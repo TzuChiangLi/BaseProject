@@ -1,4 +1,4 @@
-package com.ftrend.zgp.bean;
+package com.ftrend.zgp.utils.http;
 
 /**
  * Request请求报文

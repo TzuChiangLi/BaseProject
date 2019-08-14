@@ -1,19 +1,23 @@
 package com.ftrend.zgp;
 
+import android.view.Gravity;
 import android.widget.TextView;
 
+import com.ftrend.keyboard.DiscountKeyboardView;
 import com.ftrend.keyboard.KeyboardView;
+import com.ftrend.toast.OnClickListener;
+import com.ftrend.toast.XToast;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.utils.LogUtil;
+import com.ftrend.zgp.utils.ToastUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
  * @author LZQ
  */
-public class MainActivity extends BaseActivity{
+public class MainActivity extends BaseActivity {
     @BindView(R.id.tv)
     TextView mTv;
     @BindView(R.id.keyboard_view)
@@ -33,7 +37,7 @@ public class MainActivity extends BaseActivity{
     @Override
     protected void initView() {
         LogUtil.d("initView");
-        mTv.setText("123213213213213213213");
+//        PermissionUtil.checkAndRequestPermission();
     }
 
     @Override
@@ -42,5 +46,7 @@ public class MainActivity extends BaseActivity{
     }
 
     @OnClick(R.id.tv)
-    public void show(){mKeyboardView.show();}
+    public void show() {
+        mKeyboardView.show();
+    }
 }

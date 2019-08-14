@@ -13,7 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 
-import com.ftrend.keyboard.R;
+import com.ftrend.library.R;
 
 /**
  * author : HJQ
