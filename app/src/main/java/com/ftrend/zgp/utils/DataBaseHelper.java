@@ -19,6 +19,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements IDataBaseHelper 
 
     /**
      * 创建数据库
+     *
      * @param db
      */
     @Override
@@ -28,6 +29,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements IDataBaseHelper 
 
     /**
      * 更新数据库版本
+     *
      * @param db
      * @param oldVersion
      * @param newVersion
@@ -49,6 +51,7 @@ public class DataBaseHelper extends SQLiteOpenHelper implements IDataBaseHelper 
 
     /**
      * 查询表内数据
+     *
      * @param table 表名
      * @param <T>
      * @return
@@ -75,16 +78,18 @@ public class DataBaseHelper extends SQLiteOpenHelper implements IDataBaseHelper 
 
     /**
      * 清除表内数据
+     *
      * @param table
      */
     @Override
     public void clear(Class table) {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(table.getSimpleName(),null,null);
+        db.delete(table.getSimpleName(), null, null);
     }
 
     /**
      * 删除
+     *
      * @param obj
      */
     @Override
