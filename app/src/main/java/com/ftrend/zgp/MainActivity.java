@@ -1,15 +1,10 @@
 package com.ftrend.zgp;
 
-import android.view.Gravity;
 import android.widget.TextView;
 
-import com.ftrend.keyboard.DiscountKeyboardView;
 import com.ftrend.keyboard.KeyboardView;
-import com.ftrend.toast.OnClickListener;
-import com.ftrend.toast.XToast;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.utils.LogUtil;
-import com.ftrend.zgp.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
