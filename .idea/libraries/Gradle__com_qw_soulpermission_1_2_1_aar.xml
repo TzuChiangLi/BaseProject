@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.qw:soulpermission:1.2.1@aar">
+    <CLASSES>
+      <root url="file://F:/AndroidSDK/.gradle/caches/transforms-2/files-2.1/943dcb02a34557466f2661bcc62742f4/res" />
+      <root url="jar://F:/AndroidSDK/.gradle/caches/transforms-2/files-2.1/943dcb02a34557466f2661bcc62742f4/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://F:/AndroidSDK/.gradle/caches/modules-2/files-2.1/com.qw/soulpermission/1.2.1/fca1aa31cf0a723b8a84cfe7c85f076b0e2961b7/soulpermission-1.2.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -67,7 +67,7 @@ public class LogUtil {
                 bufWriter.write(String.format("----------------------------------------------------------------------------------------------%s%s%s%s%s",
                         "\n异常原因：",
                         msg, "\n发生时间：",
-                        new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date()),
+                        new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss").format(new Date()),
                         "\n"));
                 bufWriter.newLine();
                 bufWriter.close();

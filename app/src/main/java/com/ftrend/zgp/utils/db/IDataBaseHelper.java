@@ -1,4 +1,4 @@
-package com.ftrend.zgp.utils;
+package com.ftrend.zgp.utils.db;
 
 import java.util.Collection;
 import java.util.List;

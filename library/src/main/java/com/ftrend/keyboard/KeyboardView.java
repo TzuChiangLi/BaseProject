@@ -19,20 +19,24 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.ScreenUtils;
+import com.ftrend.library.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author LZQ
- * @content 小键盘view 用法：在布局文件或者代码中添加KeyboardView。注册捆绑后添加监听，调用show和dismiss即可，。
+ * @content 小键盘view 用法：在布局文件或者代码中添加KeyboardView。注册捆绑后添加监听，调用show和dismiss即可。
  */
 public class KeyboardView extends LinearLayout implements View.OnClickListener, KeyboardAdapter.OnItemClickListener {
     private static final String TAG = "KeyboardView";
-    private Context mContext;
+    protected Context mContext;
     private boolean isShow = false;
     private List<String> mNumberList = new ArrayList<>();
     private OnItemClickListener mItemClickListener;
@@ -73,6 +77,11 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
         mHideView.setPadding(0, 12, 0, 12);
         mHideView.setOnClickListener(this);
         addView(mHideView, new LayoutParams(MATCH_PARENT, ConvertUtils.dp2px(32)));
+        //添加折扣优惠区域
+        addDiscountView();
+
+
+
         //添加按钮与键盘的分割线
         View mLineView = new View(mContext);
         mLineView.setBackgroundColor(Color.parseColor("#DADADA"));
@@ -88,6 +97,20 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
         mRecyclerView.addItemDecoration(new GridItemDecoration(mContext, Color.parseColor("#707070"), ConvertUtils.dp2px(1), GridItemDecoration.ALL));
         mKeyboardAdapter.setItemClickListener(this);
         addView(mRecyclerView, new LayoutParams(MATCH_PARENT, (ScreenUtils.getScreenHeight() / 13) * 5));
+    }
+
+    public void addDiscountView() {
+        RelativeLayout mRelativeLayout = new RelativeLayout(mContext);
+        mRelativeLayout.setBackgroundColor(Color.WHITE);
+        RadioGroup mRadioGroup = new RadioGroup(mContext);
+        RadioButton mDiscountRBtn = new RadioButton(mContext);
+        RadioButton mMoneyRBtn = new RadioButton(mContext);
+        mDiscountRBtn.setText("折扣优惠");
+        mMoneyRBtn.setText("现金优惠");
+        mRadioGroup.addView(mDiscountRBtn);
+        mRadioGroup.addView(mMoneyRBtn);
+        mRelativeLayout.addView(mRadioGroup);
+        addView(mRelativeLayout);
     }
 
     private void initData() {

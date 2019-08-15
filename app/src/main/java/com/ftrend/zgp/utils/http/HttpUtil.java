@@ -1,4 +1,4 @@
-package com.ftrend.zgp.utils;
+package com.ftrend.zgp.utils.http;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,12 +11,12 @@ import retrofit2.Retrofit;
  *
  * @author LZQ
  */
-public class NetUtil {
-    private static NetUtil INSTANCE;
+public class HttpUtil {
+    private static HttpUtil INSTANCE;
     private Retrofit mRetrofit;
     private static final int TIMEOUT = 60;
 
-    public NetUtil() {
+    public HttpUtil() {
         initRetrofit();
     }
 
@@ -33,9 +33,9 @@ public class NetUtil {
                 .build();
     }
 
-    public static NetUtil getInstance() {
+    public static HttpUtil getInstance() {
         if (INSTANCE == null) {
-            INSTANCE = new NetUtil();
+            INSTANCE = new HttpUtil();
         }
         return INSTANCE;
     }
