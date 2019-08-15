@@ -5,6 +5,8 @@ import android.widget.TextView;
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.utils.LogUtil;
+import com.ftrend.zgp.utils.http.HttpApi;
+import com.ftrend.zgp.utils.http.HttpUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -42,6 +44,7 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.tv)
     public void show() {
-        mKeyboardView.show();
+        HttpUtil.get("hotkey");
+//        mKeyboardView.show();
     }
 }

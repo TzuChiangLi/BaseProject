@@ -14,23 +14,27 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
 
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.ftrend.library.R;
+import com.ftrend.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 在布局文件引用本控件后，不设定style会使用默认数字键盘布局，设定后会根据style值显示相应的布局
+ *
  * @author LZQ
  */
 public class KeyboardView extends LinearLayout implements View.OnClickListener, KeyboardAdapter.OnItemClickListener {
@@ -38,6 +42,7 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
     protected Context mContext;
     private boolean isShow = false;
     private List<String> mNumberList = new ArrayList<>();
+    private EditText mEdt;
     private OnItemClickListener mItemClickListener;
     private static int MATCH_PARENT = LayoutParams.MATCH_PARENT, WRAP_CONTENT = LayoutParams.WRAP_CONTENT;
     /**
@@ -111,21 +116,24 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
 
     public void addDiscountView(int style) {
         if (style == 1) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.keyboard_discount_view, KeyboardView.this, false);
+            mEdt = view.findViewById(R.id.keyboard_edt);
+            mEdt.setInputType(InputType.TYPE_NULL);
+            LogUtil.d("----mEdt==null" + (mEdt == null));
+            addView(view);
             //在这个地方插入想要的布局
-            RelativeLayout mRelativeLayout = new RelativeLayout(mContext);
-            mRelativeLayout.setBackgroundColor(Color.WHITE);
-            RadioGroup mRadioGroup = new RadioGroup(mContext);
-            RadioButton mDiscountRBtn = new RadioButton(mContext);
-            RadioButton mMoneyRBtn = new RadioButton(mContext);
-            mDiscountRBtn.setText("折扣优惠");
-            mMoneyRBtn.setText("现金优惠");
-            mRadioGroup.addView(mDiscountRBtn);
-            mRadioGroup.addView(mMoneyRBtn);
-            mRelativeLayout.addView(mRadioGroup);
-            addView(mRelativeLayout);
+//            RelativeLayout mRelativeLayout = new RelativeLayout(mContext);
+//            mRelativeLayout.setBackgroundColor(Color.WHITE);
+//            RadioGroup mRadioGroup = new RadioGroup(mContext);
+//            RadioButton mDiscountRBtn = new RadioButton(mContext);
+//            RadioButton mMoneyRBtn = new RadioButton(mContext);
+//            mDiscountRBtn.setText("折扣优惠");
+//            mMoneyRBtn.setText("现金优惠");
+//            mRadioGroup.addView(mDiscountRBtn);
+//            mRadioGroup.addView(mMoneyRBtn);
+//            mRelativeLayout.addView(mRadioGroup);
+//            addView(mRelativeLayout);
         }
-        if (style==0){}
-
     }
 
     private void initData() {
@@ -173,7 +181,8 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
 
     @Override
     public void onClick(View v) {
-        if (v instanceof ImageView && "hide".equals(v.getTag())) {
+        String hide_tag = "hide";
+        if (v instanceof ImageView && hide_tag.equals(v.getTag())) {
             isShow = false;
             dismiss();
             if (mItemClickListener != null) {
@@ -184,16 +193,34 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
 
     @Override
     public void onItemClick(View v, int position) {
-        if (mItemClickListener != null) {
-//            mItemClickListener.onKeyClick(v, ((int) v.getTag() == 9 || (int) v.getTag() == 11) ?
-//                    (int) v.getTag() == 9 ? "." : "del" : (int) v.getTag() + 1);
-            if (((int) v.getTag() == 9 || (int) v.getTag() == 11)) {
-                if ((int) v.getTag() == 9) {
-                    mItemClickListener.onPointClick();
-                } else {
-                    mItemClickListener.onDeleteClick();
-                }
+        int key_point = 9, key_delete = 11;
+        //待后续样式确定后，逻辑再做优化
+        if (mEdt != null) {
+            if ((int) v.getTag() == key_point) {
+                mEdt.getText().append('.');
+            } else if ((int) v.getTag() == key_delete) {
+                mEdt.setText(TextUtils.isEmpty(mEdt.getText().toString()) ? "" :
+                        mEdt.getText().toString().trim().substring(0, mEdt.getText().toString().trim().length() - 1));
             } else {
+                mEdt.setText(mEdt.getText().append(String.valueOf(position + 1)));
+            }
+        }
+        if (mItemClickListener != null) {
+            if ((int) v.getTag() == key_point) {
+                if (mEdt != null) {
+                    mEdt.getText().append('.');
+                }
+                mItemClickListener.onPointClick();
+            } else if ((int) v.getTag() == key_delete) {
+                if (mEdt != null) {
+                    mEdt.setText(TextUtils.isEmpty(mEdt.getText().toString()) ? "" :
+                            mEdt.getText().toString().trim().substring(0, mEdt.getText().toString().trim().length() - 1));
+                }
+                mItemClickListener.onDeleteClick();
+            } else {
+                if (mEdt != null) {
+                    mEdt.setText(mEdt.getText().append(String.valueOf(position + 1)));
+                }
                 mItemClickListener.onKeyClick(v, position + 1);
             }
         }
@@ -340,7 +367,7 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
             }
         }
     }
-    //endregion
+//endregion
 
 
     public interface OnItemClickListener {
@@ -368,6 +395,7 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
          * @param v
          */
         void onHideClick(View v);
+
     }
 
     public void setOnKeyboardClickListener(OnItemClickListener mItemClickListener) {
