@@ -4,7 +4,6 @@ import com.ftrend.zgp.utils.LogUtil;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -20,17 +19,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
  *
  * @author LZQ
  */
-public class HttpUtil{
+public class HttpUtil {
     private static HttpUtil INSTANCE;
     private static Retrofit mRetrofit;
     private static final int TIMEOUT = 60;
     private static final String baseURL = "https://www.wanandroid.com/";
 
-    //https://www.wanandroid.com//hotkey/json
     public HttpUtil() {
         initRetrofit();
     }
 
+    /**
+     * 初始化Retrofit
+     */
     private static void initRetrofit() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         // 设置超时
@@ -47,6 +48,9 @@ public class HttpUtil{
                 .build();
     }
 
+    /**
+     * @return 返回请求工具类的单例
+     */
     public static HttpUtil getInstance() {
         if (INSTANCE == null) {
             INSTANCE = new HttpUtil();
@@ -54,47 +58,61 @@ public class HttpUtil{
         return INSTANCE;
     }
 
-
-    public static void get(String type) {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-        // 设置超时
-        builder.connectTimeout(TIMEOUT, TimeUnit.SECONDS);
-        builder.readTimeout(TIMEOUT, TimeUnit.SECONDS);
-        builder.writeTimeout(TIMEOUT, TimeUnit.SECONDS);
-        OkHttpClient client = builder.build();
-        mRetrofit = new Retrofit.Builder()
-                // 设置解析转换工厂，用自己定义的
-                .baseUrl(baseURL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .client(client)
-                .build();
-        HttpApi api = mRetrofit.create(HttpApi.class);
-        api.get(type).subscribeOn(Schedulers.io())//事件发生时的线程
-                .observeOn(AndroidSchedulers.mainThread())//事件发生后回调在的线程
-                .subscribe(new Observer<KeyWord>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        LogUtil.d("----onSubcribe");
-                    }
-
-                    @Override
-                    public void onNext(KeyWord keyWord) {
-                        LogUtil.d("----onNext:" + keyWord.getData().get(0).getName());
-                    }
-
-
-                    @Override
-                    public void onError(Throwable e) {
-                        LogUtil.d("----onError:" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        LogUtil.d("----onComplete");
-                    }
-                });
+    /**
+     * 获取对应的Serviceapi
+     *
+     * @param service Service 的 class
+     * @param <T>
+     * @return
+     */
+    public <T> T create(Class<T> service) {
+        LogUtil.d("----"+mRetrofit.baseUrl());
+        return mRetrofit.create(service);
     }
+
+
+
+
+
+//    public void get(String service) {
+//        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+//        // 设置超时
+//        builder.connectTimeout(TIMEOUT, TimeUnit.SECONDS);
+//        builder.readTimeout(TIMEOUT, TimeUnit.SECONDS);
+//        builder.writeTimeout(TIMEOUT, TimeUnit.SECONDS);
+//        OkHttpClient client = builder.build();
+//        mRetrofit = new Retrofit.Builder()
+//                // 设置解析转换工厂，用自己定义的
+//                .baseUrl(baseURL)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                .client(client)
+//                .build();
+//        HttpApi api = mRetrofit.create(HttpApi.class);
+//        api.get(service).subscribeOn(Schedulers.io())//事件发生时的线程
+//                .observeOn(AndroidSchedulers.mainThread())//事件发生后回调在的线程
+//                .subscribe(new Observer<KeyWord>() {
+//                    @Override
+//                    public void onSubscribe(Disposable d) {
+//                        LogUtil.d("----onSubcribe");
+//                    }
+//
+//                    @Override
+//                    public void onNext(KeyWord keyWord) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        LogUtil.d("----onError:" + e.getMessage());
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//                        LogUtil.d("----onComplete");
+//                    }
+//                });
+//    }
 
 
 }

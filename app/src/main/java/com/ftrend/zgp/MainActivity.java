@@ -4,9 +4,12 @@ import android.widget.TextView;
 
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.base.BaseActivity;
+import com.ftrend.zgp.example.ExampleCallBack;
+import com.ftrend.zgp.example.ExampleSubscribe;
 import com.ftrend.zgp.utils.LogUtil;
-import com.ftrend.zgp.utils.http.HttpApi;
-import com.ftrend.zgp.utils.http.HttpUtil;
+import com.ftrend.zgp.utils.http.KeyWord;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -44,7 +47,35 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.tv)
     public void show() {
-        HttpUtil.get("hotkey");
-//        mKeyboardView.show();
+        //region http请求举例
+
+        ExampleSubscribe.getInstance().getHotKey(this, new ExampleCallBack<KeyWord>() {
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(List<KeyWord.DataBean> body, String msg) {
+                LogUtil.d("----onSuccess" + body.get(0).getName());
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        });
+        //endregion
+        mKeyboardView.show();
     }
 }

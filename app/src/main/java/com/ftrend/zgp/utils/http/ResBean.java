@@ -28,10 +28,29 @@ public class ResBean<T> {
      */
     private T body;
 
-    private class ResHead {
+    public class ResHead {
         private String requestNo;
         private String createTime;
         private String retFlag;
         private String retMsg;
+    }
+
+
+
+
+    public ResHead getHead() {
+        return head;
+    }
+
+    public void setHead(ResHead head) {
+        this.head = head;
+    }
+
+    public T getBody() {
+        return body;
+    }
+
+    public void setBody(T body) {
+        this.body = body;
     }
 }
