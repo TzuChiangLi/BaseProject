@@ -1,7 +1,7 @@
 package com.ftrend.zgp.base;
 
 import com.ftrend.zgp.utils.http.HttpCallBack;
-import com.ftrend.zgp.utils.http.ResBean;
+import com.ftrend.zgp.utils.http.BaseResponse;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -12,7 +12,7 @@ import io.reactivex.disposables.Disposable;
  *
  * @author LZQ
  */
-public class BaseObserver<T> implements Observer<ResBean<T>> {
+public class BaseObserver<T> implements Observer<BaseResponse<T>> {
     private HttpCallBack<T> mCallBack;
 
     public BaseObserver(HttpCallBack<T> callBack) {
@@ -25,8 +25,8 @@ public class BaseObserver<T> implements Observer<ResBean<T>> {
     }
 
     @Override
-    public void onNext(ResBean<T> tResBean) {
-        mCallBack.onSuccess(tResBean.getBody(), tResBean.getHead());
+    public void onNext(BaseResponse<T> tBaseResponse) {
+        mCallBack.onSuccess(tBaseResponse.getBody(), tBaseResponse.getHead());
     }
 
     @Override

@@ -1,13 +1,10 @@
 package com.ftrend.zgp.example;
 
-import android.content.Context;
-
-import com.ftrend.zgp.utils.http.HttpApi;
 import com.ftrend.zgp.utils.http.HttpUtil;
-import com.ftrend.zgp.utils.http.KeyWord;
+import com.ftrend.zgp.base.KeyWord;
 
 public class ExampleSubscribe extends BaseExampleSubscribe {
-    private HttpApi api;
+    private ExampleApi api;
     private static ExampleSubscribe INSTANCE;
 
     /**
@@ -21,10 +18,10 @@ public class ExampleSubscribe extends BaseExampleSubscribe {
     }
 
     public ExampleSubscribe() {
-        api = HttpUtil.getInstance().create(HttpApi.class);
+        api = HttpUtil.getInstance().create(ExampleApi.class);
     }
 
-    public void getHotKey(Context context, final ExampleCallBack<KeyWord> callBack) {
+    public void getHotKey(final ExampleCallBack<KeyWord> callBack) {
         toDetachAndSubscribe(api.example(), callBack);
     }
 }

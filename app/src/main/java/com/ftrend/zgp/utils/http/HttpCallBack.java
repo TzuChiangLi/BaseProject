@@ -1,6 +1,6 @@
 package com.ftrend.zgp.utils.http;
 
-import com.ftrend.zgp.utils.http.ResBean.ResHead;
+import com.ftrend.zgp.utils.http.BaseResponse.ResHead;
 
 /**
  * @author LZQ

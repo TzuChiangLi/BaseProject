@@ -18,7 +18,7 @@ package com.ftrend.zgp.utils.http;
  * }
  * ==========================================================================
  */
-public class ResBean<T> {
+public class BaseResponse<T> {
     /**
      * 响应头
      */

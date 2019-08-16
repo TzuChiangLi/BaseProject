@@ -74,45 +74,5 @@ public class HttpUtil {
 
 
 
-//    public void get(String service) {
-//        OkHttpClient.Builder builder = new OkHttpClient.Builder();
-//        // 设置超时
-//        builder.connectTimeout(TIMEOUT, TimeUnit.SECONDS);
-//        builder.readTimeout(TIMEOUT, TimeUnit.SECONDS);
-//        builder.writeTimeout(TIMEOUT, TimeUnit.SECONDS);
-//        OkHttpClient client = builder.build();
-//        mRetrofit = new Retrofit.Builder()
-//                // 设置解析转换工厂，用自己定义的
-//                .baseUrl(baseURL)
-//                .addConverterFactory(GsonConverterFactory.create())
-//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-//                .client(client)
-//                .build();
-//        HttpApi api = mRetrofit.create(HttpApi.class);
-//        api.get(service).subscribeOn(Schedulers.io())//事件发生时的线程
-//                .observeOn(AndroidSchedulers.mainThread())//事件发生后回调在的线程
-//                .subscribe(new Observer<KeyWord>() {
-//                    @Override
-//                    public void onSubscribe(Disposable d) {
-//                        LogUtil.d("----onSubcribe");
-//                    }
-//
-//                    @Override
-//                    public void onNext(KeyWord keyWord) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        LogUtil.d("----onError:" + e.getMessage());
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                        LogUtil.d("----onComplete");
-//                    }
-//                });
-//    }
-
 
 }

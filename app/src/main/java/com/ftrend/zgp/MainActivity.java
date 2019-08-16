@@ -4,10 +4,11 @@ import android.widget.TextView;
 
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.base.BaseActivity;
+import com.ftrend.zgp.base.KeyWord;
 import com.ftrend.zgp.example.ExampleCallBack;
 import com.ftrend.zgp.example.ExampleSubscribe;
 import com.ftrend.zgp.utils.LogUtil;
-import com.ftrend.zgp.utils.http.KeyWord;
+import com.ftrend.zgp.utils.PermissionUtil;
 
 import java.util.List;
 
@@ -36,8 +37,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        LogUtil.d("initView");
-//        PermissionUtil.checkAndRequestPermission();
+        PermissionUtil.checkAndRequestPermission();
     }
 
     @Override
@@ -48,8 +48,7 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.tv)
     public void show() {
         //region http请求举例
-
-        ExampleSubscribe.getInstance().getHotKey(this, new ExampleCallBack<KeyWord>() {
+        ExampleSubscribe.getInstance().getHotKey(new ExampleCallBack<KeyWord>() {
             @Override
             public void onStart() {
 

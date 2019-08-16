@@ -13,15 +13,5 @@ public interface HttpApi {
     //https://www.wanandroid.com//hotkey/json
 
 
-    /**
-     * 举例说明
-     *
-     * @return
-     */
-    @GET("/hotkey/json")
-    Observable<KeyWord> example();
 
-
-    @GET("{service}")
-    Observable<ResBean<KeyWord>> get(@Path("service") String service);
 }

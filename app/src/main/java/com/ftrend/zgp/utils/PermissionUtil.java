@@ -19,7 +19,6 @@ public class PermissionUtil {
         SoulPermission.getInstance().checkAndRequestPermissions(
                 Permissions.build(Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.READ_PHONE_STATE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                //if you want do noting or no need all the callbacks you may use SimplePermissionsAdapter instead
                 new CheckRequestPermissionsListener() {
                     @Override
                     public void onAllPermissionOk(Permission[] allPermissions) {

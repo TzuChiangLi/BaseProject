@@ -1,6 +1,6 @@
 package com.ftrend.zgp.example;
 
-import com.ftrend.zgp.utils.http.KeyWord;
+import com.ftrend.zgp.base.KeyWord;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;

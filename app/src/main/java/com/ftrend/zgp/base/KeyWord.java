@@ -1,4 +1,4 @@
-package com.ftrend.zgp.utils.http;
+package com.ftrend.zgp.base;
 
 import java.util.List;
 

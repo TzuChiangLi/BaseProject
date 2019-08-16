@@ -1,6 +1,6 @@
 package com.ftrend.zgp.example;
 
-import com.ftrend.zgp.utils.http.KeyWord;
+import com.ftrend.zgp.base.KeyWord;
 
 import java.util.List;
 
