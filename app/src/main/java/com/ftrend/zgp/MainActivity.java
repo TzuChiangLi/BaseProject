@@ -4,7 +4,7 @@ import android.widget.TextView;
 
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.base.BaseActivity;
-import com.ftrend.zgp.base.KeyWord;
+import com.ftrend.zgp.example.KeyWord;
 import com.ftrend.zgp.example.ExampleCallBack;
 import com.ftrend.zgp.example.ExampleSubscribe;
 import com.ftrend.zgp.utils.LogUtil;

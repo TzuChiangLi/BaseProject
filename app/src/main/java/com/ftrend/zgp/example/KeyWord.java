@@ -1,4 +1,4 @@
-package com.ftrend.zgp.base;
+package com.ftrend.zgp.example;
 
 import java.util.List;
 

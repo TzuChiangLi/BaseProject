@@ -2,7 +2,6 @@ package com.ftrend.zgp.example;
 
 
 import com.ftrend.zgp.utils.LogUtil;
-import com.ftrend.zgp.base.KeyWord;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;

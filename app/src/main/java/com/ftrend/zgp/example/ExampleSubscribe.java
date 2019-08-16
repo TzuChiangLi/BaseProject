@@ -1,7 +1,6 @@
 package com.ftrend.zgp.example;
 
 import com.ftrend.zgp.utils.http.HttpUtil;
-import com.ftrend.zgp.base.KeyWord;
 
 public class ExampleSubscribe extends BaseExampleSubscribe {
     private ExampleApi api;

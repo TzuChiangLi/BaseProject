@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
+import com.ftrend.zgp.utils.LogUtil;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 数据库调用工具
@@ -224,12 +226,50 @@ public class DatabaseManger<T> {
         return rowsNum;
     }
 
+    /**
+     * 数据查询
+     *
+     * @param table
+     * @param columns
+     * @param selection
+     * @param selectionArgs
+     * @param groupBy
+     * @param having
+     * @param orderBy
+     * @param limit
+     * @param <T>
+     * @return
+     */
+    public <T> List<T> query(String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, Integer limit) {
+        List<T> results = new ArrayList<T>();
+        Cursor cursor = null;
+        try {
+            if (limit != null) {
+                cursor = dbHelper.getReadableDatabase().query(table, columns, selection, selectionArgs, groupBy, having, orderBy, limit + "");
+            } else {
+                cursor = dbHelper.getReadableDatabase().query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
+            }
+            results = queryResult(cursor);
+        } catch (RuntimeException e) {
+            LogUtil.e(e.getMessage());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return results;
 
+    }
 
-
-
-
-
-
-
+    /**
+     * 转换为对象
+     *
+     * @param cursor
+     * @param <T>
+     * @return
+     */
+    public <T> List<T> queryResult(Cursor cursor) {
+        //TODO 复写此方法
+        throw new RuntimeException("Please overwrite method.");
+    }
 }
