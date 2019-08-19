@@ -48,8 +48,6 @@ public class MainActivity extends BaseActivity {
         DialogBuilder builder = new DialogBuilder(this, 2);
         builder.setRightBtn("确定");
         builder.setLeftBtn("返回");
-        builder.setTitle("提示");
-        builder.setContent("你懂了吗");
         builder.setOnClickListener(new DialogBuilder.onBtnClickListener() {
             @Override
             public void onLeftBtnClick(View v) {
