@@ -1,4 +1,4 @@
-package com.ftrend.utils;
+package com.ftrend.zgp.utils.log;
 
 import android.os.Environment;
 import android.util.Log;

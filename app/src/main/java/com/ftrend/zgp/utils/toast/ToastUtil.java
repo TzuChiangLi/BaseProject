@@ -1,4 +1,4 @@
-package com.ftrend.zgp.utils;
+package com.ftrend.zgp.utils.toast;
 
 import android.app.Application;
 

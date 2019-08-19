@@ -1,4 +1,4 @@
-package com.ftrend.zgp.utils;
+package com.ftrend.log;
 
 import android.os.Environment;
 import android.util.Log;
@@ -56,7 +56,7 @@ public class LogUtil {
      */
     public static void e(String msg) {
         if (showLog) {
-            android.util.Log.e(ActivityUtils.getTopActivity().toString(), msg);
+            Log.e(ActivityUtils.getTopActivity().toString(), msg);
         }
         if (saveError) {
             FileWriter writer = null;

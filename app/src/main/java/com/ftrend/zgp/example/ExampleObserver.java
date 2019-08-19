@@ -1,7 +1,7 @@
 package com.ftrend.zgp.example;
 
 
-import com.ftrend.zgp.utils.LogUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;

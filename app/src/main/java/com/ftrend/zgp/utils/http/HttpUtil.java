@@ -1,13 +1,9 @@
 package com.ftrend.zgp.utils.http;
 
-import com.ftrend.zgp.utils.LogUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 
 import java.util.concurrent.TimeUnit;
 
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;

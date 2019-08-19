@@ -27,7 +27,6 @@ import android.widget.LinearLayout;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.ftrend.library.R;
-import com.ftrend.utils.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +118,6 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
             View view = LayoutInflater.from(mContext).inflate(R.layout.keyboard_discount_view, KeyboardView.this, false);
             mEdt = view.findViewById(R.id.keyboard_edt);
             mEdt.setInputType(InputType.TYPE_NULL);
-            LogUtil.d("----mEdt==null" + (mEdt == null));
             addView(view);
             //在这个地方插入想要的布局
 //            RelativeLayout mRelativeLayout = new RelativeLayout(mContext);

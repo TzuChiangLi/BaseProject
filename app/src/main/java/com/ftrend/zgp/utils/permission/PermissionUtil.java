@@ -1,7 +1,8 @@
-package com.ftrend.zgp.utils;
+package com.ftrend.zgp.utils.permission;
 
 import android.Manifest;
 
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.qw.soul.permission.SoulPermission;
 import com.qw.soul.permission.bean.Permission;
 import com.qw.soul.permission.bean.Permissions;
