@@ -13,32 +13,32 @@ import io.reactivex.disposables.Disposable;
  * @author liziqiang@ftrend.cn
  */
 public class BaseObserver<T> implements Observer<BaseResponse<T>> {
-//    private HttpCallBack<T> mCallBack;
+    private HttpCallBack<T> mCallBack;
 
-    public BaseObserver() {//HttpCallBack<T> callBack
-//        mCallBack = callBack;
+    public BaseObserver(HttpCallBack<T> callBack) {//HttpCallBack<T> callBack
+        mCallBack = callBack;
     }
 
     @Override
     public void onSubscribe(Disposable d) {
-        //mCallBack.onStart();
+        mCallBack.onStart();
     }
 
     @Override
     public void onNext(BaseResponse<T> tBaseResponse) {
-    //    mCallBack.onSuccess(tBaseResponse.getBody(), tBaseResponse.getHead());
+        mCallBack.onSuccess(tBaseResponse.getBody(), tBaseResponse.getHead());
     }
 
     @Override
     public void onError(Throwable e) {
         //此处需要对异常处理进行封装分类
-        //mCallBack.onError();
+        mCallBack.onError();
 
     }
 
     @Override
     public void onComplete() {
-      //  mCallBack.onFinish();
+        mCallBack.onFinish();
 
     }
 }

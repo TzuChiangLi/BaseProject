@@ -19,7 +19,7 @@ public class HttpUtil {
     private static HttpUtil INSTANCE;
     private static Retrofit mRetrofit;
     private static final int TIMEOUT = 60;
-    private static final String baseURL = "https://www.wanandroid.com/";
+    private static final String baseURL = HttpBaseURL.URL;
 
     public HttpUtil() {
         initRetrofit();
@@ -62,7 +62,6 @@ public class HttpUtil {
      * @return
      */
     public <T> T create(Class<T> service) {
-        LogUtil.d("----"+mRetrofit.baseUrl());
         return mRetrofit.create(service);
     }
 

@@ -28,10 +28,68 @@ public class BaseRequest<T> {
      */
     private T body;
 
+
     private class Head {
         private String requestNo;
         private String createTime;
         private String token;
+
+        public Head() {
+        }
+
+        public Head(String requestNo, String createTime, String token) {
+            this.requestNo = requestNo;
+            this.createTime = createTime;
+            this.token = token;
+        }
+
+        public String getRequestNo() {
+            return requestNo;
+        }
+
+        public void setRequestNo(String requestNo) {
+            this.requestNo = requestNo;
+        }
+
+        public String getCreateTime() {
+            return createTime;
+        }
+
+        public void setCreateTime(String createTime) {
+            this.createTime = createTime;
+        }
+
+        public String getToken() {
+            return token;
+        }
+
+        public void setToken(String token) {
+            this.token = token;
+        }
+    }
+
+    public BaseRequest() {
+    }
+
+    public BaseRequest(Head head, T body) {
+        this.head = head;
+        this.body = body;
+    }
+
+    public Head getHead() {
+        return head;
+    }
+
+    public void setHead(Head head) {
+        this.head = head;
+    }
+
+    public T getBody() {
+        return body;
+    }
+
+    public void setBody(T body) {
+        this.body = body;
     }
 
 }

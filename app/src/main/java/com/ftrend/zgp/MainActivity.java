@@ -4,8 +4,11 @@ import android.widget.TextView;
 
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.base.BaseActivity;
+import com.ftrend.zgp.utils.http.BaseResponse;
+import com.ftrend.zgp.utils.http.HttpCallBack;
+import com.ftrend.zgp.utils.http.base_test.TestSubscribe;
+import com.ftrend.zgp.utils.http.base_test.User;
 import com.ftrend.zgp.utils.log.LogUtil;
-import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.permission.PermissionUtil;
 
 import butterknife.BindView;
@@ -44,6 +47,31 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.tv)
     public void show() {
-        MessageUtil.question("你确定看得懂我写的代码？");
+        TestSubscribe.getInstance().getResponse(new HttpCallBack<User>() {
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(User body, BaseResponse.ResHead head) {
+                LogUtil.d("----onSuccess:" + body.getName());
+            }
+
+            @Override
+            public void onFailed() {
+
+            }
+
+            @Override
+            public void onError() {
+
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        });
     }
 }

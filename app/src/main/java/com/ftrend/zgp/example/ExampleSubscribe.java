@@ -1,6 +1,5 @@
 package com.ftrend.zgp.example;
 
-import com.ftrend.zgp.examplePost.Login;
 import com.ftrend.zgp.utils.http.HttpUtil;
 
 /**

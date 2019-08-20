@@ -1,6 +1,7 @@
 package com.ftrend.zgp.base;
 
 import com.ftrend.zgp.utils.http.BaseResponse;
+import com.ftrend.zgp.utils.http.HttpCallBack;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -18,11 +19,11 @@ public class BaseSubscribe {
      * @param observable //     * @param callBack   , HttpCallBack<T> callBack
      * @param <T>
      */
-    protected <T> void toDetachAndSubscribe(Observable<? extends BaseResponse<T>> observable) {
+    protected <T> void toDetachAndSubscribe(Observable<? extends BaseResponse<T>> observable, final HttpCallBack<T> callBack) {
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<T>());
+                .subscribe(new BaseObserver<>(callBack));
     }
 
 
