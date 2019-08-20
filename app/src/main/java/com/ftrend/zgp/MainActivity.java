@@ -6,6 +6,8 @@ import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.utils.http.BaseResponse;
 import com.ftrend.zgp.utils.http.HttpCallBack;
+import com.ftrend.zgp.utils.http.base_test.Login;
+import com.ftrend.zgp.utils.http.base_test.LoginSubsrcibe;
 import com.ftrend.zgp.utils.http.base_test.TestSubscribe;
 import com.ftrend.zgp.utils.http.base_test.User;
 import com.ftrend.zgp.utils.log.LogUtil;
@@ -47,15 +49,15 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.tv)
     public void show() {
-        TestSubscribe.getInstance().getResponse(new HttpCallBack<User>() {
+        LoginSubsrcibe.getInstance().login("TzuChiangLi", "85654886", new HttpCallBack<Login>() {
             @Override
             public void onStart() {
 
             }
 
             @Override
-            public void onSuccess(User body, BaseResponse.ResHead head) {
-                LogUtil.d("----onSuccess:" + body.getName());
+            public void onSuccess(Login body, BaseResponse.ResHead head) {
+                LogUtil.d("----onSuccess"+body.getErrorMsg());
             }
 
             @Override

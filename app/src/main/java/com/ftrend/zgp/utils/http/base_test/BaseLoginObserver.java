@@ -1,4 +1,4 @@
-package com.ftrend.zgp.base;
+package com.ftrend.zgp.utils.http.base_test;
 
 import com.ftrend.zgp.utils.http.BaseResponse;
 import com.ftrend.zgp.utils.http.HttpCallBack;
@@ -9,14 +9,13 @@ import io.reactivex.disposables.Disposable;
 
 /**
  * 被观察者的封装
- * 笔记：如果不需要泛型，Observer后面是实体类那实现类不需要跟泛型
  *
  * @author liziqiang@ftrend.cn
  */
-public class BaseObserver<T> implements Observer<BaseResponse<T>> {
-    private HttpCallBack<T> mCallBack;
+public class BaseLoginObserver implements Observer<Login> {
+    private HttpCallBack mCallBack;
 
-    public BaseObserver(HttpCallBack<T> callBack) {//HttpCallBack<T> callBack
+    public BaseLoginObserver(HttpCallBack callBack) {//HttpCallBack<T> callBack
         mCallBack = callBack;
     }
 
@@ -26,9 +25,14 @@ public class BaseObserver<T> implements Observer<BaseResponse<T>> {
     }
 
     @Override
-    public void onNext(BaseResponse<T> tBaseResponse) {
-        mCallBack.onSuccess(tBaseResponse.getBody(), tBaseResponse.getHead());
+    public void onNext(Login login) {
+        mCallBack.onSuccess(login,null);
     }
+
+//    @Override
+//    public void onNext(BaseResponse<T> tBaseResponse) {
+//        mCallBack.onSuccess(tBaseResponse.getBody(), tBaseResponse.getHead());
+//    }
 
     @Override
     public void onError(Throwable e) {

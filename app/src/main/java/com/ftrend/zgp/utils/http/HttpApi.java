@@ -1,9 +1,13 @@
 package com.ftrend.zgp.utils.http;
 
+import com.ftrend.zgp.utils.http.base_test.Login;
 import com.ftrend.zgp.utils.http.base_test.User;
 
 import io.reactivex.Observable;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 
 /**
  * http请求接口,本类仅举例，后续根据具体的功能实现不同的api接口
@@ -11,11 +15,15 @@ import retrofit2.http.GET;
  * @author LZQ
  */
 public interface HttpApi {
-
+    //GET示例，服务地址自建的
     @GET("hello")
     Observable<BaseResponse<User>> getResponse();
 
+    //POST示例，API测试的玩安卓登录
+    @FormUrlEncoded
+    @POST("user/login")
+    Observable<Login> login(@Field("username") String username, @Field("password") String password);
+
 
 }
-//笔记备注：此类不要再用泛型了，因为是具体的接口直接传入具体的实体类
-//实际使用的时候，一个
+//笔记备注：此类不用泛型，因为是具体的接口直接传入具体的实体类
