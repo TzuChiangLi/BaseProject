@@ -1,6 +1,5 @@
 package com.ftrend.zgp.base;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
-import com.ftrend.zgp.utils.LogUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;

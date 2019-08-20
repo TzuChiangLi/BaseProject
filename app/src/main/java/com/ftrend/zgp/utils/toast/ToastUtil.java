@@ -1,4 +1,4 @@
-package com.ftrend.zgp.utils;
+package com.ftrend.zgp.utils.toast;
 
 import android.app.Application;
 
@@ -44,7 +44,7 @@ public class ToastUtil {
                 .setView(R.layout.toast_state_hint)
                 .setDuration(Duration)
                 .setImageDrawable(android.R.id.icon, R.drawable.toast_success)
-                .setText(android.R.id.message, "提交成功")
+                .setText(android.R.id.message, "成功")
                 .show();
     }
 

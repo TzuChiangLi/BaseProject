@@ -2,8 +2,8 @@ package com.ftrend.zgp.app;
 
 import android.app.Application;
 
-import com.ftrend.zgp.utils.LogUtil;
-import com.ftrend.zgp.utils.ToastUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
+import com.ftrend.zgp.utils.toast.ToastUtil;
 import com.qw.soul.permission.SoulPermission;
 
 /**

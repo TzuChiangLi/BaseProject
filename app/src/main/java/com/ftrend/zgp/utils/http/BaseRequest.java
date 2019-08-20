@@ -18,7 +18,7 @@ package com.ftrend.zgp.utils.http;
  * =================================GET====================================
  * ?requestNo=&createTime=&access_token=
  */
-public class ReqBean<T> {
+public class BaseRequest<T> {
     /**
      * 请求头
      */

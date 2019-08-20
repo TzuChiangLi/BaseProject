@@ -1,12 +1,12 @@
-package com.ftrend.zgp.utils.http;
+package com.ftrend.zgp.example;
 
-import com.ftrend.zgp.utils.http.BaseResponse.ResHead;
+import java.util.List;
 
 /**
  * @author LZQ
  * @content HTTP请求回调，根据后续需求增减。Presenter继承此回调，然后在http请求方法的参数中加入此回调即可。
  */
-public interface HttpCallBack<T> {
+public interface ExampleCallBack<T> {
     /**
      * 请求开始
      */
@@ -15,7 +15,7 @@ public interface HttpCallBack<T> {
     /**
      * 请求成功
      */
-    void onSuccess(T body, ResHead head);
+    void onSuccess(List<KeyWord.DataBean> body, String msg);
 
 
     /**

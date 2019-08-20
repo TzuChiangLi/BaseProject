@@ -3,7 +3,7 @@ package com.ftrend.zgp;
 import android.support.v4.view.ViewPager;
 
 import com.ftrend.zgp.base.BaseActivity;
-import com.ftrend.zgp.utils.LogUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 
 import butterknife.BindView;
 
