@@ -1,7 +1,11 @@
 package com.ftrend.zgp.example;
 
+import com.ftrend.zgp.examplePost.Login;
 import com.ftrend.zgp.utils.http.HttpUtil;
 
+/**
+ * @author liziqiang@ftrend.cn
+ */
 public class ExampleSubscribe extends BaseExampleSubscribe {
     private ExampleApi api;
     private static ExampleSubscribe INSTANCE;
@@ -23,4 +27,5 @@ public class ExampleSubscribe extends BaseExampleSubscribe {
     public void getHotKey(final ExampleCallBack<KeyWord> callBack) {
         toDetachAndSubscribe(api.example(), callBack);
     }
+
 }

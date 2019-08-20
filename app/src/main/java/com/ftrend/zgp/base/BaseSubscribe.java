@@ -1,6 +1,5 @@
 package com.ftrend.zgp.base;
 
-import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.http.BaseResponse;
 
 import io.reactivex.Observable;
@@ -10,21 +9,20 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * 统一订阅的基类
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  */
 public class BaseSubscribe {
     /**
      * 订阅
      *
-     * @param observable
-     * @param callBack
+     * @param observable //     * @param callBack   , HttpCallBack<T> callBack
      * @param <T>
      */
-    protected <T> void toDetachAndSubscribe(Observable<? extends BaseResponse<T>> observable, HttpCallBack<T> callBack) {
+    protected <T> void toDetachAndSubscribe(Observable<? extends BaseResponse<T>> observable) {
         observable.subscribeOn(Schedulers.io())
                 .unsubscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new BaseObserver<>(callBack));
+                .subscribe(new BaseObserver<T>());
     }
 
 

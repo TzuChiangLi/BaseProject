@@ -10,7 +10,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * 被观察者的封装
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  */
 public class ExampleObserver<T> implements Observer<KeyWord> {
     private ExampleCallBack<T> mCallBack;

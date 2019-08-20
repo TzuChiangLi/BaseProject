@@ -7,7 +7,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * 统一订阅的基类
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  */
 public class BaseExampleSubscribe {
     /**

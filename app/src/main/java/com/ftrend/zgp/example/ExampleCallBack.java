@@ -3,7 +3,7 @@ package com.ftrend.zgp.example;
 import java.util.List;
 
 /**
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  * @content HTTP请求回调，根据后续需求增减。Presenter继承此回调，然后在http请求方法的参数中加入此回调即可。
  */
 public interface ExampleCallBack<T> {

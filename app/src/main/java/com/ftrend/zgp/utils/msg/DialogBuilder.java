@@ -1,4 +1,4 @@
-package com.ftrend.zgp.utils.dialog;
+package com.ftrend.zgp.utils.msg;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.zgp.R;
 import com.lxj.xpopup.core.CenterPopupView;
 
@@ -40,7 +41,7 @@ public class DialogBuilder extends CenterPopupView {
     private Context context;
     private String title, content, leftBtn, rightBtn;
 
-    private onBtnClickListener mOnClickListener;
+    private OnBtnClickListener mOnClickListener;
     /**
      * 0:提示，1：警告，2：错误，3：询问
      */
@@ -57,7 +58,11 @@ public class DialogBuilder extends CenterPopupView {
      */
     public DialogBuilder(Context context) {
         super(context);
-        this.context = context;
+        if (context == null) {
+            this.context = ActivityUtils.getTopActivity();
+        } else {
+            this.context = context;
+        }
     }
 
     /**
@@ -141,13 +146,26 @@ public class DialogBuilder extends CenterPopupView {
         }
     }
 
-    public interface onBtnClickListener {
+    /**
+     * 弹窗按键监听
+     */
+    public interface OnBtnClickListener {
+        /**
+         * 左按钮监听
+         *
+         * @param v button的view
+         */
         void onLeftBtnClick(View v);
 
+        /**
+         * 右按钮监听
+         *
+         * @param v button的view
+         */
         void onRightBtnClick(View v);
     }
 
-    public void setOnClickListener(onBtnClickListener onClickListener) {
+    public void setOnClickListener(OnBtnClickListener onClickListener) {
         mOnClickListener = onClickListener;
     }
 
@@ -175,11 +193,6 @@ public class DialogBuilder extends CenterPopupView {
     public void setBtnNum(int btnNum) {
         this.btnNum = btnNum;
     }
-
-    public Context getBuilderContext() {
-        return context;
-    }
-
 
     //endregion
 }
