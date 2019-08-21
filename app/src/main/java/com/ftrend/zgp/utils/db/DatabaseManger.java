@@ -11,9 +11,9 @@ import com.ftrend.zgp.utils.log.LogUtil;
 /**
  * 数据库调用工具
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  */
-public class DatabaseManger<T> {
+public class DatabaseManger {
     private DBHelper dbHelper;
     private static DatabaseManger INSTANCE = null;
     private SQLiteDatabase db;

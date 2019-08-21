@@ -29,13 +29,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * NetUtil网络请求工具类，配置连接，封装请求方法(未完成)
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  */
 public class HttpUtil {
     private static HttpUtil INSTANCE;
     private static Retrofit mRetrofit;
     private static final int TIMEOUT = 60;
-    private static final String baseURL = HttpBaseURL.URL;
+    private static final String baseURL = HttpManager.TEST_URL;
 
     public HttpUtil() {
         initRetrofit();
@@ -76,6 +76,11 @@ public class HttpUtil {
         return mRetrofit.create(service);
     }
 
+    /**
+     * 构建client
+     *
+     * @return OkHttpClient
+     */
     private static OkHttpClient initClient() {
         InputStream inputStream = null;
         try {
@@ -97,6 +102,13 @@ public class HttpUtil {
         return client;
     }
 
+
+    /**
+     * 构建SSlSocketFactory
+     *
+     * @param trustManager
+     * @return
+     */
     private static SSLSocketFactory initSSLSocketFactory(X509TrustManager trustManager) {
         SSLSocketFactory sslSocketFactory = null;
         SSLContext sslContext = null;

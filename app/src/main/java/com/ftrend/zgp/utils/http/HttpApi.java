@@ -12,14 +12,24 @@ import retrofit2.http.POST;
 /**
  * http请求接口,本类仅举例，后续根据具体的功能实现不同的api接口
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  */
 public interface HttpApi {
-    //GET示例，服务地址自建的
+    /**
+     * Get测试
+     *
+     * @return
+     */
     @GET("hello")
     Observable<BaseResponse<User>> getResponse();
 
-    //POST示例，API测试的玩安卓登录
+    /**
+     * Post测试
+     *
+     * @param username
+     * @param password
+     * @return
+     */
     @FormUrlEncoded
     @POST("user/login")
     Observable<Login> login(@Field("username") String username, @Field("password") String password);

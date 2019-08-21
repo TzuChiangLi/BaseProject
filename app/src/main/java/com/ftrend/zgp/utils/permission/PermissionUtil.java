@@ -9,7 +9,7 @@ import com.qw.soul.permission.bean.Permissions;
 import com.qw.soul.permission.callbcak.CheckRequestPermissionsListener;
 
 /**
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  * @content 权限申请工具类
  */
 public class PermissionUtil {

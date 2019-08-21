@@ -16,7 +16,7 @@ import java.util.Date;
 /**
  * 打印日志工具类
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  */
 public class LogUtil {
     static String logPathStr = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DATA/" + AppUtils.getAppPackageName() + "/LogUtil/";

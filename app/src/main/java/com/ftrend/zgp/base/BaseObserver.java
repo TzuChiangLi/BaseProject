@@ -27,14 +27,16 @@ public class BaseObserver<T> implements Observer<BaseResponse<T>> {
 
     @Override
     public void onNext(BaseResponse<T> tBaseResponse) {
+        //如果服务返回正常但是数据有错误，在返回的数据头上应该会有错误代码
+        //onErrorMessage()
         mCallBack.onSuccess(tBaseResponse.getBody(), tBaseResponse.getHead());
     }
 
     @Override
     public void onError(Throwable e) {
-        //此处需要对异常处理进行封装分类
-        mCallBack.onError();
-
+        //此处需要对异常处理进行封装分类，如果是服务出现错误此处e应该有回调值
+        ////onThrowableMessage()
+        mCallBack.onError("");
     }
 
     @Override
