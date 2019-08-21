@@ -8,9 +8,6 @@ import android.database.sqlite.SQLiteStatement;
 
 import com.ftrend.zgp.utils.log.LogUtil;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 数据库调用工具
  *
@@ -237,11 +234,9 @@ public class DatabaseManger<T> {
      * @param having
      * @param orderBy
      * @param limit
-     * @param <T>
      * @return
      */
-    public <T> List<T> query(String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, Integer limit) {
-        List<T> results = new ArrayList<T>();
+    public Cursor query(String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, Integer limit) {
         Cursor cursor = null;
         try {
             if (limit != null) {
@@ -249,7 +244,6 @@ public class DatabaseManger<T> {
             } else {
                 cursor = dbHelper.getReadableDatabase().query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
             }
-            results = queryResult(cursor);
         } catch (RuntimeException e) {
             LogUtil.e(e.getMessage());
         } finally {
@@ -257,19 +251,7 @@ public class DatabaseManger<T> {
                 cursor.close();
             }
         }
-        return results;
-
+        return cursor;
     }
 
-    /**
-     * 转换为对象
-     *
-     * @param cursor
-     * @param <T>
-     * @return
-     */
-    public <T> List<T> queryResult(Cursor cursor) {
-        //TODO 复写此方法
-        throw new RuntimeException("Please overwrite method.");
-    }
 }

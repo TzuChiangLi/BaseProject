@@ -5,13 +5,12 @@ import android.widget.TextView;
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.utils.http.BaseResponse;
-import com.ftrend.zgp.utils.http.HttpCallBack;
-import com.ftrend.zgp.utils.http.base_test.Login;
-import com.ftrend.zgp.utils.http.base_test.LoginSubsrcibe;
-import com.ftrend.zgp.utils.http.base_test.TestSubscribe;
-import com.ftrend.zgp.utils.http.base_test.User;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.permission.PermissionUtil;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -47,33 +46,35 @@ public class MainActivity extends BaseActivity {
         LogUtil.d("initTitleBar");
     }
 
+
     @OnClick(R.id.tv)
     public void show() {
-        LoginSubsrcibe.getInstance().login("TzuChiangLi", "85654886", new HttpCallBack<Login>() {
-            @Override
-            public void onStart() {
 
-            }
-
-            @Override
-            public void onSuccess(Login body, BaseResponse.ResHead head) {
-                LogUtil.d("----onSuccess"+body.getErrorMsg());
-            }
-
-            @Override
-            public void onFailed() {
-
-            }
-
-            @Override
-            public void onError() {
-
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        });
+//        LoginSubsrcibe.getInstance().login("TzuChiangLi", "85654886", new HttpCallBack<Login>() {
+//            @Override
+//            public void onStart() {
+//
+//            }
+//
+//            @Override
+//            public void onSuccess(Login body, BaseResponse.ResHead head) {
+//                LogUtil.d("----onSuccess"+body.getErrorMsg());
+//            }
+//
+//            @Override
+//            public void onFailed() {
+//
+//            }
+//
+//            @Override
+//            public void onError() {
+//
+//            }
+//
+//            @Override
+//            public void onFinish() {
+//
+//            }
+//        });
     }
 }
