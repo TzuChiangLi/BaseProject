@@ -16,7 +16,7 @@ import java.util.Date;
 /**
  * 打印日志工具类
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  */
 public class LogUtil {
     static String logPathStr = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DATA/" + AppUtils.getAppPackageName() + "/LogUtil/";
@@ -56,7 +56,7 @@ public class LogUtil {
      */
     public static void e(String msg) {
         if (showLog) {
-            Log.e(ActivityUtils.getTopActivity().toString(), msg);
+            Log.e(ActivityUtils.getTopActivity().getLocalClassName(), msg);
         }
         if (saveError) {
             FileWriter writer = null;
@@ -74,14 +74,14 @@ public class LogUtil {
                 writer.close();
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.e(ActivityUtils.getTopActivity().toString(), "为避免发生死循环错误: " + e.getMessage());
+                Log.e(ActivityUtils.getTopActivity().getLocalClassName(), "为避免发生死循环错误: " + e.getMessage());
             }
         }
     }
 
     public static void d(String msg) {
         if (showLog) {
-            Log.d(ActivityUtils.getTopActivity().toString(), msg);
+            Log.d(ActivityUtils.getTopActivity().getLocalClassName(), msg);
         } else {
             return;
         }
@@ -89,7 +89,7 @@ public class LogUtil {
 
     public static void i(String msg) {
         if (showLog) {
-            Log.i(ActivityUtils.getTopActivity().toString(), msg);
+            Log.i(ActivityUtils.getTopActivity().getLocalClassName(), msg);
         } else {
             return;
         }

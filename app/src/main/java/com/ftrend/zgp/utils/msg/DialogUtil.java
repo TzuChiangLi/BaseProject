@@ -8,7 +8,7 @@ import com.lxj.xpopup.XPopup;
  * 模态窗口调用工具
  * 用法：先构建DialogBuilder然后把builder作为参数传入进来
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  */
 public class DialogUtil {
 

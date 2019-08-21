@@ -3,7 +3,7 @@ package com.ftrend.zgp.utils.http;
 /**
  * Response响应报文
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  * * =============================RESPONSE====================================
  * {
  * "head": {

@@ -19,7 +19,7 @@ import butterknife.OnClick;
 /**
  * 模态弹窗构建工具
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  */
 public class DialogBuilder extends CenterPopupView {
     @BindView(R.id.dialog_img_state)

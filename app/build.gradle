@@ -58,6 +58,7 @@ dependencies {
     //弹窗库
     //https://github.com/li-xiaojun/XPopup
     implementation 'com.lxj:xpopup:1.8.8'
+    //GreenDao数据库ORM框架
     //一些公共自定义view
     implementation project(':library')
 

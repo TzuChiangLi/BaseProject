@@ -6,7 +6,11 @@ import com.ftrend.zgp.utils.http.HttpCallBack;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
-//备注：此处User是传入HttpCallBack需要的具体实体类
+/**
+ * 备注：此处User是传入HttpCallBack需要的具体实体类
+ *
+ * @author liziqiang@ftrend.cn
+ */
 public class TestObserver<User> implements Observer<BaseResponse<User>> {
     private HttpCallBack<User> mCallBack;
 
