@@ -15,6 +15,9 @@ import com.ftrend.library.R;
 
 import java.util.List;
 
+/**
+ * @author liziqiang@ftrend.cn
+ */
 public class KeyboardAdapter extends RecyclerView.Adapter<KeyboardAdapter.ViewHolder> implements View.OnClickListener {
     private static final String TAG = KeyboardAdapter.class.getSimpleName();
     private int parentHeight;
@@ -35,6 +38,12 @@ public class KeyboardAdapter extends RecyclerView.Adapter<KeyboardAdapter.ViewHo
 
 
     public interface OnItemClickListener {
+        /**
+         * 点击监听
+         *
+         * @param v
+         * @param position
+         */
         void onItemClick(View v, int position);
     }
 
@@ -104,7 +113,7 @@ public class KeyboardAdapter extends RecyclerView.Adapter<KeyboardAdapter.ViewHo
 
     public void setParentHeight(int parentHeight) {
         this.parentHeight = parentHeight;
-        Log.d(TAG, "----setParentHeight: "+parentHeight);
+        Log.d(TAG, "----setParentHeight: " + parentHeight);
     }
 
 

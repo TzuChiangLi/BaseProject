@@ -10,11 +10,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-/**Fragment基类
- * @author LZQ
+/**
+ * Fragment基类
+ *
+ * @author liziqiang@ftrend.cn
  */
 public class BaseFragment extends Fragment {
     public Activity mActivity;

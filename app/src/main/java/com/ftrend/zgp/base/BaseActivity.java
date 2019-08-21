@@ -13,12 +13,14 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.ftrend.zgp.utils.log.LogUtil;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
  * 基类
+ * @author liziqiang@ftrend.cn
  */
 public abstract class BaseActivity extends AppCompatActivity {
     public Unbinder unbinder;
@@ -136,7 +138,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                     }
 //                    Toast.makeText(context, sb.toString(), Toast.LENGTH_SHORT).show();
                 } else {
-//                    ToastUtil.show("当前无网络连接");
+//                    MessageUtil.show("当前无网络连接");
                 }
             }
         }

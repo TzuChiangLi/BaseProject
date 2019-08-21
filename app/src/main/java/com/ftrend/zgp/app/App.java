@@ -3,11 +3,11 @@ package com.ftrend.zgp.app;
 import android.app.Application;
 
 import com.ftrend.zgp.utils.log.LogUtil;
-import com.ftrend.zgp.utils.toast.ToastUtil;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.qw.soul.permission.SoulPermission;
 
 /**
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  * @content 初始化相关工具组件
  */
 public class App extends Application {
@@ -16,7 +16,7 @@ public class App extends Application {
         super.onCreate();
         //region 吐司初始化
         //初始化Toast样式
-        ToastUtil.init(this);
+        MessageUtil.init(this);
         //endregion
         //region 打印日志初始化
         //设置日志输出为打印日志，出现error时保存到log.txt文件中

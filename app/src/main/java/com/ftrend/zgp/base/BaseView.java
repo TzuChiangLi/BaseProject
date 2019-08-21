@@ -1,8 +1,9 @@
 package com.ftrend.zgp.base;
 
 /**
- * @author LZQ
  * MVP中的V层基类，Activity或者Fragment继承后需要注入Presenter
+ *
+ * @author liziqiang@ftrend.cn
  */
 public interface BaseView<T> {
     /**

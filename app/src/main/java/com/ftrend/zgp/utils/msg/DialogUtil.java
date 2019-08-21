@@ -1,4 +1,6 @@
-package com.ftrend.zgp.utils.dialog;
+package com.ftrend.zgp.utils.msg;
+
+import android.content.Context;
 
 import com.lxj.xpopup.XPopup;
 
@@ -10,31 +12,31 @@ import com.lxj.xpopup.XPopup;
  */
 public class DialogUtil {
 
-    public static void showTipDialog(DialogBuilder builder) {
+    public static void showTipDialog(Context context, DialogBuilder builder) {
         builder.setDialogType(0);
-        new XPopup.Builder(builder.getBuilderContext())
+        new XPopup.Builder(context)
                 .asCustom(builder)
                 .show();
     }
 
 
-    public static void showWarningDialog(DialogBuilder builder) {
+    public static void showWarningDialog(Context context, DialogBuilder builder) {
         builder.setDialogType(1);
-        new XPopup.Builder(builder.getBuilderContext())
+        new XPopup.Builder(context)
                 .asCustom(builder)
                 .show();
     }
 
-    public static void showErrorDialog(DialogBuilder builder) {
+    public static void showErrorDialog(Context context, DialogBuilder builder) {
         builder.setDialogType(2);
-        new XPopup.Builder(builder.getBuilderContext())
+        new XPopup.Builder(context)
                 .asCustom(builder)
                 .show();
     }
 
-    public static void showAskDialog(DialogBuilder builder) {
+    public static void showAskDialog(Context context, DialogBuilder builder) {
         builder.setDialogType(3);
-        new XPopup.Builder(builder.getBuilderContext())
+        new XPopup.Builder(context)
                 .asCustom(builder)
                 .show();
     }

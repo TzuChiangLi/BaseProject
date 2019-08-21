@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * 在布局文件引用本控件后，不设定style会使用默认数字键盘布局，设定后会根据style值显示相应的布局
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  */
 public class KeyboardView extends LinearLayout implements View.OnClickListener, KeyboardAdapter.OnItemClickListener {
     private static final String TAG = "KeyboardView";

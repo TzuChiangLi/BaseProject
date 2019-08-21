@@ -7,7 +7,7 @@ import android.util.AttributeSet;
 /**
  * 自定义设置网格布局管理器禁止滑动(是否生效不能确定。最大程度的保障不让他滑动)
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  */
 public class DisableScrollLayoutManager extends GridLayoutManager {
     /**

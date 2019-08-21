@@ -5,5 +5,5 @@ package com.ftrend.zgp.utils.http;
  * @author LZQ
  */
 public class HttpBaseURL {
-    public static final String URL="";
+    public static final String URL="https://www.wanandroid.com/";
 }

@@ -28,15 +28,62 @@ public class BaseResponse<T> {
      */
     private T body;
 
-    public class ResHead {
+    public static class ResHead {
         private String requestNo;
         private String createTime;
         private String retFlag;
         private String retMsg;
+
+        public ResHead() {
+        }
+
+        public ResHead(String requestNo, String createTime, String retFlag, String retMsg) {
+            this.requestNo = requestNo;
+            this.createTime = createTime;
+            this.retFlag = retFlag;
+            this.retMsg = retMsg;
+        }
+
+        public String getRequestNo() {
+            return requestNo;
+        }
+
+        public void setRequestNo(String requestNo) {
+            this.requestNo = requestNo;
+        }
+
+        public String getCreateTime() {
+            return createTime;
+        }
+
+        public void setCreateTime(String createTime) {
+            this.createTime = createTime;
+        }
+
+        public String getRetFlag() {
+            return retFlag;
+        }
+
+        public void setRetFlag(String retFlag) {
+            this.retFlag = retFlag;
+        }
+
+        public String getRetMsg() {
+            return retMsg;
+        }
+
+        public void setRetMsg(String retMsg) {
+            this.retMsg = retMsg;
+        }
     }
 
+    public BaseResponse() {
+    }
 
-
+    public BaseResponse(ResHead head, T body) {
+        this.head = head;
+        this.body = body;
+    }
 
     public ResHead getHead() {
         return head;
