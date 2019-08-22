@@ -22,7 +22,6 @@ public class DatabaseManger {
      * 构造方法上下文
      *
      * @param context
-     * @return
      */
     private DatabaseManger(Context context) {
         dbHelper = new DBHelper(context);
@@ -32,14 +31,13 @@ public class DatabaseManger {
     /**
      * 获取本类对象的实例
      *
-     * @param context
-     * @return
+     * @param context 上下文
+     * @return 实例
      */
     public static final DatabaseManger getInstance(Context context) {
         if (INSTANCE == null) {
             if (context == null) {
                 throw new RuntimeException("Context is null.");
-
             }
             INSTANCE = new DatabaseManger(context);
         }
@@ -67,10 +65,14 @@ public class DatabaseManger {
      * 执行一条sql语句
      */
     public void execSql(String sql) {
-        if (db.isOpen()) {
-            db.execSQL(sql);
-        } else {
-            throw new RuntimeException("The DataBase has already closed");
+        try {
+            if (db.isOpen()) {
+                db.execSQL(sql);
+            } else {
+                LogUtil.e("execSql:The DataBase has already closed");
+            }
+        } catch (Exception e) {
+            LogUtil.e(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + e.getMessage());
         }
     }
 
@@ -81,10 +83,14 @@ public class DatabaseManger {
      */
     public Cursor queryData2Cursor(String sql, String[] selectionArgs) throws Exception {
         Cursor cursor = null;
-        if (db.isOpen()) {
-            cursor = db.rawQuery(sql, selectionArgs);
-        } else {
-            throw new RuntimeException("The DataBase has already closed");
+        try {
+            if (db.isOpen()) {
+                cursor = db.rawQuery(sql, selectionArgs);
+            } else {
+                LogUtil.e("queryData2Cursor:The DataBase has already closed");
+            }
+        } catch (Exception e) {
+            LogUtil.e(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + e.getMessage());
         }
         return cursor;
     }
@@ -96,14 +102,19 @@ public class DatabaseManger {
     public int getDataCounts(String table) throws Exception {
         Cursor cursor = null;
         int counts = 0;
-        if (db.isOpen()) {
-            cursor = queryData2Cursor("select * from " + table, null);
-            if (cursor != null && cursor.moveToFirst()) {
-                counts = cursor.getCount();
+        try {
+            if (db.isOpen()) {
+                cursor = queryData2Cursor("select * from " + table, null);
+                if (cursor != null && cursor.moveToFirst()) {
+                    counts = cursor.getCount();
+                }
+            } else {
+                LogUtil.e("getDataCounts:The DataBase has already closed");
             }
-        } else {
-            throw new RuntimeException("The DataBase has already closed");
+        } catch (Exception e) {
+            LogUtil.e(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + e.getMessage());
         }
+
         return counts;
     }
 
@@ -113,11 +124,16 @@ public class DatabaseManger {
      * @param table
      */
     public void clearAllData(String table) throws Exception {
-        if (db.isOpen()) {
-            execSql("delete from " + table);
-        } else {
-            throw new RuntimeException("The DataBase has already closed");
+        try {
+            if (db.isOpen()) {
+                execSql("delete from " + table);
+            } else {
+                LogUtil.e("clearAllData:The DataBase has already closed");
+            }
+        } catch (Exception e) {
+            LogUtil.e(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + e.getMessage());
         }
+
     }
 
     /**
@@ -128,20 +144,24 @@ public class DatabaseManger {
      * @return 返回插入对应的ID，返回0，则插入无效
      */
 
-    public long insertDataBySql(String sql, String[] bindArgs) throws Exception {
+    public long insertDataBySql(String sql, String[] bindArgs) {
         long id = 0;
-        if (db.isOpen()) {
-            SQLiteStatement sqLiteStatement = db.compileStatement(sql);
-            if (bindArgs != null) {
-                int size = bindArgs.length;
-                for (int i = 0; i < size; i++) {
-                    sqLiteStatement.bindString(i + 1, bindArgs[i]);
+        try {
+            if (db.isOpen()) {
+                SQLiteStatement sqLiteStatement = db.compileStatement(sql);
+                if (bindArgs != null) {
+                    int size = bindArgs.length;
+                    for (int i = 0; i < size; i++) {
+                        sqLiteStatement.bindString(i + 1, bindArgs[i]);
+                    }
+                    id = sqLiteStatement.executeInsert();
+                    sqLiteStatement.close();
                 }
-                id = sqLiteStatement.executeInsert();
-                sqLiteStatement.close();
+            } else {
+                LogUtil.e("insertDataBySql:The DataBase has already closed");
             }
-        } else {
-            throw new RuntimeException("The DataBase has already closed");
+        } catch (Exception e) {
+            LogUtil.e("insertDataBySql:" + e.getMessage());
         }
         return id;
     }
@@ -153,12 +173,16 @@ public class DatabaseManger {
      * @param values 数据
      * @return 返回插入的ID，返回0，则插入失败
      */
-    public long insetData(String table, ContentValues values) throws Exception {
+    public long insertData(String table, ContentValues values) {
         long id = 0;
-        if (db.isOpen()) {
-            id = db.insertOrThrow(table, null, values);
-        } else {
-            throw new RuntimeException("The DataBase has already closed");
+        try {
+            if (db.isOpen()) {
+                id = db.insertOrThrow(table, null, values);
+            } else {
+                LogUtil.e("insetData:The DataBase has already closed");
+            }
+        } catch (Exception e) {
+            LogUtil.e("insertData:" + e.getMessage());
         }
         return id;
     }
@@ -173,12 +197,16 @@ public class DatabaseManger {
      * @param whereArgs    表示占位符的值
      * @return 受影响的行数
      */
-    public int updateData(String table, ContentValues values, String whereClaause, String[] whereArgs) throws Exception {
+    public int updateData(String table, ContentValues values, String whereClaause, String[] whereArgs) {
         int rowsNum = 0;
-        if (db.isOpen()) {
-            rowsNum = db.update(table, values, whereClaause, whereArgs);
-        } else {
-            throw new RuntimeException("The DataBase has already closed");
+        try {
+            if (db.isOpen()) {
+                rowsNum = db.update(table, values, whereClaause, whereArgs);
+            } else {
+                LogUtil.e("updateData:The DataBase has already closed");
+            }
+        } catch (Exception e) {
+            LogUtil.e("updateData:" + e.getMessage());
         }
         return rowsNum;
     }
@@ -189,19 +217,23 @@ public class DatabaseManger {
      * @param sql      待执行的sql语句
      * @param bindArgs sql语句中的参数，参数的顺序对应占位符的顺序
      */
-    public void deleteDataBySql(String sql, String[] bindArgs) throws Exception {
-        if (db.isOpen()) {
-            SQLiteStatement statement = db.compileStatement(sql);
-            if (bindArgs != null) {
-                int size = bindArgs.length;
-                for (int i = 0; i < size; i++) {
-                    statement.bindString(i + 1, bindArgs[i]);
+    public void deleteDataBySql(String sql, String[] bindArgs) {
+        try {
+            if (db.isOpen()) {
+                SQLiteStatement statement = db.compileStatement(sql);
+                if (bindArgs != null) {
+                    int size = bindArgs.length;
+                    for (int i = 0; i < size; i++) {
+                        statement.bindString(i + 1, bindArgs[i]);
+                    }
+                    statement.execute();
+                    statement.close();
                 }
-                statement.execute();
-                statement.close();
+            } else {
+                LogUtil.e("deleteDataBySql:The DataBase has already closed");
             }
-        } else {
-            throw new RuntimeException("The DataBase has already closed");
+        } catch (Exception e) {
+            LogUtil.e("deleteDataBySql:" + e.getMessage());
         }
     }
 
@@ -213,13 +245,18 @@ public class DatabaseManger {
      * @param whereArgs   占位符的值
      * @return
      */
-    public long deleteData(String table, String whereClause, String[] whereArgs) throws Exception {
+    public long deleteData(String table, String whereClause, String[] whereArgs) {
         long rowsNum = 0;
-        if (db.isOpen()) {
-            rowsNum = db.delete(table, whereClause, whereArgs);
-        } else {
-            throw new RuntimeException("The DataBase has already closed");
+        try {
+            if (db.isOpen()) {
+                rowsNum = db.delete(table, whereClause, whereArgs);
+            } else {
+                LogUtil.e("deleteData:The DataBase has already closed");
+            }
+        } catch (Exception e) {
+            LogUtil.e("deleteData:" + e.getMessage());
         }
+
         return rowsNum;
     }
 
@@ -245,7 +282,7 @@ public class DatabaseManger {
                 cursor = dbHelper.getReadableDatabase().query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
             }
         } catch (RuntimeException e) {
-            LogUtil.e(e.getMessage());
+            LogUtil.e("query:" + e.getMessage());
         } finally {
             if (cursor != null) {
                 cursor.close();

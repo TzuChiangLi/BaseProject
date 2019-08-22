@@ -1,6 +1,5 @@
 package com.ftrend.zgp.utils.http.base_test;
 
-import com.ftrend.zgp.utils.http.BaseResponse;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 
 import io.reactivex.Observer;
@@ -26,7 +25,7 @@ public class BaseLoginObserver implements Observer<Login> {
 
     @Override
     public void onNext(Login login) {
-        mCallBack.onSuccess(login,null);
+        mCallBack.onSuccess(login, null);
     }
 
 //    @Override
@@ -37,13 +36,12 @@ public class BaseLoginObserver implements Observer<Login> {
     @Override
     public void onError(Throwable e) {
         //此处需要对异常处理进行封装分类
-        mCallBack.onError();
+        mCallBack.onError(e.getMessage());
 
     }
 
     @Override
     public void onComplete() {
         mCallBack.onFinish();
-
     }
 }
