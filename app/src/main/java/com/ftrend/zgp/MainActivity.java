@@ -11,10 +11,6 @@ import com.ftrend.zgp.utils.http.base_test.LoginSubsrcibe;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.permission.PermissionUtil;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -61,7 +57,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onSuccess(Login body, BaseResponse.ResHead head) {
-                LogUtil.d("----onSuccess"+body.getErrorMsg());
+                LogUtil.d("----onSuccess" + body.getErrorMsg());
             }
 
             @Override

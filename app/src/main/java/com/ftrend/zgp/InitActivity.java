@@ -8,8 +8,9 @@ import com.ftrend.zgp.utils.log.LogUtil;
 import butterknife.BindView;
 
 /**
+ * 首次初始化，想法是ViewPager+fragment来控制初始化流程
+ *
  * @author liziqiang@ftrend.cn
- * @content 首次初始化，想法是ViewPager+fragment来控制初始化流程
  */
 public class InitActivity extends BaseActivity {
     @BindView(R.id.init_view_pager)
