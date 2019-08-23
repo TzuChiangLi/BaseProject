@@ -59,9 +59,29 @@ public class DBHelper extends SQLiteOpenHelper {
             "Amount decimal(12,4) not null,Change decimal(12,4) default(0)," +
             "PayCode varchar(20),PayTime datetime(19) not null);";
     //交班记录
-    public static final String CREATE_HANDOVER = "";
+    public static final String CREATE_HANDOVER = "create table Handover(" +
+            "ID Integer primary key autoincrement not null," +
+            "HandoverNo varchar(8) not null,HandoverTime datetime(19) not null," +
+            "DepCode varchar(12) not null,Cashier varchar(6) not null," +
+            "LsNoMin varchar(8) not null,LsNoMax varchar(8) not null," +
+            "SaleCount decimal(12,4) default(0) not null," +
+            "SaleTotal decimal(12,4) default(0) not null," +
+            "RtnCount decimal(12,4) default(0) not null," +
+            "DelCount decimal(12,4) default(0) not null," +
+            "DelTotal decimal(12,4) default(0) not null," +
+            "CancelCount decimal(12,4) default(0) not null," +
+            "CancelTotal decimal(12,4) default(0) not null," +
+            "HangupCount decimal(12,4) default(0) not null," +
+            "HangupTotal decimal(12,4) default(0) not null," +
+            "Status varchar(1) default(0) not null);";
     //交班记录(支付方式统计)
-    public static final String CREATE_HANDOVERPAY = "create table HandoverPay ";
+    public static final String CREATE_HANDOVERPAY = "create table HandoverPay(" +
+            "ID Integer primary key autoincrement not null," +
+            "HandoverNo varchar(8) not null,TradeFlag varchar(1) not null," +
+            "PayType varchar(1) not null,SaleCount decimal(12,4) default(0) not null," +
+            "SaleTotal decimal(12,4) default(0) not null," +
+            "RtnCount decimal(12,4) default(0) not null," +
+            "RtnTotal decimal(12,4) default(0) not null);";
     //打印记录
     public static final String CREATE_PRINTLOG = "create table PrintLog(" +
             "ID Integer primary key autoincrement not null," +
@@ -128,7 +148,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_DEP);
         db.execSQL(CREATE_SYSPARAMS);
         db.execSQL(CREATE_PRINTLOG);
-
+        db.execSQL(CREATE_HANDOVERPAY);
+        db.execSQL(CREATE_HANDOVER);
     }
 
     @Override
