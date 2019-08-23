@@ -44,10 +44,18 @@ public class HttpManager {
     public static String onThrowableMessage(Throwable e) {
         if (e instanceof HttpException) {
             switch (((HttpException) e).code()) {
+                //5XX是服务器错误
                 case 504:
                     return "网络异常，请检查您的网络状态";
+                case 503:
+                    return "当前服务不可用";
+                //4XX是请求错误
                 case 404:
                     return "请求的地址不存在";
+                case 403:
+                    return "服务器拒绝请求";
+                case 400:
+                    return "发送了错误的请求";
                 default:
                     return "Error:" + e.getMessage();
             }
