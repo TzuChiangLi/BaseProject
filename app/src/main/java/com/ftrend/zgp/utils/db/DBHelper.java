@@ -5,19 +5,29 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * 数据库创建、升级工具
+ */
 public class DBHelper extends SQLiteOpenHelper {
-    //数据库名称
+    /**
+     * 数据库名称
+     */
     private static final String DATABASE_NAME = "TEST";
-    //数据库版本号
+    /**
+     * 数据库版本号
+     */
     private static final int DATABASE_VERSION = 0;
-    //暂时的测试表
-    //专柜商品类别
+    /**
+     * 专柜商品类别
+     */
     public static final String CREATE_DEPCLS = "create table DepCls(" +
             "ID Integer primary key autoincrement not null," +
             "DepCode varchar(12) not null," +
             "ClsCode varchar(12) not null," +
             "ClsName varchar(40) not null);";
-    //专柜商品信息
+    /**
+     * 专柜商品信息
+     */
     public static final String CREATE_DEPPRODUCT = "create table DepProduct(" +
             "ID Integer primary key autoincrement not null," +
             "ProdCode varchar(18) not null,BarCode varchar(18)," +
@@ -30,19 +40,25 @@ public class DBHelper extends SQLiteOpenHelper {
             "VipPrice1 Decimal(12,4),VipPrice2 Decimal(12,4),VipPrice3 Decimal(12,4)," +
             "VipRate1 Decimal(12,4),VipRate2 Decimal(12,4),VipRate3 Decimal(12,4)," +
             "MinimumPrice Decimal(12,4));";
-    //专柜支付类型
+    /**
+     * 专柜支付类型
+     */
     public static final String CREATE_DEPPAYINFO = "create table DepPayInfo(" +
             "ID Integer primary key autoincrement not null," +
             "DepCode varchar(12) not null,PayTypeCode varchar(1) not null," +
             "PayTypeName varchar(40) not null,AppPayType varchar(1) not null);";
-    //交易流水表
+    /**
+     * 交易流水表
+     */
     public static final String CREATE_TRADE = "create table Trade(ID Integer primary key autoincrement not null," +
             "DepCode varchar(12) not null,LsNo varchar(8) not null,TradeTime datetime(19)," +
             "TradeFlag varchar(1) not null,Cashier varchar(6) not null," +
             "DscTotal decimal(12,4),Total decimal(12,4),CustType varchar(1)," +
             "VipCode varchar(20),CardCode varchar(20),VipTotal decimal(12,4) default(0)," +
             "Status varchar(1) default(0) not null);";
-    //交易商品表
+    /**
+     * 交易商品表
+     */
     public static final String CREATE_TRADEPROD = "create table TradeProd(" +
             "ID Integer primary key autoincrement not null," +
             "LsNo varchar(8) not null,SortNo Integer(4) not null," +
@@ -52,13 +68,17 @@ public class DBHelper extends SQLiteOpenHelper {
             "ManuDsc decimal(8) default(0),TranDsc decimal(8)," +
             "Total decimal(8),VipTotal decimal(8),SaleInfo varchar(50)," +
             "DelFlag varchar(0) default(0));";
-    //交易支付表
+    /**
+     * 交易支付表
+     */
     public static final String CREATE_TRADEPAY = "create table TradePay(" +
             "ID Integer primary key autoincrement not null," +
             "LsNo varchar(8) not null,PayType varchar(1) not null," +
             "Amount decimal(12,4) not null,Change decimal(12,4) default(0)," +
             "PayCode varchar(20),PayTime datetime(19) not null);";
-    //交班记录
+    /**
+     * 交班记录
+     */
     public static final String CREATE_HANDOVER = "create table Handover(" +
             "ID Integer primary key autoincrement not null," +
             "HandoverNo varchar(8) not null,HandoverTime datetime(19) not null," +
@@ -74,7 +94,9 @@ public class DBHelper extends SQLiteOpenHelper {
             "HangupCount decimal(12,4) default(0) not null," +
             "HangupTotal decimal(12,4) default(0) not null," +
             "Status varchar(1) default(0) not null);";
-    //交班记录(支付方式统计)
+    /**
+     * 交班记录(支付方式统计)
+     */
     public static final String CREATE_HANDOVERPAY = "create table HandoverPay(" +
             "ID Integer primary key autoincrement not null," +
             "HandoverNo varchar(8) not null,TradeFlag varchar(1) not null," +
@@ -82,39 +104,52 @@ public class DBHelper extends SQLiteOpenHelper {
             "SaleTotal decimal(12,4) default(0) not null," +
             "RtnCount decimal(12,4) default(0) not null," +
             "RtnTotal decimal(12,4) default(0) not null);";
-    //打印记录
+    /**
+     * 打印记录
+     */
     public static final String CREATE_PRINTLOG = "create table PrintLog(" +
             "ID Integer primary key autoincrement not null," +
             "PrintType varchar(1) not null,DocName varchar(40) not null," +
             "PrintCount Integer not null,PrintTime datetime not null," +
             "UserCode varchar(6) not null);";
-    //系统参数
+    /**
+     * 系统参数
+     */
     public static final String CREATE_SYSPARAMS = "create table SysParams(" +
             "ID Integer primary key autoincrement not null," +
             "ParamName varchar(20) not null,ParamValue varchar(100) not null);";
-    //可登录专柜信息
+    /**
+     * 可登录专柜信息
+     */
     public static final String CREATE_DEP = "create table Dep(" +
             "ID Integer primary key autoincrement not null," +
             "DepCode varchar(12) not null,DepName varchar(40) not null);";
-    //可登录用户信息
+    /**
+     * 可登录用户信息
+     */
     public static final String CREATE_USER = "create table User(" +
             "ID Integer primary key autoincrement not null,UserCode varchar(6) not null," +
             "UserName varchar(10) not null,UserPwd varchar(12) not null," +
             "UserRights varchar(500) not null,MaxDscRate Integer(4) default(0) not null," +
             "MaxDscTotal decimal(12,4) default(0) not null," +
             "MaxTHTotal decimal(12,4) default(0) not null);";
-    //用户操作日志
+    /**
+     * 用户操作日志
+     */
     public static final String CREATE_USERLOG = "create table UserLog(" +
             "ID Integer primary key autoincrement not null," +
             "Module varchar(10),Function varchar(10),OccurTime datetime not null," +
             "Content varchar(1000) not null,UserCode varchar(6),DepCode varchar(12));";
-    //交易流水上传队列
+    /**
+     * 交易流水上传队列
+     */
     public static final String CREATE_TRADEUPLOADQUEUE = "create table TradeUploadQueue(" +
             "ID Integer primary key autoincrement not null," +
             "DepCode varchar(12) not null,LsNo varchao(8) not null," +
             "EnquequeTime datetime(19) not null,UploadTime datetime(19) not null);";
-
-
+    /**
+     * App配置参数
+     */
     public static final String CREATE_APPPARAMS = "create table AppParams("
             + "ID integer primary key autoincrement not null,"
             + "ParamName varchar(20) not null,"
