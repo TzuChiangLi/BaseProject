@@ -1,24 +1,23 @@
-package com.ftrend.zgp;
+package com.ftrend.zgp.init;
 
 import android.support.v4.view.ViewPager;
 
+import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.utils.log.LogUtil;
 
 import butterknife.BindView;
 
 /**
- * 首次初始化，想法是ViewPager+fragment来控制初始化流程
+ * 首次初始化
  *
  * @author liziqiang@ftrend.cn
  */
 public class InitActivity extends BaseActivity {
-    @BindView(R.id.init_view_pager)
-    ViewPager mViewPager;
 
 
     @Override
-    protected int getLayoutID(int i) {
+    protected int getLayoutID() {
         return R.layout.init_activity;
     }
 

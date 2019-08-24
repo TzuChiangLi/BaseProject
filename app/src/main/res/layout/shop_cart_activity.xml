@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".shop.ShopCartActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/shop_cart_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        app:rightColor="@color/black"
+        app:rightTitle="联网状态"
+        app:title="收银-选择商品" />
+
+    <LinearLayout
+        android:id="@+id/shop_cart_top_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/shop_cart_top_bar"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <Button
+            android:id="@+id/shop_cart_top_ll_btn_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="扫码" />
+
+        <com.ftrend.cleareditview.ClearEditText
+            android:id="@+id/shop_cart_top_ll_edt_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="请输入商品吗、条码或者商品名称"
+            android:textSize="14sp" />
+
+
+    </LinearLayout>
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/shop_cart_rv_classes"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/shop_cart_ll_bottom"
+        android:layout_below="@+id/shop_cart_top_ll"
+        android:layout_alignParentStart="true"
+        tools:listitem="@layout/shop_cart_rv_classes_item" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/shop_cart_rv_product"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/shop_cart_ll_bottom"
+        android:layout_below="@+id/shop_cart_top_ll"
+        android:layout_toEndOf="@+id/shop_cart_rv_classes" />
+
+    <RelativeLayout
+        android:id="@+id/shop_cart_ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/shop_cart_bottom_btn_car"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="购物车" />
+
+
+        <TextView
+            android:id="@+id/shop_cart_bottom_tv_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/shop_cart_bottom_btn_car"
+            android:layout_alignBottom="@+id/shop_cart_bottom_btn_car"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_toEndOf="@+id/shop_cart_bottom_btn_car"
+            android:gravity="center"
+            android:text="9999.99" />
+
+        <Button
+            android:id="@+id/shop_cart_bottom_tv_hang_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/shop_cart_bottom_tv_payment"
+            android:gravity="center"
+            android:text="挂单" />
+
+
+        <Button
+            android:id="@+id/shop_cart_bottom_tv_payment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="结算" />
+
+    </RelativeLayout>
+</RelativeLayout>
+
+
+    <!--<RelativeLayout--><!--android:id="@+id/shop_cart_top_rl"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content">-->
+
+    <!--<ImageView--><!--android:id="@+id/shop_cart_top_img_dep"--><!--android:layout_width="80dp"--><!--android:layout_height="80dp"--><!--android:layout_margin="8dp"--><!--android:background="@color/divide_line" />-->
+
+    <!--<TextView--><!--android:id="@+id/shop_cart_top_img_depname"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_alignTop="@+id/shop_cart_top_img_dep"--><!--android:layout_toEndOf="@+id/shop_cart_top_img_dep"--><!--android:text="XXXX专柜名称"--><!--android:textSize="20sp" />-->
+
+    <!--<TextView--><!--android:id="@+id/shop_cart_top_tv_title_time"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_alignStart="@+id/shop_cart_top_img_depname"--><!--android:layout_alignBottom="@+id/shop_cart_top_img_dep"--><!--android:text="营业时间：" />-->
+
+    <!--<TextView--><!--android:id="@+id/shop_cart_top_tv_time"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_alignTop="@+id/shop_cart_top_tv_title_time"--><!--android:layout_toEndOf="@+id/shop_cart_top_tv_title_time"--><!--android:text="2019年8月24日" />-->
+
+    <!--<TextView--><!--android:id="@+id/shop_cart_top_tv_title_assistant"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_alignTop="@+id/shop_cart_top_tv_time"--><!--android:layout_toStartOf="@+id/shop_cart_top_tv_assistant"--><!--android:text="营业员：" />-->
+
+    <!--<TextView--><!--android:id="@+id/shop_cart_top_tv_assistant"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_alignTop="@+id/shop_cart_top_tv_title_assistant"--><!--android:layout_alignParentEnd="true"--><!--android:layout_marginEnd="8dp"--><!--android:text="收款员2" />--><!--</RelativeLayout>-->

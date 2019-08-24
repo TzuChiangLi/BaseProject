@@ -4,6 +4,8 @@ import android.widget.TextView;
 
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.base.BaseActivity;
+import com.ftrend.zgp.utils.db.DBHelper;
+import com.ftrend.zgp.utils.db.DatabaseManger;
 import com.ftrend.zgp.utils.http.BaseResponse;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.http.base_test.Login;
@@ -25,12 +27,14 @@ public class MainActivity extends BaseActivity {
 
 
     @Override
-    protected int getLayoutID(int i) {
+    protected int getLayoutID() {
         return R.layout.main_activity;
     }
 
     @Override
     protected void initData() {
+        DBHelper dbHelper = new DBHelper(this,"TEST.db",null,1);
+        dbHelper.getWritableDatabase();
         LogUtil.d("initData");
     }
 

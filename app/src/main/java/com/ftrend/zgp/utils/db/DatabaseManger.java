@@ -37,7 +37,7 @@ public class DatabaseManger {
     public static final DatabaseManger getInstance(Context context) {
         if (INSTANCE == null) {
             if (context == null) {
-                throw new RuntimeException("Context is null.");
+                LogUtil.e("Context is null.");
             }
             INSTANCE = new DatabaseManger(context);
         }

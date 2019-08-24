@@ -58,7 +58,8 @@ dependencies {
     //弹窗库
     //https://github.com/li-xiaojun/XPopup
     implementation 'com.lxj:xpopup:1.8.8'
-    //GreenDao数据库ORM框架
+    //titleBar状态栏https://github.com/getActivity/TitleBar
+    implementation 'com.hjq:titlebar:6.0'
     //一些公共自定义view
     implementation project(':library')
 

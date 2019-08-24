@@ -1,14 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".InitActivity">
+    tools:context=".init.InitActivity">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/init_view_pager"
+    <TextView
+        android:id="@+id/init_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:text="@string/init_title"
+        android:textColor="@color/init_title"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/init_tv_warning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/init_tv_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="@string/init_warning"
+        android:textColor="@color/init_warning" />
+
+
+    <RelativeLayout
+        android:id="@+id/init_rl_result"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/init_tv_result_title1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:text="@string/init_result_title"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/init_tv_result_title2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/init_tv_result_title1"
+            android:layout_marginStart="36dp"
+            android:text="@string/init_result_title_machine" />
 
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/init_result_machine"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/init_tv_result_title2"
+            android:layout_toEndOf="@+id/init_tv_result_title2"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/init_result_machine" />
+
+
+        <TextView
+            android:id="@+id/init_tv_result_title3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/init_result_machine"
+            android:layout_marginStart="36dp"
+            android:text="@string/init_result_title_desk" />
+
+
+        <TextView
+            android:id="@+id/init_result_desk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/init_tv_result_title3"
+            android:layout_toEndOf="@+id/init_tv_result_title2"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/init_result_desk" />
+
+
+        <TextView
+            android:id="@+id/init_tv_result_title4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/init_result_desk"
+            android:layout_marginStart="36dp"
+            android:text="@string/init_result_title_user" />
+
+        <TextView
+            android:id="@+id/init_result_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/init_tv_result_title4"
+            android:layout_toEndOf="@+id/init_tv_result_title2"
+            android:lineSpacingExtra="4dp"
+            android:text="@string/init_result_user" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
