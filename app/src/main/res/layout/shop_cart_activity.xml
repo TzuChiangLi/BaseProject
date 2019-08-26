@@ -11,8 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         app:rightColor="@color/black"
-        app:rightTitle="联网状态"
-        app:title="收银-选择商品" />
+        app:rightTitle="@string/app_online_status"
+        app:title="@string/shop_title_bar_shop" />
 
     <LinearLayout
         android:id="@+id/shop_cart_top_ll"
@@ -54,7 +54,8 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/shop_cart_ll_bottom"
         android:layout_below="@+id/shop_cart_top_ll"
-        android:layout_toEndOf="@+id/shop_cart_rv_classes" />
+        android:layout_toEndOf="@+id/shop_cart_rv_classes"
+        tools:listitem="@layout/shop_cart_rv_product_item" />
 
     <RelativeLayout
         android:id="@+id/shop_cart_ll_bottom"

@@ -73,7 +73,7 @@ public class DBHelper extends SQLiteOpenHelper {
      */
     private static final String CREATE_TRADEPAY = "create table TradePay(" +
             "ID Integer primary key autoincrement not null," +
-            "LsNo Text(8) not null,PayType Text(1) not null," +
+            "LsNo Text(8) not null,PayTypeCode Text(1) not null," +
             "Amount Decimal(12,4) not null,Change Decimal(12,4) default(0)," +
             "PayCode Text(20),PayTime Datetime(19) not null);";
     /**
