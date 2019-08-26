@@ -1,4 +1,4 @@
-package com.ftrend.zgp.login;
+package com.ftrend.zgp.view;
 
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;

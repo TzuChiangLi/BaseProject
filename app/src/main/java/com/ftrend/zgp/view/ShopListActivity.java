@@ -1,18 +1,19 @@
-package com.ftrend.zgp.shop;
+package com.ftrend.zgp.view;
 
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
 
 /**
- * 购物车功能
+ * 购物车
+ *
  * @author liziqiang@ftrend.cn
  */
-public class ShopCartActivity extends BaseActivity {
+public class ShopListActivity extends BaseActivity {
 
 
     @Override
     protected int getLayoutID() {
-        return R.layout.shop_cart_activity;
+        return R.layout.shop_list_activity;
     }
 
     @Override

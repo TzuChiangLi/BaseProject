@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/main_rv_menu_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/divide_line"
+        android:paddingStart="16dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_rv_menu_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@+id/main_rv_menu_title"
+        tools:listitem="@layout/menu_rv_func_item" />
+</RelativeLayout>

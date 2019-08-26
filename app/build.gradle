@@ -60,6 +60,10 @@ dependencies {
     implementation 'com.lxj:xpopup:1.8.8'
     //titleBar状态栏https://github.com/getActivity/TitleBar
     implementation 'com.hjq:titlebar:6.0'
+    //BRVAH万能适配器
+    //https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47'
+
     //一些公共自定义view
     implementation project(':library')
 
