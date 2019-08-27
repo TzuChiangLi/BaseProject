@@ -5,13 +5,12 @@ import android.util.Log;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.AppUtils;
+import com.ftrend.zgp.utils.db.DatabaseManger;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * 打印日志工具类
@@ -67,7 +66,7 @@ public class LogUtil {
                 bufWriter.write(String.format("----------------------------------------------------------------------------------------------%s%s%s%s%s",
                         "\n异常原因：",
                         msg, "\n发生时间：",
-                        new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss").format(new Date()),
+                        DatabaseManger.getDateTime().toString(),
                         "\n"));
                 bufWriter.newLine();
                 bufWriter.close();
@@ -82,18 +81,15 @@ public class LogUtil {
     public static void d(String msg) {
         if (showLog) {
             Log.d(ActivityUtils.getTopActivity().getLocalClassName(), msg);
-        } else {
-            return;
         }
     }
 
     public static void i(String msg) {
         if (showLog) {
             Log.i(ActivityUtils.getTopActivity().getLocalClassName(), msg);
-        } else {
-            return;
         }
     }
+
 
     public static void setSaveError(boolean saveError) {
         LogUtil.saveError = saveError;

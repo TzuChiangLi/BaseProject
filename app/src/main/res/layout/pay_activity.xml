@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.PayActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/pay_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentTop="true"
+        app:rightColor="@color/black"
+
+        app:rightTitle="@string/app_online_status"
+        app:title="@string/pay_tv_title" />
+
+    <RelativeLayout
+        android:id="@+id/pay_rl_money"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_top_bar">
+
+        <TextView
+            android:id="@+id/pay_tv_money_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="16dp"
+            android:text="@string/pay_tv_should_pay"
+            android:textSize="26sp" />
+
+
+        <TextView
+            android:id="@+id/pay_tv_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/pay_tv_money_title"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:text="159.33"
+            android:textSize="25sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/pay_tv_select_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_rl_money"
+        android:background="@color/divide_line"
+        android:paddingStart="16dp"
+        android:text="@string/pay_tv_method" />
+
+
+    <LinearLayout
+        android:id="@+id/pay_ll_alipay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_tv_select_title"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pay_tv_alipay" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/pay_line_1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/pay_ll_alipay"
+        android:background="@color/divide_line" />
+
+    <LinearLayout
+        android:id="@+id/pay_ll_wechat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_line_1"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pay_tv_wechat" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/pay_line_2"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/pay_ll_wechat"
+        android:background="@color/divide_line" />
+
+    <LinearLayout
+        android:id="@+id/pay_ll_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_line_2"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pay_tv_card" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/pay_line_3"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/pay_ll_card"
+        android:background="@color/divide_line" />
+
+    <LinearLayout
+        android:id="@+id/pay_ll_money"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_line_3"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pay_tv_money" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/pay_ll_money"
+        android:background="@color/divide_line" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="end">
+
+        <Button
+            android:id="@+id/pay_btn_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pay_btn_pay" />
+
+    </LinearLayout>
+
+</RelativeLayout>

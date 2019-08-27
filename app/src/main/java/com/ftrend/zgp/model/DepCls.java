@@ -6,49 +6,46 @@ package com.ftrend.zgp.model;
  * @author liziqiang@ftrend.cn
  */
 public class DepCls {
-    private int ID;
-    private String DepCode;
-    private String ClsCode;
-    private String ClsName;
-
-    public DepCls() {
-    }
+    private int id;
+    private String depCode;
+    private String clsCode;
+    private String clsName;
 
     public DepCls(String depCode, String clsCode, String clsName) {
-        DepCode = depCode;
-        ClsCode = clsCode;
-        ClsName = clsName;
+        this.depCode = depCode;
+        this.clsCode = clsCode;
+        this.clsName = clsName;
     }
 
     public int getID() {
-        return ID;
+        return id;
     }
 
     public void setID(int ID) {
-        this.ID = ID;
+        id = ID;
     }
 
     public String getDepCode() {
-        return DepCode;
+        return depCode;
     }
 
     public void setDepCode(String depCode) {
-        DepCode = depCode;
+        this.depCode = depCode;
     }
 
     public String getClsCode() {
-        return ClsCode;
+        return clsCode;
     }
 
     public void setClsCode(String clsCode) {
-        ClsCode = clsCode;
+        this.clsCode = clsCode;
     }
 
     public String getClsName() {
-        return ClsName;
+        return clsName;
     }
 
     public void setClsName(String clsName) {
-        ClsName = clsName;
+        this.clsName = clsName;
     }
 }

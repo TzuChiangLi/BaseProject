@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pay_tv_title">结算</string>
+    <string name="pay_tv_should_pay">应收款：</string>
+    <string name="pay_tv_method">请选择一种支付方式</string>
+    <string name="pay_tv_alipay">支付宝</string>
+    <string name="pay_tv_wechat">微信支付</string>
+    <string name="pay_tv_card">储值卡</string>
+    <string name="pay_tv_money">现金</string>
+    <string name="pay_btn_pay">继续交易</string>
+</resources>

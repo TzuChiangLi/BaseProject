@@ -19,6 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/shop_cart_top_bar"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="horizontal"
         android:padding="8dp">
 
@@ -27,14 +29,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="扫码" />
+            android:text="@string/shop_btn_scan" />
 
         <com.ftrend.cleareditview.ClearEditText
             android:id="@+id/shop_cart_top_ll_edt_search"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:hint="请输入商品吗、条码或者商品名称"
+            android:hint="@string/shop_edt_search"
             android:textSize="14sp" />
 
 
@@ -80,7 +82,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="购物车" />
+                android:text="@string/shop_btn_list" />
         </FrameLayout>
 
         <TextView
@@ -103,7 +105,7 @@
             android:layout_centerVertical="true"
             android:layout_toStartOf="@+id/shop_cart_bottom_tv_payment"
             android:gravity="center"
-            android:text="挂单" />
+            android:text="@string/shop_btn_hang_up" />
 
 
         <Button
@@ -113,7 +115,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:text="结算" />
+            android:text="@string/shop_btn_pay" />
 
         <TextView
             android:id="@+id/shop_cart_bottom_tip"

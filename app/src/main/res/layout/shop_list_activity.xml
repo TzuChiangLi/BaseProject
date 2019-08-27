@@ -91,7 +91,7 @@
             android:layout_alignTop="@+id/shop_list_btn_vip"
             android:layout_toStartOf="@+id/shop_list_btn_pay"
             android:maxHeight="40dp"
-            android:text="@string/shop_tv_hang_up" />
+            android:text="@string/shop_btn_hang_up" />
 
         <Button
             android:id="@+id/shop_list_btn_pay"
@@ -100,7 +100,7 @@
             android:layout_alignTop="@+id/shop_list_btn_vip"
             android:layout_alignParentEnd="true"
             android:maxHeight="40dp"
-            android:text="@string/shop_tv_pay" />
+            android:text="@string/shop_btn_pay" />
 
     </RelativeLayout>
 

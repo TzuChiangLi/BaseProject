@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.MenuAdapter;
@@ -25,9 +26,13 @@ import butterknife.BindView;
  *
  * @author liziqiang@ftrend.cn
  */
-public class HomeActivity extends BaseActivity implements Contract.HomeView, MenuAdapter.onMenuClickListener {
+public class HomeActivity extends BaseActivity implements Contract.HomeView, MenuAdapter.OnMenuClickListener {
     @BindView(R.id.home_rv_menu)
     RecyclerView mRecyclerView;
+    @BindView(R.id.home_tv_date)
+    TextView mDateTv;
+    @BindView(R.id.home_tv_user)
+    TextView mUserTv;
     private Contract.HomePresenter mPresenter;
     private MenuAdapter mMenuAdapter;
 
@@ -45,6 +50,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         if (mPresenter == null) {
             mPresenter = HomePresenter.createPresenter(this);
         }
+        mPresenter.setInfo();
     }
 
     @Override
@@ -74,6 +80,18 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         mMenuAdapter.setOnMenuClickListener(this);
     }
 
+    /**
+     * 设置主界面需要显示的几个信息
+     *
+     * @param info 数组信息
+     */
+    @Override
+    public void showInfo(String... info) {
+
+        mDateTv.setText(info[0]);
+//        mUserTv.setText(info[1]);
+    }
+
 
     @Override
     public void onMenuClick(View view, int position) {
@@ -82,6 +100,9 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         switch ((String) view.getTag()) {
             case "收银":
                 startActivity(intent);
+                break;
+            default:
+                LogUtil.e("无此功能");
                 break;
         }
     }
