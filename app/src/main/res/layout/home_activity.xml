@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.HomeActivity">
+
+    <TextView
+        android:id="@+id/home_tv_online_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/home_tv_depname"
+        android:layout_alignEnd="@+id/home_tv_user"
+        android:text="@string/app_online_status" />
+
+    <ImageView
+        android:id="@+id/home_img_dep"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/divide_line" />
+
+    <TextView
+        android:id="@+id/home_tv_depname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/home_img_dep"
+        android:layout_alignBottom="@+id/home_img_dep"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@+id/home_img_dep"
+        android:gravity="center"
+        android:text="XXXX专柜名称"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/home_tv_date_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/home_img_dep"
+        android:layout_alignStart="@id/home_img_dep"
+        android:layout_marginTop="8dp"
+        android:text="@string/home_tv_date" />
+
+    <TextView
+        android:id="@+id/home_tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/home_tv_date_title"
+        android:layout_toEndOf="@+id/home_tv_date_title"
+        android:text="2019年8月26日" />
+
+    <TextView
+        android:id="@+id/home_tv_user_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/home_tv_date_title"
+        android:layout_toStartOf="@+id/home_tv_user"
+        android:text="@string/home_tv_user" />
+
+    <TextView
+        android:id="@+id/home_tv_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/home_tv_date_title"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:text="李四" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/home_rv_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:layout_below="@+id/home_tv_date_title"
+        tools:listitem="@layout/home_rv_menu_item" />
+
+
+</RelativeLayout>

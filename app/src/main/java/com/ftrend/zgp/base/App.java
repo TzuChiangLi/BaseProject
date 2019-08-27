@@ -1,4 +1,4 @@
-package com.ftrend.zgp.app;
+package com.ftrend.zgp.base;
 
 import android.app.Application;
 
@@ -7,8 +7,9 @@ import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.qw.soul.permission.SoulPermission;
 
 /**
+ * 初始化相关工具组件
+ *
  * @author liziqiang@ftrend.cn
- * @content 初始化相关工具组件
  */
 public class App extends Application {
     @Override

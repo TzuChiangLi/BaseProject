@@ -31,7 +31,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutID(0));
+        setContentView(getLayoutID());
         unbinder = ButterKnife.bind(this);
         mIntentFilter = new IntentFilter();
         mIntentFilter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
@@ -44,10 +44,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     /**
-     * @param i layout布局
      * @return
      */
-    protected abstract int getLayoutID(int i);
+    protected abstract int getLayoutID();
 
     /**
      * 初始化界面数据

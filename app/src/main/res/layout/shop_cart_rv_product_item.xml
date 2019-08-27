@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/shop_rv_product_tv_code_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_margin="8dp"
+        android:text="@string/shop_rv_title_prodcode" />
+
+    <TextView
+        android:id="@+id/shop_rv_product_tv_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_toEndOf="@+id/shop_rv_product_tv_code_title"
+        android:text="V1234567890" />
+
+    <TextView
+        android:id="@+id/shop_rv_product_tv_prodname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/shop_rv_product_tv_code_title"
+        android:layout_margin="8dp"
+        android:text="商品名称跑步鞋XS-789 42码" />
+
+    <TextView
+        android:id="@+id/shop_rv_product_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/shop_rv_product_tv_prodname"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="8dp"
+        android:text="480.00" />
+</RelativeLayout>

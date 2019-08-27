@@ -19,7 +19,6 @@ public class LoginObserver<Login> implements Observer<Login> {
 
     @Override
     public void onNext(Login login) {
-
     }
 
 
