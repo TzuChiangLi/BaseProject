@@ -11,6 +11,9 @@ public class DepCls {
     private String clsCode;
     private String clsName;
 
+    public DepCls() {
+    }
+
     public DepCls(String depCode, String clsCode, String clsName) {
         this.depCode = depCode;
         this.clsCode = clsCode;

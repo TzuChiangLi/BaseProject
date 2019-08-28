@@ -1,12 +1,16 @@
 package com.ftrend.zgp.presenter;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.text.TextUtils;
 
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
+import com.ftrend.zgp.utils.db.DatabaseManger;
 import com.ftrend.zgp.utils.http.BaseResponse;
 import com.ftrend.zgp.utils.http.HttpCallBack;
+import com.ftrend.zgp.utils.log.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +22,7 @@ import java.util.List;
  */
 public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBack {
     private Contract.ShopCartView mView;
+    private List<DepProduct> mProdList = new ArrayList<>();
 
     public ShopCartPresenter(Contract.ShopCartView mView) {
         this.mView = mView;
@@ -54,30 +59,73 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
     }
 
     @Override
-    public void initProdList() {
+    public void initProdList(Context context) {
         List<DepCls> clsList = new ArrayList<>();
-        List<DepProduct> prodList = new ArrayList<>();
-
-        for (int i = 0; i < 5; i++) {
-            clsList.add(new DepCls(String.valueOf(10000 + i), String.valueOf(i), "类别" + i));
+        clsList.add(new DepCls("", "", "全部类别"));
+        Cursor cursor = DatabaseManger.getInstance(context).query("DepCls", new String[]{"*"}, null, null, null, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    DepCls depCls = new DepCls();
+                    depCls.setDepCode(cursor.getString(cursor.getColumnIndex("DepCode")));
+                    depCls.setClsCode(cursor.getString(cursor.getColumnIndex("ClsCode")));
+                    depCls.setClsName(cursor.getString(cursor.getColumnIndex("ClsName")));
+                    clsList.add(depCls);
+                } while (cursor.moveToNext());
+            }
         }
-        for (int i = 0; i < 15; i++) {
-            prodList.add(new DepProduct(String.valueOf(01010000 + i), "示例商品" + i, i % 2 == 0 ? "10001" : "10002", String.valueOf(i)));
+        if (cursor != null) {
+            cursor.close();
+        }
+        cursor = DatabaseManger.getInstance(context).query("DepProduct", new String[]{"*"}, null, null, null, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    DepProduct depProduct = new DepProduct();
+                    depProduct.setClsCode(cursor.getString(cursor.getColumnIndex("ClsCode")));
+                    depProduct.setBarCode(cursor.getString(cursor.getColumnIndex("BarCode")));
+                    depProduct.setProdCode(cursor.getString(cursor.getColumnIndex("ProdCode")));
+                    depProduct.setProdName(cursor.getString(cursor.getColumnIndex("ProdName")));
+                    depProduct.setPrice(cursor.getFloat(cursor.getColumnIndex("Price")));
+                    depProduct.setSpec(cursor.getString(cursor.getColumnIndex("Spec")));
+                    mProdList.add(depProduct);
+                } while (cursor.moveToNext());
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
         }
         mView.setClsList(clsList);
-        mView.setProdList(prodList);
+        mView.setProdList(mProdList);
     }
 
     @Override
     public void searchProdList(String key) {
-        List<DepProduct> mList = new ArrayList<>();
-        if (TextUtils.isEmpty(key)) {
-            //
-        } else {
-            mList.clear();
-            for (DepProduct depProduct : mList) {
-
+        LogUtil.d("----" + key);
+        if (!TextUtils.isEmpty(key)) {
+            List<DepProduct> fliterList = new ArrayList<>();
+            if (mProdList.size() != 0 || mProdList != null) {
+                for (DepProduct depProduct : mProdList) {
+                    if (!TextUtils.isEmpty(depProduct.getProdCode())) {
+                        if (depProduct.getProdCode().contains(key)) {
+                            fliterList.add(depProduct);
+                        }
+                    }
+                    if (!TextUtils.isEmpty(depProduct.getProdName())) {
+                        if (depProduct.getProdName().contains(key)) {
+                            fliterList.add(depProduct);
+                        }
+                    }
+                    if (!TextUtils.isEmpty(depProduct.getBarCode())) {
+                        if (depProduct.getBarCode().contains(key)) {
+                            fliterList.add(depProduct);
+                        }
+                    }
+                }
             }
+            mView.updateProdList(fliterList);
+        } else {
+            mView.updateProdList(mProdList);
         }
     }
 

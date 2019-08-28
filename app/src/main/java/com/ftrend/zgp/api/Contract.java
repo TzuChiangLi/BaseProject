@@ -1,5 +1,7 @@
 package com.ftrend.zgp.api;
 
+import android.content.Context;
+
 import com.ftrend.zgp.base.BaseView;
 import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
@@ -22,6 +24,9 @@ public interface Contract {
          */
         void initMenuList();
 
+        /**
+         * 设置用户名、专柜号、当前日期
+         */
         void setInfo();
     }
 
@@ -33,21 +38,51 @@ public interface Contract {
          */
         void setMenuList(List<Menu> menuList);
 
+        /**
+         * 设置用户名、专柜号、当前日期
+         *
+         * @param info 字符串数组
+         */
         void showInfo(String... info);
     }
 
     interface ShopCartPresenter {
-        void initProdList();
+        /**
+         * 加载商品信息
+         *
+         * @param context 上下文
+         */
+        void initProdList(Context context);
 
+        /**
+         * 筛选商品
+         *
+         * @param key 筛选关键字
+         */
         void searchProdList(String key);
     }
 
     interface ShopCartView extends BaseView<Contract.ShopCartPresenter> {
+        /**
+         * 设置商品类别
+         *
+         * @param clsList 分类名称
+         */
         void setClsList(List<DepCls> clsList);
 
+        /**
+         * 设置商品
+         *
+         * @param prodList 商品列表
+         */
         void setProdList(List<DepProduct> prodList);
 
-        void updateProdList();
+        /**
+         * 返回过滤筛选后的商品列表
+         *
+         * @param prodList 商品列表
+         */
+        void updateProdList(List<DepProduct> prodList);
 
     }
 }
