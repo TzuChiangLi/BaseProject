@@ -6,12 +6,16 @@
     <string name="shop_tv_total">合计：</string>
     <string name="shop_tv_vip">会员</string>
     <string name="shop_tv_whole_discount">整单优惠</string>
-    <string name="shop_tv_hang_up">挂单</string>
-    <string name="shop_tv_pay">结算</string>
     <string name="shop_tv_cancel">取消交易</string>
     <string name="shop_tv_add">添加商品</string>
+    <string name="shop_tv_buy">加入购物车</string>
     <string name="shop_tv_num">数量：</string>
     <string name="shop_tv_per_price">单价：</string>
     <string name="shop_tv_discount">优惠：</string>
     <string name="shop_tv_sub_total">小计：</string>
+    <string name="shop_btn_hang_up">挂单</string>
+    <string name="shop_btn_pay">结算</string>
+    <string name="shop_btn_list">购物车</string>
+    <string name="shop_btn_scan">扫码</string>
+    <string name="shop_edt_search">请输入商品码、条码或者商品名称</string>
 </resources>

@@ -11,7 +11,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.model.Menu;
-import com.ftrend.zgp.utils.msg.MessageUtil;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ import java.util.List;
 public class MenuAdapter extends BaseQuickAdapter<Menu, BaseViewHolder> {
     private ChildAdapter mChildAdapter;
     private Context mContext;
-    private onMenuClickListener mClickListener;
+    private OnMenuClickListener mClickListener;
 
     public MenuAdapter(Context mContext, int layoutResId, @Nullable List<Menu> data) {
         super(layoutResId, data);
@@ -59,11 +58,17 @@ public class MenuAdapter extends BaseQuickAdapter<Menu, BaseViewHolder> {
     }
 
 
-    public interface onMenuClickListener {
+    public interface OnMenuClickListener {
+        /**
+         * 菜单点击监听
+         *
+         * @param view     点击的view
+         * @param position 点击的位置
+         */
         void onMenuClick(View view, int position);
     }
 
-    public void setOnMenuClickListener(MenuAdapter.onMenuClickListener onMenuClickListener) {
+    public void setOnMenuClickListener(MenuAdapter.OnMenuClickListener onMenuClickListener) {
         mClickListener = onMenuClickListener;
     }
 }

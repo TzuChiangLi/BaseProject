@@ -21,6 +21,8 @@ public interface Contract {
          * 创建界面菜单的数据
          */
         void initMenuList();
+
+        void setInfo();
     }
 
     interface HomeView extends BaseView<Contract.HomePresenter> {
@@ -30,6 +32,8 @@ public interface Contract {
          * @param menuList 数据
          */
         void setMenuList(List<Menu> menuList);
+
+        void showInfo(String... info);
     }
 
     interface ShopCartPresenter {
@@ -40,6 +44,7 @@ public interface Contract {
 
     interface ShopCartView extends BaseView<Contract.ShopCartPresenter> {
         void setClsList(List<DepCls> clsList);
+
         void setProdList(List<DepProduct> prodList);
 
         void updateProdList();

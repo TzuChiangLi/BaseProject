@@ -5,7 +5,10 @@ import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.utils.http.BaseResponse;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,18 +39,27 @@ public class HomePresenter implements Contract.HomePresenter, HttpCallBack {
             childList.add(new Menu.MenuList(0, menuName[i]));
         }
         menuList.add(new Menu("交易", childList));
-        childList=new ArrayList<>();
+        childList = new ArrayList<>();
         for (int i = 4; i < 7; i++) {
             childList.add(new Menu.MenuList(0, menuName[i]));
         }
         menuList.add(new Menu("报表查询", childList));
-        childList=new ArrayList<>();
+        childList = new ArrayList<>();
         for (int i = 7; i < menuName.length; i++) {
             childList.add(new Menu.MenuList(0, menuName[i]));
         }
         menuList.add(new Menu("系统功能", childList));
         mView.setMenuList(menuList);
 
+    }
+
+    @Override
+    public void setInfo() {
+        int size = 3;
+        String[] info = new String[size];
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
+        Arrays.fill(info, sdf.format(new Date()));
+        mView.showInfo(info);
     }
 
 

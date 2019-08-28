@@ -37,6 +37,8 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 helper.setText(R.id.shop_rv_product_tv_code, ((DepProduct) item).getProdCode());
                 helper.setText(R.id.shop_rv_product_tv_prodname, ((DepProduct) item).getProdName());
                 break;
+            default:
+                break;
         }
 
     }

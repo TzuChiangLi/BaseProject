@@ -37,9 +37,9 @@ public class HttpUtil {
     private static HttpUtil INSTANCE;
     private static Retrofit mRetrofit;
     private static final int TIMEOUT = 60;
-    private static final String baseURL = HttpManager.TEST_URL;
+    private static final String BASE_URL = HttpManager.TEST_URL;
 
-    public HttpUtil() {
+    private HttpUtil() {
         initRetrofit();
     }
 
@@ -49,7 +49,7 @@ public class HttpUtil {
     private static void initRetrofit() {
         mRetrofit = new Retrofit.Builder()
                 // 设置解析转换工厂，用自己定义的
-                .baseUrl(baseURL)
+                .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(initClient())

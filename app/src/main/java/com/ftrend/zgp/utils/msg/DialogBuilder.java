@@ -88,6 +88,7 @@ public class DialogBuilder extends CenterPopupView {
         ButterKnife.bind(this);
         switch (dialogType) {
             case 0:
+            default:
                 mStateImg.setImageResource(R.drawable.dialog_state_tip);
                 mTitleTv.setText("提示");
                 break;
@@ -114,6 +115,7 @@ public class DialogBuilder extends CenterPopupView {
                 mVerticalLineView.setVisibility(GONE);
                 break;
             case 2:
+            default:
                 break;
         }
         if (!TextUtils.isEmpty(title)) {

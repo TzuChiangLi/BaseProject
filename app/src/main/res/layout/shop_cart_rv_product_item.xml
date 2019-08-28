@@ -28,6 +28,17 @@
         android:layout_margin="8dp"
         android:text="商品名称跑步鞋XS-789 42码" />
 
+
+    <Button
+        android:id="@+id/shop_rv_product_btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/shop_rv_product_price"
+        android:layout_alignParentEnd="true"
+        android:maxHeight="25dp"
+        android:text="@string/shop_tv_buy" />
+
+
     <TextView
         android:id="@+id/shop_rv_product_price"
         android:layout_width="wrap_content"

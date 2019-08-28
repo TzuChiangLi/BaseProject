@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/home_tv_date_title"
         android:layout_toEndOf="@+id/home_tv_date_title"
-        android:text="2019年8月26日" />
+      />
 
     <TextView
         android:id="@+id/home_tv_user_title"

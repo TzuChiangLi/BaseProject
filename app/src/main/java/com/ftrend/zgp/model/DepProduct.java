@@ -6,227 +6,229 @@ package com.ftrend.zgp.model;
  * @author liziqiang@ftrend.cn
  */
 public class DepProduct {
-    private int ID;
-    private String ProdCode;
-    private String BarCode;
-    private String ProdName;
-    private String DepCode;
-    private String ClsCode;
-    private String CargoNo;
-    private String Spec;
-    private String Unit;
-    private float Price;
-    private String Brand;
-    private int PriceFlag;
-    private int IsLargess;
-    private int ForSaleRet;
-    private int ForDsc;
-    private int ForLargess;
-    private float ScoreSet;
-    private float VipPrice1;
-    private float VipPrice2;
-    private float VipPrice3;
-    private float VipRate1;
-    private float VipRate2;
-    private float VipRate3;
-    private float MinimumPrice;
+    private int id;
+    private String depCode;
+    private String prodCode;
+    private String barCode;
+    private String prodName;
+    private String clsCode;
+    private String cargoNo;
+    private String spec;
+    private String unit;
+    private float price;
+    private String brand;
+    private int priceFlag;
+    private int isLargess;
+    private int forSaleRet;
+    private int forDsc;
+    private int forLargess;
+    private float scoreSet;
+    private float vipPrice1;
+    private float vipPrice2;
+    private float vipPrice3;
+    private float vipRate1;
+    private float vipRate2;
+    private float vipRate3;
+    private float minimumPrice;
 
     public DepProduct(String prodCode, String prodName, String depCode, String clsCode) {
-        ProdCode = prodCode;
-        ProdName = prodName;
-        DepCode = depCode;
-        ClsCode = clsCode;
+        this.prodCode = prodCode;
+        this.prodName = prodName;
+        this.depCode = depCode;
+        this.clsCode = clsCode;
     }
+
 
     public int getID() {
-        return ID;
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setID(int id) {
+        this.id = id;
     }
+
 
     public String getProdCode() {
-        return ProdCode;
+        return prodCode;
     }
 
     public void setProdCode(String prodCode) {
-        ProdCode = prodCode;
+        this.prodCode = prodCode;
     }
 
     public String getBarCode() {
-        return BarCode;
+        return barCode;
     }
 
     public void setBarCode(String barCode) {
-        BarCode = barCode;
+        this.barCode = barCode;
     }
 
     public String getProdName() {
-        return ProdName;
+        return prodName;
     }
 
     public void setProdName(String prodName) {
-        ProdName = prodName;
+        this.prodName = prodName;
     }
 
     public String getDepCode() {
-        return DepCode;
+        return depCode;
     }
 
     public void setDepCode(String depCode) {
-        DepCode = depCode;
+        this.depCode = depCode;
     }
 
     public String getClsCode() {
-        return ClsCode;
+        return clsCode;
     }
 
     public void setClsCode(String clsCode) {
-        ClsCode = clsCode;
+        this.clsCode = clsCode;
     }
 
     public String getCargoNo() {
-        return CargoNo;
+        return cargoNo;
     }
 
     public void setCargoNo(String cargoNo) {
-        CargoNo = cargoNo;
+        this.cargoNo = cargoNo;
     }
 
     public String getSpec() {
-        return Spec;
+        return spec;
     }
 
     public void setSpec(String spec) {
-        Spec = spec;
+        this.spec = spec;
     }
 
     public String getUnit() {
-        return Unit;
+        return unit;
     }
 
     public void setUnit(String unit) {
-        Unit = unit;
+        this.unit = unit;
     }
 
     public float getPrice() {
-        return Price;
+        return price;
     }
 
     public void setPrice(float price) {
-        Price = price;
+        this.price = price;
     }
 
     public String getBrand() {
-        return Brand;
+        return brand;
     }
 
     public void setBrand(String brand) {
-        Brand = brand;
+        this.brand = brand;
     }
 
     public int getPriceFlag() {
-        return PriceFlag;
+        return priceFlag;
     }
 
     public void setPriceFlag(int priceFlag) {
-        PriceFlag = priceFlag;
+        this.priceFlag = priceFlag;
     }
 
     public int getIsLargess() {
-        return IsLargess;
+        return isLargess;
     }
 
     public void setIsLargess(int isLargess) {
-        IsLargess = isLargess;
+        this.isLargess = isLargess;
     }
 
     public int getForSaleRet() {
-        return ForSaleRet;
+        return forSaleRet;
     }
 
     public void setForSaleRet(int forSaleRet) {
-        ForSaleRet = forSaleRet;
+        this.forSaleRet = forSaleRet;
     }
 
     public int getForDsc() {
-        return ForDsc;
+        return forDsc;
     }
 
     public void setForDsc(int forDsc) {
-        ForDsc = forDsc;
+        this.forDsc = forDsc;
     }
 
     public int getForLargess() {
-        return ForLargess;
+        return forLargess;
     }
 
     public void setForLargess(int forLargess) {
-        ForLargess = forLargess;
+        this.forLargess = forLargess;
     }
 
     public float getScoreSet() {
-        return ScoreSet;
+        return scoreSet;
     }
 
     public void setScoreSet(float scoreSet) {
-        ScoreSet = scoreSet;
+        this.scoreSet = scoreSet;
     }
 
     public float getVipPrice1() {
-        return VipPrice1;
+        return vipPrice1;
     }
 
     public void setVipPrice1(float vipPrice1) {
-        VipPrice1 = vipPrice1;
+        this.vipPrice1 = vipPrice1;
     }
 
     public float getVipPrice2() {
-        return VipPrice2;
+        return vipPrice2;
     }
 
     public void setVipPrice2(float vipPrice2) {
-        VipPrice2 = vipPrice2;
+        this.vipPrice2 = vipPrice2;
     }
 
     public float getVipPrice3() {
-        return VipPrice3;
+        return vipPrice3;
     }
 
     public void setVipPrice3(float vipPrice3) {
-        VipPrice3 = vipPrice3;
+        this.vipPrice3 = vipPrice3;
     }
 
     public float getVipRate1() {
-        return VipRate1;
+        return vipRate1;
     }
 
     public void setVipRate1(float vipRate1) {
-        VipRate1 = vipRate1;
+        this.vipRate1 = vipRate1;
     }
 
     public float getVipRate2() {
-        return VipRate2;
+        return vipRate2;
     }
 
     public void setVipRate2(float vipRate2) {
-        VipRate2 = vipRate2;
+        this.vipRate2 = vipRate2;
     }
 
     public float getVipRate3() {
-        return VipRate3;
+        return vipRate3;
     }
 
     public void setVipRate3(float vipRate3) {
-        VipRate3 = vipRate3;
+        this.vipRate3 = vipRate3;
     }
 
     public float getMinimumPrice() {
-        return MinimumPrice;
+        return minimumPrice;
     }
 
     public void setMinimumPrice(float minimumPrice) {
-        MinimumPrice = minimumPrice;
+        this.minimumPrice = minimumPrice;
     }
 }

@@ -27,7 +27,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/NoActionBar">
-        <activity android:name=".view.ShopListActivity"></activity>
+        <activity android:name=".view.PayActivity"></activity>
+        <activity android:name=".view.ShopListActivity" />
         <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.ShopCartActivity" />
         <activity

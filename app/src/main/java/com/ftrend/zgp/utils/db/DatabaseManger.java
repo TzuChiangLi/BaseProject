@@ -6,7 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
+import com.ftrend.zgp.model.UserLog;
 import com.ftrend.zgp.utils.log.LogUtil;
+
+import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * 数据库调用工具
@@ -21,7 +25,7 @@ public class DatabaseManger {
     /**
      * 构造方法上下文
      *
-     * @param context
+     * @param context 控制上下文
      */
     private DatabaseManger(Context context) {
         dbHelper = new DBHelper(context);
@@ -34,7 +38,7 @@ public class DatabaseManger {
      * @param context 上下文
      * @return 实例
      */
-    public static final DatabaseManger getInstance(Context context) {
+    public static DatabaseManger getInstance(Context context) {
         if (INSTANCE == null) {
             if (context == null) {
                 LogUtil.e("Context is null.");
@@ -64,15 +68,18 @@ public class DatabaseManger {
     /**
      * 执行一条sql语句
      */
-    public void execSql(String sql) {
+    private boolean execSql(String sql) {
         try {
             if (db.isOpen()) {
                 db.execSQL(sql);
+                return true;
             } else {
                 LogUtil.e("execSql:The DataBase has already closed");
+                return false;
             }
         } catch (Exception e) {
             LogUtil.e(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + e.getMessage());
+            return false;
         }
     }
 
@@ -81,7 +88,7 @@ public class DatabaseManger {
      * selectionargs查询条件
      * 返回查询的游标，可对数据进行操作，但是需要自己关闭游标
      */
-    public Cursor queryData2Cursor(String sql, String[] selectionArgs) throws Exception {
+    private Cursor queryData2Cursor(String sql, String[] selectionArgs) throws Exception {
         Cursor cursor = null;
         try {
             if (db.isOpen()) {
@@ -96,11 +103,13 @@ public class DatabaseManger {
     }
 
     /**
-     * 查询表中数据总条数
      * 返回表中数据条数
+     *
+     * @param table 表名
+     * @return 数量
      */
-    public int getDataCounts(String table) throws Exception {
-        Cursor cursor = null;
+    public int getDataCounts(String table) {
+        Cursor cursor;
         int counts = 0;
         try {
             if (db.isOpen()) {
@@ -119,24 +128,6 @@ public class DatabaseManger {
     }
 
     /**
-     * 消除表中所有数据
-     *
-     * @param table
-     */
-    public void clearAllData(String table) throws Exception {
-        try {
-            if (db.isOpen()) {
-                execSql("delete from " + table);
-            } else {
-                LogUtil.e("clearAllData:The DataBase has already closed");
-            }
-        } catch (Exception e) {
-            LogUtil.e(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + e.getMessage());
-        }
-
-    }
-
-    /**
      * 插入数据
      *
      * @param sql      执行操作的sql语句
@@ -144,7 +135,7 @@ public class DatabaseManger {
      * @return 返回插入对应的ID，返回0，则插入无效
      */
 
-    public long insertDataBySql(String sql, String[] bindArgs) {
+    public boolean insertDataBySql(String sql, String[] bindArgs) {
         long id = 0;
         try {
             if (db.isOpen()) {
@@ -163,7 +154,11 @@ public class DatabaseManger {
         } catch (Exception e) {
             LogUtil.e("insertDataBySql:" + e.getMessage());
         }
-        return id;
+        if (id == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -173,7 +168,7 @@ public class DatabaseManger {
      * @param values 数据
      * @return 返回插入的ID，返回0，则插入失败
      */
-    public long insertData(String table, ContentValues values) {
+    public boolean insertData(String table, ContentValues values) {
         long id = 0;
         try {
             if (db.isOpen()) {
@@ -184,7 +179,11 @@ public class DatabaseManger {
         } catch (Exception e) {
             LogUtil.e("insertData:" + e.getMessage());
         }
-        return id;
+        if (id == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 
@@ -291,4 +290,36 @@ public class DatabaseManger {
         return cursor;
     }
 
+
+    /**
+     * 记录用户操作记录
+     *
+     * @param userLog
+     */
+    public void logUserHandle(UserLog userLog) {
+        try {
+            if (db.isOpen()) {
+                ContentValues values = new ContentValues();
+                values.put("Module", userLog.getModule());
+                values.put("Function", userLog.getFunction());
+                values.put("OccurTime", String.valueOf(getDateTime()));
+                values.put("Content", userLog.getContent());
+                values.put("UserCode", userLog.getUserCode());
+                values.put("DepCode", userLog.getDepCode());
+                db.insert("UserLog", null, values);
+            } else {
+                LogUtil.e("logUserHandle:The DataBase has already closed");
+            }
+        } catch (Exception e) {
+            LogUtil.e("logUserHandle:" + e.getMessage());
+        }
+    }
+
+
+    public static Date getDateTime() {
+        Date date = new Date();
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        date = ts;
+        return date;
+    }
 }

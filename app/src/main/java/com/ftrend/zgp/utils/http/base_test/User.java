@@ -1,5 +1,8 @@
 package com.ftrend.zgp.utils.http.base_test;
 
+/**
+ * @author liziqiang@ftrend.cn
+ */
 public class User {
     private String id;
     private String name;
