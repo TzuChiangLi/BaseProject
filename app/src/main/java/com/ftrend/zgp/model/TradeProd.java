@@ -1,26 +1,48 @@
 package com.ftrend.zgp.model;
 
+import com.dbflow5.annotation.Column;
+import com.dbflow5.annotation.PrimaryKey;
+import com.dbflow5.annotation.Table;
+import com.ftrend.zgp.utils.db.DBHelper;
+
 /**
  * 交易商品表
  *
  * @author liziqiang@ftrend.cn
  */
+@Table(database = DBHelper.class)
 public class TradeProd {
+    @PrimaryKey(autoincrement = true)
     private int id;
+    @Column
     private String lsNo;
+    @Column
     private String sortNo;
+    @Column
     private String prodCode;
+    @Column
     private String barCode;
+    @Column
     private String prodName;
+    @Column
     private String depCode;
+    @Column
     private float price;
+    @Column
     private float amount;
+    @Column
     private float manuDsc;
+    @Column
     private float vipDsc;
+    @Column
     private float tranDsc;
+    @Column
     private float total;
+    @Column
     private float vipTotal;
+    @Column
     private String saleInfo;
+    @Column
     private String delFlag;
 
     public TradeProd() {

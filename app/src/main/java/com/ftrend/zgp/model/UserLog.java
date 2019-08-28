@@ -1,6 +1,11 @@
 package com.ftrend.zgp.model;
 
 
+import com.dbflow5.annotation.Column;
+import com.dbflow5.annotation.PrimaryKey;
+import com.dbflow5.annotation.Table;
+import com.ftrend.zgp.utils.db.DBHelper;
+
 import java.util.Date;
 
 /**
@@ -8,19 +13,27 @@ import java.util.Date;
  *
  * @author liziqiang@ftrend.cn
  */
+@Table(database = DBHelper.class)
 public class UserLog {
+    @PrimaryKey(autoincrement = true)
     private int id;
+    @Column
     private String module;
+    @Column
     private String function;
+    @Column
     private Date occurTime;
+    @Column
     private String content;
+    @Column
     private String userCode;
+    @Column
     private String depCode;
 
     public UserLog() {
     }
 
-    public UserLog(String module, String function,String content, String userCode, String depCode) {
+    public UserLog(String module, String function, String content, String userCode, String depCode) {
         this.module = module;
         this.function = function;
         this.content = content;

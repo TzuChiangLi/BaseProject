@@ -3,9 +3,11 @@ package com.ftrend.zgp.api;
 import android.content.Context;
 
 import com.ftrend.zgp.base.BaseView;
+import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.Menu;
+import com.ftrend.zgp.model.User;
 
 import java.util.List;
 
@@ -17,6 +19,44 @@ import java.util.List;
 public interface Contract {
 
     /**********************************Activity************************************/
+    interface LoginPresenter {
+        /**
+         * 初始化可登录专柜数据
+         */
+        void initDepData(Context context);
+
+        /**
+         * 初始化可登录用户数据
+         *
+         * @param depCode 柜台编码
+         */
+        void initUserData(String depCode);
+
+        /**
+         * 验证用户信息
+         */
+        void checkUserInfo();
+    }
+
+    interface LoginView extends BaseView<Contract.LoginPresenter> {
+
+        /**
+         * 返回专柜信息
+         *
+         * @param depData 专柜信息
+         */
+        void setDepData(List<Dep> depData);
+
+        /**
+         * 返回可登录用户信息
+         *
+         * @param userData 可登录用户
+         */
+        void setUserData(List<User> userData);
+
+
+    }
+
 
     interface HomePresenter {
         /**
@@ -46,6 +86,7 @@ public interface Contract {
         void showInfo(String... info);
     }
 
+    //region 商品选择界面接口
     interface ShopCartPresenter {
         /**
          * 加载商品信息
@@ -85,4 +126,7 @@ public interface Contract {
         void updateProdList(List<DepProduct> prodList);
 
     }
+    //endregion
+
+
 }

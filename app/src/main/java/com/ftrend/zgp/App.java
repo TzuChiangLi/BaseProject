@@ -1,7 +1,8 @@
-package com.ftrend.zgp.base;
+package com.ftrend.zgp;
 
 import android.app.Application;
 
+import com.dbflow5.config.FlowManager;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.qw.soul.permission.SoulPermission;
@@ -15,6 +16,7 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        FlowManager.init(this);
         //region 吐司初始化
         //初始化Toast样式
         MessageUtil.init(this);

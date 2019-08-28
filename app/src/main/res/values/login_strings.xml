@@ -2,7 +2,7 @@
 <resources>
     <string name="login_title_top">收款员登录：</string>
     <string name="login_title_dep">专柜：</string>
-    <string name="login_title_username">用户名：</string>
+    <string name="login_title_username">用户：</string>
     <string name="login_title_password">密码：</string>
     <string name="login_btn">登录</string>
 </resources>

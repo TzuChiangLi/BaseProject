@@ -1,5 +1,10 @@
 package com.ftrend.zgp.model;
 
+import com.dbflow5.annotation.Column;
+import com.dbflow5.annotation.PrimaryKey;
+import com.dbflow5.annotation.Table;
+import com.ftrend.zgp.utils.db.DBHelper;
+
 import java.util.Date;
 
 /**
@@ -7,19 +12,33 @@ import java.util.Date;
  *
  * @author LZQ
  */
+@Table(database = DBHelper.class)
 public class Trade {
+    @PrimaryKey(autoincrement = true)
     private int id;
+    @Column
     private String depCode;
+    @Column
     private String lsNo;
+    @Column
     private Date tradeTime;
+    @Column
     private String tradeFlag;
+    @Column
     private String cashier;
+    @Column
     private float dscTotal;
+    @Column
     private float total;
+    @Column
     private String custType;
+    @Column
     private String vipCode;
+    @Column
     private String cardCode;
+    @Column
     private float vipTotal;
+    @Column
     private String status;
 
     public Trade() {

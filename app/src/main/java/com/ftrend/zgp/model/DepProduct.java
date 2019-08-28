@@ -1,34 +1,64 @@
 package com.ftrend.zgp.model;
 
+import com.dbflow5.annotation.Column;
+import com.dbflow5.annotation.PrimaryKey;
+import com.dbflow5.annotation.Table;
+import com.ftrend.zgp.utils.db.DBHelper;
+
 /**
  * 商品信息
  *
  * @author liziqiang@ftrend.cn
  */
+@Table(database = DBHelper.class)
 public class DepProduct {
+    @PrimaryKey(autoincrement = true)
     private int id;
+    @Column
     private String depCode;
+    @Column
     private String prodCode;
+    @Column
     private String barCode;
+    @Column
     private String prodName;
+    @Column
     private String clsCode;
+    @Column
     private String cargoNo;
+    @Column
     private String spec;
+    @Column
     private String unit;
+    @Column
     private float price;
+    @Column
     private String brand;
+    @Column
     private int priceFlag;
+    @Column
     private int isLargess;
+    @Column
     private int forSaleRet;
+    @Column
     private int forDsc;
+    @Column
     private int forLargess;
+    @Column
     private float scoreSet;
+    @Column
     private float vipPrice1;
+    @Column
     private float vipPrice2;
+    @Column
     private float vipPrice3;
+    @Column
     private float vipRate1;
+    @Column
     private float vipRate2;
+    @Column
     private float vipRate3;
+    @Column
     private float minimumPrice;
 
     public DepProduct() {

@@ -5,18 +5,23 @@ import android.database.DatabaseErrorHandler;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.dbflow5.annotation.Database;
+
 /**
  * 数据库创建、升级工具
+ *
+ * @author liziqiang@ftrend.cn
  */
+@Database(name = DBHelper.DATABASE_NAME, version = DBHelper.DATABASE_VERSION)
 public class DBHelper extends SQLiteOpenHelper {
     /**
      * 数据库名称
      */
-    private static final String DATABASE_NAME = "TEST.db";
+    public static final String DATABASE_NAME = "TEST";
     /**
      * 数据库版本号
      */
-    private static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 1;
     /**
      * 专柜商品类别
      */

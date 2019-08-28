@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.github.agrosner.dbflow:lib:5.0.0-alpha1@aar">
+    <CLASSES>
+      <root url="jar://F:/AndroidSDK/.gradle/caches/transforms-2/files-2.1/b117649b54bd6a6b9e71d7b62af92fe2/jars/classes.jar!/" />
+      <root url="file://F:/AndroidSDK/.gradle/caches/transforms-2/files-2.1/b117649b54bd6a6b9e71d7b62af92fe2/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://F:/AndroidSDK/.gradle/caches/modules-2/files-2.1/com.github.agrosner.dbflow/lib/5.0.0-alpha1/d16647342e7581348de2360ea5316a193a5d2b7c/lib-5.0.0-alpha1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

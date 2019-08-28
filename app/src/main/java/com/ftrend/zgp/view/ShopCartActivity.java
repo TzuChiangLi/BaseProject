@@ -22,6 +22,8 @@ import com.ftrend.zgp.model.UserLog;
 import com.ftrend.zgp.presenter.ShopCartPresenter;
 import com.ftrend.zgp.utils.db.DatabaseManger;
 import com.ftrend.zgp.utils.log.LogUtil;
+import com.hjq.bar.OnTitleBarListener;
+import com.hjq.bar.TitleBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +36,7 @@ import butterknife.OnClick;
  *
  * @author liziqiang@ftrend.cn
  */
-public class ShopCartActivity extends BaseActivity implements Contract.ShopCartView {
+public class ShopCartActivity extends BaseActivity implements Contract.ShopCartView, OnTitleBarListener {
     @BindView(R.id.shop_cart_top_ll_edt_search)
     ClearEditText mSearchEdt;
     @BindView(R.id.shop_cart_rv_classes)
@@ -47,6 +49,8 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     Button mListBtn;
     @BindView(R.id.shop_cart_bottom_tv_payment)
     Button mPayBtn;
+    @BindView(R.id.shop_cart_top_bar)
+    TitleBar mTitleBar;
     private Contract.ShopCartPresenter mPresenter;
     private ShopAdapter<DepProduct> mProdAdapter;
     private ShopAdapter<DepCls> mClsAdapter;
@@ -69,6 +73,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         if (mPresenter == null) {
             mPresenter = ShopCartPresenter.createPresenter(this);
         }
+
         mSearchEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -89,7 +94,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @Override
     protected void initTitleBar() {
-
+        mTitleBar.setOnTitleBarListener(this);
     }
 
     @Override
@@ -127,7 +132,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         //过滤筛选
         mProdAdapter.setNewData(prodList);
         mProdAdapter.notifyDataSetChanged();
-        LogUtil.d("----size:"+ mProdAdapter.getData().size());
+        LogUtil.d("----size:" + mProdAdapter.getData().size());
 
     }
 
@@ -143,5 +148,20 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         DatabaseManger.getInstance(this).logUserHandle(new UserLog("ShopCart", "结算", "结算", "userCode", "depCode"));
         Intent intent = new Intent(ShopCartActivity.this, PayActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onLeftClick(View v) {
+        finish();
+    }
+
+    @Override
+    public void onTitleClick(View v) {
+
+    }
+
+    @Override
+    public void onRightClick(View v) {
+
     }
 }
