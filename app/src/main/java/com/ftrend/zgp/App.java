@@ -2,6 +2,8 @@ package com.ftrend.zgp;
 
 import android.app.Application;
 
+import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.db.TestDataImporter;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.qw.soul.permission.SoulPermission;
@@ -17,6 +19,11 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         FlowManager.init(this);
+        // TODO: 2019/8/29 导入测试数据，可删除
+        TestDataImporter.importAll();
+        //加载全局参数
+        ZgParams.loadParams();
+
         //region 吐司初始化
         //初始化Toast样式
         MessageUtil.init(this);

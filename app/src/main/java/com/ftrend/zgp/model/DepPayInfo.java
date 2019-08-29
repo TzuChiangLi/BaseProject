@@ -23,7 +23,17 @@ public class DepPayInfo extends BaseModel {
     private String payTypeName;
     @Column
     @NotNull
-    private String AppPayType;
+    private String appPayType;
+
+    public DepPayInfo() {
+    }
+
+    public DepPayInfo(String depCode, String payTypeCode, String payTypeName, String appPayType) {
+        this.depCode = depCode;
+        this.payTypeCode = payTypeCode;
+        this.payTypeName = payTypeName;
+        this.appPayType = appPayType;
+    }
 
     public int getId() {
         return id;
@@ -58,10 +68,10 @@ public class DepPayInfo extends BaseModel {
     }
 
     public String getAppPayType() {
-        return AppPayType;
+        return appPayType;
     }
 
     public void setAppPayType(String appPayType) {
-        AppPayType = appPayType;
+        this.appPayType = appPayType;
     }
 }

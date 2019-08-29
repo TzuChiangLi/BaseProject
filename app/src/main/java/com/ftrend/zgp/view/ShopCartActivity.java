@@ -160,7 +160,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         userLog.setContent("查看购物车");
         userLog.setFunction("进入购物车");
         userLog.setDepCode("DepCode");
-        DatabaseManger.getInstance(this).logUserHandle(userLog);
+        userLog.insert();
         Intent intent = new Intent(ShopCartActivity.this, ShopListActivity.class);
         startActivity(intent);
     }
@@ -173,7 +173,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         userLog.setContent("结算");
         userLog.setFunction("结算");
         userLog.setDepCode("DepCode");
-        DatabaseManger.getInstance(this).logUserHandle(userLog);
+        userLog.insert();
         Intent intent = new Intent(ShopCartActivity.this, PayActivity.class);
         startActivity(intent);
     }
