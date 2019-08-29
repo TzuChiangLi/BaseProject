@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.ShopAdapter;
@@ -20,7 +21,11 @@ import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.UserLog;
 import com.ftrend.zgp.presenter.ShopCartPresenter;
 import com.ftrend.zgp.utils.db.DatabaseManger;
+import com.ftrend.zgp.utils.log.LogUtil;
+import com.hjq.bar.OnTitleBarListener;
+import com.hjq.bar.TitleBar;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,7 +36,7 @@ import butterknife.OnClick;
  *
  * @author liziqiang@ftrend.cn
  */
-public class ShopCartActivity extends BaseActivity implements Contract.ShopCartView {
+public class ShopCartActivity extends BaseActivity implements Contract.ShopCartView, OnTitleBarListener {
     @BindView(R.id.shop_cart_top_ll_edt_search)
     ClearEditText mSearchEdt;
     @BindView(R.id.shop_cart_rv_classes)
@@ -44,9 +49,12 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     Button mListBtn;
     @BindView(R.id.shop_cart_bottom_tv_payment)
     Button mPayBtn;
+    @BindView(R.id.shop_cart_top_bar)
+    TitleBar mTitleBar;
     private Contract.ShopCartPresenter mPresenter;
     private ShopAdapter<DepProduct> mProdAdapter;
     private ShopAdapter<DepCls> mClsAdapter;
+    private List<DepProduct> mProdList = new ArrayList<>();
 
     @Override
     protected int getLayoutID() {
@@ -55,7 +63,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @Override
     protected void initData() {
-        mPresenter.initProdList();
+        mPresenter.initProdList(this);
         mTipTv.setVisibility(View.VISIBLE);
         mTipTv.bringToFront();
     }
@@ -65,6 +73,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         if (mPresenter == null) {
             mPresenter = ShopCartPresenter.createPresenter(this);
         }
+
         mSearchEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -73,7 +82,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                mPresenter.searchProdList(s.toString());
             }
 
             @Override
@@ -85,7 +94,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @Override
     protected void initTitleBar() {
-
+        mTitleBar.setOnTitleBarListener(this);
     }
 
     @Override
@@ -97,11 +106,17 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
 
     @Override
-    public void setClsList(List<DepCls> clsList) {
+    public void setClsList(final List<DepCls> clsList) {
         mClassRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mClsAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_classes_item, clsList, 0);
         mClassRecyclerView.setAdapter(mClsAdapter);
         mClassRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mClsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                mPresenter.searchProdList(clsList.get(position).getClsCode());
+            }
+        });
     }
 
     @Override
@@ -113,7 +128,12 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     }
 
     @Override
-    public void updateProdList() {
+    public void updateProdList(List<DepProduct> prodList) {
+        //过滤筛选
+        mProdAdapter.setNewData(prodList);
+        mProdAdapter.notifyDataSetChanged();
+        LogUtil.d("----size:" + mProdAdapter.getData().size());
+
     }
 
     @OnClick(R.id.shop_cart_bottom_btn_car)
@@ -122,10 +142,26 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         Intent intent = new Intent(ShopCartActivity.this, ShopListActivity.class);
         startActivity(intent);
     }
+
     @OnClick(R.id.shop_cart_bottom_tv_payment)
-    public void goPayActivity(){
+    public void goPayActivity() {
         DatabaseManger.getInstance(this).logUserHandle(new UserLog("ShopCart", "结算", "结算", "userCode", "depCode"));
         Intent intent = new Intent(ShopCartActivity.this, PayActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onLeftClick(View v) {
+        finish();
+    }
+
+    @Override
+    public void onTitleClick(View v) {
+
+    }
+
+    @Override
+    public void onRightClick(View v) {
+
     }
 }

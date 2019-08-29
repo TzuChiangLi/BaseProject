@@ -52,13 +52,22 @@
         android:layout_alignParentStart="true"
         tools:listitem="@layout/shop_cart_rv_classes_item" />
 
+    <View
+        android:id="@+id/shop_cart_rv_verticle_line"
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/shop_cart_ll_bottom"
+        android:layout_below="@+id/shop_cart_top_ll"
+        android:layout_toEndOf="@+id/shop_cart_rv_classes"
+        android:background="@color/divide_line" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/shop_cart_rv_product"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/shop_cart_ll_bottom"
         android:layout_below="@+id/shop_cart_top_ll"
-        android:layout_toEndOf="@+id/shop_cart_rv_classes"
+        android:layout_toEndOf="@+id/shop_cart_rv_verticle_line"
         tools:listitem="@layout/shop_cart_rv_product_item" />
 
     <RelativeLayout

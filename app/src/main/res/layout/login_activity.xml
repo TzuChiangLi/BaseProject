@@ -23,19 +23,23 @@
         android:layout_below="@+id/login_title_top"
         android:layout_alignStart="@+id/login_title_top"
         android:layout_alignEnd="@+id/login_btn"
-        android:layout_marginTop="56dp">
+        android:layout_marginTop="56dp"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/login_title_dep"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/login_title_dep"
             android:textSize="18sp" />
 
-        <android.support.v7.widget.AppCompatSpinner
+        <Spinner
+            android:id="@+id/login_sp_dep"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:maxHeight="45dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:minHeight="45dp"
             android:spinnerMode="dropdown" />
     </LinearLayout>
 
@@ -54,13 +58,15 @@
             android:id="@+id/login_title_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="@string/login_title_username"
             android:textSize="18sp" />
 
-        <android.support.v7.widget.AppCompatSpinner
+        <Spinner
+            android:id="@+id/login_sp_user"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:maxHeight="45dp"
+            android:layout_height="wrap_content"
+            android:minHeight="40dp"
             android:spinnerMode="dropdown" />
 
     </LinearLayout>

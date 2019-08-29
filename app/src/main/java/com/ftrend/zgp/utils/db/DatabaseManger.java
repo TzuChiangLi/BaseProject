@@ -282,11 +282,7 @@ public class DatabaseManger {
             }
         } catch (RuntimeException e) {
             LogUtil.e("query:" + e.getMessage());
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
+        } 
         return cursor;
     }
 
@@ -319,7 +315,9 @@ public class DatabaseManger {
     public static Date getDateTime() {
         Date date = new Date();
         Timestamp ts = new Timestamp(System.currentTimeMillis());
+        LogUtil.d("----date/ts:"+date+"/"+ts);
         date = ts;
+
         return date;
     }
 }

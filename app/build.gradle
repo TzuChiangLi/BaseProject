@@ -63,6 +63,12 @@ dependencies {
     //BRVAH万能适配器
     //https://github.com/CymChad/BaseRecyclerViewAdapterHelper
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47'
+    //DBFlow ORM框架
+    //https://github.com/agrosner/DBFlow
+    annotationProcessor "com.github.agrosner.dbflow:processor:5.0.0-alpha1"
+    implementation "com.github.agrosner.dbflow:core:5.0.0-alpha1"
+    implementation "com.github.agrosner.dbflow:lib:5.0.0-alpha1"
+
 
     //一些公共自定义view
     implementation project(':library')
