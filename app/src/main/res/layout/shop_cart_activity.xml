@@ -137,7 +137,7 @@
             android:text="13"
             android:textColor="@color/shop_tip_text"
             android:textSize="13sp"
-            android:visibility="gone" />
+            android:visibility="visible" />
     </RelativeLayout>
 </RelativeLayout>
 

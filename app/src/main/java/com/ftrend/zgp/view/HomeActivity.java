@@ -12,7 +12,7 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.HomePresenter;
-import com.ftrend.zgp.utils.db.DBHelper;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.permission.PermissionUtil;
@@ -33,6 +33,8 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     TextView mDateTv;
     @BindView(R.id.home_tv_user)
     TextView mUserTv;
+    @BindView(R.id.home_tv_depname)
+    TextView mDepTv;
     private Contract.HomePresenter mPresenter;
     private MenuAdapter mMenuAdapter;
 
@@ -49,6 +51,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
             mPresenter = HomePresenter.createPresenter(this);
         }
         mPresenter.setInfo();
+
     }
 
     @Override
@@ -70,6 +73,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         mPresenter = presenter;
     }
 
+
     @Override
     public void setMenuList(List<Menu> menuList) {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -85,23 +89,30 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
      */
     @Override
     public void showInfo(String... info) {
-
         mDateTv.setText(info[0]);
-//        mUserTv.setText(info[1]);
+        mUserTv.setText(ZgParams.getCurrentUser().getUserName());
+        mDepTv.setText(ZgParams.getCurrentDep().getDepName());
     }
 
 
     @Override
     public void onMenuClick(View view, int position) {
         MessageUtil.show((String) view.getTag());
-        Intent intent = new Intent(HomeActivity.this, ShopCartActivity.class);
         switch ((String) view.getTag()) {
             case "收银":
-                startActivity(intent);
+                mPresenter.goShopCart();
                 break;
             default:
                 LogUtil.e("无此功能");
                 break;
         }
+    }
+
+
+    @Override
+    public void goShopChartActivity(String lsNo) {
+        Intent intent = new Intent(HomeActivity.this, ShopCartActivity.class);
+        intent.putExtra("lsNo", lsNo);
+        startActivity(intent);
     }
 }

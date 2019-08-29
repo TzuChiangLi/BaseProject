@@ -2,14 +2,21 @@ package com.ftrend.zgp.presenter;
 
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Menu;
+import com.ftrend.zgp.model.Trade;
+import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.http.BaseResponse;
 import com.ftrend.zgp.utils.http.HttpCallBack;
+import com.ftrend.zgp.utils.log.LogUtil;
+import com.raizlabs.android.dbflow.sql.language.Method;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
+import static com.raizlabs.android.dbflow.sql.language.Method.count;
 
 /**
  * 主界面P层----所有业务逻辑在此
@@ -60,6 +67,64 @@ public class HomePresenter implements Contract.HomePresenter, HttpCallBack {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日");
         Arrays.fill(info, sdf.format(new Date()));
         mView.showInfo(info);
+    }
+
+    @Override
+    public void goShopCart() {
+
+        mView.goShopChartActivity(createLsNo());
+
+        //三位POS号+五位流水号
+
+//        String maxLsNo = SQLite.select(TradeProd_Table.lsNo).from(TradeProd.class)
+//                .where(TradeProd_Table.id.eq(id))
+//                .querySingle().getLsNo();
+//        LogUtil.d("----maxLsNo:"+maxLsNo);
+    }
+
+
+    //
+    public String createLsNo() {
+        String max = "99999";
+        long count = SQLite.select(count(Trade_Table.id)).from(Trade.class).count();
+        LogUtil.d("----count:" + count);
+        String maxLsNo = "";
+        if (count != 0) {
+            int id = SQLite.select(Method.max(Trade_Table.id).as("max")).from(Trade.class).querySingle().getId();
+            LogUtil.d("----id:" + id);
+            maxLsNo = SQLite.select(Trade_Table.lsNo).distinct().from(Trade.class).where(Trade_Table.id.eq(id)).querySingle().getLsNo();
+            String tmp = maxLsNo.substring(3, 8);
+            String pos = maxLsNo.substring(0, 2);
+            if (tmp.equals(max)) {
+                tmp = "00000";
+            } else {
+                tmp = padLeft(Integer.valueOf(tmp) + 1);
+            }
+            maxLsNo = pos + tmp;
+        } else {
+            maxLsNo = "00100000";
+        }
+        return maxLsNo;
+    }
+
+    //字符补齐
+    public String padLeft(int inStr) {
+        String outStr = "";
+        String temp = String.valueOf(inStr);
+        int size = temp.length();
+        if (size == 1) {
+            outStr = "0000" + temp;
+        } else if (size == 2) {
+            outStr = "000" + temp;
+        } else if (size == 3) {
+            outStr = "00" + temp;
+        } else if (size == 4) {
+            outStr = "0" + temp;
+        } else if (size == 5) {
+            outStr = temp;
+        }
+
+        return outStr;
     }
 
 

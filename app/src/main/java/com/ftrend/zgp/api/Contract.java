@@ -27,19 +27,16 @@ public interface Contract {
 
         /**
          * 初始化可登录用户数据
-         *
-         * @param depCode 柜台编码
          */
-        void initUserData(String depCode);
+        void initUserData();
 
         /**
          * 验证用户信息
          */
-        void checkUserInfo();
+        void checkUserInfo(String userCode, String userPwd, String depCode);
     }
 
     interface LoginView extends BaseView<Contract.LoginPresenter> {
-
         /**
          * 返回专柜信息
          *
@@ -54,6 +51,15 @@ public interface Contract {
          */
         void setUserData(List<User> userData);
 
+        /**
+         * 登录失败
+         */
+        void loginFailed(String failedMsg);
+
+        /**
+         * 登录成功
+         */
+        void loginSuccess(User user, Dep dep);
 
     }
 
@@ -68,6 +74,12 @@ public interface Contract {
          * 设置用户名、专柜号、当前日期
          */
         void setInfo();
+
+
+        /**
+         * 跳转收银-选择商品界面
+         */
+        void goShopCart();
     }
 
     interface HomeView extends BaseView<Contract.HomePresenter> {
@@ -84,6 +96,8 @@ public interface Contract {
          * @param info 字符串数组
          */
         void showInfo(String... info);
+
+        void goShopChartActivity(String lsNo);
     }
 
     //region 商品选择界面接口
@@ -94,6 +108,13 @@ public interface Contract {
          * @param context 上下文
          */
         void initProdList(Context context);
+
+        /**
+         * 加载本次流水单号中的购物车信息
+         *
+         * @param lsNo 本次流水单号
+         */
+        void initOrderInfo(String lsNo);
 
         /**
          * 筛选商品
@@ -107,10 +128,13 @@ public interface Contract {
          *
          * @param depProduct 商品对象
          */
-        void addToShopCart(DepProduct depProduct);
+        void addToShopCart(DepProduct depProduct,String lsNo);
 
     }
 
+    /**
+     *
+     */
     interface ShopCartView extends BaseView<Contract.ShopCartPresenter> {
         /**
          * 设置商品类别
@@ -133,8 +157,21 @@ public interface Contract {
          */
         void updateProdList(List<DepProduct> prodList);
 
+
+        /**
+         * 更新界面购物车的数量
+         *
+         * @param num 购物车内的数量
+         */
+        void updateTradeProdNum(long num);
     }
     //endregion
 
+    interface ShopListPresenter {
 
+    }
+
+    interface ShopListView extends BaseView<Contract.ShopListPresenter> {
+
+    }
 }

@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
+import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.utils.http.BaseResponse;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.log.LogUtil;
@@ -13,6 +15,8 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.raizlabs.android.dbflow.sql.language.Method.count;
 
 /**
  * 收银-选择商品P层
@@ -77,8 +81,18 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
     }
 
     @Override
+    public void initOrderInfo(String lsNo) {
+        long count = SQLite.select(count(TradeProd_Table.id)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).count();
+        mView.updateTradeProdNum(count);
+    }
+
+    @Override
     public void searchProdList(String key) {
         if (!TextUtils.isEmpty(key)) {
+            if (key.equals("all")) {
+                mView.updateProdList(mProdList);
+                return;
+            }
             List<DepProduct> fliterList = new ArrayList<>();
             if (mProdList.size() != 0 || mProdList != null) {
                 for (DepProduct depProduct : mProdList) {
@@ -106,8 +120,18 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
     }
 
     @Override
-    public void addToShopCart(DepProduct depProduct) {
-        LogUtil.d("----depProduct.name:"+depProduct.getProdName());
+    public void addToShopCart(DepProduct depProduct,String lsNo) {
+        TradeProd tradeProd = new TradeProd();
+        tradeProd.setLsNo(lsNo);
+        tradeProd.setProdName(depProduct.getProdName());
+        tradeProd.setDepCode(depProduct.getDepCode());
+        tradeProd.setAmount(1);
+//        tradeProd.setSortNo();
+    }
+
+    private int createSortNo(String lsNo){
+//        long count = SQLite.select(count())
+        return 0;
     }
 //        Cursor cursor = DatabaseManger.getInstance(context).query("DepCls", new String[]{"*"}, null, null, null, null, null, null);
 //        if (cursor != null) {

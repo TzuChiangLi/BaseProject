@@ -37,6 +37,7 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
             case 1:
                 helper.setText(R.id.shop_rv_product_tv_code, ((DepProduct) item).getProdCode());
                 helper.setText(R.id.shop_rv_product_tv_prodname, ((DepProduct) item).getProdName());
+                helper.setText(R.id.shop_rv_product_price, String.valueOf(((DepProduct) item).getPrice()));
                 helper.addOnClickListener(R.id.shop_rv_product_btn_add);
                 break;
             default:

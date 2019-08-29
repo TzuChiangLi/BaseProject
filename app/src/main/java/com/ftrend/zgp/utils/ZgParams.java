@@ -5,7 +5,9 @@ import android.util.Log;
 import com.blankj.utilcode.util.GsonUtils;
 import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.AppParams_Table;
+import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.SysParams;
+import com.ftrend.zgp.model.User;
 import com.google.gson.JsonObject;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -49,9 +51,15 @@ public class ZgParams {
     private static String lastDep = "";
     //本地参数：上次登录用户
     private static String lastUser = "";
+    //常用参数：本次登录的专柜
+    private static Dep currentDep = new Dep();
+    //常用参数：本次登录的用户
+    private static User currentUser = new User();
+
 
     /**
      * 读取参数，包括系统参数和APP本地参数
+     *
      * @return
      */
     public static boolean loadParams() {
@@ -97,6 +105,7 @@ public class ZgParams {
 
     /**
      * 判断指定专柜是否使用商品类别
+     *
      * @param depCode 专柜编码
      * @return
      */
@@ -106,7 +115,8 @@ public class ZgParams {
 
     /**
      * 解析JSON格式参数
-     * @param map 输出解析结果到此Map对象
+     *
+     * @param map   输出解析结果到此Map对象
      * @param value json字符串
      */
     private static void parseJson(Map<String, Object> map, String value) {
@@ -120,6 +130,18 @@ public class ZgParams {
             Log.e(TAG, "parseJson: 解析JSON格式参数发生异常", e);
         }
     }
+
+    /**
+     * 将本次登录信息保存
+     *
+     * @param user 当前用户
+     * @param dep  当前柜台
+     */
+    public static void saveCurrentInfo(User user, Dep dep) {
+        currentDep = dep;
+        currentUser = user;
+    }
+
 
     public static String getServerUrl() {
         return serverUrl;
@@ -165,4 +187,11 @@ public class ZgParams {
         return lastUser;
     }
 
+    public static Dep getCurrentDep() {
+        return currentDep;
+    }
+
+    public static User getCurrentUser() {
+        return currentUser;
+    }
 }

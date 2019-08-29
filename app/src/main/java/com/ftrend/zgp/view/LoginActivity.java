@@ -1,5 +1,6 @@
 package com.ftrend.zgp.view;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -13,6 +14,8 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.presenter.LoginPresenter;
+import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 
 import java.util.List;
 
@@ -47,7 +50,7 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
     @Override
     protected void initData() {
         mPresenter.initDepData(this);
-
+        mPresenter.initUserData();
 
     }
 
@@ -68,7 +71,7 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
 //        MessageUtil.show("暂未向下一界面传递数据");
 //        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
 //        startActivity(intent);
-        mPresenter.checkUserInfo();
+        mPresenter.checkUserInfo(userCode, mPwdEdt.getText().toString().trim(), depCode);
 
     }
 
@@ -104,6 +107,19 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
                 userCode = null;
             }
         });
+    }
+
+    @Override
+    public void loginFailed(String failedMsg) {
+        MessageUtil.showError(failedMsg);
+    }
+
+    @Override
+    public void loginSuccess(User user, Dep dep) {
+        //此处保存静态变量
+        ZgParams.saveCurrentInfo(user, dep);
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        startActivity(intent);
     }
 
     @Override

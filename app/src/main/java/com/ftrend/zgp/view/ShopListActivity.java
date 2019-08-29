@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.ftrend.zgp.R;
+import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
@@ -17,7 +18,7 @@ import butterknife.OnClick;
  *
  * @author liziqiang@ftrend.cn
  */
-public class ShopListActivity extends BaseActivity implements OnTitleBarListener {
+public class ShopListActivity extends BaseActivity implements Contract.ShopListView,OnTitleBarListener {
     @BindView(R.id.shop_list_top_bar)
     TitleBar mTitleBar;
     @BindView(R.id.shop_list_btn_pay)
@@ -62,6 +63,11 @@ public class ShopListActivity extends BaseActivity implements OnTitleBarListener
 
     @Override
     public void onRightClick(View v) {
+
+    }
+
+    @Override
+    public void setPresenter(Contract.ShopListPresenter presenter) {
 
     }
 }
