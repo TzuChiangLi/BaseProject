@@ -33,7 +33,6 @@ public class ZgParams {
     //系统参数：微信支付收款账号
     private static String wxPayAccount = "";
 
-
     //本地参数：服务器地址
     private static String serverUrl = "";
     //本地参数：机器编号
