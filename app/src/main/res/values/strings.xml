@@ -2,4 +2,5 @@
     <string name="app_name">zgp-android-app</string>
     <string name="app_test">******</string>
     <string name="app_online_status">联网状态</string>
+    <string name="app_empty">无数据</string>
 </resources>

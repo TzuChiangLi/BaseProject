@@ -9,7 +9,6 @@ import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.utils.http.BaseResponse;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.log.LogUtil;
-import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
@@ -60,27 +59,18 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
 
     @Override
     public void initProdList(Context context) {
-        List<DepCls> clsList = new ArrayList<>();
+        List<DepCls> clsList = SQLite.select().from(DepCls.class).queryList();
+        mProdList = SQLite.select().from(DepProduct.class).queryList();
+        LogUtil.d("----cls.size:" + clsList.size());
+        //region 可能数据表自己测试用的有点问题，此处修复那个问题后再把牵扯到V层的代码修正掉
+        mView.setProdList(mProdList);
         DepCls depCls = new DepCls();
         depCls.setClsName("全部类别");
-        depCls.setClsCode("all");
         depCls.setDepCode("all");
-        clsList.add(depCls);
-        mProdList = SQLite.select().from(DepProduct.class).queryList();
-        clsList = SQLite.select().from(DepCls.class).queryList();
-        LogUtil.d("----prodlist.size:" + mProdList.get(0).getProdCode());
-        //region 可能数据表自己测试用的有点问题，此处修复那个问题后再把牵扯到V层的代码修正掉
-        if (mProdList.size() != 0 && mProdList.get(0).getProdName() != null) {
-            mView.setProdList(mProdList);
-        } else {
-            MessageUtil.show("数据库内无数据");
-        }
-        if (clsList.size() != 0 && clsList.get(0).getClsName() != null) {
+        depCls.setClsCode("all");
 
-            mView.setClsList(clsList);
-        } else {
-            MessageUtil.show("数据库内无数据");
-        }
+        clsList.add(0, depCls);
+        mView.setClsList(clsList);
         //endregion
 
 
@@ -90,7 +80,6 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
     public void searchProdList(String key) {
         if (!TextUtils.isEmpty(key)) {
             List<DepProduct> fliterList = new ArrayList<>();
-            //TODO 稍后调整
             if (mProdList.size() != 0 || mProdList != null) {
                 for (DepProduct depProduct : mProdList) {
                     if (!TextUtils.isEmpty(depProduct.getProdCode())) {
@@ -109,11 +98,16 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
                         }
                     }
                 }
-            }
+            }//TODO 如果是空那么需要用emptyView
             mView.updateProdList(fliterList);
         } else {
             mView.updateProdList(mProdList);
         }
+    }
+
+    @Override
+    public void addToShopCart(DepProduct depProduct) {
+        LogUtil.d("----depProduct.name:"+depProduct.getProdName());
     }
 //        Cursor cursor = DatabaseManger.getInstance(context).query("DepCls", new String[]{"*"}, null, null, null, null, null, null);
 //        if (cursor != null) {

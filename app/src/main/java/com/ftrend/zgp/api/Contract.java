@@ -101,6 +101,14 @@ public interface Contract {
          * @param key 筛选关键字
          */
         void searchProdList(String key);
+
+        /**
+         * 添加到购物车
+         *
+         * @param depProduct 商品对象
+         */
+        void addToShopCart(DepProduct depProduct);
+
     }
 
     interface ShopCartView extends BaseView<Contract.ShopCartPresenter> {

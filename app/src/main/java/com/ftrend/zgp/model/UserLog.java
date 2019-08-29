@@ -3,6 +3,7 @@ package com.ftrend.zgp.model;
 
 import com.ftrend.zgp.utils.db.DBHelper;
 import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
@@ -17,14 +18,17 @@ import java.util.Date;
 @Table(database = DBHelper.class)
 public class UserLog extends BaseModel {
     @PrimaryKey(autoincrement = true)
+    @NotNull
     private int id;
     @Column
     private String module;
     @Column
     private String function;
     @Column
+    @NotNull
     private Date occurTime;
     @Column
+    @NotNull
     private String content;
     @Column
     private String userCode;

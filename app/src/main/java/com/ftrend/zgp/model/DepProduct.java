@@ -3,6 +3,7 @@ package com.ftrend.zgp.model;
 
 import com.ftrend.zgp.utils.db.DBHelper;
 import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
@@ -15,16 +16,21 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 @Table(database = DBHelper.class)
 public class DepProduct extends BaseModel {
     @PrimaryKey(autoincrement = true)
+    @NotNull
     private int id;
     @Column
+    @NotNull
     private String depCode;
     @Column
+    @NotNull
     private String prodCode;
     @Column
     private String barCode;
     @Column
+    @NotNull
     private String prodName;
     @Column
+    @NotNull
     private String clsCode;
     @Column
     private String cargoNo;
@@ -33,19 +39,19 @@ public class DepProduct extends BaseModel {
     @Column
     private String unit;
     @Column
-    private float price;
+    private float price = 0;
     @Column
     private String brand;
     @Column
-    private int priceFlag;
+    private int priceFlag = 0;
     @Column
-    private int isLargess;
+    private int isLargess = 0;
     @Column
     private int forSaleRet;
     @Column
     private int forDsc;
     @Column
-    private int forLargess;
+    private int forLargess = 0;
     @Column
     private float scoreSet;
     @Column
@@ -62,26 +68,26 @@ public class DepProduct extends BaseModel {
     private float vipRate3;
     @Column
     private float minimumPrice;
-//
-//    public DepProduct() {
-//    }
-//
-//    public DepProduct(String depCode, String prodCode, String barCode, String prodName, String clsCode, String spec, float price) {
-//        this.depCode = depCode;
-//        this.prodCode = prodCode;
-//        this.barCode = barCode;
-//        this.prodName = prodName;
-//        this.clsCode = clsCode;
-//        this.spec = spec;
-//        this.price = price;
-//    }
 
-//    public DepProduct(String prodCode, String prodName, String depCode, String clsCode) {
-//        this.prodCode = prodCode;
-//        this.prodName = prodName;
-//        this.depCode = depCode;
-//        this.clsCode = clsCode;
-//    }
+    public DepProduct() {
+    }
+
+    public DepProduct(String depCode, String prodCode, String barCode, String prodName, String clsCode, String spec, float price) {
+        this.depCode = depCode;
+        this.prodCode = prodCode;
+        this.barCode = barCode;
+        this.prodName = prodName;
+        this.clsCode = clsCode;
+        this.spec = spec;
+        this.price = price;
+    }
+
+    public DepProduct(String prodCode, String prodName, String depCode, String clsCode) {
+        this.prodCode = prodCode;
+        this.prodName = prodName;
+        this.depCode = depCode;
+        this.clsCode = clsCode;
+    }
 
 
     public int getId() {
