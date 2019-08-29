@@ -2,6 +2,7 @@ package com.ftrend.zgp;
 
 import android.app.Application;
 
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.db.TestDataImporter;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
@@ -20,6 +21,8 @@ public class App extends Application {
         FlowManager.init(this);
         //导入测试数据
         TestDataImporter.importAll();
+        //读取全局参数
+        ZgParams.loadParams();
 
         //region 吐司初始化
         //初始化Toast样式
