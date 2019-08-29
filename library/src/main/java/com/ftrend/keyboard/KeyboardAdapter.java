@@ -1,5 +1,6 @@
 package com.ftrend.keyboard;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -62,7 +63,7 @@ public class KeyboardAdapter extends RecyclerView.Adapter<KeyboardAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final KeyboardAdapter.ViewHolder viewHolder, final int i) {
+    public void onBindViewHolder(@NonNull final KeyboardAdapter.ViewHolder viewHolder, @SuppressLint("RecyclerView") final int i) {
         viewHolder.mNumberTv.setText(mList.get(i));
         viewHolder.mNumberTv.setTextColor(Color.BLACK);
         viewHolder.mNumberTv.setTag(i);

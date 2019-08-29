@@ -58,7 +58,7 @@ public class LoginAdapter<T> extends BaseAdapter {
             TextView titleTv = convertView.findViewById(R.id.login_sp_title);
             TextView codeTv = convertView.findViewById(R.id.login_sp_code);
             titleTv.setText((type == 0 ? ((List<Dep>) data).get(position).getDepName() : ((List<User>) data).get(position).getUserName()).trim());
-            codeTv.setText(type == 0 ? ((List<Dep>) data).get(position).getDepCode() : ((List<User>) data).get(position).getUserName());
+            codeTv.setText(type == 0 ? ((List<Dep>) data).get(position).getDepCode() : ((List<User>) data).get(position).getUserCode());
         }
 
         return convertView;

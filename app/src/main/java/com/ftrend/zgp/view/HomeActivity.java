@@ -39,8 +39,8 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
 
     @Override
     protected void initData() {
-        DBHelper dbHelper = new DBHelper(this, "TEST.db", null, 1);
-        dbHelper.getWritableDatabase();
+        /*DBHelper dbHelper = new DBHelper(this, "TEST.db", null, 1);
+        dbHelper.getWritableDatabase();*/
         mPresenter.initMenuList();
     }
 

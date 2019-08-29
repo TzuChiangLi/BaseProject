@@ -1,10 +1,11 @@
 package com.ftrend.zgp.model;
 
 
-import com.dbflow5.annotation.Column;
-import com.dbflow5.annotation.PrimaryKey;
-import com.dbflow5.annotation.Table;
 import com.ftrend.zgp.utils.db.DBHelper;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.util.Date;
 
@@ -14,7 +15,7 @@ import java.util.Date;
  * @author liziqiang@ftrend.cn
  */
 @Table(database = DBHelper.class)
-public class UserLog {
+public class UserLog extends BaseModel {
     @PrimaryKey(autoincrement = true)
     private int id;
     @Column

@@ -62,7 +62,8 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
     public void initProdList(Context context) {
         List<DepCls> clsList = new ArrayList<>();
         clsList.add(new DepCls("", "", "全部类别"));
-        Cursor cursor = DatabaseManger.getInstance(context).query("DepCls", new String[]{"*"}, null, null, null, null, null, null);
+        // TODO: 2019/8/29
+        /*Cursor cursor = DatabaseManger.getInstance(context).query("DepCls", new String[]{"*"}, null, null, null, null, null, null);
         if (cursor != null) {
             if (cursor.moveToFirst()) {
                 do {
@@ -94,7 +95,7 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
         }
         if (cursor != null) {
             cursor.close();
-        }
+        }*/
         mView.setClsList(clsList);
         mView.setProdList(mProdList);
     }

@@ -1,11 +1,12 @@
 package com.ftrend.zgp.utils.db;
 
-import android.content.Context;
-import android.database.DatabaseErrorHandler;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+//import android.content.Context;
+//import android.database.DatabaseErrorHandler;
+//import android.database.sqlite.SQLiteDatabase;
+//import android.database.sqlite.SQLiteOpenHelper;
 
-import com.dbflow5.annotation.Database;
+import com.raizlabs.android.dbflow.annotation.Database;
+
 
 /**
  * 数据库创建、升级工具
@@ -13,7 +14,7 @@ import com.dbflow5.annotation.Database;
  * @author liziqiang@ftrend.cn
  */
 @Database(name = DBHelper.DATABASE_NAME, version = DBHelper.DATABASE_VERSION)
-public class DBHelper extends SQLiteOpenHelper {
+public class DBHelper /*extends SQLiteOpenHelper*/ {
     /**
      * 数据库名称
      */
@@ -160,7 +161,7 @@ public class DBHelper extends SQLiteOpenHelper {
             + "ParamName Text(20) not null,"
             + "ParamValue Text(100) not null)";
 
-    public DBHelper(Context context) {
+/*    public DBHelper(Context context) {
         this(context, DATABASE_NAME, null, DATABASE_VERSION);
 
     }
@@ -213,5 +214,5 @@ public class DBHelper extends SQLiteOpenHelper {
         if (oldVersion < 6) {
             DataBaseUpdate.update_5_6(db);
         }
-    }
+    }*/
 }

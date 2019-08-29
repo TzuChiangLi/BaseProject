@@ -18,26 +18,31 @@ import java.util.Date;
  * @author liziqiang@ftrend.cn
  */
 public class DatabaseManger {
+/*
     private DBHelper dbHelper;
     private static DatabaseManger INSTANCE = null;
     private SQLiteDatabase db;
 
-    /**
+    */
+/**
      * 构造方法上下文
      *
      * @param context 控制上下文
-     */
+     *//*
+
     private DatabaseManger(Context context) {
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
     }
 
-    /**
+    */
+/**
      * 获取本类对象的实例
      *
      * @param context 上下文
      * @return 实例
-     */
+     *//*
+
     public static DatabaseManger getInstance(Context context) {
         if (INSTANCE == null) {
             if (context == null) {
@@ -48,9 +53,11 @@ public class DatabaseManger {
         return INSTANCE;
     }
 
-    /**
+    */
+/**
      * 关闭数据库
-     */
+     *//*
+
     public void close() {
         if (db.isOpen()) {
             db.close();
@@ -65,9 +72,11 @@ public class DatabaseManger {
         }
     }
 
-    /**
+    */
+/**
      * 执行一条sql语句
-     */
+     *//*
+
     private boolean execSql(String sql) {
         try {
             if (db.isOpen()) {
@@ -83,11 +92,13 @@ public class DatabaseManger {
         }
     }
 
-    /**
+    */
+/**
      * sql执行查询操作的sql语句
      * selectionargs查询条件
      * 返回查询的游标，可对数据进行操作，但是需要自己关闭游标
-     */
+     *//*
+
     private Cursor queryData2Cursor(String sql, String[] selectionArgs) throws Exception {
         Cursor cursor = null;
         try {
@@ -102,12 +113,14 @@ public class DatabaseManger {
         return cursor;
     }
 
-    /**
+    */
+/**
      * 返回表中数据条数
      *
      * @param table 表名
      * @return 数量
-     */
+     *//*
+
     public int getDataCounts(String table) {
         Cursor cursor;
         int counts = 0;
@@ -127,13 +140,15 @@ public class DatabaseManger {
         return counts;
     }
 
-    /**
+    */
+/**
      * 插入数据
      *
      * @param sql      执行操作的sql语句
      * @param bindArgs sql中的参数，参数的位置对于占位符的顺序
      * @return 返回插入对应的ID，返回0，则插入无效
-     */
+     *//*
+
 
     public boolean insertDataBySql(String sql, String[] bindArgs) {
         long id = 0;
@@ -161,13 +176,15 @@ public class DatabaseManger {
         }
     }
 
-    /**
+    */
+/**
      * 插入数据
      *
      * @param table  表名
      * @param values 数据
      * @return 返回插入的ID，返回0，则插入失败
-     */
+     *//*
+
     public boolean insertData(String table, ContentValues values) {
         long id = 0;
         try {
@@ -187,7 +204,8 @@ public class DatabaseManger {
     }
 
 
-    /**
+    */
+/**
      * 更新数据
      *
      * @param table        表名
@@ -195,7 +213,8 @@ public class DatabaseManger {
      * @param whereClaause 表示sql语句中条件部分的语句
      * @param whereArgs    表示占位符的值
      * @return 受影响的行数
-     */
+     *//*
+
     public int updateData(String table, ContentValues values, String whereClaause, String[] whereArgs) {
         int rowsNum = 0;
         try {
@@ -210,12 +229,14 @@ public class DatabaseManger {
         return rowsNum;
     }
 
-    /**
+    */
+/**
      * 删除数据
      *
      * @param sql      待执行的sql语句
      * @param bindArgs sql语句中的参数，参数的顺序对应占位符的顺序
-     */
+     *//*
+
     public void deleteDataBySql(String sql, String[] bindArgs) {
         try {
             if (db.isOpen()) {
@@ -236,14 +257,16 @@ public class DatabaseManger {
         }
     }
 
-    /**
+    */
+/**
      * 删除数据
      *
      * @param table       表名
      * @param whereClause sql中的条件语句部分
      * @param whereArgs   占位符的值
      * @return
-     */
+     *//*
+
     public long deleteData(String table, String whereClause, String[] whereArgs) {
         long rowsNum = 0;
         try {
@@ -259,7 +282,8 @@ public class DatabaseManger {
         return rowsNum;
     }
 
-    /**
+    */
+/**
      * 数据查询
      *
      * @param table
@@ -271,7 +295,8 @@ public class DatabaseManger {
      * @param orderBy
      * @param limit
      * @return
-     */
+     *//*
+
     public Cursor query(String table, String[] columns, String selection, String[] selectionArgs, String groupBy, String having, String orderBy, Integer limit) {
         Cursor cursor = null;
         try {
@@ -287,11 +312,13 @@ public class DatabaseManger {
     }
 
 
-    /**
+    */
+/**
      * 记录用户操作记录
      *
      * @param userLog
-     */
+     *//*
+
     public void logUserHandle(UserLog userLog) {
         try {
             if (db.isOpen()) {
@@ -310,6 +337,7 @@ public class DatabaseManger {
             LogUtil.e("logUserHandle:" + e.getMessage());
         }
     }
+*/
 
 
     public static Date getDateTime() {

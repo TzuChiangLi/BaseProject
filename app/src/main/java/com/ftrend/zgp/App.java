@@ -2,10 +2,11 @@ package com.ftrend.zgp;
 
 import android.app.Application;
 
-import com.dbflow5.config.FlowManager;
+import com.ftrend.zgp.utils.db.TestDataImporter;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.qw.soul.permission.SoulPermission;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 /**
  * 初始化相关工具组件
@@ -17,6 +18,9 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         FlowManager.init(this);
+        //导入测试数据
+        TestDataImporter.importAll();
+
         //region 吐司初始化
         //初始化Toast样式
         MessageUtil.init(this);
@@ -34,6 +38,7 @@ public class App extends Application {
         //老的系统默认权限直接授予
         SoulPermission.skipOldRom(true);
         //endregion
+
     }
 
 

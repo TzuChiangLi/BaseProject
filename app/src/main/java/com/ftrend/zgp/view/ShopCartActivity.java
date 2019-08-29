@@ -138,14 +138,16 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @OnClick(R.id.shop_cart_bottom_btn_car)
     public void goShopListActivity() {
-        DatabaseManger.getInstance(this).logUserHandle(new UserLog("ShopCart", "进入购物车", "查看购物车", "userCode", "depCode"));
+        // TODO: 2019/8/29  
+//        DatabaseManger.getInstance(this).logUserHandle(new UserLog("ShopCart", "进入购物车", "查看购物车", "userCode", "depCode"));
         Intent intent = new Intent(ShopCartActivity.this, ShopListActivity.class);
         startActivity(intent);
     }
 
     @OnClick(R.id.shop_cart_bottom_tv_payment)
     public void goPayActivity() {
-        DatabaseManger.getInstance(this).logUserHandle(new UserLog("ShopCart", "结算", "结算", "userCode", "depCode"));
+        // TODO: 2019/8/29
+//        DatabaseManger.getInstance(this).logUserHandle(new UserLog("ShopCart", "结算", "结算", "userCode", "depCode"));
         Intent intent = new Intent(ShopCartActivity.this, PayActivity.class);
         startActivity(intent);
     }

@@ -85,7 +85,20 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
 
     @Override
     public void setUserData(List<User> userData) {
+        mUserAdapter=new LoginAdapter<>(this,userData,1);
+        mUserSp.setAdapter(mUserAdapter);
+        /*mUserSp.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                LogUtil.d("----"+mUserAdapter.getItemCode(position));
+                mPresenter.initUserData(mUserAdapter.getItemCode(position));
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });*/
     }
 
     @Override

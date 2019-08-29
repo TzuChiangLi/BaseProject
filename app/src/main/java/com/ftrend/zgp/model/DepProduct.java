@@ -1,9 +1,10 @@
 package com.ftrend.zgp.model;
 
-import com.dbflow5.annotation.Column;
-import com.dbflow5.annotation.PrimaryKey;
-import com.dbflow5.annotation.Table;
 import com.ftrend.zgp.utils.db.DBHelper;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
 /**
  * 商品信息
@@ -11,7 +12,7 @@ import com.ftrend.zgp.utils.db.DBHelper;
  * @author liziqiang@ftrend.cn
  */
 @Table(database = DBHelper.class)
-public class DepProduct {
+public class DepProduct extends BaseModel {
     @PrimaryKey(autoincrement = true)
     private int id;
     @Column
@@ -82,11 +83,11 @@ public class DepProduct {
     }
 
 
-    public int getID() {
+    public int getId() {
         return id;
     }
 
-    public void setID(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
