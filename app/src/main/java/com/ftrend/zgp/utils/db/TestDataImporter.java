@@ -117,6 +117,10 @@ public class TestDataImporter {
     private static void importAppParams() {
         SQLite.delete(AppParams.class).execute();
 //        ParamName, ParamValue
+        new AppParams("serverUrl", "http://192.168.1.20").insert();
+        new AppParams("posCode", "101").insert();
+        new AppParams("devSn", "").insert();
+        new AppParams("initFlag", "0").insert();
         new AppParams("printerConfig", "{}").insert();
         new AppParams("cardConfig", "{}").insert();
         new AppParams("lastDep", "1020").insert();

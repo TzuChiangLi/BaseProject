@@ -6,8 +6,6 @@ import com.blankj.utilcode.util.GsonUtils;
 import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.SysParams;
-import com.ftrend.zgp.model.SysParams_Table;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -35,6 +33,15 @@ public class ZgParams {
     //系统参数：微信支付收款账号
     private static String wxPayAccount = "";
 
+
+    //本地参数：服务器地址
+    private static String serverUrl = "";
+    //本地参数：机器编号
+    private static String posCode = "";
+    //本地参数：设备识别码
+    private static String devSn = "";
+    //本地参数：初始化标识（0-未完成，1-已完成）
+    private static String initFlag = "0";
     //本地参数：打印机设置
     private static Map<String, Object> printerConfig = new HashMap<>();
     //本地参数：读卡器设置
@@ -68,7 +75,15 @@ public class ZgParams {
                 .where(AppParams_Table.paramName.notLike(""))
                 .queryList();
         for (AppParams param : appParamsList) {
-            if ("printerConfig".equalsIgnoreCase(param.getParamName())) {
+            if ("serverUrl".equalsIgnoreCase(param.getParamName())) {
+                serverUrl = param.getParamValue();
+            } else if ("posCode".equalsIgnoreCase(param.getParamName())) {
+                posCode = param.getParamValue();
+            } else if ("devSn".equalsIgnoreCase(param.getParamName())) {
+                devSn = param.getParamValue();
+            } else if ("initFlag".equalsIgnoreCase(param.getParamName())) {
+                initFlag = param.getParamValue();
+            } else if ("printerConfig".equalsIgnoreCase(param.getParamName())) {
                 parseJson(printerConfig, param.getParamValue());
             } else if ("cardConfig".equalsIgnoreCase(param.getParamName())) {
                 parseJson(cardConfig, param.getParamValue());
@@ -105,6 +120,22 @@ public class ZgParams {
         } catch (Exception e) {
             Log.e(TAG, "parseJson: 解析JSON格式参数发生异常", e);
         }
+    }
+
+    public static String getServerUrl() {
+        return serverUrl;
+    }
+
+    public static String getPosCode() {
+        return posCode;
+    }
+
+    public static String getDevSn() {
+        return devSn;
+    }
+
+    public static String getInitFlag() {
+        return initFlag;
     }
 
     public static String getVipCardType() {
