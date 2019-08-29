@@ -1,9 +1,11 @@
 package com.ftrend.zgp.model;
 
-import com.dbflow5.annotation.Column;
-import com.dbflow5.annotation.PrimaryKey;
-import com.dbflow5.annotation.Table;
 import com.ftrend.zgp.utils.db.DBHelper;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
+
 
 /**
  * 可登录用户信息
@@ -11,7 +13,7 @@ import com.ftrend.zgp.utils.db.DBHelper;
  * @author liziqiang@ftrend.cn
  */
 @Table(database = DBHelper.class)
-public class User {
+public class User extends BaseModel {
     @PrimaryKey(autoincrement = true)
     private int id;
     @Column
@@ -29,18 +31,18 @@ public class User {
     @Column
     private float maxTHTotal;
 
-    public User() {
-    }
-
-    public User(String userCode, String userName, String userPwd, String userRights, int maxDscRate, float maxDscTotal, float maxTHTotal) {
-        this.userCode = userCode;
-        this.userName = userName;
-        this.userPwd = userPwd;
-        this.userRights = userRights;
-        this.maxDscRate = maxDscRate;
-        this.maxDscTotal = maxDscTotal;
-        this.maxTHTotal = maxTHTotal;
-    }
+//    public User() {
+//    }
+//
+//    public User(String userCode, String userName, String userPwd, String userRights, int maxDscRate, float maxDscTotal, float maxTHTotal) {
+//        this.userCode = userCode;
+//        this.userName = userName;
+//        this.userPwd = userPwd;
+//        this.userRights = userRights;
+//        this.maxDscRate = maxDscRate;
+//        this.maxDscTotal = maxDscTotal;
+//        this.maxTHTotal = maxTHTotal;
+//    }
 
     public int getId() {
         return id;

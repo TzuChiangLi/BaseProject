@@ -130,22 +130,36 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @Override
     public void updateProdList(List<DepProduct> prodList) {
         //过滤筛选
-        mProdAdapter.setNewData(prodList);
-        mProdAdapter.notifyDataSetChanged();
-        LogUtil.d("----size:" + mProdAdapter.getData().size());
+        if (prodList.size() != 0) {
+            mProdAdapter.setNewData(prodList);
+            mProdAdapter.notifyDataSetChanged();
+            LogUtil.d("----size:" + mProdAdapter.getData().size());
+        }
 
     }
 
     @OnClick(R.id.shop_cart_bottom_btn_car)
     public void goShopListActivity() {
-        DatabaseManger.getInstance(this).logUserHandle(new UserLog("ShopCart", "进入购物车", "查看购物车", "userCode", "depCode"));
+        UserLog userLog = new UserLog();
+        userLog.setModule("ShopCart");
+        userLog.setUserCode("userCode");
+        userLog.setContent("查看购物车");
+        userLog.setFunction("进入购物车");
+        userLog.setDepCode("DepCode");
+        DatabaseManger.getInstance(this).logUserHandle(userLog);
         Intent intent = new Intent(ShopCartActivity.this, ShopListActivity.class);
         startActivity(intent);
     }
 
     @OnClick(R.id.shop_cart_bottom_tv_payment)
     public void goPayActivity() {
-        DatabaseManger.getInstance(this).logUserHandle(new UserLog("ShopCart", "结算", "结算", "userCode", "depCode"));
+        UserLog userLog = new UserLog();
+        userLog.setModule("ShopCart");
+        userLog.setUserCode("userCode");
+        userLog.setContent("结算");
+        userLog.setFunction("结算");
+        userLog.setDepCode("DepCode");
+        DatabaseManger.getInstance(this).logUserHandle(userLog);
         Intent intent = new Intent(ShopCartActivity.this, PayActivity.class);
         startActivity(intent);
     }

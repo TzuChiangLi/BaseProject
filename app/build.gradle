@@ -2,6 +2,8 @@ ext {
     var = '2.1.0'
 }
 apply plugin: 'com.android.application'
+def dbflow_version = '4.2.4'
+
 
 android {
     compileSdkVersion 28
@@ -65,11 +67,9 @@ dependencies {
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47'
     //DBFlow ORM框架
     //https://github.com/agrosner/DBFlow
-    annotationProcessor "com.github.agrosner.dbflow:processor:5.0.0-alpha1"
-    implementation "com.github.agrosner.dbflow:core:5.0.0-alpha1"
-    implementation "com.github.agrosner.dbflow:lib:5.0.0-alpha1"
-
-
+    annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
     //一些公共自定义view
     implementation project(':library')
 
