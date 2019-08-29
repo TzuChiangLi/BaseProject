@@ -2,9 +2,11 @@ package com.ftrend.zgp.model;
 
 import com.ftrend.zgp.utils.db.DBHelper;
 import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
+
 
 /**
  * 可登录用户信息
@@ -14,21 +16,29 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 @Table(database = DBHelper.class)
 public class User extends BaseModel {
     @PrimaryKey(autoincrement = true)
+    @NotNull
     private int id;
     @Column
+    @NotNull
     private String userCode;
     @Column
+    @NotNull
     private String userName;
     @Column
+    @NotNull
     private String userPwd;
     @Column
+    @NotNull
     private String userRights;
     @Column
-    private int maxDscRate;
+    @NotNull
+    private int maxDscRate=0;
     @Column
-    private float maxDscTotal;
+    @NotNull
+    private float maxDscTotal=0;
     @Column
-    private float maxTHTotal;
+    @NotNull
+    private float maxTHTotal=0;
 
     public User() {
     }

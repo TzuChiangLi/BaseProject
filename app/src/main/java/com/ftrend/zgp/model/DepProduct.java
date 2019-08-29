@@ -1,7 +1,9 @@
 package com.ftrend.zgp.model;
 
+
 import com.ftrend.zgp.utils.db.DBHelper;
 import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
@@ -14,16 +16,21 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 @Table(database = DBHelper.class)
 public class DepProduct extends BaseModel {
     @PrimaryKey(autoincrement = true)
+    @NotNull
     private int id;
     @Column
+    @NotNull
     private String depCode;
     @Column
+    @NotNull
     private String prodCode;
     @Column
     private String barCode;
     @Column
+    @NotNull
     private String prodName;
     @Column
+    @NotNull
     private String clsCode;
     @Column
     private String cargoNo;
@@ -32,19 +39,19 @@ public class DepProduct extends BaseModel {
     @Column
     private String unit;
     @Column
-    private float price;
+    private float price = 0;
     @Column
     private String brand;
     @Column
-    private int priceFlag;
+    private int priceFlag = 0;
     @Column
-    private int isLargess;
+    private int isLargess = 0;
     @Column
     private int forSaleRet;
     @Column
     private int forDsc;
     @Column
-    private int forLargess;
+    private int forLargess = 0;
     @Column
     private float scoreSet;
     @Column

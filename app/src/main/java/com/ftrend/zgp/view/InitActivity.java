@@ -20,6 +20,7 @@ public class InitActivity extends BaseActivity {
     @Override
     protected void initData() {
         LogUtil.d("initData");
+
     }
 
     @Override

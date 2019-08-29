@@ -2,39 +2,28 @@ package com.ftrend.zgp.model;
 
 import com.ftrend.zgp.utils.db.DBHelper;
 import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-/**
- * 专柜支付方式
- * Copyright (C),青岛致远方象软件科技有限公司
- *
- * @author liuhongbin@ftrend.cn
- * @since 2019/8/29
- */
 @Table(database = DBHelper.class)
 public class DepPayInfo extends BaseModel {
     @PrimaryKey(autoincrement = true)
+    @NotNull
     private int id;
     @Column
+    @NotNull
     private String depCode;
     @Column
+    @NotNull
     private String payTypeCode;
     @Column
+    @NotNull
     private String payTypeName;
     @Column
-    private String appPayType;
-
-    public DepPayInfo() {
-    }
-
-    public DepPayInfo(String depCode, String payTypeCode, String payTypeName, String appPayType) {
-        this.depCode = depCode;
-        this.payTypeCode = payTypeCode;
-        this.payTypeName = payTypeName;
-        this.appPayType = appPayType;
-    }
+    @NotNull
+    private String AppPayType;
 
     public int getId() {
         return id;
@@ -69,10 +58,10 @@ public class DepPayInfo extends BaseModel {
     }
 
     public String getAppPayType() {
-        return appPayType;
+        return AppPayType;
     }
 
     public void setAppPayType(String appPayType) {
-        this.appPayType = appPayType;
+        AppPayType = appPayType;
     }
 }

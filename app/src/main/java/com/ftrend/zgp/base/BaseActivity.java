@@ -13,13 +13,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.ftrend.zgp.utils.log.LogUtil;
-import com.ftrend.zgp.utils.msg.MessageUtil;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
  * 基类
+ *
  * @author liziqiang@ftrend.cn
  */
 public abstract class BaseActivity extends AppCompatActivity {
@@ -100,45 +100,50 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            //检测API是不是小于23，因为到了API23之后getNetworkInfo(int networkType)方法被弃用
-            if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
-                //获得ConnectivityManager对象
-                ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                //获取ConnectivityManager对象对应的NetworkInfo对象
-                //获取WIFI连接的信息
-                NetworkInfo wifiNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-                //获取移动数据连接的信息
-                NetworkInfo dataNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
-                if (wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
+            try {
+
+
+                //检测API是不是小于23，因为到了API23之后getNetworkInfo(int networkType)方法被弃用
+                if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    //获得ConnectivityManager对象
+                    ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    //获取ConnectivityManager对象对应的NetworkInfo对象
+                    //获取WIFI连接的信息
+                    NetworkInfo wifiNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                    //获取移动数据连接的信息
+                    NetworkInfo dataNetworkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                    if (wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
 //                    Toast.makeText(context, "WIFI已连接,移动数据已连接", Toast.LENGTH_SHORT).show();
-                } else if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
+                    } else if (wifiNetworkInfo.isConnected() && !dataNetworkInfo.isConnected()) {
 //                    Toast.makeText(context, "WIFI已连接,移动数据已断开", Toast.LENGTH_SHORT).show();
-                } else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
+                    } else if (!wifiNetworkInfo.isConnected() && dataNetworkInfo.isConnected()) {
 //                    Toast.makeText(context, "WIFI已断开,移动数据已连接", Toast.LENGTH_SHORT).show();
-                } else {
+                    } else {
 //                    Toast.makeText(context, "WIFI已断开,移动数据已断开", Toast.LENGTH_SHORT).show();
-                }
-                //API大于23时使用下面的方式进行网络监听
-            } else {
-                //获得ConnectivityManager对象
-                ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                //获取所有网络连接的信息
-                Network[] networks = connMgr.getAllNetworks();
-                //用于存放网络连接信息
-                StringBuilder sb = new StringBuilder();
-                //通过循环将网络信息逐个取出来
-                LogUtil.d(String.valueOf(networks.length));
-                if (networks.length > 0) {
-                    for (int i = 0; i < networks.length; i++) {
-                        //获取ConnectivityManager对象对应的NetworkInfo对象
-                        NetworkInfo networkInfo = connMgr.getNetworkInfo(networks[i]);
-                        sb.append(networkInfo.getTypeName() + " connect is " + networkInfo.isConnected());
-                        LogUtil.d(sb.toString());
                     }
-//                    Toast.makeText(context, sb.toString(), Toast.LENGTH_SHORT).show();
+                    //API大于23时使用下面的方式进行网络监听
                 } else {
+                    //获得ConnectivityManager对象
+                    ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    //获取所有网络连接的信息
+                    Network[] networks = connMgr.getAllNetworks();
+                    //用于存放网络连接信息
+                    StringBuilder sb = new StringBuilder();
+                    //通过循环将网络信息逐个取出来
+                    LogUtil.d(String.valueOf(networks.length));
+                    if (networks.length > 0) {
+                        for (int i = 0; i < networks.length; i++) {
+                            //获取ConnectivityManager对象对应的NetworkInfo对象
+                            NetworkInfo networkInfo = connMgr.getNetworkInfo(networks[i]);
+                            sb.append(networkInfo.getTypeName() + " connect is " + networkInfo.isConnected());
+                            LogUtil.d(sb.toString());
+                        }
+                    } else {
 //                    MessageUtil.show("当前无网络连接");
+                    }
                 }
+            } catch (Exception e) {
+                LogUtil.e(e.getMessage());
             }
         }
     }

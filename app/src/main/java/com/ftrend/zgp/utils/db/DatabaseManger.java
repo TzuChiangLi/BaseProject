@@ -31,8 +31,8 @@ public class DatabaseManger {
      *//*
 
     private DatabaseManger(Context context) {
-        dbHelper = new DBHelper(context);
-        db = dbHelper.getWritableDatabase();
+//        dbHelper = new DBHelper(context);
+//        db = dbHelper.getWritableDatabase();
     }
 
     */
@@ -64,7 +64,7 @@ public class DatabaseManger {
             db = null;
         }
         if (dbHelper != null) {
-            dbHelper.close();
+//            dbHelper.close();
             dbHelper = null;
         }
         if (INSTANCE != null) {
@@ -301,13 +301,13 @@ public class DatabaseManger {
         Cursor cursor = null;
         try {
             if (limit != null) {
-                cursor = dbHelper.getReadableDatabase().query(table, columns, selection, selectionArgs, groupBy, having, orderBy, limit + "");
+//                cursor = dbHelper.getReadableDatabase().query(table, columns, selection, selectionArgs, groupBy, having, orderBy, limit + "");
             } else {
-                cursor = dbHelper.getReadableDatabase().query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
+//                cursor = dbHelper.getReadableDatabase().query(table, columns, selection, selectionArgs, groupBy, having, orderBy);
             }
         } catch (RuntimeException e) {
             LogUtil.e("query:" + e.getMessage());
-        } 
+        }
         return cursor;
     }
 
@@ -321,20 +321,9 @@ public class DatabaseManger {
 
     public void logUserHandle(UserLog userLog) {
         try {
-            if (db.isOpen()) {
-                ContentValues values = new ContentValues();
-                values.put("Module", userLog.getModule());
-                values.put("Function", userLog.getFunction());
-                values.put("OccurTime", String.valueOf(getDateTime()));
-                values.put("Content", userLog.getContent());
-                values.put("UserCode", userLog.getUserCode());
-                values.put("DepCode", userLog.getDepCode());
-                db.insert("UserLog", null, values);
-            } else {
-                LogUtil.e("logUserHandle:The DataBase has already closed");
-            }
+            userLog.insert();
         } catch (Exception e) {
-            LogUtil.e("logUserHandle:" + e.getMessage());
+            LogUtil.e("logUserHandle error:" + e.getMessage());
         }
     }
 */
@@ -343,7 +332,7 @@ public class DatabaseManger {
     public static Date getDateTime() {
         Date date = new Date();
         Timestamp ts = new Timestamp(System.currentTimeMillis());
-        LogUtil.d("----date/ts:"+date+"/"+ts);
+        LogUtil.d("----date/ts:" + date + "/" + ts);
         date = ts;
 
         return date;

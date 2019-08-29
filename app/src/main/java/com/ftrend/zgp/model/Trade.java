@@ -1,7 +1,9 @@
 package com.ftrend.zgp.model;
 
+
 import com.ftrend.zgp.utils.db.DBHelper;
 import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
@@ -16,16 +18,21 @@ import java.util.Date;
 @Table(database = DBHelper.class)
 public class Trade extends BaseModel {
     @PrimaryKey(autoincrement = true)
+    @NotNull
     private int id;
     @Column
+    @NotNull
     private String depCode;
     @Column
+    @NotNull
     private String lsNo;
     @Column
     private Date tradeTime;
     @Column
+    @NotNull
     private String tradeFlag;
     @Column
+    @NotNull
     private String cashier;
     @Column
     private float dscTotal;
@@ -38,12 +45,13 @@ public class Trade extends BaseModel {
     @Column
     private String cardCode;
     @Column
-    private float vipTotal;
+    private float vipTotal=0;
     @Column
-    private String status;
+    @NotNull
+    private String status="0";
 
-    public Trade() {
-    }
+//    public Trade() {
+//    }
 
     public int getId() {
         return id;

@@ -2,8 +2,6 @@ package com.ftrend.zgp;
 
 import android.app.Application;
 
-import com.ftrend.zgp.utils.ZgParams;
-import com.ftrend.zgp.utils.db.TestDataImporter;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.qw.soul.permission.SoulPermission;
@@ -19,11 +17,6 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         FlowManager.init(this);
-        //导入测试数据
-        TestDataImporter.importAll();
-        //读取全局参数
-        ZgParams.loadParams();
-
         //region 吐司初始化
         //初始化Toast样式
         MessageUtil.init(this);
@@ -41,7 +34,6 @@ public class App extends Application {
         //老的系统默认权限直接授予
         SoulPermission.skipOldRom(true);
         //endregion
-
     }
 
 
