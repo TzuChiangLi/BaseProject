@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -21,7 +22,7 @@ import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.UserLog;
 import com.ftrend.zgp.presenter.ShopCartPresenter;
 import com.ftrend.zgp.utils.db.DatabaseManger;
-import com.ftrend.zgp.utils.log.LogUtil;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 
@@ -54,6 +55,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     private Contract.ShopCartPresenter mPresenter;
     private ShopAdapter<DepProduct> mProdAdapter;
     private ShopAdapter<DepCls> mClsAdapter;
+    private int oldPosition = -1;
     private List<DepProduct> mProdList = new ArrayList<>();
 
     @Override
@@ -125,6 +127,16 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item, prodList, 1);
         mProdRecyclerView.setAdapter(mProdAdapter);
         mProdRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mProdAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view.getId() == R.id.shop_rv_product_btn_add) {
+                    //添加到购物车中
+                    mPresenter.addToShopCart((DepProduct) adapter.getItem(position));
+                    MessageUtil.show(String.valueOf(position));
+                }
+            }
+        });
     }
 
     @Override
@@ -133,7 +145,9 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         if (prodList.size() != 0) {
             mProdAdapter.setNewData(prodList);
             mProdAdapter.notifyDataSetChanged();
-            LogUtil.d("----size:" + mProdAdapter.getData().size());
+        } else {
+            //如果没有数据，就显示为空
+            mProdAdapter.setEmptyView(LinearLayout.inflate(this, R.layout.rv_item_empty, null));
         }
 
     }

@@ -1,6 +1,5 @@
 package com.ftrend.zgp.model;
 
-
 import com.ftrend.zgp.utils.db.DBHelper;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
@@ -8,14 +7,8 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-
-/**
- * 专柜商品类别
- *
- * @author liziqiang@ftrend.cn
- */
 @Table(database = DBHelper.class)
-public class DepCls extends BaseModel {
+public class DepPayInfo extends BaseModel {
     @PrimaryKey(autoincrement = true)
     @NotNull
     private int id;
@@ -24,26 +17,20 @@ public class DepCls extends BaseModel {
     private String depCode;
     @Column
     @NotNull
-    private String clsCode;
+    private String payTypeCode;
     @Column
     @NotNull
-    private String clsName;
-
-    public DepCls() {
-    }
-
-    public DepCls(String depCode, String clsCode, String clsName) {
-        this.depCode = depCode;
-        this.clsCode = clsCode;
-        this.clsName = clsName;
-    }
+    private String payTypeName;
+    @Column
+    @NotNull
+    private String AppPayType;
 
     public int getId() {
         return id;
     }
 
-    public void setId(int ID) {
-        id = ID;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDepCode() {
@@ -54,19 +41,27 @@ public class DepCls extends BaseModel {
         this.depCode = depCode;
     }
 
-    public String getClsCode() {
-        return clsCode;
+    public String getPayTypeCode() {
+        return payTypeCode;
     }
 
-    public void setClsCode(String clsCode) {
-        this.clsCode = clsCode;
+    public void setPayTypeCode(String payTypeCode) {
+        this.payTypeCode = payTypeCode;
     }
 
-    public String getClsName() {
-        return clsName;
+    public String getPayTypeName() {
+        return payTypeName;
     }
 
-    public void setClsName(String clsName) {
-        this.clsName = clsName;
+    public void setPayTypeName(String payTypeName) {
+        this.payTypeName = payTypeName;
+    }
+
+    public String getAppPayType() {
+        return AppPayType;
+    }
+
+    public void setAppPayType(String appPayType) {
+        AppPayType = appPayType;
     }
 }

@@ -3,6 +3,7 @@ package com.ftrend.zgp.model;
 
 import com.ftrend.zgp.utils.db.DBHelper;
 import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
@@ -16,27 +17,33 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 @Table(database = DBHelper.class)
 public class TradeProd extends BaseModel {
     @PrimaryKey(autoincrement = true)
+    @NotNull
     private int id;
     @Column
+    @NotNull
     private String lsNo;
     @Column
+    @NotNull
     private String sortNo;
     @Column
+    @NotNull
     private String prodCode;
     @Column
     private String barCode;
     @Column
-    private String prodName;
+    @NotNull
+    private String prodName = "1";
     @Column
     private String depCode;
     @Column
-    private float price;
+    private float price = 0;
     @Column
-    private float amount;
+    @NotNull
+    private float amount = 0;
     @Column
-    private float manuDsc;
+    private float manuDsc = 0;
     @Column
-    private float vipDsc;
+    private float vipDsc = 0;
     @Column
     private float tranDsc;
     @Column
@@ -46,7 +53,7 @@ public class TradeProd extends BaseModel {
     @Column
     private String saleInfo;
     @Column
-    private String delFlag;
+    private String delFlag = "0";
 //
 //    public TradeProd() {
 //    }

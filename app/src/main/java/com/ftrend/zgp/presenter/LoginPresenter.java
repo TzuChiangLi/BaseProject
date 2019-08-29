@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Dep;
-import com.ftrend.zgp.utils.log.LogUtil;
+import com.ftrend.zgp.model.User;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.List;
@@ -31,6 +31,27 @@ public class LoginPresenter implements Contract.LoginPresenter {
     public void initDepData(Context context) {
         List<Dep> depList = SQLite.select().from(Dep.class).queryList();
         mView.setDepData(depList);
+//        String depCode, clsCode;
+//        for (int i = 0; i < 200; i++) {
+//            DepProduct depProduct = new DepProduct();
+//            depProduct.setSpec(String.valueOf(0.1 + i));
+//            depProduct.setPrice((0.1f + i));
+//            depProduct.setProdName("测试商品" + i);
+//            depProduct.setProdCode(String.valueOf(10000 + i));
+//            if (i > 0 && i < 30) {
+//                depCode = "1000";
+//                clsCode = depCode;
+//            } else if (i >= 30 && i < 90) {
+//                depCode = "1001";
+//                clsCode = depCode;
+//            } else {
+//                depCode = "1002";
+//                clsCode = depCode;
+//            }
+//            depProduct.setDepCode(depCode);
+//            depProduct.setClsCode(clsCode);
+//            depProduct.insert();
+//        }
 //        Cursor cursor = DatabaseManger.getInstance(context).query("Dep", new String[]{"*"}, null, null, null, null, null, null);
 //        if (cursor != null) {
 //            if (cursor.moveToFirst()) {
@@ -51,7 +72,8 @@ public class LoginPresenter implements Contract.LoginPresenter {
 
     @Override
     public void initUserData(String depCode) {
-
+        List<User> userList = SQLite.select().from(User.class).queryList();
+        mView.setUserData(userList);
     }
 
 
