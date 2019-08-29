@@ -1,9 +1,11 @@
 package com.ftrend.zgp.model;
 
-import com.dbflow5.annotation.Column;
-import com.dbflow5.annotation.PrimaryKey;
-import com.dbflow5.annotation.Table;
+
 import com.ftrend.zgp.utils.db.DBHelper;
+import com.raizlabs.android.dbflow.annotation.Column;
+import com.raizlabs.android.dbflow.annotation.PrimaryKey;
+import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
 /**
  * 商品信息
@@ -11,7 +13,7 @@ import com.ftrend.zgp.utils.db.DBHelper;
  * @author liziqiang@ftrend.cn
  */
 @Table(database = DBHelper.class)
-public class DepProduct {
+public class DepProduct extends BaseModel {
     @PrimaryKey(autoincrement = true)
     private int id;
     @Column
@@ -60,33 +62,33 @@ public class DepProduct {
     private float vipRate3;
     @Column
     private float minimumPrice;
+//
+//    public DepProduct() {
+//    }
+//
+//    public DepProduct(String depCode, String prodCode, String barCode, String prodName, String clsCode, String spec, float price) {
+//        this.depCode = depCode;
+//        this.prodCode = prodCode;
+//        this.barCode = barCode;
+//        this.prodName = prodName;
+//        this.clsCode = clsCode;
+//        this.spec = spec;
+//        this.price = price;
+//    }
 
-    public DepProduct() {
-    }
-
-    public DepProduct(String depCode, String prodCode, String barCode, String prodName, String clsCode, String spec, float price) {
-        this.depCode = depCode;
-        this.prodCode = prodCode;
-        this.barCode = barCode;
-        this.prodName = prodName;
-        this.clsCode = clsCode;
-        this.spec = spec;
-        this.price = price;
-    }
-
-    public DepProduct(String prodCode, String prodName, String depCode, String clsCode) {
-        this.prodCode = prodCode;
-        this.prodName = prodName;
-        this.depCode = depCode;
-        this.clsCode = clsCode;
-    }
+//    public DepProduct(String prodCode, String prodName, String depCode, String clsCode) {
+//        this.prodCode = prodCode;
+//        this.prodName = prodName;
+//        this.depCode = depCode;
+//        this.clsCode = clsCode;
+//    }
 
 
-    public int getID() {
+    public int getId() {
         return id;
     }
 
-    public void setID(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -13,13 +13,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.ftrend.zgp.utils.log.LogUtil;
-import com.ftrend.zgp.utils.msg.MessageUtil;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
  * 基类
+ *
  * @author liziqiang@ftrend.cn
  */
 public abstract class BaseActivity extends AppCompatActivity {

@@ -46,7 +46,7 @@ public class LoginAdapter<T> extends BaseAdapter {
     }
 
     public String getItemCode(int position) {
-        return type == 0 ? ((List<Dep>) data).get(position).getDepCode().trim() : ((List<User>) data).get(position).getUserCode();
+        return type == 0 ? ((List<Dep>) data).get(position).getDepCode(): ((List<User>) data).get(position).getUserCode();
     }
 
 
@@ -57,7 +57,7 @@ public class LoginAdapter<T> extends BaseAdapter {
         if (convertView != null) {
             TextView titleTv = convertView.findViewById(R.id.login_sp_title);
             TextView codeTv = convertView.findViewById(R.id.login_sp_code);
-            titleTv.setText((type == 0 ? ((List<Dep>) data).get(position).getDepName() : ((List<User>) data).get(position).getUserName()).trim());
+            titleTv.setText((type == 0 ? ((List<Dep>) data).get(position).getDepName() : ((List<User>) data).get(position).getUserName()));
             codeTv.setText(type == 0 ? ((List<Dep>) data).get(position).getDepCode() : ((List<User>) data).get(position).getUserName());
         }
 

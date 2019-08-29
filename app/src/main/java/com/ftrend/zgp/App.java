@@ -2,10 +2,10 @@ package com.ftrend.zgp;
 
 import android.app.Application;
 
-import com.dbflow5.config.FlowManager;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.qw.soul.permission.SoulPermission;
+import com.raizlabs.android.dbflow.config.FlowManager;
 
 /**
  * 初始化相关工具组件
