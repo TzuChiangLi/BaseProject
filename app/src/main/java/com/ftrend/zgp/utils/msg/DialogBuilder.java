@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.zgp.R;
+import com.ftrend.zgp.utils.log.LogUtil;
+import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.core.CenterPopupView;
 
 import butterknife.BindView;
@@ -40,7 +42,6 @@ public class DialogBuilder extends CenterPopupView {
     View mVerticalLineView;
     private Context context;
     private String title, content, leftBtn, rightBtn;
-
     private OnBtnClickListener mOnClickListener;
     /**
      * 0:提示，1：警告，2：错误，3：询问
@@ -134,17 +135,33 @@ public class DialogBuilder extends CenterPopupView {
         }
     }
 
+
+    public static void close() {
+    }
+
+    @Override
+    protected void onShow() {
+        super.onShow();
+        LogUtil.d("----我显示了");
+    }
+
+    @Override
+    protected void onDismiss() {
+        super.onDismiss();
+        LogUtil.d("----我笑死了");
+    }
+
     @OnClick(R.id.dialog_ll_btn_left)
     public void onLeftBtnClick() {
         if (mOnClickListener != null) {
-            mOnClickListener.onLeftBtnClick(mLeftBtn);
+            mOnClickListener.onLeftBtnClick(this);
         }
     }
 
     @OnClick(R.id.dialog_ll_btn_right)
     public void onRightBtnClick() {
         if (mOnClickListener != null) {
-            mOnClickListener.onRightBtnClick(mRightBtn);
+            mOnClickListener.onRightBtnClick(this);
         }
     }
 
@@ -157,14 +174,14 @@ public class DialogBuilder extends CenterPopupView {
          *
          * @param v button的view
          */
-        void onLeftBtnClick(View v);
+        void onLeftBtnClick(BasePopupView v);
 
         /**
          * 右按钮监听
          *
          * @param v button的view
          */
-        void onRightBtnClick(View v);
+        void onRightBtnClick(BasePopupView v);
     }
 
     public void setOnClickListener(OnBtnClickListener onClickListener) {

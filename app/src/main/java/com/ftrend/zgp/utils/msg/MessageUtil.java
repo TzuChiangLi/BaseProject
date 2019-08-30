@@ -2,12 +2,12 @@ package com.ftrend.zgp.utils.msg;
 
 import android.app.Application;
 import android.content.Context;
-import android.view.View;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.toast.XToast;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.utils.log.LogUtil;
+import com.lxj.xpopup.core.BasePopupView;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -21,6 +21,29 @@ public class MessageUtil {
      * 模态弹窗需要获取上下文
      */
     private static Context mContext;
+    private static OnBtnClickListener mListener = null;
+    private static DialogBuilder builder;
+
+    public static void setMessageUtilClickListener(OnBtnClickListener mListener) {
+        MessageUtil.mListener = mListener;
+    }
+
+    public interface OnBtnClickListener {
+        /**
+         * 左按钮响应
+         *
+         * @param popView 弹窗控件
+         */
+        void onLeftBtnClick(BasePopupView popView);
+
+        /**
+         * 右按钮响应
+         *
+         * @param popView 弹窗控件
+         */
+        void onRightBtnClick(BasePopupView popView);
+
+    }
 
     /**
      * 提示弹窗
@@ -29,18 +52,18 @@ public class MessageUtil {
      */
     public static void info(String message) {
         mContext = mContext == null ? ActivityUtils.getTopActivity() : mContext;
-        DialogBuilder builder = new DialogBuilder(mContext, 1);
+        builder = new DialogBuilder(mContext, 1);
         builder.setContent(message);
         builder.setLeftBtn("确定");
         builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
             @Override
-            public void onLeftBtnClick(View v) {
-                LogUtil.d("----你点了左边");
+            public void onLeftBtnClick(BasePopupView v) {
+                mListener.onLeftBtnClick(v);
             }
 
             @Override
-            public void onRightBtnClick(View v) {
-                LogUtil.d("----你点了右边");
+            public void onRightBtnClick(BasePopupView v) {
+                mListener.onRightBtnClick(v);
             }
         });
         DialogUtil.showTipDialog(mContext, builder);
@@ -53,18 +76,19 @@ public class MessageUtil {
      */
     public static void warning(String message) {
         mContext = mContext == null ? ActivityUtils.getTopActivity() : mContext;
-        DialogBuilder builder = new DialogBuilder(mContext, 1);
+        builder = new DialogBuilder(mContext, 1);
         builder.setLeftBtn("确定");
         builder.setContent(message);
         builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
             @Override
-            public void onLeftBtnClick(View v) {
-                LogUtil.d("----你点了左边");
+            public void onLeftBtnClick(BasePopupView v) {
+                mListener.onLeftBtnClick(v);
             }
 
             @Override
-            public void onRightBtnClick(View v) {
+            public void onRightBtnClick(BasePopupView v) {
                 LogUtil.d("----你点了右边");
+                mListener.onRightBtnClick(v);
             }
         });
         DialogUtil.showWarningDialog(mContext, builder);
@@ -77,20 +101,22 @@ public class MessageUtil {
      */
     public static void error(String message) {
         mContext = mContext == null ? ActivityUtils.getTopActivity() : mContext;
-        DialogBuilder builder = new DialogBuilder(mContext, 1);
+        builder = new DialogBuilder(mContext, 1);
         builder.setLeftBtn("确定");
         builder.setContent(message);
         builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
             @Override
-            public void onLeftBtnClick(View v) {
-                LogUtil.d("----你点了左边");
+            public void onLeftBtnClick(BasePopupView v) {
+                mListener.onLeftBtnClick(v);
             }
 
             @Override
-            public void onRightBtnClick(View v) {
+            public void onRightBtnClick(BasePopupView v) {
                 LogUtil.d("----你点了右边");
+                mListener.onRightBtnClick(v);
             }
         });
+
         DialogUtil.showErrorDialog(mContext, builder);
     }
 
@@ -102,20 +128,20 @@ public class MessageUtil {
      */
     public static void question(String message) {
         mContext = mContext == null ? ActivityUtils.getTopActivity() : mContext;
-        final DialogBuilder builder = new DialogBuilder(mContext, 2);
+        builder = new DialogBuilder(mContext, 2);
         builder.setLeftBtn("是");
         builder.setRightBtn("否");
         builder.setContent(message);
         builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
             @Override
-            public void onLeftBtnClick(View v) {
-                LogUtil.d("----你点了左边");
+            public void onLeftBtnClick(BasePopupView v) {
+                mListener.onLeftBtnClick(v);
             }
 
             @Override
-            public void onRightBtnClick(View v) {
+            public void onRightBtnClick(BasePopupView v) {
                 LogUtil.d("----你点了右边");
-                builder.dismiss();
+                mListener.onRightBtnClick(v);
             }
         });
         DialogUtil.showAskDialog(mContext, builder);

@@ -95,7 +95,7 @@
         </FrameLayout>
 
         <TextView
-            android:id="@+id/shop_cart_bottom_tv_amount"
+            android:id="@+id/shop_cart_bottom_tv_toal_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/shop_cart_fl"
@@ -131,7 +131,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/shop_cart_bottom_tv_amount"
+            android:layout_toStartOf="@+id/shop_cart_bottom_tv_toal_price"
             android:background="@drawable/shop_tip_num"
             android:gravity="center"
             android:text="13"

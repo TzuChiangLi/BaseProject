@@ -9,6 +9,7 @@ import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -71,11 +72,10 @@ public class HomePresenter implements Contract.HomePresenter, HttpCallBack {
 
     @Override
     public void goShopCart() {
-
+        //先判断TradeProd表内的流水号在Trade表里的Status状态
+        //如果是取消，就创建新单子
         mView.goShopChartActivity(createLsNo());
-
         //三位POS号+五位流水号
-
 //        String maxLsNo = SQLite.select(TradeProd_Table.lsNo).from(TradeProd.class)
 //                .where(TradeProd_Table.id.eq(id))
 //                .querySingle().getLsNo();
@@ -90,17 +90,23 @@ public class HomePresenter implements Contract.HomePresenter, HttpCallBack {
         LogUtil.d("----count:" + count);
         String maxLsNo = "";
         if (count != 0) {
-            int id = SQLite.select(Method.max(Trade_Table.id).as("max")).from(Trade.class).querySingle().getId();
+            FlowCursor cursor = SQLite.select(Method.max(Trade_Table.id)).from(Trade.class).query();
+            cursor.moveToFirst();
+            int id = cursor.getIntOrDefault(0);
+            cursor.close();
             LogUtil.d("----id:" + id);
             maxLsNo = SQLite.select(Trade_Table.lsNo).distinct().from(Trade.class).where(Trade_Table.id.eq(id)).querySingle().getLsNo();
-            String tmp = maxLsNo.substring(3, 8);
-            String pos = maxLsNo.substring(0, 2);
-            if (tmp.equals(max)) {
-                tmp = "00000";
-            } else {
-                tmp = padLeft(Integer.valueOf(tmp) + 1);
+            String status = SQLite.select(Trade_Table.status).from(Trade.class).where(Trade_Table.lsNo.eq(maxLsNo)).querySingle().getStatus();
+            if (!status.equals("0")) {
+                String tmp = maxLsNo.substring(3, 7);
+                String pos = maxLsNo.substring(0, 2);
+                if (tmp.equals(max)) {
+                    tmp = "00000";
+                } else {
+                    tmp = padLeft(Integer.valueOf(tmp) + 1);
+                }
+                maxLsNo = pos + tmp;
             }
-            maxLsNo = pos + tmp;
         } else {
             maxLsNo = "00100000";
         }

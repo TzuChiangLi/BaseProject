@@ -120,6 +120,7 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
         ZgParams.saveCurrentInfo(user, dep);
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override

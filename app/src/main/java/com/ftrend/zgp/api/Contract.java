@@ -7,6 +7,7 @@ import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.Menu;
+import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.User;
 
 import java.util.List;
@@ -97,17 +98,19 @@ public interface Contract {
          */
         void showInfo(String... info);
 
+        /**
+         * 跳转到收银选择商品界面
+         *
+         * @param lsNo 流水单号
+         */
         void goShopChartActivity(String lsNo);
     }
 
-    //region 商品选择界面接口
     interface ShopCartPresenter {
         /**
          * 加载商品信息
-         *
-         * @param context 上下文
          */
-        void initProdList(Context context);
+        void initProdList();
 
         /**
          * 加载本次流水单号中的购物车信息
@@ -127,8 +130,9 @@ public interface Contract {
          * 添加到购物车
          *
          * @param depProduct 商品对象
+         * @param lsNo       流水单号
          */
-        void addToShopCart(DepProduct depProduct,String lsNo);
+        void addToShopCart(DepProduct depProduct, String lsNo);
 
     }
 
@@ -163,15 +167,60 @@ public interface Contract {
          *
          * @param num 购物车内的数量
          */
-        void updateTradeProdNum(long num);
+        void updateTradeProd(long num, float price);
     }
-    //endregion
 
     interface ShopListPresenter {
+        /**
+         * 显示此时购物车内的所有商品
+         *
+         * @param lsNo 流水单号
+         */
+        void initShopList(String lsNo);
 
+        /**
+         * 设置交易状态
+         *
+         * @param lsNo   流水单号
+         * @param status 交易状态
+         */
+        void setTradeStatus(String lsNo, int status);
     }
 
     interface ShopListView extends BaseView<Contract.ShopListPresenter> {
+        /**
+         * 显示流水单内商品
+         *
+         * @param prodList 购物车商品信息
+         */
+        void showTradeProd(List<TradeProd> prodList);
 
+        /**
+         * 返回界面
+         */
+        void returnHomeActivity();
+
+    }
+
+
+    interface PayPresenter {
+        /**
+         * 初始化界面
+         */
+        void initPayWay();
+
+        /**
+         * 交易完成
+         */
+        void paySuccess(String lsNo, float amount, int payWay);
+    }
+
+    interface PayView extends BaseView<Contract.PayPresenter> {
+        /**
+         * 界面
+         *
+         * @param payWay 图标、文字
+         */
+        void showPayway(List<Menu.MenuList> payWay);
     }
 }

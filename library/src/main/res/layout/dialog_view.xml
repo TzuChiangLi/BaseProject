@@ -3,18 +3,19 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
     android:background="@drawable/dialog_bg_top"
-
-    android:minWidth="150dp">
+    android:minWidth="130dp">
 
     <ImageView
         android:id="@+id/dialog_img_state"
         android:layout_width="wrap_content"
-        android:layout_height="64dp"
+        android:layout_height="56dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
-        android:maxHeight="80dp"
+        android:maxHeight="56dp"
         android:minHeight="48dp"
         android:scaleType="centerInside"
         android:src="@drawable/dialog_state_tip" />

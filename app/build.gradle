@@ -60,6 +60,7 @@ dependencies {
     //弹窗库
     //https://github.com/li-xiaojun/XPopup
     implementation 'com.lxj:xpopup:1.8.8'
+
     //titleBar状态栏https://github.com/getActivity/TitleBar
     implementation 'com.hjq:titlebar:6.0'
     //BRVAH万能适配器
@@ -70,6 +71,7 @@ dependencies {
     annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
     implementation "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
     implementation "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
+
     //一些公共自定义view
     implementation project(':library')
 

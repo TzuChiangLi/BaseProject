@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -18,8 +19,9 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
-import com.ftrend.zgp.model.UserLog;
 import com.ftrend.zgp.presenter.ShopCartPresenter;
+import com.ftrend.zgp.utils.TradeUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
@@ -50,12 +52,15 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     Button mPayBtn;
     @BindView(R.id.shop_cart_top_bar)
     TitleBar mTitleBar;
+    @BindView(R.id.shop_cart_bottom_tv_toal_price)
+    TextView mTotalPriceTv;
     private Contract.ShopCartPresenter mPresenter;
     private ShopAdapter<DepProduct> mProdAdapter;
     private ShopAdapter<DepCls> mClsAdapter;
     private int oldPosition = -1;
     private String lsNo = "";
     private List<DepProduct> mProdList = new ArrayList<>();
+    private View noDataView;
 
     @Override
     protected int getLayoutID() {
@@ -64,7 +69,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @Override
     protected void initData() {
-        mPresenter.initProdList(this);
+        mPresenter.initProdList();
         mTipTv.setVisibility(View.VISIBLE);
         mTipTv.bringToFront();
     }
@@ -77,6 +82,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         Intent intent = getIntent();
         lsNo = intent.getStringExtra("lsNo");
         mPresenter.initOrderInfo(lsNo);
+        LogUtil.d("----lsno:" + TradeUtil.getTrade().getCreateTime());
         mSearchEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -126,7 +132,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
                 if (view.getId() == R.id.shop_rv_product_btn_add) {
                     //添加到购物车中
-                    mPresenter.addToShopCart((DepProduct) adapter.getItem(position),lsNo);
+                    mPresenter.addToShopCart((DepProduct) adapter.getItem(position), lsNo);
                     MessageUtil.show(String.valueOf(position));
                 }
             }
@@ -136,39 +142,49 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @Override
     public void updateProdList(List<DepProduct> prodList) {
         //过滤筛选
-        mProdAdapter.setNewData(prodList);
-        mProdAdapter.notifyDataSetChanged();
+        if (prodList.size() != 0) {
+            mProdAdapter.setNewData(prodList);
+            mProdAdapter.notifyDataSetChanged();
+        } else {
+            mProdAdapter.setNewData(null);
+            mProdAdapter.setEmptyView(getLayoutInflater().inflate(R.layout.rv_item_empty, (ViewGroup) mProdRecyclerView.getParent(), false));
+        }
 
     }
 
     @Override
-    public void updateTradeProdNum(long num) {
+    public void updateTradeProd(long num, float price) {
         mTipTv.setText(String.valueOf(num));
+        mTotalPriceTv.setText(String.valueOf(price));
     }
 
     @OnClick(R.id.shop_cart_bottom_btn_car)
     public void goShopListActivity() {
-        UserLog userLog = new UserLog();
-        userLog.setModule("ShopCart");
-        userLog.setUserCode("userCode");
-        userLog.setContent("查看购物车");
-        userLog.setFunction("进入购物车");
-        userLog.setDepCode("DepCode");
-        userLog.insert();
+//        UserLog userLog = new UserLog();
+//        userLog.setModule("ShopCart");
+//        userLog.setUserCode("userCode");
+//        userLog.setContent("查看购物车");
+//        userLog.setFunction("进入购物车");
+//        userLog.setDepCode("DepCode");
+//        userLog.insert();
+
         Intent intent = new Intent(ShopCartActivity.this, ShopListActivity.class);
+        intent.putExtra("lsNo", lsNo);
+        intent.putExtra("total", mTotalPriceTv.getText());
         startActivity(intent);
     }
 
     @OnClick(R.id.shop_cart_bottom_tv_payment)
     public void goPayActivity() {
-        UserLog userLog = new UserLog();
-        userLog.setModule("ShopCart");
-        userLog.setUserCode("userCode");
-        userLog.setContent("结算");
-        userLog.setFunction("结算");
-        userLog.setDepCode("DepCode");
-        userLog.insert();
+//        UserLog userLog = new UserLog();
+//        userLog.setModule("ShopCart");
+//        userLog.setUserCode("userCode");
+//        userLog.setContent("结算");
+//        userLog.setFunction("结算");
+//        userLog.setDepCode("DepCode");
+//        userLog.insert();
         Intent intent = new Intent(ShopCartActivity.this, PayActivity.class);
+        intent.putExtra("total", mTotalPriceTv.getText().toString());
         startActivity(intent);
     }
 
@@ -182,6 +198,8 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @Override
     public void onLeftClick(View v) {
+        //查询一下TradeProd流水单号下是否有商品，没有的话就删掉Trade这个流水
+        TradeUtil.deleteEmptyTrade();
         finish();
     }
 

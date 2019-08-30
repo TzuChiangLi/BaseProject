@@ -11,6 +11,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.Date;
 
 /**
  * 打印日志工具类
@@ -90,6 +92,19 @@ public class LogUtil {
         }
     }
 
+    public static Date getDateTime() {
+        Date date = new Date();
+        Timestamp ts = new Timestamp(System.currentTimeMillis());
+        LogUtil.d("----date/ts:" + date + "/" + ts);
+        date = ts;
+
+        return date;
+    }
+
+    public static Timestamp getTimestamp() {
+        Date date = new Date();
+        return new Timestamp(System.currentTimeMillis());
+    }
 
     public static void setSaveError(boolean saveError) {
         LogUtil.saveError = saveError;

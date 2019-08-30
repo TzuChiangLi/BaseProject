@@ -2,12 +2,17 @@ package com.ftrend.zgp;
 
 import android.app.Application;
 
+import com.ftrend.zgp.model.User;
+import com.ftrend.zgp.model.User_Table;
 import com.ftrend.zgp.utils.ZgParams;
-import com.ftrend.zgp.utils.db.TestDataImporter;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.test.TestDataImporter;
 import com.qw.soul.permission.SoulPermission;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
+
+import static com.raizlabs.android.dbflow.sql.language.Method.count;
 
 /**
  * 初始化相关工具组件
@@ -19,8 +24,11 @@ public class App extends Application {
     public void onCreate() {
         super.onCreate();
         FlowManager.init(this);
-        // TODO: 2019/8/29 导入测试数据，可删除
-        TestDataImporter.importAll();
+        //test
+        long count = SQLite.select(count(User_Table.userCode)).from(User.class).count();
+        if (count == 0) {
+            TestDataImporter.importAll();
+        }
         //加载全局参数
         ZgParams.loadParams();
 

@@ -45,12 +45,17 @@ public class Trade extends BaseModel {
     @Column
     private String cardCode;
     @Column
-    private float vipTotal=0;
+    private float vipTotal = 0;
     @Column
     @NotNull
-    private String status="0";
+    private String status = "0";
+    @Column
+    private String CreateTime;
+    @Column
+    private String CreateIp;
 
-//    public Trade() {
+
+//    public TradeUtil() {
 //    }
 
     public int getId() {
@@ -155,5 +160,21 @@ public class Trade extends BaseModel {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getCreateTime() {
+        return CreateTime;
+    }
+
+    public void setCreateTime(String createTime) {
+        CreateTime = createTime;
+    }
+
+    public String getCreateIp() {
+        return CreateIp;
+    }
+
+    public void setCreateIp(String createIp) {
+        CreateIp = createIp;
     }
 }

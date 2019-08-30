@@ -24,7 +24,7 @@
         android:layout_below="@+id/pay_top_bar">
 
         <TextView
-            android:id="@+id/pay_tv_money_title"
+            android:id="@+id/pay_tv_total_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -34,11 +34,11 @@
 
 
         <TextView
-            android:id="@+id/pay_tv_money"
+            android:id="@+id/pay_tv_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/pay_tv_money_title"
+            android:layout_toEndOf="@+id/pay_tv_total_title"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:text="159.33"
@@ -56,102 +56,11 @@
         android:paddingStart="16dp"
         android:text="@string/pay_tv_method" />
 
-
-    <LinearLayout
-        android:id="@+id/pay_ll_alipay"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/pay_rv_pay_way"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pay_tv_select_title"
-        android:orientation="horizontal"
-        android:padding="16dp">
+        android:layout_below="@+id/pay_tv_select_title" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pay_tv_alipay" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/pay_line_1"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_below="@+id/pay_ll_alipay"
-        android:background="@color/divide_line" />
-
-    <LinearLayout
-        android:id="@+id/pay_ll_wechat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pay_line_1"
-        android:orientation="horizontal"
-        android:padding="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pay_tv_wechat" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/pay_line_2"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_below="@+id/pay_ll_wechat"
-        android:background="@color/divide_line" />
-
-    <LinearLayout
-        android:id="@+id/pay_ll_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pay_line_2"
-        android:orientation="horizontal"
-        android:padding="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pay_tv_card" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/pay_line_3"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_below="@+id/pay_ll_card"
-        android:background="@color/divide_line" />
-
-    <LinearLayout
-        android:id="@+id/pay_ll_money"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/pay_line_3"
-        android:orientation="horizontal"
-        android:padding="16dp">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pay_tv_money" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_below="@+id/pay_ll_money"
-        android:background="@color/divide_line" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="end">
-
-        <Button
-            android:id="@+id/pay_btn_pay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/pay_btn_pay" />
-
-    </LinearLayout>
 
 </RelativeLayout>

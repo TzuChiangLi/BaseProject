@@ -1,6 +1,5 @@
 package com.ftrend.zgp.presenter;
 
-import android.content.Context;
 import android.text.TextUtils;
 
 import com.ftrend.zgp.api.Contract;
@@ -10,13 +9,14 @@ import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.utils.http.BaseResponse;
 import com.ftrend.zgp.utils.http.HttpCallBack;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.raizlabs.android.dbflow.sql.language.Method.count;
+import static com.raizlabs.android.dbflow.sql.language.Method.sum;
 
 /**
  * 收银-选择商品P层
@@ -62,10 +62,9 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
     }
 
     @Override
-    public void initProdList(Context context) {
+    public void initProdList() {
         List<DepCls> clsList = SQLite.select().from(DepCls.class).queryList();
         mProdList = SQLite.select().from(DepProduct.class).queryList();
-        LogUtil.d("----cls.size:" + clsList.size());
         //region 可能数据表自己测试用的有点问题，此处修复那个问题后再把牵扯到V层的代码修正掉
         mView.setProdList(mProdList);
         DepCls depCls = new DepCls();
@@ -83,7 +82,10 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
     @Override
     public void initOrderInfo(String lsNo) {
         long count = SQLite.select(count(TradeProd_Table.id)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).count();
-        mView.updateTradeProdNum(count);
+        FlowCursor csr = SQLite.select(sum(TradeProd_Table.price)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).query();
+        csr.moveToFirst();
+        float price = csr.getFloat(0);
+        mView.updateTradeProd(count, price);
     }
 
     @Override
@@ -120,18 +122,25 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
     }
 
     @Override
-    public void addToShopCart(DepProduct depProduct,String lsNo) {
+    public void addToShopCart(DepProduct depProduct, String lsNo) {
         TradeProd tradeProd = new TradeProd();
         tradeProd.setLsNo(lsNo);
+        tradeProd.setProdCode(depProduct.getProdCode());
         tradeProd.setProdName(depProduct.getProdName());
         tradeProd.setDepCode(depProduct.getDepCode());
         tradeProd.setAmount(1);
-//        tradeProd.setSortNo();
+        tradeProd.setPrice(depProduct.getPrice());
+        tradeProd.setSortNo(String.valueOf(createSortNo(lsNo) + 1));
+        tradeProd.insert();
+        FlowCursor csr = SQLite.select(sum(TradeProd_Table.price)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).query();
+        csr.moveToFirst();
+        float price = csr.getFloat(0);
+        mView.updateTradeProd(createSortNo(lsNo), price);
     }
 
-    private int createSortNo(String lsNo){
-//        long count = SQLite.select(count())
-        return 0;
+    private long createSortNo(String lsNo) {
+        return SQLite.select(count()).from(TradeProd.class).
+                where(TradeProd_Table.lsNo.eq(lsNo)).count();
     }
 //        Cursor cursor = DatabaseManger.getInstance(context).query("DepCls", new String[]{"*"}, null, null, null, null, null, null);
 //        if (cursor != null) {

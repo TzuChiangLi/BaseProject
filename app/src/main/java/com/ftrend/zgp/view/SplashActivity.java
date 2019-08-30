@@ -22,11 +22,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //test
-        long count = SQLite.select(count(User_Table.userCode)).from(User.class).count();
-        if (count == 0) {
-            TestDataImporter.importAll();
-        }
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {

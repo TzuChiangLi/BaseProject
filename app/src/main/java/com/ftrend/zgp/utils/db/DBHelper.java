@@ -52,7 +52,7 @@ public class DBHelper {
 //    /**
 //     * 交易流水表
 //     */
-//    private static final String CREATE_TRADE = "create table Trade(ID Integer primary key autoincrement not null," +
+//    private static final String CREATE_TRADE = "create table TradeUtil(ID Integer primary key autoincrement not null," +
 //            "DepCode Text(12) not null,LsNo Text(8) not null,TradeTime Datetime(19)," +
 //            "TradeFlag Text(1) not null,Cashier Text(6) not null," +
 //            "DscTotal Decimal(12,4),Total Decimal(12,4),CustType Text(1)," +

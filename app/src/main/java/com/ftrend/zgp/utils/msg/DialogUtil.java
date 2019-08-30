@@ -2,6 +2,7 @@ package com.ftrend.zgp.utils.msg;
 
 import android.content.Context;
 
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.lxj.xpopup.XPopup;
 
 /**
@@ -21,6 +22,7 @@ public class DialogUtil {
 
 
     public static void showWarningDialog(Context context, DialogBuilder builder) {
+        LogUtil.d("----show");
         builder.setDialogType(1);
         new XPopup.Builder(context)
                 .asCustom(builder)

@@ -11,7 +11,9 @@ import com.ftrend.zgp.adapter.MenuAdapter;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
+import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.HomePresenter;
+import com.ftrend.zgp.utils.TradeUtil;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
@@ -111,6 +113,18 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
 
     @Override
     public void goShopChartActivity(String lsNo) {
+        //创建交易流水
+        //TODO 构建工具类调用
+        Trade trade = new Trade();
+        trade.setLsNo(lsNo);
+        trade.setDepCode(ZgParams.getCurrentDep().getDepName());
+        trade.setCashier(ZgParams.getCurrentUser().getUserName());
+        trade.setTradeFlag("T");
+        trade.setStatus("0");
+        trade.setCreateTime(String.valueOf(LogUtil.getDateTime()));
+        trade.insert();
+
+        TradeUtil.setLsNo(lsNo);
         Intent intent = new Intent(HomeActivity.this, ShopCartActivity.class);
         intent.putExtra("lsNo", lsNo);
         startActivity(intent);
