@@ -2,9 +2,12 @@ package com.ftrend.zgp.utils.test;
 
 import android.util.Log;
 
+import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.DepCls;
+import com.ftrend.zgp.model.DepPayInfo;
 import com.ftrend.zgp.model.DepProduct;
+import com.ftrend.zgp.model.SysParams;
 import com.ftrend.zgp.model.User;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -92,32 +95,41 @@ public class TestDataImporter {
      * 导入专柜支付方式
      */
     private static void importDepPayInfo() {
-//        SQLite.delete(DepPayInfo.class).execute();
+        SQLite.delete(DepPayInfo.class).execute();
 //        DepCode, PayTypeCode, PayTypeName, AppPayType
-//        new DepPayInfo("2010", "0", "现金", "1").insert();
-//        new DepPayInfo("2010", "2", "微信支付", "3").insert();
-//        new DepPayInfo("2010", "3", "支付宝", "2").insert();
-//        new DepPayInfo("2010", "8", "储值卡", "4").insert();
-//        Log.d(TAG, "=====================importDepPayInfo记录数: " + SQLite.select(count()).from(DepPayInfo.class).count());
+        new DepPayInfo("2010", "0", "现金", "1").insert();
+        new DepPayInfo("2010", "2", "微信支付", "3").insert();
+        new DepPayInfo("2010", "3", "支付宝", "2").insert();
+        new DepPayInfo("2010", "8", "储值卡", "4").insert();
+        Log.d(TAG, "=====================importDepPayInfo记录数: " + SQLite.select(count()).from(DepPayInfo.class).count());
     }
 
+    /**
+     * 导入系统配置参数
+     */
     private static void importSysParams() {
-//        SQLite.delete(SysParams.class).execute();
+        SQLite.delete(SysParams.class).execute();
 //        ParamName, ParamValue
-//        new SysParams("NoClsDep", "2010,2018").insert();
-//        new SysParams("VipCardType", "1").insert();
-//        new SysParams("AliPayAccount", "123456789").insert();
-//        new SysParams("WxPayAccount", "123456789").insert();
-//        Log.d(TAG, "=====================importSysParams记录数: " + SQLite.select(count()).from(SysParams.class).count());
+        new SysParams("NoClsDep", "2010,2018").insert();
+        new SysParams("VipCardType", "1").insert();
+        new SysParams("AliPayAccount", "123456789").insert();
+        new SysParams("WxPayAccount", "123456789").insert();
+        Log.d(TAG, "=====================importSysParams记录数: " + SQLite.select(count()).from(SysParams.class).count());
     }
 
+    /**
+     * 导入APP本地配置参数
+     */
     private static void importAppParams() {
-//        SQLite.delete(AppParams.class).execute();
+        SQLite.delete(AppParams.class).execute();
 //        ParamName, ParamValue
-//        new AppParams("printerConfig", "{}").insert();
-//        new AppParams("cardConfig", "{}").insert();
-//        new AppParams("lastDep", "1020").insert();
-//        new AppParams("lastUser", "080").insert();
-//        Log.d(TAG, "=====================importAppParams记录数: " + SQLite.select(count()).from(AppParams.class).count());
+        new AppParams("serverUrl", "192.168.1.20").insert();
+        new AppParams("posCode", "101").insert();
+        new AppParams("devSn", "111").insert();
+        new AppParams("initFlag", "1").insert();
+        new AppParams("cardConfig", "{}").insert();
+        new AppParams("lastDep", "1020").insert();
+        new AppParams("lastUser", "080").insert();
+        Log.d(TAG, "=====================importAppParams记录数: " + SQLite.select(count()).from(AppParams.class).count());
     }
 }
