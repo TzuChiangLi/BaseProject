@@ -79,7 +79,7 @@ public class ZgParams {
 
         //本地参数
         List<AppParams> appParamsList = SQLite.select().from(AppParams.class)
-                .where(AppParams_Table.paramName.notLike(""))
+                .where(AppParams_Table.paramName.notLike("UDP_%"))
                 .queryList();
         for (AppParams param : appParamsList) {
             if ("serverUrl".equalsIgnoreCase(param.getParamName())) {
