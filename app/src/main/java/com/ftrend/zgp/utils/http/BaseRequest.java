@@ -1,5 +1,9 @@
 package com.ftrend.zgp.utils.http;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
 /**
  * Request请求报文
  *
@@ -32,15 +36,15 @@ public class BaseRequest<T> {
     private class Head {
         private String requestNo;
         private String createTime;
-        private String token;
 
         public Head() {
+            this.requestNo = UUID.randomUUID().toString().replaceAll("-", "");
+            this.createTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date());
         }
 
-        public Head(String requestNo, String createTime, String token) {
+        public Head(String requestNo, String createTime) {
             this.requestNo = requestNo;
             this.createTime = createTime;
-            this.token = token;
         }
 
         public String getRequestNo() {
@@ -57,14 +61,6 @@ public class BaseRequest<T> {
 
         public void setCreateTime(String createTime) {
             this.createTime = createTime;
-        }
-
-        public String getToken() {
-            return token;
-        }
-
-        public void setToken(String token) {
-            this.token = token;
         }
     }
 
