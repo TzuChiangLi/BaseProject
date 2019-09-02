@@ -14,6 +14,7 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.PayPresenter;
+import com.ftrend.zgp.utils.TradeUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
@@ -108,20 +109,25 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                         break;
                     case 3:
                         //现金
-                        MessageUtil.warning("确认已使用现金完成交易？");
+                        MessageUtil.warning(String.format("确认使用现金收款%s元？", mPriceTotalTv.getText().toString()));
                         MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
                             @Override
-                            public void onLeftBtnClick(BasePopupView view) {
+                            public void onLeftBtnClick(BasePopupView popView) {
                                 MessageUtil.showSuccess("交易已完成");
-                                mPresenter.paySuccess(lsNo, Float.parseFloat(total), 3);
-                                view.dismiss();
+                                mPresenter.paySuccess(TradeUtil.getLsNo(), Float.parseFloat(total), 3);
+                                popView.dismiss();
+                                Intent intent = new Intent(PayActivity.this, HomeActivity.class);
+                                startActivity(intent);
                             }
 
                             @Override
-                            public void onRightBtnClick(BasePopupView view) {
+                            public void onRightBtnClick(BasePopupView popView) {
 
                             }
+
                         });
+                        break;
+                    default:
                         break;
                 }
             }

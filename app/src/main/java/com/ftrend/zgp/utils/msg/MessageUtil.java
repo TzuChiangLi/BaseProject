@@ -3,9 +3,9 @@ package com.ftrend.zgp.utils.msg;
 import android.app.Application;
 import android.content.Context;
 
-import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.toast.XToast;
 import com.ftrend.zgp.R;
+import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -51,7 +51,7 @@ public class MessageUtil {
      * @param message 提示文本
      */
     public static void info(String message) {
-        mContext = mContext == null ? ActivityUtils.getTopActivity() : mContext;
+        mContext = BaseActivity.mContext;
         builder = new DialogBuilder(mContext, 1);
         builder.setContent(message);
         builder.setLeftBtn("确定");
@@ -75,7 +75,7 @@ public class MessageUtil {
      * @param message 警告文本
      */
     public static void warning(String message) {
-        mContext = mContext == null ? ActivityUtils.getTopActivity() : mContext;
+        mContext = BaseActivity.mContext;
         builder = new DialogBuilder(mContext, 1);
         builder.setLeftBtn("确定");
         builder.setContent(message);
@@ -100,7 +100,7 @@ public class MessageUtil {
      * @param message 错误文本
      */
     public static void error(String message) {
-        mContext = mContext == null ? ActivityUtils.getTopActivity() : mContext;
+        mContext = BaseActivity.mContext;
         builder = new DialogBuilder(mContext, 1);
         builder.setLeftBtn("确定");
         builder.setContent(message);
@@ -127,7 +127,7 @@ public class MessageUtil {
      * @param message 询问文本
      */
     public static void question(String message) {
-        mContext = mContext == null ? ActivityUtils.getTopActivity() : mContext;
+        mContext = BaseActivity.mContext;
         builder = new DialogBuilder(mContext, 2);
         builder.setLeftBtn("是");
         builder.setRightBtn("否");

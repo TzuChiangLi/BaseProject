@@ -1,6 +1,7 @@
 package com.ftrend.zgp;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.model.User_Table;

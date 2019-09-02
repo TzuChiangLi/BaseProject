@@ -22,7 +22,6 @@ public class DialogUtil {
 
 
     public static void showWarningDialog(Context context, DialogBuilder builder) {
-        LogUtil.d("----show");
         builder.setDialogType(1);
         new XPopup.Builder(context)
                 .asCustom(builder)

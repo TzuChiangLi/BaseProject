@@ -27,6 +27,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     //监听网络变化
     private IntentFilter mIntentFilter;
     private NetworkChangeReceiver mNetworkChangeReceiver;
+    public static Context mContext;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +41,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         initView();
         initTitleBar();
         initData();
+        mContext = this;
     }
 
 
