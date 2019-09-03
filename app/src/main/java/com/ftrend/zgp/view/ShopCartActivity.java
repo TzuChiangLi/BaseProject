@@ -21,14 +21,15 @@ import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.presenter.ShopCartPresenter;
 import com.ftrend.zgp.utils.TradeUtil;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -54,13 +55,16 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     TitleBar mTitleBar;
     @BindView(R.id.shop_cart_bottom_tv_toal_price)
     TextView mTotalPriceTv;
+    @BindColor(R.color.common_rv_item)
+    int rv_item_selected;
+    @BindColor(R.color.common_white)
+    int rv_item_normal;
     private Contract.ShopCartPresenter mPresenter;
     private ShopAdapter<DepProduct> mProdAdapter;
     private ShopAdapter<DepCls> mClsAdapter;
     private int oldPosition = -1;
     private String lsNo = "";
     private List<DepProduct> mProdList = new ArrayList<>();
-    private View noDataView;
 
     @Override
     protected int getLayoutID() {
@@ -82,7 +86,6 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         Intent intent = getIntent();
         lsNo = intent.getStringExtra("lsNo");
         mPresenter.initOrderInfo(lsNo);
-        LogUtil.d("----lsno:" + TradeUtil.getTrade().getCreateTime());
         mSearchEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -103,6 +106,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @Override
     protected void initTitleBar() {
+        ImmersionBar.with(this).fitsSystemWindows(true).navigationBarAlpha(0.0f).barColor(R.color.common_white).autoDarkModeEnable(true).init();
         mTitleBar.setOnTitleBarListener(this);
     }
 
@@ -127,14 +131,17 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item, prodList, 1);
         mProdRecyclerView.setAdapter(mProdAdapter);
         mProdRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        mProdAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+        mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if (view.getId() == R.id.shop_rv_product_btn_add) {
-                    //添加到购物车中
-                    mPresenter.addToShopCart((DepProduct) adapter.getItem(position), lsNo);
-                    MessageUtil.show(String.valueOf(position));
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (oldPosition != -1) {
+                    adapter.getViewByPosition(mProdRecyclerView, oldPosition, R.id.shop_cart_rv_product_rl).setBackgroundColor(rv_item_normal);
                 }
+                oldPosition = position;
+                view.setBackgroundColor(rv_item_selected);
+                //添加到购物车中
+                mPresenter.addToShopCart((DepProduct) adapter.getItem(position), lsNo);
+                MessageUtil.show(String.valueOf(position));
             }
         });
     }
@@ -209,5 +216,11 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @Override
     public void onRightClick(View v) {
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestory();
     }
 }

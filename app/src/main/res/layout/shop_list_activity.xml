@@ -4,15 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_white"
     tools:context=".view.ShopListActivity">
 
     <com.hjq.bar.TitleBar
         android:id="@+id/shop_list_top_bar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        app:rightColor="@color/black"
-        app:rightTitle="@string/app_online_status"
-        app:title="@string/shop_title_bar_list" />
+        app:leftIcon="@mipmap/back"
+        app:rightIcon="@mipmap/net_status">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:letterSpacing="0.05"
+            android:text="@string/shop_title_bar_list"
+            android:textColor="@color/common_blue"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </com.hjq.bar.TitleBar>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/shop_list_rv"
@@ -35,7 +48,8 @@
             android:layout_height="wrap_content"
             android:maxHeight="40dp"
             android:padding="12dp"
-            android:text="@string/shop_tv_total" />
+            android:text="@string/shop_tv_total"
+            android:textColor="@color/pay_tv_red" />
 
         <TextView
             android:id="@+id/shop_list_tv_total"
@@ -44,7 +58,8 @@
             android:layout_toEndOf="@+id/shop_list_tv_total_title"
             android:maxHeight="40dp"
             android:padding="12dp"
-            android:text="9999.99" />
+            android:text="9999.99"
+            android:textColor="@color/pay_tv_red" />
 
 
         <Button
@@ -53,6 +68,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/shop_list_btn_hang_up"
             android:layout_alignStart="@+id/shop_list_btn_hang_up"
+            android:background="@drawable/shop_btn_gray_selector"
             android:maxHeight="40dp"
             android:text="@string/shop_tv_cancel" />
 
@@ -62,8 +78,10 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/shop_list_btn_pay"
             android:layout_alignParentEnd="true"
+            android:background="@drawable/shop_btn_blue_selector"
             android:maxHeight="40dp"
-            android:text="@string/shop_tv_add" />
+            android:text="@string/shop_tv_add"
+            android:textColor="@color/common_white" />
 
 
         <Button
@@ -72,7 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/shop_list_tv_total_title"
             android:layout_alignParentStart="true"
-            android:maxHeight="40dp"
+            android:background="@drawable/shop_btn_gray_selector"
             android:text="@string/shop_tv_vip" />
 
         <Button
@@ -81,7 +99,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/shop_list_btn_vip"
             android:layout_toEndOf="@+id/shop_list_btn_vip"
-            android:maxHeight="40dp"
+            android:background="@drawable/shop_btn_gray_selector"
             android:text="@string/shop_tv_whole_discount" />
 
         <Button
@@ -90,7 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/shop_list_btn_vip"
             android:layout_toStartOf="@+id/shop_list_btn_pay"
-            android:maxHeight="40dp"
+            android:background="@drawable/shop_btn_gray_selector"
             android:text="@string/shop_btn_hang_up" />
 
         <Button
@@ -99,8 +117,9 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/shop_list_btn_vip"
             android:layout_alignParentEnd="true"
-            android:maxHeight="40dp"
-            android:text="@string/shop_btn_pay" />
+            android:background="@drawable/shop_btn_red_selector"
+            android:text="@string/shop_btn_pay"
+            android:textColor="@color/shop_white_text" />
 
     </RelativeLayout>
 

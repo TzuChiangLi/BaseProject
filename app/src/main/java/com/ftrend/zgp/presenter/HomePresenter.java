@@ -1,12 +1,12 @@
 package com.ftrend.zgp.presenter;
 
+import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.http.BaseResponse;
 import com.ftrend.zgp.utils.http.HttpCallBack;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
@@ -43,8 +43,9 @@ public class HomePresenter implements Contract.HomePresenter, HttpCallBack {
         List<Menu.MenuList> childList = new ArrayList<>();
         String[] menuName = {"收银", "取单", "退货", "交班", "交班报表", "交易统计", "流水查询", "数据同步", "操作指南", "参数设置"
                 , "修改密码", "注销登录"};
+        int[] menuImg = {R.mipmap.jy_sy, R.mipmap.jy_qd, R.mipmap.jy_th, R.mipmap.jy_jb};
         for (int i = 0; i < 4; i++) {
-            childList.add(new Menu.MenuList(0, menuName[i]));
+            childList.add(new Menu.MenuList(menuImg[i], menuName[i]));
         }
         menuList.add(new Menu("交易", childList));
         childList = new ArrayList<>();
@@ -82,19 +83,28 @@ public class HomePresenter implements Contract.HomePresenter, HttpCallBack {
 //        LogUtil.d("----maxLsNo:"+maxLsNo);
     }
 
+    @Override
+    public void onDestory() {
+        if (mView != null) {
+            mView = null;
+        }
+    }
 
-    //
-    public String createLsNo() {
+
+    /**
+     * 创建流水单号
+     *
+     * @return 流水单号
+     */
+    private String createLsNo() {
         String max = "99999";
         long count = SQLite.select(count(Trade_Table.id)).from(Trade.class).count();
-        LogUtil.d("----count:" + count);
         String maxLsNo = "";
         if (count != 0) {
             FlowCursor cursor = SQLite.select(Method.max(Trade_Table.id)).from(Trade.class).query();
             cursor.moveToFirst();
             int id = cursor.getIntOrDefault(0);
             cursor.close();
-            LogUtil.d("----id:" + id);
             maxLsNo = SQLite.select(Trade_Table.lsNo).distinct().from(Trade.class).where(Trade_Table.id.eq(id)).querySingle().getLsNo();
             String status = SQLite.select(Trade_Table.status).from(Trade.class).where(Trade_Table.lsNo.eq(maxLsNo)).querySingle().getStatus();
             if (!status.equals("0")) {
@@ -113,8 +123,13 @@ public class HomePresenter implements Contract.HomePresenter, HttpCallBack {
         return maxLsNo;
     }
 
-    //字符补齐
-    public String padLeft(int inStr) {
+    /**
+     * 字符补齐
+     *
+     * @param inStr 输入文本
+     * @return 补齐文本
+     */
+    private String padLeft(int inStr) {
         String outStr = "";
         String temp = String.valueOf(inStr);
         int size = temp.length();

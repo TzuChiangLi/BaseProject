@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menu_ll_func"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:id="@+id/menu_ll_func"
+    android:background="@color/common_white"
     android:gravity="center"
     android:orientation="vertical"
     android:padding="8dp">
@@ -12,9 +13,7 @@
         android:id="@+id/menu_img_func"
         android:layout_width="64dp"
         android:layout_height="64dp"
-
         android:layout_gravity="center"
-        android:background="@color/divide_line"
         android:scaleType="centerInside" />
 
     <TextView
@@ -23,6 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
+        android:textColor="@color/text_black_second"
         android:text="@string/app_test" />
 
 </LinearLayout>

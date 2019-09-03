@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_white"
     tools:context=".view.LoginActivity">
 
 
@@ -10,8 +11,8 @@
         android:id="@+id/login_title_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="100dp"
         android:text="@string/login_title_top"
         android:textSize="20sp" />
 
@@ -73,6 +74,7 @@
 
 
     <LinearLayout
+        android:id="@+id/login_ll_pwd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/login_ll_username"
@@ -105,10 +107,10 @@
         android:id="@+id/login_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/login_ll_pwd"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="56dp"
-        android:layout_marginBottom="150dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="48dp"
         android:text="@string/login_btn" />
 
 </RelativeLayout>

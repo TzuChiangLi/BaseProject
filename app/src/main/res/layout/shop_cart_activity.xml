@@ -4,141 +4,178 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:context=".view.ShopCartActivity">
 
     <com.hjq.bar.TitleBar
         android:id="@+id/shop_cart_top_bar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        app:rightColor="@color/black"
-        app:rightTitle="@string/app_online_status"
-        app:title="@string/shop_title_bar_shop" />
+        app:leftIcon="@mipmap/back"
+        app:rightIcon="@mipmap/net_status">
 
-    <LinearLayout
-        android:id="@+id/shop_cart_top_ll"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:letterSpacing="0.05"
+            android:text="@string/shop_title_bar_shop"
+            android:textColor="@color/common_blue"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </com.hjq.bar.TitleBar>
+
+    <!--<LinearLayout-->
+    <!--android:id="@+id/shop_cart_top_ll"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@+id/shop_cart_top_bar"-->
+    <!--android:focusable="true"-->
+    <!--android:focusableInTouchMode="true"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:padding="8dp">-->
+
+    <ImageButton
+        android:id="@+id/shop_cart_top_ll_btn_scan"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_below="@+id/shop_cart_top_bar"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="horizontal"
-        android:padding="8dp">
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/shop_cart_rv_product"
+        android:background="@drawable/shop_btn_blue_selector"
+        android:maxHeight="32dp"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/scan" />
 
-        <Button
-            android:id="@+id/shop_cart_top_ll_btn_scan"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/shop_btn_scan" />
-
-        <com.ftrend.cleareditview.ClearEditText
-            android:id="@+id/shop_cart_top_ll_edt_search"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="4"
-            android:hint="@string/shop_edt_search"
-            android:textSize="14sp" />
+    <com.ftrend.cleareditview.ClearEditText
+        android:id="@+id/shop_cart_top_ll_edt_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/shop_cart_rv_classes"
+        android:layout_alignTop="@+id/shop_cart_top_ll_btn_scan"
+        android:layout_alignEnd="@+id/shop_cart_line"
+        android:layout_toEndOf="@+id/shop_cart_top_ll_btn_scan"
+        android:hint="@string/shop_edt_search"
+        android:textSize="14sp" />
 
 
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
+    <View
+        android:id="@+id/shop_cart_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/shop_cart_top_ll_btn_scan"
+        android:background="@color/divide_line" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/shop_cart_rv_classes"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_above="@+id/shop_cart_ll_bottom"
-        android:layout_below="@+id/shop_cart_top_ll"
+        android:layout_above="@+id/shop_cart_fl"
+        android:layout_below="@+id/shop_cart_line"
         android:layout_alignParentStart="true"
+
+        android:background="@color/shop_rv_bg"
         tools:listitem="@layout/shop_cart_rv_classes_item" />
 
     <View
-        android:id="@+id/shop_cart_rv_verticle_line"
-        android:layout_width="1px"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/shop_cart_ll_bottom"
-        android:layout_below="@+id/shop_cart_top_ll"
-        android:layout_toEndOf="@+id/shop_cart_rv_classes"
-        android:background="@color/divide_line" />
+    android:id="@+id/shop_cart_rv_verticle_line"
+    android:layout_width="1px"
+    android:layout_height="match_parent"
+    android:layout_above="@+id/shop_cart_fl"
+    android:layout_below="@+id/shop_cart_top_ll_btn_scan"
+    android:layout_toEndOf="@+id/shop_cart_rv_classes"
+    android:background="@color/divide_line" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/shop_cart_rv_product"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/shop_cart_ll_bottom"
-        android:layout_below="@+id/shop_cart_top_ll"
+        android:layout_above="@+id/shop_cart_fl"
+        android:layout_below="@+id/shop_cart_line"
         android:layout_toEndOf="@+id/shop_cart_rv_verticle_line"
+        android:background="@color/shop_rv_bg"
         tools:listitem="@layout/shop_cart_rv_product_item" />
 
-    <RelativeLayout
-        android:id="@+id/shop_cart_ll_bottom"
+    <!--<RelativeLayout-->
+    <!--android:id="@+id/shop_cart_ll_bottom"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:clipChildren="true">-->
+
+    <!--为了实现角标覆盖Button在Button上层，有两种方式，一个是button的android:stateListAnimator
+    属性设置为@null，另一个方法就是如下方式，用一个布局把Button给套起来-->
+    <FrameLayout
+        android:id="@+id/shop_cart_fl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/shop_cart_rv_classes"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/shop_cart_bottom_btn_car"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shop_btn_blue_selector"
+            android:gravity="center"
+            android:text="@string/shop_btn_list"
+            android:textColor="@color/shop_white_text" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/shop_cart_bottom_tv_toal_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/shop_cart_fl"
         android:layout_alignParentBottom="true"
-        android:clipChildren="true">
+        android:layout_toStartOf="@+id/shop_cart_bottom_tv_hang_up"
+        android:layout_toEndOf="@+id/shop_cart_fl"
+        android:background="@color/common_white"
+        android:gravity="center"
+        android:text="9999.99"
+        android:textColor="@color/pay_tv_red" />
 
-        <!--为了实现角标覆盖Button在Button上层，有两种方式，一个是button的android:stateListAnimator
-        属性设置为@null，另一个方法就是如下方式，用一个布局把Button给套起来-->
-        <FrameLayout
-            android:id="@+id/shop_cart_fl"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true">
-
-            <Button
-                android:id="@+id/shop_cart_bottom_btn_car"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/shop_btn_list" />
-        </FrameLayout>
-
-        <TextView
-            android:id="@+id/shop_cart_bottom_tv_toal_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/shop_cart_fl"
-            android:layout_alignBottom="@+id/shop_cart_fl"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_toEndOf="@+id/shop_cart_fl"
-            android:gravity="center"
-            android:text="9999.99" />
-
-        <Button
-            android:id="@+id/shop_cart_bottom_tv_hang_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/shop_cart_bottom_tv_payment"
-            android:gravity="center"
-            android:text="@string/shop_btn_hang_up" />
+    <Button
+        android:id="@+id/shop_cart_bottom_tv_hang_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/shop_cart_bottom_tv_payment"
+        android:background="@drawable/shop_btn_gray_selector"
+        android:text="@string/shop_btn_hang_up" />
 
 
-        <Button
-            android:id="@+id/shop_cart_bottom_tv_payment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:text="@string/shop_btn_pay" />
+    <Button
+        android:id="@+id/shop_cart_bottom_tv_payment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shop_btn_red_selector"
+        android:text="@string/shop_btn_pay"
+        android:textColor="@color/shop_white_text" />
 
-        <TextView
-            android:id="@+id/shop_cart_bottom_tip"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentTop="true"
-            android:layout_toStartOf="@+id/shop_cart_bottom_tv_toal_price"
-            android:background="@drawable/shop_tip_num"
-            android:gravity="center"
-            android:text="13"
-            android:textColor="@color/shop_tip_text"
-            android:textSize="13sp"
-            android:visibility="visible" />
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/shop_cart_bottom_tip"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_alignTop="@+id/shop_cart_fl"
+        android:layout_alignEnd="@+id/shop_cart_fl"
+        android:layout_marginTop="-10dp"
+        android:layout_marginEnd="-10dp"
+        android:background="@drawable/shop_tip_num"
+        android:gravity="center"
+        android:textColor="@color/shop_white_text"
+        android:textSize="13sp"
+        android:visibility="visible" />
+    <!--</RelativeLayout>-->
 </RelativeLayout>
 
 

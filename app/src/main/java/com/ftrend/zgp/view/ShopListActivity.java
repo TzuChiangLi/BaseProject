@@ -8,17 +8,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.ShopAdapter;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
+import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.ShopListPresenter;
+import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 
 import java.util.List;
 
+import butterknife.BindColor;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -38,9 +43,14 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     TextView mPriceTotalTv;
     @BindView(R.id.shop_list_btn_cancel)
     Button mCancelBtn;
+    @BindColor(R.color.common_rv_item)
+    int rv_item_selected;
+    @BindColor(R.color.common_white)
+    int rv_item_normal;
     private ShopAdapter<TradeProd> mProdAdapter;
     private Contract.ShopListPresenter mPresenter;
     private String lsNo = "", total = "";
+    private int oldPosition = -1;
 
     @Override
     protected int getLayoutID() {
@@ -66,6 +76,8 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     protected void initTitleBar() {
+
+        ImmersionBar.with(this).fitsSystemWindows(true).navigationBarAlpha(0.0f).barColor(R.color.common_white).autoDarkModeEnable(true).init();
         mTitleBar.setOnTitleBarListener(this);
     }
 
@@ -106,6 +118,17 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         mProdAdapter = new ShopAdapter<>(R.layout.shop_list_rv_product_item, prodList, 2);
         mRecyclerView.setAdapter(mProdAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (oldPosition != -1) {
+                    adapter.getViewByPosition(mRecyclerView, oldPosition, R.id.shop_list_rv_product_rl).setBackgroundColor(rv_item_normal);
+                }
+                oldPosition = position;
+                view.setBackgroundColor(rv_item_selected);
+                MessageUtil.show(String.valueOf(position));
+            }
+        });
     }
 
     @Override
@@ -119,5 +142,11 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     @OnClick(R.id.shop_list_btn_cancel)
     public void cancelTrade() {
         mPresenter.setTradeStatus(lsNo, 3);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestory();
     }
 }

@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.core.CenterPopupView;
 
@@ -147,13 +146,11 @@ public class DialogBuilder extends CenterPopupView {
     @Override
     protected void onShow() {
         super.onShow();
-        LogUtil.d("----我显示了");
     }
 
     @Override
     protected void onDismiss() {
         super.onDismiss();
-        LogUtil.d("----我笑死了");
     }
 
     @OnClick(R.id.dialog_ll_btn_left)

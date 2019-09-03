@@ -1,6 +1,7 @@
 package com.ftrend.zgp.view;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +17,7 @@ import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.PayPresenter;
 import com.ftrend.zgp.utils.TradeUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 import com.lxj.xpopup.core.BasePopupView;
@@ -63,6 +65,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
 
     @Override
     protected void initTitleBar() {
+        ImmersionBar.with(this).fitsSystemWindows(true).barColor(R.color.common_white).autoDarkModeEnable(true).init();
         mTitleBar.setOnTitleBarListener(this);
     }
 
@@ -89,7 +92,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     }
 
     @Override
-    public void showPayway(List<Menu.MenuList> payWay) {
+    public void showPayway(final List<Menu.MenuList> payWay) {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mPayWayAdapter = new ShopAdapter<>(R.layout.pay_way_rv_item, payWay, 3);
         mRecyclerView.setAdapter(mPayWayAdapter);
@@ -113,11 +116,18 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                         MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
                             @Override
                             public void onLeftBtnClick(BasePopupView popView) {
-                                MessageUtil.showSuccess("交易已完成");
                                 mPresenter.paySuccess(TradeUtil.getLsNo(), Float.parseFloat(total), 3);
                                 popView.dismiss();
-                                Intent intent = new Intent(PayActivity.this, HomeActivity.class);
-                                startActivity(intent);
+                                MessageUtil.showSuccess("交易已完成");
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Intent intent = new Intent(PayActivity.this, HomeActivity.class);
+                                        startActivity(intent);
+                                    }
+                                }, 1500);
+
+
                             }
 
                             @Override
@@ -132,5 +142,11 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                 }
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestory();
     }
 }

@@ -3,10 +3,10 @@ package com.ftrend.zgp.utils.msg;
 import android.app.Application;
 import android.content.Context;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.toast.XToast;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.lxj.xpopup.core.BasePopupView;
 
 /**
@@ -87,7 +87,6 @@ public class MessageUtil {
 
             @Override
             public void onRightBtnClick(BasePopupView v) {
-                LogUtil.d("----你点了右边");
                 mListener.onRightBtnClick(v);
             }
         });
@@ -112,7 +111,6 @@ public class MessageUtil {
 
             @Override
             public void onRightBtnClick(BasePopupView v) {
-                LogUtil.d("----你点了右边");
                 mListener.onRightBtnClick(v);
             }
         });
@@ -140,7 +138,6 @@ public class MessageUtil {
 
             @Override
             public void onRightBtnClick(BasePopupView v) {
-                LogUtil.d("----你点了右边");
                 mListener.onRightBtnClick(v);
             }
         });
@@ -157,7 +154,7 @@ public class MessageUtil {
      * 初始化
      */
     public static void init(Application app) {
-        APP = app;
+        setAPP(app);
     }
 
 
@@ -167,10 +164,10 @@ public class MessageUtil {
      * @param msg 吐司文本
      */
     public static void show(String msg) {
-        new XToast(APP)
-                .setView(R.layout.toast_nolmal_hint)
+        new XToast(ActivityUtils.getTopActivity())
+                .setView(R.layout.toast_normal_hint)
                 .setDuration(Duration)
-                .setText(msg)
+                .setText(android.R.id.message, msg)
                 .show();
     }
 
@@ -179,7 +176,7 @@ public class MessageUtil {
      * 成功
      */
     public static void showSuccess() {
-        new XToast(APP)
+        new XToast(ActivityUtils.getTopActivity())
                 .setView(R.layout.toast_state_hint)
                 .setDuration(Duration)
                 .setImageDrawable(android.R.id.icon, R.drawable.toast_success)
@@ -193,9 +190,9 @@ public class MessageUtil {
      * @param text
      */
     public static void showSuccess(String text) {
-        new XToast(APP)
+        new XToast(ActivityUtils.getTopActivity())
                 .setView(R.layout.toast_state_hint)
-                .setDuration(Duration)
+                .setDuration(1500)
                 .setImageDrawable(android.R.id.icon, R.drawable.toast_success)
                 .setText(android.R.id.message, text)
                 .show();
@@ -205,7 +202,7 @@ public class MessageUtil {
      * 错误
      */
     public static void showError() {
-        new XToast(APP)
+        new XToast(ActivityUtils.getTopActivity())
                 .setView(R.layout.toast_state_hint)
                 .setDuration(Duration)
                 .setImageDrawable(android.R.id.icon, R.drawable.toast_error)
@@ -219,7 +216,7 @@ public class MessageUtil {
      * @param text
      */
     public static void showError(String text) {
-        new XToast(APP)
+        new XToast(ActivityUtils.getTopActivity())
                 .setView(R.layout.toast_state_hint)
                 .setDuration(Duration)
                 .setImageDrawable(android.R.id.icon, R.drawable.toast_error)
@@ -233,7 +230,7 @@ public class MessageUtil {
      * @param text
      */
     public static void showWarning(String text) {
-        new XToast(APP)
+        new XToast(ActivityUtils.getTopActivity())
                 .setView(R.layout.toast_state_hint)
                 .setDuration(Duration)
                 .setImageDrawable(android.R.id.icon, R.drawable.toast_warning)
@@ -241,6 +238,10 @@ public class MessageUtil {
                 .show();
     }
 
+
+    public static void setAPP(Application APP) {
+        MessageUtil.APP = APP;
+    }
 
     /**
      * 吐司工具初始化所需app

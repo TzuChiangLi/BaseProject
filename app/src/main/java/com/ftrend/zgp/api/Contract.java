@@ -35,6 +35,11 @@ public interface Contract {
          * 验证用户信息
          */
         void checkUserInfo(String userCode, String userPwd, String depCode);
+
+        /**
+         * 销毁，防止泄露
+         */
+        void onDestory();
     }
 
     interface LoginView extends BaseView<Contract.LoginPresenter> {
@@ -81,6 +86,11 @@ public interface Contract {
          * 跳转收银-选择商品界面
          */
         void goShopCart();
+
+        /**
+         * 销毁，防止泄露
+         */
+        void onDestory();
     }
 
     interface HomeView extends BaseView<Contract.HomePresenter> {
@@ -134,6 +144,10 @@ public interface Contract {
          */
         void addToShopCart(DepProduct depProduct, String lsNo);
 
+        /**
+         * 销毁，防止泄露
+         */
+        void onDestory();
     }
 
     /**
@@ -185,6 +199,11 @@ public interface Contract {
          * @param status 交易状态
          */
         void setTradeStatus(String lsNo, int status);
+
+        /**
+         * 销毁，防止泄露
+         */
+        void onDestory();
     }
 
     interface ShopListView extends BaseView<Contract.ShopListPresenter> {
@@ -213,6 +232,11 @@ public interface Contract {
          * 交易完成
          */
         void paySuccess(String lsNo, float amount, int payWay);
+
+        /**
+         * 销毁，防止泄露
+         */
+        void onDestory();
     }
 
     interface PayView extends BaseView<Contract.PayPresenter> {

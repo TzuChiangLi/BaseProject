@@ -16,6 +16,7 @@ import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.presenter.LoginPresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.List;
 
@@ -59,20 +60,18 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
         if (mPresenter == null) {
             mPresenter = LoginPresenter.createPresenter(this);
         }
+
     }
 
     @Override
     protected void initTitleBar() {
+        ImmersionBar.with(this).fitsSystemWindows(true).navigationBarAlpha(0.0f).barColor(R.color.common_white).autoDarkModeEnable(true).init();
     }
 
 
     @OnClick(R.id.login_btn)
     public void doLogin() {
-//        MessageUtil.show("暂未向下一界面传递数据");
-//        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-//        startActivity(intent);
         mPresenter.checkUserInfo(userCode, mPwdEdt.getText().toString().trim(), depCode);
-
     }
 
     @Override
@@ -130,4 +129,10 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
         }
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestory();
+    }
 }

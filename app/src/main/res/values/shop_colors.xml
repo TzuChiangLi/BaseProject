@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="shop_tip_num">#FF4646</color>
-    <color name="shop_tip_text">#FFF</color>
+    <color name="shop_white_text">#FFF</color>
+    <color name="shop_btn_red_start">#da5858</color>
+    <color name="shop_btn_red_end">#a61414</color>
+    <color name="shop_btn_blue_start">#05c3c5</color>
+    <color name="shop_btn_blue_end">#087ca2</color>
+    <color name="shop_btn_gray_start">#F2F2F2</color>
+    <color name="shop_btn_gray_end">#d4d4d4</color>
+    <color name="shop_rv_bg">#d9d9d9</color>
+
 </resources>
