@@ -22,7 +22,7 @@ import java.util.UUID;
  * =================================GET====================================
  * ?requestNo=&createTime=&access_token=
  */
-public class BaseRequest<T> {
+public class RestRequest<T> {
     /**
      * 请求头
      */
@@ -64,10 +64,10 @@ public class BaseRequest<T> {
         }
     }
 
-    public BaseRequest() {
+    public RestRequest() {
     }
 
-    public BaseRequest(Head head, T body) {
+    public RestRequest(Head head, T body) {
         this.head = head;
         this.body = body;
     }

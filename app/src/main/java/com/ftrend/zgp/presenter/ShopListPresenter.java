@@ -6,7 +6,7 @@ import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.Trade_Table;
-import com.ftrend.zgp.utils.http.BaseResponse;
+import com.ftrend.zgp.utils.http.RestResponse;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -74,17 +74,17 @@ public class ShopListPresenter implements Contract.ShopListPresenter, HttpCallBa
     }
 
     @Override
-    public void onSuccess(Object body, BaseResponse.ResHead head) {
+    public void onSuccess(Object body) {
 
     }
 
     @Override
-    public void onFailed() {
+    public void onFailed(String errorCode, String errorMessage) {
 
     }
 
     @Override
-    public void onError(String errorMsg) {
+    public void onHttpError(int errorCode, String errorMsg) {
 
     }
 

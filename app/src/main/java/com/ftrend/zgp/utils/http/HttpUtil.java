@@ -1,6 +1,6 @@
 package com.ftrend.zgp.utils.http;
 
-import com.blankj.utilcode.util.Utils;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.log.LogUtil;
 
 import java.io.IOException;
@@ -20,9 +20,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -36,8 +34,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class HttpUtil {
     private static HttpUtil INSTANCE;
     private static Retrofit mRetrofit;
-    private static final int TIMEOUT = 60;
-    private static final String BASE_URL = HttpManager.TEST_URL;
+    private static final int CONNECT_TIMEOUT = 10;
+    private static final int READ_TIMEOUT = 10;
+    private static final int WRITE_TIMEOUT = 10;
+    private static final String BASE_URL = String.format("http://%s/pos/", ZgParams.getServerUrl());
 
     private HttpUtil() {
         initRetrofit();
@@ -55,7 +55,6 @@ public class HttpUtil {
                 .client(initClient())
                 .build();
     }
-
 
     /**
      * @return 返回请求工具类的单例
@@ -84,7 +83,8 @@ public class HttpUtil {
      * @return OkHttpClient
      */
     private static OkHttpClient initClient() {
-        InputStream inputStream = null;
+        // TODO: 2019/9/2 暂时屏蔽https证书
+/*        InputStream inputStream = null;
         try {
             //证书文件名需要改
             inputStream = Utils.getApp().getAssets().open("srca.cer");
@@ -92,14 +92,14 @@ public class HttpUtil {
             e.printStackTrace();
             LogUtil.e(e.getMessage());
         }
-        X509TrustManager trustManager = initTrustManager(inputStream);
+        X509TrustManager trustManager = initTrustManager(inputStream);*/
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         //设置自签名证书（暂时不让他生效）
 //        builder.sslSocketFactory(initSSLSocketFactory(trustManager), trustManager);
         // 设置超时
-        builder.connectTimeout(TIMEOUT, TimeUnit.SECONDS);
-        builder.readTimeout(TIMEOUT, TimeUnit.SECONDS);
-        builder.writeTimeout(TIMEOUT, TimeUnit.SECONDS);
+        builder.connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS);
+        builder.readTimeout(READ_TIMEOUT, TimeUnit.SECONDS);
+        builder.writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS);
 //        builder.addInterceptor(new Interceptor() {
 //            @Override
 //            public Response intercept(Chain chain) throws IOException {
@@ -108,6 +108,7 @@ public class HttpUtil {
 //                return response;
 //            }
 //        });
+        builder.addInterceptor(new RestInterceptor());//拦截器，自动注入token
         OkHttpClient client = builder.build();
         return client;
     }

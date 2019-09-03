@@ -7,7 +7,7 @@ import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
-import com.ftrend.zgp.utils.http.BaseResponse;
+import com.ftrend.zgp.utils.http.RestResponse;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
@@ -42,17 +42,17 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
     }
 
     @Override
-    public void onSuccess(Object body, BaseResponse.ResHead head) {
+    public void onSuccess(Object body) {
 
     }
 
     @Override
-    public void onFailed() {
+    public void onFailed(String errorCode, String errorMessage) {
 
     }
 
     @Override
-    public void onError(String errorMsg) {
+    public void onHttpError(int errorCode, String errorMsg) {
 
     }
 

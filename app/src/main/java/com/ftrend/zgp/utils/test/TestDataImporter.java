@@ -125,7 +125,7 @@ public class TestDataImporter {
 //        ParamName, ParamValue
         new AppParams("serverUrl", "192.168.1.20").insert();
         new AppParams("posCode", "101").insert();
-        new AppParams("devSn", "111").insert();
+        new AppParams("devSn", "11111111").insert();
         new AppParams("initFlag", "1").insert();
         new AppParams("cardConfig", "{}").insert();
         new AppParams("lastDep", "1020").insert();

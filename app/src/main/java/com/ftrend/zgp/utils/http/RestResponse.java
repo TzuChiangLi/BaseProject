@@ -18,7 +18,7 @@ package com.ftrend.zgp.utils.http;
  * }
  * ==========================================================================
  */
-public class BaseResponse<T> {
+public class RestResponse<T> {
     /**
      * 响应头
      */
@@ -77,12 +77,20 @@ public class BaseResponse<T> {
         }
     }
 
-    public BaseResponse() {
+    public RestResponse() {
     }
 
-    public BaseResponse(ResHead head, T body) {
+    public RestResponse(ResHead head, T body) {
         this.head = head;
         this.body = body;
+    }
+
+    /**
+     * 判断是否执行成功
+     * @return
+     */
+    public boolean succeed() {
+        return "0000".equals(head.retFlag);
     }
 
     public ResHead getHead() {
