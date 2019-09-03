@@ -49,11 +49,22 @@ public class LoginPresenter implements Contract.LoginPresenter {
         if (!TextUtils.isEmpty(userCode)) {
             User user = SQLite.select().from(User.class).where(User_Table.userCode.eq(userCode)).querySingle();
             Dep dep = SQLite.select().from(Dep.class).where(Dep_Table.depCode.eq(depCode)).querySingle();
-            if (user.getUserPwd().equals(userPwd)) {
-                mView.loginSuccess(user,dep);
-            } else {
-                mView.loginFailed("用户名或密码错误，请重试！");
+            if (user != null) {
+                if (user.getUserPwd().equals(userPwd)) {
+                    mView.loginSuccess(user, dep);
+                } else {
+                    mView.loginFailed("用户名或密码错误，请重试！");
+                }
             }
         }
     }
+
+    @Override
+    public void onDestory() {
+        if (mView != null) {
+            mView = null;
+        }
+    }
+
+
 }

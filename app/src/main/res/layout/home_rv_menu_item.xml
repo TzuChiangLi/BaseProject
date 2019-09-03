@@ -2,22 +2,34 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/common_white">
 
     <TextView
         android:id="@+id/main_rv_menu_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/divide_line"
+        android:layout_alignParentStart="true"
         android:paddingStart="16dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp" />
+        android:paddingTop="8dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="4dp"
+        android:textColor="@color/text_black_first"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/main_rv_menu_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/main_rv_menu_title"
+        android:layout_marginStart="8dp"
+        android:background="@color/divide_line" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_rv_menu_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
-        android:layout_below="@+id/main_rv_menu_title"
+        android:layout_below="@+id/main_rv_menu_line"
         tools:listitem="@layout/menu_rv_func_item" />
 </RelativeLayout>

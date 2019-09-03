@@ -12,16 +12,28 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentTop="true"
+        app:leftIcon="@mipmap/back"
         app:rightColor="@color/black"
+        app:rightIcon="@mipmap/net_status">
 
-        app:rightTitle="@string/app_online_status"
-        app:title="@string/pay_tv_title" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:letterSpacing="0.05"
+            android:text="@string/pay_tv_title"
+            android:textColor="@color/common_blue"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </com.hjq.bar.TitleBar>
 
     <RelativeLayout
         android:id="@+id/pay_rl_money"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pay_top_bar">
+        android:layout_below="@+id/pay_top_bar"
+        android:background="@color/dialog_bg_white">
 
         <TextView
             android:id="@+id/pay_tv_total_title"
@@ -30,6 +42,7 @@
             android:layout_centerVertical="true"
             android:padding="16dp"
             android:text="@string/pay_tv_should_pay"
+            android:textColor="@color/pay_tv_red"
             android:textSize="26sp" />
 
 
@@ -42,6 +55,7 @@
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
             android:text="159.33"
+            android:textColor="@color/pay_tv_red"
             android:textSize="25sp"
             android:textStyle="bold" />
 
@@ -52,14 +66,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/pay_rl_money"
-        android:background="@color/divide_line"
+        android:background="@color/common_blue"
         android:paddingStart="16dp"
-        android:text="@string/pay_tv_method" />
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="@string/pay_tv_method"
+        android:textColor="@color/dialog_bg_white"
+        android:textSize="16sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/pay_rv_pay_way"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:overScrollMode="never"
+        tools:listitem="@layout/pay_way_rv_item"
         android:layout_below="@+id/pay_tv_select_title" />
 
 

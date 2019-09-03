@@ -51,7 +51,7 @@ public class MenuAdapter extends BaseQuickAdapter<Menu, BaseViewHolder> {
 
         @Override
         protected void convert(@NonNull BaseViewHolder helper, Menu.MenuList item) {
-//            helper.setImageResource(R.id.menu_img_func, item.getMenuImg());
+            helper.setImageResource(R.id.menu_img_func, item.getMenuImg());
             helper.setText(R.id.menu_tv_func, item.getMenuName());
             helper.setTag(R.id.menu_ll_func, item.getMenuName());
         }

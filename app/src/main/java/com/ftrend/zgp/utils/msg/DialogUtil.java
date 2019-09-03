@@ -16,15 +16,16 @@ public class DialogUtil {
     public static void showTipDialog(Context context, DialogBuilder builder) {
         builder.setDialogType(0);
         new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
                 .asCustom(builder)
                 .show();
     }
 
 
     public static void showWarningDialog(Context context, DialogBuilder builder) {
-        LogUtil.d("----show");
         builder.setDialogType(1);
         new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
                 .asCustom(builder)
                 .show();
     }
@@ -32,6 +33,7 @@ public class DialogUtil {
     public static void showErrorDialog(Context context, DialogBuilder builder) {
         builder.setDialogType(2);
         new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
                 .asCustom(builder)
                 .show();
     }
@@ -39,9 +41,11 @@ public class DialogUtil {
     public static void showAskDialog(Context context, DialogBuilder builder) {
         builder.setDialogType(3);
         new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
                 .asCustom(builder)
                 .show();
     }
+
 
 
 }

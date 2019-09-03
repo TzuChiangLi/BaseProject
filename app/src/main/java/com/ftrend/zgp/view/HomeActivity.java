@@ -18,6 +18,7 @@ import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.permission.PermissionUtil;
+import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.List;
 
@@ -58,6 +59,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
 
     @Override
     protected void initTitleBar() {
+        ImmersionBar.with(this).fitsSystemWindows(true).barColor(R.color.common_white).autoDarkModeEnable(true).init();
         LogUtil.d("initTitleBar");
     }
 
@@ -128,5 +130,11 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         Intent intent = new Intent(HomeActivity.this, ShopCartActivity.class);
         intent.putExtra("lsNo", lsNo);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestory();
     }
 }

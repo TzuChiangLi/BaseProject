@@ -1,5 +1,6 @@
 package com.ftrend.zgp.presenter;
 
+import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.Trade;
@@ -58,10 +59,10 @@ public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
     @Override
     public void initPayWay() {
         List<Menu.MenuList> payWays = new ArrayList<>();
-        payWays.add(new Menu.MenuList(0, "支付宝"));
-        payWays.add(new Menu.MenuList(0, "微信支付"));
-        payWays.add(new Menu.MenuList(0, "储值卡"));
-        payWays.add(new Menu.MenuList(0, "现金"));
+        payWays.add(new Menu.MenuList(R.mipmap.alipay, "支付宝"));
+        payWays.add(new Menu.MenuList(R.mipmap.wechat, "微信支付"));
+        payWays.add(new Menu.MenuList(R.mipmap.card, "储值卡"));
+        payWays.add(new Menu.MenuList(R.mipmap.money, "现金"));
         mView.showPayway(payWays);
     }
 
@@ -83,5 +84,11 @@ public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
         tradePay.setPayTime(LogUtil.getDateTime());
 //        tradePay.setPayCode();
         tradePay.insert();
+    }
+    @Override
+    public void onDestory() {
+        if (mView != null) {
+            mView = null;
+        }
     }
 }

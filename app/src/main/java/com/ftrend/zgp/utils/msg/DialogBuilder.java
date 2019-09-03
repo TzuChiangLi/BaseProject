@@ -8,9 +8,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.zgp.R;
-import com.ftrend.zgp.utils.log.LogUtil;
+import com.ftrend.zgp.base.BaseActivity;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.core.CenterPopupView;
 
@@ -60,7 +59,7 @@ public class DialogBuilder extends CenterPopupView {
     public DialogBuilder(Context context) {
         super(context);
         if (context == null) {
-            this.context = ActivityUtils.getTopActivity();
+            this.context = BaseActivity.mContext;
         } else {
             this.context = context;
         }
@@ -74,7 +73,12 @@ public class DialogBuilder extends CenterPopupView {
      */
     public DialogBuilder(Context context, int btnNum) {
         super(context);
-        this.context = context;
+        if (context == null) {
+            this.context = BaseActivity.mContext;
+        } else {
+
+            this.context = context;
+        }
         this.btnNum = btnNum;
     }
 
@@ -142,13 +146,11 @@ public class DialogBuilder extends CenterPopupView {
     @Override
     protected void onShow() {
         super.onShow();
-        LogUtil.d("----我显示了");
     }
 
     @Override
     protected void onDismiss() {
         super.onDismiss();
-        LogUtil.d("----我笑死了");
     }
 
     @OnClick(R.id.dialog_ll_btn_left)

@@ -32,4 +32,5 @@ public class InitActivity extends BaseActivity {
     protected void initTitleBar() {
         LogUtil.d("initData");
     }
+
 }

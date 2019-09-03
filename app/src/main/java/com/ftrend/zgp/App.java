@@ -1,6 +1,7 @@
 package com.ftrend.zgp;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.model.User_Table;
@@ -38,10 +39,6 @@ public class App extends Application {
         //加载全局参数
         ZgParams.loadParams();
 
-        //region 吐司初始化
-        //初始化Toast样式
-        MessageUtil.init(this);
-        //endregion
         //region 打印日志初始化
         //设置日志输出为打印日志，出现error时保存到log.txt文件中
         LogUtil.setShowLog(true);

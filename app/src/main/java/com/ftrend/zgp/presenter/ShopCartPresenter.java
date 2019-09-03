@@ -142,6 +142,16 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
         return SQLite.select(count()).from(TradeProd.class).
                 where(TradeProd_Table.lsNo.eq(lsNo)).count();
     }
+
+    @Override
+    public void onDestory() {
+        if (mView != null) {
+            mView = null;
+        }
+    }
+
+
+
 //        Cursor cursor = DatabaseManger.getInstance(context).query("DepCls", new String[]{"*"}, null, null, null, null, null, null);
 //        if (cursor != null) {
 //            if (cursor.moveToFirst()) {

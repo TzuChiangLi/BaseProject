@@ -42,7 +42,7 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 helper.setText(R.id.shop_rv_product_tv_code, ((DepProduct) item).getProdCode());
                 helper.setText(R.id.shop_rv_product_tv_prodname, ((DepProduct) item).getProdName());
                 helper.setText(R.id.shop_rv_product_price, String.valueOf(((DepProduct) item).getPrice()));
-                helper.addOnClickListener(R.id.shop_rv_product_btn_add);
+//                helper.addOnClickListener(R.id.shop_rv_product_btn_add);
                 break;
             case 2:
                 //购物车商品列表
@@ -50,7 +50,7 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 helper.setText(R.id.shop_list_rv_product_tv_prodname, ((TradeProd) item).getProdName());
                 helper.setText(R.id.shop_list_rv_product_tv_num, String.valueOf(((TradeProd) item).getAmount()));
                 helper.setText(R.id.shop_list_rv_product_tv_per_price, String.valueOf(((TradeProd) item).getPrice()));
-                helper.setText(R.id.shop_list_rv_product_tv_total, String.valueOf(((TradeProd) item).getTotal()));
+                helper.setText(R.id.shop_list_rv_product_tv_total, String.valueOf(((TradeProd) item).getAmount() * ((TradeProd) item).getPrice()));
                 break;
             case 3:
                 //支付方式列表
