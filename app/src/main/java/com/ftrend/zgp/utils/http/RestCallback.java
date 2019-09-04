@@ -1,14 +1,6 @@
 package com.ftrend.zgp.utils.http;
 
-import android.util.Log;
-
-import com.ftrend.zgp.utils.ZgParams;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * RestCallback
@@ -29,12 +21,12 @@ public class RestCallback implements HttpCallBack<Map<String, Object>> {
 
     @Override
     public void onStart() {
-        Log.d(TAG, "-----------------------------onStart: ");
+//        Log.d(TAG, "-----------------------------onStart: ");
     }
 
     @Override
     public void onSuccess(Map<String, Object> body) {
-        Log.d(TAG, "-----------------------------onSuccess: ");
+//        Log.d(TAG, "-----------------------------onSuccess: ");
         if (resultHandler != null) {
             resultHandler.onSuccess(body);
         }
@@ -42,7 +34,7 @@ public class RestCallback implements HttpCallBack<Map<String, Object>> {
 
     @Override
     public void onFailed(String errorCode, String errorMsg) {
-        Log.d(TAG, "-----------------------------onFailed: " + errorMsg);
+//        Log.d(TAG, "-----------------------------onFailed: " + errorMsg);
         if (resultHandler != null) {
             resultHandler.onFailed(errorCode, errorMsg);
         }
@@ -50,7 +42,7 @@ public class RestCallback implements HttpCallBack<Map<String, Object>> {
 
     @Override
     public void onHttpError(int errorCode, String errorMsg) {
-        Log.d(TAG, "-----------------------------onHttpError: " + errorMsg);
+//        Log.d(TAG, "-----------------------------onHttpError: " + errorMsg);
         if (resultHandler != null) {
             resultHandler.onFailed(Integer.toString(errorCode), errorMsg);
         }
@@ -58,6 +50,6 @@ public class RestCallback implements HttpCallBack<Map<String, Object>> {
 
     @Override
     public void onFinish() {
-        Log.d(TAG, "-----------------------------onFinish: ");
+//        Log.d(TAG, "-----------------------------onFinish: ");
     }
 }

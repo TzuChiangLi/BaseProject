@@ -1,23 +1,19 @@
 package com.ftrend.zgp;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.model.User_Table;
 import com.ftrend.zgp.utils.ZgParams;
-import com.ftrend.zgp.utils.http.RestCallback;
-import com.ftrend.zgp.utils.http.RestResultHandler;
-import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.log.LogUtil;
-import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.ftrend.zgp.utils.task.ServerWatcherThread;
 import com.ftrend.zgp.utils.test.TestDataImporter;
 import com.qw.soul.permission.SoulPermission;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
-import java.util.Map;
+import java.util.Locale;
 
 import static com.raizlabs.android.dbflow.sql.language.Method.count;
 
@@ -58,7 +54,7 @@ public class App extends Application {
         watcherThread.start();
 
         // TODO: 2019/9/3 网络请求测试
-        RestSubscribe.getInstance().updatePosDep("101", new RestCallback(new RestResultHandler() {
+        /*RestSubscribe.getInstance().updatePosDep("101", new RestCallback(new RestResultHandler() {
             @Override
             public void onSuccess(Map<String, Object> body) {
                 System.out.println("updatePosDep success: " + body.toString());
@@ -68,8 +64,15 @@ public class App extends Application {
             public void onFailed(String errorCode, String errorMsg) {
                 System.out.println("updatePosDep failed: " + errorCode + " - " + errorMsg);
             }
-        }));
-    }
+        }));*/
 
+        // TODO: 2019/9/4 数据下载更新，移到启动页
+        new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
+            @Override
+            public void handleProgress(int percent, boolean isFailed, String msg) {
+                System.out.println(String.format(Locale.getDefault(), "%d%% %s", percent, msg));
+            }
+        }).start();
+    }
 
 }

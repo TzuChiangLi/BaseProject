@@ -26,6 +26,15 @@ public interface RestApi {
     Observable<RestResponse<Map<String, Object>>> clientLogin(@Body RestRequest<Map<String, Object>> request);
 
     /**
+     * 1 获取指定机器号的数据更新标志
+     *
+     * @param request
+     * @return
+     */
+    @POST("update/check/pos")
+    Observable<RestResponse<Map<String, Object>>> checkPosUpdate(@Body RestRequest<Map<String, Object>> request);
+
+    /**
      * 2 获取指定机器号可登录专柜列表
      * @param request
      * @return

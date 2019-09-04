@@ -14,22 +14,26 @@ import java.util.Locale;
  */
 public class ServerWatcherThread extends Thread {
 
+    //是否正在执行ping命令，防止因请求超时造成重复调用（如果ping间隔大于超时时间设置，此参数没有意义）
+    private boolean isPinging = false;
+
     public void run() {
-        final boolean[] pinging = {false};
-        while (true) {
-            if (!pinging[0]) {
+        super.run();
+
+        while (!isInterrupted()) {
+            if (!isPinging) {
                 RestSubscribe.getInstance().ping(new HttpCallBack<String>() {
                     @Override
                     public void onStart() {
                         System.out.println("ping started...");
-                        pinging[0] = true;
+                        isPinging = true;
                     }
 
                     @Override
                     public void onSuccess(String body) {
                         // TODO: 2019/9/3 广播：联机状态
                         System.out.println(body);
-                        pinging[0] = false;
+                        isPinging = false;
                     }
 
                     @Override
@@ -41,7 +45,7 @@ public class ServerWatcherThread extends Thread {
                     public void onHttpError(int errorCode, String errorMsg) {
                         // TODO: 2019/9/3 广播：单机状态
                         System.out.println(String.format(Locale.getDefault(), "%d - %s", errorCode, errorMsg));
-                        pinging[0] = false;
+                        isPinging = false;
                     }
 
                     @Override
