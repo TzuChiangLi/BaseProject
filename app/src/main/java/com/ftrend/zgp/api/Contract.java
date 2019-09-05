@@ -20,6 +20,62 @@ import java.util.List;
 public interface Contract {
 
     /**********************************Activity************************************/
+
+
+    interface InitPresenter {
+        void startAnimator();
+
+        /**
+         * 开始同步数据
+         */
+        void startInitData();
+
+        /**
+         * 停止同步
+         */
+        void stopInitData();
+
+        /**
+         * 完成同步
+         */
+        void finishInitData();
+
+        /**
+         * 销毁，防止泄露
+         */
+        void onDestory();
+    }
+
+    interface InitView extends BaseView<Contract.InitPresenter> {
+
+        /**
+         * 开始同步数据
+         */
+        void startUpdate();
+
+        /**
+         * 同步数据进度
+         *
+         * @param progress 进度
+         */
+        void updateProgress(int progress);
+
+        /**
+         * 停止动画
+         */
+        void stopUpdate();
+
+        /**
+         * 完成同步
+         *
+         * @param posCode 机器编号
+         * @param dep     可登录专柜
+         * @param user    可登录用户
+         */
+        void finishUpdate(String posCode, String dep, String user);
+    }
+
+
     interface LoginPresenter {
         /**
          * 初始化可登录专柜数据

@@ -3,101 +3,135 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/common_white"
+    android:background="@drawable/login_bg"
     tools:context=".view.LoginActivity">
 
 
-    <TextView
-        android:id="@+id/login_title_top"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="100dp"
-        android:text="@string/login_title_top"
-        android:textSize="20sp" />
+    <ImageView
+        android:id="@+id/login_img_logo"
+        android:layout_width="128dp"
+        android:layout_height="128dp"
+        android:layout_above="@+id/login_ll"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/splash_logo" />
 
 
     <LinearLayout
-        android:id="@+id/login_ll_dep"
+        android:id="@+id/login_ll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/login_title_top"
-        android:layout_alignStart="@+id/login_title_top"
-        android:layout_alignEnd="@+id/login_btn"
-        android:layout_marginTop="56dp"
-        android:orientation="horizontal">
+        android:layout_centerInParent="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
+        android:background="@color/common_white"
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <TextView
-            android:id="@+id/login_title_dep"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/login_title_dep"
-            android:textSize="18sp" />
-
-        <Spinner
-            android:id="@+id/login_sp_dep"
+        <LinearLayout
+            android:id="@+id/login_ll_dep"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="45dp"
-            android:spinnerMode="dropdown" />
-    </LinearLayout>
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/login_dep" />
+
+            <TextView
+                android:id="@+id/login_title_dep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingStart="8dp"
+                android:text="@string/login_title_dep"
+                android:textSize="14sp" />
+
+            <Spinner
+                android:id="@+id/login_sp_dep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:minHeight="45dp"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
 
 
-    <LinearLayout
-        android:id="@+id/login_ll_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/login_ll_dep"
-        android:layout_alignStart="@+id/login_ll_dep"
-        android:layout_alignEnd="@+id/login_btn"
-        android:layout_marginTop="24dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/login_title_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/login_title_username"
-            android:textSize="18sp" />
-
-        <Spinner
-            android:id="@+id/login_sp_user"
+        <LinearLayout
+            android:id="@+id/login_ll_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="40dp"
-            android:spinnerMode="dropdown" />
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/login_user" />
+
+            <TextView
+                android:id="@+id/login_title_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingStart="8dp"
+                android:text="@string/login_title_username"
+                android:textSize="14sp" />
+
+            <Spinner
+                android:id="@+id/login_sp_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:minHeight="40dp"
+                android:spinnerMode="dropdown" />
+
+        </LinearLayout>
 
 
-    <LinearLayout
-        android:id="@+id/login_ll_pwd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/login_ll_username"
-        android:layout_alignStart="@+id/login_ll_username"
-        android:layout_alignEnd="@+id/login_btn"
-        android:layout_marginTop="24dp"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/login_title_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login_title_password"
-            android:textSize="18sp" />
-
-
-        <com.ftrend.cleareditview.ClearEditText
-            android:id="@+id/login_edt_password"
+        <LinearLayout
+            android:id="@+id/login_ll_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxHeight="45dp"
-            android:maxLines="1"
-            android:textSize="18sp" />
+            android:layout_marginTop="16dp"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/login_pwd" />
+
+            <TextView
+                android:id="@+id/login_title_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingStart="8dp"
+                android:text="@string/login_title_password"
+                android:textSize="14sp" />
+
+
+            <com.ftrend.cleareditview.ClearEditText
+                android:id="@+id/login_edt_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:maxHeight="45dp"
+                android:maxLines="1"
+                android:textSize="18sp" />
+
+
+        </LinearLayout>
 
 
     </LinearLayout>
@@ -106,11 +140,15 @@
     <Button
         android:id="@+id/login_btn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/login_ll_pwd"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="48dp"
-        android:layout_marginEnd="48dp"
-        android:text="@string/login_btn" />
+        android:layout_height="40dp"
+        android:layout_below="@+id/login_ll"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="70dp"
+        android:background="@drawable/login_btn_selector"
+        android:letterSpacing="0.2"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/login_btn"
+        android:textColor="@color/common_white" />
 
 </RelativeLayout>

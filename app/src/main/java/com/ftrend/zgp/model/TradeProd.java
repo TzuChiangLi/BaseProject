@@ -32,7 +32,7 @@ public class TradeProd extends BaseModel {
     private String barCode;
     @Column
     @NotNull
-    private String prodName = "1";
+    private String prodName = "splash";
     @Column
     private String depCode;
     @Column

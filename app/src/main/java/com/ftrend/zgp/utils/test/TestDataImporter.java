@@ -97,7 +97,7 @@ public class TestDataImporter {
     private static void importDepPayInfo() {
         SQLite.delete(DepPayInfo.class).execute();
 //        DepCode, PayTypeCode, PayTypeName, AppPayType
-        new DepPayInfo("2010", "0", "现金", "1").insert();
+        new DepPayInfo("2010", "0", "现金", "splash").insert();
         new DepPayInfo("2010", "2", "微信支付", "3").insert();
         new DepPayInfo("2010", "3", "支付宝", "2").insert();
         new DepPayInfo("2010", "8", "储值卡", "4").insert();
@@ -111,7 +111,7 @@ public class TestDataImporter {
         SQLite.delete(SysParams.class).execute();
 //        ParamName, ParamValue
         new SysParams("NoClsDep", "2010,2018").insert();
-        new SysParams("VipCardType", "1").insert();
+        new SysParams("VipCardType", "splash").insert();
         new SysParams("AliPayAccount", "123456789").insert();
         new SysParams("WxPayAccount", "123456789").insert();
         Log.d(TAG, "=====================importSysParams记录数: " + SQLite.select(count()).from(SysParams.class).count());
@@ -123,10 +123,10 @@ public class TestDataImporter {
     private static void importAppParams() {
         SQLite.delete(AppParams.class).execute();
 //        ParamName, ParamValue
-        new AppParams("serverUrl", "192.168.1.20").insert();
+        new AppParams("serverUrl", "192.168.splash.20").insert();
         new AppParams("posCode", "101").insert();
         new AppParams("devSn", "11111111").insert();
-        new AppParams("initFlag", "1").insert();
+        new AppParams("initFlag", "splash").insert();
         new AppParams("cardConfig", "{}").insert();
         new AppParams("lastDep", "1020").insert();
         new AppParams("lastUser", "080").insert();

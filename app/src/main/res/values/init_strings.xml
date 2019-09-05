@@ -2,7 +2,7 @@
 <resources>
     <string name="init_title">设备注册成功，正在进行初始化设置…</string>
     <string name="init_warning">初始化过程中请勿移动，并保持网络连接畅通！</string>
-    <string name="init_result_title">您的设备注册信息如下：</string>
+    <string name="init_result_title">您的设备注册信息如下</string>
     <string name="init_result_title_machine">机器号：</string>
     <string name="init_result_machine">101</string>
     <string name="init_result_title_desk">可登录专柜：</string>

@@ -5,7 +5,6 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.Trade_Table;
-import com.ftrend.zgp.utils.http.RestResponse;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -43,19 +42,20 @@ public class HomePresenter implements Contract.HomePresenter, HttpCallBack {
         List<Menu.MenuList> childList = new ArrayList<>();
         String[] menuName = {"收银", "取单", "退货", "交班", "交班报表", "交易统计", "流水查询", "数据同步", "操作指南", "参数设置"
                 , "修改密码", "注销登录"};
-        int[] menuImg = {R.mipmap.jy_sy, R.mipmap.jy_qd, R.mipmap.jy_th, R.mipmap.jy_jb};
+        int[] menuImg = {R.drawable.jy_sy, R.drawable.jy_qd, R.drawable.jy_th, R.drawable.jy_jb, R.drawable.jy_sy, R.drawable.jy_qd, R.drawable.jy_th, R.drawable.jy_jb,
+                R.drawable.jy_sy, R.drawable.jy_qd, R.drawable.jy_th, R.drawable.jy_jb};
         for (int i = 0; i < 4; i++) {
             childList.add(new Menu.MenuList(menuImg[i], menuName[i]));
         }
         menuList.add(new Menu("交易", childList));
         childList = new ArrayList<>();
         for (int i = 4; i < 7; i++) {
-            childList.add(new Menu.MenuList(0, menuName[i]));
+            childList.add(new Menu.MenuList(menuImg[i], menuName[i]));
         }
         menuList.add(new Menu("报表查询", childList));
         childList = new ArrayList<>();
         for (int i = 7; i < menuName.length; i++) {
-            childList.add(new Menu.MenuList(0, menuName[i]));
+            childList.add(new Menu.MenuList(menuImg[i], menuName[i]));
         }
         menuList.add(new Menu("系统功能", childList));
         mView.setMenuList(menuList);

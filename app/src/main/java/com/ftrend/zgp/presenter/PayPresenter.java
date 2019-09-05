@@ -59,10 +59,10 @@ public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
     @Override
     public void initPayWay() {
         List<Menu.MenuList> payWays = new ArrayList<>();
-        payWays.add(new Menu.MenuList(R.mipmap.alipay, "支付宝"));
-        payWays.add(new Menu.MenuList(R.mipmap.wechat, "微信支付"));
-        payWays.add(new Menu.MenuList(R.mipmap.card, "储值卡"));
-        payWays.add(new Menu.MenuList(R.mipmap.money, "现金"));
+        payWays.add(new Menu.MenuList(R.drawable.alipay, "支付宝"));
+        payWays.add(new Menu.MenuList(R.drawable.wechat, "微信支付"));
+        payWays.add(new Menu.MenuList(R.drawable.card, "储值卡"));
+        payWays.add(new Menu.MenuList(R.drawable.money, "现金"));
         mView.showPayway(payWays);
     }
 

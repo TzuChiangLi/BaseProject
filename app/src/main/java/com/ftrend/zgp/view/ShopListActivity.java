@@ -1,7 +1,6 @@
 package com.ftrend.zgp.view;
 
 import android.content.Intent;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -13,7 +12,6 @@ import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.ShopAdapter;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
-import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.ShopListPresenter;
 import com.ftrend.zgp.utils.msg.MessageUtil;
@@ -76,8 +74,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     protected void initTitleBar() {
-
-        ImmersionBar.with(this).fitsSystemWindows(true).navigationBarAlpha(0.0f).barColor(R.color.common_white).autoDarkModeEnable(true).init();
+        ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white).autoDarkModeEnable(true).init();
         mTitleBar.setOnTitleBarListener(this);
     }
 
@@ -117,7 +114,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mProdAdapter = new ShopAdapter<>(R.layout.shop_list_rv_product_item, prodList, 2);
         mRecyclerView.setAdapter(mProdAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

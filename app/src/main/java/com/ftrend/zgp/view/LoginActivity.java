@@ -15,6 +15,7 @@ import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.presenter.LoginPresenter;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.common.EncryptUtill;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 
@@ -65,7 +66,7 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
 
     @Override
     protected void initTitleBar() {
-        ImmersionBar.with(this).fitsSystemWindows(true).navigationBarAlpha(0.0f).barColor(R.color.common_white).autoDarkModeEnable(true).init();
+        ImmersionBar.with(this).autoDarkModeEnable(true).init();
     }
 
 

@@ -7,6 +7,9 @@
     <color name="common_blue">#3063E4</color>
     <color name="common_white">#FFF</color>
     <color name="common_black">#000</color>
+    <color name="common_gray_bg">#e4e8ea</color>
+    <!--<color name="common_gray_bg">#f0f1f3</color>-->
+    <!--<color name="common_gray_bg">#f2f0f1</color>-->
     <color name="common_rv_item">#FFFAC4</color>
 
     <color name="text_black">#141418</color>

@@ -28,10 +28,10 @@ public class App extends Application {
         super.onCreate();
         FlowManager.init(this);
         //test
-        long count = SQLite.select(count(User_Table.userCode)).from(User.class).count();
-        if (count == 0) {
-            TestDataImporter.importAll();
-        }
+//        long count = SQLite.select(count(User_Table.userCode)).from(User.class).count();
+//        if (count == 0) {
+//            TestDataImporter.importAll();
+//        }
         //加载全局参数
         ZgParams.loadParams();
 
@@ -66,13 +66,13 @@ public class App extends Application {
             }
         }));*/
 
-        // TODO: 2019/9/4 数据下载更新，移到启动页
-        new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
-            @Override
-            public void handleProgress(int percent, boolean isFailed, String msg) {
-                System.out.println(String.format(Locale.getDefault(), "%d%% %s", percent, msg));
-            }
-        }).start();
+//        // TODO: 2019/9/4 数据下载更新，移到启动页
+//        new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
+//            @Override
+//            public void handleProgress(int percent, boolean isFailed, String msg) {
+//                System.out.println(String.format(Locale.getDefault(), "%d%% %s", percent, msg));
+//            }
+//        }).start();
     }
 
 }
