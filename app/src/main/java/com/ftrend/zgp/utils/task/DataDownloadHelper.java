@@ -194,8 +194,7 @@ public class DataDownloadHelper {
             User user = new User();
             user.setUserCode(String.valueOf(map.get("userCode")));
             user.setUserName(String.valueOf(map.get("userName")));
-//            user.setUserPwd(String.valueOf(map.get("userPwd")));
-            user.setUserPwd("123");// TODO: 2019/9/4 测试数据
+            user.setUserPwd(String.valueOf(map.get("userPwd")));
             user.setUserRights(String.valueOf(map.get("userRights")));
             user.setMaxDscRate(Float.valueOf(String.valueOf(map.get("maxDscRate"))).intValue());
             user.setMaxDscTotal(Float.valueOf(String.valueOf(map.get("maxDscTotal"))));

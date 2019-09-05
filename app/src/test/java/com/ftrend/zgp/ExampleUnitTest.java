@@ -21,14 +21,14 @@ public class ExampleUnitTest {
     public void pwdEncrypt() {
         String pwd = "123abc";
         String encrypted = EncryptUtill.pwdEncrypt(pwd);//7A>AJY;@;
-        System.out.println("pwdEncrypt: " + pwd + " => " + encrypted);
-        System.out.println("pwdDecrypt: " + encrypted + " => " + EncryptUtill.pwdDecrypt(encrypted));
-        encrypted = "7A>AJY;@;";
-        System.out.println("pwdDecrypt: " + encrypted + " => " + EncryptUtill.pwdDecrypt(encrypted));
-        encrypted = "79O?<FI76";
-        System.out.println("pwdDecrypt: " + encrypted + " => " + EncryptUtill.pwdDecrypt(encrypted));
-        encrypted = "7APAH8H3-";
-        System.out.println("pwdDecrypt: " + encrypted + " => " + EncryptUtill.pwdDecrypt(encrypted));
+        System.out.println("加密测试: " + pwd + " => " + encrypted);
+        System.out.println("解密测试: " + encrypted + " => " + EncryptUtill.pwdDecrypt(encrypted));
+        System.out.println();
+        System.out.println("用户密码: 李雪勤 => " + EncryptUtill.pwdDecrypt("6=R>D<H?."));
+        System.out.println("用户密码: 高丽 => " + EncryptUtill.pwdDecrypt("71S><CH;."));
+        System.out.println("用户密码: 授权卡号 => " + EncryptUtill.pwdDecrypt("6A<>0/I;4"));
+        System.out.println("用户密码: 退货账号 => " + EncryptUtill.pwdDecrypt("7ANAL?;?)"));
+        System.out.println("用户密码: 宋昆林 => " + EncryptUtill.pwdDecrypt("7C?A>7"));
 
 //        System.out.println(Charset.availableCharsets());
     }
