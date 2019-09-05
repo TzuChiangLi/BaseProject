@@ -1,5 +1,6 @@
 package com.ftrend.zgp.utils.task;
 
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.http.RestSubscribe;
 
@@ -33,6 +34,7 @@ public class ServerWatcherThread extends Thread {
                     public void onSuccess(String body) {
                         // TODO: 2019/9/3 广播：联机状态
                         System.out.println(body);
+                        ZgParams.setIsOnline(true);
                         isPinging = false;
                     }
 
@@ -45,6 +47,7 @@ public class ServerWatcherThread extends Thread {
                     public void onHttpError(int errorCode, String errorMsg) {
                         // TODO: 2019/9/3 广播：单机状态
                         System.out.println(String.format(Locale.getDefault(), "%d - %s", errorCode, errorMsg));
+                        ZgParams.setIsOnline(false);
                         isPinging = false;
                     }
 

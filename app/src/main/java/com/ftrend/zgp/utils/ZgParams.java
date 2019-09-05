@@ -26,6 +26,9 @@ import static android.support.constraint.Constraints.TAG;
  */
 public class ZgParams {
 
+    //是否联机模式
+    private static volatile boolean isOnline = false;
+
     //系统参数：是否使用商品类别
     private static String noClsDep = "";
     //系统参数：会员卡类型，1-磁卡，2-IC卡
@@ -142,6 +145,13 @@ public class ZgParams {
         currentUser = user;
     }
 
+    public static boolean isIsOnline() {
+        return isOnline;
+    }
+
+    public static void setIsOnline(boolean isOnline) {
+        ZgParams.isOnline = isOnline;
+    }
 
     public static String getServerUrl() {
         return serverUrl;
