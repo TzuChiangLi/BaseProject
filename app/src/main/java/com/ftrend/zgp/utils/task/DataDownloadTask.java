@@ -98,6 +98,10 @@ public class DataDownloadTask {
             postFinished();
             return;
         }
+        if (step == -1) {
+            checkUpdateSign();
+            return;
+        }
         UpdateInfo info = updateInfoList.get(step);
         if (!isForce && !info.needUpdate()) {
             //无需更新，跳过
