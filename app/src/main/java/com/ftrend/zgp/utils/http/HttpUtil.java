@@ -2,6 +2,8 @@ package com.ftrend.zgp.utils.http;
 
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.log.LogUtil;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,8 +39,8 @@ public class HttpUtil {
     private static final int CONNECT_TIMEOUT = 10;
     private static final int READ_TIMEOUT = 10;
     private static final int WRITE_TIMEOUT = 10;
-    private static final String BASE_URL = String.format("http://%s/pos/", "192.168.1.153:8091");
-//    private static final String BASE_URL = String.format("http://%s/pos/", ZgParams.getServerUrl());
+    //    private static final String BASE_URL = String.format("http://%s/pos/", "192.168.1.153:8091");
+    private static final String BASE_URL = String.format("http://%s/pos/", ZgParams.getServerUrl());
 
     private HttpUtil() {
         initRetrofit();
@@ -48,10 +50,14 @@ public class HttpUtil {
      * 初始化Retrofit
      */
     private static void initRetrofit() {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .create();
+
         mRetrofit = new Retrofit.Builder()
                 // 设置解析转换工厂，用自己定义的
                 .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(initClient())
                 .build();
