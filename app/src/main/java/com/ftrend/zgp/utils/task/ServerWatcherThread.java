@@ -59,8 +59,8 @@ public class ServerWatcherThread extends Thread {
             }
             try {
                 Thread.sleep(1000 * 30);
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (InterruptedException e) {
+                break;
             }
         }
     }
