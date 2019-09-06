@@ -7,8 +7,11 @@ import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.DepCls;
+import com.ftrend.zgp.model.DepCls_Table;
 import com.ftrend.zgp.model.DepPayInfo;
+import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.DepProduct;
+import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.SysParams;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.utils.db.DBHelper;
@@ -118,7 +121,7 @@ public class DataDownloadHelper {
                             saveDepPayInfo(code, dataList);
                         } else if (isDepProduct(dataType)) {
                             dataKey = makeKeyDepProduct(code);
-                            saveDepProduct(dataList);
+                            saveDepProduct(code, dataList);
                         } else if (isPosDep(dataType)) {
                             dataKey = makeKeyPosDep(code);
                             savePosDep(dataList);
@@ -228,7 +231,7 @@ public class DataDownloadHelper {
      */
     private static void saveDepCls(final String depCode, final List<Map<String, Object>> clsList) {
         //清空数据表
-        SQLite.delete(DepCls.class).execute();
+        SQLite.delete(DepCls.class).where(DepCls_Table.depCode.eq(depCode)).execute();
         //写入数据
         for (Map<String, Object> map : clsList) {
             DepCls cls = new DepCls();
@@ -242,11 +245,12 @@ public class DataDownloadHelper {
     /**
      * 更新专柜商品信息
      *
+     * @param depCode
      * @param productList
      */
-    private static void saveDepProduct(final List<Map<String, Object>> productList) {
+    private static void saveDepProduct(final String depCode, final List<Map<String, Object>> productList) {
         //清空数据表
-        SQLite.delete(DepProduct.class).execute();
+        SQLite.delete(DepProduct.class).where(DepProduct_Table.depCode.eq(depCode)).execute();
         //写入数据
         for (Map<String, Object> map : productList) {
             DepProduct product = new DepProduct();
@@ -286,7 +290,7 @@ public class DataDownloadHelper {
      */
     private static void saveDepPayInfo(final String depCode, final List<Map<String, Object>> payInfoList) {
         //清空数据表
-        SQLite.delete(DepPayInfo.class).execute();
+        SQLite.delete(DepPayInfo.class).where(DepPayInfo_Table.depCode.eq(depCode)).execute();
         //写入数据
         for (Map<String, Object> map : payInfoList) {
             DepPayInfo payInfo = new DepPayInfo();

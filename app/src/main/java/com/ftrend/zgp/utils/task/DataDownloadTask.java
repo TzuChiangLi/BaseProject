@@ -99,10 +99,8 @@ public class DataDownloadTask {
             return;
         }
         UpdateInfo info = updateInfoList.get(step);
-        Log.d(TAG, "===================start update: " + info);
         if (!isForce && !info.needUpdate()) {
             //无需更新，跳过
-            Log.d(TAG, "===================skip update: " + info);
             next();
             return;
         }
@@ -126,7 +124,6 @@ public class DataDownloadTask {
             //7 专柜支付方式
             RestSubscribe.getInstance().updateDepPayInfo(info.getCode(), makeCallback(info));
         } else {
-            // TODO: 2019/9/4 实现实时流水下载
             //不支持的数据类型，跳过
             next();
         }
