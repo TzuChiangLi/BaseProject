@@ -4,10 +4,12 @@ import android.text.TextUtils;
 
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.DepCls;
+import com.ftrend.zgp.model.DepCls_Table;
 import com.ftrend.zgp.model.DepProduct;
+import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
-import com.ftrend.zgp.utils.http.RestResponse;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
@@ -63,8 +65,8 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
 
     @Override
     public void initProdList() {
-        List<DepCls> clsList = SQLite.select().from(DepCls.class).queryList();
-        mProdList = SQLite.select().from(DepProduct.class).queryList();
+        List<DepCls> clsList = SQLite.select().from(DepCls.class).where(DepCls_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode())).queryList();
+        mProdList = SQLite.select().from(DepProduct.class).where(DepProduct_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode())).queryList();
         //region 可能数据表自己测试用的有点问题，此处修复那个问题后再把牵扯到V层的代码修正掉
         mView.setProdList(mProdList);
         DepCls depCls = new DepCls();
@@ -75,8 +77,6 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
         clsList.add(0, depCls);
         mView.setClsList(clsList);
         //endregion
-
-
     }
 
     @Override
@@ -149,7 +149,6 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
             mView = null;
         }
     }
-
 
 
 //        Cursor cursor = DatabaseManger.getInstance(context).query("DepCls", new String[]{"*"}, null, null, null, null, null, null);

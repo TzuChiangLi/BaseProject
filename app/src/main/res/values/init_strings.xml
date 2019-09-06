@@ -9,4 +9,10 @@
     <string name="init_result_desk">11110001 鞋服专柜\n11110002 运动品牌专柜\n11110003 XXXX专柜</string>
     <string name="init_result_title_user">可登录用户：</string>
     <string name="init_result_user">001 收款员1\n002 收款员2</string>
+    <string name="reg_title_first">请输入服务器地址</string>
+    <string name="reg_title_second">请输入设备注册信息</string>
+    <string name="reg_title_posCode">设备编号</string>
+    <string name="reg_title_regCode">注册码</string>
+    <string name="reg_title_warning">在注册过程中，请保持网络连接畅通，否则可能注册失败。</string>
+    <string name="reg_btn_register">注册</string>
 </resources>

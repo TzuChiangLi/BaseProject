@@ -15,7 +15,6 @@
         android:layout_alignParentTop="true"
         android:background="@color/common_white"
         app:leftIcon="@drawable/back"
-        app:rightColor="@color/black"
         app:lineColor="@color/common_blue"
         app:lineVisible="true"
         app:rightIcon="@drawable/net_status">

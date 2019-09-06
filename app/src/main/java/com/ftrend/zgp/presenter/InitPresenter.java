@@ -19,7 +19,7 @@ import java.util.Locale;
 public class InitPresenter implements Contract.InitPresenter, HttpCallBack {
     private Contract.InitView mView;
 
-    public InitPresenter(Contract.InitView mView) {
+    private InitPresenter(Contract.InitView mView) {
         this.mView = mView;
     }
 
@@ -51,14 +51,11 @@ public class InitPresenter implements Contract.InitPresenter, HttpCallBack {
     @Override
     public void finishInitData() {
         String posCode = SQLite.select(AppParams_Table.paramValue).from(AppParams.class).where(AppParams_Table.paramName.eq("posCode")).querySingle().getParamValue();
-
-
         List<Dep> depList = SQLite.select().distinct().from(Dep.class).queryList();
         StringBuilder depStr = new StringBuilder();
         for (Dep dep : depList) {
             depStr.append(dep.getDepCode()).append(" ").append(dep.getDepName()).append("\n");
         }
-
         List<User> userList = SQLite.select().distinct().from(User.class).queryList();
         StringBuilder userStr = new StringBuilder();
         for (User user : userList) {
