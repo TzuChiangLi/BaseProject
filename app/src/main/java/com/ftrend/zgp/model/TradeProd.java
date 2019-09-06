@@ -24,7 +24,7 @@ public class TradeProd extends BaseModel {
     private String lsNo;
     @Column
     @NotNull
-    private String sortNo;
+    private Long sortNo;
     @Column
     @NotNull
     private String prodCode;
@@ -32,7 +32,7 @@ public class TradeProd extends BaseModel {
     private String barCode;
     @Column
     @NotNull
-    private String prodName = "splash";
+    private String prodName;
     @Column
     private String depCode;
     @Column
@@ -74,11 +74,11 @@ public class TradeProd extends BaseModel {
         this.lsNo = lsNo;
     }
 
-    public String getSortNo() {
+    public Long getSortNo() {
         return sortNo;
     }
 
-    public void setSortNo(String sortNo) {
+    public void setSortNo(Long sortNo) {
         this.sortNo = sortNo;
     }
 
