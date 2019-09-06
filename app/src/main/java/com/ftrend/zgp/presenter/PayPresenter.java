@@ -5,8 +5,9 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
+import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
-import com.ftrend.zgp.utils.http.RestResponse;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -82,9 +83,18 @@ public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
         tradePay.setPayTypeCode(String.valueOf(payWay));
         tradePay.setAmount(amount);
         tradePay.setPayTime(LogUtil.getDateTime());
-//        tradePay.setPayCode();
+        //tradePay.setPayCode();
         tradePay.insert();
+
+        //添加到交易流水队列表
+        TradeUploadQueue queue = new TradeUploadQueue();
+        queue.setDepCode(ZgParams.getCurrentDep().getDepCode());
+        queue.setLsNo(lsNo);
+        //此处仅加入创建队列的时间，上传时间等上传时再更新
+        queue.setEnqueueTime(LogUtil.getDateTime());
+        queue.insert();
     }
+
     @Override
     public void onDestory() {
         if (mView != null) {

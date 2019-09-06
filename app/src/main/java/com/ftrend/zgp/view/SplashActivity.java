@@ -38,7 +38,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //后面根据首页再做延时操作
-                Intent intent = new Intent(SplashActivity.this, InitActivity.class);//HomeActivity
+                Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);//HomeActivity
                 startActivity(intent);
                 finish();
             }

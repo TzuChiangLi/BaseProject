@@ -2,4 +2,5 @@
 <resources>
     <color name="init_warning">#ff0000</color>
     <color name="init_title">#000000</color>
+    <color name="reg_warning">#C20000</color>
 </resources>
