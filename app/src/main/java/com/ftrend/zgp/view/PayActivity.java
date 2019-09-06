@@ -40,7 +40,6 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     RecyclerView mRecyclerView;
     private Contract.PayPresenter mPresenter;
     private String total = "", lsNo = "";
-    private ShopAdapter<Menu.MenuList> mPayWayAdapter;
 
     @Override
     protected int getLayoutID() {
@@ -65,7 +64,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
 
     @Override
     protected void initTitleBar() {
-        ImmersionBar.with(this).fitsSystemWindows(true).barColor(R.color.common_white).autoDarkModeEnable(true).init();
+        ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white).autoDarkModeEnable(true).init();
         mTitleBar.setOnTitleBarListener(this);
     }
 
@@ -94,7 +93,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     @Override
     public void showPayway(final List<Menu.MenuList> payWay) {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mPayWayAdapter = new ShopAdapter<>(R.layout.pay_way_rv_item, payWay, 3);
+        ShopAdapter<Menu.MenuList> mPayWayAdapter = new ShopAdapter<>(R.layout.pay_way_rv_item, payWay, 3);
         mRecyclerView.setAdapter(mPayWayAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mPayWayAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -112,7 +111,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                         break;
                     case 3:
                         //现金
-                        MessageUtil.warning(String.format("确认使用现金收款%s元？", mPriceTotalTv.getText().toString()));
+                        MessageUtil.info(String.format("确认使用现金收款%s元？", mPriceTotalTv.getText().toString()));
                         MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
                             @Override
                             public void onLeftBtnClick(BasePopupView popView) {
@@ -126,15 +125,12 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                                         startActivity(intent);
                                     }
                                 }, 1500);
-
-
                             }
 
                             @Override
                             public void onRightBtnClick(BasePopupView popView) {
-
+                                popView.dismiss();
                             }
-
                         });
                         break;
                     default:

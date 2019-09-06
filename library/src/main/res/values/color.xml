@@ -6,7 +6,11 @@
     <color name="clear_edt_light_gray">#99000000</color>
     <color name="divide_line">#FFB7B2B2</color>
     <color name="text_black">#141418</color>
+    <color name="text_white">#FFFFFF</color>
     <color name="text_black_first">#393B4D</color>
     <color name="text_black_second">#5f5f6b</color>
     <color name="text_black_third">#97979f</color>
+    <color name="progress_load_red">#FF4646</color>
+    <color name="progress_load_blue">#95cefd</color>
+    <color name="progress_load_orange">#FFA25A</color>
 </resources>

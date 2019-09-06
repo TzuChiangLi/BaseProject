@@ -37,7 +37,8 @@ public class HttpUtil {
     private static final int CONNECT_TIMEOUT = 10;
     private static final int READ_TIMEOUT = 10;
     private static final int WRITE_TIMEOUT = 10;
-    private static final String BASE_URL = String.format("http://%s/pos/", ZgParams.getServerUrl());
+    private static final String BASE_URL = String.format("http://%s/pos/", "192.168.1.153:8091");
+//    private static final String BASE_URL = String.format("http://%s/pos/", ZgParams.getServerUrl());
 
     private HttpUtil() {
         initRetrofit();

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_gray_bg"
     android:orientation="vertical"
     tools:context=".view.PayActivity">
 
@@ -12,9 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentTop="true"
-        app:leftIcon="@mipmap/back"
+        android:background="@color/common_white"
+        app:leftIcon="@drawable/back"
         app:rightColor="@color/black"
-        app:rightIcon="@mipmap/net_status">
+        app:lineColor="@color/common_blue"
+        app:lineVisible="true"
+        app:rightIcon="@drawable/net_status">
 
         <TextView
             android:layout_width="match_parent"
@@ -28,12 +32,22 @@
             android:textStyle="bold" />
     </com.hjq.bar.TitleBar>
 
+
+    <ImageView
+        android:id="@+id/pay_title_line"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_below="@+id/pay_top_bar"
+        android:background="@color/common_white"
+        android:scaleType="centerInside"
+        android:src="@drawable/title_bar_bottom" />
+
     <RelativeLayout
         android:id="@+id/pay_rl_money"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pay_top_bar"
-        android:background="@color/dialog_bg_white">
+        android:layout_below="@+id/pay_title_line"
+        android:background="@color/common_white">
 
         <TextView
             android:id="@+id/pay_tv_total_title"
@@ -71,16 +85,16 @@
         android:paddingTop="4dp"
         android:paddingBottom="4dp"
         android:text="@string/pay_tv_method"
-        android:textColor="@color/dialog_bg_white"
+        android:textColor="@color/common_white"
         android:textSize="16sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/pay_rv_pay_way"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_tv_select_title"
         android:overScrollMode="never"
-        tools:listitem="@layout/pay_way_rv_item"
-        android:layout_below="@+id/pay_tv_select_title" />
+        tools:listitem="@layout/pay_way_rv_item" />
 
 
 </RelativeLayout>

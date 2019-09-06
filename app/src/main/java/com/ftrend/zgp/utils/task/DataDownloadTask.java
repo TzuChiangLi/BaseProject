@@ -155,7 +155,7 @@ public class DataDownloadTask {
     }
 
     /**
-     * 1 检查数据更新标志
+     * splash 检查数据更新标志
      */
     private void checkUpdateSign() {
         RestSubscribe.getInstance().checkPosUpdate(ZgParams.getPosCode(), new RestCallback(new RestResultHandler() {

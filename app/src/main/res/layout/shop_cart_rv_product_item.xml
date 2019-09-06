@@ -13,6 +13,7 @@
         android:layout_alignParentStart="true"
         android:layout_margin="8dp"
         android:text="@string/shop_rv_title_prodcode"
+        android:textSize="14sp"
         android:textColor="@color/text_black_second" />
 
     <TextView
@@ -22,6 +23,7 @@
         android:layout_margin="8dp"
         android:layout_toEndOf="@+id/shop_rv_product_tv_code_title"
         android:text="V1234567890"
+        android:textSize="14sp"
         android:textColor="@color/text_black_second" />
 
     <TextView
@@ -54,6 +56,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="8dp"
         android:text="480.00"
+        android:textSize="18sp"
         android:textColor="@color/text_black_first"
         android:textStyle="bold" />
 </RelativeLayout>

@@ -13,8 +13,10 @@
         android:id="@+id/shop_cart_top_bar"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        app:leftIcon="@mipmap/back"
-        app:rightIcon="@mipmap/net_status">
+        app:leftIcon="@drawable/back"
+        app:lineColor="@color/common_blue"
+        app:lineVisible="true"
+        app:rightIcon="@drawable/net_status">
 
         <TextView
             android:layout_width="match_parent"
@@ -28,6 +30,15 @@
             android:textStyle="bold" />
     </com.hjq.bar.TitleBar>
 
+
+    <ImageView
+        android:id="@+id/shop_cart_title_line"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_below="@+id/shop_cart_top_bar"
+        android:background="@color/common_white"
+        android:scaleType="centerInside"
+        android:src="@drawable/title_bar_bottom" />
     <!--<LinearLayout-->
     <!--android:id="@+id/shop_cart_top_ll"-->
     <!--android:layout_width="match_parent"-->
@@ -42,7 +53,7 @@
         android:id="@+id/shop_cart_top_ll_btn_scan"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_below="@+id/shop_cart_top_bar"
+        android:layout_below="@+id/shop_cart_title_line"
         android:layout_alignParentStart="true"
         android:layout_toStartOf="@+id/shop_cart_rv_product"
         android:background="@drawable/shop_btn_blue_selector"
@@ -59,7 +70,9 @@
         android:layout_alignTop="@+id/shop_cart_top_ll_btn_scan"
         android:layout_alignEnd="@+id/shop_cart_line"
         android:layout_toEndOf="@+id/shop_cart_top_ll_btn_scan"
+        android:background="@null"
         android:hint="@string/shop_edt_search"
+        android:paddingStart="8dp"
         android:textSize="14sp" />
 
 
@@ -80,17 +93,17 @@
         android:layout_below="@+id/shop_cart_line"
         android:layout_alignParentStart="true"
 
-        android:background="@color/shop_rv_bg"
+        android:background="@color/common_gray_bg"
         tools:listitem="@layout/shop_cart_rv_classes_item" />
 
     <View
-    android:id="@+id/shop_cart_rv_verticle_line"
-    android:layout_width="1px"
-    android:layout_height="match_parent"
-    android:layout_above="@+id/shop_cart_fl"
-    android:layout_below="@+id/shop_cart_top_ll_btn_scan"
-    android:layout_toEndOf="@+id/shop_cart_rv_classes"
-    android:background="@color/divide_line" />
+        android:id="@+id/shop_cart_rv_verticle_line"
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/shop_cart_fl"
+        android:layout_below="@+id/shop_cart_top_ll_btn_scan"
+        android:layout_toEndOf="@+id/shop_cart_rv_classes"
+        android:background="@color/divide_line" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/shop_cart_rv_product"
@@ -99,7 +112,7 @@
         android:layout_above="@+id/shop_cart_fl"
         android:layout_below="@+id/shop_cart_line"
         android:layout_toEndOf="@+id/shop_cart_rv_verticle_line"
-        android:background="@color/shop_rv_bg"
+        android:background="@color/common_gray_bg"
         tools:listitem="@layout/shop_cart_rv_product_item" />
 
     <!--<RelativeLayout-->

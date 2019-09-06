@@ -3,11 +3,13 @@ package com.ftrend.zgp.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.Dep_Table;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.model.User_Table;
+import com.ftrend.zgp.utils.common.EncryptUtill;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.List;
@@ -50,7 +52,7 @@ public class LoginPresenter implements Contract.LoginPresenter {
             User user = SQLite.select().from(User.class).where(User_Table.userCode.eq(userCode)).querySingle();
             Dep dep = SQLite.select().from(Dep.class).where(Dep_Table.depCode.eq(depCode)).querySingle();
             if (user != null) {
-                if (user.getUserPwd().equals(userPwd)) {
+                if (user.getUserPwd().equals(EncryptUtill.pwdEncrypt(userPwd))) {
                     mView.loginSuccess(user, dep);
                 } else {
                     mView.loginFailed("用户名或密码错误，请重试！");

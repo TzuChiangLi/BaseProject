@@ -31,8 +31,8 @@ public class ZgParams {
 
     //系统参数：是否使用商品类别
     private static String noClsDep = "";
-    //系统参数：会员卡类型，1-磁卡，2-IC卡
-    private static String vipCardType = "1";
+    //系统参数：会员卡类型，splash-磁卡，2-IC卡
+    private static String vipCardType = "splash";
     //系统参数：支付宝收款账号
     private static String aliPayAccount = "";
     //系统参数：微信支付收款账号
@@ -44,7 +44,7 @@ public class ZgParams {
     private static String posCode = "";
     //本地参数：设备识别码
     private static String devSn = "";
-    //本地参数：初始化标识（0-未完成，1-已完成）
+    //本地参数：初始化标识（0-未完成，splash-已完成）
     private static String initFlag = "0";
     //本地参数：打印机设置
     private static Map<String, Object> printerConfig = new HashMap<>();

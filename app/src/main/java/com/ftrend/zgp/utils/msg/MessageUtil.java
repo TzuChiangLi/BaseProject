@@ -7,14 +7,17 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.toast.XToast;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
+import com.ftrend.zgp.model.Event;
 import com.lxj.xpopup.core.BasePopupView;
+
+import org.greenrobot.eventbus.EventBus;
 
 /**
  * @author liziqiang@ftrend.cn
  */
 public class MessageUtil {
 
-//-------------------------------------模态弹窗-----------------------------------------
+//-------------------------------------模态弹窗-----------------------------------------//
 
     //region 模态弹窗
     /**
@@ -52,9 +55,10 @@ public class MessageUtil {
      */
     public static void info(String message) {
         mContext = BaseActivity.mContext;
-        builder = new DialogBuilder(mContext, 1);
+        builder = new DialogBuilder(mContext, 2);
         builder.setContent(message);
         builder.setLeftBtn("确定");
+        builder.setRightBtn("返回");
         builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
             @Override
             public void onLeftBtnClick(BasePopupView v) {
@@ -146,7 +150,7 @@ public class MessageUtil {
     //endregion
 
 
-//-------------------------------------吐司工具-----------------------------------------
+//-------------------------------------吐司工具-----------------------------------------//
 
     //region 吐司
 
@@ -260,4 +264,12 @@ public class MessageUtil {
         Duration = duration;
     }
     //endregion
+//-------------------------------------事件传递-----------------------------------------//
+
+    public static void finishInit() {
+        Event event = new Event();
+        event.target = Event.TARGET_INIT;
+        event.type = Event.TYPE_INIT_FINISH;
+        EventBus.getDefault().post(event);
+    }
 }

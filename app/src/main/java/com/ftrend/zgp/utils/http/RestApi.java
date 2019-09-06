@@ -26,7 +26,7 @@ public interface RestApi {
     Observable<RestResponse<Map<String, Object>>> clientLogin(@Body RestRequest<Map<String, Object>> request);
 
     /**
-     * 1 获取指定机器号的数据更新标志
+     * splash 获取指定机器号的数据更新标志
      *
      * @param request
      * @return
