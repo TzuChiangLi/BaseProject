@@ -1,6 +1,12 @@
 package com.ftrend.zgp.utils.http;
 
+import com.ftrend.zgp.model.AppParams;
+import com.ftrend.zgp.model.Trade;
+import com.ftrend.zgp.model.TradePay;
+import com.ftrend.zgp.model.TradeProd;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -219,6 +225,51 @@ public class RestSubscribe {
         RestRequest<Map<String, Object>> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.posEnd(request), callback);
+    }
+
+
+    /**
+     * 上传交易流水
+     *
+     * @param posCode  机器号
+     * @param trade    交易流水信息
+     * @param prod     商品信息
+     * @param pay      支付信息
+     * @param callback
+     */
+    public void uploadTrade(final String posCode, Trade trade, TradeProd prod, TradePay pay,
+                            final RestCallback callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("posCode", posCode);
+        params.put("trade", trade);
+        params.put("prod", prod);
+        params.put("pay", pay);
+
+        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        request.setBody(params);
+        detachAndSubscribe(api.uploadTrade(request), callback);
+    }
+
+    /**
+     * 上传APP配置参数
+     *
+     * @param posCode  机器号
+     * @param list     APP配置参数列表
+     * @param callback
+     */
+    public void uploadAppParams(final String posCode, List<AppParams> list,
+                                final RestCallback callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("posCode", posCode);
+        Map<String, String> appParams = new HashMap<>();
+        for (AppParams p : list) {
+            appParams.put(p.getParamName(), p.getParamValue());
+        }
+        params.put("params", appParams);
+
+        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        request.setBody(params);
+        detachAndSubscribe(api.uploadAppParams(request), callback);
     }
 
 }

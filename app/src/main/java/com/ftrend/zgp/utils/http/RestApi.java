@@ -113,4 +113,22 @@ public interface RestApi {
     @POST("trade/end")
     Observable<RestResponse<Map<String, Object>>> posEnd(@Body RestRequest<Map<String, Object>> request);
 
+    /**
+     * 上传交易流水
+     *
+     * @param request
+     * @return
+     */
+    @POST("upload/trade")
+    Observable<RestResponse<Map<String, Object>>> uploadTrade(@Body RestRequest<Map<String, Object>> request);
+
+    /**
+     * 上传APP配置参数
+     *
+     * @param request
+     * @return
+     */
+    @POST("upload/params")
+    Observable<RestResponse<Map<String, Object>>> uploadAppParams(@Body RestRequest<Map<String, Object>> request);
+
 }
