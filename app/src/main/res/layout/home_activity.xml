@@ -13,8 +13,6 @@
         android:layout_alignTop="@+id/home_tv_depname"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="16dp"
-        android:scaleX="0.5"
-        android:scaleY="0.5"
         android:src="@drawable/net_status" />
 
     <ImageView
