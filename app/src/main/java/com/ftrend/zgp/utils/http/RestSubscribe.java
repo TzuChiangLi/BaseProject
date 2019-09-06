@@ -214,6 +214,36 @@ public class RestSubscribe {
     }
 
     /**
+     * 8 按机器号查询已上传实时流水（所有未交班流水号列表）
+     *
+     * @param posCode  机器号
+     * @param callback
+     */
+    public void queryPosLsList(final String posCode, final RestCallback callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("posCode", posCode);
+        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        request.setBody(params);
+        detachAndSubscribe(api.queryPosLsList(request), callback);
+    }
+
+    /**
+     * 9 按机器号查询指定流水（未交班流水）
+     *
+     * @param posCode  机器号
+     * @param lsNo     流水号
+     * @param callback
+     */
+    public void downloadPosLs(final String posCode, final String lsNo, final RestCallback callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("posCode", posCode);
+        params.put("lsNo", lsNo);
+        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        request.setBody(params);
+        detachAndSubscribe(api.downloadPosLs(request), callback);
+    }
+
+    /**
      * 交班
      *
      * @param posCode  机器号
@@ -233,16 +263,17 @@ public class RestSubscribe {
      *
      * @param posCode  机器号
      * @param trade    交易流水信息
-     * @param prod     商品信息
+     * @param prodList     商品信息
      * @param pay      支付信息
      * @param callback
      */
-    public void uploadTrade(final String posCode, Trade trade, TradeProd prod, TradePay pay,
+    public void uploadTrade(final String posCode,
+                            Trade trade, List<TradeProd> prodList, TradePay pay,
                             final RestCallback callback) {
         Map<String, Object> params = new HashMap<>();
         params.put("posCode", posCode);
         params.put("trade", trade);
-        params.put("prod", prod);
+        params.put("prod", prodList);
         params.put("pay", pay);
 
         RestRequest<Map<String, Object>> request = new RestRequest<>();

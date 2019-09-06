@@ -100,9 +100,23 @@ public interface RestApi {
     @POST("update/dep/payinfo")
     Observable<RestResponse<Map<String, Object>>> updateDepPayInfo(@Body RestRequest<Map<String, Object>> request);
 
-    // TODO: 2019/9/2 8 按机器号查询已上传实时流水（所有未交班流水号列表）
-//    @POST("update/pos/ls")
-//    Observable<RestResponse<Map<String, Object>>> updatePosLs(@Body RestRequest<Map<String, Object>> request);
+    /**
+     * 8 按机器号查询已上传实时流水（所有未交班流水号列表）
+     *
+     * @param request
+     * @return
+     */
+    @POST("update/ls/list")
+    Observable<RestResponse<Map<String, Object>>> queryPosLsList(@Body RestRequest<Map<String, Object>> request);
+
+    /**
+     * 9 按机器号查询指定流水（未交班流水）
+     *
+     * @param request
+     * @return
+     */
+    @POST("update/ls/download")
+    Observable<RestResponse<Map<String, Object>>> downloadPosLs(@Body RestRequest<Map<String, Object>> request);
 
     /**
      * 交班
