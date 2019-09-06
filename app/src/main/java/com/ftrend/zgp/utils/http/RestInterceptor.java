@@ -88,6 +88,7 @@ public class RestInterceptor implements Interceptor {
         String urlStr = url.toString();
         if (urlStr.contains("/pos/common/ping")) return false;
         if (urlStr.contains("/pos/auth/login")) return false;
+        if (urlStr.contains("/pos/auth/devReg")) return false;
         return true;
     }
 
