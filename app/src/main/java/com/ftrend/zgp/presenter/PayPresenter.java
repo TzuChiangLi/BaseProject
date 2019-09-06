@@ -13,6 +13,7 @@ import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -72,7 +73,7 @@ public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
         //付款成功
         //更新交易流水表
         SQLite.update(Trade.class)
-                .set(Trade_Table.status.eq("2"))
+                .set(Trade_Table.status.eq("2"), Trade_Table.tradeTime.eq(new Date()))
                 .where(Trade_Table.lsNo.is(lsNo))
                 .async()
                 .execute(); // non-UI blocking
@@ -83,15 +84,11 @@ public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
         tradePay.setPayTypeCode(String.valueOf(payWay));
         tradePay.setAmount(amount);
         tradePay.setPayTime(LogUtil.getDateTime());
-        //tradePay.setPayCode();
+//        tradePay.setPayCode();
         tradePay.insert();
 
-        //添加到交易流水队列表
-        TradeUploadQueue queue = new TradeUploadQueue();
-        queue.setDepCode(ZgParams.getCurrentDep().getDepCode());
-        queue.setLsNo(lsNo);
-        //此处仅加入创建队列的时间，上传时间等上传时再更新
-        queue.setEnqueueTime(LogUtil.getDateTime());
+        //流水号写入上传队列
+        TradeUploadQueue queue = new TradeUploadQueue(ZgParams.getCurrentDep().getDepCode(), lsNo);
         queue.insert();
     }
 
