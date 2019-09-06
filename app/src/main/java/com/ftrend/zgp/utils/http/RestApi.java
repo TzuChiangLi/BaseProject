@@ -26,6 +26,24 @@ public interface RestApi {
     Observable<RestResponse<Map<String, Object>>> clientLogin(@Body RestRequest<Map<String, Object>> request);
 
     /**
+     * 修改用户登录密码
+     *
+     * @param request
+     * @return
+     */
+    @POST("auth/changePwd")
+    Observable<RestResponse<Map<String, Object>>> userChangePwd(@Body RestRequest<Map<String, Object>> request);
+
+    /**
+     * 设备注册
+     *
+     * @param request
+     * @return
+     */
+    @POST("auth/devReg")
+    Observable<RestResponse<Map<String, Object>>> devReg(@Body RestRequest<Map<String, Object>> request);
+
+    /**
      * splash 获取指定机器号的数据更新标志
      *
      * @param request
@@ -85,5 +103,14 @@ public interface RestApi {
     // TODO: 2019/9/2 8 按机器号查询已上传实时流水（所有未交班流水号列表）
 //    @POST("update/pos/ls")
 //    Observable<RestResponse<Map<String, Object>>> updatePosLs(@Body RestRequest<Map<String, Object>> request);
+
+    /**
+     * 交班
+     *
+     * @param request
+     * @return
+     */
+    @POST("trade/end")
+    Observable<RestResponse<Map<String, Object>>> posEnd(@Body RestRequest<Map<String, Object>> request);
 
 }
