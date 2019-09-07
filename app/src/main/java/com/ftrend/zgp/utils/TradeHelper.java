@@ -72,7 +72,7 @@ public class TradeHelper {
             trade.setCardCode("");
             trade.setVipTotal(0);
             trade.setCreateTime((String.valueOf(LogUtil.getDateTime())));
-            trade.setCreateIp(ZgParams.getDevSn().substring(0, 14));
+            trade.setCreateIp(ZgParams.getCurrentIp());
             trade.setStatus(TRADE_STATUS_NOTPAY);
 
             prodList = new ArrayList<>();
@@ -203,7 +203,7 @@ public class TradeHelper {
         }
 
         String lsNo = cursor.getStringOrDefault(0);
-        int max = Integer.valueOf(lsNo.substring(2));
+        int max = Integer.valueOf(lsNo.substring(3));
         int current = max == 99999 ? 1 : max + 1;
         return ZgParams.getPosCode() + String.format("%05d", current);
     }

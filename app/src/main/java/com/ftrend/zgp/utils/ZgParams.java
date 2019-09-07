@@ -54,10 +54,13 @@ public class ZgParams {
     private static String lastDep = "";
     //本地参数：上次登录用户
     private static String lastUser = "";
-    //常用参数：本次登录的专柜
+
+    //业务参数：本次登录的专柜
     private static Dep currentDep = new Dep();
-    //常用参数：本次登录的用户
+    //业务参数：本次登录的用户
     private static User currentUser = new User();
+    //业务参数：本机IP
+    private static String currentIp = "";
 
 
     /**
@@ -103,6 +106,10 @@ public class ZgParams {
                 lastUser = param.getParamValue();
             }
         }
+
+        //业务参数初始化
+        currentIp = devSn.length() > 15 ? devSn.substring(0, 15) : devSn;
+
         return true;
     }
 
@@ -207,5 +214,9 @@ public class ZgParams {
 
     public static User getCurrentUser() {
         return currentUser;
+    }
+
+    public static String getCurrentIp() {
+        return currentIp;
     }
 }
