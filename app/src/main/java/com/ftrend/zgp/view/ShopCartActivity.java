@@ -20,7 +20,7 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.presenter.ShopCartPresenter;
-import com.ftrend.zgp.utils.TradeUtil;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -83,8 +83,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         if (mPresenter == null) {
             mPresenter = ShopCartPresenter.createPresenter(this);
         }
-        Intent intent = getIntent();
-        lsNo = intent.getStringExtra("lsNo");
+        lsNo = TradeHelper.getTrade().getLsNo();
         mPresenter.initOrderInfo(lsNo);
         mSearchEdt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -167,16 +166,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @OnClick(R.id.shop_cart_bottom_btn_car)
     public void goShopListActivity() {
-//        UserLog userLog = new UserLog();
-//        userLog.setModule("ShopCart");
-//        userLog.setUserCode("userCode");
-//        userLog.setContent("查看购物车");
-//        userLog.setFunction("进入购物车");
-//        userLog.setDepCode("DepCode");
-//        userLog.insert();
-
         Intent intent = new Intent(ShopCartActivity.this, ShopListActivity.class);
-        intent.putExtra("lsNo", lsNo);
         intent.putExtra("total", mTotalPriceTv.getText());
         startActivity(intent);
     }
@@ -206,7 +196,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @Override
     public void onLeftClick(View v) {
         //查询一下TradeProd流水单号下是否有商品，没有的话就删掉Trade这个流水
-        TradeUtil.deleteEmptyTrade();
+        TradeHelper.deleteEmptyTrade();
         finish();
     }
 

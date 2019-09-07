@@ -44,7 +44,7 @@ public interface RestApi {
     Observable<RestResponse<Map<String, Object>>> devReg(@Body RestRequest<Map<String, Object>> request);
 
     /**
-     * splash 获取指定机器号的数据更新标志
+     * 1 获取指定机器号的数据更新标志
      *
      * @param request
      * @return

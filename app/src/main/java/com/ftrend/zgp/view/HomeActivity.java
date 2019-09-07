@@ -115,20 +115,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
 
     @Override
     public void goShopChartActivity(String lsNo) {
-        //创建交易流水
-        //TODO 构建工具类调用
-        Trade trade = new Trade();
-        trade.setLsNo(lsNo);
-        trade.setDepCode(ZgParams.getCurrentDep().getDepName());
-        trade.setCashier(ZgParams.getCurrentUser().getUserName());
-        trade.setTradeFlag("T");
-        trade.setStatus("0");
-        trade.setCreateTime(String.valueOf(LogUtil.getDateTime()));
-        trade.insert();
-
-        TradeUtil.setLsNo(lsNo);
         Intent intent = new Intent(HomeActivity.this, ShopCartActivity.class);
-        intent.putExtra("lsNo", lsNo);
         startActivity(intent);
     }
 

@@ -14,6 +14,7 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.ShopListPresenter;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -58,10 +59,9 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     @Override
     protected void initData() {
         Intent intent = getIntent();
-        lsNo = intent.getStringExtra("lsNo");
         total = intent.getStringExtra("total");
         mPriceTotalTv.setText(total);
-        mPresenter.initShopList(lsNo);
+        mPresenter.initShopList(TradeHelper.getTrade().getLsNo());
     }
 
     @Override
