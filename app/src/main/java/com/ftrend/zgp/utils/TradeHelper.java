@@ -1,9 +1,12 @@
 package com.ftrend.zgp.utils;
 
+import android.util.Log;
+
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.Method;
@@ -22,6 +25,7 @@ import java.util.List;
  * @since 2019/9/6
  */
 public class TradeHelper {
+    private static String TAG = "TradeHelper";
 
     // 交易类型：T-销售
     private static final String TRADE_FLAG_SALE = "T";
@@ -51,6 +55,7 @@ public class TradeHelper {
         trade = SQLite.select().from(Trade.class)
                 .where(Trade_Table.status.eq(TRADE_STATUS_NOTPAY))
                 .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
+                .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
                 .querySingle();
         if (trade == null) {
             trade = new Trade();
@@ -61,7 +66,7 @@ public class TradeHelper {
             trade.setCashier(ZgParams.getCurrentUser().getUserCode());
             trade.setDscTotal(0);
             trade.setTotal(0);
-            trade.setCustType("");
+            trade.setCustType("0");
             trade.setVipCode("");
             trade.setCardCode("");
             trade.setVipTotal(0);
@@ -70,16 +75,17 @@ public class TradeHelper {
             trade.setStatus(TRADE_STATUS_NOTPAY);
 
             prodList = new ArrayList<>();
-
-            pay = new TradePay();
-            pay.setLsNo(trade.getLsNo());
+        } else {
+            prodList = SQLite.select().from(TradeProd.class)
+                    .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                    .queryList();
         }
     }
 
     /**
      * 添加商品到商品列表
      *
-     * @param product
+     * @param product 商品信息
      * @return
      */
     public static long addProduct(DepProduct product) {
@@ -111,6 +117,22 @@ public class TradeHelper {
     }
 
     /**
+     * 行清
+     *
+     * @param index 行清的商品索引
+     * @return
+     */
+    public static boolean delProduct(int index) {
+        if (index < 0 || index >= prodList.size()) {
+            Log.e(TAG, "行清: 索引无效");
+            return false;
+        }
+        TradeProd prod = prodList.get(index);
+        prod.setDelFlag("1");
+        return prod.save();
+    }
+
+    /**
      * 完成支付
      *
      * @param payTypeCode 支付类型编号
@@ -131,6 +153,7 @@ public class TradeHelper {
         pay.setPayTime(new Date());
         if (pay.save()) {
             trade.setTradeTime(pay.getPayTime());
+            trade.setCashier(ZgParams.getCurrentUser().getUserCode());
             trade.setStatus(TRADE_STATUS_PAID);
             return trade.save();
         } else {
@@ -141,12 +164,22 @@ public class TradeHelper {
     /**
      * 完成支付（仅适用于现金支付）
      *
-     * @param payTypeCode
-     * @param change
+     * @param payTypeCode 支付类型编号
      * @return
      */
-    public static boolean pay(String payTypeCode, float change) {
-        return pay(payTypeCode, trade.getTotal(), change, "");
+    public static boolean pay(String payTypeCode) {
+        return pay(payTypeCode, trade.getTotal(), 0, "(无)");
+    }
+
+    /**
+     * 完成支付（适用于微信、支付宝、储值卡等支付方式）
+     *
+     * @param payTypeCode 支付类型编号
+     * @param payCode     支付账号
+     * @return
+     */
+    public static boolean pay(String payTypeCode, String payCode) {
+        return pay(payTypeCode, trade.getTotal(), 0, payCode);
     }
 
     /**
