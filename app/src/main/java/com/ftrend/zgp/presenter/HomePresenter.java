@@ -5,6 +5,7 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.Trade_Table;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -75,7 +76,8 @@ public class HomePresenter implements Contract.HomePresenter, HttpCallBack {
     public void goShopCart() {
         //先判断TradeProd表内的流水号在Trade表里的Status状态
         //如果是取消，就创建新单子
-        mView.goShopChartActivity(createLsNo());
+        TradeHelper.initSale();
+        mView.goShopChartActivity(TradeHelper.getTrade().getLsNo());
         //三位POS号+五位流水号
 //        String maxLsNo = SQLite.select(TradeProd_Table.lsNo).from(TradeProd.class)
 //                .where(TradeProd_Table.id.eq(id))

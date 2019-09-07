@@ -37,6 +37,9 @@ public class RegisterActivity extends BaseActivity implements Contract.RegisterV
         if (mPresenter == null) {
             mPresenter = RegisterPresenter.createPresenter(this);
         }
+        mPosCodeEdt.setText("101");
+        mURLEdt.setText("192.168.1.153:8091");
+        mRegCodeEdt.setText("1234");
     }
 
     @Override
