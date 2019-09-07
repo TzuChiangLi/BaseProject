@@ -39,9 +39,9 @@ public class TradeHelper {
     // 交易状态：1-挂起
     private static final String TRADE_STATUS_HANGUP = "1";
     // 交易状态：2-已结
-    private static final String TRADE_STATUS_CANCELLED = "2";
-    // 交易状态：13-取消
-    private static final String TRADE_STATUS_PAID = "3";
+    private static final String TRADE_STATUS_PAID = "2";
+    // 交易状态：3-取消
+    private static final String TRADE_STATUS_CANCELLED = "3";
     // 交易流水
     private static Trade trade = null;
     // 商品列表
@@ -107,10 +107,10 @@ public class TradeHelper {
         prod.setVipDsc(0);
         prod.setSaleInfo("");
         prod.setDelFlag("0");
-        if (prod.insert() > 0) {
+        //保存商品记录并重新汇总流水金额（此时会保存交易流水）
+        // TODO: 2019/9/7 启用事务，避免数据异常
+        if (prod.insert() > 0 && recalcTotal()) {
             prodList.add(prod);
-            //重新汇总流水金额
-            recalcTotal();
             return index;
         } else {
             return -1;
@@ -152,6 +152,7 @@ public class TradeHelper {
         pay.setChange(change);
         pay.setPayCode(payCode);
         pay.setPayTime(new Date());
+        // TODO: 2019/9/7 启用事务，避免数据异常
         if (pay.save()) {
             trade.setTradeTime(pay.getPayTime());
             trade.setCashier(ZgParams.getCurrentUser().getUserCode());
@@ -203,7 +204,7 @@ public class TradeHelper {
     /**
      * 重新汇总流水金额：优惠、合计、积分金额
      */
-    private static void recalcTotal() {
+    private static boolean recalcTotal() {
         float dscTotal = 0;
         float total = 0;
         float vipTotal = 0;
@@ -216,7 +217,7 @@ public class TradeHelper {
         trade.setDscTotal(dscTotal);
         trade.setTotal(total);
         trade.setVipTotal(vipTotal);
-        trade.save();
+        return trade.save();
     }
 
 
