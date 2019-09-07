@@ -62,6 +62,7 @@ public class LsUploadThread extends Thread {
                         .querySingle();
                 List<TradeProd> prodList = SQLite.select().from(TradeProd.class)
                         .where(TradeProd_Table.lsNo.eq(lsNo))
+                        .and(TradeProd_Table.delFlag.eq("0"))//行清商品不上传
                         .queryList();
                 TradePay pay = SQLite.select().from(TradePay.class)
                         .where(TradePay_Table.lsNo.eq(lsNo))
