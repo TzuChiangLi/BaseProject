@@ -93,7 +93,7 @@ public class TradeHelper {
         long index = prodList.size();
         TradeProd prod = new TradeProd();
         prod.setLsNo(trade.getLsNo());
-        prod.setSortNo(index);
+        prod.setSortNo(index + 1);//商品序号从1开始
         prod.setProdCode(product.getProdCode());
         prod.setProdName(product.getProdName());
         prod.setBarCode(product.getBarCode());
