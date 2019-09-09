@@ -43,6 +43,7 @@ public class LsUploadThread extends Thread {
                     .queryList();
             if (list.size() == 0 || !ZgParams.isIsOnline()) {
                 //没有需要上传的数据或者单机模式，等待一段时间
+                Log.e(TAG, "没有需要上传的数据或者单机模式，10秒钟后继续");
                 try {
                     Thread.sleep(1000 * 10);
                 } catch (InterruptedException e) {
@@ -68,8 +69,8 @@ public class LsUploadThread extends Thread {
                         .where(TradePay_Table.lsNo.eq(lsNo))
                         .querySingle();
                 // 如果流水号无效（流水信息不存在），直接从队列删除
-                if (trade == null || prodList == null || pay == null) {
-                    Log.e(TAG, "流水号无效（流水信息不存在），直接从队列删除");
+                if (trade == null || prodList.size() == 0 || pay == null) {
+                    Log.e(TAG, "流水号无效（流水信息不存在），直接从队列删除：" + lsNo);
                     queue.delete();
                     continue;
                 }

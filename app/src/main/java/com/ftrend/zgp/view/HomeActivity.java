@@ -18,6 +18,7 @@ import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.permission.PermissionUtil;
 import com.ftrend.zgp.utils.task.LsUploadThread;
+import com.ftrend.zgp.utils.task.ServerWatcherThread;
 import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.List;
@@ -54,6 +55,10 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
             mPresenter = HomePresenter.createPresenter(this);
         }
         mPresenter.setInfo();
+
+        //启动后台服务心跳检测线程
+        ServerWatcherThread watcherThread = new ServerWatcherThread();
+        watcherThread.start();
         //启动数据上传线程
         LsUploadThread lsUploadThread = new LsUploadThread();
         lsUploadThread.start();

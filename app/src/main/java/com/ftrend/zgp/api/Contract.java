@@ -314,7 +314,7 @@ public interface Contract {
         /**
          * 交易完成
          */
-        void paySuccess(String lsNo, float amount, int payWay);
+        boolean paySuccess(String lsNo, float amount, int payWay);
 
         /**
          * 销毁，防止泄露

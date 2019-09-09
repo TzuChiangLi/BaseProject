@@ -4,12 +4,12 @@ import android.Manifest;
 
 import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.PhoneUtils;
-import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.http.RestCallback;
+import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
-import com.ftrend.zgp.utils.task.ServerWatcherThread;
 import com.qw.soul.permission.SoulPermission;
 
 import java.util.Map;
@@ -19,7 +19,7 @@ import java.util.Map;
  *
  * @author liziqiang@ftrend.cn
  */
-public class RegisterPresenter extends RestCallback implements Contract.RegisterPresenter {
+public class RegisterPresenter implements Contract.RegisterPresenter {
     private Contract.RegisterView mView;
     private static String devSn = "";
     private String regCode = "", posCode = "";
@@ -32,9 +32,30 @@ public class RegisterPresenter extends RestCallback implements Contract.Register
         return new RegisterPresenter(mView);
     }
 
+    private RestResultHandler regHandler = new RestResultHandler() {
+        @Override
+        public void onSuccess(Map<String, Object> body) {
+            //注册成功，设备注册参数写入数据库
+            ZgParams.saveAppParams("serverUrl", ZgParams.getServerUrl());
+            ZgParams.saveAppParams("posCode", posCode);
+            ZgParams.saveAppParams("regCode", regCode);
+            ZgParams.saveAppParams("devSn", devSn);
+            ZgParams.saveAppParams("initFlag", "0");
+            //注册成功后，刷新全局变量
+            ZgParams.loadParams();
+            //调用UI
+            mView.registerSuccess();
+        }
+
+        @Override
+        public void onFailed(String errorCode, String errorMsg) {
+            // TODO: 2019/9/9 显示注册失败的提示信息
+        }
+    };
+
 
     @Override
-    public void register(String url, String posCode, String regCode) {
+    public void register(String url, final String posCode, final String regCode) {
         //保存注册码
         this.regCode = regCode;
         this.posCode = posCode;
@@ -44,49 +65,34 @@ public class RegisterPresenter extends RestCallback implements Contract.Register
         SoulPermission.getInstance().checkSinglePermission(Manifest.permission.READ_PHONE_STATE);
         //获取SN码
         devSn = PhoneUtils.getSerial();
-        //启动后台服务心跳检测线程
-        ServerWatcherThread watcherThread = new ServerWatcherThread();
-        watcherThread.start();
-        RestSubscribe.getInstance().devReg(posCode, regCode, devSn,
-                String.format("%s %s", DeviceUtils.getManufacturer(), DeviceUtils.getModel()),
-                this);
-    }
 
-    @Override
-    public void onSuccess(Map<String, Object> body) {
-        super.onSuccess(body);
-        //成功后再写入数据库
-        ZgParams.saveAppParams("serverUrl", ZgParams.getServerUrl());
-        ZgParams.saveAppParams("posCode", posCode);
-        ZgParams.saveAppParams("regCode", regCode);
-        ZgParams.saveAppParams("devSn", devSn);
-        ZgParams.saveAppParams("initFlag", "0");
-        //注册成功后，刷新全局变量
-        ZgParams.loadParams();
-        //调用UI
-        mView.registerSuccess();
-    }
+        //验证服务地址是否有效
+        RestSubscribe.getInstance().ping(new HttpCallBack<String>() {
+            @Override
+            public void onSuccess(String body) {
+                //后台服务可用，注册设备
+                RestSubscribe.getInstance().devReg(posCode, regCode, devSn,
+                        String.format("%s %s", DeviceUtils.getManufacturer(), DeviceUtils.getModel()),
+                        new RestCallback(regHandler));
+            }
 
+            @Override
+            public void onHttpError(int errorCode, String errorMsg) {
+                // TODO: 2019/9/9 显示服务器地址无效的提示信息
+            }
 
-    @Override
-    public void onStart() {
-        LogUtil.d("----onStart");
-    }
+            @Override
+            public void onStart() {
+            }
 
+            @Override
+            public void onFailed(String errorCode, String errorMsg) {
+            }
 
-    @Override
-    public void onFailed(String errorCode, String errorMsg) {
-        LogUtil.d("----onFailed:" + errorCode + errorMsg);
-    }
-
-    @Override
-    public void onHttpError(int errorCode, String errorMsg) {
-        LogUtil.d("----onHttpError:" + errorCode + errorMsg);
-    }
-
-    @Override
-    public void onFinish() {
-
+            @Override
+            public void onFinish() {
+            }
+        });
     }
 
     @Override

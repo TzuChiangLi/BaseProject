@@ -43,7 +43,7 @@ public class ShopListPresenter implements Contract.ShopListPresenter, HttpCallBa
                 break;
             case 3:
                 //取消
-                TradeHelper.cancelTrade(status);
+                TradeHelper.cancelTrade();
                 mView.returnHomeActivity();
                 break;
             default:
