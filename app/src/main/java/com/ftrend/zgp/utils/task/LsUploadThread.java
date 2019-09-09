@@ -67,7 +67,12 @@ public class LsUploadThread extends Thread {
                 TradePay pay = SQLite.select().from(TradePay.class)
                         .where(TradePay_Table.lsNo.eq(lsNo))
                         .querySingle();
-
+                // 如果流水号无效（流水信息不存在），直接从队列删除
+                if (trade == null || prodList == null || pay == null) {
+                    Log.e(TAG, "流水号无效（流水信息不存在），直接从队列删除");
+                    queue.delete();
+                    continue;
+                }
 
                 isUploading = true;
                 RestSubscribe.getInstance().uploadTrade(posCode, trade, prodList, pay,
