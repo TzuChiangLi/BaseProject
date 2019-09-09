@@ -34,8 +34,8 @@
         android:id="@+id/init_progress_view"
         android:layout_width="match_parent"
         android:layout_height="280dp"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         app:defualtText="开始"
         app:originColor="@color/progress_load_blue" />
 

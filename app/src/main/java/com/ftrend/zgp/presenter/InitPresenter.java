@@ -1,5 +1,6 @@
 package com.ftrend.zgp.presenter;
 
+import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.AppParams_Table;
@@ -70,8 +71,7 @@ public class InitPresenter implements Contract.InitPresenter, HttpCallBack {
             userStr.append(user.getUserCode()).append(" ").append(user.getUserName()).append("\n");
         }
 
-        mView.finishUpdate(posCode, depStr.toString(), userStr.toString());
-        mView.finishUpdate(null, null, null);
+        mView.finishUpdate(posCode+"\n", depStr.toString(), userStr.toString());
     }
 
     @Override
