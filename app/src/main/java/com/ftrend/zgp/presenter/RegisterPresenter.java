@@ -10,6 +10,7 @@ import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.qw.soul.permission.SoulPermission;
 
 import java.util.Map;
@@ -49,7 +50,7 @@ public class RegisterPresenter implements Contract.RegisterPresenter {
 
         @Override
         public void onFailed(String errorCode, String errorMsg) {
-            // TODO: 2019/9/9 显示注册失败的提示信息
+            MessageUtil.showError("注册失败，请稍后重试");
         }
     };
 
@@ -78,7 +79,7 @@ public class RegisterPresenter implements Contract.RegisterPresenter {
 
             @Override
             public void onHttpError(int errorCode, String errorMsg) {
-                // TODO: 2019/9/9 显示服务器地址无效的提示信息
+                MessageUtil.showError("服务器请求失败：请检查服务地址是否正确，并处于良好的网络环境下");
             }
 
             @Override
