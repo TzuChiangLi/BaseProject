@@ -33,8 +33,7 @@ public class ProgressView extends FrameLayout {
     private Context mContext;
     private int progress;
     public static int maxProgress = 100;
-    public boolean isStart = false, isFinish = false;
-
+    public int FLAG = -1;
     private ImageView mBigestCircle;
     private ImageView mBigCircle;
     private ImageView mMidCircle;
@@ -153,6 +152,7 @@ public class ProgressView extends FrameLayout {
     }
 
     public void start() {
+        FLAG = 0;
         animation_bigest = AnimationUtils.loadAnimation(mContext, R.anim.progress_load_anim);
         animation_big = AnimationUtils.loadAnimation(mContext, R.anim.progress_load_anim);
         animation_mid = AnimationUtils.loadAnimation(mContext, R.anim.progress_load_anim);
@@ -191,11 +191,9 @@ public class ProgressView extends FrameLayout {
                     animation_smallest.setStartOffset(1200);
                     mSmallCircle.startAnimation(animation_smallest);
 
-                    isStart = true;
                 }
             });
         } else {
-
 
             mBigestCircle.startAnimation(animation_bigest);
 
@@ -211,37 +209,28 @@ public class ProgressView extends FrameLayout {
             animation_smallest.setStartOffset(1200);
             mSmallCircle.startAnimation(animation_smallest);
 
-            isStart = true;
         }
     }
 
+
     /**
-     * 停止动画
+     * @param finish 是否完成，true表示完成，false表示中断
      */
-    public void stop() {
-        mBigestCircle.clearAnimation();
-        mBigestCircle.clearAnimation();
-        mBigCircle.clearAnimation();
-        mMidCircle.clearAnimation();
-        mSmallCircle.clearAnimation();
-        mSmallestCircle.clearAnimation();
-        isStart = false;
-
-        animation_bigest = null;
-        animation_big = null;
-        animation_mid = null;
-        animation_small = null;
-        animation_smallest = null;
-
-    }
-
-
-    public void finish() {
+    public void restore(final boolean finish) {
+        FLAG = finish ? 1 : -1;
         AnimatorSet bigest = finishAnimator(mBigestCircle);
         AnimatorSet big = finishAnimator(mBigCircle);
         AnimatorSet mid = finishAnimator(mMidCircle);
         AnimatorSet small = finishAnimator(mSmallCircle);
         AnimatorSet smallest = finishAnimator(mSmallestCircle);
+        if (!finish) {
+            changeColor(errorColor, mBigestCircle);
+            changeColor(errorColor, mBigCircle);
+            changeColor(errorColor, mMidCircle);
+            changeColor(errorColor, mSmallCircle);
+            changeColor(errorColor, mSmallestCircle);
+            mProgressTv.setText("取消");
+        }
 
         bigest.start();
         big.start();
@@ -252,8 +241,6 @@ public class ProgressView extends FrameLayout {
             @Override
             public void onAnimationEnd(final Animator animation) {
                 super.onAnimationEnd(animation);
-                mProgressTv.setText("已完成");
-//                整体向上移并且消失
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -263,25 +250,30 @@ public class ProgressView extends FrameLayout {
                             @Override
                             public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
-                                //动画消失后移除本View
-                                isFinish = true;
-                                changeColor(finishColor, mBigestCircle);
-                                changeColor(finishColor, mBigCircle);
-                                changeColor(finishColor, mMidCircle);
-                                changeColor(finishColor, mSmallCircle);
-                                changeColor(finishColor, mSmallestCircle);
-                                mProgressTv.setText("进入系统");
-                                ObjectAnimator.ofFloat(ProgressView.this,"alpha",0f,1f).setDuration(500).start();
+                                if (finish) {
+                                    //动画消失后移除本View
+                                    changeColor(finishColor, mBigestCircle);
+                                    changeColor(finishColor, mBigCircle);
+                                    changeColor(finishColor, mMidCircle);
+                                    changeColor(finishColor, mSmallCircle);
+                                    changeColor(finishColor, mSmallestCircle);
+                                    mProgressTv.setText("进入系统");
+                                    ObjectAnimator.ofFloat(ProgressView.this, "alpha", 0f, 1f).setDuration(500).start();
+                                } else {
+                                    changeColor(originColor, mBigestCircle);
+                                    changeColor(originColor, mBigCircle);
+                                    changeColor(originColor, mMidCircle);
+                                    changeColor(originColor, mSmallCircle);
+                                    changeColor(originColor, mSmallestCircle);
+                                    mProgressTv.setText("开始");
+                                    ObjectAnimator.ofFloat(ProgressView.this, "alpha", 0f, 1f).setDuration(500).start();
+                                }
                             }
                         });
                     }
                 }, 200);
             }
 
-            @Override
-            public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
-            }
         });
 
 
@@ -295,11 +287,9 @@ public class ProgressView extends FrameLayout {
 
     private AnimatorSet hide(View view) {
         AnimatorSet animatorSet = new AnimatorSet();
-//        ObjectAnimator translationY = ObjectAnimator.ofFloat(view, "translationY", view.getTranslationY(), -150f);
         ObjectAnimator alpha = ObjectAnimator.ofFloat(view, "alpha", view.getAlpha(), 0f);
         animatorSet.playTogether(alpha);
-//        animatorSet.playTogether(translationY, alpha);
-        animatorSet.setDuration(1500);
+        animatorSet.setDuration(500);
         return animatorSet;
     }
 
@@ -309,7 +299,7 @@ public class ProgressView extends FrameLayout {
         scaleYImg = ObjectAnimator.ofFloat(view, "scaleY", view.getScaleX(), 0.5f);
         alphaImg = ObjectAnimator.ofFloat(view, "alpha", view.getAlpha(), 1f);
         animatorSet.playTogether(scaleXImg, scaleYImg, alphaImg);
-        animatorSet.setDuration(1500);
+        animatorSet.setDuration(500);
         return animatorSet;
     }
 
@@ -326,11 +316,6 @@ public class ProgressView extends FrameLayout {
     private void initViewScale(View view) {
         view.setScaleX(0.5f);
         view.setScaleY(0.5f);
-    }
-
-
-    public boolean isStart() {
-        return isStart;
     }
 
 

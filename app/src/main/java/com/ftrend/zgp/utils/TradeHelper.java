@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.raizlabs.android.dbflow.sql.language.Method.count;
-
 /**
  * 交易操作类
  * Copyright (C),青岛致远方象软件科技有限公司
@@ -220,22 +218,6 @@ public class TradeHelper {
         return trade.save();
     }
 
-
-    /**
-     * 当点击进入收银-选择商品界面但是没有任何操作就退出时
-     * 调用此方法，可以清空数据库内的本流水单号记录，并置空常量
-     */
-    public static void deleteEmptyTrade() {
-        long count = SQLite.select(count(TradeProd_Table.id)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(trade.getLsNo())).count();
-        if (count == 0) {
-            //删除流水
-            SQLite.delete(Trade.class)
-                    .where(Trade_Table.lsNo.is(trade.getLsNo()))
-                    .async()
-                    .execute();
-        }
-        trade = new Trade();
-    }
 
     public static Trade getTrade() {
         return trade;

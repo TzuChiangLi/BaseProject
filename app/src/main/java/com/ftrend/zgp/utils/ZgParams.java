@@ -145,6 +145,18 @@ public class ZgParams {
         currentUser = user;
     }
 
+    /**
+     * 保存本地参数信息到数据库
+     *
+     * @param paramName  列名
+     * @param paramValue 列值
+     */
+    public static void saveAppParams(String paramName, String paramValue) {
+        AppParams appParams = SQLite.select().from(AppParams.class).where(AppParams_Table.paramName.eq(paramName)).querySingle();
+        appParams.setParamValue(paramValue);
+        appParams.update();
+    }
+
     public static boolean isIsOnline() {
         return isOnline;
     }

@@ -5,6 +5,7 @@ import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -18,6 +19,7 @@ import java.util.Locale;
  */
 public class InitPresenter implements Contract.InitPresenter, HttpCallBack {
     private Contract.InitView mView;
+    private boolean isStart = false;
 
     private InitPresenter(Contract.InitView mView) {
         this.mView = mView;
@@ -34,17 +36,23 @@ public class InitPresenter implements Contract.InitPresenter, HttpCallBack {
 
     @Override
     public void startInitData() {
+        isStart = true;
         new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
             @Override
             public void handleProgress(int percent, boolean isFailed, String msg) {
-                mView.updateProgress(percent);
-                System.out.println(String.format(Locale.getDefault(), "%d%% %s", percent, msg));
+//                if (isStart) {
+                    mView.updateProgress(percent);
+                    System.out.println(String.format(Locale.getDefault(), "%d%% %s", percent, msg));
+//                }
             }
         }).start();
+
     }
+
 
     @Override
     public void stopInitData() {
+        isStart = false;
         mView.stopUpdate();
     }
 
@@ -63,6 +71,7 @@ public class InitPresenter implements Contract.InitPresenter, HttpCallBack {
         }
 
         mView.finishUpdate(posCode, depStr.toString(), userStr.toString());
+        mView.finishUpdate(null, null, null);
     }
 
     @Override
@@ -98,35 +107,41 @@ public class InitPresenter implements Contract.InitPresenter, HttpCallBack {
 
     }
 
-
-}
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (isStart)
+//                        mView.updateProgress(0);
+//                }
+//            }, 200);
+//
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (isStart)
+//                        mView.updateProgress(20);
+//                }
+//            }, 1000);
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (isStart)
+//                        mView.updateProgress(50);
+//                }
+//            }, 2000);
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    if (isStart)
+//                        mView.updateProgress(90);
+//                }
+//            }, 3000);
+//
 //        new Handler().postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
-//                mView.updateProgress(0);
-//            }
-//        }, 200);
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mView.updateProgress(20);
-//            }
-//        }, 1000);
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mView.updateProgress(50);
-//            }
-//        }, 2000);
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mView.updateProgress(90);
-//            }
-//        }, 3000);
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                mView.updateProgress(100);
+//                if (isStart)
+//                    mView.updateProgress(100);
 //            }
 //        }, 5000);
+}

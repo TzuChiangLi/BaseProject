@@ -4,6 +4,7 @@ import com.ftrend.zgp.utils.db.DBHelper;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.annotation.Unique;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 /**
@@ -18,6 +19,7 @@ public class AppParams extends BaseModel {
     @PrimaryKey(autoincrement = true)
     private int id;
     @Column
+    @Unique
     private String paramName;
     @Column
     private String paramValue;

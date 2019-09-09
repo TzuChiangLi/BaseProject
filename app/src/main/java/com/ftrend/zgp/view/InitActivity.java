@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ClickUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.ftrend.progressview.ProgressView;
 import com.ftrend.zgp.R;
@@ -62,21 +63,26 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
         if (mPresenter == null) {
             mPresenter = InitPresenter.createPresenter(this);
         }
-        mLoadView.setOnClickListener(new View.OnClickListener() {
+        //防抖动点击
+        mLoadView.setOnClickListener(new ClickUtils.OnDebouncingClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onDebouncingClick(View v) {
                 //点击开始获取数据，动效开始
-                if (!((ProgressView) v).isStart) {
+                LogUtil.d(String.valueOf(((ProgressView) v).FLAG));
+                if (((ProgressView) v).FLAG == -1) {
                     mPresenter.startAnimator();
                     mPresenter.startInitData();
-                } else if (((ProgressView) v).isFinish) {
+                    return;
+                }
+                if (((ProgressView) v).FLAG == 0) {
+                    mPresenter.stopInitData();
+                    return;
+                }
+                if (((ProgressView) v).FLAG > 0) {
                     Intent intent = new Intent(InitActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
-                } else {
-                    if (((ProgressView) v).getProgress() != ProgressView.maxProgress) {
-                        mPresenter.stopInitData();
-                    }
+                    return;
                 }
             }
         });
@@ -102,24 +108,29 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
 
     @Override
     public void stopUpdate() {
-        mLoadView.stop();
+        mLoadView.restore(false);
     }
 
     @Override
     public void finishUpdate(final String posCode, final String dep, final String user) {
-        mLoadView.finish();
+        mLoadView.restore(true);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                mInfoLayout.setVisibility(View.VISIBLE);
-                mFinishTv.setVisibility(View.VISIBLE);
-                mTitleTv.setAlpha(0);
-                mWarnningTv.setAlpha(0);
-                mPosCodeTv.setText(posCode);
-                mDepTv.setText(dep);
-                mUserTv.setText(user);
+                try {
+                    mInfoLayout.setVisibility(View.VISIBLE);
+                    mFinishTv.setVisibility(View.VISIBLE);
+                    mTitleTv.setAlpha(0);
+                    mWarnningTv.setAlpha(0);
+                    mPosCodeTv.setText(posCode);
+                    mDepTv.setText(dep);
+                    mUserTv.setText(user);
+                    LogUtil.d(dep);
+                } catch (Exception e) {
+                    LogUtil.e(e.getMessage());
+                }
             }
-        }, 3000);
+        }, 1200);
 
     }
 

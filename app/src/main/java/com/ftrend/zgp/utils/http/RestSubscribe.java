@@ -61,6 +61,7 @@ public class RestSubscribe {
 
     /**
      * 后台服务心跳检测
+     *
      * @param callback
      */
     public void ping(final HttpCallBack<String> callback) {
@@ -109,7 +110,8 @@ public class RestSubscribe {
 
     /**
      * 客户端登录
-     * @param posCode 机器号
+     *
+     * @param posCode  机器号
      * @param callback
      */
     public void clientLogin(final String posCode, final String regCode, final RestCallback callback) {
@@ -124,7 +126,7 @@ public class RestSubscribe {
     /**
      * 1 获取指定机器号的数据更新标志
      *
-     * @param posCode 机器号
+     * @param posCode  机器号
      * @param callback
      */
     public void checkPosUpdate(final String posCode, final RestCallback callback) {
@@ -137,7 +139,8 @@ public class RestSubscribe {
 
     /**
      * 2 获取指定机器号可登录专柜列表
-     * @param posCode 机器号
+     *
+     * @param posCode  机器号
      * @param callback
      */
     public void updatePosDep(final String posCode, final RestCallback callback) {
@@ -150,7 +153,8 @@ public class RestSubscribe {
 
     /**
      * 3 获取指定机器号可登录用户列表
-     * @param posCode 机器号
+     *
+     * @param posCode  机器号
      * @param callback
      */
     public void updatePosUser(final String posCode, final RestCallback callback) {
@@ -163,7 +167,8 @@ public class RestSubscribe {
 
     /**
      * 4 获取指定机器号系统参数列表
-     * @param posCode 机器号
+     *
+     * @param posCode  机器号
      * @param callback
      */
     public void updatePosSysParams(final String posCode, final RestCallback callback) {
@@ -176,7 +181,8 @@ public class RestSubscribe {
 
     /**
      * 5 获取指定专柜的商品类别列表
-     * @param depCode 专柜编码
+     *
+     * @param depCode  专柜编码
      * @param callback
      */
     public void updateDepCls(final String depCode, final RestCallback callback) {
@@ -189,7 +195,8 @@ public class RestSubscribe {
 
     /**
      * 6 获取指定专柜的商品列表
-     * @param depCode 专柜编码
+     *
+     * @param depCode  专柜编码
      * @param callback
      */
     public void updateDepProduct(final String depCode, final RestCallback callback) {
@@ -202,7 +209,8 @@ public class RestSubscribe {
 
     /**
      * 7 获取指定专柜的支付方式列表
-     * @param depCode 专柜编码
+     *
+     * @param depCode  专柜编码
      * @param callback
      */
     public void updateDepPayInfo(final String depCode, final RestCallback callback) {
@@ -263,7 +271,7 @@ public class RestSubscribe {
      *
      * @param posCode  机器号
      * @param trade    交易流水信息
-     * @param prodList     商品信息
+     * @param prodList 商品信息
      * @param pay      支付信息
      * @param callback
      */

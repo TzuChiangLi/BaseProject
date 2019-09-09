@@ -195,8 +195,6 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @Override
     public void onLeftClick(View v) {
-        //查询一下TradeProd流水单号下是否有商品，没有的话就删掉Trade这个流水
-        TradeHelper.deleteEmptyTrade();
         finish();
     }
 

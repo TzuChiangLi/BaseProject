@@ -1,10 +1,14 @@
 package com.ftrend.zgp.view;
 
+import android.content.Intent;
+import android.os.Handler;
+
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.presenter.RegisterPresenter;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 
 import butterknife.BindView;
@@ -37,9 +41,6 @@ public class RegisterActivity extends BaseActivity implements Contract.RegisterV
         if (mPresenter == null) {
             mPresenter = RegisterPresenter.createPresenter(this);
         }
-        mPosCodeEdt.setText("101");
-        mURLEdt.setText("192.168.1.153:8091");
-        mRegCodeEdt.setText("1234");
     }
 
     @Override
@@ -55,7 +56,14 @@ public class RegisterActivity extends BaseActivity implements Contract.RegisterV
 
     @Override
     public void registerSuccess() {
-
+        MessageUtil.showSuccess("设备注册成功！");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(RegisterActivity.this, InitActivity.class);
+                startActivity(intent);
+            }
+        }, 1500);
     }
 
     @Override

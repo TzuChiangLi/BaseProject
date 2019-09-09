@@ -9,6 +9,7 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.task.ServerWatcherThread;
 import com.qw.soul.permission.SoulPermission;
 
 import java.util.Map;
@@ -35,7 +36,16 @@ public class RegisterPresenter extends RestCallback implements Contract.Register
     public void register(String url, String posCode, String regCode) {
         ZgParams.setServerUrl(url);
         SoulPermission.getInstance().checkSinglePermission(Manifest.permission.READ_PHONE_STATE);
-        LogUtil.d("----url:" + ZgParams.getServerUrl());
+
+        //启动后台服务心跳检测线程
+        ServerWatcherThread watcherThread = new ServerWatcherThread();
+        watcherThread.start();
+
+        ZgParams.saveAppParams("serverUrl", url);
+        ZgParams.saveAppParams("posCode", posCode);
+        ZgParams.saveAppParams("regCode", regCode);
+        ZgParams.saveAppParams("devSn", PhoneUtils.getSerial());
+        ZgParams.saveAppParams("initFlag", "0");
 
 
         RestSubscribe.getInstance().devReg(posCode, regCode, PhoneUtils.getSerial(),
@@ -47,6 +57,7 @@ public class RegisterPresenter extends RestCallback implements Contract.Register
     public void onSuccess(Map<String, Object> body) {
         super.onSuccess(body);
         LogUtil.d("----body:" + body.size());
+        mView.registerSuccess();
     }
 
 

@@ -34,7 +34,6 @@ public class App extends Application {
 //        }
         //加载全局参数
         ZgParams.loadParams();
-
         //region 打印日志初始化
         //设置日志输出为打印日志，出现error时保存到log.txt文件中
         LogUtil.setShowLog(true);
@@ -49,9 +48,9 @@ public class App extends Application {
         SoulPermission.skipOldRom(true);
         //endregion
 
-        //启动后台服务心跳检测线程
-        ServerWatcherThread watcherThread = new ServerWatcherThread();
-        watcherThread.start();
+//        //启动后台服务心跳检测线程
+//        ServerWatcherThread watcherThread = new ServerWatcherThread();
+//        watcherThread.start();
 
         // TODO: 2019/9/3 网络请求测试
         /*RestSubscribe.getInstance().updatePosDep("101", new RestCallback(new RestResultHandler() {
