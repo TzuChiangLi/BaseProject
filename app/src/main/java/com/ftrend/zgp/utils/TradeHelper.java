@@ -248,9 +248,7 @@ public class TradeHelper {
      * 上传交易流水
      */
     public static void uploadTradeQueue() {
-        TradeUploadQueue queue = new TradeUploadQueue();
-        queue.setDepCode(ZgParams.getCurrentDep().getDepCode());
-        queue.setLsNo(TradeHelper.getTrade().getLsNo());
+        TradeUploadQueue queue = new TradeUploadQueue(trade.getDepCode(), trade.getLsNo());
         queue.insert();
     }
 
