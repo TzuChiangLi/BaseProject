@@ -13,6 +13,7 @@ import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.presenter.InitPresenter;
+import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.gyf.immersionbar.ImmersionBar;
 
@@ -67,6 +68,9 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
         mLoadView.setOnClickListener(new ClickUtils.OnDebouncingClickListener() {
             @Override
             public void onDebouncingClick(View v) {
+                if (ClickUtil.onceClick()) {
+                    return;
+                }
                 //点击开始获取数据，动效开始
                 LogUtil.d(String.valueOf(((ProgressView) v).FLAG));
                 if (((ProgressView) v).FLAG == -1) {

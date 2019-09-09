@@ -47,7 +47,6 @@ public class LoginPresenter implements Contract.LoginPresenter {
 
     @Override
     public void checkUserInfo(String userCode, String userPwd, String depCode) {
-
         if (!TextUtils.isEmpty(userCode)) {
             User user = SQLite.select().from(User.class).where(User_Table.userCode.eq(userCode)).querySingle();
             Dep dep = SQLite.select().from(Dep.class).where(Dep_Table.depCode.eq(depCode)).querySingle();
@@ -55,7 +54,7 @@ public class LoginPresenter implements Contract.LoginPresenter {
                 if (user.getUserPwd().equals(EncryptUtill.pwdEncrypt(userPwd))) {
                     mView.loginSuccess(user, dep);
                 } else {
-                    mView.loginFailed("用户名或密码错误，请重试！");
+                    mView.loginFailed("用户名或密码错误\n请重试！");
                 }
             }
         }

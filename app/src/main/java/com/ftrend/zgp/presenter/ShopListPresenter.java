@@ -1,11 +1,9 @@
 package com.ftrend.zgp.presenter;
 
 import com.ftrend.zgp.api.Contract;
-import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
-import com.ftrend.zgp.model.Trade_Table;
-import com.ftrend.zgp.utils.http.RestResponse;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -45,16 +43,7 @@ public class ShopListPresenter implements Contract.ShopListPresenter, HttpCallBa
                 break;
             case 3:
                 //取消
-                SQLite.update(Trade.class)
-                        .set(Trade_Table.status.eq(String.valueOf(status)))
-                        .where(Trade_Table.lsNo.is(lsNo))
-                        .async()
-                        .execute(); // non-UI blocking
-
-                SQLite.delete(TradeProd.class)
-                        .where(TradeProd_Table.lsNo.eq(lsNo))
-                        .async()
-                        .execute();
+                TradeHelper.cancelTrade(status);
                 mView.returnHomeActivity();
                 break;
             default:
