@@ -4,9 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 
 import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.AppParams_Table;
+import com.ftrend.zgp.utils.ZgParams;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import static com.raizlabs.android.dbflow.sql.language.Method.count;
@@ -48,7 +50,13 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //后面根据首页再做延时操作
-                Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
+                Intent intent;
+                if (TextUtils.isEmpty(ZgParams.getPosCode())) {
+                    intent = new Intent(SplashActivity.this, RegisterActivity.class);
+
+                } else {
+                    intent = new Intent(SplashActivity.this, LoginActivity.class);
+                }
                 startActivity(intent);
                 finish();
             }
@@ -77,9 +85,9 @@ public class SplashActivity extends AppCompatActivity {
             appParams.insert();
             appParams = new AppParams("lastDep", "");
             appParams.insert();
-            appParams = new AppParams("printerConfig", "");
+            appParams = new AppParams("printerConfig", "{}");
             appParams.insert();
-            appParams = new AppParams("cardConfig", "");
+            appParams = new AppParams("cardConfig", "{}");
             appParams.insert();
         }
     }

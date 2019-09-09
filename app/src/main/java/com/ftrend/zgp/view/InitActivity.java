@@ -125,7 +125,6 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
                     mPosCodeTv.setText(posCode);
                     mDepTv.setText(dep);
                     mUserTv.setText(user);
-                    LogUtil.d(dep);
                 } catch (Exception e) {
                     LogUtil.e(e.getMessage());
                 }

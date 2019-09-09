@@ -21,7 +21,8 @@ import java.util.Map;
  */
 public class RegisterPresenter extends RestCallback implements Contract.RegisterPresenter {
     private Contract.RegisterView mView;
-
+    private static String devSn = "";
+    private String regCode = "", posCode = "";
 
     private RegisterPresenter(Contract.RegisterView mView) {
         this.mView = mView;
@@ -34,21 +35,19 @@ public class RegisterPresenter extends RestCallback implements Contract.Register
 
     @Override
     public void register(String url, String posCode, String regCode) {
+        //保存注册码
+        this.regCode = regCode;
+        this.posCode = posCode;
+        //在联网或者执行心跳之前更新BASE_URL
         ZgParams.setServerUrl(url);
+        //检查权限
         SoulPermission.getInstance().checkSinglePermission(Manifest.permission.READ_PHONE_STATE);
-
+        //获取SN码
+        devSn = PhoneUtils.getSerial();
         //启动后台服务心跳检测线程
         ServerWatcherThread watcherThread = new ServerWatcherThread();
         watcherThread.start();
-
-        ZgParams.saveAppParams("serverUrl", url);
-        ZgParams.saveAppParams("posCode", posCode);
-        ZgParams.saveAppParams("regCode", regCode);
-        ZgParams.saveAppParams("devSn", PhoneUtils.getSerial());
-        ZgParams.saveAppParams("initFlag", "0");
-
-
-        RestSubscribe.getInstance().devReg(posCode, regCode, PhoneUtils.getSerial(),
+        RestSubscribe.getInstance().devReg(posCode, regCode, devSn,
                 String.format("%s %s", DeviceUtils.getManufacturer(), DeviceUtils.getModel()),
                 this);
     }
@@ -56,7 +55,15 @@ public class RegisterPresenter extends RestCallback implements Contract.Register
     @Override
     public void onSuccess(Map<String, Object> body) {
         super.onSuccess(body);
-        LogUtil.d("----body:" + body.size());
+        //成功后再写入数据库
+        ZgParams.saveAppParams("serverUrl", ZgParams.getServerUrl());
+        ZgParams.saveAppParams("posCode", posCode);
+        ZgParams.saveAppParams("regCode", regCode);
+        ZgParams.saveAppParams("devSn", devSn);
+        ZgParams.saveAppParams("initFlag", "0");
+        //注册成功后，刷新全局变量
+        ZgParams.loadParams();
+        //调用UI
         mView.registerSuccess();
     }
 
