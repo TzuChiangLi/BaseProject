@@ -70,7 +70,7 @@ public class TradeHelper {
             trade.setCardCode("");
             trade.setVipTotal(0);
             trade.setCreateTime((String.valueOf(LogUtil.getDateTime())));
-            trade.setCreateIp(ZgParams.getDevSn().substring(0, 14));
+            trade.setCreateIp(ZgParams.getCurrentIp());
             trade.setStatus(TRADE_STATUS_NOTPAY);
 
             prodList = new ArrayList<>();
@@ -188,15 +188,22 @@ public class TradeHelper {
      * @return
      */
     private static String newLsNo() {
+        //初始流水号
+        final String DEF_LS_NO = ZgParams.getPosCode() + "00001";
+
         FlowCursor cursor = SQLite.select(Method.max(Trade_Table.lsNo)).from(Trade.class).query();
-        if (cursor == null || cursor.getCount() == 0 || cursor.isNull(0)) {
-            return ZgParams.getPosCode() + "00001";
-        } else {
-            String lsNo = cursor.getStringOrDefault(0);
-            int max = Integer.valueOf(lsNo.substring(2));
-            int current = max == 99999 ? 1 : max + 1;
-            return ZgParams.getPosCode() + String.format("%05d", current);
+        if (cursor == null) {
+            return DEF_LS_NO;
         }
+        cursor.moveToNext();
+        if (cursor.getCount() == 0 || cursor.isNull(0)) {
+            return DEF_LS_NO;
+        }
+
+        String lsNo = cursor.getStringOrDefault(0);
+        int max = Integer.valueOf(lsNo.substring(3));
+        int current = max == 99999 ? 1 : max + 1;
+        return ZgParams.getPosCode() + String.format("%05d", current);
     }
 
     /**
