@@ -5,6 +5,7 @@ import android.util.Log;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
+import com.ftrend.zgp.model.TradePay_Table;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.TradeUploadQueue;
@@ -75,10 +76,14 @@ public class TradeHelper {
             trade.setStatus(TRADE_STATUS_NOTPAY);
 
             prodList = new ArrayList<>();
+            pay = null;
         } else {
             prodList = SQLite.select().from(TradeProd.class)
                     .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
                     .queryList();
+            pay = SQLite.select().from(TradePay.class)
+                    .where(TradePay_Table.lsNo.eq(trade.getLsNo()))
+                    .querySingle();
         }
     }
 
@@ -228,20 +233,13 @@ public class TradeHelper {
 
     /**
      * 取消交易
-     *
-     * @param status
      */
-    public static void cancelTrade(int status) {
+    public static void cancelTrade() {
         SQLite.update(Trade.class)
-                .set(Trade_Table.status.eq(String.valueOf(status)))
+                .set(Trade_Table.status.eq(TRADE_STATUS_CANCELLED))
                 .where(Trade_Table.lsNo.is(trade.getLsNo()))
                 .async()
                 .execute(); // non-UI blocking
-
-        SQLite.delete(TradeProd.class)
-                .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
-                .async()
-                .execute();
     }
 
     /**
