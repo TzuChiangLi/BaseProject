@@ -11,13 +11,13 @@ import com.ftrend.zgp.adapter.MenuAdapter;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
-import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.HomePresenter;
-import com.ftrend.zgp.utils.TradeUtil;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.permission.PermissionUtil;
+import com.ftrend.zgp.utils.task.LsUploadThread;
 import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 
 /**
- * 主界面V层----本界面不处理任何数据，只负责调用、接收并显示
+ * 主界面V层----本层不处理任何数据，只负责调用、接收并显示
  *
  * @author liziqiang@ftrend.cn
  */
@@ -54,7 +54,9 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
             mPresenter = HomePresenter.createPresenter(this);
         }
         mPresenter.setInfo();
-
+        //启动数据上传线程
+        LsUploadThread lsUploadThread = new LsUploadThread();
+        lsUploadThread.start();
     }
 
     @Override
@@ -101,6 +103,9 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
 
     @Override
     public void onMenuClick(View view, int position) {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
         MessageUtil.show((String) view.getTag());
         switch ((String) view.getTag()) {
             case "收银":

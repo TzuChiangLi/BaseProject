@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.ftrend.cleareditview.ClearEditText;
+import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.LoginAdapter;
 import com.ftrend.zgp.api.Contract;
@@ -15,7 +16,7 @@ import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.presenter.LoginPresenter;
 import com.ftrend.zgp.utils.ZgParams;
-import com.ftrend.zgp.utils.common.EncryptUtill;
+import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 
@@ -42,6 +43,7 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
     private LoginAdapter<Dep> mDepAdapter;
     private LoginAdapter<User> mUserAdapter;
     private String depCode, userCode;
+    private int i=0;
 
 
     @Override
@@ -72,6 +74,8 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
 
     @OnClick(R.id.login_btn)
     public void doLogin() {
+        LogUtil.d(String.valueOf(i++));
+        if (ClickUtil.onceClick()) {return;}
         mPresenter.checkUserInfo(userCode, mPwdEdt.getText().toString().trim(), depCode);
     }
 

@@ -35,7 +35,7 @@
     <ImageView
         android:id="@+id/pay_title_line"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/pay_top_bar"
         android:background="@color/common_white"
         android:scaleType="centerInside"
@@ -82,6 +82,7 @@
         android:background="@color/common_blue"
         android:paddingStart="16dp"
         android:paddingTop="4dp"
+        android:paddingEnd="16dp"
         android:paddingBottom="4dp"
         android:text="@string/pay_tv_method"
         android:textColor="@color/common_white"

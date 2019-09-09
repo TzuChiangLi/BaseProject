@@ -16,6 +16,7 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.PayPresenter;
 import com.ftrend.zgp.utils.TradeUtil;
+import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -99,6 +100,9 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
         mPayWayAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (ClickUtil.onceClick()) {
+                    return;
+                }
                 switch (position) {
                     case 0:
                         //支付宝

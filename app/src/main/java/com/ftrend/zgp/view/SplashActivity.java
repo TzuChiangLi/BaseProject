@@ -19,33 +19,13 @@ import static com.raizlabs.android.dbflow.sql.language.Method.count;
  * @author liziqiang@ftrend.cn
  */
 public class SplashActivity extends AppCompatActivity {
-//    @BindView(R.id.img)
-//    ImageView mImg;
-//    private int i =1;
-//    @OnClick(R.id.img)
-//    public void change(){
-//        switch (i){
-//            case 1:
-//                mImg.setImageResource(R.mipmap.splash);
-//                i++;
-//                break;
-//            case 2:
-//                i++;
-//                mImg.setImageResource(R.mipmap.splash2);
-//                break;
-//            case 3:
-//                mImg.setImageResource(R.mipmap.splash3);
-//                i=1;
-//                break;
-//        }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        //初始化本地参数
         initAppParams();
-
-
+        //根据本地参数来确定跳转页面
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -53,7 +33,6 @@ public class SplashActivity extends AppCompatActivity {
                 Intent intent;
                 if (TextUtils.isEmpty(ZgParams.getPosCode())) {
                     intent = new Intent(SplashActivity.this, RegisterActivity.class);
-
                 } else {
                     intent = new Intent(SplashActivity.this, LoginActivity.class);
                 }

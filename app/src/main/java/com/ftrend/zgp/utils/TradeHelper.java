@@ -7,6 +7,7 @@ import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
+import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.Method;
@@ -223,6 +224,34 @@ public class TradeHelper {
         trade.setTotal(total);
         trade.setVipTotal(vipTotal);
         return trade.save();
+    }
+
+    /**
+     * 取消交易
+     *
+     * @param status
+     */
+    public static void cancelTrade(int status) {
+        SQLite.update(Trade.class)
+                .set(Trade_Table.status.eq(String.valueOf(status)))
+                .where(Trade_Table.lsNo.is(trade.getLsNo()))
+                .async()
+                .execute(); // non-UI blocking
+
+        SQLite.delete(TradeProd.class)
+                .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                .async()
+                .execute();
+    }
+
+    /**
+     * 上传交易流水
+     */
+    public static void uploadTradeQueue() {
+        TradeUploadQueue queue = new TradeUploadQueue();
+        queue.setDepCode(ZgParams.getCurrentDep().getDepCode());
+        queue.setLsNo(TradeHelper.getTrade().getLsNo());
+        queue.insert();
     }
 
 

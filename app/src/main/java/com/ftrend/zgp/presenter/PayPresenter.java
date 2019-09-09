@@ -1,10 +1,15 @@
 package com.ftrend.zgp.presenter;
 
+import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.model.DepPayInfo;
+import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.HttpCallBack;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +45,19 @@ public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
     public void paySuccess(String lsNo, float amount, int payWay) {
         //付款成功
         //更新交易流水表
-        TradeHelper.pay("1");
+        try {
+            String payCode = SQLite.select(DepPayInfo_Table.payTypeCode).from(DepPayInfo.class)
+                    .where(DepPayInfo_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
+                    .and(DepPayInfo_Table.appPayType.eq(String.valueOf(payWay)))
+                    .querySingle().getPayTypeCode();
 
-
+            //完成支付
+            TradeHelper.pay(payCode);
+            //插入交易流水队列
+            TradeHelper.uploadTradeQueue();
+        } catch (Exception e) {
+            LogUtil.e(e.getMessage());
+        }
 //        SQLite.update(Trade.class)
 //                .set(Trade_Table.status.eq("2"), Trade_Table.tradeTime.eq(new Date()))
 //                .where(Trade_Table.lsNo.is(lsNo))

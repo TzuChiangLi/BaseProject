@@ -8,6 +8,7 @@ import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.presenter.RegisterPresenter;
+import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 
@@ -50,6 +51,9 @@ public class RegisterActivity extends BaseActivity implements Contract.RegisterV
 
     @OnClick(R.id.reg_btn)
     public void register() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
         mPresenter.register(mURLEdt.getText().toString().trim(), mPosCodeEdt.getText().toString().trim(), mRegCodeEdt.getText().toString().trim());
     }
 
