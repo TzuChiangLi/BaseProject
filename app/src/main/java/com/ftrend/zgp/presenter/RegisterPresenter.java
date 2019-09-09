@@ -39,7 +39,7 @@ public class RegisterPresenter implements Contract.RegisterPresenter {
             //注册成功，设备注册参数写入数据库
             ZgParams.saveAppParams("serverUrl", ZgParams.getServerUrl());
             ZgParams.saveAppParams("posCode", posCode);
-            ZgParams.saveAppParams("regCode", regCode);
+//            ZgParams.saveAppParams("regCode", regCode);//不保存注册码
             ZgParams.saveAppParams("devSn", devSn);
             ZgParams.saveAppParams("initFlag", "0");
             //注册成功后，刷新全局变量
@@ -54,7 +54,6 @@ public class RegisterPresenter implements Contract.RegisterPresenter {
         }
     };
 
-
     @Override
     public void register(String url, final String posCode, final String regCode) {
         //保存注册码
@@ -67,11 +66,11 @@ public class RegisterPresenter implements Contract.RegisterPresenter {
         //获取SN码
         devSn = PhoneUtils.getSerial();
 
-        //验证服务地址是否有效
+        //1. 验证服务地址是否有效
         RestSubscribe.getInstance().ping(new HttpCallBack<String>() {
             @Override
             public void onSuccess(String body) {
-                //后台服务可用，注册设备
+                //2. 后台服务可用，注册设备
                 RestSubscribe.getInstance().devReg(posCode, regCode, devSn,
                         String.format("%s %s", DeviceUtils.getManufacturer(), DeviceUtils.getModel()),
                         new RestCallback(regHandler));
