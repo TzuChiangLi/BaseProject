@@ -39,7 +39,7 @@ public class DepProduct extends BaseModel {
     @Column
     private String unit;
     @Column
-    private float price = 0;
+    private double price = 0;
     @Column
     private String brand;
     @Column
@@ -53,26 +53,26 @@ public class DepProduct extends BaseModel {
     @Column
     private int forLargess = 0;
     @Column
-    private float scoreSet;
+    private double scoreSet;
     @Column
-    private float vipPrice1;
+    private double vipPrice1;
     @Column
-    private float vipPrice2;
+    private double vipPrice2;
     @Column
-    private float vipPrice3;
+    private double vipPrice3;
     @Column
-    private float vipRate1;
+    private double vipRate1;
     @Column
-    private float vipRate2;
+    private double vipRate2;
     @Column
-    private float vipRate3;
+    private double vipRate3;
     @Column
-    private float minimumPrice;
+    private double minimumPrice;
 
     public DepProduct() {
     }
 
-    public DepProduct(String depCode, String prodCode, String barCode, String prodName, String clsCode, String spec, float price) {
+    public DepProduct(String depCode, String prodCode, String barCode, String prodName, String clsCode, String spec, double price) {
         this.depCode = depCode;
         this.prodCode = prodCode;
         this.barCode = barCode;
@@ -163,11 +163,11 @@ public class DepProduct extends BaseModel {
         this.unit = unit;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
@@ -219,67 +219,67 @@ public class DepProduct extends BaseModel {
         this.forLargess = forLargess;
     }
 
-    public float getScoreSet() {
+    public double getScoreSet() {
         return scoreSet;
     }
 
-    public void setScoreSet(float scoreSet) {
+    public void setScoreSet(double scoreSet) {
         this.scoreSet = scoreSet;
     }
 
-    public float getVipPrice1() {
+    public double getVipPrice1() {
         return vipPrice1;
     }
 
-    public void setVipPrice1(float vipPrice1) {
+    public void setVipPrice1(double vipPrice1) {
         this.vipPrice1 = vipPrice1;
     }
 
-    public float getVipPrice2() {
+    public double getVipPrice2() {
         return vipPrice2;
     }
 
-    public void setVipPrice2(float vipPrice2) {
+    public void setVipPrice2(double vipPrice2) {
         this.vipPrice2 = vipPrice2;
     }
 
-    public float getVipPrice3() {
+    public double getVipPrice3() {
         return vipPrice3;
     }
 
-    public void setVipPrice3(float vipPrice3) {
+    public void setVipPrice3(double vipPrice3) {
         this.vipPrice3 = vipPrice3;
     }
 
-    public float getVipRate1() {
+    public double getVipRate1() {
         return vipRate1;
     }
 
-    public void setVipRate1(float vipRate1) {
+    public void setVipRate1(double vipRate1) {
         this.vipRate1 = vipRate1;
     }
 
-    public float getVipRate2() {
+    public double getVipRate2() {
         return vipRate2;
     }
 
-    public void setVipRate2(float vipRate2) {
+    public void setVipRate2(double vipRate2) {
         this.vipRate2 = vipRate2;
     }
 
-    public float getVipRate3() {
+    public double getVipRate3() {
         return vipRate3;
     }
 
-    public void setVipRate3(float vipRate3) {
+    public void setVipRate3(double vipRate3) {
         this.vipRate3 = vipRate3;
     }
 
-    public float getMinimumPrice() {
+    public double getMinimumPrice() {
         return minimumPrice;
     }
 
-    public void setMinimumPrice(float minimumPrice) {
+    public void setMinimumPrice(double minimumPrice) {
         this.minimumPrice = minimumPrice;
     }
 }

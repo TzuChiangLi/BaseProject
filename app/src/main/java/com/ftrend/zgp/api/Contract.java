@@ -264,7 +264,7 @@ public interface Contract {
          *
          * @param num 购物车内的数量
          */
-        void updateTradeProd(long num, float price);
+        void updateTradeProd(long num, double price);
     }
 
     interface ShopListPresenter {
@@ -314,7 +314,7 @@ public interface Contract {
         /**
          * 交易完成
          */
-        void paySuccess(String lsNo, float amount, int payWay);
+        void paySuccess(String lsNo, double amount, int payWay);
 
         /**
          * 销毁，防止泄露

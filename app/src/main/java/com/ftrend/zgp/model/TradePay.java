@@ -27,9 +27,9 @@ public class TradePay extends BaseModel {
     private String payTypeCode;
     @Column
     @NotNull
-    private float amount;
+    private double amount;
     @Column
-    private float change = 0;
+    private double change = 0;
     @Column
     private String payCode;
     @Column
@@ -39,7 +39,7 @@ public class TradePay extends BaseModel {
     public TradePay() {
     }
 
-    public TradePay(String lsNo, String payTypeCode, float amount, float change, Date payTime, String payCode) {
+    public TradePay(String lsNo, String payTypeCode, double amount, double change, Date payTime, String payCode) {
         this.lsNo = lsNo;
         this.payTypeCode = payTypeCode;
         this.amount = amount;
@@ -72,19 +72,19 @@ public class TradePay extends BaseModel {
         this.payTypeCode = payTypeCode;
     }
 
-    public float getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
-    public float getChange() {
+    public double getChange() {
         return change;
     }
 
-    public void setChange(float change) {
+    public void setChange(double change) {
         this.change = change;
     }
 

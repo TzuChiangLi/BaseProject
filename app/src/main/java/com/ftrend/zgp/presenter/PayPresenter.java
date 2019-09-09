@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * 支付P层
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  */
 public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
     private Contract.PayView mView;
@@ -42,7 +42,7 @@ public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
     }
 
     @Override
-    public void paySuccess(String lsNo, float amount, int payWay) {
+    public void paySuccess(String lsNo, double amount, int payWay) {
         //付款成功
         //更新交易流水表
         try {
@@ -50,7 +50,6 @@ public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
                     .where(DepPayInfo_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
                     .and(DepPayInfo_Table.appPayType.eq(String.valueOf(payWay)))
                     .querySingle().getPayTypeCode();
-
             //完成支付
             TradeHelper.pay(payCode);
             //插入交易流水队列
@@ -58,24 +57,6 @@ public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
         } catch (Exception e) {
             LogUtil.e(e.getMessage());
         }
-//        SQLite.update(Trade.class)
-//                .set(Trade_Table.status.eq("2"), Trade_Table.tradeTime.eq(new Date()))
-//                .where(Trade_Table.lsNo.is(lsNo))
-//                .async()
-//                .execute(); // non-UI blocking
-//
-//        //更新交易支付表
-//        TradePay tradePay = new TradePay();
-//        tradePay.setLsNo(lsNo);
-//        tradePay.setPayTypeCode(String.valueOf(payWay));
-//        tradePay.setAmount(amount);
-//        tradePay.setPayTime(LogUtil.getDateTime());
-////        tradePay.setPayCode();
-//        tradePay.insert();
-//
-//        //流水号写入上传队列
-//        TradeUploadQueue queue = new TradeUploadQueue(ZgParams.getCurrentDep().getDepCode(), lsNo);
-//        queue.insert();
     }
 
     @Override

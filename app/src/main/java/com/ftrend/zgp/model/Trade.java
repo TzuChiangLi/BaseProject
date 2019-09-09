@@ -35,9 +35,9 @@ public class Trade extends BaseModel {
     @NotNull
     private String cashier;
     @Column
-    private float dscTotal;
+    private double dscTotal;
     @Column
-    private float total;
+    private double total;
     @Column
     private String custType;
     @Column
@@ -45,7 +45,7 @@ public class Trade extends BaseModel {
     @Column
     private String cardCode;
     @Column
-    private float vipTotal = 0;
+    private double vipTotal = 0;
     @Column
     @NotNull
     private String status = "0";
@@ -106,19 +106,19 @@ public class Trade extends BaseModel {
         this.cashier = cashier;
     }
 
-    public float getDscTotal() {
+    public double getDscTotal() {
         return dscTotal;
     }
 
-    public void setDscTotal(float dscTotal) {
+    public void setDscTotal(double dscTotal) {
         this.dscTotal = dscTotal;
     }
 
-    public float getTotal() {
+    public double getTotal() {
         return total;
     }
 
-    public void setTotal(float total) {
+    public void setTotal(double total) {
         this.total = total;
     }
 
@@ -146,11 +146,11 @@ public class Trade extends BaseModel {
         this.cardCode = cardCode;
     }
 
-    public float getVipTotal() {
+    public double getVipTotal() {
         return vipTotal;
     }
 
-    public void setVipTotal(float vipTotal) {
+    public void setVipTotal(double vipTotal) {
         this.vipTotal = vipTotal;
     }
 

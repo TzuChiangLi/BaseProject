@@ -2,20 +2,10 @@ package com.ftrend.zgp;
 
 import android.app.Application;
 
-import com.ftrend.zgp.model.User;
-import com.ftrend.zgp.model.User_Table;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.log.LogUtil;
-import com.ftrend.zgp.utils.task.DataDownloadTask;
-import com.ftrend.zgp.utils.task.ServerWatcherThread;
-import com.ftrend.zgp.utils.test.TestDataImporter;
 import com.qw.soul.permission.SoulPermission;
 import com.raizlabs.android.dbflow.config.FlowManager;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
-
-import java.util.Locale;
-
-import static com.raizlabs.android.dbflow.sql.language.Method.count;
 
 /**
  * 初始化相关工具组件

@@ -141,7 +141,7 @@ public class TradeHelper {
      * @param payCode     支付账号
      * @return
      */
-    public static boolean pay(String payTypeCode, float amount, float change, String payCode) {
+    public static boolean pay(String payTypeCode, double amount, double change, String payCode) {
         if (pay == null) {
             pay = new TradePay();
             pay.setLsNo(trade.getLsNo());
@@ -211,9 +211,9 @@ public class TradeHelper {
      * 重新汇总流水金额：优惠、合计、积分金额
      */
     private static boolean recalcTotal() {
-        float dscTotal = 0;
-        float total = 0;
-        float vipTotal = 0;
+        double dscTotal = 0;
+        double total = 0;
+        double vipTotal = 0;
 
         for (TradeProd prod : prodList) {
             dscTotal += prod.getManuDsc() + prod.getTranDsc() + prod.getVipDsc();

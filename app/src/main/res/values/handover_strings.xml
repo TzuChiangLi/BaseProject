@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="handover_usercode">收款员号：</string>
+    <string name="handover_username">收款员：</string>
+    <string name="handover_count">已打印次数：</string>
+    <string name="handover_time">上次打印时间：</string>
+    <string name="handover_title">交班</string>
+</resources>
