@@ -119,16 +119,19 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                         MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
                             @Override
                             public void onLeftBtnClick(BasePopupView popView) {
-                                mPresenter.paySuccess(TradeUtil.getLsNo(), Float.parseFloat(total), 3);
-                                popView.dismiss();
-                                MessageUtil.showSuccess("交易已完成");
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Intent intent = new Intent(PayActivity.this, HomeActivity.class);
-                                        startActivity(intent);
-                                    }
-                                }, 1500);
+                                if (mPresenter.paySuccess(TradeUtil.getLsNo(), Float.parseFloat(total), 3)) {
+                                    popView.dismiss();
+                                    MessageUtil.showSuccess("交易已完成");
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Intent intent = new Intent(PayActivity.this, HomeActivity.class);
+                                            startActivity(intent);
+                                        }
+                                    }, 1500);
+                                } else {
+                                    MessageUtil.showError("交易失败，请稍后重试");
+                                }
                             }
 
                             @Override
