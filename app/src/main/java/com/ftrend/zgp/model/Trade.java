@@ -8,7 +8,9 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * 交易流水表
@@ -168,6 +170,11 @@ public class Trade extends BaseModel {
 
     public void setCreateTime(String createTime) {
         CreateTime = createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        CreateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                .format(createTime);
     }
 
     public String getCreateIp() {

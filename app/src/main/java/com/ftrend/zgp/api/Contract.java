@@ -54,8 +54,10 @@ public interface Contract {
 
         /**
          * 开始同步数据
+         *
+         * @param step 步骤：1 - 下载基础数据；2 - 下载实时流水
          */
-        void startInitData();
+        void startInitData(int step);
 
         /**
          * 停止同步
@@ -83,9 +85,10 @@ public interface Contract {
         /**
          * 同步数据进度
          *
+         * @param step 步骤：1 - 下载基础数据；2 - 下载实时流水
          * @param progress 进度
          */
-        void updateProgress(int progress);
+        void updateProgress(int step, int progress);
 
         /**
          * 停止动画

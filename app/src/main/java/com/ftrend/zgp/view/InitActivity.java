@@ -75,7 +75,7 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
                 LogUtil.d(String.valueOf(((ProgressView) v).FLAG));
                 if (((ProgressView) v).FLAG == -1) {
                     mPresenter.startAnimator();
-                    mPresenter.startInitData();
+                    mPresenter.startInitData(1);
                     return;
                 }
                 if (((ProgressView) v).FLAG == 0) {
@@ -103,10 +103,14 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
     }
 
     @Override
-    public void updateProgress(int progress) {
-        mLoadView.setProgress(progress);
+    public void updateProgress(int step, int progress) {
+        mLoadView.setProgress(progress * (50 * step / 100));
         if (progress >= 100) {
-            mPresenter.finishInitData();
+            if (step == 1) {
+                mPresenter.startInitData(2);
+            } else {
+                mPresenter.finishInitData();
+            }
         }
     }
 

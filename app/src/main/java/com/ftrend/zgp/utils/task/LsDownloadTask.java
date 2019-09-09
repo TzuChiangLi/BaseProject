@@ -3,18 +3,21 @@ package com.ftrend.zgp.utils.task;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.blankj.utilcode.util.GsonUtils;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradePay_Table;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
+import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.db.DBHelper;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
@@ -22,6 +25,7 @@ import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -178,7 +182,7 @@ public class LsDownloadTask {
                     return;
                 }
 
-                Map<String, Object> trade = (Map<String, Object>) body.get("teade");
+                Map<String, Object> trade = (Map<String, Object>) body.get("trade");
                 List<Map<String, Object>> prod = (List<Map<String, Object>>) body.get("prod");
                 Map<String, Object> pay = (Map<String, Object>) body.get("pay");
                 saveLs(trade, prod, pay);
@@ -203,9 +207,12 @@ public class LsDownloadTask {
         Transaction transaction = FlowManager.getDatabase(DBHelper.class).beginTransactionAsync(new ITransaction() {
             @Override
             public void execute(DatabaseWrapper databaseWrapper) {
-                saveTrade(trade);
-                saveProd(prod);
-                savePay(pay);
+                Gson gson = new GsonBuilder()
+                        .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                        .create();
+                saveTrade(gson, trade);
+                saveProd(gson, prod);
+                savePay(gson, pay);
             }
         }).success(new Transaction.Success() {
             @Override
@@ -227,12 +234,17 @@ public class LsDownloadTask {
      *
      * @param values
      */
-    private void saveTrade(Map<String, Object> values) {
-        Trade trade = GsonUtils.fromJson(GsonUtils.toJson(values), Trade.class);
+    private void saveTrade(Gson gson, Map<String, Object> values) {
+        Trade trade = gson.fromJson(gson.toJson(values), Trade.class);
         SQLite.delete(Trade.class)
                 .where(Trade_Table.lsNo.eq(trade.getLsNo()))
                 .execute();
+        trade.setStatus(TradeHelper.TRADE_STATUS_PAID);
+        trade.setCreateTime(trade.getTradeTime());
+        trade.setCreateIp(ZgParams.getCurrentIp());
         trade.insert();
+        //添加上传队列，避免重复上传
+        saveQueue(trade);
     }
 
     /**
@@ -240,13 +252,14 @@ public class LsDownloadTask {
      *
      * @param values
      */
-    private void saveProd(List<Map<String, Object>> values) {
+    private void saveProd(Gson gson, List<Map<String, Object>> values) {
         if (values.size() == 0) {
             return;
         }
         List<TradeProd> prodList = new ArrayList<>();
         for (Map<String, Object> map : values) {
-            TradeProd prod = GsonUtils.fromJson(GsonUtils.toJson(map), TradeProd.class);
+            TradeProd prod = gson.fromJson(gson.toJson(map), TradeProd.class);
+            prod.setDelFlag("0");
             prodList.add(prod);
         }
 
@@ -263,12 +276,26 @@ public class LsDownloadTask {
      *
      * @param values
      */
-    private void savePay(Map<String, Object> values) {
-        TradePay pay = GsonUtils.fromJson(GsonUtils.toJson(values), TradePay.class);
+    private void savePay(Gson gson, Map<String, Object> values) {
+        TradePay pay = gson.fromJson(gson.toJson(values), TradePay.class);
         SQLite.delete(TradePay.class)
                 .where(TradePay_Table.lsNo.eq(pay.getLsNo()))
                 .execute();
         pay.insert();
+    }
+
+    /**
+     * 添加上传队列，并设置为已上传
+     *
+     * @param trade
+     */
+    private void saveQueue(Trade trade) {
+        TradeUploadQueue queue = new TradeUploadQueue();
+        queue.setDepCode(trade.getDepCode());
+        queue.setLsNo(trade.getLsNo());
+        queue.setEnqueueTime(trade.getTradeTime());
+        queue.setUploadTime(new Date());
+        queue.insert();
     }
 
 }
