@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.AppUtils;
-import com.ftrend.zgp.utils.db.DatabaseManger;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -68,7 +67,7 @@ public class LogUtil {
                 bufWriter.write(String.format("----------------------------------------------------------------------------------------------%s%s%s%s%s",
                         "\n异常原因：",
                         msg, "\n发生时间：",
-                        DatabaseManger.getDateTime().toString(),
+                        getDateTime().toString(),
                         "\n"));
                 bufWriter.newLine();
                 bufWriter.close();

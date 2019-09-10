@@ -105,29 +105,11 @@ public class ZgParams {
                 lastUser = param.getParamValue();
             }
         }
-        if (appParamsList.size() == 0) {
-            initAppParams();
-        }
 
         //业务参数初始化
         currentIp = devSn.length() > 15 ? devSn.substring(0, 15) : devSn;
 
         return true;
-    }
-
-    /**
-     * 初始化本地参数
-     */
-    private static void initAppParams() {
-        new AppParams("serverUrl", serverUrl).insert();
-        new AppParams("posCode", posCode).insert();
-//        new AppParams("regCode", "").insert();
-        new AppParams("devSn", devSn).insert();
-        new AppParams("initFlag", initFlag).insert();
-        new AppParams("lastUser", lastUser).insert();
-        new AppParams("lastDep", lastDep).insert();
-        new AppParams("printerConfig", GsonUtils.toJson(printerConfig)).insert();
-        new AppParams("cardConfig", GsonUtils.toJson(cardConfig)).insert();
     }
 
     /**

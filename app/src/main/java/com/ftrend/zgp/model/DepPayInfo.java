@@ -1,13 +1,13 @@
 package com.ftrend.zgp.model;
 
-import com.ftrend.zgp.utils.db.DBHelper;
+import com.ftrend.zgp.utils.db.ZgpDb;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
-@Table(database = DBHelper.class)
+@Table(database = ZgpDb.class)
 public class DepPayInfo extends BaseModel {
     @PrimaryKey(autoincrement = true)
     @NotNull

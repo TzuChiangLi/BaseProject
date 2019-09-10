@@ -12,7 +12,7 @@ import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
-import com.ftrend.zgp.utils.db.DBHelper;
+import com.ftrend.zgp.utils.db.ZgpDb;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
@@ -204,7 +204,7 @@ public class LsDownloadTask {
      * @param pay   支付信息
      */
     private void saveLs(final Map<String, Object> trade, final List<Map<String, Object>> prod, final Map<String, Object> pay) {
-        Transaction transaction = FlowManager.getDatabase(DBHelper.class).beginTransactionAsync(new ITransaction() {
+        Transaction transaction = FlowManager.getDatabase(ZgpDb.class).beginTransactionAsync(new ITransaction() {
             @Override
             public void execute(DatabaseWrapper databaseWrapper) {
                 Gson gson = new GsonBuilder()

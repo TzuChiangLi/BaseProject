@@ -1,6 +1,6 @@
 package com.ftrend.zgp.model;
 
-import com.ftrend.zgp.utils.db.DBHelper;
+import com.ftrend.zgp.utils.db.ZgpDb;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -16,7 +16,7 @@ import java.util.Date;
  * @author liuhongbin@ftrend.cn
  * @since 2019/9/6
  */
-@Table(database = DBHelper.class)
+@Table(database = ZgpDb.class)
 public class TradeUploadQueue extends BaseModel {
     @PrimaryKey(autoincrement = true)
     @NotNull

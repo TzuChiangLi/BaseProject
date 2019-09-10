@@ -1,7 +1,7 @@
 package com.ftrend.zgp.model;
 
 
-import com.ftrend.zgp.utils.db.DBHelper;
+import com.ftrend.zgp.utils.db.ZgpDb;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -17,7 +17,7 @@ import java.util.Locale;
  *
  * @author LZQ
  */
-@Table(database = DBHelper.class)
+@Table(database = ZgpDb.class)
 public class Trade extends BaseModel {
     @PrimaryKey(autoincrement = true)
     @NotNull
