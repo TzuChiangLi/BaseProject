@@ -56,10 +56,6 @@ public class Trade extends BaseModel {
     @Column
     private String CreateIp;
 
-
-//    public TradeUtil() {
-//    }
-
     public int getId() {
         return id;
     }
