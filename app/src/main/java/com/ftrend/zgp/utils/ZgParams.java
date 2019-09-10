@@ -28,6 +28,10 @@ public class ZgParams {
 
     //是否联机模式
     private static volatile boolean isOnline = false;
+    //联机状态消息
+    public static final String MSG_ONLINE = "online mode";
+    //单机状态消息
+    public static final String MSG_OFFLINE = "offline mode";
 
     //系统参数：是否使用商品类别
     private static String noClsDep = "";

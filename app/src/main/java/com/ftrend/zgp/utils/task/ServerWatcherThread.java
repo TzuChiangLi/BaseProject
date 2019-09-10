@@ -1,5 +1,9 @@
 package com.ftrend.zgp.utils.task;
 
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
+
+import com.ftrend.zgp.App;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.http.RestSubscribe;
@@ -15,8 +19,34 @@ import java.util.Locale;
  */
 public class ServerWatcherThread extends Thread {
 
-    //是否正在执行ping命令，防止因请求超时造成重复调用（如果ping间隔大于超时时间设置，此参数没有意义）
+    // 是否正在执行ping命令，防止因请求超时造成重复调用（如果ping间隔大于超时时间设置，此参数没有意义）
     private boolean isPinging = false;
+    // 本地消息广播
+    private LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(App.getContext());
+
+    /**
+     * 广播消息：切换到联机模式
+     */
+    private void broadcastOnline() {
+        if (ZgParams.isIsOnline()) {
+            return;//不重复发送消息
+        }
+        ZgParams.setIsOnline(true);
+        Intent intent = new Intent(ZgParams.MSG_ONLINE);
+        localBroadcastManager.sendBroadcastSync(intent);
+    }
+
+    /**
+     * 广播消息：切换到单机模式
+     */
+    private void broadcastOffline() {
+        if (!ZgParams.isIsOnline()) {
+            return;//不重复发送消息
+        }
+        ZgParams.setIsOnline(false);
+        Intent intent = new Intent(ZgParams.MSG_OFFLINE);
+        localBroadcastManager.sendBroadcastSync(intent);
+    }
 
     public void run() {
         super.run();
@@ -32,9 +62,9 @@ public class ServerWatcherThread extends Thread {
 
                     @Override
                     public void onSuccess(String body) {
-                        // TODO: 2019/9/3 广播：联机状态
                         System.out.println(body);
-                        ZgParams.setIsOnline(true);
+                        // 广播：联机状态
+                        broadcastOnline();
                         isPinging = false;
                     }
 
@@ -45,9 +75,9 @@ public class ServerWatcherThread extends Thread {
 
                     @Override
                     public void onHttpError(int errorCode, String errorMsg) {
-                        // TODO: 2019/9/3 广播：单机状态
                         System.out.println(String.format(Locale.getDefault(), "%d - %s", errorCode, errorMsg));
-                        ZgParams.setIsOnline(false);
+                        // 广播：单机状态
+                        broadcastOffline();
                         isPinging = false;
                     }
 
