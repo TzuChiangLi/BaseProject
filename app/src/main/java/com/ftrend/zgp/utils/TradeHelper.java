@@ -10,7 +10,6 @@ import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
@@ -30,18 +29,18 @@ public class TradeHelper {
     private static String TAG = "TradeHelper";
 
     // 交易类型：T-销售
-    private static final String TRADE_FLAG_SALE = "T";
+    public static final String TRADE_FLAG_SALE = "T";
     // 交易类型：R-退货
-    private static final String TRADE_FLAG_RETURN = "R";
+    public static final String TRADE_FLAG_RETURN = "R";
 
     // 交易状态：0-未结
-    private static final String TRADE_STATUS_NOTPAY = "0";
+    public static final String TRADE_STATUS_NOTPAY = "0";
     // 交易状态：1-挂起
-    private static final String TRADE_STATUS_HANGUP = "1";
+    public static final String TRADE_STATUS_HANGUP = "1";
     // 交易状态：2-已结
-    private static final String TRADE_STATUS_PAID = "2";
+    public static final String TRADE_STATUS_PAID = "2";
     // 交易状态：3-取消
-    private static final String TRADE_STATUS_CANCELLED = "3";
+    public static final String TRADE_STATUS_CANCELLED = "3";
     // 交易流水
     private static Trade trade = null;
     // 商品列表
@@ -71,7 +70,7 @@ public class TradeHelper {
             trade.setVipCode("");
             trade.setCardCode("");
             trade.setVipTotal(0);
-            trade.setCreateTime((String.valueOf(LogUtil.getDateTime())));
+            trade.setCreateTime(new Date());
             trade.setCreateIp(ZgParams.getCurrentIp());
             trade.setStatus(TRADE_STATUS_NOTPAY);
 

@@ -1,14 +1,13 @@
 package com.ftrend.zgp.presenter;
 
-import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
-import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
+import com.ftrend.zgp.utils.task.LsDownloadTask;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.List;
@@ -36,18 +35,29 @@ public class InitPresenter implements Contract.InitPresenter, HttpCallBack {
     }
 
     @Override
-    public void startInitData() {
+    public void startInitData(int step) {
         isStart = true;
-        new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
-            @Override
-            public void handleProgress(int percent, boolean isFailed, String msg) {
+        if (step == 1) {
+            new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
+                @Override
+                public void handleProgress(int percent, boolean isFailed, String msg) {
 //                if (isStart) {
-                    mView.updateProgress(percent);
-                    System.out.println(String.format(Locale.getDefault(), "%d%% %s", percent, msg));
+                    mView.updateProgress(1, percent);
+                    System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
 //                }
-            }
-        }).start();
-
+                }
+            }).start();
+        } else if (step == 2) {
+            new LsDownloadTask(new DataDownloadTask.ProgressHandler() {
+                @Override
+                public void handleProgress(int percent, boolean isFailed, String msg) {
+//                if (isStart) {
+                    mView.updateProgress(2, percent);
+                    System.out.println(String.format(Locale.getDefault(), "实时流水下载进度：%d%% %s", percent, msg));
+//                }
+                }
+            }).start();
+        }
     }
 
 

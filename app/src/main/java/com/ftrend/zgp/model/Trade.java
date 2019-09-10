@@ -1,21 +1,23 @@
 package com.ftrend.zgp.model;
 
 
-import com.ftrend.zgp.utils.db.DBHelper;
+import com.ftrend.zgp.utils.db.ZgpDb;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * 交易流水表
  *
  * @author LZQ
  */
-@Table(database = DBHelper.class)
+@Table(database = ZgpDb.class)
 public class Trade extends BaseModel {
     @PrimaryKey(autoincrement = true)
     @NotNull
@@ -168,6 +170,11 @@ public class Trade extends BaseModel {
 
     public void setCreateTime(String createTime) {
         CreateTime = createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        CreateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                .format(createTime);
     }
 
     public String getCreateIp() {

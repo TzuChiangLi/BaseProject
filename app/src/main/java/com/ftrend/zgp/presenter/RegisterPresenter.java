@@ -10,6 +10,7 @@ import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.qw.soul.permission.SoulPermission;
 
 import java.util.Map;
@@ -38,7 +39,7 @@ public class RegisterPresenter implements Contract.RegisterPresenter {
             //注册成功，设备注册参数写入数据库
             ZgParams.saveAppParams("serverUrl", ZgParams.getServerUrl());
             ZgParams.saveAppParams("posCode", posCode);
-            ZgParams.saveAppParams("regCode", regCode);
+//            ZgParams.saveAppParams("regCode", regCode);//不保存注册码
             ZgParams.saveAppParams("devSn", devSn);
             ZgParams.saveAppParams("initFlag", "0");
             //注册成功后，刷新全局变量
@@ -49,10 +50,9 @@ public class RegisterPresenter implements Contract.RegisterPresenter {
 
         @Override
         public void onFailed(String errorCode, String errorMsg) {
-            // TODO: 2019/9/9 显示注册失败的提示信息
+            MessageUtil.showError("注册失败，请稍后重试");
         }
     };
-
 
     @Override
     public void register(String url, final String posCode, final String regCode) {
@@ -66,11 +66,11 @@ public class RegisterPresenter implements Contract.RegisterPresenter {
         //获取SN码
         devSn = PhoneUtils.getSerial();
 
-        //验证服务地址是否有效
+        //1. 验证服务地址是否有效
         RestSubscribe.getInstance().ping(new HttpCallBack<String>() {
             @Override
             public void onSuccess(String body) {
-                //后台服务可用，注册设备
+                //2. 后台服务可用，注册设备
                 RestSubscribe.getInstance().devReg(posCode, regCode, devSn,
                         String.format("%s %s", DeviceUtils.getManufacturer(), DeviceUtils.getModel()),
                         new RestCallback(regHandler));
@@ -78,7 +78,7 @@ public class RegisterPresenter implements Contract.RegisterPresenter {
 
             @Override
             public void onHttpError(int errorCode, String errorMsg) {
-                // TODO: 2019/9/9 显示服务器地址无效的提示信息
+                MessageUtil.showError("服务器请求失败：请检查服务地址是否正确，并处于良好的网络环境下");
             }
 
             @Override

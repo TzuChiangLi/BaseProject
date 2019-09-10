@@ -14,7 +14,7 @@ import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.SysParams;
 import com.ftrend.zgp.model.User;
-import com.ftrend.zgp.utils.db.DBHelper;
+import com.ftrend.zgp.utils.db.ZgpDb;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -108,7 +108,7 @@ public class DataDownloadHelper {
                 final List<Map<String, Object>> dataList = (List<Map<String, Object>>) body.get("list");
                 final String dataSign = body.get("sign").toString();
                 //保存数据
-                Transaction transaction = FlowManager.getDatabase(DBHelper.class).beginTransactionAsync(new ITransaction() {
+                Transaction transaction = FlowManager.getDatabase(ZgpDb.class).beginTransactionAsync(new ITransaction() {
                     @Override
                     public void execute(DatabaseWrapper databaseWrapper) {
                         //全表更新
