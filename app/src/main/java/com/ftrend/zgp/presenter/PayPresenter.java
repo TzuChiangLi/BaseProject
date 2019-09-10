@@ -42,7 +42,7 @@ public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
     }
 
     @Override
-    public boolean paySuccess(String lsNo, float amount, int payWay) {
+    public boolean paySuccess(int payWay) {
         //付款成功
         //更新交易流水表
         try {

@@ -316,8 +316,10 @@ public interface Contract {
 
         /**
          * 交易完成
+         *
+         * @param payWay 支付方式
          */
-        boolean paySuccess(String lsNo, float amount, int payWay);
+        boolean paySuccess(int payWay);
 
         /**
          * 销毁，防止泄露

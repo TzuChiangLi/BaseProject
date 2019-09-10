@@ -14,7 +14,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * RestSubscribe
+ * 后台服务请求工具类，实现通用封装，简化调用
  * Copyright (C),青岛致远方象软件科技有限公司
  *
  * @author liuhongbin@ftrend.cn

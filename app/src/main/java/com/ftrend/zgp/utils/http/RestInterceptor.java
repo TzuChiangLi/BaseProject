@@ -27,13 +27,10 @@ import static android.content.ContentValues.TAG;
  */
 public class RestInterceptor implements Interceptor {
 
+    // 当前使用的token，除个别接口以外，都需要通过此token来验证身份
     private static String token = "";
+    // token过期时间
     private static Date tokenExpireTime = new Date();
-
-/*    public static void setToken(String token, Date expire) {
-        RestInterceptor.token = token;
-        RestInterceptor.tokenExpireTime = expire;
-    }*/
 
     /**
      * 设置token信息
@@ -59,6 +56,13 @@ public class RestInterceptor implements Interceptor {
         RestInterceptor.tokenExpireTime = new Date();
     }
 
+    /**
+     * 拦截网络请求，注入token信息
+     *
+     * @param chain
+     * @return
+     * @throws IOException
+     */
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
@@ -84,6 +88,11 @@ public class RestInterceptor implements Interceptor {
         return response;
     }
 
+    /**
+     * 判断指定的url是否需要验证token
+     * @param url
+     * @return
+     */
     private boolean needToken(HttpUrl url) {
         String urlStr = url.toString();
         if (urlStr.contains("/pos/common/ping")) return false;
@@ -92,12 +101,20 @@ public class RestInterceptor implements Interceptor {
         return true;
     }
 
+    /**
+     * 判断token是否有效
+     * @return
+     */
     private boolean tokenExpired() {
         //注意：服务端生成的token有效期为24小时，且每天清空。一般不会出现token过期的情况
         Date checkTime = new Date(new Date().getTime() + 60 * 1000 * 3);
         return StringUtils.isEmpty(token) || (tokenExpireTime.before(checkTime));
     }
 
+    /**
+     * 检查token是否有效，如果已失效则重新获取
+     * @return
+     */
     private boolean checkToken() {
         if (!tokenExpired()) {
             return true;
@@ -117,6 +134,7 @@ public class RestInterceptor implements Interceptor {
 
                     }
                 }));
+        // 异步获取token，如果30秒未成功，则认为超时失败
         Date checkStart = new Date();
         while (tokenExpired()) {
             if (new Date().after(new Date(checkStart.getTime() + 30 * 1000))) {

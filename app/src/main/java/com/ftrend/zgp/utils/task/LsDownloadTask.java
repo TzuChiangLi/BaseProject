@@ -243,7 +243,7 @@ public class LsDownloadTask {
         trade.setCreateTime(trade.getTradeTime());
         trade.setCreateIp(ZgParams.getCurrentIp());
         trade.insert();
-        //添加上传队列，避免重复上传
+        //添加上传队列（状态为：已上传），避免重复上传
         saveQueue(trade);
     }
 

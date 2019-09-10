@@ -5,11 +5,12 @@ import io.reactivex.disposables.Disposable;
 import retrofit2.HttpException;
 
 /**
- * TextObserver
+ * 按纯文本的方式来处理HttpResponse的body数据
  * Copyright (C),青岛致远方象软件科技有限公司
  *
  * @author liuhongbin@ftrend.cn
  * @since 2019/9/3
+ * @see RestObserver
  */
 public class TextObserver extends AbstractObserver implements Observer<String> {
 

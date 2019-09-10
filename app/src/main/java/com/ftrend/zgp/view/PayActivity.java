@@ -15,7 +15,6 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.PayPresenter;
-import com.ftrend.zgp.utils.TradeUtil;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
@@ -119,7 +118,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                         MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
                             @Override
                             public void onLeftBtnClick(BasePopupView popView) {
-                                if (mPresenter.paySuccess(TradeUtil.getLsNo(), Float.parseFloat(total), 3)) {
+                                if (mPresenter.paySuccess(3)) {
                                     popView.dismiss();
                                     MessageUtil.showSuccess("交易已完成");
                                     new Handler().postDelayed(new Runnable() {

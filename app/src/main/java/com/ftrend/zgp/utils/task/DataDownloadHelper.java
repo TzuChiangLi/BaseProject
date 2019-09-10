@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * DataDownloadHelper
+ * 数据下载工具类
  * Copyright (C),青岛致远方象软件科技有限公司
  *
  * @author liuhongbin@ftrend.cn
@@ -97,6 +97,14 @@ public class DataDownloadHelper {
         return DATA_TYPE_POS_USER.equalsIgnoreCase(dataType);
     }
 
+    /**
+     * 数据下载服务请求回调，将下载的数据保存到数据中
+     *
+     * @param dataType 数据类型
+     * @param code     机器号或专柜编码
+     * @param handler  回调实现对象，用于发送处理结果
+     * @return
+     */
     public static RestCallback makeCallback(final String dataType, final String code, final DownloadResultHandler handler) {
         return new RestCallback(new RestResultHandler() {
             @Override
@@ -306,8 +314,15 @@ public class DataDownloadHelper {
      * 数据更新结果处理器
      */
     public interface DownloadResultHandler {
+        /**
+         * 成功
+         */
         void onSuccess();
 
+        /**
+         * 失败
+         * @param msg 错误消息
+         */
         void onError(String msg);
     }
 }

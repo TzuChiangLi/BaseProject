@@ -70,7 +70,6 @@ public class ServerWatcherThread extends Thread {
 
                     @Override
                     public void onFailed(String errorCode, String errorMessage) {
-
                     }
 
                     @Override

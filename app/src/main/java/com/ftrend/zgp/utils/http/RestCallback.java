@@ -3,7 +3,7 @@ package com.ftrend.zgp.utils.http;
 import java.util.Map;
 
 /**
- * RestCallback
+ * 后台服务接口请求回调
  * Copyright (C),青岛致远方象软件科技有限公司
  *
  * @author liuhongbin@ftrend.cn
