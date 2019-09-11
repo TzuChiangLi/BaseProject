@@ -6,6 +6,7 @@ import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.ZgParams;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
@@ -86,13 +87,19 @@ public class HomePresenter implements Contract.HomePresenter {
 
     @Override
     public void goHandover() {
-        long tradeCount = SQLite.select(count()).from(Trade.class)
-                .where(Trade_Table.status.eq(TradeHelper.TRADE_STATUS_PAID)).count();
-        if (tradeCount > 0) {
-            mView.goHandoverActivity();
-        } else {
-            mView.hasNoTrade();
+        if (ZgParams.isIsOnline()){
+            long tradeCount = SQLite.select(count()).from(Trade.class)
+                    .where(Trade_Table.status.eq(TradeHelper.TRADE_STATUS_PAID)).count();
+            if (tradeCount > 0) {
+                mView.goHandoverActivity();
+            } else {
+                mView.hasNoTrade();
+            }
+        }else {
+            mView.showOfflineTip();
         }
+
+
     }
 
     @Override
