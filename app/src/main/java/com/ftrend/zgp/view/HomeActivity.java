@@ -116,7 +116,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
             case "收银":
                 mPresenter.goShopCart();
                 break;
-            case "交班报表":
+            case "交班":
                 mPresenter.goHandover();
                 break;
             default:
