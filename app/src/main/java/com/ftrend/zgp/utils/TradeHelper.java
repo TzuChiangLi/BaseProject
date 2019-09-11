@@ -274,7 +274,7 @@ public class TradeHelper {
     }
 
     /**
-     * qi
+     * 清空数据库
      */
     public static void clearAllTradeData() {
         SQLite.delete(Trade.class).execute();
