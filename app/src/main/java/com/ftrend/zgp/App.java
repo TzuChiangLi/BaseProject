@@ -1,6 +1,7 @@
 package com.ftrend.zgp;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.log.LogUtil;
@@ -13,9 +14,16 @@ import com.raizlabs.android.dbflow.config.FlowManager;
  * @author liziqiang@ftrend.cn
  */
 public class App extends Application {
+
+    // 全局Context对象
+    private static Context context = null;
+
     @Override
     public void onCreate() {
         super.onCreate();
+
+        context = this;
+
         FlowManager.init(this);
         //加载全局参数
         ZgParams.loadParams();
@@ -34,4 +42,7 @@ public class App extends Application {
         //endregion
     }
 
+    public static Context getContext() {
+        return context;
+    }
 }
