@@ -211,6 +211,9 @@ public class HandoverActivity extends BaseActivity implements Contract.HandoverV
      */
     @Override
     public void onNetWorkChange(boolean isOnline) {
-        mTitleBar.setRightIcon(isOnline?R.drawable.online:R.drawable.offline);
+        if (mTitleBar == null) {
+            mTitleBar = findViewById(R.id.handover_top_bar);
+        }
+        mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
     }
 }

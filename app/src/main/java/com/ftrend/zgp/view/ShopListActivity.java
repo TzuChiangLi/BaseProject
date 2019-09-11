@@ -15,6 +15,7 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.ShopListPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -59,6 +60,9 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
      */
     @Override
     public void onNetWorkChange(boolean isOnline) {
+        if (mTitleBar==null){
+            mTitleBar=findViewById(R.id.shop_list_top_bar);
+        }
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
     }
 
@@ -86,6 +90,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     @Override
     protected void initTitleBar() {
         ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white).autoDarkModeEnable(true).init();
+        mTitleBar.setRightIcon(ZgParams.isIsOnline() ?R.drawable.online:R.drawable.offline);
         mTitleBar.setOnTitleBarListener(this);
     }
 

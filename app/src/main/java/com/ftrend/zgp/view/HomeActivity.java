@@ -70,7 +70,8 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     @Override
     protected void initTitleBar() {
         ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white).autoDarkModeEnable(true).init();
-        LogUtil.d("initTitleBar");
+        mNetImg.setImageResource(ZgParams.isIsOnline() ? R.drawable.online : R.drawable.offline);
+
     }
 
 

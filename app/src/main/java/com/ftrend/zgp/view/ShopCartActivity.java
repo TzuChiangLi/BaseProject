@@ -21,6 +21,7 @@ import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.presenter.ShopCartPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -106,6 +107,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @Override
     protected void initTitleBar() {
         ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white).autoDarkModeEnable(true).init();
+        mTitleBar.setRightIcon(ZgParams.isIsOnline() ?R.drawable.online:R.drawable.offline);
         mTitleBar.setOnTitleBarListener(this);
     }
 
@@ -188,6 +190,9 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
      */
     @Override
     public void onNetWorkChange(boolean isOnline) {
+        if (mTitleBar==null){
+            mTitleBar=findViewById(R.id.shop_cart_top_bar);
+        }
         mTitleBar.setRightIcon(isOnline?R.drawable.online:R.drawable.offline);
     }
     @Override
