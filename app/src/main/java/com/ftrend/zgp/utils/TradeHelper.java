@@ -61,6 +61,15 @@ public class TradeHelper {
     private static TradePay pay = null;
 
     /**
+     * 清空当前交易信息
+     */
+    public static void clear() {
+        trade = null;
+        prodList = null;
+        pay = null;
+    }
+
+    /**
      * 初始化当前操作的交易流水，读取未结销售流水，不存在则创建新的流水
      */
     public static void initSale() {
