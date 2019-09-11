@@ -39,18 +39,20 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 break;
             case 1:
                 //选择商品界面右部商品分栏
-                helper.setText(R.id.shop_rv_product_tv_code, ((DepProduct) item).getProdCode());
+                helper.setText(R.id.shop_rv_product_tv_prodcode, ((DepProduct) item).getProdCode());
                 helper.setText(R.id.shop_rv_product_tv_prodname, ((DepProduct) item).getProdName());
                 helper.setText(R.id.shop_rv_product_price, String.valueOf(((DepProduct) item).getPrice()));
+                helper.setText(R.id.shop_rv_product_tv_barcode, ((DepProduct) item).getBarCode());
 //                helper.addOnClickListener(R.id.shop_rv_product_btn_add);
                 break;
             case 2:
                 //购物车商品列表
-                helper.setText(R.id.shop_list_rv_product_tv_code, ((TradeProd) item).getProdCode());
+                helper.setText(R.id.shop_list_rv_product_tv_prodcode, ((TradeProd) item).getProdCode());
                 helper.setText(R.id.shop_list_rv_product_tv_prodname, ((TradeProd) item).getProdName());
                 helper.setText(R.id.shop_list_rv_product_tv_num, String.valueOf(((TradeProd) item).getAmount()));
                 helper.setText(R.id.shop_list_rv_product_tv_per_price, String.valueOf(((TradeProd) item).getPrice()));
                 helper.setText(R.id.shop_list_rv_product_tv_total, String.valueOf(((TradeProd) item).getAmount() * ((TradeProd) item).getPrice()));
+                helper.setText(R.id.shop_list_rv_product_tv_barcode, ((TradeProd) item).getBarCode());
                 break;
             case 3:
                 //支付方式列表
