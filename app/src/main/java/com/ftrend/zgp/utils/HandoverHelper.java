@@ -362,6 +362,11 @@ public class HandoverHelper {
     }
 
 
+    /**
+     * @param appPayType
+     * @param tradeFlag
+     * @return
+     */
     public static double getTotalByPayTypeAndTradeFlag(String appPayType, String tradeFlag) {
         double total = 0.00;
         double amount = 0.00, change = 0.00;
