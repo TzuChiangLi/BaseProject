@@ -177,12 +177,7 @@ public class MessageUtil {
      * 成功
      */
     public static void showSuccess() {
-        new XToast(ActivityUtils.getTopActivity())
-                .setView(R.layout.toast_state_hint)
-                .setDuration(Duration)
-                .setImageDrawable(android.R.id.icon, R.drawable.toast_success)
-                .setText(android.R.id.message, "成功")
-                .show();
+        showSuccess("成功");
     }
 
     /**
@@ -193,7 +188,7 @@ public class MessageUtil {
     public static void showSuccess(String text) {
         new XToast(ActivityUtils.getTopActivity())
                 .setView(R.layout.toast_state_hint)
-                .setDuration(1500)
+                .setDuration(Duration)
                 .setImageDrawable(android.R.id.icon, R.drawable.toast_success)
                 .setText(android.R.id.message, text)
                 .show();
@@ -203,12 +198,7 @@ public class MessageUtil {
      * 错误
      */
     public static void showError() {
-        new XToast(ActivityUtils.getTopActivity())
-                .setView(R.layout.toast_state_hint)
-                .setDuration(Duration)
-                .setImageDrawable(android.R.id.icon, R.drawable.toast_error)
-                .setText(android.R.id.message, "出现错误")
-                .show();
+        showError("出现错误");
     }
 
     /**
