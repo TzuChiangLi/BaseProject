@@ -35,10 +35,10 @@ public class User extends BaseModel {
     private int maxDscRate=0;
     @Column
     @NotNull
-    private float maxDscTotal=0;
+    private double maxDscTotal=0;
     @Column
     @NotNull
-    private float maxTHTotal=0;
+    private double maxTHTotal=0;
 
     public User() {
     }
@@ -101,19 +101,19 @@ public class User extends BaseModel {
         this.maxDscRate = maxDscRate;
     }
 
-    public float getMaxDscTotal() {
+    public double getMaxDscTotal() {
         return maxDscTotal;
     }
 
-    public void setMaxDscTotal(float maxDscTotal) {
+    public void setMaxDscTotal(double maxDscTotal) {
         this.maxDscTotal = maxDscTotal;
     }
 
-    public float getMaxTHTotal() {
+    public double getMaxTHTotal() {
         return maxTHTotal;
     }
 
-    public void setMaxTHTotal(float maxTHTotal) {
+    public void setMaxTHTotal(double maxTHTotal) {
         this.maxTHTotal = maxTHTotal;
     }
 }

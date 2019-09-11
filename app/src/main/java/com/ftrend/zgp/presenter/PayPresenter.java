@@ -17,7 +17,7 @@ import java.util.List;
 /**
  * 支付P层
  *
- * @author LZQ
+ * @author liziqiang@ftrend.cn
  */
 public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
     private Contract.PayView mView;
@@ -50,7 +50,6 @@ public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
                     .where(DepPayInfo_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
                     .and(DepPayInfo_Table.appPayType.eq(String.valueOf(payWay)))
                     .querySingle().getPayTypeCode();
-
             //完成支付
             if (TradeHelper.pay(payCode)) {
                 //插入交易流水队列

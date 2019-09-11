@@ -36,20 +36,20 @@ public class TradeProd extends BaseModel {
     @Column
     private String depCode;
     @Column
-    private float price = 0;
+    private double price = 0;
     @Column
     @NotNull
-    private float amount = 0;
+    private double amount = 0;
     @Column
-    private float manuDsc = 0;
+    private double manuDsc = 0;
     @Column
-    private float vipDsc = 0;
+    private double vipDsc = 0;
     @Column
-    private float tranDsc;
+    private double tranDsc;
     @Column
-    private float total;
+    private double total;
     @Column
-    private float vipTotal;
+    private double vipTotal;
     @Column
     private String saleInfo;
     @Column
@@ -114,59 +114,59 @@ public class TradeProd extends BaseModel {
         this.depCode = depCode;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
-    public float getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(float amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
-    public float getManuDsc() {
+    public double getManuDsc() {
         return manuDsc;
     }
 
-    public void setManuDsc(float manuDsc) {
+    public void setManuDsc(double manuDsc) {
         this.manuDsc = manuDsc;
     }
 
-    public float getVipDsc() {
+    public double getVipDsc() {
         return vipDsc;
     }
 
-    public void setVipDsc(float vipDsc) {
+    public void setVipDsc(double vipDsc) {
         this.vipDsc = vipDsc;
     }
 
-    public float getTranDsc() {
+    public double getTranDsc() {
         return tranDsc;
     }
 
-    public void setTranDsc(float tranDsc) {
+    public void setTranDsc(double tranDsc) {
         this.tranDsc = tranDsc;
     }
 
-    public float getTotal() {
+    public double getTotal() {
         return total;
     }
 
-    public void setTotal(float total) {
+    public void setTotal(double total) {
         this.total = total;
     }
 
-    public float getVipTotal() {
+    public double getVipTotal() {
         return vipTotal;
     }
 
-    public void setVipTotal(float vipTotal) {
+    public void setVipTotal(double vipTotal) {
         this.vipTotal = vipTotal;
     }
 

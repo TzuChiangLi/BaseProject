@@ -159,7 +159,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     }
 
     @Override
-    public void updateTradeProd(long num, float price) {
+    public void updateTradeProd(long num, double price) {
         mTipTv.setText(String.valueOf(num));
         mTotalPriceTv.setText(String.valueOf(price));
     }

@@ -86,7 +86,7 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
         long count = SQLite.select(count(TradeProd_Table.id)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).count();
         FlowCursor csr = SQLite.select(sum(TradeProd_Table.price)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).query();
         csr.moveToFirst();
-        float price = csr.getFloat(0);
+        double price = csr.getDouble(0);
         mView.updateTradeProd(count, price);
     }
 
@@ -139,7 +139,7 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
         } else {
             FlowCursor csr = SQLite.select(sum(TradeProd_Table.price)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).query();
             csr.moveToFirst();
-            float price = csr.getFloat(0);
+            double price = csr.getDoubleOrDefault(0);
 
             //获取商品条目
             long sortNo = SQLite.select(count(TradeProd_Table.sortNo)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).count();

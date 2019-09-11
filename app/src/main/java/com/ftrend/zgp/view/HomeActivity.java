@@ -116,6 +116,9 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
             case "收银":
                 mPresenter.goShopCart();
                 break;
+            case "交班报表":
+                mPresenter.goHandover();
+                break;
             default:
                 LogUtil.e("无此功能");
                 break;
@@ -126,6 +129,12 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     @Override
     public void goShopChartActivity(String lsNo) {
         Intent intent = new Intent(HomeActivity.this, ShopCartActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void goHandoverActivity() {
+        Intent intent = new Intent(HomeActivity.this, HandoverActivity.class);
         startActivity(intent);
     }
 
