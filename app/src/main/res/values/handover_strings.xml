@@ -17,4 +17,8 @@
     <string name="handover_wechat">微信支付</string>
     <string name="handover_card">储值卡</string>
     <string name="handover_money">现金</string>
+
+
+    <string name="handover_cancel">取消</string>
+    <string name="handover_send">交班</string>
 </resources>

@@ -273,6 +273,14 @@ public class TradeHelper {
         queue.insert();
     }
 
+    /**
+     * 清空数据库
+     */
+    public static void clearAllTradeData() {
+        SQLite.delete(Trade.class).execute();
+        SQLite.delete(TradePay.class).execute();
+        SQLite.delete(TradeProd.class).execute();
+    }
 
     public static Trade getTrade() {
         return trade;

@@ -92,6 +92,11 @@ public class HandoverActivity extends BaseActivity implements Contract.HandoverV
         mPresenter.doHandover();
     }
 
+    @OnClick(R.id.handover_btn_cancel)
+    public void cancel() {
+        finish();
+    }
+
 
     @Override
     public void showUserInfo(String userCode, String userName) {
