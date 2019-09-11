@@ -103,6 +103,11 @@ public class HomePresenter implements Contract.HomePresenter {
     }
 
     @Override
+    public void logout() {
+        mView.logout();
+    }
+
+    @Override
     public void onDestory() {
         if (mView != null) {
             mView = null;

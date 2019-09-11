@@ -123,6 +123,9 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
             case "交班":
                 mPresenter.goHandover();
                 break;
+            case "注销登录":
+                mPresenter.logout();
+                break;
             default:
                 LogUtil.e("无此功能");
                 break;
@@ -150,6 +153,13 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     @Override
     public void showOfflineTip() {
         MessageUtil.showWarning("单机模式不能交班");
+    }
+
+    @Override
+    public void logout() {
+        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override

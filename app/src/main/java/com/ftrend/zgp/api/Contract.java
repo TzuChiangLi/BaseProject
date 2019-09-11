@@ -156,6 +156,9 @@ public interface Contract {
     }
 
 
+    /**
+     *
+     */
     interface HomePresenter {
         /**
          * 创建界面菜单的数据
@@ -179,11 +182,20 @@ public interface Contract {
         void goHandover();
 
         /**
+         * 注销登录
+         */
+        void logout();
+
+
+        /**
          * 销毁，防止泄露
          */
         void onDestory();
     }
 
+    /**
+     *
+     */
     interface HomeView extends BaseView<Contract.HomePresenter> {
         /**
          * 返回数据显示界面
@@ -220,6 +232,11 @@ public interface Contract {
          * 单机运行
          */
         void showOfflineTip();
+
+        /**
+         * 注销登录
+         */
+        void logout();
 
     }
 

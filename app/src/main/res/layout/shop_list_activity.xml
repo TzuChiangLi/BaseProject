@@ -42,9 +42,9 @@
         android:id="@+id/shop_list_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
         android:layout_above="@+id/shop_list_rl_bottom"
         android:layout_below="@+id/shop_list_title_line"
+        android:layout_marginBottom="1dp"
         tools:listitem="@layout/shop_list_rv_product_item" />
 
 

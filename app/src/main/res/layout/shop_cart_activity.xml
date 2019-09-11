@@ -100,7 +100,7 @@
         android:id="@+id/shop_cart_rv_verticle_line"
         android:layout_width="1px"
         android:layout_height="match_parent"
-        android:layout_above="@+id/shop_cart_fl"
+        android:layout_above="@+id/shop_cart_bottom_line"
         android:layout_below="@+id/shop_cart_top_ll_btn_scan"
         android:layout_toEndOf="@+id/shop_cart_rv_classes"
         android:background="@color/divide_line" />
@@ -109,7 +109,7 @@
         android:id="@+id/shop_cart_rv_product"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/shop_cart_fl"
+        android:layout_above="@+id/shop_cart_bottom_line"
         android:layout_below="@+id/shop_cart_line"
         android:layout_toEndOf="@+id/shop_cart_rv_verticle_line"
         android:background="@color/common_gray_bg"
@@ -141,6 +141,13 @@
             android:text="@string/shop_btn_list"
             android:textColor="@color/shop_white_text" />
     </FrameLayout>
+
+    <View
+        android:id="@+id/shop_cart_bottom_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/shop_cart_bottom_tv_toal_price"
+        android:background="@color/common_gray_bg" />
 
     <TextView
         android:id="@+id/shop_cart_bottom_tv_toal_price"
