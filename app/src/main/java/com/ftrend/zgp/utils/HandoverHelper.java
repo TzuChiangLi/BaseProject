@@ -1,5 +1,7 @@
 package com.ftrend.zgp.utils;
 
+import android.support.annotation.NonNull;
+
 import com.ftrend.zgp.model.Handover;
 import com.ftrend.zgp.model.HandoverPay;
 import com.ftrend.zgp.model.Handover_Table;
@@ -9,10 +11,15 @@ import com.ftrend.zgp.model.TradePay_Table;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.Trade_Table;
+import com.ftrend.zgp.utils.db.ZgpDb;
 import com.ftrend.zgp.utils.log.LogUtil;
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
+import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
+import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import static com.raizlabs.android.dbflow.sql.language.Method.count;
 import static com.raizlabs.android.dbflow.sql.language.Method.sum;
@@ -64,6 +71,11 @@ public class HandoverHelper {
     public static HandoverPay handoverPay = null;
 
 
+    /**
+     * 保存到交班数据库中
+     *
+     * @param handover
+     */
     public static void saveHandover(Handover handover) {
         //整理剩余数据
         handover.setHandoverNo(newHandoverNo());
@@ -82,24 +94,46 @@ public class HandoverHelper {
 
     }
 
-    private static void saveHandoverPay(String handoverNo) {
-        HandoverPay handoverPay = null;
-        String[] tradeFlag = {TRADE_FLAG_SALE, TRADE_FLAG_RETURN};
-        String[] payType = {HANDOVER_PAY_MONEY, HANDOVER_PAY_ALIPAY, HANDOVER_PAY_WECHAT, HANDOVER_PAY_CARD};
-        for (int i = 0; i < payType.length; i++) {
-            for (int j = 0; j < tradeFlag.length; j++) {
-                handoverPay = new HandoverPay();
-                handoverPay.setHandoverNo(handoverNo);
-                handoverPay.setTradeFlag(tradeFlag[j]);
-                handoverPay.setPayType(payType[i]);
-                handoverPay.setSaleTotal(tradeFlag[j].equals(tradeFlag[0]) ? getTotalByPayTypeAndTradeFlag(payType[i], tradeFlag[j]) : 0.00);
-                handoverPay.setSaleCount(tradeFlag[j].equals(tradeFlag[0]) ? getCountByPayTypeAndTradeFlag(payType[i], tradeFlag[j]) : 0);
-                handoverPay.setRtnTotal(tradeFlag[j].equals(tradeFlag[0]) ? 0.00 : getTotalByPayTypeAndTradeFlag(payType[i], tradeFlag[j]));
-                handoverPay.setRtnCount(tradeFlag[j].equals(tradeFlag[0]) ? 0 : getTotalByPayTypeAndTradeFlag(payType[i], tradeFlag[j]));
-                handoverPay.insert();
+    /**
+     * 保存支付统计记录
+     *
+     * @param handoverNo
+     */
+    private static void saveHandoverPay(final String handoverNo) {
+        Transaction transaction = FlowManager.getDatabase(ZgpDb.class).beginTransactionAsync(new ITransaction() {
+            @Override
+            public void execute(DatabaseWrapper databaseWrapper) {
+                HandoverPay handoverPay = null;
+                String[] tradeFlag = {TRADE_FLAG_SALE, TRADE_FLAG_RETURN};
+                String[] payType = {HANDOVER_PAY_MONEY, HANDOVER_PAY_ALIPAY, HANDOVER_PAY_WECHAT, HANDOVER_PAY_CARD};
+                for (int i = 0; i < payType.length; i++) {
+                    for (int j = 0; j < tradeFlag.length; j++) {
+                        handoverPay = new HandoverPay();
+                        handoverPay.setHandoverNo(handoverNo);
+                        handoverPay.setTradeFlag(tradeFlag[j]);
+                        handoverPay.setPayType(payType[i]);
+                        handoverPay.setSaleTotal(tradeFlag[j].equals(tradeFlag[0]) ? getTotalByPayTypeAndTradeFlag(payType[i], tradeFlag[j]) : 0.00);
+                        handoverPay.setSaleCount(tradeFlag[j].equals(tradeFlag[0]) ? getCountByPayTypeAndTradeFlag(payType[i], tradeFlag[j]) : 0);
+                        handoverPay.setRtnTotal(tradeFlag[j].equals(tradeFlag[0]) ? 0.00 : getTotalByPayTypeAndTradeFlag(payType[i], tradeFlag[j]));
+                        handoverPay.setRtnCount(tradeFlag[j].equals(tradeFlag[0]) ? 0 : getTotalByPayTypeAndTradeFlag(payType[i], tradeFlag[j]));
+                        handoverPay.insert();
+                    }
+                }
+                //全部成功后清空流水的数据表
+                TradeHelper.clearAllTradeData();
             }
-        }
+        }).success(new Transaction.Success() {
+            @Override
+            public void onSuccess(@NonNull Transaction transaction) {
+            }
+        }).error(new Transaction.Error() {
+            @Override
+            public void onError(@NonNull Transaction transaction, @NonNull Throwable error) {
+            }
+        }).build();
+        transaction.execute();
     }
+
 
     /**
      * 生成新的交单流水号
