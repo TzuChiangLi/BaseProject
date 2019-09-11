@@ -31,7 +31,7 @@ public class ExampleUnitTest {
         System.out.println("用户密码: 退货账号 => " + EncryptUtill.pwdDecrypt("7ANAL?;?)"));
         System.out.println("用户密码: 宋昆林 => " + EncryptUtill.pwdDecrypt("7C?A>7"));
         System.out.println("用户密码: 周显云 => " + EncryptUtill.pwdDecrypt("7-:>D,H;5"));
-
 //        System.out.println(Charset.availableCharsets());
     }
+
 }

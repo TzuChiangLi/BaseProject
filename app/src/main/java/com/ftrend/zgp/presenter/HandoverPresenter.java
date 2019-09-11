@@ -16,9 +16,9 @@ import java.util.Map;
 
 public class HandoverPresenter implements Contract.HandoverPresenter {
     private Contract.HandoverView mView;
-    private double saleTotal, rtnTotal, tradeTotal;
-    private double moneyTotal, aliPayTotal, wechatTotal, cardTotal, payTotal;
-    private long saleCount, rtnCount, tradeCount, moneyCount, aliPayCount, wechatCount, cardCount, payCount;
+    private double saleTotal, rtnTotal, getTotalByTradeFlag;
+    private double moneyTotal, aliPayTotal, wechatTotal, cardTotal, getTotalByPayType;
+    private long saleCount, rtnCount, getCountByTradeFlag, moneyCount, aliPayCount, wechatCount, cardCount, getCountByPayType;
 
     private HandoverPresenter(Contract.HandoverView mView) {
         this.mView = mView;
@@ -32,7 +32,7 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
         @Override
         public void onSuccess(Map<String, Object> body) {
             mView.showSuccess();
-            //TODO 2019年9月10日18:27 写入数据库
+            //将本页面已获取到的数据保存到对象中
             Handover handover = new Handover();
             handover.setRtnCount(rtnCount);
             handover.setRtnTotal(rtnTotal);
@@ -41,9 +41,7 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
             handover.setCashier(ZgParams.getCurrentUser().getUserCode());
             handover.setDepCode(ZgParams.getCurrentDep().getDepCode());
             handover.setStatus(HandoverHelper.HANDOVER_STATUS_FINISH);
-            //TODO 2019年9月10日19:56 获取最大lsNo和最小lsNo
             HandoverHelper.saveHandover(handover);
-
         }
 
         @Override
@@ -55,23 +53,28 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
 
     @Override
     public void initView() {
-        saleTotal = HandoverHelper.tradeTotal("T");
-        saleCount = HandoverHelper.tradeCount("T");
-        rtnTotal = HandoverHelper.tradeTotal("R");
-        rtnCount = HandoverHelper.tradeCount("R");
-        tradeTotal = HandoverHelper.tradeTotal("ALL");
-        tradeCount = HandoverHelper.tradeCount("ALL");
+        saleTotal = HandoverHelper.getTotalByTradeFlag("T");
+        saleCount = HandoverHelper.getCountByTradeFlag("T");
+        rtnTotal = HandoverHelper.getTotalByTradeFlag("R");
+        rtnCount = HandoverHelper.getCountByTradeFlag("R");
+        getTotalByTradeFlag = HandoverHelper.getTotalByTradeFlag("ALL");
+        getCountByTradeFlag = HandoverHelper.getCountByTradeFlag("ALL");
+        //现金
+        moneyTotal = HandoverHelper.getTotalByPayType("1");
+        moneyCount = HandoverHelper.getCountByPayType("1");
+        //支付宝
+        aliPayTotal = HandoverHelper.getTotalByPayType("2");
+        aliPayCount = HandoverHelper.getCountByPayType("2");
+        //微信支付
+        wechatTotal = HandoverHelper.getTotalByPayType("3");
+        wechatCount = HandoverHelper.getCountByPayType("3");
+        //储值卡
+        cardTotal = HandoverHelper.getTotalByPayType("4");
+        cardCount = HandoverHelper.getCountByPayType("4");
 
-        moneyTotal = HandoverHelper.payTotal("1");
-        moneyCount = HandoverHelper.payCount("1");
-        aliPayTotal = HandoverHelper.payTotal("2");
-        aliPayCount = HandoverHelper.payCount("2");
-        wechatTotal = HandoverHelper.payTotal("3");
-        wechatCount = HandoverHelper.payCount("3");
-        cardTotal = HandoverHelper.payTotal("4");
-        cardCount = HandoverHelper.payCount("4");
-        payTotal = HandoverHelper.payTotal("ALL");
-        payCount = HandoverHelper.payCount("ALL");
+
+        getTotalByPayType = HandoverHelper.getTotalByPayType("ALL");
+        getCountByPayType = HandoverHelper.getCountByPayType("ALL");
 
 
         //显示收款员信息
@@ -80,7 +83,7 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
         mView.showCashInfo(saleTotal, saleCount);
         mView.showTHInfo(rtnTotal, rtnCount);
         //交易合计
-        mView.showTradeInfo(tradeTotal, tradeCount);
+        mView.showTradeInfo(getTotalByTradeFlag, getCountByTradeFlag);
         //现金
         mView.showMoneyInfo(moneyTotal, moneyCount);
         //支付宝
@@ -90,7 +93,7 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
         //储值卡
         mView.showCardInfo(cardTotal, cardCount);
         //支付方式合计
-        mView.showPayInfo(payTotal, payCount);
+        mView.showPayInfo(getTotalByPayType, getCountByPayType);
     }
 
     @Override
