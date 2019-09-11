@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_gray_bg"
     tools:context=".view.HandoverActivity">
 
     <com.hjq.bar.TitleBar
@@ -36,5 +37,40 @@
         android:background="@color/common_white"
         android:scaleType="centerInside"
         android:src="@drawable/title_bar_bottom" />
+
+
+    <include
+        layout="@layout/handover_rv_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/handover_title_line" />
+
+
+    <LinearLayout
+        android:id="@+id/handover_ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_white"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/handover_bottom_tv_hang_up"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shop_btn_gray_selector"
+            android:text="@string/shop_btn_hang_up" />
+
+
+        <Button
+            android:id="@+id/handover_btn_handover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shop_btn_red_selector"
+            android:text="@string/shop_btn_pay"
+            android:textColor="@color/shop_white_text" />
+    </LinearLayout>
+
 
 </RelativeLayout>

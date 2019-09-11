@@ -85,7 +85,7 @@ public interface Contract {
         /**
          * 同步数据进度
          *
-         * @param step 步骤：1 - 下载基础数据；2 - 下载实时流水
+         * @param step     步骤：1 - 下载基础数据；2 - 下载实时流水
          * @param progress 进度
          */
         void updateProgress(int step, int progress);
@@ -174,6 +174,11 @@ public interface Contract {
         void goShopCart();
 
         /**
+         * 跳转交班界面
+         */
+        void goHandover();
+
+        /**
          * 销毁，防止泄露
          */
         void onDestory();
@@ -200,6 +205,11 @@ public interface Contract {
          * @param lsNo 流水单号
          */
         void goShopChartActivity(String lsNo);
+
+        /**
+         * 跳转到交班界面
+         */
+        void goHandoverActivity();
     }
 
     interface ShopCartPresenter {
@@ -317,7 +327,7 @@ public interface Contract {
         /**
          * 交易完成
          */
-        void paySuccess(String lsNo, double amount, int payWay);
+        boolean paySuccess(String lsNo, double amount, int payWay);
 
         /**
          * 销毁，防止泄露
@@ -333,4 +343,96 @@ public interface Contract {
          */
         void showPayway(List<Menu.MenuList> payWay);
     }
+
+    interface HandoverPresenter {
+        /**
+         * 初始化界面
+         */
+        void initView();
+
+        /**
+         * 交班
+         */
+        void doHandover();
+
+    }
+
+    interface HandoverView extends BaseView<Contract.HandoverPresenter> {
+        /**
+         * 显示收款员信息
+         */
+        void showUserInfo(String userCode, String userName);
+
+        /**
+         * 显示收银信息
+         */
+        void showCashInfo(double cashTotal, long cashCount);
+
+        /**
+         * 显示退货信息
+         */
+        void showTHInfo(double thTotal, long thCount);
+
+        /**
+         * 显示交易合计信息
+         *
+         * @param tradeTotal 交易合计金额
+         * @param tradeCount 交易合计次数
+         */
+        void showTradeInfo(double tradeTotal, long tradeCount);
+
+        /**
+         * 显示现金信息
+         *
+         * @param moneyTotal 现金金额
+         * @param moneyCount 现金次数
+         */
+        void showMoneyInfo(double moneyTotal, long moneyCount);
+
+        /**
+         * 支付宝现金信息
+         *
+         * @param aliTotal 支付宝金额
+         * @param aliCount 支付宝次数
+         */
+        void showAliPayInfo(double aliTotal, long aliCount);
+
+        /**
+         * 微信支付信息
+         *
+         * @param wechatTotal 微信支付金额
+         * @param wechatCount 微信支付次数
+         */
+        void showWeChatInfo(double wechatTotal, long wechatCount);
+
+        /**
+         * 储值卡信息
+         *
+         * @param cardTotal 储值卡金额
+         * @param cardCount 储值卡支付次数
+         */
+        void showCardInfo(double cardTotal, long cardCount);
+
+
+        /**
+         * 显示支付方式合计
+         *
+         * @param payTotal 支付方式合计金额
+         * @param payCount 支付方式合计次数
+         */
+        void showPayInfo(double payTotal, long payCount);
+
+        /**
+         * 交班成功并返回
+         */
+        void showSuccess();
+
+        /**
+         * 提示错误
+         */
+        void showError();
+
+    }
+
+
 }

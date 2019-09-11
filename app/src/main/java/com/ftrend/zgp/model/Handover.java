@@ -1,17 +1,17 @@
 package com.ftrend.zgp.model;
 
-import com.bin.david.form.annotation.SmartTable;
-import com.ftrend.zgp.utils.db.DBHelper;
+import com.ftrend.zgp.utils.db.ZgpDb;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
+import com.raizlabs.android.dbflow.structure.BaseModel;
 
 /**
  * @author liziqiang@ftrend.cn
  */
-@Table(database = DBHelper.class)
-public class Handover {
+@Table(database = ZgpDb.class)
+public class Handover extends BaseModel {
     @PrimaryKey(autoincrement = true)
     @NotNull
     private int id;
@@ -66,6 +66,7 @@ public class Handover {
     @Column
     @NotNull
     private String status = "0";
+
 
     public int getId() {
         return id;

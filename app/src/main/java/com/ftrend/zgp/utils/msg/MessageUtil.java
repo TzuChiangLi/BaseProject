@@ -7,10 +7,7 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.toast.XToast;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
-import com.ftrend.zgp.model.Event;
 import com.lxj.xpopup.core.BasePopupView;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -264,12 +261,4 @@ public class MessageUtil {
         Duration = duration;
     }
     //endregion
-//-------------------------------------事件传递-----------------------------------------//
-
-    public static void finishInit() {
-        Event event = new Event();
-        event.target = Event.TARGET_INIT;
-        event.type = Event.TYPE_INIT_FINISH;
-        EventBus.getDefault().post(event);
-    }
 }

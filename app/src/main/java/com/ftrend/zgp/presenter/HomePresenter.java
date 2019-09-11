@@ -6,7 +6,6 @@ import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.TradeHelper;
-import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
@@ -24,7 +23,7 @@ import static com.raizlabs.android.dbflow.sql.language.Method.count;
  *
  * @author liziqiang@ftrend.cn
  */
-public class HomePresenter implements Contract.HomePresenter, HttpCallBack {
+public class HomePresenter implements Contract.HomePresenter {
     private Contract.HomeView mView;
 
 
@@ -83,6 +82,11 @@ public class HomePresenter implements Contract.HomePresenter, HttpCallBack {
 //                .where(TradeProd_Table.id.eq(id))
 //                .querySingle().getLsNo();
 //        LogUtil.d("----maxLsNo:"+maxLsNo);
+    }
+
+    @Override
+    public void goHandover() {
+        mView.goHandoverActivity();
     }
 
     @Override
@@ -148,32 +152,6 @@ public class HomePresenter implements Contract.HomePresenter, HttpCallBack {
         }
 
         return outStr;
-    }
-
-
-    @Override
-    public void onStart() {
-
-    }
-
-    @Override
-    public void onSuccess(Object body) {
-
-    }
-
-    @Override
-    public void onFailed(String errorCode, String errorMessage) {
-
-    }
-
-    @Override
-    public void onHttpError(int errorCode, String errorMsg) {
-
-    }
-
-    @Override
-    public void onFinish() {
-
     }
 
 
