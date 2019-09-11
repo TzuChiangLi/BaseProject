@@ -86,7 +86,8 @@ public class HomePresenter implements Contract.HomePresenter {
 
     @Override
     public void goHandover() {
-        long tradeCount = SQLite.select(count()).from(Trade.class).count();
+        long tradeCount = SQLite.select(count()).from(Trade.class)
+                .where(Trade_Table.status.eq(TradeHelper.TRADE_STATUS_PAID)).count();
         if (tradeCount > 0) {
             mView.goHandoverActivity();
         } else {

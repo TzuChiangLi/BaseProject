@@ -42,7 +42,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         initTitleBar();
         initData();
         mContext = this;
-        registerReceiver();
     }
 
 
@@ -128,7 +127,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (unbinder != null) {
             unbinder.unbind();
         }
-        unRegisterReceiver();
         super.onDestroy();
     }
 
