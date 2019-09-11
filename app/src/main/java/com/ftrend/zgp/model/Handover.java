@@ -7,6 +7,8 @@ import com.raizlabs.android.dbflow.annotation.PrimaryKey;
 import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
+import java.util.Date;
+
 /**
  * @author liziqiang@ftrend.cn
  */
@@ -20,7 +22,7 @@ public class Handover extends BaseModel {
     private String handoverNo;
     @Column
     @NotNull
-    private String handoverTime;
+    private Date handoverTime;
     @Column
     @NotNull
     private String depCode;
@@ -59,10 +61,10 @@ public class Handover extends BaseModel {
     private double cancelTotal = 0;
     @Column
     @NotNull
-    private double hanupCount = 0;
+    private double hangupCount = 0;
     @Column
     @NotNull
-    private double hanupTotal = 0;
+    private double hangupTotal = 0;
     @Column
     @NotNull
     private String status = "0";
@@ -84,11 +86,11 @@ public class Handover extends BaseModel {
         this.handoverNo = handoverNo;
     }
 
-    public String getHandoverTime() {
+    public Date getHandoverTime() {
         return handoverTime;
     }
 
-    public void setHandoverTime(String handoverTime) {
+    public void setHandoverTime(Date handoverTime) {
         this.handoverTime = handoverTime;
     }
 
@@ -188,27 +190,27 @@ public class Handover extends BaseModel {
         this.cancelTotal = cancelTotal;
     }
 
-    public double getHanupCount() {
-        return hanupCount;
-    }
-
-    public void setHanupCount(double hanupCount) {
-        this.hanupCount = hanupCount;
-    }
-
-    public double getHanupTotal() {
-        return hanupTotal;
-    }
-
-    public void setHanupTotal(double hanupTotal) {
-        this.hanupTotal = hanupTotal;
-    }
-
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public double getHangupCount() {
+        return hangupCount;
+    }
+
+    public void setHangupCount(double hangupCount) {
+        this.hangupCount = hangupCount;
+    }
+
+    public double getHangupTotal() {
+        return hangupTotal;
+    }
+
+    public void setHangupTotal(double hangupTotal) {
+        this.hangupTotal = hangupTotal;
     }
 }

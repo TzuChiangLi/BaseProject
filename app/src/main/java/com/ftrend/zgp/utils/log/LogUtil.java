@@ -1,6 +1,7 @@
 package com.ftrend.zgp.utils.log;
 
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.blankj.utilcode.util.ActivityUtils;
@@ -55,39 +56,46 @@ public class LogUtil {
      * @param msg
      */
     public static void e(String msg) {
-        if (showLog) {
-            Log.e(ActivityUtils.getTopActivity().getLocalClassName(), msg);
+        if (!TextUtils.isEmpty(msg)) {
+            if (showLog) {
+                Log.e(ActivityUtils.getTopActivity().getLocalClassName(), msg);
+            }
+            if (saveError) {
+                FileWriter writer = null;
+                try {
+                    init();
+                    writer = new FileWriter(new File(logPathStr + "log.txt"), true);
+                    BufferedWriter bufWriter = new BufferedWriter(writer);
+                    bufWriter.write(String.format("----------------------------------------------------------------------------------------------%s%s%s%s%s",
+                            "\n异常原因：",
+                            msg, "\n发生时间：",
+                            getDateTime().toString(),
+                            "\n"));
+                    bufWriter.newLine();
+                    bufWriter.close();
+                    writer.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e(ActivityUtils.getTopActivity().getLocalClassName(), "为避免发生死循环错误: " + e.getMessage());
+                }
+            }
         }
-        if (saveError) {
-            FileWriter writer = null;
-            try {
-                init();
-                writer = new FileWriter(new File(logPathStr + "log.txt"), true);
-                BufferedWriter bufWriter = new BufferedWriter(writer);
-                bufWriter.write(String.format("----------------------------------------------------------------------------------------------%s%s%s%s%s",
-                        "\n异常原因：",
-                        msg, "\n发生时间：",
-                        getDateTime().toString(),
-                        "\n"));
-                bufWriter.newLine();
-                bufWriter.close();
-                writer.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e(ActivityUtils.getTopActivity().getLocalClassName(), "为避免发生死循环错误: " + e.getMessage());
+
+    }
+
+    public static void d(String msg) {
+        if (!TextUtils.isEmpty(msg)) {
+            if (showLog) {
+                Log.d(ActivityUtils.getTopActivity().getLocalClassName(), msg);
             }
         }
     }
 
-    public static void d(String msg) {
-        if (showLog) {
-            Log.d(ActivityUtils.getTopActivity().getLocalClassName(), msg);
-        }
-    }
-
     public static void i(String msg) {
-        if (showLog) {
-            Log.i(ActivityUtils.getTopActivity().getLocalClassName(), msg);
+        if (!TextUtils.isEmpty(msg)) {
+            if (showLog) {
+                Log.i(ActivityUtils.getTopActivity().getLocalClassName(), msg);
+            }
         }
     }
 
