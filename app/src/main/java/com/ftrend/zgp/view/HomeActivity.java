@@ -148,6 +148,11 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     }
 
     @Override
+    public void showOfflineTip() {
+        MessageUtil.showWarning("单机模式不能交班");
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.onDestory();

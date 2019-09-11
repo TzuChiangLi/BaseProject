@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
     /**
-     * 0是选择界面的类别，1是选择界面的商品信息，2是查看购物车内的商品信息
+     * 0是选择界面的类别，1是选择界面的商品信息，2是查看购物车内的商品信息，3是支付列表
      */
     private int type;
 

@@ -216,6 +216,11 @@ public interface Contract {
          */
         void hasNoTrade();
 
+        /**
+         * 单机运行
+         */
+        void showOfflineTip();
+
     }
 
     interface ShopCartPresenter {
@@ -440,6 +445,9 @@ public interface Contract {
          */
         void showError();
 
+        /**
+         * 单机模式不允许交班
+         */
         void showOfflineTip();
 
     }
