@@ -70,6 +70,15 @@ public class RegisterActivity extends BaseActivity implements Contract.RegisterV
         }, 1500);
     }
 
+    /**
+     * 网络变化
+     * @param isOnline
+     */
+    @Override
+    public void onNetWorkChange(boolean isOnline) {
+
+    }
+
     @Override
     public void registerError(String error) {
 

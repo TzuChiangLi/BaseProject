@@ -33,14 +33,6 @@ public class HandoverHelper {
     // 交易类型：R-退货
     public static final String TRADE_FLAG_RETURN = "R";
 
-    // 交易状态：0-未结
-    public static final String TRADE_STATUS_NOTPAY = "0";
-    // 交易状态：1-挂起
-    public static final String TRADE_STATUS_HANGUP = "1";
-    // 交易状态：2-已结
-    public static final String TRADE_STATUS_PAID = "2";
-    // 交易状态：3-取消
-    public static final String TRADE_STATUS_CANCELLED = "3";
     // 操作记录：0-未删除
     public static final String DELFLAG_EXIST = "0";
     // 操作记录：1-已删除
@@ -81,10 +73,10 @@ public class HandoverHelper {
         handover.setHandoverNo(newHandoverNo());
         handover.setLsNoMin(getMinLsNo());
         handover.setLsNoMax(getMaxLsNo());
-        handover.setCancelCount(getCountByStatus(TRADE_STATUS_CANCELLED));
-        handover.setCancelTotal(getTotalByStatus(TRADE_STATUS_CANCELLED));
-        handover.setHangupCount(getCountByStatus(TRADE_STATUS_HANGUP));
-        handover.setHangupTotal(getTotalByStatus(TRADE_STATUS_HANGUP));
+        handover.setCancelCount(getCountByStatus(TradeHelper.TRADE_STATUS_CANCELLED));
+        handover.setCancelTotal(getTotalByStatus(TradeHelper.TRADE_STATUS_CANCELLED));
+        handover.setHangupCount(getCountByStatus(TradeHelper.TRADE_STATUS_HANGUP));
+        handover.setHangupTotal(getTotalByStatus(TradeHelper.TRADE_STATUS_HANGUP));
         handover.setDelCount(getCountByDelFlag(DELFLAG_DELETE));
         handover.setDelTotal(getTotalByDelFlag(DELFLAG_DELETE));
         handover.setHandoverTime(LogUtil.getDateTime());
@@ -337,7 +329,7 @@ public class HandoverHelper {
         double total = 0.00;
         FlowCursor csr = null;
         double amount = 0.00, change = 0.00;
-        if (type.equals("ALL")) {
+        if (type.equals(TRADE_ALL)) {
             csr = SQLite.select(sum(TradePay_Table.amount)).from(TradePay.class)
                     .query();
             if (csr.moveToFirst()) {

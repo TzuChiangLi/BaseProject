@@ -154,4 +154,12 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
         super.onDestroy();
         mPresenter.onDestory();
     }
+
+    /**
+     * 网络变化
+     * @param isOnline
+     */
+    @Override
+    public void onNetWorkChange(boolean isOnline) {
+    }
 }

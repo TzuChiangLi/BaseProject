@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         app:leftIcon="@drawable/back"
-        app:lineSize="1px"
         app:lineColor="@color/common_blue"
-        app:rightIcon="@drawable/net_status">
+        app:lineSize="1px"
+        app:rightIcon="@drawable/online">
 
         <TextView
             android:layout_width="match_parent"

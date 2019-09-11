@@ -210,6 +210,12 @@ public interface Contract {
          * 跳转到交班界面
          */
         void goHandoverActivity();
+
+        /**
+         * 没有交易流水，无法进入交班界面
+         */
+        void hasNoTrade();
+
     }
 
     interface ShopCartPresenter {
@@ -433,6 +439,8 @@ public interface Contract {
          * 提示错误
          */
         void showError();
+
+        void showOfflineTip();
 
     }
 

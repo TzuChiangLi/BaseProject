@@ -173,19 +173,23 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @OnClick(R.id.shop_cart_bottom_tv_payment)
     public void goPayActivity() {
-//        UserLog userLog = new UserLog();
-//        userLog.setModule("ShopCart");
-//        userLog.setUserCode("userCode");
-//        userLog.setContent("结算");
-//        userLog.setFunction("结算");
-//        userLog.setDepCode("DepCode");
-//        userLog.insert();
-        Intent intent = new Intent(ShopCartActivity.this, PayActivity.class);
-        intent.putExtra("total", mTotalPriceTv.getText().toString());
-        startActivity(intent);
+        if (!mTipTv.getText().toString().equals("0")) {
+            Intent intent = new Intent(ShopCartActivity.this, PayActivity.class);
+            intent.putExtra("total", mTotalPriceTv.getText().toString());
+            startActivity(intent);
+        } else {
+            MessageUtil.showWarning("购物车为空");
+        }
     }
 
-
+    /**
+     * 网络变化
+     * @param isOnline
+     */
+    @Override
+    public void onNetWorkChange(boolean isOnline) {
+        mTitleBar.setRightIcon(isOnline?R.drawable.online:R.drawable.offline);
+    }
     @Override
     public void setPresenter(Contract.ShopCartPresenter presenter) {
         if (presenter != null) {

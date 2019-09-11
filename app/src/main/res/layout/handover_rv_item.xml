@@ -412,7 +412,8 @@
             android:layout_alignParentStart="true"
             android:text="@string/handover_print_count"
             android:textColor="@color/text_black_first"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/handover_rv_item_tv_count"
@@ -421,7 +422,8 @@
             android:layout_below="@id/handover_rv_ll_item"
             android:layout_toEndOf="@+id/handover_tv_count_title"
             android:textColor="@color/text_black_first"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:visibility="gone" />
 
 
         <TextView
@@ -432,7 +434,8 @@
             android:layout_toStartOf="@+id/handover_tv_print_time"
             android:text="@string/handover_time"
             android:textColor="@color/text_black_first"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/handover_tv_print_time"
@@ -441,7 +444,8 @@
             android:layout_below="@id/handover_rv_ll_item"
             android:layout_alignParentEnd="true"
             android:textColor="@color/text_black_first"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

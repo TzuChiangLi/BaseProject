@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ftrend.zgp.R;
@@ -39,6 +40,8 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     TextView mUserTv;
     @BindView(R.id.home_tv_depname)
     TextView mDepTv;
+    @BindView(R.id.home_img_online_status)
+    ImageView mNetImg;
     private Contract.HomePresenter mPresenter;
     private MenuAdapter mMenuAdapter;
 
@@ -139,8 +142,23 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     }
 
     @Override
+    public void hasNoTrade() {
+        MessageUtil.showWarning("当前没有交易流水！");
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.onDestory();
+    }
+
+    /**
+     * 网络变化
+     *
+     * @param isOnline
+     */
+    @Override
+    public void onNetWorkChange(boolean isOnline) {
+        mNetImg.setImageResource(isOnline ? R.drawable.online : R.drawable.offline);
     }
 }

@@ -73,8 +73,8 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
         cardCount = HandoverHelper.getCountByPayType("4");
 
 
-        getTotalByPayType = HandoverHelper.getTotalByPayType("ALL");
-        getCountByPayType = HandoverHelper.getCountByPayType("ALL");
+        getTotalByPayType = HandoverHelper.getTotalByPayType(HandoverHelper.TRADE_ALL);
+        getCountByPayType = HandoverHelper.getCountByPayType(HandoverHelper.TRADE_ALL);
 
 
         //显示收款员信息
@@ -98,6 +98,10 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
 
     @Override
     public void doHandover() {
-        RestSubscribe.getInstance().posEnd(ZgParams.getPosCode(), new RestCallback(regHandler));
+        if (ZgParams.isIsOnline()) {
+            RestSubscribe.getInstance().posEnd(ZgParams.getPosCode(), new RestCallback(regHandler));
+        } else {
+            mView.showOfflineTip();
+        }
     }
 }

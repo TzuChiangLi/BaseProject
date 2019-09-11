@@ -84,6 +84,16 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
 
     }
 
+    /**
+     * 网络变化
+     *
+     * @param isOnline
+     */
+    @Override
+    public void onNetWorkChange(boolean isOnline) {
+
+    }
+
     @Override
     public void setPresenter(Contract.PayPresenter presenter) {
         if (presenter != null) {

@@ -51,6 +51,17 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     private String lsNo = "", total = "";
     private int oldPosition = -1;
 
+
+    /**
+     * 网络变化
+     *
+     * @param isOnline
+     */
+    @Override
+    public void onNetWorkChange(boolean isOnline) {
+        mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
+    }
+
     @Override
     protected int getLayoutID() {
         return R.layout.shop_list_activity;
@@ -81,10 +92,14 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @OnClick(R.id.shop_list_btn_pay)
     public void doPay() {
-        Intent intent = new Intent(ShopListActivity.this, PayActivity.class);
-        intent.putExtra("lsNo", lsNo);
-        intent.putExtra("total", total);
-        startActivity(intent);
+        if (mProdAdapter.getData().size() > 0) {
+            Intent intent = new Intent(ShopListActivity.this, PayActivity.class);
+            intent.putExtra("lsNo", lsNo);
+            intent.putExtra("total", total);
+            startActivity(intent);
+        } else {
+            MessageUtil.showWarning("购物车为空");
+        }
     }
 
     @Override

@@ -14,7 +14,7 @@
         app:leftIcon="@drawable/back"
         app:lineColor="@color/common_blue"
         app:lineSize="1px"
-        app:rightIcon="@drawable/net_status">
+        app:rightIcon="@drawable/online">
 
         <TextView
             android:layout_width="match_parent"

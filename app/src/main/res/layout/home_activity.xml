@@ -13,7 +13,7 @@
         android:layout_alignTop="@+id/home_tv_depname"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/net_status" />
+        android:src="@drawable/online" />
 
     <ImageView
         android:id="@+id/home_img_dep"

@@ -1,6 +1,7 @@
 package com.ftrend.zgp.view;
 
 import android.os.Handler;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -11,6 +12,8 @@ import com.ftrend.zgp.presenter.HandoverPresenter;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
+import com.hjq.bar.OnTitleBarListener;
+import com.hjq.bar.TitleBar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -18,7 +21,7 @@ import butterknife.OnClick;
 /**
  * @author liziqiang@ftrend.cn
  */
-public class HandoverActivity extends BaseActivity implements Contract.HandoverView {
+public class HandoverActivity extends BaseActivity implements Contract.HandoverView, OnTitleBarListener {
     @BindView(R.id.handover_tv_usercode)
     TextView mUserCodeTv;
     @BindView(R.id.handover_tv_username)
@@ -57,6 +60,8 @@ public class HandoverActivity extends BaseActivity implements Contract.HandoverV
     TextView mPayWayTotalTv;
     @BindView(R.id.handover_btn_handover)
     Button mHandoverBtn;
+    @BindView(R.id.handover_top_bar)
+    TitleBar mTitleBar;
 
 
     private Contract.HandoverPresenter mPresenter;
@@ -76,6 +81,7 @@ public class HandoverActivity extends BaseActivity implements Contract.HandoverV
         if (mPresenter == null) {
             mPresenter = HandoverPresenter.createPresenter(this);
         }
+        mTitleBar.setOnTitleBarListener(this);
     }
 
     @Override
@@ -94,6 +100,9 @@ public class HandoverActivity extends BaseActivity implements Contract.HandoverV
 
     @OnClick(R.id.handover_btn_cancel)
     public void cancel() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
         finish();
     }
 
@@ -169,9 +178,39 @@ public class HandoverActivity extends BaseActivity implements Contract.HandoverV
     }
 
     @Override
+    public void showOfflineTip() {
+        MessageUtil.showError("当前状态为单机模式，无法交班！");
+    }
+
+    @Override
     public void setPresenter(Contract.HandoverPresenter presenter) {
         if (presenter != null) {
             mPresenter = presenter;
         }
+    }
+
+    @Override
+    public void onLeftClick(View v) {
+        finish();
+    }
+
+    @Override
+    public void onTitleClick(View v) {
+
+    }
+
+    @Override
+    public void onRightClick(View v) {
+
+    }
+
+    /**
+     * 网络变化
+     *
+     * @param isOnline
+     */
+    @Override
+    public void onNetWorkChange(boolean isOnline) {
+        mTitleBar.setRightIcon(isOnline?R.drawable.online:R.drawable.offline);
     }
 }

@@ -43,7 +43,7 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
     private LoginAdapter<Dep> mDepAdapter;
     private LoginAdapter<User> mUserAdapter;
     private String depCode, userCode;
-    private int i=0;
+    private int i = 0;
 
 
     @Override
@@ -75,7 +75,9 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
     @OnClick(R.id.login_btn)
     public void doLogin() {
         LogUtil.d(String.valueOf(i++));
-        if (ClickUtil.onceClick()) {return;}
+        if (ClickUtil.onceClick()) {
+            return;
+        }
         mPresenter.checkUserInfo(userCode, mPwdEdt.getText().toString().trim(), depCode);
     }
 
@@ -139,5 +141,15 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.onDestory();
+    }
+
+    /**
+     * 网络变化
+     *
+     * @param isOnline
+     */
+    @Override
+    public void onNetWorkChange(boolean isOnline) {
+
     }
 }
