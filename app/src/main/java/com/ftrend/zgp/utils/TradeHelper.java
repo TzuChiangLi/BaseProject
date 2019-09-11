@@ -2,6 +2,8 @@ package com.ftrend.zgp.utils;
 
 import android.util.Log;
 
+import com.ftrend.zgp.model.DepPayInfo;
+import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
@@ -41,6 +43,16 @@ public class TradeHelper {
     public static final String TRADE_STATUS_PAID = "2";
     // 交易状态：3-取消
     public static final String TRADE_STATUS_CANCELLED = "3";
+
+    // APP支付类型: 1-现金
+    public static final String APP_PAY_TYPE_CASH = "1";
+    // APP支付类型: 2-支付宝
+    public static final String APP_PAY_TYPE_ALIPAY = "2";
+    // APP支付类型: 3-微信支付
+    public static final String APP_PAY_TYPE_WXPAY = "3";
+    // APP支付类型: 4-储值卡
+    public static final String APP_PAY_TYPE_VIPCARD = "4";
+
     // 交易流水
     private static Trade trade = null;
     // 商品列表
@@ -139,52 +151,64 @@ public class TradeHelper {
     /**
      * 完成支付
      *
-     * @param payTypeCode 支付类型编号
-     * @param amount      支付金额
-     * @param change      找零金额
-     * @param payCode     支付账号
+     * @param appPayType APP支付类型
+     * @param amount     支付金额
+     * @param change     找零金额
+     * @param payCode    支付账号
      * @return
      */
-    public static boolean pay(String payTypeCode, double amount, double change, String payCode) {
-        if (pay == null) {
-            pay = new TradePay();
-            pay.setLsNo(trade.getLsNo());
-        }
-        pay.setPayTypeCode(payTypeCode);
-        pay.setAmount(amount);
-        pay.setChange(change);
-        pay.setPayCode(payCode);
-        pay.setPayTime(new Date());
-        // TODO: 2019/9/7 启用事务，避免数据异常
-        if (pay.save()) {
-            trade.setTradeTime(pay.getPayTime());
-            trade.setCashier(ZgParams.getCurrentUser().getUserCode());
-            trade.setStatus(TRADE_STATUS_PAID);
-            return trade.save();
-        } else {
+    public static boolean pay(String appPayType, double amount, double change, String payCode) {
+        try {
+            String payTypeCode = SQLite.select(DepPayInfo_Table.payTypeCode).from(DepPayInfo.class)
+                    .where(DepPayInfo_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
+                    .and(DepPayInfo_Table.appPayType.eq(appPayType))
+                    .querySingle().getPayTypeCode();
+
+            if (pay == null) {
+                pay = new TradePay();
+                pay.setLsNo(trade.getLsNo());
+            }
+            pay.setPayTypeCode(payTypeCode);
+            pay.setAppPayType(appPayType);
+            pay.setAmount(amount);
+            pay.setChange(change);
+            pay.setPayCode(payCode);
+            pay.setPayTime(new Date());
+            // TODO: 2019/9/7 启用事务，避免数据异常
+            if (pay.save()) {
+                trade.setTradeTime(pay.getPayTime());
+                trade.setCashier(ZgParams.getCurrentUser().getUserCode());
+                trade.setStatus(TRADE_STATUS_PAID);
+                return trade.save();
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "支付异常: " + pay.getLsNo() + " - " + appPayType, e);
             return false;
         }
+
     }
 
     /**
      * 完成支付（仅适用于现金支付）
      *
-     * @param payTypeCode 支付类型编号
+     * @param appPayType APP支付类型
      * @return
      */
-    public static boolean pay(String payTypeCode) {
-        return pay(payTypeCode, trade.getTotal(), 0, "(无)");
+    public static boolean pay(String appPayType) {
+        return pay(appPayType, trade.getTotal(), 0, "(无)");
     }
 
     /**
      * 完成支付（适用于微信、支付宝、储值卡等支付方式）
      *
-     * @param payTypeCode 支付类型编号
-     * @param payCode     支付账号
+     * @param appPayType APP支付类型
+     * @param payCode    支付账号
      * @return
      */
-    public static boolean pay(String payTypeCode, String payCode) {
-        return pay(payTypeCode, trade.getTotal(), 0, payCode);
+    public static boolean pay(String appPayType, String payCode) {
+        return pay(appPayType, trade.getTotal(), 0, payCode);
     }
 
     /**

@@ -119,7 +119,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                         MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
                             @Override
                             public void onLeftBtnClick(BasePopupView popView) {
-                                if (mPresenter.paySuccess(3)) {
+                                if (mPresenter.paySuccess(TradeHelper.APP_PAY_TYPE_CASH)) {
                                     popView.dismiss();
                                     MessageUtil.showSuccess("交易已完成");
                                     new Handler().postDelayed(new Runnable() {

@@ -327,9 +327,9 @@ public interface Contract {
         /**
          * 交易完成
          *
-         * @param payWay 支付方式
+         * @param appPayType APP支付方式
          */
-        boolean paySuccess(int payWay);
+        boolean paySuccess(String appPayType);
 
         /**
          * 销毁，防止泄露

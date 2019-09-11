@@ -3,6 +3,8 @@ package com.ftrend.zgp.utils.task;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.ftrend.zgp.model.DepPayInfo;
+import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradePay_Table;
@@ -278,6 +280,12 @@ public class LsDownloadTask {
      */
     private void savePay(Gson gson, Map<String, Object> values) {
         TradePay pay = gson.fromJson(gson.toJson(values), TradePay.class);
+        // 查找对应的appPayType（后台不保存此字段）
+        DepPayInfo payInfo = SQLite.select().from(DepPayInfo.class)
+                .where(DepPayInfo_Table.payTypeCode.eq(pay.getPayTypeCode()))
+                .querySingle();
+        pay.setAppPayType(payInfo == null ? "" : payInfo.getAppPayType());
+        // 先删除后添加
         SQLite.delete(TradePay.class)
                 .where(TradePay_Table.lsNo.eq(pay.getLsNo()))
                 .execute();
