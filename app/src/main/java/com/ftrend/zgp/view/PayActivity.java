@@ -16,6 +16,7 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.PayPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
@@ -66,6 +67,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     @Override
     protected void initTitleBar() {
         ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white).autoDarkModeEnable(true).init();
+        mTitleBar.setRightIcon(ZgParams.isIsOnline() ?R.drawable.online:R.drawable.offline);
         mTitleBar.setOnTitleBarListener(this);
     }
 
@@ -91,7 +93,10 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
      */
     @Override
     public void onNetWorkChange(boolean isOnline) {
-
+        if (mTitleBar==null){
+            mTitleBar=findViewById(R.id.pay_top_bar);
+        }
+        mTitleBar.setRightIcon(isOnline ?R.drawable.online:R.drawable.offline);
     }
 
     @Override

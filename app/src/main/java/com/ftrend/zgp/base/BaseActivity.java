@@ -42,15 +42,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         initTitleBar();
         initData();
         mContext = this;
-        IntentFilter msgFilter = new IntentFilter();
-        msgFilter.addAction(ZgParams.MSG_ONLINE);
-        msgFilter.addAction(ZgParams.MSG_OFFLINE);
-        receiver = new onNetStatusReceiver();
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, msgFilter);
+        registerReceiver();
     }
 
 
-    class onNetStatusReceiver extends BroadcastReceiver {
+    public class onNetStatusReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(ZgParams.MSG_ONLINE)) {
@@ -61,8 +57,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+
     public abstract void onNetWorkChange(boolean isOnline);
 
+
+    private void registerReceiver() {
+        IntentFilter msgFilter = new IntentFilter();
+        msgFilter.addAction(ZgParams.MSG_ONLINE);
+        msgFilter.addAction(ZgParams.MSG_OFFLINE);
+        receiver = new onNetStatusReceiver();
+        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, msgFilter);
+    }
 
     private void unRegisterReceiver() {
         if (receiver == null) {
@@ -71,7 +76,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             try {
                 unregisterReceiver(receiver);
             } catch (Exception e) {
-                LogUtil.e(e.getMessage());
             }
         }
     }
@@ -109,19 +113,17 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        //关闭网络监听
+        unRegisterReceiver();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //网络监听
-
+        registerReceiver();
     }
 
     @Override
     protected void onDestroy() {
-//        unregisterReceiver(mNetworkChangeReceiver);
         //ButterKnife解绑
         if (unbinder != null) {
             unbinder.unbind();
