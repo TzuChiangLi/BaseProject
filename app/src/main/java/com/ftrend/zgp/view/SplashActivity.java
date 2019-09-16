@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.permission.PermissionUtil;
 
 /**
  * 启动闪屏
@@ -18,7 +19,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        PermissionUtil.checkAndRequestPermission();
         //根据本地参数来确定跳转页面
         new Handler().postDelayed(new Runnable() {
             @Override

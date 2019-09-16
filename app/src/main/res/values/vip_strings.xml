@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vip_way_title">会员登录方式</string>
+    <string name="vip_way_mobile">手机号</string>
+    <string name="vip_way_scan">扫码</string>
+    <string name="vip_way_card">会员卡</string>
+
+</resources>

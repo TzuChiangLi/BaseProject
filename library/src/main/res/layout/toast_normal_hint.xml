@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:layout_margin="100dp"
+    android:alpha="0.9"
     android:background="@drawable/toast_bg"
     android:gravity="center"
     android:orientation="vertical">

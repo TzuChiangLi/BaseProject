@@ -51,7 +51,6 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
 
     @Override
     protected void initView() {
-        PermissionUtil.checkAndRequestPermission();
         if (mPresenter == null) {
             mPresenter = HomePresenter.createPresenter(this);
         }

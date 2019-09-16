@@ -39,7 +39,7 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
 
     @Override
     protected void convert(@NonNull BaseViewHolder helper, T item) {
-        ButterKnife.bind(this,helper.itemView);
+        ButterKnife.bind(this, helper.itemView);
         switch (type) {
             case 0:
                 //选择商品界面左部类别分栏
@@ -51,7 +51,7 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 helper.setText(R.id.shop_rv_product_tv_prodname, ((DepProduct) item).getProdName());
                 helper.setText(R.id.shop_rv_product_price, String.valueOf(((DepProduct) item).getPrice()));
                 helper.setText(R.id.shop_rv_product_tv_barcode, ((DepProduct) item).getBarCode());
-                helper.setBackgroundColor(R.id.shop_cart_rv_product_rl, ((DepProduct) item).isSelect() ?rv_item_selected :rv_item_normal);
+                helper.setBackgroundColor(R.id.shop_cart_rv_product_rl, ((DepProduct) item).isSelect() ? rv_item_selected : rv_item_normal);
                 break;
             case 2:
                 //购物车商品列表
@@ -61,7 +61,11 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 helper.setText(R.id.shop_list_rv_product_tv_per_price, String.valueOf(((TradeProd) item).getPrice()));
                 helper.setText(R.id.shop_list_rv_product_tv_total, String.valueOf(((TradeProd) item).getAmount() * ((TradeProd) item).getPrice()));
                 helper.setText(R.id.shop_list_rv_product_tv_barcode, ((TradeProd) item).getBarCode());
-                helper.setBackgroundColor(R.id.shop_list_rv_product_rl, ((TradeProd) item).isSelect() ?rv_item_selected :rv_item_normal);
+                helper.setBackgroundColor(R.id.shop_list_rv_product_rl, ((TradeProd) item).isSelect() ? rv_item_selected : rv_item_normal);
+                helper.setGone(R.id.shop_list_rv_ll_btn, ((TradeProd) item).isSelect() ? true : false);
+                helper.addOnClickListener(R.id.shop_list_rv_img_add);
+                helper.addOnClickListener(R.id.shop_list_rv_img_minus);
+
                 break;
             case 3:
                 //支付方式列表

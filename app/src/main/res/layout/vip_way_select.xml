@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:background="@drawable/vip_select_shape"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/vip_way_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="8dp"
+        android:text="@string/vip_way_title"
+        android:textColor="@color/text_black_first"
+        android:textStyle="bold" />
+
+
+    <ImageView
+        android:id="@+id/vip_way_img_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/vip_way_tv_title"
+        android:layout_alignEnd="@+id/vip_way_ll"
+        android:scaleType="centerCrop"
+        android:src="@drawable/close" />
+
+
+    <LinearLayout
+        android:id="@+id/vip_way_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_way_tv_title"
+        android:layout_margin="16dp"
+        android:background="@color/common_white"
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+        <LinearLayout
+            android:id="@+id/vip_way_ll_mobile"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/vip_way_mobile" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:letterSpacing="0.05"
+                android:text="@string/vip_way_mobile"
+                android:textColor="@color/text_black_first" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/vip_way_ll_scan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/vip_way_mobile" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:letterSpacing="0.05"
+                android:text="@string/vip_way_scan"
+                android:textColor="@color/text_black_first" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/vip_way_ll_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/vip_way_mobile" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:letterSpacing="0.05"
+                android:text="@string/vip_way_card"
+                android:textColor="@color/text_black_first" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</RelativeLayout>
