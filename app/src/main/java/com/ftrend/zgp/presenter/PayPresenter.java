@@ -5,7 +5,6 @@ import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.utils.TradeHelper;
-import com.ftrend.zgp.utils.http.HttpCallBack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
  *
  * @author liziqiang@ftrend.cn
  */
-public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
+public class PayPresenter implements Contract.PayPresenter {
     private Contract.PayView mView;
 
     private PayPresenter(Contract.PayView mView) {
@@ -63,28 +62,4 @@ public class PayPresenter implements Contract.PayPresenter, HttpCallBack {
         }
     }
 
-    @Override
-    public void onStart() {
-
-    }
-
-    @Override
-    public void onSuccess(Object body) {
-
-    }
-
-    @Override
-    public void onFailed(String errorCode, String errorMessage) {
-
-    }
-
-    @Override
-    public void onHttpError(int errorCode, String errorMsg) {
-
-    }
-
-    @Override
-    public void onFinish() {
-
-    }
 }

@@ -60,8 +60,8 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
      */
     @Override
     public void onNetWorkChange(boolean isOnline) {
-        if (mTitleBar==null){
-            mTitleBar=findViewById(R.id.shop_list_top_bar);
+        if (mTitleBar == null) {
+            mTitleBar = findViewById(R.id.shop_list_top_bar);
         }
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
     }
@@ -90,7 +90,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     @Override
     protected void initTitleBar() {
         ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white).autoDarkModeEnable(true).init();
-        mTitleBar.setRightIcon(ZgParams.isIsOnline() ?R.drawable.online:R.drawable.offline);
+        mTitleBar.setRightIcon(ZgParams.isIsOnline() ? R.drawable.online : R.drawable.offline);
         mTitleBar.setOnTitleBarListener(this);
     }
 
@@ -138,11 +138,12 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (oldPosition != -1) {
-                    adapter.getViewByPosition(mRecyclerView, oldPosition, R.id.shop_list_rv_product_rl).setBackgroundColor(rv_item_normal);
+                    mProdAdapter.getData().get(oldPosition).setSelect(false);
+                    mProdAdapter.notifyItemChanged(oldPosition);
                 }
                 oldPosition = position;
-                view.setBackgroundColor(rv_item_selected);
-                MessageUtil.show(String.valueOf(position));
+                mProdAdapter.getData().get(position).setSelect(true);
+                mProdAdapter.notifyItemChanged(position);
             }
         });
     }

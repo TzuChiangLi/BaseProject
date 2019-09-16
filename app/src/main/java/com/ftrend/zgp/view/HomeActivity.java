@@ -18,8 +18,6 @@ import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.permission.PermissionUtil;
-import com.ftrend.zgp.utils.task.LsUploadThread;
-import com.ftrend.zgp.utils.task.ServerWatcherThread;
 import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.List;
@@ -57,14 +55,10 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         if (mPresenter == null) {
             mPresenter = HomePresenter.createPresenter(this);
         }
+        //设置界面信息
         mPresenter.setInfo();
-
-        //启动后台服务心跳检测线程
-        ServerWatcherThread watcherThread = new ServerWatcherThread();
-        watcherThread.start();
-        //启动数据上传线程
-        LsUploadThread lsUploadThread = new LsUploadThread();
-        lsUploadThread.start();
+        //启动线程
+        mPresenter.initServerThread();
     }
 
     @Override
@@ -175,6 +169,9 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
      */
     @Override
     public void onNetWorkChange(boolean isOnline) {
+        if (mNetImg == null) {
+            mNetImg = findViewById(R.id.home_img_online_status);
+        }
         mNetImg.setImageResource(isOnline ? R.drawable.online : R.drawable.offline);
     }
 }

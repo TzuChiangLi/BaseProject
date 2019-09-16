@@ -160,6 +160,11 @@ public interface Contract {
      *
      */
     interface HomePresenter {
+
+        /**
+         * 启动线程
+         */
+        void initServerThread();
         /**
          * 创建界面菜单的数据
          */

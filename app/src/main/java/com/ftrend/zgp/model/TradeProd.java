@@ -54,7 +54,12 @@ public class TradeProd extends BaseModel {
     private String saleInfo;
     @Column
     private String delFlag = "0";
-//
+    /**
+     * 该变量为了改变变量选中状态而创建，与数据库字段无关
+     */
+    private boolean isSelect = false;
+
+
 //    public TradeProd() {
 //    }
 
@@ -184,5 +189,13 @@ public class TradeProd extends BaseModel {
 
     public void setDelFlag(String delFlag) {
         this.delFlag = delFlag;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 }

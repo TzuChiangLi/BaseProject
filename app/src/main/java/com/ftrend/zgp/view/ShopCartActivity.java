@@ -107,7 +107,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @Override
     protected void initTitleBar() {
         ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white).autoDarkModeEnable(true).init();
-        mTitleBar.setRightIcon(ZgParams.isIsOnline() ?R.drawable.online:R.drawable.offline);
+        mTitleBar.setRightIcon(ZgParams.isIsOnline() ? R.drawable.online : R.drawable.offline);
         mTitleBar.setOnTitleBarListener(this);
     }
 
@@ -136,13 +136,14 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (oldPosition != -1) {
-                    adapter.getViewByPosition(mProdRecyclerView, oldPosition, R.id.shop_cart_rv_product_rl).setBackgroundColor(rv_item_normal);
+                    mProdAdapter.getData().get(oldPosition).setSelect(false);
+                    mProdAdapter.notifyItemChanged(oldPosition);
                 }
                 oldPosition = position;
-                view.setBackgroundColor(rv_item_selected);
+                mProdAdapter.getData().get(position).setSelect(true);
+                mProdAdapter.notifyItemChanged(position);
                 //添加到购物车中
                 mPresenter.addToShopCart((DepProduct) adapter.getItem(position), lsNo);
-                MessageUtil.show(String.valueOf(position));
             }
         });
     }
@@ -186,15 +187,17 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     /**
      * 网络变化
+     *
      * @param isOnline
      */
     @Override
     public void onNetWorkChange(boolean isOnline) {
-        if (mTitleBar==null){
-            mTitleBar=findViewById(R.id.shop_cart_top_bar);
+        if (mTitleBar == null) {
+            mTitleBar = findViewById(R.id.shop_cart_top_bar);
         }
-        mTitleBar.setRightIcon(isOnline?R.drawable.online:R.drawable.offline);
+        mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
     }
+
     @Override
     public void setPresenter(Contract.ShopCartPresenter presenter) {
         if (presenter != null) {

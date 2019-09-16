@@ -69,6 +69,10 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
     public void initProdList() {
         List<DepCls> clsList = SQLite.select().from(DepCls.class).where(DepCls_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode())).queryList();
         mProdList = SQLite.select().from(DepProduct.class).where(DepProduct_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode())).queryList();
+        for (DepProduct product :
+                mProdList) {
+            product.setSelect(false);
+        }
         //region 可能数据表自己测试用的有点问题，此处修复那个问题后再把牵扯到V层的代码修正掉
         mView.setProdList(mProdList);
         DepCls depCls = new DepCls();
@@ -93,7 +97,7 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
     @Override
     public void searchProdList(String key) {
         if (!TextUtils.isEmpty(key)) {
-            if (key.equals("all")) {
+            if ("all".equals(key)) {
                 mView.updateProdList(mProdList);
                 return;
             }
@@ -125,25 +129,15 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
 
     @Override
     public void addToShopCart(DepProduct depProduct, String lsNo) {
-//        TradeProd tradeProd = new TradeProd();
-//        tradeProd.setLsNo(lsNo);
-//        tradeProd.setProdCode(depProduct.getProdCode());
-//        tradeProd.setProdName(depProduct.getProdName());
-//        tradeProd.setDepCode(depProduct.getDepCode());
-//        tradeProd.setAmount(1);
-//        tradeProd.setPrice(depProduct.getPrice());
-//        tradeProd.setSortNo(String.valueOf(createSortNo(lsNo) + 1));
-//        tradeProd.insert();
         if (TradeHelper.addProduct(depProduct) == -1) {
             LogUtil.e("数据库添加失败");
         } else {
+            //TODO 2019年9月12日14:08 待放入TradeHelper
             FlowCursor csr = SQLite.select(sum(TradeProd_Table.price)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).query();
             csr.moveToFirst();
             double price = csr.getDoubleOrDefault(0);
-
             //获取商品条目
             long sortNo = SQLite.select(count(TradeProd_Table.sortNo)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).count();
-
 
             mView.updateTradeProd(sortNo, price);
         }
@@ -151,10 +145,6 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
 
     }
 
-//    private long createSortNo(String lsNo) {
-//        return SQLite.select(count()).from(TradeProd.class).
-//                where(TradeProd_Table.lsNo.eq(lsNo)).count();
-//    }
 
     @Override
     public void onDestory() {
@@ -163,38 +153,4 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
         }
     }
 
-
-//        Cursor cursor = DatabaseManger.getInstance(context).query("DepCls", new String[]{"*"}, null, null, null, null, null, null);
-//        if (cursor != null) {
-//            if (cursor.moveToFirst()) {
-//                do {
-//                    DepCls depCls = new DepCls();
-//                    depCls.setDepCode(cursor.getString(cursor.getColumnIndex("DepCode")));
-//                    depCls.setClsCode(cursor.getString(cursor.getColumnIndex("ClsCode")));
-//                    depCls.setClsName(cursor.getString(cursor.getColumnIndex("ClsName")));
-//                    clsList.add(depCls);
-//                } while (cursor.moveToNext());
-//            }
-//        }
-//        if (cursor != null) {
-//            cursor.close();
-//        }
-    //        cursor = DatabaseManger.getInstance(context).query("DepProduct", new String[]{"*"}, null, null, null, null, null, null);
-//        if (cursor != null) {
-//            if (cursor.moveToFirst()) {
-//                do {
-//                    DepProduct depProduct = new DepProduct();
-//                    depProduct.setClsCode(cursor.getString(cursor.getColumnIndex("ClsCode")));
-//                    depProduct.setBarCode(cursor.getString(cursor.getColumnIndex("BarCode")));
-//                    depProduct.setProdCode(cursor.getString(cursor.getColumnIndex("ProdCode")));
-//                    depProduct.setProdName(cursor.getString(cursor.getColumnIndex("ProdName")));
-//                    depProduct.setPrice(cursor.getFloat(cursor.getColumnIndex("Price")));
-//                    depProduct.setSpec(cursor.getString(cursor.getColumnIndex("Spec")));
-//                    mProdList.add(depProduct);
-//                } while (cursor.moveToNext());
-//            }
-//        }
-//        if (cursor != null) {
-//            cursor.close();
-//        }
 }

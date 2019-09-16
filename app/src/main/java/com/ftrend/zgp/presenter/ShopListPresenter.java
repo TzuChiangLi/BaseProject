@@ -4,15 +4,16 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.utils.TradeHelper;
-import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+
+import java.util.List;
 
 /**
  * 收银-选择商品P层
  *
  * @author liziqiang@ftrend.cn
  */
-public class ShopListPresenter implements Contract.ShopListPresenter, HttpCallBack {
+public class ShopListPresenter implements Contract.ShopListPresenter {
     private Contract.ShopListView mView;
 
     private ShopListPresenter(Contract.ShopListView mView) {
@@ -26,7 +27,11 @@ public class ShopListPresenter implements Contract.ShopListPresenter, HttpCallBa
 
     @Override
     public void initShopList(String lsNo) {
-        mView.showTradeProd(SQLite.select().from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).queryList());
+        List<TradeProd> tradeProdList = SQLite.select().from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).queryList();
+        for (TradeProd t : tradeProdList) {
+            t.setSelect(false);
+        }
+        mView.showTradeProd(tradeProdList);
     }
 
     @Override
@@ -57,32 +62,6 @@ public class ShopListPresenter implements Contract.ShopListPresenter, HttpCallBa
         if (mView != null) {
             mView = null;
         }
-    }
-
-
-    @Override
-    public void onStart() {
-
-    }
-
-    @Override
-    public void onSuccess(Object body) {
-
-    }
-
-    @Override
-    public void onFailed(String errorCode, String errorMessage) {
-
-    }
-
-    @Override
-    public void onHttpError(int errorCode, String errorMsg) {
-
-    }
-
-    @Override
-    public void onFinish() {
-
     }
 
 

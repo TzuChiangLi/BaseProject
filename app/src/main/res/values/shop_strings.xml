@@ -4,6 +4,8 @@
     <string name="shop_title_bar_list">收银-购物车</string>
     <string name="shop_rv_title_prodcode">商品码：</string>
     <string name="shop_rv_title_barcode">条码：</string>
+    <string name="shop_rv_title_sn">SN：</string>
+    <string name="shop_rv_title_sn_line">/</string>
     <string name="shop_tv_total">合计：</string>
     <string name="shop_tv_vip">会员</string>
     <string name="shop_tv_whole_discount">整单优惠</string>

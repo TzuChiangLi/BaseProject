@@ -13,6 +13,9 @@ import com.ftrend.zgp.model.TradeProd;
 
 import java.util.List;
 
+import butterknife.BindColor;
+import butterknife.ButterKnife;
+
 /**
  * 收银-商品选择界面列表适配器
  *
@@ -23,6 +26,11 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
      * 0是选择界面的类别，1是选择界面的商品信息，2是查看购物车内的商品信息，3是支付列表
      */
     private int type;
+    @BindColor(R.color.common_rv_item)
+    int rv_item_selected;
+    @BindColor(R.color.common_white)
+    int rv_item_normal;
+
 
     public ShopAdapter(int layoutResId, @Nullable List<T> data, int type) {
         super(layoutResId, data);
@@ -31,7 +39,7 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
 
     @Override
     protected void convert(@NonNull BaseViewHolder helper, T item) {
-
+        ButterKnife.bind(this,helper.itemView);
         switch (type) {
             case 0:
                 //选择商品界面左部类别分栏
@@ -43,7 +51,7 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 helper.setText(R.id.shop_rv_product_tv_prodname, ((DepProduct) item).getProdName());
                 helper.setText(R.id.shop_rv_product_price, String.valueOf(((DepProduct) item).getPrice()));
                 helper.setText(R.id.shop_rv_product_tv_barcode, ((DepProduct) item).getBarCode());
-//                helper.addOnClickListener(R.id.shop_rv_product_btn_add);
+                helper.setBackgroundColor(R.id.shop_cart_rv_product_rl, ((DepProduct) item).isSelect() ?rv_item_selected :rv_item_normal);
                 break;
             case 2:
                 //购物车商品列表
@@ -53,6 +61,7 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 helper.setText(R.id.shop_list_rv_product_tv_per_price, String.valueOf(((TradeProd) item).getPrice()));
                 helper.setText(R.id.shop_list_rv_product_tv_total, String.valueOf(((TradeProd) item).getAmount() * ((TradeProd) item).getPrice()));
                 helper.setText(R.id.shop_list_rv_product_tv_barcode, ((TradeProd) item).getBarCode());
+                helper.setBackgroundColor(R.id.shop_list_rv_product_rl, ((TradeProd) item).isSelect() ?rv_item_selected :rv_item_normal);
                 break;
             case 3:
                 //支付方式列表

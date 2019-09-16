@@ -75,13 +75,13 @@ public abstract class BaseActivity extends AppCompatActivity {
             try {
                 unregisterReceiver(receiver);
             } catch (Exception e) {
+                LogUtil.e(e.getMessage());
             }
         }
     }
 
-
     /**
-     * @return
+     * @return 布局ID
      */
     protected abstract int getLayoutID();
 
@@ -129,6 +129,29 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
         super.onDestroy();
     }
+
+
+    //region 屏幕方向
+    /**
+     * 是否允许旋转屏幕
+     */
+    private boolean isAllowScrRoate = false;
+
+    /**
+     * 设置是否允许横屏
+     *
+     * @param isAllowScrRoate
+     */
+    public void setAllowScrRoate(boolean isAllowScrRoate) {
+        this.isAllowScrRoate = isAllowScrRoate;
+        if (isAllowScrRoate) {
+            LogUtil.d("允许横屏");
+        } else {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+    }
+    //endregion
+
 
 //    class NetworkChangeReceiver extends BroadcastReceiver {
 //
@@ -181,24 +204,4 @@ public abstract class BaseActivity extends AppCompatActivity {
 //            }
 //        }
 //    }
-
-    //region 屏幕方向
-    /**
-     * 是否允许旋转屏幕
-     */
-    private boolean isAllowScrRoate = false;
-
-    /**
-     * 设置是否允许横屏
-     *
-     * @param isAllowScrRoate
-     */
-    public void setAllowScrRoate(boolean isAllowScrRoate) {
-        this.isAllowScrRoate = isAllowScrRoate;
-        if (isAllowScrRoate) {
-        } else {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-    }
-    //endregion
 }
