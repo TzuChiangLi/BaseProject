@@ -17,9 +17,11 @@ import com.ftrend.zgp.presenter.ShopListPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.pop.VipDialog;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
+import com.lxj.xpopup.XPopup;
 
 import java.util.List;
 
@@ -43,6 +45,8 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     TextView mPriceTotalTv;
     @BindView(R.id.shop_list_btn_cancel)
     Button mCancelBtn;
+    @BindView(R.id.shop_list_btn_vip)
+    Button mVipBtn;
     @BindColor(R.color.common_rv_item)
     int rv_item_selected;
     @BindColor(R.color.common_white)
@@ -60,8 +64,8 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
      */
     @Override
     public void onNetWorkChange(boolean isOnline) {
-        if (mTitleBar==null){
-            mTitleBar=findViewById(R.id.shop_list_top_bar);
+        if (mTitleBar == null) {
+            mTitleBar = findViewById(R.id.shop_list_top_bar);
         }
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
     }
@@ -90,10 +94,18 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     @Override
     protected void initTitleBar() {
         ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white).autoDarkModeEnable(true).init();
-        mTitleBar.setRightIcon(ZgParams.isIsOnline() ?R.drawable.online:R.drawable.offline);
+        mTitleBar.setRightIcon(ZgParams.isIsOnline() ? R.drawable.online : R.drawable.offline);
         mTitleBar.setOnTitleBarListener(this);
     }
 
+
+    @OnClick(R.id.shop_list_btn_vip)
+    public void selectVipLoginWay() {
+        new XPopup.Builder(this)
+                .dismissOnTouchOutside(false)
+                .asCustom(new VipDialog(this))
+                .show();
+    }
 
     @OnClick(R.id.shop_list_btn_pay)
     public void doPay() {
@@ -134,15 +146,30 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mProdAdapter = new ShopAdapter<>(R.layout.shop_list_rv_product_item, prodList, 2);
         mRecyclerView.setAdapter(mProdAdapter);
+        mProdAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                switch (view.getId()) {
+                    case R.id.shop_list_rv_img_add:
+                        MessageUtil.show("add");
+                        break;
+                    case R.id.shop_list_rv_img_minus:
+                        MessageUtil.show("minus");
+                        break;
+                    default:
+                }
+            }
+        });
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 if (oldPosition != -1) {
-                    adapter.getViewByPosition(mRecyclerView, oldPosition, R.id.shop_list_rv_product_rl).setBackgroundColor(rv_item_normal);
+                    mProdAdapter.getData().get(oldPosition).setSelect(false);
+                    mProdAdapter.notifyItemChanged(oldPosition);
                 }
                 oldPosition = position;
-                view.setBackgroundColor(rv_item_selected);
-                MessageUtil.show(String.valueOf(position));
+                mProdAdapter.getData().get(position).setSelect(true);
+                mProdAdapter.notifyItemChanged(position);
             }
         });
     }

@@ -24,22 +24,25 @@ public class App extends Application {
 
         context = this;
 
+        //初始化数据库框架
         FlowManager.init(this);
+
+
         //加载全局参数
         ZgParams.loadParams();
-        //region 打印日志初始化
+
+
         //设置日志输出为打印日志，出现error时保存到log.txt文件中
         LogUtil.setShowLog(true);
         LogUtil.setSaveError(true);
-        //endregion
-        //region 权限初始化
+
+
         //权限申请初始化
         SoulPermission.init(this);
         //是否打印日志
         SoulPermission.setDebug(true);
         //老的系统默认权限直接授予
         SoulPermission.skipOldRom(true);
-        //endregion
     }
 
     public static Context getContext() {

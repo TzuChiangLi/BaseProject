@@ -16,22 +16,17 @@
             android:id="@+id/shop_rv_product_tv_code_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_margin="8dp"
-            android:text="@string/shop_rv_title_prodcode"
+            android:text="@string/shop_rv_title_sn"
             android:textColor="@color/text_black_second"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/shop_rv_product_tv_prodcode"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_toEndOf="@+id/shop_rv_product_tv_code_title"
-            android:layout_weight="1"
-            android:text="V1234567890"
             android:textColor="@color/text_black_second"
             android:textSize="14sp" />
 
@@ -40,23 +35,17 @@
             android:id="@+id/shop_rv_product_tv_barcode_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/shop_rv_product_tv_barcode"
             android:layout_margin="8dp"
-            android:layout_toEndOf="@+id/shop_rv_product_tv_code_title"
-            android:text="@string/shop_rv_title_barcode"
+            android:text="@string/shop_rv_title_sn_line"
             android:textColor="@color/text_black_second" />
 
         <TextView
             android:id="@+id/shop_rv_product_tv_barcode"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/shop_rv_product_tv_code"
-            android:layout_alignParentEnd="true"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:layout_weight="1"
-            android:text="45156465"
             android:textSize="14sp" />
 
 
@@ -69,7 +58,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/shop_cart_rv_ll"
         android:layout_margin="8dp"
-        android:text="商品名称跑步鞋XS-789 42码"
         android:textColor="@color/text_black_first"
         android:textSize="16sp"
         android:textStyle="bold" />

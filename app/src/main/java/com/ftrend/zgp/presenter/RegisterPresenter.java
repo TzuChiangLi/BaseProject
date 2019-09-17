@@ -65,7 +65,6 @@ public class RegisterPresenter implements Contract.RegisterPresenter {
         SoulPermission.getInstance().checkSinglePermission(Manifest.permission.READ_PHONE_STATE);
         //获取SN码
         devSn = PhoneUtils.getSerial();
-
         //1. 验证服务地址是否有效
         RestSubscribe.getInstance().ping(new HttpCallBack<String>() {
             @Override

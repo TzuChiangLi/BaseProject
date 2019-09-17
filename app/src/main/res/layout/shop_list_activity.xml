@@ -42,25 +42,43 @@
         android:id="@+id/shop_list_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/shop_list_rl_bottom"
+        android:layout_above="@+id/shop_list_rl_vip"
         android:layout_below="@+id/shop_list_title_line"
         android:layout_marginBottom="1dp"
         tools:listitem="@layout/shop_list_rv_product_item" />
 
 
     <RelativeLayout
-        android:id="@+id/shop_list_rl_bottom"
+        android:id="@+id/shop_list_rl_vip"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true"
+        android:layout_height="20dp"
+        android:layout_above="@+id/shop_list_rl_discount"
+        android:background="@color/common_white"
+        android:visibility="visible"></RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/shop_list_rl_discount"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_above="@+id/shop_list_rl_mid"
+        android:background="@color/common_white"
+        android:visibility="visible"></RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/shop_list_rl_mid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/shop_list_rl_bottom"
         android:background="@color/common_white">
 
         <TextView
             android:id="@+id/shop_list_tv_total_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxHeight="40dp"
-            android:padding="12dp"
+            android:paddingStart="12dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
             android:text="@string/shop_tv_total"
             android:textColor="@color/pay_tv_red" />
 
@@ -69,8 +87,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/shop_list_tv_total_title"
-            android:maxHeight="40dp"
-            android:padding="12dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
             android:textColor="@color/pay_tv_red"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -80,29 +98,34 @@
             android:id="@+id/shop_list_btn_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/shop_list_btn_hang_up"
-            android:layout_alignStart="@+id/shop_list_btn_hang_up"
+            android:layout_toStartOf="@+id/shop_list_btn_add"
             android:background="@drawable/shop_btn_gray_selector"
-            android:maxHeight="40dp"
             android:text="@string/shop_tv_cancel" />
 
         <Button
             android:id="@+id/shop_list_btn_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/shop_list_btn_pay"
             android:layout_alignParentEnd="true"
             android:background="@drawable/shop_btn_blue_selector"
-            android:maxHeight="40dp"
             android:text="@string/shop_tv_add"
             android:textColor="@color/common_white" />
 
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/shop_list_rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_white">
 
         <Button
             android:id="@+id/shop_list_btn_vip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/shop_list_tv_total_title"
             android:layout_alignParentStart="true"
             android:background="@drawable/shop_btn_gray_selector"
             android:text="@string/shop_tv_vip" />
@@ -134,7 +157,7 @@
             android:background="@drawable/shop_btn_red_selector"
             android:text="@string/shop_btn_pay"
             android:textColor="@color/shop_white_text" />
-
     </RelativeLayout>
+
 
 </RelativeLayout>

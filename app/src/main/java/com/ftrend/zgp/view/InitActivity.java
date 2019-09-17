@@ -50,7 +50,6 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
 
     @Override
     protected void initData() {
-        LogUtil.d("initData");
 
     }
 

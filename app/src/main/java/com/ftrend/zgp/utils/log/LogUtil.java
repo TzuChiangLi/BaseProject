@@ -58,7 +58,6 @@ public class LogUtil {
     public static void e(String msg) {
         if (!TextUtils.isEmpty(msg)) {
             if (showLog) {
-                Log.e(ActivityUtils.getTopActivity().getLocalClassName(), msg);
             }
             if (saveError) {
                 FileWriter writer = null;
@@ -76,7 +75,7 @@ public class LogUtil {
                     writer.close();
                 } catch (Exception e) {
                     e.printStackTrace();
-                    Log.e(ActivityUtils.getTopActivity().getLocalClassName(), "为避免发生死循环错误: " + e.getMessage());
+//                    Log.e(ActivityUtils.getTopActivity().getLocalClassName(), "为避免发生死循环错误: " + e.getMessage());
                 }
             }
         }

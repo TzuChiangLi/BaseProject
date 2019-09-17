@@ -5,7 +5,6 @@ import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
-import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.ftrend.zgp.utils.task.LsDownloadTask;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -17,7 +16,7 @@ import java.util.Locale;
 /**
  * @author liziqiang@ftrend.cn
  */
-public class InitPresenter implements Contract.InitPresenter, HttpCallBack {
+public class InitPresenter implements Contract.InitPresenter {
     private Contract.InitView mView;
     private boolean isStart = false;
 
@@ -81,7 +80,7 @@ public class InitPresenter implements Contract.InitPresenter, HttpCallBack {
             userStr.append(user.getUserCode()).append(" ").append(user.getUserName()).append("\n");
         }
 
-        mView.finishUpdate(posCode+"\n", depStr.toString(), userStr.toString());
+        mView.finishUpdate(posCode + "\n", depStr.toString(), userStr.toString());
     }
 
     @Override
@@ -91,31 +90,6 @@ public class InitPresenter implements Contract.InitPresenter, HttpCallBack {
         }
     }
 
-
-    @Override
-    public void onStart() {
-
-    }
-
-    @Override
-    public void onSuccess(Object body) {
-
-    }
-
-    @Override
-    public void onFailed(String errorCode, String errorMsg) {
-
-    }
-
-    @Override
-    public void onHttpError(int errorCode, String errorMsg) {
-
-    }
-
-    @Override
-    public void onFinish() {
-
-    }
 
 //            new Handler().postDelayed(new Runnable() {
 //                @Override
