@@ -3,6 +3,7 @@ package com.ftrend.zgp.view;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import com.hjq.bar.TitleBar;
 import com.lxj.xpopup.XPopup;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindColor;
 import butterknife.BindView;
@@ -42,7 +44,9 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     @BindView(R.id.shop_list_rv)
     RecyclerView mRecyclerView;
     @BindView(R.id.shop_list_tv_total)
-    TextView mPriceTotalTv;
+    TextView mTotalTv;
+    @BindView(R.id.shop_list_tv_count)
+    TextView mCountTv;
     @BindView(R.id.shop_list_btn_cancel)
     Button mCancelBtn;
     @BindView(R.id.shop_list_btn_vip)
@@ -77,9 +81,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     protected void initData() {
-        Intent intent = getIntent();
-        total = intent.getStringExtra("total");
-        mPriceTotalTv.setText(total);
         mPresenter.initShopList(TradeHelper.getTrade().getLsNo());
     }
 
@@ -142,22 +143,51 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     }
 
     @Override
-    public void showTradeProd(List<TradeProd> prodList) {
+    public void showTradeProd(final List<TradeProd> prodList) {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //防止点击item的子view出现画面闪烁的问题
+        ((SimpleItemAnimator) (Objects.requireNonNull(mRecyclerView.getItemAnimator()))).setSupportsChangeAnimations(false);
         mProdAdapter = new ShopAdapter<>(R.layout.shop_list_rv_product_item, prodList, 2);
         mRecyclerView.setAdapter(mProdAdapter);
         mProdAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                double amount = mProdAdapter.getData().get(position).getAmount();
                 switch (view.getId()) {
                     case R.id.shop_list_rv_img_add:
-                        MessageUtil.show("add");
+                        //商品数量+1
+                        mProdAdapter.getData().get(position).setAmount(amount + 1);
+                        mProdAdapter.notifyItemChanged(position);
+                        mPresenter.changeAmount(position, 1);
                         break;
                     case R.id.shop_list_rv_img_minus:
-                        MessageUtil.show("minus");
+                        //商品数量-1，当商品数量为1时，不再减少
+                        mProdAdapter.getData().get(position).setAmount((amount - 1 == 0) ? 1 : amount - 1);
+                        mProdAdapter.notifyItemChanged(position);
+                        mPresenter.changeAmount(position, -1);
+                        break;
+                    case R.id.shop_list_rv_btn_change_price:
+                        //改价
+                        break;
+                    case R.id.shop_list_rv_btn_discount:
+                        //单品优惠
+                        break;
+                    case R.id.shop_list_rv_btn_del:
+                        //检查行清权限
+                        if (TradeHelper.getUserRight(TradeHelper.USER_RIGHT_DEL)) {
+                            TradeHelper.delProduct(position);
+                            prodList.remove(position);
+                            mProdAdapter.notifyItemRemoved(position);
+                            mPresenter.updateTradeInfo();
+                        } else {
+                            //提示用户无此权限
+                            MessageUtil.show("当前用户无此权限");
+                        }
                         break;
                     default:
+                        break;
                 }
+
             }
         });
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -172,6 +202,16 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                 mProdAdapter.notifyItemChanged(position);
             }
         });
+    }
+
+    @Override
+    public void updateTotal(double total) {
+        mTotalTv.setText(String.valueOf(total));
+    }
+
+    @Override
+    public void updateCount(double count) {
+        mCountTv.setText(String.valueOf(count));
     }
 
     @Override

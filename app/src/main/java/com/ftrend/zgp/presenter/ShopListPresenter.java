@@ -1,12 +1,7 @@
 package com.ftrend.zgp.presenter;
 
 import com.ftrend.zgp.api.Contract;
-import com.ftrend.zgp.model.TradeProd;
-import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.utils.TradeHelper;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
-
-import java.util.List;
 
 /**
  * 收银-选择商品P层
@@ -27,11 +22,12 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
 
     @Override
     public void initShopList(String lsNo) {
-        List<TradeProd> tradeProdList = SQLite.select().from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).queryList();
-        for (TradeProd t : tradeProdList) {
-            t.setSelect(false);
-        }
-        mView.showTradeProd(tradeProdList);
+        //加载商品列表
+        mView.showTradeProd(TradeHelper.getTradeProdList());
+        //获取商品总件数
+        mView.updateCount(TradeHelper.getTradeCount());
+        //获取商品总金额
+        mView.updateTotal(TradeHelper.getTradeTotal());
     }
 
     @Override
@@ -55,6 +51,21 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
                 break;
         }
 
+    }
+
+    @Override
+    public void changeAmount(int index, double changeAmount) {
+        TradeHelper.changeAmount(index, changeAmount);
+
+        updateTradeInfo();
+    }
+
+    @Override
+    public void updateTradeInfo() {
+        //获取商品总件数
+        mView.updateCount(TradeHelper.getTradeCount());
+        //获取商品总金额
+        mView.updateTotal(TradeHelper.getTradeTotal());
     }
 
     @Override

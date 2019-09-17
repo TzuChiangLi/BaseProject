@@ -37,7 +37,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     @BindView(R.id.pay_top_bar)
     TitleBar mTitleBar;
     @BindView(R.id.pay_tv_total)
-    TextView mPriceTotalTv;
+    TextView mTotalTv;
     @BindView(R.id.pay_rv_pay_way)
     RecyclerView mRecyclerView;
     private Contract.PayPresenter mPresenter;
@@ -50,10 +50,6 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
 
     @Override
     protected void initData() {
-        Intent intent = getIntent();
-        lsNo = intent.getStringExtra("lsNo");
-        total = intent.getStringExtra("total");
-        mPriceTotalTv.setText(total);
         mPresenter.initPayWay();
     }
 
@@ -67,7 +63,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     @Override
     protected void initTitleBar() {
         ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white).autoDarkModeEnable(true).init();
-        mTitleBar.setRightIcon(ZgParams.isIsOnline() ?R.drawable.online:R.drawable.offline);
+        mTitleBar.setRightIcon(ZgParams.isIsOnline() ? R.drawable.online : R.drawable.offline);
         mTitleBar.setOnTitleBarListener(this);
     }
 
@@ -93,10 +89,10 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
      */
     @Override
     public void onNetWorkChange(boolean isOnline) {
-        if (mTitleBar==null){
-            mTitleBar=findViewById(R.id.pay_top_bar);
+        if (mTitleBar == null) {
+            mTitleBar = findViewById(R.id.pay_top_bar);
         }
-        mTitleBar.setRightIcon(isOnline ?R.drawable.online:R.drawable.offline);
+        mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
     }
 
     @Override
@@ -130,7 +126,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                         break;
                     case 3:
                         //现金
-                        MessageUtil.info(String.format("确认使用现金收款%s元？", mPriceTotalTv.getText().toString()));
+                        MessageUtil.info(String.format("确认使用现金收款%s元？", mTotalTv.getText().toString()));
                         MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
                             @Override
                             public void onLeftBtnClick(BasePopupView popView) {
@@ -160,6 +156,11 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                 }
             }
         });
+    }
+
+    @Override
+    public void showTradeInfo(double total) {
+        mTotalTv.setText(String.valueOf(total));
     }
 
     @Override

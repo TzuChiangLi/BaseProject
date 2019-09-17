@@ -165,6 +165,7 @@ public interface Contract {
          * 启动线程
          */
         void initServerThread();
+
         /**
          * 创建界面菜单的数据
          */
@@ -310,7 +311,7 @@ public interface Contract {
          *
          * @param num 购物车内的数量
          */
-        void updateTradeProd(long num, double price);
+        void updateTradeProd(double num, double price);
     }
 
     interface ShopListPresenter {
@@ -329,6 +330,21 @@ public interface Contract {
          */
         void setTradeStatus(String lsNo, int status);
 
+
+        /**
+         * 更改商品数量
+         *
+         * @param index        商品索引
+         * @param changeAmount 改变数量
+         */
+        void changeAmount(int index, double changeAmount);
+
+        /**
+         * 更新交易信息
+         */
+        void updateTradeInfo();
+
+
         /**
          * 销毁，防止泄露
          */
@@ -342,6 +358,16 @@ public interface Contract {
          * @param prodList 购物车商品信息
          */
         void showTradeProd(List<TradeProd> prodList);
+
+        /**
+         * 更新合计金额
+         */
+        void updateTotal(double total);
+
+        /**
+         * 更新购物车总商品数
+         */
+        void updateCount(double count);
 
         /**
          * 返回界面
@@ -377,6 +403,13 @@ public interface Contract {
          * @param payWay 图标、文字
          */
         void showPayway(List<Menu.MenuList> payWay);
+
+        /**
+         * 显示应收款
+         *
+         * @param total 订单总金额
+         */
+        void showTradeInfo(double total);
     }
 
     interface HandoverPresenter {

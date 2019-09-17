@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.raizlabs.android.dbflow.sql.language.Method.sum;
+
 /**
  * 交易操作类
  * Copyright (C),青岛致远方象软件科技有限公司
@@ -29,6 +31,11 @@ import java.util.List;
  */
 public class TradeHelper {
     private static String TAG = "TradeHelper";
+
+    //行清标记：0-未删除
+    public static final String DELFLAG_NO = "0";
+    //行清标记：0-已删除
+    public static final String DELFLAG_YES = "1";
 
     // 交易类型：T-销售
     public static final String TRADE_FLAG_SALE = "T";
@@ -59,6 +66,10 @@ public class TradeHelper {
     private static List<TradeProd> prodList = null;
     // 支付信息
     private static TradePay pay = null;
+    // 用户权限: 0-行清权限
+    public static final int USER_RIGHT_DEL = 0;
+    // 用户权限: 1-取消交易权限
+    public static final int USER_RIGHT_CANCEL = 1;
 
     /**
      * 清空当前交易信息
@@ -290,6 +301,85 @@ public class TradeHelper {
         SQLite.delete(TradePay.class).execute();
         SQLite.delete(TradeProd.class).execute();
     }
+
+
+    /**
+     * 购物车 - 加减按钮、更改单个商品的数量
+     *
+     * @param index        索引序号
+     * @param changeAmount 加减的数量
+     * @return 是否成功
+     */
+    public static boolean changeAmount(int index, double changeAmount) {
+        if (index < 0 || index >= prodList.size()) {
+            Log.e(TAG, "改变数量: 索引无效");
+            return false;
+        }
+        TradeProd tradeProd = prodList.get(index);
+        tradeProd.setAmount(tradeProd.getAmount() + changeAmount);
+
+        return tradeProd.save();
+    }
+
+
+    /**
+     * 购物车 - 当前购物车内商品总件数,需要Amount的和
+     *
+     * @return
+     */
+    public static double getTradeCount() {
+        double count = 0;
+        FlowCursor csr = SQLite.select(sum(TradeProd_Table.amount)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                .and(TradeProd_Table.delFlag.eq(DELFLAG_NO)).query();
+        if (csr.moveToFirst()) {
+            do {
+                count = csr.getDoubleOrDefault(0);
+            } while (csr.moveToNext());
+        }
+        return count;
+    }
+
+    /**
+     * 购物车 - 当前购物车内商品总金额
+     *
+     * @return
+     */
+    public static double getTradeTotal() {
+        double total = 0.00;
+        FlowCursor csr = SQLite.select(TradeProd_Table.price, TradeProd_Table.amount).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                .and(TradeProd_Table.delFlag.eq(DELFLAG_NO)).query();
+        if (csr.moveToFirst()) {
+            do {
+                total += (csr.getDoubleOrDefault(0) * csr.getDoubleOrDefault(1));
+            } while (csr.moveToNext());
+        }
+        return total;
+    }
+
+    /**
+     * 购物车 - 获取商品列表
+     *
+     * @return 购物车内商品
+     */
+    public static List<TradeProd> getTradeProdList() {
+        List<TradeProd> tradeProdList = SQLite.select().from(TradeProd.class).where(TradeProd_Table.lsNo.eq(trade.getLsNo())).queryList();
+        for (TradeProd t : tradeProdList) {
+            t.setSelect(false);
+        }
+        return tradeProdList;
+    }
+
+
+    /**
+     * 购物车 - 行清、取消交易权限
+     *
+     * @param rightType 查看权限类型
+     * @return 是否有此权限
+     */
+    public static boolean getUserRight(int rightType) {
+        return true;
+    }
+
 
     public static Trade getTrade() {
         return trade;

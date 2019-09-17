@@ -76,21 +76,68 @@
             android:id="@+id/shop_list_tv_total_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="12dp"
+            android:layout_centerVertical="true"
+            android:paddingStart="8dp"
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
             android:text="@string/shop_tv_total"
-            android:textColor="@color/pay_tv_red" />
+            android:textColor="@color/pay_tv_red"
+            android:textSize="13sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/shop_list_tv_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/shop_list_tv_total_title"
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
+            android:text="1212.10"
             android:textColor="@color/pay_tv_red"
-            android:textSize="14sp"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/shop_list_tv_total_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/shop_list_tv_total"
+            android:paddingStart="4dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="4dp"
+            android:paddingBottom="12dp"
+            android:text="@string/shop_tv_total_unit"
+            android:textColor="@color/pay_tv_red"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/shop_list_tv_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/shop_list_tv_total_unit"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="123"
+            android:textColor="@color/pay_tv_red"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/shop_list_tv_count_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/shop_list_tv_count"
+            android:paddingStart="4dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:text="@string/shop_tv_count_unit"
+            android:textColor="@color/pay_tv_red"
+            android:textSize="13sp"
             android:textStyle="bold" />
 
 

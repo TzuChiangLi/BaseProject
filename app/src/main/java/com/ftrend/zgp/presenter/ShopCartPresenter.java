@@ -8,19 +8,13 @@ import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepCls_Table;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.DepProduct_Table;
-import com.ftrend.zgp.model.TradeProd;
-import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
-import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.raizlabs.android.dbflow.sql.language.Method.count;
-import static com.raizlabs.android.dbflow.sql.language.Method.sum;
 
 /**
  * 收银-选择商品P层
@@ -87,11 +81,7 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
 
     @Override
     public void initOrderInfo(String lsNo) {
-        long count = SQLite.select(count(TradeProd_Table.id)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).count();
-        FlowCursor csr = SQLite.select(sum(TradeProd_Table.price)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).query();
-        csr.moveToFirst();
-        double price = csr.getDouble(0);
-        mView.updateTradeProd(count, price);
+        mView.updateTradeProd(TradeHelper.getTradeCount(), TradeHelper.getTradeTotal());
     }
 
     @Override
@@ -132,14 +122,9 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
         if (TradeHelper.addProduct(depProduct) == -1) {
             LogUtil.e("数据库添加失败");
         } else {
-            //TODO 2019年9月12日14:08 待放入TradeHelper
-            FlowCursor csr = SQLite.select(sum(TradeProd_Table.price)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).query();
-            csr.moveToFirst();
-            double price = csr.getDoubleOrDefault(0);
-            //获取商品条目
-            long sortNo = SQLite.select(count(TradeProd_Table.sortNo)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(lsNo)).count();
-
-            mView.updateTradeProd(sortNo, price);
+            double price = TradeHelper.getTradeTotal();
+            double count = TradeHelper.getTradeCount();
+            mView.updateTradeProd(count, price);
         }
 
 

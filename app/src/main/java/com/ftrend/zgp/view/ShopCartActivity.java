@@ -162,23 +162,21 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     }
 
     @Override
-    public void updateTradeProd(long num, double price) {
-        mTipTv.setText(String.valueOf(num));
+    public void updateTradeProd(double count, double price) {
+        mTipTv.setText(String.valueOf(count).replace(".0", ""));
         mTotalPriceTv.setText(String.valueOf(price));
     }
 
     @OnClick(R.id.shop_cart_bottom_btn_car)
     public void goShopListActivity() {
         Intent intent = new Intent(ShopCartActivity.this, ShopListActivity.class);
-        intent.putExtra("total", mTotalPriceTv.getText());
         startActivity(intent);
     }
 
     @OnClick(R.id.shop_cart_bottom_tv_payment)
     public void goPayActivity() {
-        if (!mTipTv.getText().toString().equals("0")) {
+        if (!"0".equals(mTipTv.getText().toString())) {
             Intent intent = new Intent(ShopCartActivity.this, PayActivity.class);
-            intent.putExtra("total", mTotalPriceTv.getText().toString());
             startActivity(intent);
         } else {
             MessageUtil.showWarning("购物车为空");
@@ -198,6 +196,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
     }
 
+
     @Override
     public void setPresenter(Contract.ShopCartPresenter presenter) {
         if (presenter != null) {
@@ -216,6 +215,13 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @Override
     public void onRightClick(View v) {
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mPresenter.initOrderInfo(lsNo);
     }
 
     @Override
