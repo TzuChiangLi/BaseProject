@@ -40,7 +40,7 @@ public class TradeHelper {
     // 交易类型：T-销售
     public static final String TRADE_FLAG_SALE = "T";
     // 交易类型：R-退货
-    public static final String TRADE_FLAG_RETURN = "R";
+    public static final String TRADE_FLAG_REFUND = "R";
 
     // 交易状态：0-未结
     public static final String TRADE_STATUS_NOTPAY = "0";
