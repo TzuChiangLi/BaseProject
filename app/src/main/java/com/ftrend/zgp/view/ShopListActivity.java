@@ -1,6 +1,7 @@
 package com.ftrend.zgp.view;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
@@ -218,13 +219,19 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     public void returnHomeActivity() {
         //HomeActivity的启动模式设置为栈内复用
         //如果Activity栈内有HomeActivity存在，把他之上的所有栈全部移除，并将他置顶
-        Intent intent = new Intent(ShopListActivity.this, HomeActivity.class);
-        startActivity(intent);
+        MessageUtil.showSuccess("已挂单");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(ShopListActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        }, 1500);
     }
 
     @OnClick(R.id.shop_list_btn_cancel)
     public void cancelTrade() {
-        mPresenter.setTradeStatus(lsNo, 3);
+        mPresenter.setTradeStatus(TradeHelper.TRADE_STATUS_CANCELLED);
     }
 
     @Override

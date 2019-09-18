@@ -54,7 +54,7 @@
         android:layout_height="20dp"
         android:layout_above="@+id/shop_list_rl_discount"
         android:background="@color/common_white"
-        android:visibility="visible"></RelativeLayout>
+        android:visibility="gone"></RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/shop_list_rl_discount"
@@ -62,7 +62,7 @@
         android:layout_height="20dp"
         android:layout_above="@+id/shop_list_rl_mid"
         android:background="@color/common_white"
-        android:visibility="visible"></RelativeLayout>
+        android:visibility="gone"></RelativeLayout>
 
 
     <RelativeLayout

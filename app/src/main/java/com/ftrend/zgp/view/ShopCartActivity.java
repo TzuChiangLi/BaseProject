@@ -1,6 +1,7 @@
 package com.ftrend.zgp.view;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -55,7 +57,11 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @BindView(R.id.shop_cart_top_bar)
     TitleBar mTitleBar;
     @BindView(R.id.shop_cart_bottom_tv_toal_price)
-    TextView mTotalPriceTv;
+    TextView mTotalTv;
+    @BindView(R.id.shop_cart_top_ll_btn_scan)
+    ImageButton mScanBtn;
+    @BindView(R.id.shop_cart_bottom_tv_hang_up)
+    Button mHangUpBtn;
     @BindColor(R.color.common_rv_item)
     int rv_item_selected;
     @BindColor(R.color.common_white)
@@ -164,7 +170,21 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @Override
     public void updateTradeProd(double count, double price) {
         mTipTv.setText(String.valueOf(count).replace(".0", ""));
-        mTotalPriceTv.setText(String.valueOf(price));
+        mTotalTv.setText(String.valueOf(price));
+    }
+
+    @Override
+    public void returnHomeActivity() {
+        //HomeActivity的启动模式设置为栈内复用
+        //如果Activity栈内有HomeActivity存在，把他之上的所有栈全部移除，并将他置顶
+        MessageUtil.showSuccess("已挂单");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(ShopCartActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        }, 1500);
     }
 
     @OnClick(R.id.shop_cart_bottom_btn_car)
@@ -181,6 +201,19 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         } else {
             MessageUtil.showWarning("购物车为空");
         }
+    }
+
+    @OnClick(R.id.shop_cart_bottom_tv_hang_up)
+    public void hangUp() {
+        mPresenter.setTradeStatus(TradeHelper.TRADE_STATUS_HANGUP);
+    }
+
+    @OnClick(R.id.shop_cart_top_ll_btn_scan)
+    public void goScanActivity() {
+        Intent intent = new Intent("com.summi.scan");
+
+        intent.setPackage("com.sunmi.sunmiqrcodescanner");
+        startActivityForResult(intent, 0001);
     }
 
     /**

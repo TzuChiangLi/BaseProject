@@ -31,26 +31,9 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
     }
 
     @Override
-    public void setTradeStatus(String lsNo, int status) {
-        switch (status) {
-            case 0:
-                //未结
-                break;
-            case 1:
-                //挂起
-                break;
-            case 2:
-                //已结
-                break;
-            case 3:
-                //取消
-                TradeHelper.cancelTrade();
-                mView.returnHomeActivity();
-                break;
-            default:
-                break;
-        }
-
+    public void setTradeStatus(String status) {
+        TradeHelper.setTradeStatus(status);
+        mView.returnHomeActivity();
     }
 
     @Override

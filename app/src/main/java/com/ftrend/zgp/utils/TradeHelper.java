@@ -275,15 +275,16 @@ public class TradeHelper {
     }
 
     /**
-     * 取消交易
+     * 更新交易状态
      */
-    public static void cancelTrade() {
+    public static void setTradeStatus(String status) {
         SQLite.update(Trade.class)
-                .set(Trade_Table.status.eq(TRADE_STATUS_CANCELLED))
+                .set(Trade_Table.status.eq(status))
                 .where(Trade_Table.lsNo.is(trade.getLsNo()))
                 .async()
                 .execute(); // non-UI blocking
     }
+
 
     /**
      * 上传交易流水

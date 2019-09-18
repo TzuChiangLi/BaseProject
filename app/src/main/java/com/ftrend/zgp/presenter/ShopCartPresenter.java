@@ -130,6 +130,12 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
 
     }
 
+    @Override
+    public void setTradeStatus(String status) {
+        TradeHelper.setTradeStatus(status);
+        mView.returnHomeActivity();
+    }
+
 
     @Override
     public void onDestory() {

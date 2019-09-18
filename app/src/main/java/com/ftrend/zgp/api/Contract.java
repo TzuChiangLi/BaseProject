@@ -275,6 +275,13 @@ public interface Contract {
         void addToShopCart(DepProduct depProduct, String lsNo);
 
         /**
+         * 设置交易状态
+         *
+         * @param status 交易状态
+         */
+        void setTradeStatus(String status);
+
+        /**
          * 销毁，防止泄露
          */
         void onDestory();
@@ -312,6 +319,11 @@ public interface Contract {
          * @param num 购物车内的数量
          */
         void updateTradeProd(double num, double price);
+
+        /**
+         * 返回界面
+         */
+        void returnHomeActivity();
     }
 
     interface ShopListPresenter {
@@ -325,10 +337,9 @@ public interface Contract {
         /**
          * 设置交易状态
          *
-         * @param lsNo   流水单号
          * @param status 交易状态
          */
-        void setTradeStatus(String lsNo, int status);
+        void setTradeStatus(String status);
 
 
         /**

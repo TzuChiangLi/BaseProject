@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/vip_mobile_card_shape">
+
+
+    <TextView
+        android:id="@+id/vip_way_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="请输入会员手机号:"
+        android:textColor="@color/text_black_first"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <com.ftrend.cleareditview.ClearEditText
+        android:id="@+id/vip_way_edt_mobile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_way_tv_title"
+        android:background="@null"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:inputType="phone"
+        android:padding="16dp" />
+
+
+    <ImageView
+        android:id="@+id/vip_way_img_card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/card_nfc_ic"
+        android:visibility="gone" />
+
+
+</RelativeLayout>
