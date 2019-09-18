@@ -197,7 +197,7 @@ public class HandoverHelper {
     }
 
     /**
-     * 获取行清金额
+     * 获取行清次数
      *
      * @param delFlag
      * @return

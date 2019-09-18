@@ -141,7 +141,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (oldPosition != -1) {
+                if (oldPosition != -1 && oldPosition < adapter.getItemCount()) {
                     mProdAdapter.getData().get(oldPosition).setSelect(false);
                     mProdAdapter.notifyItemChanged(oldPosition);
                 }
@@ -174,10 +174,10 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     }
 
     @Override
-    public void returnHomeActivity() {
+    public void returnHomeActivity(String status) {
         //HomeActivity的启动模式设置为栈内复用
         //如果Activity栈内有HomeActivity存在，把他之上的所有栈全部移除，并将他置顶
-        MessageUtil.showSuccess("已挂单");
+        MessageUtil.showSuccess(status);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -189,8 +189,13 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @OnClick(R.id.shop_cart_bottom_btn_car)
     public void goShopListActivity() {
-        Intent intent = new Intent(ShopCartActivity.this, ShopListActivity.class);
-        startActivity(intent);
+        if (!"0".equals(mTipTv.getText().toString())) {
+            Intent intent = new Intent(ShopCartActivity.this, ShopListActivity.class);
+            startActivity(intent);
+        } else {
+            MessageUtil.showWarning("购物车为空");
+        }
+
     }
 
     @OnClick(R.id.shop_cart_bottom_tv_payment)

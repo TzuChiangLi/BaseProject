@@ -5,4 +5,7 @@
     <string name="vip_way_scan">扫码</string>
     <string name="vip_way_card">会员卡</string>
 
+    <string name="vip_way_mobile_title">请输入会员手机号：</string>
+    <string name="vip_btn_submit">提交</string>
+
 </resources>

@@ -52,13 +52,14 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     Button mCancelBtn;
     @BindView(R.id.shop_list_btn_vip)
     Button mVipBtn;
+    @BindView(R.id.shop_list_btn_hang_up)
+    Button mHangUpBtn;
     @BindColor(R.color.common_rv_item)
     int rv_item_selected;
     @BindColor(R.color.common_white)
     int rv_item_normal;
     private ShopAdapter<TradeProd> mProdAdapter;
     private Contract.ShopListPresenter mPresenter;
-    private String lsNo = "", total = "";
     private int oldPosition = -1;
 
 
@@ -113,12 +114,15 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     public void doPay() {
         if (mProdAdapter.getData().size() > 0) {
             Intent intent = new Intent(ShopListActivity.this, PayActivity.class);
-            intent.putExtra("lsNo", lsNo);
-            intent.putExtra("total", total);
             startActivity(intent);
         } else {
             MessageUtil.showWarning("购物车为空");
         }
+    }
+
+    @OnClick(R.id.shop_list_btn_hang_up)
+    public void hangUp() {
+        mPresenter.setTradeStatus(TradeHelper.TRADE_STATUS_HANGUP);
     }
 
     @Override
@@ -153,22 +157,23 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         mProdAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                double amount = mProdAdapter.getData().get(position).getAmount();
+                double amount = prodList.get(position).getAmount();
                 switch (view.getId()) {
                     case R.id.shop_list_rv_img_add:
                         //商品数量+1
-                        mProdAdapter.getData().get(position).setAmount(amount + 1);
-                        mProdAdapter.notifyItemChanged(position);
+                        prodList.get(position).setAmount(amount + 1);
+                        //改变数据库
                         mPresenter.changeAmount(position, 1);
                         break;
                     case R.id.shop_list_rv_img_minus:
-                        //商品数量-1，当商品数量为1时，不再减少
-                        mProdAdapter.getData().get(position).setAmount((amount - 1 == 0) ? 1 : amount - 1);
-                        mProdAdapter.notifyItemChanged(position);
-                        mPresenter.changeAmount(position, -1);
+                        //改变数据数量
+                        prodList.get(position).setAmount((amount - 1 == 0) ? 1 : amount - 1);
+                        //数据库数量改变
+                        mPresenter.changeAmount(position, (amount - 1 == 0) ? 0 : -1);
                         break;
                     case R.id.shop_list_rv_btn_change_price:
-                        //改价
+                        //先检查商品是否允许改价
+                        mPresenter.getProdPriceFlag(prodList.get(position).getProdCode(), prodList.get(position).getBarCode(), position);
                         break;
                     case R.id.shop_list_rv_btn_discount:
                         //单品优惠
@@ -176,10 +181,8 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     case R.id.shop_list_rv_btn_del:
                         //检查行清权限
                         if (TradeHelper.getUserRight(TradeHelper.USER_RIGHT_DEL)) {
-                            TradeHelper.delProduct(position);
+                            mPresenter.delTradeProd(position);
                             prodList.remove(position);
-                            mProdAdapter.notifyItemRemoved(position);
-                            mPresenter.updateTradeInfo();
                         } else {
                             //提示用户无此权限
                             MessageUtil.show("当前用户无此权限");
@@ -194,7 +197,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (oldPosition != -1) {
+                if (oldPosition != -1 && oldPosition < adapter.getItemCount()) {
                     mProdAdapter.getData().get(oldPosition).setSelect(false);
                     mProdAdapter.notifyItemChanged(oldPosition);
                 }
@@ -215,11 +218,28 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         mCountTv.setText(String.valueOf(count));
     }
 
+    /**
+     * 行清
+     *
+     * @param index 索引
+     */
     @Override
-    public void returnHomeActivity() {
+    public void delTradeProd(int index) {
+        mProdAdapter.notifyItemRemoved(index);
+        mPresenter.updateTradeInfo();
+    }
+
+    @Override
+    public void updateTradeProd(int index) {
+        mProdAdapter.notifyItemChanged(index);
+        mPresenter.updateTradeInfo();
+    }
+
+    @Override
+    public void returnHomeActivity(String status) {
         //HomeActivity的启动模式设置为栈内复用
         //如果Activity栈内有HomeActivity存在，把他之上的所有栈全部移除，并将他置顶
-        MessageUtil.showSuccess("已挂单");
+        MessageUtil.showSuccess(status);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -227,6 +247,17 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                 startActivity(intent);
             }
         }, 1500);
+    }
+
+
+    @Override
+    public void showPriceChangeDialog(boolean priceFlag, int index) {
+        if (priceFlag) {
+            //弹出改价窗口
+            MessageUtil.showPriceChange(index);
+        } else {
+            MessageUtil.showError("该商品不允许改价");
+        }
     }
 
     @OnClick(R.id.shop_list_btn_cancel)

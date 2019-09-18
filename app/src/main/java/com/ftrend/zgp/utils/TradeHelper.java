@@ -5,6 +5,7 @@ import android.util.Log;
 import com.ftrend.zgp.model.DepPayInfo;
 import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.DepProduct;
+import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradePay_Table;
@@ -19,8 +20,6 @@ import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import static com.raizlabs.android.dbflow.sql.language.Method.sum;
 
 /**
  * 交易操作类
@@ -111,6 +110,7 @@ public class TradeHelper {
         } else {
             prodList = SQLite.select().from(TradeProd.class)
                     .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                    .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
                     .queryList();
             pay = SQLite.select().from(TradePay.class)
                     .where(TradePay_Table.lsNo.eq(trade.getLsNo()))
@@ -158,6 +158,7 @@ public class TradeHelper {
      * @param index 行清的商品索引
      * @return
      */
+
     public static boolean delProduct(int index) {
         if (index < 0 || index >= prodList.size()) {
             Log.e(TAG, "行清: 索引无效");
@@ -165,6 +166,7 @@ public class TradeHelper {
         }
         TradeProd prod = prodList.get(index);
         prod.setDelFlag("1");
+        prodList.remove(index);
         return prod.save();
     }
 
@@ -318,8 +320,13 @@ public class TradeHelper {
         }
         TradeProd tradeProd = prodList.get(index);
         tradeProd.setAmount(tradeProd.getAmount() + changeAmount);
-
-        return tradeProd.save();
+        tradeProd.setTotal((tradeProd.getAmount()) * tradeProd.getPrice());
+        if (tradeProd.save()) {
+            recalcTotal();
+            return true;
+        } else {
+            return false;
+        }
     }
 
 
@@ -330,12 +337,8 @@ public class TradeHelper {
      */
     public static double getTradeCount() {
         double count = 0;
-        FlowCursor csr = SQLite.select(sum(TradeProd_Table.amount)).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
-                .and(TradeProd_Table.delFlag.eq(DELFLAG_NO)).query();
-        if (csr.moveToFirst()) {
-            do {
-                count = csr.getDoubleOrDefault(0);
-            } while (csr.moveToNext());
+        for (int i = 0; i < prodList.size(); i++) {
+            count += prodList.get(i).getAmount();
         }
         return count;
     }
@@ -347,27 +350,126 @@ public class TradeHelper {
      */
     public static double getTradeTotal() {
         double total = 0.00;
-        FlowCursor csr = SQLite.select(TradeProd_Table.price, TradeProd_Table.amount).from(TradeProd.class).where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
-                .and(TradeProd_Table.delFlag.eq(DELFLAG_NO)).query();
-        if (csr.moveToFirst()) {
-            do {
-                total += (csr.getDoubleOrDefault(0) * csr.getDoubleOrDefault(1));
-            } while (csr.moveToNext());
+        for (int i = 0; i < prodList.size(); i++) {
+            total += prodList.get(i).getTotal();
         }
         return total;
     }
 
     /**
-     * 购物车 - 获取商品列表
+     * 购物车 - 获取商品列表（过滤掉了已被行清的商品）
      *
      * @return 购物车内商品
      */
     public static List<TradeProd> getTradeProdList() {
-        List<TradeProd> tradeProdList = SQLite.select().from(TradeProd.class).where(TradeProd_Table.lsNo.eq(trade.getLsNo())).queryList();
+        List<TradeProd> tradeProdList = SQLite.select().from(TradeProd.class).where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                .and(TradeProd_Table.delFlag.eq(DELFLAG_NO)).queryList();
         for (TradeProd t : tradeProdList) {
             t.setSelect(false);
         }
         return tradeProdList;
+    }
+
+
+    /**
+     * 该商品是否有改价权
+     *
+     * @param barCode 根据条码
+     * @return 是或否
+     */
+    public static boolean getPriceFlagByBarCode(String barCode) {
+        int result = 0;
+        FlowCursor csr = SQLite.select(DepProduct_Table.priceFlag).from(DepProduct.class)
+                .where(DepProduct_Table.barCode.eq(barCode)).query();
+        if (csr.moveToFirst()) {
+            do {
+                result = csr.getIntOrDefault(0);
+            } while (csr.moveToNext());
+        }
+        return result != 0;
+    }
+
+    /**
+     * 该商品是否有改价权
+     *
+     * @param prodCode 根据编码
+     * @return 是或否
+     */
+    public static boolean getPriceFlagByProdCode(String prodCode) {
+        int result = 0;
+        FlowCursor csr = SQLite.select(DepProduct_Table.priceFlag).from(DepProduct.class)
+                .where(DepProduct_Table.prodCode.eq(prodCode)).query();
+        if (csr.moveToFirst()) {
+            do {
+                result = csr.getIntOrDefault(0);
+            } while (csr.moveToNext());
+        }
+        return result != 0;
+    }
+
+    /**
+     * 改价
+     *
+     * @param index 商品索引
+     * @param price 价格
+     * @return 是否成功
+     */
+    public static boolean priceChange(int index, double price) {
+        if (price < 0) {
+            Log.e(TAG, "改价: 价格无效");
+            return false;
+        }
+        TradeProd tradeProd = prodList.get(index);
+        if (tradeProd != null) {
+            tradeProd.setPrice(price);
+            tradeProd.setTotal(tradeProd.getAmount() * price);
+        }
+        if (tradeProd.save()) {
+            recalcTotal();
+            return true;
+        } else {
+            return false;
+        }
+    }
+//    public static boolean priceChange(long sortNo, double price) {
+//        if (price < 0) {
+//            Log.e(TAG, "改价: 价格无效");
+//            return false;
+//        }
+////        TradeProd tradeProd = SQLite.select().from(TradeProd.class)
+////                .where(TradeProd_Table.sortNo.eq(sortNo))
+////                .and(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+////                .querySingle();
+//        TradeProd tradeProd = prodList.get(index);
+//
+//
+//        if (tradeProd != null) {
+//            tradeProd.setPrice(price);
+//            tradeProd.setTotal(tradeProd.getAmount() * price);
+//        }
+//        return tradeProd.save();
+//    }
+
+
+    /**
+     * 转换交易状态
+     *
+     * @param status 状态码
+     * @return 提示文本
+     */
+    public static String convertTradeStatus(String status) {
+        switch (status) {
+            case TradeHelper.TRADE_STATUS_CANCELLED:
+                return "取消交易";
+            case TradeHelper.TRADE_STATUS_HANGUP:
+                return "已挂单";
+            case TradeHelper.TRADE_STATUS_NOTPAY:
+                return "尚未支付";
+            case TradeHelper.TRADE_STATUS_PAID:
+                return "支付成功";
+            default:
+                return "交易异常";
+        }
     }
 
 

@@ -21,12 +21,10 @@ public class RestCallback implements HttpCallBack<Map<String, Object>> {
 
     @Override
     public void onStart() {
-//        Log.d(TAG, "-----------------------------onStart: ");
     }
 
     @Override
     public void onSuccess(Map<String, Object> body) {
-//        Log.d(TAG, "-----------------------------onSuccess: ");
         if (resultHandler != null) {
             resultHandler.onSuccess(body);
         }

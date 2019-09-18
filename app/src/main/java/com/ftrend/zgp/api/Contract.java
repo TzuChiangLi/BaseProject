@@ -322,8 +322,10 @@ public interface Contract {
 
         /**
          * 返回界面
+         *
+         * @param statusResult 状态结果
          */
-        void returnHomeActivity();
+        void returnHomeActivity(String statusResult);
     }
 
     interface ShopListPresenter {
@@ -355,6 +357,22 @@ public interface Contract {
          */
         void updateTradeInfo();
 
+        /**
+         * 行清商品
+         *
+         * @param index  索引
+         */
+        void delTradeProd(int index);
+
+
+        /**
+         * 查询专柜商品信息表中该商品的改价权限
+         *
+         * @param prodCode 商品编码，可能不唯一
+         * @param barCode  商品条码，可能为空
+         * @param index    商品索引
+         */
+        void getProdPriceFlag(String prodCode, String barCode, int index);
 
         /**
          * 销毁，防止泄露
@@ -381,9 +399,33 @@ public interface Contract {
         void updateCount(double count);
 
         /**
-         * 返回界面
+         * 更新界面 - 行清
+         *
+         * @param index 索引
          */
-        void returnHomeActivity();
+        void delTradeProd(int index);
+
+        /**
+         * 加减更改
+         *
+         * @param index 索引
+         */
+        void updateTradeProd(int index);
+
+        /**
+         * 返回界面
+         *
+         * @param status 更改状态
+         */
+        void returnHomeActivity(String status);
+
+        /**
+         * 是否可以改价
+         *
+         * @param priceFlag 是或否
+         * @param index     索引
+         */
+        void showPriceChangeDialog(boolean priceFlag, int index);
 
     }
 

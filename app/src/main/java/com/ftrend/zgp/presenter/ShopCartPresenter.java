@@ -10,7 +10,6 @@ import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
-import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ import java.util.List;
  *
  * @author liziqiang@ftrend.cn
  */
-public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBack {
+public class ShopCartPresenter implements Contract.ShopCartPresenter {
     private Contract.ShopCartView mView;
     private List<DepProduct> mProdList = new ArrayList<>();
 
@@ -33,31 +32,6 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
         return new ShopCartPresenter(mView);
     }
 
-
-    @Override
-    public void onStart() {
-
-    }
-
-    @Override
-    public void onSuccess(Object body) {
-
-    }
-
-    @Override
-    public void onFailed(String errorCode, String errorMessage) {
-
-    }
-
-    @Override
-    public void onHttpError(int errorCode, String errorMsg) {
-
-    }
-
-    @Override
-    public void onFinish() {
-
-    }
 
     @Override
     public void initProdList() {
@@ -120,7 +94,7 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
     @Override
     public void addToShopCart(DepProduct depProduct, String lsNo) {
         if (TradeHelper.addProduct(depProduct) == -1) {
-            LogUtil.e("数据库添加失败");
+            LogUtil.e("向数据库添加商品失败");
         } else {
             double price = TradeHelper.getTradeTotal();
             double count = TradeHelper.getTradeCount();
@@ -133,7 +107,8 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter, HttpCallBa
     @Override
     public void setTradeStatus(String status) {
         TradeHelper.setTradeStatus(status);
-        mView.returnHomeActivity();
+        mView.returnHomeActivity(TradeHelper.convertTradeStatus(status));
+        TradeHelper.clear();
     }
 
 

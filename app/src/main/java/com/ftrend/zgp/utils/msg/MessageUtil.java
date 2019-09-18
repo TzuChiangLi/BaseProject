@@ -7,12 +7,34 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.toast.XToast;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
+import com.ftrend.zgp.utils.pop.MobileCardDialog;
+import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
+
+import static com.ftrend.zgp.utils.pop.MobileCardDialog.DIALOG_CHANGE_PRICE;
 
 /**
  * @author liziqiang@ftrend.cn
  */
 public class MessageUtil {
+
+//-------------------------------------业务弹窗-----------------------------------------//
+
+    public static void showPriceChange(long sortNo) {
+        mContext = BaseActivity.mContext;
+        new XPopup.Builder(mContext)
+                .dismissOnTouchOutside(false)
+                .asCustom(new MobileCardDialog(mContext, DIALOG_CHANGE_PRICE))
+                .show();
+    }
+    public static void showPriceChange(int  index) {
+        mContext = BaseActivity.mContext;
+        new XPopup.Builder(mContext)
+                .dismissOnTouchOutside(false)
+                .asCustom(new MobileCardDialog(mContext, DIALOG_CHANGE_PRICE,index))
+                .show();
+    }
+
 
 //-------------------------------------模态弹窗-----------------------------------------//
 
