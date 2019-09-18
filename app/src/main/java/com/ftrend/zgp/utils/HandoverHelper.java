@@ -21,6 +21,9 @@ import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.raizlabs.android.dbflow.sql.language.Method.count;
 import static com.raizlabs.android.dbflow.sql.language.Method.sum;
 
@@ -151,6 +154,40 @@ public class HandoverHelper {
         return ZgParams.getPosCode() + String.format("%05d", current);
     }
 
+    /**
+     * 获取流水表内的用户名
+     *
+     * @return 交易表的用户名
+     */
+    public static List<String> getUserCode() {
+        List<Trade> temp = SQLite.select(Trade_Table.cashier).distinct().from(Trade.class).queryList();
+        if (temp != null) {
+            List<String> userCode = new ArrayList<>();
+            for (Trade t : temp) {
+                userCode.add(t.getCashier());
+            }
+            return userCode;
+        }
+        return null;
+    }
+
+    /**
+     * 获取流水表内的用户名
+     *
+     * @return 交易表的用户名
+     */
+    public static List<String> getLsNoByUserCode(String userCode) {
+        List<Trade> temp = SQLite.select(Trade_Table.lsNo).distinct().from(Trade.class)
+                .where(Trade_Table.cashier.eq(userCode)).queryList();
+        if (temp != null) {
+            List<String> lsNo = new ArrayList<>();
+            for (Trade t : temp) {
+                lsNo.add(t.getLsNo());
+            }
+            return lsNo;
+        }
+        return null;
+    }
 
     /**
      * @return 最大流水单号
