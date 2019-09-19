@@ -40,9 +40,10 @@
 
 
     <android.support.v7.widget.RecyclerView
-        layout="@layout/handover_rv_item"
+        android:id="@+id/handover_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/handover_ll_bottom"
         android:layout_below="@+id/handover_title_line"
         tools:listitem="@layout/handover_rv_item" />
 

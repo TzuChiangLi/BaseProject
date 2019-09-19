@@ -1,18 +1,24 @@
 package com.ftrend.zgp.view;
 
 import android.os.Handler;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 
 import com.ftrend.zgp.R;
+import com.ftrend.zgp.adapter.HandoverAdapter;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
+import com.ftrend.zgp.model.HandoverRecord;
 import com.ftrend.zgp.presenter.HandoverPresenter;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -21,13 +27,13 @@ import butterknife.OnClick;
  * @author liziqiang@ftrend.cn
  */
 public class HandoverActivity extends BaseActivity implements Contract.HandoverView, OnTitleBarListener {
-
+    @BindView(R.id.handover_rv)
+    RecyclerView mRecyclerView;
     @BindView(R.id.handover_btn_handover)
     Button mHandoverBtn;
     @BindView(R.id.handover_top_bar)
     TitleBar mTitleBar;
-
-
+    private HandoverAdapter mAdapter = null;
     private Contract.HandoverPresenter mPresenter;
 
     @Override
@@ -123,6 +129,13 @@ public class HandoverActivity extends BaseActivity implements Contract.HandoverV
     public void showPayInfo(double payTotal, long payCount) {
 //        mPayWayCountTv.setText(String.valueOf(payCount));
 //        mPayWayTotalTv.setText(String.valueOf(payTotal));
+    }
+
+    @Override
+    public void showHandoverRecord(List<HandoverRecord> recordList) {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new HandoverAdapter(R.layout.handover_rv_item, recordList);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override

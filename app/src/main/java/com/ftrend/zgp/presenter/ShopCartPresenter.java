@@ -96,9 +96,7 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
         if (TradeHelper.addProduct(depProduct) == -1) {
             LogUtil.e("向数据库添加商品失败");
         } else {
-            double price = TradeHelper.getTradeTotal();
-            double count = TradeHelper.getTradeCount();
-            mView.updateTradeProd(count, price);
+            updateTradeInfo();
         }
 
 
@@ -109,6 +107,19 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
         TradeHelper.setTradeStatus(status);
         mView.returnHomeActivity(TradeHelper.convertTradeStatus(status));
         TradeHelper.clear();
+    }
+
+    @Override
+    public void cancelPriceChange() {
+        TradeHelper.rollackPriceChangeInShopCart();
+        updateTradeInfo();
+    }
+
+    @Override
+    public void updateTradeInfo() {
+        double price = TradeHelper.getTradeTotal();
+        double count = TradeHelper.getTradeCount();
+        mView.updateTradeProd(count, price);
     }
 
 

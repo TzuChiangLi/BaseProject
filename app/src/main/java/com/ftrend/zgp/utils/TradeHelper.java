@@ -156,7 +156,7 @@ public class TradeHelper {
      * 行清
      *
      * @param index 行清的商品索引
-     * @return
+     * @return 是否成功
      */
 
     public static boolean delProduct(int index) {
@@ -306,6 +306,9 @@ public class TradeHelper {
     }
 
 
+
+
+
     /**
      * 购物车 - 加减按钮、更改单个商品的数量
      *
@@ -408,17 +411,18 @@ public class TradeHelper {
     }
 
     /**
-     * 改价
+     * 购物车界面改价
      *
      * @param index 商品索引
      * @param price 价格
      * @return 是否成功
      */
-    public static boolean priceChange(int index, double price) {
+    public static boolean priceChangeInShopList(int index, double price) {
         if (price < 0) {
             Log.e(TAG, "改价: 价格无效");
             return false;
         }
+
         TradeProd tradeProd = prodList.get(index);
         if (tradeProd != null) {
             tradeProd.setPrice(price);
@@ -431,24 +435,42 @@ public class TradeHelper {
             return false;
         }
     }
-//    public static boolean priceChange(long sortNo, double price) {
-//        if (price < 0) {
-//            Log.e(TAG, "改价: 价格无效");
-//            return false;
-//        }
-////        TradeProd tradeProd = SQLite.select().from(TradeProd.class)
-////                .where(TradeProd_Table.sortNo.eq(sortNo))
-////                .and(TradeProd_Table.lsNo.eq(trade.getLsNo()))
-////                .querySingle();
-//        TradeProd tradeProd = prodList.get(index);
-//
-//
-//        if (tradeProd != null) {
-//            tradeProd.setPrice(price);
-//            tradeProd.setTotal(tradeProd.getAmount() * price);
-//        }
-//        return tradeProd.save();
-//    }
+
+    /**
+     * 选择商品界面改价
+     *
+     * @param price 价格
+     * @return 是否成功
+     */
+    public static boolean priceChangeInShopCart(double price) {
+        if (price < 0) {
+            Log.e(TAG, "改价: 价格无效");
+            return false;
+        }
+        TradeProd tradeProd = prodList.get(prodList.size() - 1);
+        if (tradeProd != null) {
+            tradeProd.setPrice(price);
+            tradeProd.setTotal(tradeProd.getAmount() * price);
+        }
+        if (tradeProd.save()) {
+            recalcTotal();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 选择商品界面改价撤销
+     */
+    public static void rollackPriceChangeInShopCart() {
+        TradeProd tradeProd = prodList.get(prodList.size() - 1);
+        if (tradeProd != null) {
+            tradeProd.delete();
+            prodList.remove(prodList.size() - 1);
+        }
+        recalcTotal();
+    }
 
 
     /**

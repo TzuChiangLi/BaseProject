@@ -18,12 +18,17 @@ import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.ShopListPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.VipDialog;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 import com.lxj.xpopup.XPopup;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 import java.util.Objects;
@@ -91,7 +96,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         if (mPresenter == null) {
             mPresenter = ShopListPresenter.createPresenter(this);
         }
-
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -146,6 +151,20 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
             mPresenter = presenter;
         }
     }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessage(Event event) {
+        if (event.getTarget() == Event.TARGET_SHOP_LIST) {
+            if (event.getType() == Event.TYPE_REFRESH) {
+                //TODO 2019年9月19日15:08:49 此处数据上的更新后续考虑如何放进P层
+                mProdAdapter.getData().get(oldPosition).setPrice((Double) event.getData());
+                mProdAdapter.notifyItemChanged(oldPosition);
+                mPresenter.updateTradeInfo();
+            }
+        }
+    }
+
 
     @Override
     public void showTradeProd(final List<TradeProd> prodList) {
@@ -215,7 +234,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     public void updateCount(double count) {
-        mCountTv.setText(String.valueOf(count));
+        mCountTv.setText(String.valueOf(count).replace(".0", ""));
     }
 
     /**
@@ -231,7 +250,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     public void updateTradeProd(int index) {
-        mProdAdapter.notifyItemChanged(index);
+        mProdAdapter.notifyDataSetChanged();
         mPresenter.updateTradeInfo();
     }
 
@@ -254,7 +273,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     public void showPriceChangeDialog(boolean priceFlag, int index) {
         if (priceFlag) {
             //弹出改价窗口
-            MessageUtil.showPriceChange(index);
+            MessageUtil.showPriceChange(ShopListActivity.this, index);
         } else {
             MessageUtil.showError("该商品不允许改价");
         }
@@ -269,5 +288,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.onDestory();
+        EventBus.getDefault().unregister(this);
     }
 }

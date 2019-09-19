@@ -20,6 +20,11 @@ public class MessageUtil {
 
 //-------------------------------------业务弹窗-----------------------------------------//
 
+    /**
+     * 待删
+     *
+     * @param sortNo 序号
+     */
     public static void showPriceChange(long sortNo) {
         mContext = BaseActivity.mContext;
         new XPopup.Builder(mContext)
@@ -27,11 +32,14 @@ public class MessageUtil {
                 .asCustom(new MobileCardDialog(mContext, DIALOG_CHANGE_PRICE))
                 .show();
     }
-    public static void showPriceChange(int  index) {
-        mContext = BaseActivity.mContext;
-        new XPopup.Builder(mContext)
+
+    /**
+     * @param index 索引
+     */
+    public static void showPriceChange(Context context,int index) {
+        new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new MobileCardDialog(mContext, DIALOG_CHANGE_PRICE,index))
+                .asCustom(new MobileCardDialog(context, DIALOG_CHANGE_PRICE, index))
                 .show();
     }
 

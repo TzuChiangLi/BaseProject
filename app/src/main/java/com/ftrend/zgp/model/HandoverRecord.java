@@ -9,6 +9,8 @@ public class HandoverRecord {
     private String cashier;
     private String cashierName;
 
+    private String depCode;
+
     private double saleCount = 0;
     private double saleTotal = 0;
 
@@ -180,5 +182,13 @@ public class HandoverRecord {
 
     public void setPayCount(double payCount) {
         this.payCount = payCount;
+    }
+
+    public String getDepCode() {
+        return depCode;
+    }
+
+    public void setDepCode(String depCode) {
+        this.depCode = depCode;
     }
 }

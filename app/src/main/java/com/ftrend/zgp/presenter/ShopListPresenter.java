@@ -3,8 +3,8 @@ package com.ftrend.zgp.presenter;
 import android.text.TextUtils;
 
 import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.TradeHelper;
-import com.ftrend.zgp.utils.log.LogUtil;
 
 /**
  * 收银-选择商品P层
@@ -43,7 +43,6 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
 
     @Override
     public void changeAmount(int index, double changeAmount) {
-        LogUtil.d("----changeAmount:" + changeAmount);
         TradeHelper.changeAmount(index, changeAmount);
         updateTradeInfo();
         mView.updateTradeProd(index);
@@ -55,6 +54,11 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
         mView.updateCount(TradeHelper.getTradeCount());
         //获取商品总金额
         mView.updateTotal(TradeHelper.getTradeTotal());
+    }
+
+    @Override
+    public void updateTradeList(int index, TradeProd tradeProd) {
+        mView.updateTradeProd(index);
     }
 
     /**
@@ -74,7 +78,6 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
      */
     @Override
     public void getProdPriceFlag(String prodCode, String barCode, int index) {
-
         //如果条码不为空，即查条码
         if (TextUtils.isEmpty(barCode)) {
             mView.showPriceChangeDialog(TradeHelper.getPriceFlagByBarCode(barCode), index);

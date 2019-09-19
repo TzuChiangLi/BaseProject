@@ -60,7 +60,7 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 if (((TradeProd) item).getDelFlag().equals(TradeHelper.DELFLAG_NO)) {
                     helper.setText(R.id.shop_list_rv_product_tv_prodcode, ((TradeProd) item).getProdCode());
                     helper.setText(R.id.shop_list_rv_product_tv_prodname, ((TradeProd) item).getProdName());
-                    helper.setText(R.id.shop_list_rv_product_tv_num, String.valueOf(((TradeProd) item).getAmount()));
+                    helper.setText(R.id.shop_list_rv_product_tv_num, String.valueOf(((TradeProd) item).getAmount()).replace(".0",""));
                     helper.setText(R.id.shop_list_rv_product_tv_per_price, String.valueOf(((TradeProd) item).getPrice()));
                     helper.setText(R.id.shop_list_rv_product_tv_total, String.valueOf(((TradeProd) item).getAmount() * ((TradeProd) item).getPrice()));
                     helper.setText(R.id.shop_list_rv_product_tv_barcode, ((TradeProd) item).getBarCode());

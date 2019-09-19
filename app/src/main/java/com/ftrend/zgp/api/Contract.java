@@ -6,6 +6,7 @@ import com.ftrend.zgp.base.BaseView;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
+import com.ftrend.zgp.model.HandoverRecord;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.User;
@@ -246,6 +247,9 @@ public interface Contract {
 
     }
 
+    /**
+     *
+     */
     interface ShopCartPresenter {
         /**
          * 加载商品信息
@@ -280,6 +284,16 @@ public interface Contract {
          * @param status 交易状态
          */
         void setTradeStatus(String status);
+
+        /**
+         * 取消改价操作，购物车已添加的商品回滚
+         */
+        void cancelPriceChange();
+
+        /**
+         * 更新交易信息
+         */
+        void updateTradeInfo();
 
         /**
          * 销毁，防止泄露
@@ -320,6 +334,7 @@ public interface Contract {
          */
         void updateTradeProd(double num, double price);
 
+
         /**
          * 返回界面
          *
@@ -358,9 +373,17 @@ public interface Contract {
         void updateTradeInfo();
 
         /**
+         * 更新列表数据
+         *
+         * @param index     索引
+         * @param tradeProd 修改的数据
+         */
+        void updateTradeList(int index, TradeProd tradeProd);
+
+        /**
          * 行清商品
          *
-         * @param index  索引
+         * @param index 索引
          */
         void delTradeProd(int index);
 
@@ -542,6 +565,15 @@ public interface Contract {
          * @param payCount 支付方式合计次数
          */
         void showPayInfo(double payTotal, long payCount);
+
+
+        /**
+         * 采用列表的方式显示交班信息
+         *
+         * @param recordList 交班信息
+         */
+        void showHandoverRecord(List<HandoverRecord> recordList);
+
 
         /**
          * 交班成功并返回

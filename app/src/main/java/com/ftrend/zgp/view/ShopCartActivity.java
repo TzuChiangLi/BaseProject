@@ -24,10 +24,15 @@ import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.presenter.ShopCartPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +95,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         if (mPresenter == null) {
             mPresenter = ShopCartPresenter.createPresenter(this);
         }
+        EventBus.getDefault().register(this);
         lsNo = TradeHelper.getTrade().getLsNo();
         mPresenter.initOrderInfo(lsNo);
         mSearchEdt.addTextChangedListener(new TextWatcher() {
@@ -133,7 +139,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     }
 
     @Override
-    public void setProdList(List<DepProduct> prodList) {
+    public void setProdList(final List<DepProduct> prodList) {
         mProdRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item, prodList, 1);
         mProdRecyclerView.setAdapter(mProdAdapter);
@@ -150,6 +156,12 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
                 mProdAdapter.notifyItemChanged(position);
                 //添加到购物车中
                 mPresenter.addToShopCart((DepProduct) adapter.getItem(position), lsNo);
+                //如果商品价格是0，那么就弹出窗口
+                if (prodList.get(position).getPrice() == 0) {
+                    //TODO 2019年9月19日11:07:20 如果价格是0，弹出改价提示窗
+                    MessageUtil.showPriceChange(ShopCartActivity.this, position);
+                }
+
             }
         });
     }
@@ -215,11 +227,22 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @OnClick(R.id.shop_cart_top_ll_btn_scan)
     public void goScanActivity() {
-        Intent intent = new Intent("com.summi.scan");
 
-        intent.setPackage("com.sunmi.sunmiqrcodescanner");
-        startActivityForResult(intent, 0001);
     }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessage(Event event) {
+        if (event.getTarget() == Event.TARGET_SHOP_CART) {
+            if (event.getType() == Event.TYPE_REFRESH) {
+                mPresenter.updateTradeInfo();
+            }
+            if (event.getType() == Event.TYPE_CANCEL_PRICE_CHANGE) {
+                mPresenter.cancelPriceChange();
+            }
+        }
+    }
+
 
     /**
      * 网络变化
@@ -266,5 +289,6 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.onDestory();
+        EventBus.getDefault().unregister(this);
     }
 }
