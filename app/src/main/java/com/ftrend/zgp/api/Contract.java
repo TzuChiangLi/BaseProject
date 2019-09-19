@@ -345,6 +345,11 @@ public interface Contract {
 
     interface ShopListPresenter {
         /**
+         * 商品是否允许优惠,弹出相应提示
+         */
+        void checkProdForDsc(String prodCode, String barCode);
+
+        /**
          * 显示此时购物车内的所有商品
          *
          * @param lsNo 流水单号
@@ -449,6 +454,7 @@ public interface Contract {
          * @param index     索引
          */
         void showPriceChangeDialog(boolean priceFlag, int index);
+
 
     }
 

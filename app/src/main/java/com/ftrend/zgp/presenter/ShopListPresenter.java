@@ -24,6 +24,10 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
 
 
     @Override
+    public void checkProdForDsc(String prodCode, String barCode) {
+    }
+
+    @Override
     public void initShopList(String lsNo) {
         TradeHelper.initSale();
         //加载商品列表

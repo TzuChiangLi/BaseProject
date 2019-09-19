@@ -24,6 +24,9 @@ public class DepPayInfo extends BaseModel {
     @Column
     @NotNull
     private String appPayType;
+    @Column
+    @NotNull
+    private String isScore;
 
     public DepPayInfo() {
     }
@@ -73,5 +76,13 @@ public class DepPayInfo extends BaseModel {
 
     public void setAppPayType(String appPayType) {
         this.appPayType = appPayType;
+    }
+
+    public String getIsScore() {
+        return isScore;
+    }
+
+    public void setIsScore(String isScore) {
+        this.isScore = isScore;
     }
 }

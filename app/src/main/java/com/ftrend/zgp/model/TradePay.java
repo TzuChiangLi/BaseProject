@@ -38,9 +38,6 @@ public class TradePay extends BaseModel {
     @Column
     @NotNull
     private Date payTime;
-    @Column
-    @NotNull
-    private String isScore;
 
     public TradePay() {
     }
@@ -120,11 +117,4 @@ public class TradePay extends BaseModel {
         this.payCode = payCode;
     }
 
-    public String getIsScore() {
-        return isScore;
-    }
-
-    public void setIsScore(String isScore) {
-        this.isScore = isScore;
-    }
 }

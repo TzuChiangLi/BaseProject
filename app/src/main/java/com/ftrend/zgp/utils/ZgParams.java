@@ -41,6 +41,9 @@ public class ZgParams {
     private static String aliPayAccount = "";
     //系统参数：微信支付收款账号
     private static String wxPayAccount = "";
+    //系统参数：优惠版本 null或者“超市版”时为超市版，否则为百货版
+    private static String programEdition = "";
+
 
     //本地参数：服务器地址
     private static String serverUrl = "";
@@ -166,6 +169,21 @@ public class ZgParams {
         appParams.setParamValue(paramValue);
         appParams.update();
     }
+
+
+    public static void checkProgramEdition(){
+
+    }
+
+
+
+
+
+
+
+
+
+
 
     public static boolean isIsOnline() {
         return isOnline;

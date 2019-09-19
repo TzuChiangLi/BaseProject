@@ -204,7 +204,7 @@ public class HandoverHelper {
                 lsNo = csr.getStringOrDefault(0);
             } while (csr.moveToNext());
         }
-        LogUtil.d("----maxLsNo:"+lsNo);
+        LogUtil.d("----maxLsNo:" + lsNo);
         return lsNo;
     }
 
@@ -223,7 +223,7 @@ public class HandoverHelper {
                 lsNo = csr.getStringOrDefault(0);
             } while (csr.moveToNext());
         }
-        LogUtil.d("----minLsNo:"+lsNo);
+        LogUtil.d("----minLsNo:" + lsNo);
         return lsNo;
     }
 

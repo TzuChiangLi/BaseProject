@@ -196,6 +196,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                         break;
                     case R.id.shop_list_rv_btn_discount:
                         //单品优惠
+
                         break;
                     case R.id.shop_list_rv_btn_del:
                         //检查行清权限
@@ -237,11 +238,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         mCountTv.setText(String.valueOf(count).replace(".0", ""));
     }
 
-    /**
-     * 行清
-     *
-     * @param index 索引
-     */
     @Override
     public void delTradeProd(int index) {
         mProdAdapter.notifyItemRemoved(index);
