@@ -1,6 +1,7 @@
 package com.ftrend.zgp.view;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -22,10 +24,15 @@ import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.presenter.ShopCartPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +62,11 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @BindView(R.id.shop_cart_top_bar)
     TitleBar mTitleBar;
     @BindView(R.id.shop_cart_bottom_tv_toal_price)
-    TextView mTotalPriceTv;
+    TextView mTotalTv;
+    @BindView(R.id.shop_cart_top_ll_btn_scan)
+    ImageButton mScanBtn;
+    @BindView(R.id.shop_cart_bottom_tv_hang_up)
+    Button mHangUpBtn;
     @BindColor(R.color.common_rv_item)
     int rv_item_selected;
     @BindColor(R.color.common_white)
@@ -84,6 +95,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         if (mPresenter == null) {
             mPresenter = ShopCartPresenter.createPresenter(this);
         }
+        EventBus.getDefault().register(this);
         lsNo = TradeHelper.getTrade().getLsNo();
         mPresenter.initOrderInfo(lsNo);
         mSearchEdt.addTextChangedListener(new TextWatcher() {
@@ -127,7 +139,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     }
 
     @Override
-    public void setProdList(List<DepProduct> prodList) {
+    public void setProdList(final List<DepProduct> prodList) {
         mProdRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item, prodList, 1);
         mProdRecyclerView.setAdapter(mProdAdapter);
@@ -135,7 +147,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (oldPosition != -1) {
+                if (oldPosition != -1 && oldPosition < adapter.getItemCount()) {
                     mProdAdapter.getData().get(oldPosition).setSelect(false);
                     mProdAdapter.notifyItemChanged(oldPosition);
                 }
@@ -144,6 +156,12 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
                 mProdAdapter.notifyItemChanged(position);
                 //添加到购物车中
                 mPresenter.addToShopCart((DepProduct) adapter.getItem(position), lsNo);
+                //如果商品价格是0，那么就弹出窗口
+                if (prodList.get(position).getPrice() == 0) {
+                    //TODO 2019年9月19日11:07:20 如果价格是0，弹出改价提示窗
+                    MessageUtil.showPriceChange(ShopCartActivity.this, position);
+                }
+
             }
         });
     }
@@ -162,28 +180,69 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     }
 
     @Override
-    public void updateTradeProd(long num, double price) {
-        mTipTv.setText(String.valueOf(num));
-        mTotalPriceTv.setText(String.valueOf(price));
+    public void updateTradeProd(double count, double price) {
+        mTipTv.setText(String.valueOf(count).replace(".0", ""));
+        mTotalTv.setText(String.valueOf(price));
+    }
+
+    @Override
+    public void returnHomeActivity(String status) {
+        //HomeActivity的启动模式设置为栈内复用
+        //如果Activity栈内有HomeActivity存在，把他之上的所有栈全部移除，并将他置顶
+        MessageUtil.showSuccess(status);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(ShopCartActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        }, 1500);
     }
 
     @OnClick(R.id.shop_cart_bottom_btn_car)
     public void goShopListActivity() {
-        Intent intent = new Intent(ShopCartActivity.this, ShopListActivity.class);
-        intent.putExtra("total", mTotalPriceTv.getText());
-        startActivity(intent);
+        if (!"0".equals(mTipTv.getText().toString())) {
+            Intent intent = new Intent(ShopCartActivity.this, ShopListActivity.class);
+            startActivity(intent);
+        } else {
+            MessageUtil.showWarning("购物车为空");
+        }
+
     }
 
     @OnClick(R.id.shop_cart_bottom_tv_payment)
     public void goPayActivity() {
-        if (!mTipTv.getText().toString().equals("0")) {
+        if (!"0".equals(mTipTv.getText().toString())) {
             Intent intent = new Intent(ShopCartActivity.this, PayActivity.class);
-            intent.putExtra("total", mTotalPriceTv.getText().toString());
             startActivity(intent);
         } else {
             MessageUtil.showWarning("购物车为空");
         }
     }
+
+    @OnClick(R.id.shop_cart_bottom_tv_hang_up)
+    public void hangUp() {
+        mPresenter.setTradeStatus(TradeHelper.TRADE_STATUS_HANGUP);
+    }
+
+    @OnClick(R.id.shop_cart_top_ll_btn_scan)
+    public void goScanActivity() {
+
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessage(Event event) {
+        if (event.getTarget() == Event.TARGET_SHOP_CART) {
+            if (event.getType() == Event.TYPE_REFRESH) {
+                mPresenter.updateTradeInfo();
+            }
+            if (event.getType() == Event.TYPE_CANCEL_PRICE_CHANGE) {
+                mPresenter.cancelPriceChange();
+            }
+        }
+    }
+
 
     /**
      * 网络变化
@@ -197,6 +256,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         }
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
     }
+
 
     @Override
     public void setPresenter(Contract.ShopCartPresenter presenter) {
@@ -218,9 +278,17 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     public void onRightClick(View v) {
     }
 
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mPresenter.initOrderInfo(lsNo);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.onDestory();
+        EventBus.getDefault().unregister(this);
     }
 }

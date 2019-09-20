@@ -34,6 +34,7 @@ public class PayPresenter implements Contract.PayPresenter {
         payWays.add(new Menu.MenuList(R.drawable.card, "储值卡"));
         payWays.add(new Menu.MenuList(R.drawable.money, "现金"));
         mView.showPayway(payWays);
+        mView.showTradeInfo(TradeHelper.getTradeTotal());
     }
 
     @Override

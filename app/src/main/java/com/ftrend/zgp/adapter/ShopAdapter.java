@@ -10,6 +10,7 @@ import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.utils.TradeHelper;
 
 import java.util.List;
 
@@ -55,17 +56,22 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 break;
             case 2:
                 //购物车商品列表
-                helper.setText(R.id.shop_list_rv_product_tv_prodcode, ((TradeProd) item).getProdCode());
-                helper.setText(R.id.shop_list_rv_product_tv_prodname, ((TradeProd) item).getProdName());
-                helper.setText(R.id.shop_list_rv_product_tv_num, String.valueOf(((TradeProd) item).getAmount()));
-                helper.setText(R.id.shop_list_rv_product_tv_per_price, String.valueOf(((TradeProd) item).getPrice()));
-                helper.setText(R.id.shop_list_rv_product_tv_total, String.valueOf(((TradeProd) item).getAmount() * ((TradeProd) item).getPrice()));
-                helper.setText(R.id.shop_list_rv_product_tv_barcode, ((TradeProd) item).getBarCode());
-                helper.setBackgroundColor(R.id.shop_list_rv_product_rl, ((TradeProd) item).isSelect() ? rv_item_selected : rv_item_normal);
-                helper.setGone(R.id.shop_list_rv_ll_btn, ((TradeProd) item).isSelect() ? true : false);
-                helper.addOnClickListener(R.id.shop_list_rv_img_add);
-                helper.addOnClickListener(R.id.shop_list_rv_img_minus);
-
+                if (((TradeProd) item).getDelFlag().equals(TradeHelper.DELFLAG_NO)) {
+                    helper.setText(R.id.shop_list_rv_product_tv_prodcode, ((TradeProd) item).getProdCode());
+                    helper.setText(R.id.shop_list_rv_product_tv_prodname, ((TradeProd) item).getProdName());
+                    helper.setText(R.id.shop_list_rv_product_tv_num, String.valueOf(((TradeProd) item).getAmount()).replace(".0", ""));
+                    helper.setText(R.id.shop_list_rv_product_tv_per_price, String.valueOf(((TradeProd) item).getPrice()));
+                    helper.setText(R.id.shop_list_rv_product_tv_total, String.valueOf(((TradeProd) item).getAmount() * ((TradeProd) item).getPrice()));
+                    helper.setText(R.id.shop_list_rv_product_tv_barcode, ((TradeProd) item).getBarCode());
+                    helper.setText(R.id.shop_list_rv_product_tv_discount, String.valueOf(((TradeProd) item).getSingleDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getWholeDsc()));
+                    helper.setBackgroundColor(R.id.shop_list_rv_product_rl, ((TradeProd) item).isSelect() ? rv_item_selected : rv_item_normal);
+                    helper.setGone(R.id.shop_list_rv_ll_btn, ((TradeProd) item).isSelect() ? true : false);
+                    helper.addOnClickListener(R.id.shop_list_rv_img_add);
+                    helper.addOnClickListener(R.id.shop_list_rv_img_minus);
+                    helper.addOnClickListener(R.id.shop_list_rv_btn_change_price);
+                    helper.addOnClickListener(R.id.shop_list_rv_btn_discount);
+                    helper.addOnClickListener(R.id.shop_list_rv_btn_del);
+                }
                 break;
             case 3:
                 //支付方式列表

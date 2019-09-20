@@ -54,6 +54,11 @@ public class TradeProd extends BaseModel {
     private String saleInfo;
     @Column
     private String delFlag = "0";
+    @Column
+    private double singleDsc = 0;
+    @Column
+    private double wholeDsc = 0;
+
     /**
      * 该变量为了改变变量选中状态而创建，与数据库字段无关
      */
@@ -197,5 +202,21 @@ public class TradeProd extends BaseModel {
 
     public void setSelect(boolean select) {
         isSelect = select;
+    }
+
+    public double getSingleDsc() {
+        return singleDsc;
+    }
+
+    public void setSingleDsc(double singleDsc) {
+        this.singleDsc = singleDsc;
+    }
+
+    public double getWholeDsc() {
+        return wholeDsc;
+    }
+
+    public void setWholeDsc(double wholeDsc) {
+        this.wholeDsc = wholeDsc;
     }
 }

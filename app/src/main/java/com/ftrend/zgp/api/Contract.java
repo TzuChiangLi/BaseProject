@@ -6,6 +6,7 @@ import com.ftrend.zgp.base.BaseView;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
+import com.ftrend.zgp.model.HandoverRecord;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.User;
@@ -165,6 +166,7 @@ public interface Contract {
          * 启动线程
          */
         void initServerThread();
+
         /**
          * 创建界面菜单的数据
          */
@@ -245,6 +247,9 @@ public interface Contract {
 
     }
 
+    /**
+     *
+     */
     interface ShopCartPresenter {
         /**
          * 加载商品信息
@@ -272,6 +277,23 @@ public interface Contract {
          * @param lsNo       流水单号
          */
         void addToShopCart(DepProduct depProduct, String lsNo);
+
+        /**
+         * 设置交易状态
+         *
+         * @param status 交易状态
+         */
+        void setTradeStatus(String status);
+
+        /**
+         * 取消改价操作，购物车已添加的商品回滚
+         */
+        void cancelPriceChange();
+
+        /**
+         * 更新交易信息
+         */
+        void updateTradeInfo();
 
         /**
          * 销毁，防止泄露
@@ -310,10 +332,25 @@ public interface Contract {
          *
          * @param num 购物车内的数量
          */
-        void updateTradeProd(long num, double price);
+        void updateTradeProd(double num, double price);
+
+
+        /**
+         * 返回界面
+         *
+         * @param statusResult 状态结果
+         */
+        void returnHomeActivity(String statusResult);
     }
 
     interface ShopListPresenter {
+        /**
+         * 商品是否允许优惠,弹出相应提示
+         *
+         * @param index 索引
+         */
+        void checkProdForDsc(int index);
+
         /**
          * 显示此时购物车内的所有商品
          *
@@ -324,10 +361,48 @@ public interface Contract {
         /**
          * 设置交易状态
          *
-         * @param lsNo   流水单号
          * @param status 交易状态
          */
-        void setTradeStatus(String lsNo, int status);
+        void setTradeStatus(String status);
+
+
+        /**
+         * 更改商品数量
+         *
+         * @param index        商品索引
+         * @param changeAmount 改变数量
+         */
+        void changeAmount(int index, double changeAmount);
+
+        /**
+         * 更新交易信息
+         */
+        void updateTradeInfo();
+
+        /**
+         * 更新列表数据
+         *
+         * @param index     索引
+         * @param tradeProd 修改的数据
+         */
+        void updateTradeList(int index, TradeProd tradeProd);
+
+        /**
+         * 行清商品
+         *
+         * @param index 索引
+         */
+        void delTradeProd(int index);
+
+
+        /**
+         * 查询专柜商品信息表中该商品的改价权限
+         *
+         * @param prodCode 商品编码，可能不唯一
+         * @param barCode  商品条码，可能为空
+         * @param index    商品索引
+         */
+        void getProdPriceFlag(String prodCode, String barCode, int index);
 
         /**
          * 销毁，防止泄露
@@ -344,9 +419,52 @@ public interface Contract {
         void showTradeProd(List<TradeProd> prodList);
 
         /**
-         * 返回界面
+         * 更新合计金额
          */
-        void returnHomeActivity();
+        void updateTotal(double total);
+
+        /**
+         * 更新购物车总商品数
+         */
+        void updateCount(double count);
+
+        /**
+         * 更新界面 - 行清
+         *
+         * @param index 索引
+         */
+        void delTradeProd(int index);
+
+        /**
+         * 加减更改
+         *
+         * @param index 索引
+         */
+        void updateTradeProd(int index);
+
+        /**
+         * 返回界面
+         *
+         * @param status 更改状态
+         */
+        void returnHomeActivity(String status);
+
+        /**
+         * 是否可以改价
+         *
+         * @param priceFlag 是或否
+         * @param index     索引
+         */
+        void showPriceChangeDialog(boolean priceFlag, int index);
+
+        /**
+         * 是否可以单项优惠
+         *
+         * @param forDsc 是否可以单项优惠
+         * @param index  索引
+         */
+        void showSingleDscDialog(boolean forDsc, int index);
+
 
     }
 
@@ -377,6 +495,13 @@ public interface Contract {
          * @param payWay 图标、文字
          */
         void showPayway(List<Menu.MenuList> payWay);
+
+        /**
+         * 显示应收款
+         *
+         * @param total 订单总金额
+         */
+        void showTradeInfo(double total);
     }
 
     interface HandoverPresenter {
@@ -456,6 +581,15 @@ public interface Contract {
          * @param payCount 支付方式合计次数
          */
         void showPayInfo(double payTotal, long payCount);
+
+
+        /**
+         * 采用列表的方式显示交班信息
+         *
+         * @param recordList 交班信息
+         */
+        void showHandoverRecord(List<HandoverRecord> recordList);
+
 
         /**
          * 交班成功并返回

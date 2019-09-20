@@ -265,6 +265,19 @@ public class RestSubscribe {
         detachAndSubscribe(api.posEnd(request), callback);
     }
 
+    /**
+     * 查询会员信息
+     *
+     * @param code     查询参数：会员卡号、会员编号、手机号，3项任传其一
+     * @param callback
+     */
+    public void queryVipInfo(final String code, final RestCallback callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("code", code);
+        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        request.setBody(params);
+        detachAndSubscribe(api.queryVipInfo(request), callback);
+    }
 
     /**
      * 上传交易流水

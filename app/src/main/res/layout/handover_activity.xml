@@ -39,11 +39,13 @@
         android:src="@drawable/title_bar_bottom" />
 
 
-    <include
-        layout="@layout/handover_rv_item"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/handover_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/handover_title_line" />
+        android:layout_above="@+id/handover_ll_bottom"
+        android:layout_below="@+id/handover_title_line"
+        tools:listitem="@layout/handover_rv_item" />
 
 
     <LinearLayout

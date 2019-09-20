@@ -21,4 +21,7 @@
 
     <string name="handover_cancel">取消</string>
     <string name="handover_send">交班</string>
+
+    <string name="handover_total_replace">123.00</string>
+    <string name="handover_count_replace">12</string>
 </resources>

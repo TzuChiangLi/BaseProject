@@ -128,6 +128,15 @@ public interface RestApi {
     Observable<RestResponse<Map<String, Object>>> posEnd(@Body RestRequest<Map<String, Object>> request);
 
     /**
+     * 查询会员信息
+     *
+     * @param request
+     * @return
+     */
+    @POST("trade/vip/info")
+    Observable<RestResponse<Map<String, Object>>> queryVipInfo(@Body RestRequest<Map<String, Object>> request);
+
+    /**
      * 上传交易流水
      *
      * @param request

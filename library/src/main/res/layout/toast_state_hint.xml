@@ -31,8 +31,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="14dp"
             android:gravity="center"
-            android:maxWidth="150dp"
             android:textAlignment="center"
+            android:maxWidth="120dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:textColor="#ffffff"
             android:textSize="14sp"
             tools:text="提示语" />

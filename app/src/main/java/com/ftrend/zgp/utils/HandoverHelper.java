@@ -11,6 +11,8 @@ import com.ftrend.zgp.model.TradePay_Table;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.Trade_Table;
+import com.ftrend.zgp.model.User;
+import com.ftrend.zgp.model.User_Table;
 import com.ftrend.zgp.utils.db.ZgpDb;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -20,6 +22,9 @@ import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.raizlabs.android.dbflow.sql.language.Method.count;
 import static com.raizlabs.android.dbflow.sql.language.Method.sum;
@@ -71,8 +76,8 @@ public class HandoverHelper {
     public static void saveHandover(Handover handover) {
         //整理剩余数据
         handover.setHandoverNo(newHandoverNo());
-        handover.setLsNoMin(getMinLsNo());
-        handover.setLsNoMax(getMaxLsNo());
+        handover.setLsNoMin(getMinLsNo(handover.getCashier()));
+        handover.setLsNoMax(getMaxLsNo(handover.getCashier()));
         handover.setCancelCount(getCountByStatus(TradeHelper.TRADE_STATUS_CANCELLED));
         handover.setCancelTotal(getTotalByStatus(TradeHelper.TRADE_STATUS_CANCELLED));
         handover.setHangupCount(getCountByStatus(TradeHelper.TRADE_STATUS_HANGUP));
@@ -95,24 +100,22 @@ public class HandoverHelper {
         Transaction transaction = FlowManager.getDatabase(ZgpDb.class).beginTransactionAsync(new ITransaction() {
             @Override
             public void execute(DatabaseWrapper databaseWrapper) {
-                HandoverPay handoverPay = null;
+                HandoverPay handoverPay;
                 String[] tradeFlag = {TRADE_FLAG_SALE, TRADE_FLAG_RETURN};
                 String[] payType = {HANDOVER_PAY_MONEY, HANDOVER_PAY_ALIPAY, HANDOVER_PAY_WECHAT, HANDOVER_PAY_CARD};
-                for (int i = 0; i < payType.length; i++) {
-                    for (int j = 0; j < tradeFlag.length; j++) {
+                for (String s : payType) {
+                    for (String s1 : tradeFlag) {
                         handoverPay = new HandoverPay();
                         handoverPay.setHandoverNo(handoverNo);
-                        handoverPay.setTradeFlag(tradeFlag[j]);
-                        handoverPay.setPayType(payType[i]);
-                        handoverPay.setSaleTotal(tradeFlag[j].equals(tradeFlag[0]) ? getTotalByPayTypeAndTradeFlag(payType[i], tradeFlag[j]) : 0.00);
-                        handoverPay.setSaleCount(tradeFlag[j].equals(tradeFlag[0]) ? getCountByPayTypeAndTradeFlag(payType[i], tradeFlag[j]) : 0);
-                        handoverPay.setRtnTotal(tradeFlag[j].equals(tradeFlag[0]) ? 0.00 : getTotalByPayTypeAndTradeFlag(payType[i], tradeFlag[j]));
-                        handoverPay.setRtnCount(tradeFlag[j].equals(tradeFlag[0]) ? 0 : getTotalByPayTypeAndTradeFlag(payType[i], tradeFlag[j]));
+                        handoverPay.setTradeFlag(s1);
+                        handoverPay.setPayType(s);
+                        handoverPay.setSaleTotal(s1.equals(tradeFlag[0]) ? getTotalByPayTypeAndTradeFlag(s, s1) : 0.00);
+                        handoverPay.setSaleCount(s1.equals(tradeFlag[0]) ? getCountByPayTypeAndTradeFlag(s, s1) : 0);
+                        handoverPay.setRtnTotal(s1.equals(tradeFlag[0]) ? 0.00 : getTotalByPayTypeAndTradeFlag(s, s1));
+                        handoverPay.setRtnCount(s1.equals(tradeFlag[0]) ? 0 : getTotalByPayTypeAndTradeFlag(s, s1));
                         handoverPay.insert();
                     }
                 }
-                //全部成功后清空流水的数据表
-                TradeHelper.clearAllTradeData();
             }
         }).success(new Transaction.Success() {
             @Override
@@ -151,34 +154,76 @@ public class HandoverHelper {
         return ZgParams.getPosCode() + String.format("%05d", current);
     }
 
+    /**
+     * 获取流水表内的用户名
+     *
+     * @return 交易表的用户名
+     */
+    public static List<String> getUserCode() {
+        List<Trade> temp = SQLite.select(Trade_Table.cashier).distinct().from(Trade.class).queryList();
+        if (temp != null) {
+            List<String> userCode = new ArrayList<>();
+            for (Trade t : temp) {
+                userCode.add(t.getCashier());
+            }
+            return userCode;
+        }
+        return null;
+    }
 
     /**
+     * 获取流水表内的用户名
+     *
+     * @return 交易表的用户名
+     */
+    public static List<String> getLsNoByUserCode(String userCode) {
+        List<Trade> temp = SQLite.select(Trade_Table.lsNo).distinct().from(Trade.class)
+                .where(Trade_Table.cashier.eq(userCode)).queryList();
+        if (temp != null) {
+            List<String> lsNo = new ArrayList<>();
+            for (Trade t : temp) {
+                lsNo.add(t.getLsNo());
+            }
+            return lsNo;
+        }
+        return null;
+    }
+
+    /**
+     * @param userCode 用户账号
      * @return 最大流水单号
      */
-    public static String getMaxLsNo() {
-        FlowCursor csr = null;
+    public static String getMaxLsNo(String userCode) {
+        FlowCursor csr;
         String lsNo = "";
-        csr = SQLite.select(Method.max(Trade_Table.lsNo)).distinct().from(Trade.class).query();
+        csr = SQLite.select(Method.max(Trade_Table.lsNo)).distinct().from(Trade.class)
+                .where(Trade_Table.cashier.eq(userCode))
+                .query();
         if (csr.moveToFirst()) {
             do {
                 lsNo = csr.getStringOrDefault(0);
             } while (csr.moveToNext());
         }
+        LogUtil.d("----maxLsNo:" + lsNo);
         return lsNo;
     }
 
     /**
+     * @param userCode 用户账号
      * @return 最小流水单号
      */
-    public static String getMinLsNo() {
-        FlowCursor csr = null;
+    public static String getMinLsNo(String userCode) {
+        FlowCursor csr;
         String lsNo = "";
-        csr = SQLite.select(Method.min(Trade_Table.lsNo)).distinct().from(Trade.class).query();
+        csr = SQLite.select(Method.min(Trade_Table.lsNo)).distinct().from(Trade.class)
+                .where(Trade_Table.cashier.eq(userCode))
+                .query();
         if (csr.moveToFirst()) {
             do {
                 lsNo = csr.getStringOrDefault(0);
             } while (csr.moveToNext());
         }
+        LogUtil.d("----minLsNo:" + lsNo);
         return lsNo;
     }
 
@@ -190,14 +235,14 @@ public class HandoverHelper {
      * @return 次数
      */
     public static long getCountByStatus(String status) {
-        long count = 0;
+        long count;
         count = SQLite.select(count()).from(Trade.class).where(Trade_Table.status.eq(status))
                 .count();
         return count;
     }
 
     /**
-     * 获取行清金额
+     * 获取行清次数
      *
      * @param delFlag
      * @return
@@ -257,7 +302,7 @@ public class HandoverHelper {
      *
      * @return 金额
      */
-    public static double getTotalByTradeFlag(String type) {
+    public static double getTotalByTradeFlag(String type, String userCode) {
         //该专柜下、该收银员的已结流水
         double total = 0.00;
         FlowCursor csr = null;
@@ -266,6 +311,7 @@ public class HandoverHelper {
             case TRADE_FLAG_RETURN:
                 csr = SQLite.select(sum(Trade_Table.total)).from(Trade.class)
                         .where(Trade_Table.tradeFlag.eq(type))
+                        .and(Trade_Table.cashier.eq(userCode))
                         .and(Trade_Table.status.eq("2")).query();
                 if (csr.moveToFirst()) {
                     do {
@@ -277,6 +323,7 @@ public class HandoverHelper {
             default:
                 csr = SQLite.select(sum(Trade_Table.total)).from(Trade.class)
                         .where(Trade_Table.status.eq("2"))
+                        .and(Trade_Table.cashier.eq(userCode))
                         .query();
                 if (csr.moveToFirst()) {
                     do {
@@ -295,7 +342,7 @@ public class HandoverHelper {
      *
      * @return 次数
      */
-    public static long getCountByTradeFlag(String type) {
+    public static long getCountByTradeFlag(String type, String userCode) {
         //该专柜下、该收银员的已结流水
         long count = 0;
         FlowCursor csr = null;
@@ -304,15 +351,18 @@ public class HandoverHelper {
             case TRADE_FLAG_RETURN:
                 count = SQLite.select(count()).from(Trade.class)
                         .where(Trade_Table.tradeFlag.eq(type))
+                        .and(Trade_Table.cashier.eq(userCode))
                         .and(Trade_Table.status.eq("2")).count();
                 break;
             default:
-                long countT = 0, countR = 0;
+                long countT, countR;
                 countT = SQLite.select(count()).from(Trade.class)
                         .where(Trade_Table.tradeFlag.eq("T"))
+                        .and(Trade_Table.cashier.eq(userCode))
                         .and(Trade_Table.status.eq("2")).count();
                 countR = SQLite.select(count()).from(Trade.class)
                         .where(Trade_Table.tradeFlag.eq("R"))
+                        .and(Trade_Table.cashier.eq(userCode))
                         .and(Trade_Table.status.eq("2")).count();
                 count = countT + countR;
                 break;
@@ -326,8 +376,8 @@ public class HandoverHelper {
      * @return 金额
      */
     public static double getTotalByPayType(String type) {
-        double total = 0.00;
-        FlowCursor csr = null;
+        double total;
+        FlowCursor csr;
         double amount = 0.00, change = 0.00;
         if (type.equals(TRADE_ALL)) {
             csr = SQLite.select(sum(TradePay_Table.amount)).from(TradePay.class)
@@ -369,13 +419,68 @@ public class HandoverHelper {
         return total;
     }
 
+    public static double getTotalByPayType(String type, List<String> lsNoList) {
+        double total;
+        FlowCursor csr;
+        double amount = 0.00, change = 0.00;
+        if (type.equals(TRADE_ALL)) {
+            for (int i = 0; i < lsNoList.size(); i++) {
+                csr = SQLite.select(sum(TradePay_Table.amount)).from(TradePay.class)
+                        .where(TradeProd_Table.lsNo.eq(lsNoList.get(i)))
+                        .query();
+                if (csr.moveToFirst()) {
+                    do {
+                        amount += csr.getDoubleOrDefault(0);
+                    } while (csr.moveToNext());
+                }
+                csr.close();
+                csr = SQLite.select(sum(TradePay_Table.change)).from(TradePay.class)
+                        .where(TradeProd_Table.lsNo.eq(lsNoList.get(i)))
+                        .query();
+                if (csr.moveToFirst()) {
+                    do {
+                        change += csr.getDoubleOrDefault(0);
+                    } while (csr.moveToNext());
+                }
+                csr.close();
+            }
+            total = amount - change;
+        } else {
+            for (int i = 0; i < lsNoList.size(); i++) {
+                csr = SQLite.select(sum(TradePay_Table.amount)).from(TradePay.class)
+                        .where(TradePay_Table.appPayType.eq(type))
+                        .and(TradeProd_Table.lsNo.eq(lsNoList.get(i)))
+                        .query();
+                if (csr.moveToFirst()) {
+                    do {
+                        amount += csr.getDoubleOrDefault(0);
+                    } while (csr.moveToNext());
+                }
+                csr.close();
+                csr = SQLite.select(sum(TradePay_Table.change)).from(TradePay.class)
+                        .where(TradePay_Table.appPayType.eq(type))
+                        .and(TradeProd_Table.lsNo.eq(lsNoList.get(i)))
+                        .query();
+                if (csr.moveToFirst()) {
+                    do {
+                        change += csr.getDoubleOrDefault(0);
+                    } while (csr.moveToNext());
+                }
+                csr.close();
+            }
+
+            total = amount - change;
+        }
+        return total;
+    }
+
     /**
      * 支付方式次数
      *
      * @return 次数
      */
     public static long getCountByPayType(String type) {
-        long count = 0;
+        long count;
         FlowCursor csr = null;
         if (type.equals(TRADE_ALL)) {
             count = SQLite.select(count()).from(TradePay.class)
@@ -383,6 +488,22 @@ public class HandoverHelper {
         } else {
             count = SQLite.select(count()).from(TradePay.class).where(TradePay_Table.appPayType.eq(type))
                     .count();
+        }
+        return count;
+    }
+
+    public static long getCountByPayType(String type, List<String> lsNoList) {
+        long count = 0;
+        for (int i = 0; i < lsNoList.size(); i++) {
+            if (type.equals(TRADE_ALL)) {
+                count += SQLite.select(count()).from(TradePay.class)
+                        .where(TradePay_Table.lsNo.eq(lsNoList.get(i)))
+                        .count();
+            } else {
+                count += SQLite.select(count()).from(TradePay.class).where(TradePay_Table.appPayType.eq(type))
+                        .and(TradePay_Table.lsNo.eq(lsNoList.get(i)))
+                        .count();
+            }
         }
         return count;
     }
@@ -457,6 +578,25 @@ public class HandoverHelper {
                 break;
         }
         return count;
+    }
+
+
+    /**
+     * 根据userCode获得用户名
+     *
+     * @param userCode 用户账号
+     * @return 用户名
+     */
+    public static String convertUserCodeToUserName(String userCode) {
+        String userName = "";
+        FlowCursor csr = SQLite.select(User_Table.userName).from(User.class)
+                .where(User_Table.userCode.eq(userCode)).query();
+        if (csr.moveToFirst()) {
+            do {
+                userName = csr.getStringOrDefault(0);
+            } while (csr.moveToNext());
+        }
+        return userName;
     }
 
 

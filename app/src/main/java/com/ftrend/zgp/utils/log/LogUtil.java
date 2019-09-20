@@ -101,7 +101,6 @@ public class LogUtil {
     public static Date getDateTime() {
         Date date = new Date();
         Timestamp ts = new Timestamp(System.currentTimeMillis());
-        LogUtil.d("----date/ts:" + date + "/" + ts);
         date = ts;
 
         return date;

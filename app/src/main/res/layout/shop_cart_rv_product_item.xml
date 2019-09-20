@@ -57,20 +57,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/shop_cart_rv_ll"
+        android:layout_alignParentStart="true"
         android:layout_margin="8dp"
+        android:layout_toStartOf="@+id/shop_rv_product_price"
+        android:gravity="start"
+        android:text="@string/shop_edt_search"
         android:textColor="@color/text_black_first"
         android:textSize="16sp"
         android:textStyle="bold" />
-
-
-    <!--<Button-->
-    <!--android:id="@+id/shop_rv_product_btn_add"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignEnd="@+id/shop_rv_product_price"-->
-    <!--android:layout_alignParentEnd="true"-->
-    <!--android:maxHeight="25dp"-->
-    <!--android:text="@string/shop_tv_buy" />-->
 
 
     <TextView
@@ -80,8 +74,24 @@
         android:layout_alignBottom="@+id/shop_rv_product_tv_prodname"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="8dp"
-        android:text="480.00"
+        android:text="@string/shop_tv_num_replace"
         android:textColor="@color/text_black_first"
         android:textSize="18sp"
         android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/shop_rv_product_tv_num"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:autoSizeMaxTextSize="14sp"
+        android:autoSizeTextType="uniform"
+        android:background="@drawable/shop_tip_num"
+        android:gravity="center"
+
+        android:textColor="@color/shop_white_text"
+        android:textSize="12sp"
+        android:visibility="visible" />
+
 </RelativeLayout>

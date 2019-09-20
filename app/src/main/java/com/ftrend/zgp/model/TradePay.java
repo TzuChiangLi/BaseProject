@@ -116,4 +116,5 @@ public class TradePay extends BaseModel {
     public void setPayCode(String payCode) {
         this.payCode = payCode;
     }
+
 }
