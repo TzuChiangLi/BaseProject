@@ -306,6 +306,7 @@ public class DataDownloadHelper {
             payInfo.setPayTypeCode(String.valueOf(map.get("payTypeCode")));
             payInfo.setPayTypeName(String.valueOf(map.get("payTypeName")));
             payInfo.setAppPayType(String.valueOf(map.get("appPayType")));
+            payInfo.setIsScore(String.valueOf(map.get("isScore")));
             payInfo.insert();
         }
     }
