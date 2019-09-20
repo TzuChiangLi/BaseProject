@@ -24,6 +24,7 @@ public class KeyboardAdapter extends RecyclerView.Adapter<KeyboardAdapter.ViewHo
     private int parentHeight;
     private List<String> mList;
     private OnItemClickListener mItemClickListener;
+    private int style = 0;
 
     public void setItemClickListener(OnItemClickListener itemClickListener) {
         mItemClickListener = itemClickListener;
@@ -49,8 +50,9 @@ public class KeyboardAdapter extends RecyclerView.Adapter<KeyboardAdapter.ViewHo
     }
 
 
-    public KeyboardAdapter(List<String> mList) {
+    public KeyboardAdapter(List<String> mList, int style) {
         this.mList = mList;
+        this.style = style;
     }
 
 
@@ -64,33 +66,68 @@ public class KeyboardAdapter extends RecyclerView.Adapter<KeyboardAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final KeyboardAdapter.ViewHolder viewHolder, @SuppressLint("RecyclerView") final int i) {
-        viewHolder.mNumberTv.setText(mList.get(i));
-        viewHolder.mNumberTv.setTextColor(Color.BLACK);
-        viewHolder.mNumberTv.setTag(i);
-        viewHolder.mNumberTv.setBackgroundColor((i == 9 || i == 11) ? Color.parseColor("#dadada") : Color.WHITE);
-        viewHolder.mNumberTv.setLayoutParams(
-                new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, parentHeight / 4));
-        viewHolder.mNumberTv.setOnClickListener(this);
-        viewHolder.mNumberTv.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                    case MotionEvent.ACTION_BUTTON_PRESS:
-                        viewHolder.mNumberTv.setBackgroundColor(Color.parseColor("#BFBFBF"));
-                        viewHolder.mNumberTv.setTextColor(Color.WHITE);
-                        break;
-                    case MotionEvent.ACTION_CANCEL:
-                    case MotionEvent.ACTION_MOVE:
-                        break;
-                    default:
-                        viewHolder.mNumberTv.setBackgroundColor((i == 9 || i == 11) ? Color.parseColor("#dadada") : Color.WHITE);
-                        viewHolder.mNumberTv.setTextColor(Color.BLACK);
-                        break;
-                }
-                return false;
-            }
-        });
+        switch (style) {
+            case 1:
+                viewHolder.mNumberTv.setText(mList.get(i));
+                viewHolder.mNumberTv.setTextColor(Color.BLACK);
+                viewHolder.mNumberTv.setTag(i);
+                viewHolder.mNumberTv.setBackgroundColor((i == 3 || i == 7 || i == 11 || i == 14 || i == 15) ? Color.parseColor("#dadada") : Color.WHITE);
+                viewHolder.mNumberTv.setLayoutParams(
+                        new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, parentHeight / 4));
+                viewHolder.mNumberTv.setOnClickListener(this);
+                viewHolder.mNumberTv.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                            case MotionEvent.ACTION_BUTTON_PRESS:
+                                viewHolder.mNumberTv.setBackgroundColor(Color.parseColor("#BFBFBF"));
+                                viewHolder.mNumberTv.setTextColor(Color.WHITE);
+                                break;
+                            case MotionEvent.ACTION_CANCEL:
+                            case MotionEvent.ACTION_MOVE:
+                                break;
+                            default:
+                                viewHolder.mNumberTv.setBackgroundColor((i == 3 || i == 7 || i == 11 || i == 14 || i == 15) ? Color.parseColor("#dadada") : Color.WHITE);
+                                viewHolder.mNumberTv.setTextColor(Color.BLACK);
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                break;
+            case 0:
+            default:
+                viewHolder.mNumberTv.setText(mList.get(i));
+                viewHolder.mNumberTv.setTextColor(Color.BLACK);
+                viewHolder.mNumberTv.setTag(i);
+                viewHolder.mNumberTv.setBackgroundColor((i == 9 || i == 11) ? Color.parseColor("#dadada") : Color.WHITE);
+                viewHolder.mNumberTv.setLayoutParams(
+                        new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, parentHeight / 4));
+                viewHolder.mNumberTv.setOnClickListener(this);
+                viewHolder.mNumberTv.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_DOWN:
+                            case MotionEvent.ACTION_BUTTON_PRESS:
+                                viewHolder.mNumberTv.setBackgroundColor(Color.parseColor("#BFBFBF"));
+                                viewHolder.mNumberTv.setTextColor(Color.WHITE);
+                                break;
+                            case MotionEvent.ACTION_CANCEL:
+                            case MotionEvent.ACTION_MOVE:
+                                break;
+                            default:
+                                viewHolder.mNumberTv.setBackgroundColor((i == 9 || i == 11) ? Color.parseColor("#dadada") : Color.WHITE);
+                                viewHolder.mNumberTv.setTextColor(Color.BLACK);
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                break;
+        }
+
     }
 
     @Override
@@ -114,7 +151,6 @@ public class KeyboardAdapter extends RecyclerView.Adapter<KeyboardAdapter.ViewHo
 
     public void setParentHeight(int parentHeight) {
         this.parentHeight = parentHeight;
-        Log.d(TAG, "----setParentHeight: " + parentHeight);
     }
 
 

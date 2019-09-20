@@ -83,9 +83,15 @@
         android:visibility="gone" />
 
     <ViewStub
-        android:id="@+id/vip_way_key_view"
+        android:id="@+id/vip_way_key_func_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/vip_way_ll_info"
-        android:layout="@layout/keyboard_view_stub" />
+        android:layout="@layout/key_all_func_view_stub" />
+    <ViewStub
+        android:id="@+id/vip_way_key_lite_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_way_ll_info"
+        android:layout="@layout/key_lite_func_view_stub" />
 </RelativeLayout>

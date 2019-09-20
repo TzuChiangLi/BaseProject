@@ -322,6 +322,7 @@ public class DataDownloadHelper {
 
         /**
          * 失败
+         *
          * @param msg 错误消息
          */
         void onError(String msg);

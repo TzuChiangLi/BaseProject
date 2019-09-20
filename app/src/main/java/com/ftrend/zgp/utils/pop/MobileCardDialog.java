@@ -15,6 +15,7 @@ import com.blankj.utilcode.util.KeyboardUtils;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.R;
+import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
@@ -32,10 +33,7 @@ import butterknife.OnClick;
 public class MobileCardDialog extends BottomPopupView implements View.OnClickListener, KeyboardView.OnItemClickListener {
     @BindView(R.id.vip_way_ll_info)
     LinearLayout mInfoLayout;
-    @BindView(R.id.vip_dsc_rate_view)
-    ViewStub mRateDscView;
-    @BindView(R.id.vip_way_key_view)
-    ViewStub mKeyViewStub;
+
     @BindView(R.id.vip_way_edt)
     ClearEditText mEdt;
     @BindView(R.id.vip_way_img_card)
@@ -46,6 +44,8 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
     Button mSubmitBtn;
     @BindView(R.id.vip_way_img_close)
     ImageView mCloseImg;
+
+
     //会员弹窗：0-手机号
     public static final int DIALOG_CARD = 0;
     //会员弹窗：1-会员卡
@@ -56,10 +56,13 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
     public static final int DIALOG_SINGLE_RSC = 3;
     //优惠：    3-整单优惠
     public static final int DIALOG_WHOLE_RSC = 4;
-    private KeyboardView mKeyView;
     private int type;
     private int index = 0;
     private Context mContext;
+    private KeyboardView mKeyView;
+    private View mKeyViewStub, mRateDscView;
+    private ClearEditText mRateEdt, mDscEdt;
+    private TextView mPriceTv, mTotalTv, mProdNameTv;
 
     public MobileCardDialog(@NonNull Context context, int type) {
         super(context);
@@ -92,16 +95,18 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
                 mTitleTv.setVisibility(GONE);
                 break;
             case DIALOG_MOBILE:
-                ButterKnife.bind(R.layout.keyboard_view_stub, mKeyViewStub);
-                mKeyView = mKeyViewStub.inflate().findViewById(R.id.vip_way_keyboard);
+                //手机号
+                mKeyViewStub = ((ViewStub) findViewById(R.id.vip_way_key_lite_view)).inflate();
+                mKeyView = mKeyViewStub.findViewById(R.id.vip_way_keyboard);
                 mKeyView.show();
                 mEdt.setInputType(InputType.TYPE_NULL);
                 mEdt.setOnClickListener(this);
                 mKeyView.setOnKeyboardClickListener(this);
                 break;
             case DIALOG_CHANGE_PRICE:
-                ButterKnife.bind(R.layout.keyboard_view_stub, mKeyViewStub);
-                mKeyView = mKeyViewStub.inflate().findViewById(R.id.vip_way_keyboard);
+                //改价
+                mKeyViewStub = ((ViewStub) findViewById(R.id.vip_way_key_lite_view)).inflate();
+                mKeyView = mKeyViewStub.findViewById(R.id.vip_way_keyboard);
                 mKeyView.show();
                 mEdt.setInputType(InputType.TYPE_NULL);
                 mTitleTv.setText("请输入修改后的商品价格：");
@@ -111,18 +116,52 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
                 break;
             case DIALOG_SINGLE_RSC:
             case DIALOG_WHOLE_RSC:
-                ButterKnife.bind(R.layout.vip_dsc_rate, mRateDscView);
-                ButterKnife.bind(R.layout.keyboard_view_stub, mKeyViewStub);
-                mKeyView = mKeyViewStub.inflate().findViewById(R.id.vip_way_keyboard);
-                mRateDscView.inflate();
-                mKeyView.show();
-                mTitleTv.setText("请输入此商品优惠信息：");
-                mEdt.setVisibility(GONE);
-                mSubmitBtn.setVisibility(GONE);
+                //优惠
+                initSingleDscView();
+                initSingleDscData();
                 break;
             default:
                 break;
         }
+    }
+
+
+    /**
+     * 折扣单项优惠初始化界面
+     */
+    private void initSingleDscView() {
+        //懒加载
+        mKeyViewStub = ((ViewStub) findViewById(R.id.vip_way_key_func_view)).inflate();
+        mKeyView = mKeyViewStub.findViewById(R.id.vip_way_keyboard);
+        mRateDscView = ((ViewStub) findViewById(R.id.vip_dsc_rate_view)).inflate();
+        //注册控件
+        mDscEdt = mRateDscView.findViewById(R.id.vip_dsc_edt_dsc);
+        mRateEdt = mRateDscView.findViewById(R.id.vip_dsc_edt_rate);
+        mProdNameTv = mRateDscView.findViewById(R.id.vip_dsc_tv_prodname);
+        mPriceTv = mRateDscView.findViewById(R.id.vip_dsc_tv_price);
+        mTotalTv = mRateDscView.findViewById(R.id.vip_dsc_tv_total);
+        //防止键盘弹出
+        mRateEdt.setInputType(InputType.TYPE_NULL);
+        mDscEdt.setInputType(InputType.TYPE_NULL);
+        //展示自家小键盘
+        mKeyView.show();
+        //初始化其他界面信息
+        mTitleTv.setText("请输入此商品优惠信息：");
+        mEdt.setVisibility(GONE);
+        mSubmitBtn.setVisibility(GONE);
+        mKeyView.setOnKeyboardClickListener(this);
+        mRateEdt.selectAll();
+    }
+
+    /**
+     * 折扣优惠初始化数据面板
+     */
+    private void initSingleDscData() {
+        //获取该条商品的信息
+        TradeProd tradeProd = TradeHelper.getTradeProdList().get(index);
+        mPriceTv.setText(String.valueOf(tradeProd.getPrice()));
+        mTotalTv.setText(String.valueOf(tradeProd.getTotal()));
+        mProdNameTv.setText(tradeProd.getProdName());
     }
 
 
@@ -177,6 +216,7 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
         dismiss();
     }
 
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -194,23 +234,120 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
     //-------------------------------------键盘响应--------------------------------------------//
     @Override
     public void onKeyClick(View v, int key) {
-        mEdt.setText(mEdt.getText().append(String.valueOf(key)));
+        switch (type) {
+            case DIALOG_SINGLE_RSC:
+            case DIALOG_WHOLE_RSC:
+                if (mRateEdt.hasFocus()) {
+                    mRateEdt.setText(mRateEdt.getText().append(String.valueOf(key)));
+                } else {
+                    mDscEdt.setText(mDscEdt.getText().append(String.valueOf(key)));
+                }
+
+                break;
+            case DIALOG_MOBILE:
+            case DIALOG_CHANGE_PRICE:
+            default:
+                mEdt.setText(mEdt.getText().append(String.valueOf(key)));
+                break;
+        }
+
     }
 
     @Override
     public void onDeleteClick() {
-        mEdt.setText(TextUtils.isEmpty(mEdt.getText().toString()) ? "" :
-                mEdt.getText().toString().trim().substring(0, mEdt.getText().toString().trim().length() - 1));
+        switch (type) {
+            case DIALOG_SINGLE_RSC:
+            case DIALOG_WHOLE_RSC:
+                if (mRateEdt.hasFocus()) {
+                    mRateEdt.setText(TextUtils.isEmpty(mRateEdt.getText().toString()) ? "" :
+                            mRateEdt.getText().toString().trim().substring(0, mRateEdt.getText().toString().trim().length() - 1));
+                } else {
+                    mDscEdt.setText(TextUtils.isEmpty(mDscEdt.getText().toString()) ? "" :
+                            mDscEdt.getText().toString().trim().substring(0, mDscEdt.getText().toString().trim().length() - 1));
+                }
+
+                break;
+            case DIALOG_MOBILE:
+            case DIALOG_CHANGE_PRICE:
+            default:
+                mEdt.setText(TextUtils.isEmpty(mEdt.getText().toString()) ? "" :
+                        mEdt.getText().toString().trim().substring(0, mEdt.getText().toString().trim().length() - 1));
+                break;
+        }
+
     }
 
     @Override
     public void onPointClick() {
-        mEdt.getText().append('.');
+        switch (type) {
+            case DIALOG_SINGLE_RSC:
+            case DIALOG_WHOLE_RSC:
+                if (mRateEdt.hasFocus()) {
+                    mRateEdt.getText().append('.');
+                } else {
+                    mDscEdt.getText().append('.');
+                }
+                break;
+            case DIALOG_MOBILE:
+            case DIALOG_CHANGE_PRICE:
+            default:
+                mEdt.getText().append('.');
+                break;
+        }
     }
 
     @Override
     public void onHideClick(View v) {
         dismiss();
+    }
+
+    @Override
+    public void onNextClick() {
+        switch (type) {
+            case DIALOG_SINGLE_RSC:
+            case DIALOG_WHOLE_RSC:
+                if (mRateEdt.hasFocus()) {
+                    mDscEdt.requestFocus();
+                    mDscEdt.selectAll();
+                } else {
+                    mRateEdt.requestFocus();
+                    mRateEdt.selectAll();
+                }
+                break;
+            case DIALOG_MOBILE:
+            case DIALOG_CHANGE_PRICE:
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onClearClick() {
+        switch (type) {
+            case DIALOG_SINGLE_RSC:
+            case DIALOG_WHOLE_RSC:
+                if (mRateEdt.hasFocus()) {
+                    mRateEdt.setText("");
+                } else {
+                    mDscEdt.setText("");
+                }
+                break;
+            case DIALOG_MOBILE:
+            case DIALOG_CHANGE_PRICE:
+            default:
+                mEdt.setText("");
+                break;
+        }
+    }
+
+    @Override
+    public void onCancelClick() {
+        dismiss();
+    }
+
+    @Override
+    public void onEnterClick() {
+
     }
 }
 //                new Handler().postDelayed(new Runnable() {
