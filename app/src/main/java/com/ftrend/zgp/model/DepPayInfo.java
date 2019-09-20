@@ -25,7 +25,7 @@ public class DepPayInfo extends BaseModel {
     @NotNull
     private String appPayType;
     @Column
-    @NotNull
+//    @NotNull
     private String isScore;
 
     public DepPayInfo() {

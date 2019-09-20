@@ -74,19 +74,22 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
         ButterKnife.bind(this);
         KeyboardUtils.hideSoftInput(this);
 
-        mKeyView.show();
+
         switch (type) {
             case DIALOG_CARD:
+                mKeyView.setVisibility(GONE);
                 mCardImg.setVisibility(VISIBLE);
                 mEdt.setVisibility(GONE);
                 mTitleTv.setVisibility(GONE);
                 break;
             case DIALOG_MOBILE:
+                mKeyView.show();
                 mEdt.setInputType(InputType.TYPE_NULL);
                 mEdt.setOnClickListener(this);
                 mKeyView.setOnKeyboardClickListener(this);
                 break;
             case DIALOG_CHANGE_PRICE:
+                mKeyView.show();
                 mKeyView.setOnKeyboardClickListener(this);
                 mEdt.setInputType(InputType.TYPE_NULL);
                 mEdt.setOnClickListener(this);

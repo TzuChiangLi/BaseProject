@@ -327,7 +327,6 @@ public class TradeHelper {
         }
         TradeProd tradeProd = prodList.get(index);
         tradeProd.setAmount(tradeProd.getAmount() + changeAmount);
-        LogUtil.d("-----helper:" + (tradeProd.getAmount()));
         tradeProd.setTotal((tradeProd.getAmount()) * tradeProd.getPrice());
         if (tradeProd.save()) {
             recalcTotal();
