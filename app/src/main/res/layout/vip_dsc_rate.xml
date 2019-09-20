@@ -9,7 +9,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="商品名商品名商品名商品名"
         android:textColor="@color/text_black_first"
         android:textSize="18sp" />
 
@@ -40,7 +39,6 @@
             android:layout_alignTop="@+id/vip_dsc_tv_price_title"
             android:layout_toEndOf="@+id/vip_dsc_tv_price_title"
             android:layout_weight="1"
-            android:text="480.00"
             android:textSize="16sp" />
 
         <TextView
@@ -58,7 +56,6 @@
             android:layout_alignTop="@+id/vip_dsc_tv_price_title"
             android:layout_toEndOf="@+id/vip_dsc_tv_price_title"
             android:layout_weight="1"
-            android:text="480.00"
             android:textSize="16sp" />
 
     </LinearLayout>
@@ -93,8 +90,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="none"
-            android:text="20" />
+            android:inputType="none" />
 
         <TextView
             android:id="@+id/vip_dsc_tv_rate"
@@ -108,7 +104,6 @@
             android:id="@+id/vip_dsc_tv_rate_range"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="(0%-25%)"
             android:textColor="@color/text_black_second"
             android:textSize="16sp" />
 
@@ -137,8 +132,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:inputType="none"
-            android:text="20" />
+            android:inputType="none" />
 
         <TextView
             android:id="@+id/vip_dsc_tv_dsc"
@@ -152,7 +146,6 @@
             android:id="@+id/vip_dsc_tv_dsc_range"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="(0.00-100.00)"
             android:textColor="@color/text_black_second"
             android:textSize="16sp" />
     </LinearLayout>

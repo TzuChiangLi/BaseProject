@@ -130,6 +130,13 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         mPresenter.setTradeStatus(TradeHelper.TRADE_STATUS_HANGUP);
     }
 
+    @OnClick(R.id.shop_list_btn_whole_discount)
+    public void wholeDsc(){
+        MessageUtil.showWholeDscChange(this);
+    }
+
+
+
     @Override
     public void onLeftClick(View v) {
         finish();
@@ -158,7 +165,9 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         if (event.getTarget() == Event.TARGET_SHOP_LIST) {
             if (event.getType() == Event.TYPE_REFRESH) {
                 //TODO 2019年9月19日15:08:49 此处数据上的更新后续考虑如何放进P层
-                mProdAdapter.getData().get(oldPosition).setPrice((Double) event.getData());
+                if (event.getData() != null) {
+                    mProdAdapter.getData().get(oldPosition).setPrice((Double) event.getData());
+                }
                 mProdAdapter.notifyItemChanged(oldPosition);
                 mPresenter.updateTradeInfo();
             }

@@ -61,7 +61,7 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                     helper.setText(R.id.shop_list_rv_product_tv_prodname, ((TradeProd) item).getProdName());
                     helper.setText(R.id.shop_list_rv_product_tv_num, String.valueOf(((TradeProd) item).getAmount()).replace(".0", ""));
                     helper.setText(R.id.shop_list_rv_product_tv_per_price, String.valueOf(((TradeProd) item).getPrice()));
-                    helper.setText(R.id.shop_list_rv_product_tv_total, String.valueOf(((TradeProd) item).getAmount() * ((TradeProd) item).getPrice()));
+                    helper.setText(R.id.shop_list_rv_product_tv_total, String.valueOf(((TradeProd) item).getTotal()));
                     helper.setText(R.id.shop_list_rv_product_tv_barcode, ((TradeProd) item).getBarCode());
                     helper.setText(R.id.shop_list_rv_product_tv_discount, String.valueOf(((TradeProd) item).getSingleDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getWholeDsc()));
                     helper.setBackgroundColor(R.id.shop_list_rv_product_rl, ((TradeProd) item).isSelect() ? rv_item_selected : rv_item_normal);

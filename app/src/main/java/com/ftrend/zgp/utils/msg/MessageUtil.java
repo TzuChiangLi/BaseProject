@@ -13,6 +13,7 @@ import com.lxj.xpopup.core.BasePopupView;
 
 import static com.ftrend.zgp.utils.pop.MobileCardDialog.DIALOG_CHANGE_PRICE;
 import static com.ftrend.zgp.utils.pop.MobileCardDialog.DIALOG_SINGLE_RSC;
+import static com.ftrend.zgp.utils.pop.MobileCardDialog.DIALOG_WHOLE_RSC;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -37,7 +38,7 @@ public class MessageUtil {
     /**
      * @param index 索引
      */
-    public static void showPriceChange(Context context,int index) {
+    public static void showPriceChange(Context context, int index) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
                 .asCustom(new MobileCardDialog(context, DIALOG_CHANGE_PRICE, index))
@@ -45,12 +46,27 @@ public class MessageUtil {
     }
 
     /**
-     * @param index 索引
+     * 单项优惠
+     *
+     * @param context 上下文
+     * @param index   索引
      */
-    public static void showSingleDscChange(Context context,int index) {
+    public static void showSingleDscChange(Context context, int index) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
                 .asCustom(new MobileCardDialog(context, DIALOG_SINGLE_RSC, index))
+                .show();
+    }
+
+    /**
+     * 整单优惠
+     *
+     * @param context 上下文
+     */
+    public static void showWholeDscChange(Context context) {
+        new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
+                .asCustom(new MobileCardDialog(context, DIALOG_WHOLE_RSC))
                 .show();
     }
 
