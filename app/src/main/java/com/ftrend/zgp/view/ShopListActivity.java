@@ -198,7 +198,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                         //检查行清权限
                         if (TradeHelper.getUserRight(TradeHelper.USER_RIGHT_DEL)) {
                             mPresenter.delTradeProd(position);
-                            prodList.remove(position);
                         } else {
                             //提示用户无此权限
                             MessageUtil.show("当前用户无此权限");
