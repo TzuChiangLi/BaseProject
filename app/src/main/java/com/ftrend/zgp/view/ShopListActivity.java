@@ -180,14 +180,10 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                 switch (view.getId()) {
                     case R.id.shop_list_rv_img_add:
                         //商品数量+1
-                        prodList.get(position).setAmount(amount + 1);
-                        //改变数据库
                         mPresenter.changeAmount(position, 1);
                         break;
                     case R.id.shop_list_rv_img_minus:
-                        //改变数据数量
-                        prodList.get(position).setAmount((amount - 1 == 0) ? 1 : amount - 1);
-                        //数据库数量改变
+                        //改变数量-1
                         mPresenter.changeAmount(position, (amount - 1 == 0) ? 0 : -1);
                         break;
                     case R.id.shop_list_rv_btn_change_price:
@@ -246,7 +242,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     public void updateTradeProd(int index) {
-        mProdAdapter.notifyDataSetChanged();
+        mProdAdapter.notifyItemChanged(index);
         mPresenter.updateTradeInfo();
     }
 

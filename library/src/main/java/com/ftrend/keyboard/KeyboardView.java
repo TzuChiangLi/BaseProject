@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.ftrend.library.R;
+import com.ftrend.log.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -191,7 +192,7 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
 
     @Override
     public void onItemClick(View v, int position) {
-        int key_point = 9, key_delete = 11;
+        int key_point = 9, key_delete = 11, key_zero = 10;
         //待后续样式确定后，逻辑再做优化
         if (mEdt != null) {
             if ((int) v.getTag() == key_point) {
@@ -204,7 +205,7 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
             }
         }
         if (mItemClickListener != null) {
-            if ((int) v.getTag() == key_point) {
+         if ((int) v.getTag() == key_point) {
                 if (mEdt != null) {
                     mEdt.getText().append('.');
                 }
@@ -215,11 +216,13 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
                             mEdt.getText().toString().trim().substring(0, mEdt.getText().toString().trim().length() - 1));
                 }
                 mItemClickListener.onDeleteClick();
-            } else {
+            } else
+
+                {
                 if (mEdt != null) {
                     mEdt.setText(mEdt.getText().append(String.valueOf(position + 1)));
                 }
-                mItemClickListener.onKeyClick(v, position + 1);
+                mItemClickListener.onKeyClick(v, position + 1==11?0:position+1);
             }
         }
     }
