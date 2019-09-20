@@ -192,7 +192,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                         break;
                     case R.id.shop_list_rv_btn_discount:
                         //单品优惠
-
+                        mPresenter.checkProdForDsc(position);
                         break;
                     case R.id.shop_list_rv_btn_del:
                         //检查行清权限
@@ -267,6 +267,16 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
             MessageUtil.showPriceChange(ShopListActivity.this, index);
         } else {
             MessageUtil.showError("该商品不允许改价");
+        }
+    }
+
+    @Override
+    public void showSingleDscDialog(boolean forDsc, int index) {
+        if (forDsc) {
+            //弹出改价窗口
+            MessageUtil.showSingleDscChange(ShopListActivity.this, index);
+        } else {
+            MessageUtil.showError("无此权限");
         }
     }
 

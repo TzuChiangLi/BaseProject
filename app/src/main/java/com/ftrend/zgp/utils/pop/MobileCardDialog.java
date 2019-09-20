@@ -5,8 +5,10 @@ import android.support.annotation.NonNull;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewStub;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.KeyboardUtils;
@@ -28,8 +30,12 @@ import butterknife.OnClick;
  * @author liziqiang@ftrend.cn
  */
 public class MobileCardDialog extends BottomPopupView implements View.OnClickListener, KeyboardView.OnItemClickListener {
-    @BindView(R.id.vip_way_key)
-    KeyboardView mKeyView;
+    @BindView(R.id.vip_way_ll_info)
+    LinearLayout mInfoLayout;
+    @BindView(R.id.vip_dsc_rate_view)
+    ViewStub mRateDscView;
+    @BindView(R.id.vip_way_key_view)
+    ViewStub mKeyViewStub;
     @BindView(R.id.vip_way_edt)
     ClearEditText mEdt;
     @BindView(R.id.vip_way_img_card)
@@ -46,6 +52,11 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
     public static final int DIALOG_MOBILE = 1;
     //购物车：  2-改价
     public static final int DIALOG_CHANGE_PRICE = 2;
+    //优惠：    3-单项优惠
+    public static final int DIALOG_SINGLE_RSC = 3;
+    //优惠：    3-整单优惠
+    public static final int DIALOG_WHOLE_RSC = 4;
+    private KeyboardView mKeyView;
     private int type;
     private int index = 0;
     private Context mContext;
@@ -73,29 +84,41 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
         super.onCreate();
         ButterKnife.bind(this);
         KeyboardUtils.hideSoftInput(this);
-
-
         switch (type) {
             case DIALOG_CARD:
-                mKeyView.setVisibility(GONE);
+                mInfoLayout.setVisibility(GONE);
                 mCardImg.setVisibility(VISIBLE);
                 mEdt.setVisibility(GONE);
                 mTitleTv.setVisibility(GONE);
                 break;
             case DIALOG_MOBILE:
+                ButterKnife.bind(R.layout.keyboard_view_stub, mKeyViewStub);
+                mKeyView = mKeyViewStub.inflate().findViewById(R.id.vip_way_keyboard);
                 mKeyView.show();
                 mEdt.setInputType(InputType.TYPE_NULL);
                 mEdt.setOnClickListener(this);
                 mKeyView.setOnKeyboardClickListener(this);
                 break;
             case DIALOG_CHANGE_PRICE:
+                ButterKnife.bind(R.layout.keyboard_view_stub, mKeyViewStub);
+                mKeyView = mKeyViewStub.inflate().findViewById(R.id.vip_way_keyboard);
                 mKeyView.show();
-                mKeyView.setOnKeyboardClickListener(this);
                 mEdt.setInputType(InputType.TYPE_NULL);
-                mEdt.setOnClickListener(this);
                 mTitleTv.setText("请输入修改后的商品价格：");
                 mSubmitBtn.setText("修改");
-
+                mEdt.setOnClickListener(this);
+                mKeyView.setOnKeyboardClickListener(this);
+                break;
+            case DIALOG_SINGLE_RSC:
+            case DIALOG_WHOLE_RSC:
+                ButterKnife.bind(R.layout.vip_dsc_rate, mRateDscView);
+                ButterKnife.bind(R.layout.keyboard_view_stub, mKeyViewStub);
+                mKeyView = mKeyViewStub.inflate().findViewById(R.id.vip_way_keyboard);
+                mRateDscView.inflate();
+                mKeyView.show();
+                mTitleTv.setText("请输入此商品优惠信息：");
+                mEdt.setVisibility(GONE);
+                mSubmitBtn.setVisibility(GONE);
                 break;
             default:
                 break;

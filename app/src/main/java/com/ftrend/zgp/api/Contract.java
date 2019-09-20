@@ -346,8 +346,10 @@ public interface Contract {
     interface ShopListPresenter {
         /**
          * 商品是否允许优惠,弹出相应提示
+         *
+         * @param index 索引
          */
-        void checkProdForDsc(String prodCode, String barCode);
+        void checkProdForDsc(int index);
 
         /**
          * 显示此时购物车内的所有商品
@@ -454,6 +456,14 @@ public interface Contract {
          * @param index     索引
          */
         void showPriceChangeDialog(boolean priceFlag, int index);
+
+        /**
+         * 是否可以单项优惠
+         *
+         * @param forDsc 是否可以单项优惠
+         * @param index  索引
+         */
+        void showSingleDscDialog(boolean forDsc, int index);
 
 
     }

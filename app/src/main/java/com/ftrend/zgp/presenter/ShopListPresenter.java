@@ -24,7 +24,9 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
 
 
     @Override
-    public void checkProdForDsc(String prodCode, String barCode) {
+    public void checkProdForDsc(int index) {
+        mView.showSingleDscDialog(TradeHelper.checkForDsc(index), index);
+
     }
 
     @Override

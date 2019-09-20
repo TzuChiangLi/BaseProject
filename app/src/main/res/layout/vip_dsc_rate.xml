@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/vip_dsc_tv_prodname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="商品名商品名商品名商品名"
+        android:textColor="@color/text_black_first"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:id="@+id/vip_dsc_ll_prod_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_dsc_tv_prodname"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_price_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vip_dsc_tv_prodname"
+            android:text="原价："
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/vip_dsc_tv_price_title"
+            android:layout_toEndOf="@+id/vip_dsc_tv_price_title"
+            android:layout_weight="1"
+            android:text="480.00"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_total_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vip_dsc_tv_prodname"
+            android:text="优惠价："
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_total"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/vip_dsc_tv_price_title"
+            android:layout_toEndOf="@+id/vip_dsc_tv_price_title"
+            android:layout_weight="1"
+            android:text="480.00"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/vip_dsc_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@id/vip_dsc_ll_prod_info"
+        android:background="@color/divide_line" />
+
+    <LinearLayout
+        android:id="@+id/vip_dsc_ll_rate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_dsc_line"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_rate_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="折扣比例："
+            android:textColor="@color/text_black_second"
+            android:textSize="16sp" />
+
+        <com.ftrend.cleareditview.ClearEditText
+            android:id="@+id/vip_dsc_edt_rate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:text="20" />
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_rate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="%"
+            android:textColor="@color/text_black_second"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_rate_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(0%-25%)"
+            android:textColor="@color/text_black_second"
+            android:textSize="16sp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vip_dsc_ll_dsc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_dsc_ll_rate"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_dsc_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="优惠金额："
+            android:textColor="@color/text_black_second"
+            android:textSize="16sp" />
+
+        <com.ftrend.cleareditview.ClearEditText
+            android:id="@+id/vip_dsc_edt_dsc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="20" />
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_dsc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="元"
+            android:textColor="@color/text_black_second"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_dsc_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(0.00-100.00)"
+            android:textColor="@color/text_black_second"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+</RelativeLayout>
