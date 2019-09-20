@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.log.LogUtil;
 
 /**
  * 收银-选择商品P层
@@ -47,6 +48,7 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
 
     @Override
     public void changeAmount(int index, double changeAmount) {
+        LogUtil.d("----amount:"+changeAmount);
         TradeHelper.changeAmount(index, changeAmount);
         updateTradeInfo();
         mView.updateTradeProd(index);

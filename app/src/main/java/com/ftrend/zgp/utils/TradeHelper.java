@@ -14,6 +14,7 @@ import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
@@ -326,6 +327,7 @@ public class TradeHelper {
         }
         TradeProd tradeProd = prodList.get(index);
         tradeProd.setAmount(tradeProd.getAmount() + changeAmount);
+        LogUtil.d("-----helper:" + (tradeProd.getAmount()));
         tradeProd.setTotal((tradeProd.getAmount()) * tradeProd.getPrice());
         if (tradeProd.save()) {
             recalcTotal();
