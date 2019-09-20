@@ -23,13 +23,15 @@ android {
     }
     //apk文件重命名
     android.applicationVariants.all { variant ->
-        variant.outputs.all { output ->
-            def outputFile = output.outputFile
-            if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                def fileName = "zgp-${variant.buildType.name}-v${versionName}.apk"
-                outputFileName = fileName
-            }
+        variant.outputs.all {
+            outputFileName = "zgp-${variant.buildType.name}-v${versionName}.apk"
         }
+    }
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
     }
 }
 
@@ -88,5 +90,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
     //一些公共自定义view
     implementation project(':library')
+    //商米支付SDK
+    implementation(name: 'PayLib-release-1.4.18', ext: 'aar')
 
 }
