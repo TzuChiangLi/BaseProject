@@ -7,13 +7,13 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.toast.XToast;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
-import com.ftrend.zgp.utils.pop.MobileCardDialog;
+import com.ftrend.zgp.utils.pop.PriceDscDialog;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
-import static com.ftrend.zgp.utils.pop.MobileCardDialog.DIALOG_CHANGE_PRICE;
-import static com.ftrend.zgp.utils.pop.MobileCardDialog.DIALOG_SINGLE_RSC;
-import static com.ftrend.zgp.utils.pop.MobileCardDialog.DIALOG_WHOLE_RSC;
+import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_CHANGE_PRICE;
+import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_SINGLE_RSC;
+import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_WHOLE_RSC;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -31,7 +31,7 @@ public class MessageUtil {
         mContext = BaseActivity.mContext;
         new XPopup.Builder(mContext)
                 .dismissOnTouchOutside(false)
-                .asCustom(new MobileCardDialog(mContext, DIALOG_CHANGE_PRICE))
+                .asCustom(new PriceDscDialog(mContext, DIALOG_CHANGE_PRICE))
                 .show();
     }
 
@@ -41,7 +41,7 @@ public class MessageUtil {
     public static void showPriceChange(Context context, int index) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new MobileCardDialog(context, DIALOG_CHANGE_PRICE, index))
+                .asCustom(new PriceDscDialog(context, DIALOG_CHANGE_PRICE, index))
                 .show();
     }
 
@@ -54,7 +54,7 @@ public class MessageUtil {
     public static void showSingleDscChange(Context context, int index) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new MobileCardDialog(context, DIALOG_SINGLE_RSC, index))
+                .asCustom(new PriceDscDialog(context, DIALOG_SINGLE_RSC, index))
                 .show();
     }
 
@@ -66,7 +66,7 @@ public class MessageUtil {
     public static void showWholeDscChange(Context context) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new MobileCardDialog(context, DIALOG_WHOLE_RSC))
+                .asCustom(new PriceDscDialog(context, DIALOG_WHOLE_RSC))
                 .show();
     }
 

@@ -25,7 +25,11 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
 
     @Override
     public void checkProdForDsc(int index) {
-        mView.showSingleDscDialog(TradeHelper.checkForDsc(index), index);
+        if (TradeHelper.checkForDsc(index)) {
+            mView.showSingleDscDialog(index);
+        } else {
+            mView.showNoRightDscDialog("该商品无优惠");
+        }
 
     }
 
@@ -49,6 +53,9 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
 
     @Override
     public void changeAmount(int index, double changeAmount) {
+        if (changeAmount<0){
+            changeAmount=TradeHelper.getTradeProdList().get(index).getAmount()-1==0?1:-1;
+        }
         TradeHelper.changeAmount(index, changeAmount);
         updateTradeInfo();
         mView.updateTradeProd(index);
@@ -86,9 +93,17 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
     public void getProdPriceFlag(String prodCode, String barCode, int index) {
         //如果条码不为空，即查条码
         if (TextUtils.isEmpty(barCode)) {
-            mView.showPriceChangeDialog(TradeHelper.getPriceFlagByBarCode(barCode), index);
+            if (TradeHelper.getPriceFlagByBarCode(barCode)) {
+                mView.showPriceChangeDialog(index);
+            } else {
+                mView.showNoRightDscDialog("该商品不允许改价");
+            }
         } else {
-            mView.showPriceChangeDialog(TradeHelper.getPriceFlagByProdCode(prodCode), index);
+            if (TradeHelper.getPriceFlagByProdCode(prodCode)) {
+                mView.showPriceChangeDialog(index);
+            } else {
+                mView.showNoRightDscDialog("该商品不允许改价");
+            }
         }
 
     }

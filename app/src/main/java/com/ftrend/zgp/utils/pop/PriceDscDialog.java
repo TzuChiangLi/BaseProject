@@ -33,27 +33,22 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
+ * 改价、输入手机号、单项优惠、整单优惠弹出窗口
+ *
  * @author liziqiang@ftrend.cn
  */
-public class MobileCardDialog extends BottomPopupView implements View.OnClickListener, KeyboardView.OnItemClickListener, View.OnFocusChangeListener {
+public class PriceDscDialog extends BottomPopupView implements View.OnClickListener, KeyboardView.OnItemClickListener, View.OnFocusChangeListener {
     @BindView(R.id.vip_way_ll_info)
     LinearLayout mInfoLayout;
-
     @BindView(R.id.vip_way_edt)
     ClearEditText mEdt;
-    @BindView(R.id.vip_way_img_card)
-    ImageView mCardImg;
     @BindView(R.id.vip_way_tv_title)
     TextView mTitleTv;
     @BindView(R.id.vip_mobile_btn_submit)
     Button mSubmitBtn;
     @BindView(R.id.vip_way_img_close)
     ImageView mCloseImg;
-
-
-    //会员弹窗：0-手机号
-    public static final int DIALOG_CARD = 0;
-    //会员弹窗：1-会员卡
+    //会员弹窗：1-手机号
     public static final int DIALOG_MOBILE = 1;
     //购物车：  2-改价
     public static final int DIALOG_CHANGE_PRICE = 2;
@@ -66,18 +61,18 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
     private Context mContext;
     private KeyboardView mKeyView;
     private View mKeyViewStub, mRateDscView;
-    private ClearEditText mRateEdt, mDscEdt;
+    private EditText mRateEdt, mDscEdt;
     private TextView mPriceTv, mTotalTv, mProdNameTv, mMaxRateTv, mMaxDscTv;
     private boolean isFirst = true;
 
 
-    public MobileCardDialog(@NonNull Context context, int type) {
+    public PriceDscDialog(@NonNull Context context, int type) {
         super(context);
         this.type = type;
         mContext = context;
     }
 
-    public MobileCardDialog(@NonNull Context context, int type, int index) {
+    public PriceDscDialog(@NonNull Context context, int type, int index) {
         super(context);
         this.type = type;
         this.index = index;
@@ -86,7 +81,7 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
 
     @Override
     protected int getImplLayoutId() {
-        return R.layout.vip_mobile_card;
+        return R.layout.vip_dsc_mobile;
     }
 
     @Override
@@ -95,12 +90,6 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
         ButterKnife.bind(this);
         KeyboardUtils.hideSoftInput(this);
         switch (type) {
-            case DIALOG_CARD:
-                mInfoLayout.setVisibility(GONE);
-                mCardImg.setVisibility(VISIBLE);
-                mEdt.setVisibility(GONE);
-                mTitleTv.setVisibility(GONE);
-                break;
             case DIALOG_MOBILE:
                 //手机号
                 mKeyViewStub = ((ViewStub) findViewById(R.id.vip_way_key_lite_view)).inflate();
@@ -141,7 +130,7 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
      * 初始化整单优惠数据
      */
     private void initWholeDscData() {
-
+        mPriceTv.setText(String.valueOf(TradeHelper.getWholePrice()));
     }
 
     /**
@@ -170,6 +159,8 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
         mProdNameTv.setVisibility(GONE);
         mKeyView.setOnKeyboardClickListener(this);
         mRateEdt.selectAll();
+
+        mRateEdt.setOnFocusChangeListener(this);
     }
 
 
@@ -195,7 +186,7 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
         //展示自家小键盘
         mKeyView.show();
         //初始化其他界面信息
-        mTitleTv.setText("请输入此商品优惠信息：");
+        mTitleTv.setText("商品单项优惠：");
         mEdt.setVisibility(GONE);
         mSubmitBtn.setVisibility(GONE);
         mKeyView.setOnKeyboardClickListener(this);
@@ -226,8 +217,6 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
     @OnClick(R.id.vip_mobile_btn_submit)
     public void submit() {
         switch (type) {
-            case DIALOG_CARD:
-                break;
             case DIALOG_MOBILE:
                 break;
             case DIALOG_CHANGE_PRICE:
@@ -300,33 +289,36 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (count != 0) {
                 if (s.toString().contains(".")) {
+                    errorTextColor(mRateEdt);
                     return;
                 }
-                switch (type) {
-                    case DIALOG_SINGLE_RSC:
-                        //TODO 2019年9月20日17:16:17 需要加入正则校验是否正确
-                        if (Long.valueOf(s.toString()) > TradeHelper.getMaxDscRate()) {
-                            //超过限制
-                            errorTextColor(mRateEdt);
-                        } else {
+                if (Long.valueOf(s.toString()) > TradeHelper.getMaxDscRate()) {
+                    //超过限制
+                    errorTextColor(mRateEdt);
+                } else {
+                    restoreTextColor(mRateEdt);
+                    switch (type) {
+                        case DIALOG_SINGLE_RSC:
+                            //TODO 2019年9月20日17:16:17 需要加入正则校验是否正确
                             //设置优惠金额
                             mDscEdt.setText(String.format("%.2f", TradeHelper.getSingleDsc(index, Integer.valueOf(s.toString()))));
                             //修改优惠后的价格
                             mTotalTv.setText(String.format("%.2f", TradeHelper.getSingleTotal(index, Double.parseDouble(mDscEdt.getText().toString()))));
+                            //如果优惠金额大于最大金额
                             if (Double.parseDouble(mDscEdt.getText().toString()) > TradeHelper.getMaxSingleDsc(index)) {
-                                //TODO 2019年9月20日17:44:34 折扣率超限
                                 errorTextColor(mDscEdt);
                             } else {
                                 restoreTextColor(mDscEdt);
                             }
-                        }
-                        break;
-                    case DIALOG_WHOLE_RSC:
-                        break;
-                    default:
-                        break;
+                            break;
+                        case DIALOG_WHOLE_RSC:
+                            mTotalTv.setText(String.format("%.2f", TradeHelper.getWholeTotal(Integer.valueOf(s.toString()))));
+                            mDscEdt.setText(String.format("%.2f", TradeHelper.getWholeDsc(Integer.valueOf(s.toString()))));
+                            break;
+                        default:
+                            break;
+                    }
                 }
-
             } else {
                 mDscEdt.setText("");
                 restoreTextColor(mRateEdt);
@@ -349,13 +341,14 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (count != 0) {
-                switch (type) {
-                    case DIALOG_SINGLE_RSC:
-                        //TODO 2019年9月20日17:16:17 需要加入正则校验是否正确
-                        if (Double.parseDouble(s.toString()) > TradeHelper.getMaxDscTotal()) {
-                            //超过限制
-                            errorTextColor(mDscEdt);
-                        } else {
+                if (Double.parseDouble(s.toString()) > TradeHelper.getMaxDscTotal()) {
+                    //超过限制
+                    errorTextColor(mDscEdt);
+                } else {
+                    restoreTextColor(mDscEdt);
+                    switch (type) {
+                        case DIALOG_SINGLE_RSC:
+                            //TODO 2019年9月20日17:16:17 需要加入正则校验是否正确
                             //设置折扣率
                             mRateEdt.setText(String.valueOf(TradeHelper.getSingleRate(index, Double.parseDouble(s.toString()))));
                             //修改优惠后的价格
@@ -365,14 +358,15 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
                             } else {
                                 restoreTextColor(mRateEdt);
                             }
-                        }
-                        break;
-                    case DIALOG_WHOLE_RSC:
-                        break;
-                    default:
-                        break;
+                            break;
+                        case DIALOG_WHOLE_RSC:
+                            mRateEdt.setText(String.valueOf(TradeHelper.getWholeRate(Double.parseDouble(s.toString()))));
+                            mTotalTv.setText(String.format("%.2f", TradeHelper.getWholeTotal(Double.parseDouble(s.toString()))));
+                            break;
+                        default:
+                            break;
+                    }
                 }
-
             } else {
                 mRateEdt.setText("");
                 restoreTextColor(mRateEdt);
@@ -522,6 +516,18 @@ public class MobileCardDialog extends BottomPopupView implements View.OnClickLis
                 }
                 break;
             case DIALOG_WHOLE_RSC:
+                if (TextUtils.isEmpty(mRateEdt.getText().toString()) && TextUtils.isEmpty(mDscEdt.getText().toString())) {
+                    dismiss();
+                    return;
+                }
+                if (Integer.parseInt(mRateEdt.getText().toString()) <= TradeHelper.getMaxDscRate() &&
+                        Double.parseDouble(mDscEdt.getText().toString()) <= TradeHelper.getMaxSingleDsc(index)) {
+                    //两个都为true的时候，才能保存成功
+
+
+                } else {
+                    MessageUtil.showError("失败");
+                }
                 break;
             case DIALOG_MOBILE:
             case DIALOG_CHANGE_PRICE:

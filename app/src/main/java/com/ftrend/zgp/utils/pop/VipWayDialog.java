@@ -18,12 +18,12 @@ import butterknife.OnClick;
  *
  * @author liziqiang@ftrend.cn
  */
-public class VipDialog extends CenterPopupView {
+public class VipWayDialog extends CenterPopupView {
     @BindView(R.id.vip_way_img_close)
     ImageView mCloseImg;
     private Context mContext;
 
-    public VipDialog(@NonNull Context context) {
+    public VipWayDialog(@NonNull Context context) {
         super(context);
         mContext = context;
     }
@@ -50,7 +50,7 @@ public class VipDialog extends CenterPopupView {
         dismiss();
         new XPopup.Builder(mContext)
                 .dismissOnTouchOutside(false)
-                .asCustom(new MobileCardDialog(mContext, MobileCardDialog.DIALOG_MOBILE))
+                .asCustom(new PriceDscDialog(mContext, PriceDscDialog.DIALOG_MOBILE))
                 .show();
     }
 
@@ -65,7 +65,7 @@ public class VipDialog extends CenterPopupView {
         dismiss();
         new XPopup.Builder(mContext)
                 .dismissOnTouchOutside(false)
-                .asCustom(new MobileCardDialog(mContext, MobileCardDialog.DIALOG_CARD))
+                .asCustom(new VipCardDialog(mContext))
                 .show();
     }
 }

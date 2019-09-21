@@ -20,7 +20,7 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
-import com.ftrend.zgp.utils.pop.VipDialog;
+import com.ftrend.zgp.utils.pop.VipWayDialog;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
@@ -111,7 +111,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     public void selectVipLoginWay() {
         new XPopup.Builder(this)
                 .dismissOnTouchOutside(false)
-                .asCustom(new VipDialog(this))
+                .asCustom(new VipWayDialog(this))
                 .show();
     }
 
@@ -131,10 +131,9 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     }
 
     @OnClick(R.id.shop_list_btn_whole_discount)
-    public void wholeDsc(){
+    public void wholeDsc() {
         MessageUtil.showWholeDscChange(this);
     }
-
 
 
     @Override
@@ -193,7 +192,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                         break;
                     case R.id.shop_list_rv_img_minus:
                         //改变数量-1
-                        mPresenter.changeAmount(position, (amount - 1 == 0) ? 0 : -1);
+                        mPresenter.changeAmount(position, -1);
                         break;
                     case R.id.shop_list_rv_btn_change_price:
                         //先检查商品是否允许改价
@@ -270,23 +269,21 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
 
     @Override
-    public void showPriceChangeDialog(boolean priceFlag, int index) {
-        if (priceFlag) {
-            //弹出改价窗口
-            MessageUtil.showPriceChange(ShopListActivity.this, index);
-        } else {
-            MessageUtil.showError("该商品不允许改价");
-        }
+    public void showPriceChangeDialog(int index) {
+        //弹出改价窗口
+        MessageUtil.showPriceChange(ShopListActivity.this, index);
+    }
+
+
+    @Override
+    public void showNoRightDscDialog(String msg) {
+        MessageUtil.showError(msg);
     }
 
     @Override
-    public void showSingleDscDialog(boolean forDsc, int index) {
-        if (forDsc) {
-            //弹出改价窗口
-            MessageUtil.showSingleDscChange(ShopListActivity.this, index);
-        } else {
-            MessageUtil.showError("无此权限");
-        }
+    public void showSingleDscDialog(int index) {
+        //弹出改价窗口
+        MessageUtil.showSingleDscChange(ShopListActivity.this, index);
     }
 
     @OnClick(R.id.shop_list_btn_cancel)

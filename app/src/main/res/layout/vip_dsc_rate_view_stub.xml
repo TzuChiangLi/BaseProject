@@ -85,11 +85,12 @@
             android:textColor="@color/text_black_second"
             android:textSize="16sp" />
 
-        <com.ftrend.cleareditview.ClearEditText
+        <EditText
             android:id="@+id/vip_dsc_edt_rate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/dsc_edt_normal_selector"
             android:inputType="none" />
 
         <TextView
@@ -127,11 +128,12 @@
             android:textColor="@color/text_black_second"
             android:textSize="16sp" />
 
-        <com.ftrend.cleareditview.ClearEditText
+        <EditText
             android:id="@+id/vip_dsc_edt_dsc"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/dsc_edt_normal_selector"
             android:inputType="none" />
 
         <TextView

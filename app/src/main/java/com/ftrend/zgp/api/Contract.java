@@ -452,18 +452,23 @@ public interface Contract {
         /**
          * 是否可以改价
          *
-         * @param priceFlag 是或否
          * @param index     索引
          */
-        void showPriceChangeDialog(boolean priceFlag, int index);
+        void showPriceChangeDialog( int index);
 
         /**
-         * 是否可以单项优惠
+         * 单项优惠
          *
-         * @param forDsc 是否可以单项优惠
-         * @param index  索引
+         * @param index 索引
          */
-        void showSingleDscDialog(boolean forDsc, int index);
+        void showSingleDscDialog(int index);
+
+        /**
+         * 单项优惠
+         *
+         * @param msg 文本
+         */
+        void showNoRightDscDialog(String msg);
 
 
     }

@@ -3,7 +3,6 @@ package com.ftrend.zgp.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.model.DepPayInfo;
 import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.DepProduct;
@@ -77,6 +76,8 @@ public class TradeHelper {
         return trade;
     }
 
+    //region clear----清空当前交易信息
+
     /**
      * 清空当前交易信息
      */
@@ -85,6 +86,9 @@ public class TradeHelper {
         prodList = null;
         pay = null;
     }
+    //endregion
+
+    //region initSale----初始化当前操作流水
 
     /**
      * 初始化当前操作的交易流水，读取未结销售流水，不存在则创建新的流水
@@ -124,6 +128,9 @@ public class TradeHelper {
                     .querySingle();
         }
     }
+    //endregion
+
+    //region addProduct----添加到商品表
 
     /**
      * 添加商品到商品列表
@@ -158,6 +165,9 @@ public class TradeHelper {
             return -1;
         }
     }
+    //endregion
+
+    //region delProduct----行清
 
     /**
      * 行清
@@ -165,7 +175,6 @@ public class TradeHelper {
      * @param index 行清的商品索引
      * @return 是否成功
      */
-
     public static boolean delProduct(int index) {
         if (index < 0 || index >= prodList.size()) {
             Log.e(TAG, "行清: 索引无效");
@@ -176,6 +185,9 @@ public class TradeHelper {
         prodList.remove(index);
         return prod.save();
     }
+    //endregion
+
+    //region pay----完成支付
 
     /**
      * 完成支付
@@ -219,6 +231,7 @@ public class TradeHelper {
 
     }
 
+
     /**
      * 完成支付（仅适用于现金支付）
      *
@@ -239,6 +252,7 @@ public class TradeHelper {
     public static boolean pay(String appPayType, String payCode) {
         return pay(appPayType, trade.getTotal(), 0, payCode);
     }
+    //endregion
 
     /**
      * 生成新的流水号
@@ -572,14 +586,12 @@ public class TradeHelper {
             firstDsc = SQLite.select(DepProduct_Table.minimumPrice).from(DepProduct.class)
                     .where(DepProduct_Table.prodCode.eq(prodCode))
                     .querySingle().getMinimumPrice();
-            LogUtil.d("----原价-最低限价:" + prodList.get(index).getPrice() + "/" + firstDsc);
             firstDsc = prodList.get(index).getPrice() - firstDsc;
         } else {
             //原价-最低限价
             firstDsc = SQLite.select(DepProduct_Table.minimumPrice).from(DepProduct.class)
                     .where(DepProduct_Table.barCode.eq(barCode))
                     .querySingle().getMinimumPrice();
-            LogUtil.d("----原价-最低限价:" + prodList.get(index).getPrice() + "/" + firstDsc);
             firstDsc = prodList.get(index).getPrice() - firstDsc;
 
         }
@@ -600,6 +612,7 @@ public class TradeHelper {
         return dsc[0];
     }
 
+
     /**
      * 输入折扣率获取整单优惠金额
      *
@@ -615,8 +628,6 @@ public class TradeHelper {
         firstDsc = price * (rate / 100);
         //优惠金额 = 商品原价 × 折扣率
         for (TradeProd prod : prodList) {
-            //优惠金额
-
             //该商品其他优惠金额
             singleDsc = prod.getSingleDsc();
             vipDsc = prod.getVipDsc();
@@ -651,37 +662,62 @@ public class TradeHelper {
     }
 
     /**
-     * 输入整单优惠金额获取折扣率
+     * 检查整单优惠折扣率
      *
      * @return 折扣率
      */
-    public static double getWholeRateByDsc(double dsc) {
-        //TODO 2019年9月19日19:23:05 在P层处理好输入值与最大值的提示关系
+    public static boolean checkWholeRateByDsc(double dsc) {
         //最大折扣金额
-        double price = 0;
-        double rate = 0;
         double maxDscTotal = ZgParams.getCurrentUser().getMaxDscTotal();
         //最大折扣率
         int maxDscRate = ZgParams.getCurrentUser().getMaxDscRate();
-        if (dsc > maxDscTotal) {
-            dsc = maxDscTotal;
+        return dsc > maxDscTotal;
+    }
+
+
+    /**
+     * 本笔交易未优惠前价格
+     *
+     * @return
+     */
+    public static double getWholePrice() {
+        //TODO 2019年9月21日09:40:38 原价显示当前流水的每个商品单价*数量？
+        double price = 0;
+        for (TradeProd prod : prodList) {
+            price += prod.getPrice() * prod.getAmount();
         }
-        //需要筛选出来可以分摊的商品
-        List<TradeProd> tempList = new ArrayList<>();
-        for (int i = 0; i < prodList.size(); i++) {
-            if (checkForDsc(i)) {
-                tempList.add(prodList.get(i));
-            }
-            price += prodList.get(i).getPrice() * prodList.get(i).getAmount();
-        }
-        //分摊到每个商品中
-        for (TradeProd prod : tempList) {
-            prod.setWholeDsc((prod.getPrice() * prod.getAmount() / price) * dsc);
-            prod.save();
-        }
-        rate = dsc / price;
-        recalcTotal();
-        return rate > maxDscRate ? maxDscRate : rate;
+        return price;
+
+        //TODO 2019年9月21日09:41:13 原价显示当前流水（每个商品单价-单项优惠）*数量？
+    }
+
+
+    /**
+     * 获取整单优惠金额
+     *
+     * @param rate
+     * @return
+     */
+    public static double getWholeDsc(int rate) {
+        return getWholePrice() * rate / 100;
+    }
+
+    /**
+     * 获取整单优惠后的总金额
+     *
+     * @param dsc
+     * @return
+     */
+    public static double getWholeTotal(double dsc) {
+        return getWholePrice() - dsc;
+    }
+
+    /**
+     * @param wholeDsc
+     * @return
+     */
+    public static long getWholeRate(double wholeDsc) {
+        return Math.round((wholeDsc / getWholePrice()) * 100);
     }
 
 
@@ -722,5 +758,62 @@ public class TradeHelper {
         return false;
     }
 
+    public static boolean saveWholeDscByDsc(double wholeDsc) {
+        //保存整单优惠，需要分摊
+        //如果这个商 品已经有优惠，取两者较大值
+        //优惠金额不能大于：商品原价-最低限价
+        //总的优惠金额不能大于单笔最大优惠金额（能执行到本方法时，已经排除大于最大优惠金额）
+        double price = getWholePrice();
+        //需要筛选出来可以分摊的商品
+        List<TradeProd> tempList = new ArrayList<>();
+        for (int i = 0; i < prodList.size(); i++) {
+            if (checkForDsc(i)) {
+                tempList.add(prodList.get(i));
+            }
+        }
+        //分摊到每个商品中
+        for (TradeProd prod : tempList) {
+            prod.setWholeDsc((prod.getPrice() * prod.getAmount() / price) * wholeDsc);
+            prod.save();
+        }
+        return recalcTotal();
+    }
+
+
+    /**
+     * 整单优惠输入折扣率时保存
+     *
+     * @param rate
+     * @return
+     */
+    public static boolean saveWholeDscByRate(int rate) {
+        //优惠金额=商品总价*折扣率
+        //优惠金额不能大于：商品原价-最低限价
+        //总的优惠金额不能大于单笔最大优惠金额（能执行到本方法时，已经排除大于最大优惠金额）
+        //需要筛选出来可以分摊的商品
+        double dsc, minumPrice;
+        for (TradeProd prod : prodList) {
+            dsc = prod.getPrice() * rate;
+            //TODO 商品已有优惠，是指已有单品优惠还是整单优惠？
+            //优惠金额与已有优惠相比，取较大值
+            dsc = dsc >= prod.getWholeDsc() ? dsc : prod.getWholeDsc();
+            //取商品的最低限价
+            if (TextUtils.isEmpty(prod.getBarCode())) {
+                minumPrice = SQLite.select(DepProduct_Table.minimumPrice).from(DepProduct.class)
+                        .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
+                        .querySingle().getMinimumPrice();
+            } else {
+                minumPrice = SQLite.select(DepProduct_Table.minimumPrice).from(DepProduct.class)
+                        .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
+                        .querySingle().getMinimumPrice();
+            }
+            //优惠金额与最低限价相比，超过最低限价则取最低限价
+            dsc = dsc >= prod.getPrice() - minumPrice ? prod.getPrice() - minumPrice : dsc;
+            prod.setWholeDsc(dsc);
+            prod.setManuDsc(prod.getSingleDsc() + dsc);
+            prod.save();
+        }
+        return recalcTotal();
+    }
 
 }
