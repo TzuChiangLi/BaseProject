@@ -8,14 +8,13 @@ import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.SysParams;
 import com.ftrend.zgp.model.User;
+import com.ftrend.zgp.utils.sunmi.SunmiCardConfig;
 import com.google.gson.JsonObject;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static android.support.constraint.Constraints.TAG;
 
 /**
  * 全局参数
@@ -25,6 +24,8 @@ import static android.support.constraint.Constraints.TAG;
  * @since 2019/8/29
  */
 public class ZgParams {
+
+    private static String TAG = "ZgParams";
 
     //是否联机模式
     private static volatile boolean isOnline = false;
@@ -56,7 +57,7 @@ public class ZgParams {
     //本地参数：打印机设置
     private static Map<String, Object> printerConfig = new HashMap<>();
     //本地参数：读卡器设置
-    private static Map<String, Object> cardConfig = new HashMap<>();
+    private static SunmiCardConfig cardConfig = SunmiCardConfig.def();
     //本地参数：上次登录专柜
     private static String lastDep = "";
     //本地参数：上次登录用户
@@ -86,8 +87,11 @@ public class ZgParams {
                 aliPayAccount = param.getParamValue();
             } else if ("wxPayAccount".equalsIgnoreCase(param.getParamName())) {
                 wxPayAccount = param.getParamValue();
+            } else if ("CardConfig".equalsIgnoreCase(param.getParamName())) {
+                cardConfig = SunmiCardConfig.fromJson(param.getParamValue());
             }
         }
+        Log.e(TAG, "cardConfig: " + GsonUtils.toJson(cardConfig));
 
         //本地参数
         List<AppParams> appParamsList = SQLite.select().from(AppParams.class)
@@ -104,8 +108,6 @@ public class ZgParams {
                 initFlag = param.getParamValue();
             } else if ("printerConfig".equalsIgnoreCase(param.getParamName())) {
                 parseJson(printerConfig, param.getParamValue());
-            } else if ("cardConfig".equalsIgnoreCase(param.getParamName())) {
-                parseJson(cardConfig, param.getParamValue());
             } else if ("lastDep".equalsIgnoreCase(param.getParamName())) {
                 lastDep = param.getParamValue();
             } else if ("lastUser".equalsIgnoreCase(param.getParamName())) {
@@ -229,7 +231,7 @@ public class ZgParams {
         return printerConfig;
     }
 
-    public static Map<String, Object> getCardConfig() {
+    public static SunmiCardConfig getCardConfig() {
         return cardConfig;
     }
 

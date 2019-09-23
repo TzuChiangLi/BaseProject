@@ -6,8 +6,8 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.ftrend.zgp.App;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ByteUtil;
-import com.sunmi.pay.hardware.aidlv2.AidlConstantsV2;
 import com.sunmi.pay.hardware.aidlv2.readcard.CheckCardCallbackV2;
 import com.sunmi.pay.hardware.aidlv2.readcard.ReadCardOptV2;
 
@@ -26,7 +26,7 @@ import sunmi.paylib.SunmiPayKernel;
 public class SunmiPayHelper {
     private final String TAG = "SunmiPayHelper";
 
-    // TODO: 2019/9/20 读卡需要以下参数，应在服务端设置
+/*    // TODO: 2019/9/20 读卡需要以下参数，应在服务端设置
     // （1）支持的卡类型：1-磁卡，2-M1卡
     private int cardTypes = AidlConstantsV2.CardType.MIFARE.getValue()
             | AidlConstantsV2.CardType.MAGNETIC.getValue();
@@ -39,21 +39,21 @@ public class SunmiPayHelper {
     // （5）M1卡读取密码，6字节（12个十六进制字符），默认为“FFFFFFFFFFFF”
     private byte[] m1KeyBytes = ByteUtil.hexStr2Bytes("FFFFFFFFFFFF");
     // （6）M1卡密码类型：0-KeyA，1-KeyB
-    private final int m1KeyType = 0;
+    private final int m1KeyType = 0;*/
 
     private SunmiPayKernel kernel = null;
-    // 读卡器操作对象
-    private ReadCardOptV2 readCardOptV2 = null;
     // 是否已连接到支付SDK
     private boolean sdkConnected = false;
-    // 卡片状态
-    private CardState cardState = CardState.None;
-    // 失败重试次数
-    private final int retryCount = 10;
-    // 失败次数
-    private int failCount = 0;
+    // 读卡器操作对象
+    private ReadCardOptV2 readCardOptV2 = null;
+    // 读卡器参数
+    private SunmiCardConfig cardConfig = null;
     // 读卡回调
     private ReadCardCallback readCardCallback = null;
+    // 卡片状态
+    private CardState cardState = CardState.None;
+    // 失败次数
+    private int failCount = 0;
 
     /**
      * 连接到支付SDK服务
@@ -86,6 +86,7 @@ public class SunmiPayHelper {
             Log.e(TAG, "onConnectPaySDK");
             try {
                 readCardOptV2 = kernel.mReadCardOptV2;
+                cardConfig = ZgParams.getCardConfig();
                 sdkConnected = true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -109,7 +110,7 @@ public class SunmiPayHelper {
                 cardState = CardState.Finding;
                 failCount = 0;
             }
-            readCardOptV2.checkCard(cardTypes, mCheckCardCallback, 120);
+            readCardOptV2.checkCard(cardConfig.getCardTypes(), mCheckCardCallback, 120);
         } catch (Exception e) {
             cardState = CardState.Error;
             e.printStackTrace();
@@ -125,7 +126,7 @@ public class SunmiPayHelper {
      */
     private void cancelCheckCard() {
         try {
-            readCardOptV2.cardOff(cardTypes);
+            readCardOptV2.cardOff(cardConfig.getCardTypes());
             readCardOptV2.cancelCheckCard();
         } catch (Exception e) {
             e.printStackTrace();
@@ -158,7 +159,7 @@ public class SunmiPayHelper {
         public void onError(int code, String message) throws RemoteException {
             failCount++;
             Log.e(TAG, "checkCard: retry...");
-            if (failCount > retryCount) {
+            if (failCount > cardConfig.getRetryCount()) {
                 //超过失败重试限制
                 cardState = CardState.Error;
                 Log.e(TAG, "checkCard: max retry");
@@ -177,59 +178,23 @@ public class SunmiPayHelper {
      * M1卡读取指定扇区数据
      */
     private void readSector() {
-        int startBlockNo = m1Sector * 4;
-        boolean result = m1Auth(m1KeyType, startBlockNo, m1KeyBytes);
+        int startBlockNo = cardConfig.getM1Sector() * 4 + cardConfig.getM1Block();
+        boolean result = m1Auth(cardConfig.getM1KeyType(), startBlockNo, cardConfig.getM1KeyBytes());
         if (result) {
             byte[] outData = new byte[128];
             int res = m1ReadBlock(startBlockNo, outData);
             if (res >= 0 && res <= 16) {
                 String hexStr = ByteUtil.bytes2HexStr(Arrays.copyOf(outData, res));
-                Log.e(TAG, "read block 0:" + hexStr);
+                Log.e(TAG, "read block:" + hexStr);
                 //回调
                 String code = new String(outData, 0, 16);
-                if (readCardCallback != null && m1Block == 0) {
+                if (readCardCallback != null && cardConfig.getM1Block() == 0) {
                     readCardCallback.onSuccess(code);
                 }
             } else {
-                Log.e(TAG, "read block 0: FAILED");
+                Log.e(TAG, "read block: FAILED");
                 //回调
-                if (readCardCallback != null && m1Block == 0) {
-                    readCardCallback.onError("读取数据失败");
-                }
-            }
-
-            outData = new byte[128];
-            res = m1ReadBlock(startBlockNo + 1, outData);
-            if (res >= 0 && res <= 16) {
-                String hexStr = ByteUtil.bytes2HexStr(Arrays.copyOf(outData, res));
-                Log.e(TAG, "read block 1:" + hexStr);
-                //回调
-                String code = new String(outData, 0, 16);
-                if (readCardCallback != null && m1Block == 1) {
-                    readCardCallback.onSuccess(code);
-                }
-            } else {
-                Log.e(TAG, "read block 1: FAILED");
-                //回调
-                if (readCardCallback != null && m1Block == 1) {
-                    readCardCallback.onError("读取数据失败");
-                }
-            }
-
-            outData = new byte[128];
-            res = m1ReadBlock(startBlockNo + 2, outData);
-            if (res >= 0 && res <= 16) {
-                String hexStr = ByteUtil.bytes2HexStr(Arrays.copyOf(outData, res));
-                Log.e(TAG, "read block 2:" + hexStr);
-                //回调
-                String code = new String(outData, 0, 16);
-                if (readCardCallback != null && m1Block == 2) {
-                    readCardCallback.onSuccess(code);
-                }
-            } else {
-                Log.e(TAG, "read block 2: FAILED");
-                //回调
-                if (readCardCallback != null && m1Block == 2) {
+                if (readCardCallback != null) {
                     readCardCallback.onError("读取数据失败");
                 }
             }
@@ -295,7 +260,7 @@ public class SunmiPayHelper {
             //回调
             if (readCardCallback != null) {
                 // 根据配置参数返回卡号
-                switch (magTrackNo) {
+                switch (cardConfig.getMagTrackNo()) {
                     case 1:
                         readCardCallback.onSuccess(track1);
                         break;
