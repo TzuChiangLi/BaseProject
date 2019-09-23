@@ -130,6 +130,10 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
      * 初始化整单优惠数据
      */
     private void initWholeDscData() {
+        mMaxRateTv.setText(TradeHelper.getMaxWholeRate() == 0 ? "(无优惠)"
+                : "(0-" + TradeHelper.getMaxWholeRate() + "%)");
+        mMaxDscTv.setText(TradeHelper.getMaxWholeDsc() == 0 ? "(无优惠)"
+                : "(0-" + TradeHelper.getMaxWholeDsc() + "元)");
         mPriceTv.setText(String.valueOf(TradeHelper.getWholePrice()));
     }
 
@@ -147,6 +151,8 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         mProdNameTv = mRateDscView.findViewById(R.id.vip_dsc_tv_prodname);
         mPriceTv = mRateDscView.findViewById(R.id.vip_dsc_tv_price);
         mTotalTv = mRateDscView.findViewById(R.id.vip_dsc_tv_total);
+        mMaxDscTv = mRateDscView.findViewById(R.id.vip_dsc_tv_dsc_range);
+        mMaxRateTv = mRateDscView.findViewById(R.id.vip_dsc_tv_rate_range);
         //防止键盘弹出
         mRateEdt.setInputType(InputType.TYPE_NULL);
         mDscEdt.setInputType(InputType.TYPE_NULL);
@@ -204,9 +210,9 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         mPriceTv.setText(String.valueOf(tradeProd.getPrice()));
         mTotalTv.setText(String.valueOf(tradeProd.getTotal() / tradeProd.getAmount()));
         mProdNameTv.setText(tradeProd.getProdName());
-        mMaxRateTv.setText(TradeHelper.getMaxDscRate() == 0 ? "此商品无优惠活动"
-                : "(0%-" + TradeHelper.getMaxDscRate() + "%)");
-        mMaxDscTv.setText(TradeHelper.getMaxSingleDsc(index) == 0 ? "此商品无优惠活动"
+        mMaxRateTv.setText(TradeHelper.getMaxSingleRate(index) == 0 ? "(无优惠)"
+                : "(0-" + TradeHelper.getMaxSingleRate(index) + "%)");
+        mMaxDscTv.setText(TradeHelper.getMaxSingleDsc(index) == 0 ? "(无优惠)"
                 : "(0-" + TradeHelper.getMaxSingleDsc(index) + "元)");
         mDscEdt.setText(String.valueOf(tradeProd.getManuDsc() + tradeProd.getVipDsc() + tradeProd.getTranDsc()));
         mRateEdt.setText(String.valueOf(TradeHelper.getSingleRate(index, Double.parseDouble(mDscEdt.getText().toString()))));
@@ -292,13 +298,13 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                     errorTextColor(mRateEdt);
                     return;
                 }
-                if (Long.valueOf(s.toString()) > TradeHelper.getMaxDscRate()) {
-                    //超过限制
-                    errorTextColor(mRateEdt);
-                } else {
-                    restoreTextColor(mRateEdt);
-                    switch (type) {
-                        case DIALOG_SINGLE_RSC:
+                switch (type) {
+                    case DIALOG_SINGLE_RSC:
+                        if (Long.valueOf(s.toString()) > TradeHelper.getMaxSingleRate(index)) {
+                            //超过限制
+                            errorTextColor(mRateEdt);
+                        } else {
+                            restoreTextColor(mRateEdt);
                             //TODO 2019年9月20日17:16:17 需要加入正则校验是否正确
                             //设置优惠金额
                             mDscEdt.setText(String.format("%.2f", TradeHelper.getSingleDsc(index, Integer.valueOf(s.toString()))));
@@ -310,14 +316,20 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                             } else {
                                 restoreTextColor(mDscEdt);
                             }
-                            break;
-                        case DIALOG_WHOLE_RSC:
+                        }
+                        break;
+                    case DIALOG_WHOLE_RSC:
+                        if (Long.valueOf(s.toString()) > TradeHelper.getMaxWholeRate()) {
+                            //超过限制
+                            errorTextColor(mRateEdt);
+                        } else {
+                            restoreTextColor(mRateEdt);
                             mTotalTv.setText(String.format("%.2f", TradeHelper.getWholeTotal(Integer.valueOf(s.toString()))));
                             mDscEdt.setText(String.format("%.2f", TradeHelper.getWholeDsc(Integer.valueOf(s.toString()))));
-                            break;
-                        default:
-                            break;
-                    }
+                        }
+                        break;
+                    default:
+                        break;
                 }
             } else {
                 mDscEdt.setText("");
@@ -341,31 +353,38 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (count != 0) {
-                if (Double.parseDouble(s.toString()) > TradeHelper.getMaxDscTotal()) {
-                    //超过限制
-                    errorTextColor(mDscEdt);
-                } else {
-                    restoreTextColor(mDscEdt);
-                    switch (type) {
-                        case DIALOG_SINGLE_RSC:
+
+                switch (type) {
+                    case DIALOG_SINGLE_RSC:
+                        if (Double.parseDouble(s.toString()) > TradeHelper.getMaxSingleDsc(index)) {
+                            //超过限制
+                            errorTextColor(mDscEdt);
+                        } else {
+                            restoreTextColor(mDscEdt);
                             //TODO 2019年9月20日17:16:17 需要加入正则校验是否正确
                             //设置折扣率
                             mRateEdt.setText(String.valueOf(TradeHelper.getSingleRate(index, Double.parseDouble(s.toString()))));
                             //修改优惠后的价格
                             mTotalTv.setText(String.format("%.2f", TradeHelper.getSingleTotal(index, Double.parseDouble(mDscEdt.getText().toString()))));
-                            if (Integer.parseInt(mRateEdt.getText().toString()) > TradeHelper.getMaxDscRate()) {
+                            if (Integer.parseInt(mRateEdt.getText().toString()) > TradeHelper.getUserMaxDscRate()) {
                                 errorTextColor(mRateEdt);
                             } else {
                                 restoreTextColor(mRateEdt);
                             }
-                            break;
-                        case DIALOG_WHOLE_RSC:
+                        }
+                        break;
+                    case DIALOG_WHOLE_RSC:
+                        if (Double.parseDouble(s.toString()) > TradeHelper.getMaxWholeDsc()) {
+                            //超过限制
+                            errorTextColor(mDscEdt);
+                        } else {
+                            restoreTextColor(mDscEdt);
                             mRateEdt.setText(String.valueOf(TradeHelper.getWholeRate(Double.parseDouble(s.toString()))));
                             mTotalTv.setText(String.format("%.2f", TradeHelper.getWholeTotal(Double.parseDouble(s.toString()))));
-                            break;
-                        default:
-                            break;
-                    }
+                        }
+                        break;
+                    default:
+                        break;
                 }
             } else {
                 mRateEdt.setText("");
@@ -504,7 +523,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                     dismiss();
                     return;
                 }
-                if (Integer.parseInt(mRateEdt.getText().toString()) <= TradeHelper.getMaxDscRate() &&
+                if (Integer.parseInt(mRateEdt.getText().toString()) <= TradeHelper.getMaxSingleRate(index) &&
                         Double.parseDouble(mDscEdt.getText().toString()) <= TradeHelper.getMaxSingleDsc(index)) {
                     //两个都为true的时候，才能保存成功
                     if (TradeHelper.saveSingleDsc(index, Double.parseDouble(mDscEdt.getText().toString()))) {
@@ -520,11 +539,14 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                     dismiss();
                     return;
                 }
-                if (Integer.parseInt(mRateEdt.getText().toString()) <= TradeHelper.getMaxDscRate() &&
-                        Double.parseDouble(mDscEdt.getText().toString()) <= TradeHelper.getMaxSingleDsc(index)) {
+
+                if (Integer.parseInt(mRateEdt.getText().toString()) <= TradeHelper.getMaxWholeRate() &&
+                        Double.parseDouble(mDscEdt.getText().toString()) <= TradeHelper.getMaxWholeDsc()) {
                     //两个都为true的时候，才能保存成功
-
-
+                    if (TradeHelper.saveWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
+                        Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
+                        dismiss();
+                    }
                 } else {
                     MessageUtil.showError("失败");
                 }
