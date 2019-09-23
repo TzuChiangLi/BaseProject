@@ -72,6 +72,7 @@ public class SunmiPayHelper {
         if (!sdkConnected) {
             return;
         }
+        cancelCheckCard();
         kernel.destroyPaySDK();
         kernel = null;
     }
