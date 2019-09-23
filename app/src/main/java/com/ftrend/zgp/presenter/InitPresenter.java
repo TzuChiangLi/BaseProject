@@ -1,10 +1,9 @@
 package com.ftrend.zgp.presenter;
 
 import com.ftrend.zgp.api.Contract;
-import com.ftrend.zgp.model.AppParams;
-import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.ftrend.zgp.utils.task.LsDownloadTask;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -68,7 +67,9 @@ public class InitPresenter implements Contract.InitPresenter {
 
     @Override
     public void finishInitData() {
-        String posCode = SQLite.select(AppParams_Table.paramValue).from(AppParams.class).where(AppParams_Table.paramName.eq("posCode")).querySingle().getParamValue();
+        // 数据初始化完成，重新加载参数
+        ZgParams.loadParams();
+
         List<Dep> depList = SQLite.select().distinct().from(Dep.class).queryList();
         StringBuilder depStr = new StringBuilder();
         for (Dep dep : depList) {
@@ -80,7 +81,7 @@ public class InitPresenter implements Contract.InitPresenter {
             userStr.append(user.getUserCode()).append(" ").append(user.getUserName()).append("\n");
         }
 
-        mView.finishUpdate(posCode + "\n", depStr.toString(), userStr.toString());
+        mView.finishUpdate(ZgParams.getPosCode() + "\n", depStr.toString(), userStr.toString());
     }
 
     @Override
