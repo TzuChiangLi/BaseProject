@@ -162,13 +162,21 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessage(Event event) {
         if (event.getTarget() == Event.TARGET_SHOP_LIST) {
-            if (event.getType() == Event.TYPE_REFRESH) {
-                //TODO 2019年9月19日15:08:49 此处数据上的更新后续考虑如何放进P层
-                if (event.getData() != null) {
-                    mProdAdapter.getData().get(oldPosition).setPrice((Double) event.getData());
-                }
-                mProdAdapter.notifyItemChanged(oldPosition);
-                mPresenter.updateTradeInfo();
+            switch (event.getType()) {
+                case Event.TYPE_REFRESH:
+                    //TODO 2019年9月19日15:08:49 此处数据上的更新后续考虑如何放进P层
+                    if (event.getData() != null) {
+                        mProdAdapter.getData().get(oldPosition).setPrice((Double) event.getData());
+                    }
+                    mProdAdapter.notifyItemChanged(oldPosition);
+                    mPresenter.updateTradeInfo();
+                    break;
+                case Event.TYPE_REFRESH_WHOLE_PRICE:
+                    mProdAdapter.notifyDataSetChanged();
+                    mPresenter.updateTradeInfo();
+                    break;
+                default:
+                    break;
             }
         }
     }

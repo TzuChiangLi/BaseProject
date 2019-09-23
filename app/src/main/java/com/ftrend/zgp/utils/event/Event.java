@@ -27,6 +27,7 @@ public class Event {
 
     public static final int TYPE_CANCEL_PRICE_CHANGE = 1;
 
+    public static final int TYPE_REFRESH_WHOLE_PRICE = 2;
     //-----------------------------------简单数据-----------------------------------------//
     //一般用不到
     private Object data;
