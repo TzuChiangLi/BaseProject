@@ -23,12 +23,11 @@ import sunmi.paylib.SunmiPayKernel;
  * @author liuhongbin@ftrend.cn
  * @since 2019/9/20
  */
-public class SunmiHelper {
-    private final String TAG = "SunmiHelper";
+public class SunmiPayHelper {
+    private final String TAG = "SunmiPayHelper";
 
-    // TODO: 2019/9/20 读卡需要以下参数
-    // （1）磁卡或M1卡：1-磁卡，2-M1卡
-    //支持的卡类型
+    // TODO: 2019/9/20 读卡需要以下参数，应在服务端设置
+    // （1）支持的卡类型：1-磁卡，2-M1卡
     private int cardTypes = AidlConstantsV2.CardType.MIFARE.getValue()
             | AidlConstantsV2.CardType.MAGNETIC.getValue();
     // （2）磁卡轨道号（会员卡号所在轨道）：1～3
