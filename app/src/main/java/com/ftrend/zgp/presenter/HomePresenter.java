@@ -7,6 +7,7 @@ import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.task.LsUploadThread;
 import com.ftrend.zgp.utils.task.ServerWatcherThread;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -36,6 +37,10 @@ public class HomePresenter implements Contract.HomePresenter {
         return new HomePresenter(mView);
     }
 
+    @Override
+    public void initSunmiPaySdk() {
+        SunmiPayHelper.getInstance().connectPayService();
+    }
 
     @Override
     public void initServerThread() {
@@ -113,6 +118,7 @@ public class HomePresenter implements Contract.HomePresenter {
 
     @Override
     public void onDestory() {
+        SunmiPayHelper.getInstance().disconnectPayService();
         if (mView != null) {
             mView = null;
         }

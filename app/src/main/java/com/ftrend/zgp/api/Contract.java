@@ -163,7 +163,12 @@ public interface Contract {
     interface HomePresenter {
 
         /**
-         * 启动线程
+         * 初始化商米支付SDK
+         */
+        void initSunmiPaySdk();
+
+        /**
+         * 启动后台线程
          */
         void initServerThread();
 

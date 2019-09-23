@@ -26,21 +26,6 @@ import sunmi.paylib.SunmiPayKernel;
 public class SunmiPayHelper {
     private final String TAG = "SunmiPayHelper";
 
-/*    // TODO: 2019/9/20 读卡需要以下参数，应在服务端设置
-    // （1）支持的卡类型：1-磁卡，2-M1卡
-    private int cardTypes = AidlConstantsV2.CardType.MIFARE.getValue()
-            | AidlConstantsV2.CardType.MAGNETIC.getValue();
-    // （2）磁卡轨道号（会员卡号所在轨道）：1～3
-    private int magTrackNo = 2;
-    // （3）M1卡扇区号（会员卡号所在扇区）：0～15
-    private final int m1Sector = 1;
-    // （4）M1卡块号（会员卡号所在块）：0～2
-    private final int m1Block = 0;
-    // （5）M1卡读取密码，6字节（12个十六进制字符），默认为“FFFFFFFFFFFF”
-    private byte[] m1KeyBytes = ByteUtil.hexStr2Bytes("FFFFFFFFFFFF");
-    // （6）M1卡密码类型：0-KeyA，1-KeyB
-    private final int m1KeyType = 0;*/
-
     private SunmiPayKernel kernel = null;
     // 是否已连接到支付SDK
     private boolean sdkConnected = false;
@@ -55,6 +40,20 @@ public class SunmiPayHelper {
     // 失败次数
     private int failCount = 0;
 
+    private static SunmiPayHelper helper = null;
+
+    /**
+     * 获取静态实例
+     *
+     * @return
+     */
+    public static SunmiPayHelper getInstance() {
+        if (helper == null) {
+            helper = new SunmiPayHelper();
+        }
+        return helper;
+    }
+
     /**
      * 连接到支付SDK服务
      */
@@ -67,11 +66,26 @@ public class SunmiPayHelper {
     }
 
     /**
-     * M1卡读取：检卡、认证、读卡
+     * 释放到支付SDK服务的连接
+     */
+    public void disconnectPayService() {
+        if (!sdkConnected) {
+            return;
+        }
+        kernel.destroyPaySDK();
+        kernel = null;
+    }
+
+    /**
+     * 读取卡片信息：检卡、认证、读卡
      *
      * @param callback 读卡回调
      */
     public void readCard(ReadCardCallback callback) {
+        if (!sdkConnected) {
+            callback.onError("支付SDK服务未连接");
+            return;
+        }
         this.readCardCallback = callback;
         checkCard(false);
     }

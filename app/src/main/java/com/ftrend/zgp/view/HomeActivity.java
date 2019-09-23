@@ -17,7 +17,6 @@ import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
-import com.ftrend.zgp.utils.permission.PermissionUtil;
 import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.List;
@@ -58,6 +57,8 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         mPresenter.setInfo();
         //启动线程
         mPresenter.initServerThread();
+        //初始化商米支付SDK
+        mPresenter.initSunmiPaySdk();
     }
 
     @Override
