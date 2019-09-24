@@ -33,6 +33,10 @@ public class ZgParams {
     public static final String MSG_ONLINE = "online mode";
     //单机状态消息
     public static final String MSG_OFFLINE = "offline mode";
+    //百货版
+    public static final String PROG_EDITION_BH = "百货版";
+    //超市版
+    public static final String PROG_EDITION_CS = "超市版";
 
     //系统参数：是否使用商品类别
     private static String noClsDep = "";
@@ -89,6 +93,8 @@ public class ZgParams {
                 wxPayAccount = param.getParamValue();
             } else if ("CardConfig".equalsIgnoreCase(param.getParamName())) {
                 cardConfig = SunmiCardConfig.fromJson(param.getParamValue());
+            } else if ("ProgramEdition".equalsIgnoreCase(param.getParamName())) {
+                programEdition = param.getParamValue();
             }
         }
         Log.e(TAG, "cardConfig: " + GsonUtils.toJson(cardConfig));
@@ -172,21 +178,6 @@ public class ZgParams {
         appParams.update();
     }
 
-
-    public static void checkProgramEdition(){
-
-    }
-
-
-
-
-
-
-
-
-
-
-
     public static boolean isIsOnline() {
         return isOnline;
     }
@@ -253,5 +244,13 @@ public class ZgParams {
 
     public static String getCurrentIp() {
         return currentIp;
+    }
+
+    public static String getProgramEdition() {
+        return programEdition;
+    }
+
+    public static void setProgramEdition(String programEdition) {
+        ZgParams.programEdition = programEdition;
     }
 }

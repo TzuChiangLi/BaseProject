@@ -13,12 +13,20 @@ import com.blankj.utilcode.util.KeyboardUtils;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.R;
+import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.http.RestCallback;
+import com.ftrend.zgp.utils.http.RestResultHandler;
+import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.view.ShopCartActivity;
 import com.ftrend.zgp.view.ShopListActivity;
 import com.lxj.xpopup.core.BottomPopupView;
+
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,6 +84,7 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
                 mKeyViewStub = ((ViewStub) findViewById(R.id.vip_way_key_lite_view)).inflate();
                 mKeyView = mKeyViewStub.findViewById(R.id.vip_way_keyboard);
                 mKeyView.show();
+                mSubmitBtn.setText("查询");
                 mEdt.setInputType(InputType.TYPE_NULL);
                 mEdt.setOnClickListener(this);
                 mKeyView.setOnKeyboardClickListener(this);
@@ -101,10 +110,18 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
     public void submit() {
         switch (type) {
             case DIALOG_MOBILE:
+//                if (!TradeHelper.checkPhoneNoFormat(mEdt.getText().toString())) {
+//                    MessageUtil.show("格式不正确");
+//                    return;
+//                }
+                queryVipInfo();
                 break;
             case DIALOG_CHANGE_PRICE:
-                //TODO 价格格式验证
                 if (TextUtils.isEmpty(mEdt.getText().toString())) {
+                    return;
+                }
+                if (!TradeHelper.checkPriceFormat(mEdt.getText().toString())) {
+                    MessageUtil.show("格式不正确");
                     return;
                 }
                 if (mContext instanceof ShopListActivity) {
@@ -134,6 +151,39 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
                 break;
         }
     }
+
+    private void queryVipInfo() {
+        if (ZgParams.isIsOnline()) {
+            RestSubscribe.getInstance().queryVipInfo(mEdt.getText().toString(), new RestCallback(regHandler));
+        } else {
+            MessageUtil.showWarning("当前离线");
+        }
+
+    }
+
+    private RestResultHandler regHandler = new RestResultHandler() {
+        @Override
+        public void onSuccess(Map<String, Object> body) {
+            LogUtil.d("----body:" + body.toString());
+            VipInfo vipInfo = TradeHelper.vip();
+            vipInfo.setVipName(body.get("vipName").toString());
+            vipInfo.setVipCode(body.get("vipCode").toString());
+            vipInfo.setVipDscRate(Double.parseDouble(body.get("vipDscRate").toString()));
+            vipInfo.setVipGrade(body.get("vipGrade").toString());
+            vipInfo.setVipPriceType(Double.parseDouble(body.get("vipPriceType").toString()));
+            vipInfo.setRateRule(Double.parseDouble(body.get("rateRule").toString()));
+            vipInfo.setForceDsc(body.get("forceDsc").toString());
+            vipInfo.setCardCode(body.get("cardCode").toString());
+            vipInfo.setDscProdIsDsc(body.get("dscProdIsDsc").toString());
+            Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_VIP_INFO, vipInfo);
+            dismiss();
+        }
+
+        @Override
+        public void onFailed(String errorCode, String errorMsg) {
+            MessageUtil.show(errorCode + errorMsg);
+        }
+    };
 
 
     @OnClick(R.id.vip_way_img_close)
@@ -201,6 +251,8 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
     @Override
     public void onPointClick() {
         switch (type) {
+            case DIALOG_MOBILE:
+                break;
             case DIALOG_CHANGE_PRICE:
             default:
                 mEdt.getText().append('.');

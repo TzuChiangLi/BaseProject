@@ -25,7 +25,6 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.view.ShopCartActivity;
-import com.ftrend.zgp.view.ShopListActivity;
 import com.lxj.xpopup.core.BottomPopupView;
 
 import butterknife.BindView;
@@ -220,45 +219,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
     }
 
 
-    @OnClick(R.id.vip_mobile_btn_submit)
-    public void submit() {
-        switch (type) {
-            case DIALOG_MOBILE:
-                break;
-            case DIALOG_CHANGE_PRICE:
-                //TODO 价格格式验证
-                if (TextUtils.isEmpty(mEdt.getText().toString())) {
-                    return;
-                }
-                if (mContext instanceof ShopListActivity) {
-                    if (TradeHelper.priceChangeInShopList(index, Double.parseDouble(mEdt.getText().toString()))) {
-                        Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH, Double.parseDouble(mEdt.getText().toString()));
-                        MessageUtil.showSuccess("改价成功");
-                        KeyboardUtils.hideSoftInput(this);
-                        dismiss();
-                    } else {
-                        MessageUtil.showError("改价失败");
-                    }
-                    return;
-                }
-                if (mContext instanceof ShopCartActivity) {
-                    if (TradeHelper.priceChangeInShopCart(Double.parseDouble(mEdt.getText().toString()))) {
-                        Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_REFRESH);
-                        KeyboardUtils.hideSoftInput(this);
-                        MessageUtil.showSuccess("改价成功");
-                        dismiss();
-                    } else {
-                        MessageUtil.showError("改价失败");
-                    }
-                    return;
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-
     @OnClick(R.id.vip_way_img_close)
     public void close() {
         if (mContext instanceof ShopCartActivity) {
@@ -305,7 +265,12 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (count != 0) {
                 if (s.toString().contains(".")) {
+                    MessageUtil.show("格式不正确");
                     errorTextColor(mRateEdt);
+                    return;
+                }
+                if (!TradeHelper.checkRateFormat(s.toString())) {
+                    MessageUtil.show("格式不正确");
                     return;
                 }
                 switch (type) {
@@ -315,7 +280,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                             errorTextColor(mRateEdt);
                         } else {
                             restoreTextColor(mRateEdt);
-                            //TODO 2019年9月20日17:16:17 需要加入正则校验是否正确
                             //设置优惠金额
                             mDscEdt.setText(String.format("%.2f", TradeHelper.getSingleDsc(index, Integer.valueOf(s.toString()))));
                             //修改优惠后的价格
@@ -363,7 +327,10 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (count != 0) {
-
+                if (!TradeHelper.checkPriceFormat(s.toString())) {
+                    MessageUtil.show("格式不正确");
+                    return;
+                }
                 switch (type) {
                     case DIALOG_SINGLE_RSC:
                         if (Double.parseDouble(s.toString()) > TradeHelper.getMaxSingleDsc(index)) {
@@ -371,7 +338,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                             errorTextColor(mDscEdt);
                         } else {
                             restoreTextColor(mDscEdt);
-                            //TODO 2019年9月20日17:16:17 需要加入正则校验是否正确
                             //设置折扣率
                             mRateEdt.setText(String.valueOf(TradeHelper.getSingleRate(index, Double.parseDouble(s.toString()))));
                             //修改优惠后的价格

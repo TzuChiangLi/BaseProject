@@ -14,6 +14,7 @@ import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
+import com.ftrend.zgp.model.VipInfo;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
@@ -61,20 +62,32 @@ public class TradeHelper {
     // APP支付类型: 4-储值卡
     public static final String APP_PAY_TYPE_VIPCARD = "4";
 
+
+    // 用户权限: 0-行清权限
+    public static final int USER_RIGHT_DEL = 0;
+    // 用户权限: 1-取消交易权限
+    public static final int USER_RIGHT_CANCEL = 1;
+
+    // VIP强制优惠：1-强制优惠，无视商品的forDsc属性
+    public static final String VIP_DSC_FORCE = "1";
+    // VIP强制优惠：0-不强制
+    public static final String VIP_DSC_NORMAL = "0";
+
+
     // 交易流水
     private static Trade trade = null;
     // 商品列表
     private static List<TradeProd> prodList = null;
     // 支付信息
     private static TradePay pay = null;
-    // 用户权限: 0-行清权限
-    public static final int USER_RIGHT_DEL = 0;
-    // 用户权限: 1-取消交易权限
-    public static final int USER_RIGHT_CANCEL = 1;
+    // 会员信息
+    private static VipInfo vip = null;
+
 
     public static Trade getTrade() {
         return trade;
     }
+
 
     //region clear----清空当前交易信息
 
@@ -829,6 +842,72 @@ public class TradeHelper {
         return recalcTotal();
     }
 
+    /**
+     * 初始化会员信息
+     *
+     * @return
+     */
+    public static VipInfo vip() {
+        if (vip == null) {
+            vip = new VipInfo();
+        }
+        return vip;
+    }
+
+    /**
+     * 清空会员信息
+     */
+    public static void clearVip() {
+        if (vip != null) {
+            vip = null;
+        }
+    }
+
+    /**
+     * 保存会员优惠
+     *
+     * @return
+     */
+    public static boolean saveVipDsc() {
+        //筛选没有单项优惠、整项优惠的商品
+        List<TradeProd> tempList = new ArrayList<>();
+        double vipDsc =0;
+        if (VIP_DSC_FORCE.equals(vip.getForceDsc())) {
+            //强制打折
+            for (TradeProd prod : prodList) {
+                if (prod.getManuDsc() == 0) {
+                    tempList.add(prod);
+                }
+            }
+        } else {
+            //不强制打折
+            for (int i = 0; i < prodList.size(); i++) {
+                if (checkForDsc(i)) {
+                    if (prodList.get(i).getManuDsc() == 0) {
+                        tempList.add(prodList.get(i));
+                    }
+                }
+            }
+        }
+
+        if (ZgParams.getProgramEdition().equals(ZgParams.PROG_EDITION_BH)) {
+            double rate = vip.getVipDscRate();
+            double vipPrice = 0;
+            for (TradeProd prod : tempList) {
+                vipPrice = prod.getPrice() * (100 - rate);
+                //TODO 判断会员价谁最大
+                prod.setVipTotal(vipPrice);
+                prod.save();
+            }
+        } else {
+            double rate = vip.getVipDscRate();
+            double vipPrice = 0;
+        }
+        recalcTotal();
+
+        return true;
+    }
+
 
     /**
      * 价格格式化
@@ -850,4 +929,40 @@ public class TradeHelper {
     public static long rateFormat(double total, double price) {
         return Math.round((total / price) * 100);
     }
+
+    /**
+     * 金额正则表达式
+     *
+     * @param price 价格
+     * @return 是或否
+     */
+    public static boolean checkPriceFormat(Object price) {
+        String match = "(?!^0*(\\.0{1,2})?$)^\\d{1,13}(\\.\\d{1,2})?$";
+        return String.valueOf(price).matches(match);
+    }
+
+
+    /**
+     * 非负整数正则表达式
+     *
+     * @param rate 折扣率
+     * @return 是或否
+     */
+    public static boolean checkRateFormat(Object rate) {
+        String match = "^[1-9]\\d*|0$";
+        return String.valueOf(rate).matches(match);
+    }
+
+    /**
+     * 手机号正则表达式
+     *
+     * @param phone
+     * @return 是或否
+     */
+    public static boolean checkPhoneNoFormat(Object phone) {
+        String match = "^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$";
+        return String.valueOf(phone).matches(match);
+    }
+
+
 }

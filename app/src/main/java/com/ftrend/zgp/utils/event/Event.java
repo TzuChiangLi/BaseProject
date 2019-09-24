@@ -25,9 +25,14 @@ public class Event {
      */
     public static final int TYPE_REFRESH = 0;
 
+    /**
+     * 选择商品界面取消改价时撤销已添加的操作
+     */
     public static final int TYPE_CANCEL_PRICE_CHANGE = 1;
 
     public static final int TYPE_REFRESH_WHOLE_PRICE = 2;
+
+    public static final int TYPE_REFRESH_VIP_INFO = 3;
     //-----------------------------------简单数据-----------------------------------------//
     //一般用不到
     private Object data;

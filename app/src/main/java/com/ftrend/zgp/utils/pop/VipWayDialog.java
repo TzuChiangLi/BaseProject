@@ -45,19 +45,17 @@ public class VipWayDialog extends CenterPopupView {
 
     @OnClick(R.id.vip_way_ll_mobile)
     public void mobile() {
-        MessageUtil.show("手机号");
         dismiss();
         MessageUtil.showVipMobile(mContext, PriceMobileDialog.DIALOG_MOBILE);
     }
 
     @OnClick(R.id.vip_way_ll_scan)
     public void scan() {
-        MessageUtil.show("微会员");
+
     }
 
     @OnClick(R.id.vip_way_ll_card)
     public void card() {
-        MessageUtil.show("会员卡");
         dismiss();
         MessageUtil.showVipCard(mContext);
     }

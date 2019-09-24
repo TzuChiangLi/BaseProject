@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -15,6 +16,7 @@ import com.ftrend.zgp.adapter.ShopAdapter;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.presenter.ShopListPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
@@ -59,6 +61,14 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     Button mVipBtn;
     @BindView(R.id.shop_list_btn_hang_up)
     Button mHangUpBtn;
+    @BindView(R.id.shop_list_tv_vip_code)
+    TextView mVipCodeTv;
+    @BindView(R.id.shop_list_tv_vip_name)
+    TextView mVipNameTv;
+    @BindView(R.id.shop_list_tv_card_grade)
+    TextView mCardGradeTv;
+    @BindView(R.id.shop_list_rl_vip)
+    RelativeLayout mVipInfoLayout;
     @BindColor(R.color.common_rv_item)
     int rv_item_selected;
     @BindColor(R.color.common_white)
@@ -175,10 +185,25 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     mProdAdapter.notifyDataSetChanged();
                     mPresenter.updateTradeInfo();
                     break;
+                case Event.TYPE_REFRESH_VIP_INFO:
+                    showVipInfo((VipInfo) event.getData());
+                    break;
                 default:
                     break;
             }
         }
+    }
+
+    /**
+     * 展示会员信息
+     *
+     * @param body json数据
+     */
+    private void showVipInfo(VipInfo body) {
+        mVipInfoLayout.setVisibility(View.VISIBLE);
+        mVipCodeTv.setText(body.getVipCode());
+        mVipNameTv.setText(body.getVipName());
+        mCardGradeTv.setText(String.format("%s/%s", body.getCardCode(), body.getVipGrade()));
     }
 
 
@@ -241,7 +266,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     public void updateTotal(double total) {
-        mTotalTv.setText(String.format("%.2f",total));
+        mTotalTv.setText(String.format("%.2f", total));
     }
 
     @Override
