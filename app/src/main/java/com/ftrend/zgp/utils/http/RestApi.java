@@ -4,6 +4,7 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 
@@ -15,7 +16,7 @@ import retrofit2.http.POST;
 public interface RestApi {
 
     @GET("common/ping")
-    Observable<String> ping();
+    Observable<String> ping(@Field("posCode") String posCode, @Field("userCode") String userCode);
 
     /**
      * 客户端登录
