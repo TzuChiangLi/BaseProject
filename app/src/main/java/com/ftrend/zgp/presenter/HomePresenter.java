@@ -118,6 +118,9 @@ public class HomePresenter implements Contract.HomePresenter {
 
     @Override
     public void logout() {
+        //清除登录信息
+        ZgParams.clearCurrentInfo();
+
         mView.logout();
     }
 

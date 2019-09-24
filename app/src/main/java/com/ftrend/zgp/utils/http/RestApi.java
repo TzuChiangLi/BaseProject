@@ -6,6 +6,7 @@ import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * 后台服务http请求接口
@@ -15,7 +16,7 @@ import retrofit2.http.POST;
 public interface RestApi {
 
     @GET("common/ping")
-    Observable<String> ping();
+    Observable<String> ping(@Query("posCode") String posCode, @Query("userCode") String userCode);
 
     /**
      * 客户端登录

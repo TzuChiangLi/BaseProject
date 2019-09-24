@@ -167,6 +167,14 @@ public class ZgParams {
     }
 
     /**
+     * 清除登录信息（用于注销登录）
+     */
+    public static void clearCurrentInfo() {
+        currentDep = new Dep();
+        currentUser = new User();
+    }
+
+    /**
      * 保存本地参数信息到数据库
      *
      * @param paramName  列名

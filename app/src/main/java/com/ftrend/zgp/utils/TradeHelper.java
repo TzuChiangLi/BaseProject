@@ -294,21 +294,18 @@ public class TradeHelper {
     }
 
     /**
-     * 重新汇总流水金额：优惠、合计、积分金额
+     * 重新汇总流水金额：优惠、合计
      */
     private static boolean recalcTotal() {
         double dscTotal = 0;
         double total = 0;
-        double vipTotal = 0;
 
         for (TradeProd prod : prodList) {
             dscTotal += prod.getManuDsc() + prod.getTranDsc() + prod.getVipDsc();
             total += prod.getTotal();
-            vipTotal += prod.getVipTotal();
         }
         trade.setDscTotal(dscTotal);
         trade.setTotal(total);
-        trade.setVipTotal(vipTotal);
         return trade.save();
     }
 

@@ -64,8 +64,8 @@ public class RestSubscribe {
      *
      * @param callback
      */
-    public void ping(final HttpCallBack<String> callback) {
-        detachAndSubscribeText(api.ping(), callback);
+    public void ping(final String posCode, final String userCode, final HttpCallBack<String> callback) {
+        detachAndSubscribeText(api.ping(posCode, userCode), callback);
     }
 
     /**

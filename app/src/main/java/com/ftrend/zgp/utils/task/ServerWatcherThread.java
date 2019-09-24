@@ -53,7 +53,9 @@ public class ServerWatcherThread extends Thread {
 
         while (!isInterrupted()) {
             if (!isPinging) {
-                RestSubscribe.getInstance().ping(new HttpCallBack<String>() {
+                String posCode = ZgParams.getPosCode();
+                String userCode = ZgParams.getCurrentUser().getUserCode();//CurrentUser不会为null
+                RestSubscribe.getInstance().ping(posCode, userCode, new HttpCallBack<String>() {
                     @Override
                     public void onStart() {
                         System.out.println("ping started...");
