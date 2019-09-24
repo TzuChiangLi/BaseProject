@@ -26,6 +26,7 @@
     <string name="shop_btn_price">改价</string>
     <string name="shop_btn_delete">行清</string>
     <string name="shop_btn_hang_up">挂单</string>
+
     <string name="shop_btn_pay">结算</string>
     <string name="shop_btn_list">购物车</string>
     <string name="shop_btn_scan">扫码</string>

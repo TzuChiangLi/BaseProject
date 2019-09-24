@@ -363,6 +363,7 @@ public class TradeHelper {
 
     /**
      * 购物车 - 当前购物车内商品总金额
+     * 优惠后的价钱
      *
      * @return
      */
@@ -752,6 +753,8 @@ public class TradeHelper {
         }
         TradeProd prod = prodList.get(index);
         prod.setSingleDsc(priceFormat(singleDsc));
+        //单项优惠的时候，清空整单优惠
+        prod.setWholeDsc(0);
         prod.setManuDsc(priceFormat(prod.getSingleDsc() + prod.getWholeDsc()));
         prod.setTotal(priceFormat((prod.getPrice() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()) * prod.getAmount()));
         if (prod.save()) {
@@ -778,7 +781,7 @@ public class TradeHelper {
         //region 需要筛选出来可以分摊且没有单项优惠的商品
         List<TradeProd> tempList = new ArrayList<>();
         for (int i = 0; i < prodList.size(); i++) {
-            if (checkForDscAndNoSingleDsc(i)) {
+            if (checkForDsc(i)) {
                 tempList.add(prodList.get(i));
             }
         }
@@ -789,7 +792,7 @@ public class TradeHelper {
             price += prod.getPrice() * prod.getAmount();
         }
 
-        //可优惠金额是否比最大可优惠金额大？
+        //可优惠金额是否比最大可优惠金额大
         wholeDsc = wholeDsc >= maxDsc ? maxDsc : wholeDsc;
         //给每个商品按照比例分摊优惠的金额
         for (TradeProd prod : tempList) {
@@ -810,6 +813,8 @@ public class TradeHelper {
                 //优惠金额与最低限价相比，超过最低限价则取最低限价
                 dsc = dsc >= prod.getPrice() - minumPrice ? prod.getPrice() - minumPrice : dsc;
                 prod.setWholeDsc(priceFormat(dsc));
+                //整单优惠的时候，单项优惠清零
+                prod.setSingleDsc(0);
                 prod.setManuDsc(priceFormat(prod.getSingleDsc() + dsc));
                 prod.setTotal(priceFormat((prod.getPrice() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()) * prod.getAmount()));
             }
@@ -830,5 +835,16 @@ public class TradeHelper {
      */
     public static double priceFormat(double before) {
         return Double.parseDouble(String.format("%.2f", before));
+    }
+
+    /**
+     * 折扣率格式化
+     *
+     * @param total 优惠后总金额
+     * @param price 原价
+     * @return 保留小数点后两位
+     */
+    public static long rateFormat(double total, double price) {
+        return Math.round((total / price) * 100);
     }
 }

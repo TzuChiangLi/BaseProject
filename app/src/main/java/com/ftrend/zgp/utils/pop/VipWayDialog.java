@@ -6,7 +6,6 @@ import android.widget.ImageView;
 
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.utils.msg.MessageUtil;
-import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.CenterPopupView;
 
 import butterknife.BindView;
@@ -48,24 +47,18 @@ public class VipWayDialog extends CenterPopupView {
     public void mobile() {
         MessageUtil.show("手机号");
         dismiss();
-        new XPopup.Builder(mContext)
-                .dismissOnTouchOutside(false)
-                .asCustom(new PriceDscDialog(mContext, PriceDscDialog.DIALOG_MOBILE))
-                .show();
+        MessageUtil.showVipMobile(mContext, PriceMobileDialog.DIALOG_MOBILE);
     }
 
     @OnClick(R.id.vip_way_ll_scan)
     public void scan() {
-        MessageUtil.show("扫码");
+        MessageUtil.show("微会员");
     }
 
     @OnClick(R.id.vip_way_ll_card)
     public void card() {
         MessageUtil.show("会员卡");
         dismiss();
-        new XPopup.Builder(mContext)
-                .dismissOnTouchOutside(false)
-                .asCustom(new VipCardDialog(mContext))
-                .show();
+        MessageUtil.showVipCard(mContext);
     }
 }

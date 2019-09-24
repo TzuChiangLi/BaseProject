@@ -241,7 +241,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     public void updateTotal(double total) {
-        mTotalTv.setText(String.valueOf(total));
+        mTotalTv.setText(String.format("%.2f",total));
     }
 
     @Override
