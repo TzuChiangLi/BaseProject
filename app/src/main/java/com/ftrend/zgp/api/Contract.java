@@ -194,10 +194,14 @@ public interface Contract {
         void goHandover();
 
         /**
+         * 跳转到取单界面
+         */
+        void getOutOrder();
+
+        /**
          * 注销登录
          */
         void logout();
-
 
         /**
          * 销毁，防止泄露
@@ -234,6 +238,11 @@ public interface Contract {
          * 跳转到交班界面
          */
         void goHandoverActivity();
+
+        /**
+         * 跳转到取单界面
+         */
+        void goOrderOutActivity();
 
         /**
          * 没有交易流水，无法进入交班界面
@@ -457,9 +466,9 @@ public interface Contract {
         /**
          * 是否可以改价
          *
-         * @param index     索引
+         * @param index 索引
          */
-        void showPriceChangeDialog( int index);
+        void showPriceChangeDialog(int index);
 
         /**
          * 单项优惠

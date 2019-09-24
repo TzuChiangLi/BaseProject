@@ -8,12 +8,15 @@ import com.ftrend.toast.XToast;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.utils.pop.PriceDscDialog;
+import com.ftrend.zgp.utils.pop.PriceMobileDialog;
+import com.ftrend.zgp.utils.pop.VipCardDialog;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
 import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_CHANGE_PRICE;
 import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_SINGLE_RSC;
 import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_WHOLE_RSC;
+import static com.ftrend.zgp.utils.pop.PriceMobileDialog.DIALOG_MOBILE;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -23,25 +26,36 @@ public class MessageUtil {
 //-------------------------------------业务弹窗-----------------------------------------//
 
     /**
-     * 待删
-     *
-     * @param sortNo 序号
+     * 会员卡登录
      */
-    public static void showPriceChange(long sortNo) {
-        mContext = BaseActivity.mContext;
-        new XPopup.Builder(mContext)
+    public static void showVipCard(Context context) {
+        new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new PriceDscDialog(mContext, DIALOG_CHANGE_PRICE))
+                .asCustom(new VipCardDialog(context))
                 .show();
     }
 
     /**
+     * 改价弹窗
+     *
      * @param index 索引
      */
     public static void showPriceChange(Context context, int index) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new PriceDscDialog(context, DIALOG_CHANGE_PRICE, index))
+                .asCustom(new PriceMobileDialog(context, DIALOG_CHANGE_PRICE, index))
+                .show();
+    }
+
+    /**
+     * 会员输入弹窗
+     *
+     * @param index 索引
+     */
+    public static void showVipMobile(Context context, int index) {
+        new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
+                .asCustom(new PriceMobileDialog(context, DIALOG_MOBILE, index))
                 .show();
     }
 

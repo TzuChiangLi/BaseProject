@@ -73,7 +73,6 @@
     </LinearLayout>
 
 
-
     <ViewStub
         android:id="@+id/vip_way_key_func_view"
         android:layout_width="match_parent"

@@ -120,6 +120,9 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
             case "注销登录":
                 mPresenter.logout();
                 break;
+            case "取单":
+                mPresenter.getOutOrder();
+                break;
             default:
                 LogUtil.e("无此功能");
                 break;
@@ -136,6 +139,12 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     @Override
     public void goHandoverActivity() {
         Intent intent = new Intent(HomeActivity.this, HandoverActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void goOrderOutActivity() {
+        Intent intent = new Intent(HomeActivity.this, OrderOutActivity.class);
         startActivity(intent);
     }
 

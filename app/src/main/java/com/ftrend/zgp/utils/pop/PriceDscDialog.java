@@ -283,6 +283,16 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onDismiss() {
+        super.onDismiss();
+        if (mContext instanceof ShopCartActivity) {
+            //需要撤销添加的最后一条
+            if (TextUtils.isEmpty(mEdt.getText().toString())) {
+                Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE);
+            }
+        }
+    }
 
     //-------------------------------------输入实时监听--------------------------------------------//
     private TextWatcher rateWatcher = new TextWatcher() {

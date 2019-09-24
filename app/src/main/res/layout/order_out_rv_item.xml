@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/out_order_tv_lsno_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/out_tv_lsno" />
+
+    <TextView
+        android:id="@+id/out_order_tv_lsno"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/out_order_tv_lsno_title"
+        android:layout_toEndOf="@+id/out_order_tv_lsno_title"
+        android:text="10112345" />
+
+    <TextView
+        android:id="@+id/out_order_tv_amount_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/out_order_tv_lsno"
+        android:text="@string/out_tv_amount" />
+
+    <TextView
+        android:id="@+id/out_order_tv_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/out_order_tv_lsno_title"
+        android:layout_toEndOf="@+id/out_order_tv_amount_title"
+        android:text="15" />
+
+    <TextView
+        android:id="@+id/out_order_tv_total_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@+id/out_order_tv_amount"
+        android:text="@string/out_tv_total" />
+
+    <TextView
+        android:id="@+id/out_order_tv_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/out_order_tv_lsno_title"
+        android:layout_toEndOf="@+id/out_order_tv_total_title"
+        android:text="123" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/out_order_tv_total"
+        android:text="@string/out_btn_get_out" />
+
+</RelativeLayout>

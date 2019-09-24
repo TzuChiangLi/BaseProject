@@ -160,7 +160,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
 
     @Override
     public void showTradeInfo(double total) {
-        mTotalTv.setText(String.valueOf(total));
+        mTotalTv.setText(String.format("%.2f", total));
     }
 
     @Override

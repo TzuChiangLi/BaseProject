@@ -30,7 +30,7 @@ import butterknife.OnClick;
  *
  * @author liziqiang@ftrend.cn
  */
-public class LoginActivity extends BaseActivity implements Contract.LoginView {
+    public class LoginActivity extends BaseActivity implements Contract.LoginView {
     @BindView(R.id.login_sp_dep)
     Spinner mDepSp;
     @BindView(R.id.login_sp_user)

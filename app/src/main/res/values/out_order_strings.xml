@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="out_tv_get_out">已挂起交易</string>
+    <string name="out_tv_lsno">流水号：</string>
+    <string name="out_tv_amount">商品数：</string>
+    <string name="out_tv_total">合计金额：</string>
+    <string name="out_tv_">合计金额：</string>
+
+
+    <string name="out_btn_get_out">取单</string>
+    <string name="out_btn_close">关闭</string>
+
+
+</resources>
