@@ -66,7 +66,7 @@ public class RegisterPresenter implements Contract.RegisterPresenter {
         //获取SN码
         devSn = PhoneUtils.getSerial();
         //1. 验证服务地址是否有效
-        RestSubscribe.getInstance().ping(new HttpCallBack<String>() {
+        RestSubscribe.getInstance().ping("", "", new HttpCallBack<String>() {
             @Override
             public void onSuccess(String body) {
                 //2. 后台服务可用，注册设备
