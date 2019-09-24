@@ -24,6 +24,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static com.raizlabs.android.dbflow.sql.language.Method.sum;
+
 /**
  * 交易操作类
  * Copyright (C),青岛致远方象软件科技有限公司
@@ -871,7 +873,7 @@ public class TradeHelper {
     public static boolean saveVipDsc() {
         //筛选没有单项优惠、整项优惠的商品
         List<TradeProd> tempList = new ArrayList<>();
-        double vipDsc =0;
+        double vipDsc = 0;
         if (VIP_DSC_FORCE.equals(vip.getForceDsc())) {
             //强制打折
             for (TradeProd prod : prodList) {
@@ -906,6 +908,33 @@ public class TradeHelper {
         recalcTotal();
 
         return true;
+    }
+
+    /**
+     * @return 获取本机内所有未结流水单
+     */
+    public static List<Trade> getOutOrder() {
+        List<Trade> tradeList = SQLite.select().distinct().from(Trade.class)
+                .where(Trade_Table.status.eq(TRADE_STATUS_HANGUP)).queryList();
+
+        for (Trade trade : tradeList) {
+            TradeProd tradeProd = SQLite.select().from(TradeProd.class)
+                    .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                    .limit(1)
+                    .querySingle();
+            trade.setProdName(tradeProd.getProdName());
+            trade.setProdNum(tradeProd.getAmount());
+
+            FlowCursor csr = SQLite.select(sum(TradeProd_Table.amount)).from(TradeProd.class)
+                    .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                    .query();
+            if (csr.moveToFirst()) {
+                do {
+                    trade.setAmount(csr.getDoubleOrDefault(0));
+                } while (csr.moveToNext());
+            }
+        }
+        return tradeList;
     }
 
 

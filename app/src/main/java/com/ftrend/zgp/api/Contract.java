@@ -8,6 +8,7 @@ import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.HandoverRecord;
 import com.ftrend.zgp.model.Menu;
+import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.User;
 
@@ -22,6 +23,28 @@ public interface Contract {
 
     /**********************************Activity************************************/
 
+    interface OrderOutPresenter {
+        /**
+         * 初始化界面数据
+         */
+        void initView();
+
+        /**
+         * 销毁，防止泄露
+         */
+        void onDestory();
+
+    }
+
+    interface OrderOutView extends BaseView<Contract.OrderOutPresenter> {
+        /**
+         * 初始化界面列表数据
+         *
+         * @param tradeList 数据
+         */
+        void initOutOrder(List<Trade> tradeList);
+
+    }
 
     interface RegisterPresenter {
 

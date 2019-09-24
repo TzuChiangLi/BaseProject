@@ -55,6 +55,14 @@ public class Trade extends BaseModel {
     private String CreateTime;
     @Column
     private String CreateIp;
+    //取单字段(非数据库字段)：流水单内第一个商品
+    private String prodName;
+    //取单字段(非数据库字段)：第一个商品的数量
+    private double prodNum;
+    //取单字段(非数据库字段)：该流水单的商品总件数
+    private double amount;
+
+
 
     public int getId() {
         return id;
@@ -179,5 +187,29 @@ public class Trade extends BaseModel {
 
     public void setCreateIp(String createIp) {
         CreateIp = createIp;
+    }
+
+    public String getProdName() {
+        return prodName;
+    }
+
+    public void setProdName(String prodName) {
+        this.prodName = prodName;
+    }
+
+    public double getProdNum() {
+        return prodNum;
+    }
+
+    public void setProdNum(double prodNum) {
+        this.prodNum = prodNum;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 }
