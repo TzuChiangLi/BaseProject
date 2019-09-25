@@ -59,13 +59,16 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
             case 2:
                 //购物车商品列表
                 if (((TradeProd) item).getDelFlag().equals(TradeHelper.DELFLAG_NO)) {
+                    String dsc = String.format("%.2f%s%s", ((TradeProd) item).getManuDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getTranDsc(),
+                            String.format("(-%d", Math.round(100 * (((TradeProd) item).getManuDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getTranDsc()) / ((TradeProd) item).getPrice())), "%)");
                     helper.setText(R.id.shop_list_rv_product_tv_prodcode, ((TradeProd) item).getProdCode());
                     helper.setText(R.id.shop_list_rv_product_tv_prodname, ((TradeProd) item).getProdName());
                     helper.setText(R.id.shop_list_rv_product_tv_num, String.valueOf(((TradeProd) item).getAmount()).replace(".0", ""));
                     helper.setText(R.id.shop_list_rv_product_tv_per_price, String.format("%.2f", ((TradeProd) item).getPrice()));
                     helper.setText(R.id.shop_list_rv_product_tv_total, String.format("%.2f", ((TradeProd) item).getTotal()));
                     helper.setText(R.id.shop_list_rv_product_tv_barcode, ((TradeProd) item).getBarCode());
-                    helper.setText(R.id.shop_list_rv_product_tv_discount, String.format("%.2f", ((TradeProd) item).getSingleDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getWholeDsc()));
+                    helper.setText(R.id.shop_list_rv_product_tv_discount, dsc);
+//                    helper.setText(R.id.shop_list_rv_product_tv_discount, String.format("%.2f", ((TradeProd) item).getManuDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getTranDsc()));
                     helper.setBackgroundColor(R.id.shop_list_rv_product_rl, ((TradeProd) item).isSelect() ? rv_item_selected : rv_item_normal);
                     helper.setGone(R.id.shop_list_rv_ll_btn, ((TradeProd) item).isSelect() ? true : false);
                     helper.addOnClickListener(R.id.shop_list_rv_img_add);
@@ -82,10 +85,10 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 break;
             case 4:
                 helper.setText(R.id.out_order_tv_lsno, ((Trade) item).getLsNo());
-                helper.setText(R.id.out_order_tv_num, String.valueOf(((Trade) item).getProdNum()).replace(".0",""));
-                helper.setText(R.id.out_order_tv_total, String.format("%.2f",((Trade) item).getTotal()));
+                helper.setText(R.id.out_order_tv_num, String.valueOf(((Trade) item).getProdNum()).replace(".0", ""));
+                helper.setText(R.id.out_order_tv_total, String.format("%.2f", ((Trade) item).getTotal()));
                 helper.setText(R.id.out_order_tv_prod_name, ((Trade) item).getProdName());
-                helper.setText(R.id.out_order_tv_amount, String.valueOf(((Trade) item).getAmount()).replace(".0",""));
+                helper.setText(R.id.out_order_tv_amount, String.valueOf(((Trade) item).getAmount()).replace(".0", ""));
 
                 break;
             default:

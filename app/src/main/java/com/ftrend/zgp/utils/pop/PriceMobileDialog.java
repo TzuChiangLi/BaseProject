@@ -87,6 +87,7 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
                 mSubmitBtn.setText("查询");
                 mEdt.setInputType(InputType.TYPE_NULL);
                 mEdt.setOnClickListener(this);
+                mEdt.setText("13637366688");
                 mKeyView.setOnKeyboardClickListener(this);
                 break;
             case DIALOG_CHANGE_PRICE:
@@ -175,6 +176,8 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
             vipInfo.setForceDsc(body.get("forceDsc").toString());
             vipInfo.setCardCode(body.get("cardCode").toString());
             vipInfo.setDscProdIsDsc(body.get("dscProdIsDsc").toString());
+            //刷新会员优惠
+            TradeHelper.saveVipDsc();
             Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_VIP_INFO, vipInfo);
             dismiss();
         }

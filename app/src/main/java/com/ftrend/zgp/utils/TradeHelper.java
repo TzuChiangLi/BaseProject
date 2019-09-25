@@ -75,6 +75,13 @@ public class TradeHelper {
     // VIP强制优惠：0-不强制
     public static final String VIP_DSC_NORMAL = "0";
 
+    // 超市版：会员优惠规则-1
+    public static final int VIP_ONE = 1;
+    // 超市版：会员优惠规则-2
+    public static final int VIP_TWO = 2;
+    // 超市版：会员优惠规则-3
+    public static final int VIP_THREE = 3;
+
 
     // 交易流水
     private static Trade trade = null;
@@ -774,6 +781,7 @@ public class TradeHelper {
         prod.setSingleDsc(priceFormat(singleDsc));
         //单项优惠的时候，清空整单优惠
         prod.setWholeDsc(0);
+        prod.setVipTotal(0);
         prod.setManuDsc(priceFormat(prod.getSingleDsc() + prod.getWholeDsc()));
         prod.setTotal(priceFormat((prod.getPrice() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()) * prod.getAmount()));
         if (prod.save()) {
@@ -828,7 +836,6 @@ public class TradeHelper {
                         .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
                         .querySingle().getMinimumPrice();
             }
-
             if (maxDsc > 0) {
                 dsc = prod.getPrice() * rate;
                 //优惠金额与最低限价相比，超过最低限价则取最低限价
@@ -836,6 +843,7 @@ public class TradeHelper {
                 prod.setWholeDsc(priceFormat(i == prodList.size() - 1 ? wholeDsc : dsc));
                 //整单优惠的时候，单项优惠清零
                 prod.setSingleDsc(0);
+                prod.setVipTotal(0);
                 prod.setManuDsc(priceFormat(prod.getSingleDsc() + dsc));
                 prod.setTotal(priceFormat((prod.getPrice() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()) * prod.getAmount()));
             }
@@ -877,7 +885,6 @@ public class TradeHelper {
     public static boolean saveVipDsc() {
         //筛选没有单项优惠、整项优惠的商品
         List<TradeProd> tempList = new ArrayList<>();
-        double vipDsc = 0;
         if (VIP_DSC_FORCE.equals(vip.getForceDsc())) {
             //强制打折
             for (TradeProd prod : prodList) {
@@ -895,24 +902,119 @@ public class TradeHelper {
                 }
             }
         }
-
+        //区分版本优惠
+        double vipPriceType = vip.getVipPriceType();
         if (ZgParams.getProgramEdition().equals(ZgParams.PROG_EDITION_BH)) {
+            //百货版
             double rate = vip.getVipDscRate();
-            double vipPrice = 0;
+            double vipPrice, ratePrice;
             for (TradeProd prod : tempList) {
-                vipPrice = prod.getPrice() * (100 - rate);
-                //TODO 判断会员价谁最大
-                prod.setVipTotal(vipPrice);
+                ratePrice = prod.getPrice() * (100 - rate) / 100;
+                vipPrice = queryVipPrice(vipPriceType, prod);
+                prod.setVipDsc(Math.max(ratePrice, vipPrice));
+                prod.setManuDsc(0);
+                prod.setWholeDsc(0);
+                prod.setSingleDsc(0);
+                //已存在手工优惠的不参与会员优惠
+                prod.setTotal(priceFormat((prod.getPrice() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()) * prod.getAmount()));
                 prod.save();
             }
         } else {
-            double rate = vip.getVipDscRate();
-            double vipPrice = 0;
+            //超市版
+            double rateRule = vip.getRateRule();
+            double vipPrice, ratePrice;
+            for (TradeProd prod : tempList) {
+                //如果没有会员规则，rateRule=0;
+                rateRule = queryRateRule(rateRule, prod);
+                ratePrice = prod.getPrice() * (100 - rateRule) / 100;
+                //如果没有会员价，vipPrice = prod.getPrice()商品原价
+                vipPrice = queryVipPrice(vipPriceType, prod);
+                prod.setVipDsc(Math.max(ratePrice, vipPrice));
+                prod.setManuDsc(0);
+                prod.setWholeDsc(0);
+                prod.setSingleDsc(0);
+                //已存在手工优惠的不参与会员优惠
+                prod.setTotal(priceFormat((prod.getPrice() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()) * prod.getAmount()));
+                prod.save();
+            }
         }
-        recalcTotal();
-
-        return true;
+        return recalcTotal();
     }
+
+    private static double queryVipPrice(double vipPriceType, TradeProd prod) {
+        double vipPrice = prod.getPrice();
+        if (TextUtils.isEmpty(prod.getBarCode())) {
+            if (vipPriceType == VIP_ONE) {
+                vipPrice = SQLite.select(DepProduct_Table.vipPrice1).from(DepProduct.class)
+                        .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
+                        .querySingle().getVipPrice1();
+            } else if (vipPriceType == VIP_TWO) {
+                vipPrice = SQLite.select(DepProduct_Table.vipPrice2).from(DepProduct.class)
+                        .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
+                        .querySingle().getVipPrice2();
+            } else if (vipPriceType == VIP_THREE) {
+                vipPrice = SQLite.select(DepProduct_Table.vipPrice3).from(DepProduct.class)
+                        .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
+                        .querySingle().getVipPrice3();
+            }
+        } else {
+            if (vipPriceType == VIP_ONE) {
+                vipPrice = SQLite.select(DepProduct_Table.vipPrice1).from(DepProduct.class)
+                        .where(DepProduct_Table.barCode.eq(prod.getBarCode()))
+                        .querySingle().getVipPrice1();
+            } else if (vipPriceType == VIP_TWO) {
+                vipPrice = SQLite.select(DepProduct_Table.vipPrice2).from(DepProduct.class)
+                        .where(DepProduct_Table.barCode.eq(prod.getBarCode()))
+                        .querySingle().getVipPrice2();
+            } else if (vipPriceType == VIP_THREE) {
+                vipPrice = SQLite.select(DepProduct_Table.vipPrice3).from(DepProduct.class)
+                        .where(DepProduct_Table.barCode.eq(prod.getBarCode()))
+                        .querySingle().getVipPrice3();
+            }
+        }
+        return vipPrice;
+    }
+
+
+    /**
+     * @param rateRule
+     * @param prod
+     * @return
+     */
+    private static double queryRateRule(double rateRule, TradeProd prod) {
+        double rate = 0;
+        if (TextUtils.isEmpty(prod.getBarCode())) {
+            if (rateRule == VIP_ONE) {
+                rateRule = SQLite.select(DepProduct_Table.vipRate1).from(DepProduct.class)
+                        .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
+                        .querySingle().getVipRate1();
+            } else if (rateRule == VIP_TWO) {
+                rateRule = SQLite.select(DepProduct_Table.vipRate2).from(DepProduct.class)
+                        .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
+                        .querySingle().getVipRate2();
+            } else if (rateRule == VIP_THREE) {
+                rateRule = SQLite.select(DepProduct_Table.vipRate3).from(DepProduct.class)
+                        .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
+                        .querySingle().getVipRate3();
+            }
+        } else {
+            if (rateRule == VIP_ONE) {
+                rate = SQLite.select(DepProduct_Table.vipRate1).from(DepProduct.class)
+                        .where(DepProduct_Table.barCode.eq(prod.getBarCode()))
+                        .querySingle().getVipRate1();
+            } else if (rateRule == VIP_TWO) {
+                rate = SQLite.select(DepProduct_Table.vipRate1).from(DepProduct.class)
+                        .where(DepProduct_Table.barCode.eq(prod.getBarCode()))
+                        .querySingle().getVipRate2();
+            } else if (rateRule == VIP_THREE) {
+                rate = SQLite.select(DepProduct_Table.vipRate3).from(DepProduct.class)
+                        .where(DepProduct_Table.barCode.eq(prod.getBarCode()))
+                        .querySingle().getVipRate3();
+            }
+        }
+        return rate;
+    }
+
 
     /**
      * @return 获取本机内所有未结流水单

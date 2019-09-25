@@ -157,7 +157,7 @@
             android:id="@+id/shop_list_rv_product_tv_per_price_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
+            android:layout_weight="1.2"
             android:text="@string/shop_tv_per_price"
             android:textColor="@color/text_black_first" />
 
@@ -173,7 +173,7 @@
             android:id="@+id/shop_list_rv_product_tv_discount_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
+            android:layout_weight="1.2"
             android:text="@string/shop_tv_discount"
             android:textColor="@color/text_black_first" />
 
@@ -181,7 +181,7 @@
             android:id="@+id/shop_list_rv_product_tv_discount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="3.1"
             android:text="@string/shop_tv_num_replace"
             android:textColor="@color/text_black_first" />
 
@@ -189,7 +189,7 @@
             android:id="@+id/shop_list_rv_product_tv_total_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
+            android:layout_weight="1.2"
             android:text="@string/shop_tv_sub_total"
             android:textColor="@color/text_black_first" />
 
