@@ -8,6 +8,7 @@ import android.util.Log;
 import com.ftrend.zgp.App;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ByteUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.sunmi.pay.hardware.aidlv2.readcard.CheckCardCallbackV2;
 import com.sunmi.pay.hardware.aidlv2.readcard.ReadCardOptV2;
 
@@ -69,12 +70,17 @@ public class SunmiPayHelper {
      * 释放到支付SDK服务的连接
      */
     public void disconnectPayService() {
-        if (!sdkConnected) {
-            return;
+        //TODO 2019年9月25日09:05:55 出现过一次空指针崩溃
+        try {
+            if (!sdkConnected) {
+                return;
+            }
+            cancelCheckCard();
+            kernel.destroyPaySDK();
+            kernel = null;
+        } catch (Exception e) {
+            LogUtil.e(e.getMessage());
         }
-        cancelCheckCard();
-        kernel.destroyPaySDK();
-        kernel = null;
     }
 
     /**

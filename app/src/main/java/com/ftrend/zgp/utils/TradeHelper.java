@@ -452,6 +452,10 @@ public class TradeHelper {
         TradeProd tradeProd = prodList.get(index);
         if (tradeProd != null) {
             tradeProd.setPrice(priceFormat(price));
+            //改价把手动优惠清掉
+            tradeProd.setSingleDsc(0);
+            tradeProd.setWholeDsc(0);
+            tradeProd.setManuDsc(0);
             tradeProd.setTotal(priceFormat(tradeProd.getAmount() * price));
         }
         if (tradeProd.save()) {
@@ -790,7 +794,8 @@ public class TradeHelper {
         //优惠金额不能大于：商品原价-最低限价
         //总的优惠金额不能大于单笔最大优惠金额（能执行到本方法时，已经排除大于最大优惠金额）
         //需要筛选出来可以分摊的商品
-        double dsc = 0, minumPrice;
+        double dsc = 0, minumPrice, rate;
+        //本折扣率为实际折扣率，非界面显示折扣率
         double maxDsc = getMaxWholeDsc();
         double price = 0;
         //region 需要筛选出来可以分摊且没有单项优惠的商品
@@ -806,9 +811,11 @@ public class TradeHelper {
         for (TradeProd prod : tempList) {
             price += prod.getPrice() * prod.getAmount();
         }
-
+        rate = wholeDsc / price;
         //可优惠金额是否比最大可优惠金额大
         wholeDsc = wholeDsc >= maxDsc ? maxDsc : wholeDsc;
+        //计数变量
+        int i = 0;
         //给每个商品按照比例分摊优惠的金额
         for (TradeProd prod : tempList) {
             //取商品的最低限价
@@ -823,11 +830,10 @@ public class TradeHelper {
             }
 
             if (maxDsc > 0) {
-                //
-                dsc = (prod.getPrice() * prod.getAmount() / price) * wholeDsc;
+                dsc = prod.getPrice() * rate;
                 //优惠金额与最低限价相比，超过最低限价则取最低限价
                 dsc = dsc >= prod.getPrice() - minumPrice ? prod.getPrice() - minumPrice : dsc;
-                prod.setWholeDsc(priceFormat(dsc));
+                prod.setWholeDsc(priceFormat(i == prodList.size() - 1 ? wholeDsc : dsc));
                 //整单优惠的时候，单项优惠清零
                 prod.setSingleDsc(0);
                 prod.setManuDsc(priceFormat(prod.getSingleDsc() + dsc));
@@ -836,6 +842,7 @@ public class TradeHelper {
             if (prod.save()) {
                 wholeDsc = wholeDsc - dsc < 0 ? 0 : wholeDsc - dsc;
             }
+            i++;
         }
         //重新汇总
         return recalcTotal();
