@@ -23,10 +23,13 @@ import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.raizlabs.android.dbflow.sql.language.Method.count;
+import static com.raizlabs.android.dbflow.sql.language.Method.min;
 import static com.raizlabs.android.dbflow.sql.language.Method.sum;
 
 /**
@@ -57,15 +60,19 @@ public class HandoverHelper {
     // 交易筛选：All-全部
     public static final String TRADE_ALL = "ALL";
 
+    // 强制交班天数
+    private static final int MUST_HANDOVER_DAYS = 3;
+    // 提示交班天数
+    private static final int TIP_HANDOVER_DAYS = 2;
 
     /**
      * 交班记录
      */
-    public static Handover handover = null;
+    private static Handover handover = null;
     /**
      * 交班记录(支付方式统计)
      */
-    public static HandoverPay handoverPay = null;
+    private static HandoverPay handoverPay = null;
 
     /**
      * 当前是否可以交班
@@ -84,6 +91,42 @@ public class HandoverHelper {
         } else {
             return -1;
         }
+    }
+
+    /**
+     * 当前是否必须交班（收银、取单、退货等功能进入前调用此方法）
+     *
+     * @return 0 - 必须交班，-1 - 不提示交班，大于0 - 提示已经这么多天没有交班了
+     */
+    public static int mustHandover() {
+        int result;
+        FlowCursor cursor = SQLite.select(min(Trade_Table.tradeTime))
+                .from(Trade.class)
+                .where(Trade_Table.status.eq(TradeHelper.TRADE_STATUS_PAID))
+                .query();
+        if (cursor == null || cursor.getCount() == 0) {
+            result = -1;
+        } else {
+            cursor.moveToNext();
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                Date minDate = format.parse(cursor.getString(0));
+                long days = (System.currentTimeMillis() - minDate.getTime()) / (1000 * 60 * 60 * 24);
+                if (days < TIP_HANDOVER_DAYS) {
+                    result = -1;
+                } else if (days >= MUST_HANDOVER_DAYS) {
+                    return 0;
+                } else {
+                    return (int) days;
+                }
+            } catch (Exception e) {
+                result = -1;
+            }
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return result;
     }
 
     /**
@@ -233,7 +276,7 @@ public class HandoverHelper {
     public static String getMinLsNo(String userCode) {
         FlowCursor csr;
         String lsNo = "";
-        csr = SQLite.select(Method.min(Trade_Table.lsNo)).distinct().from(Trade.class)
+        csr = SQLite.select(min(Trade_Table.lsNo)).distinct().from(Trade.class)
                 .where(Trade_Table.cashier.eq(userCode))
                 .query();
         if (csr.moveToFirst()) {
