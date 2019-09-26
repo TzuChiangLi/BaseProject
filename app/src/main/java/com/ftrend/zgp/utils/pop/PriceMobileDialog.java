@@ -20,7 +20,6 @@ import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.view.ShopCartActivity;
 import com.ftrend.zgp.view.ShopListActivity;
@@ -157,7 +156,10 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
         if (ZgParams.isIsOnline()) {
             RestSubscribe.getInstance().queryVipInfo(mEdt.getText().toString(), new RestCallback(regHandler));
         } else {
-            MessageUtil.showWarning("当前离线");
+            MessageUtil.showWarning("当前为单机模式，无法查询会员信息");
+            //保存vipCode
+            TradeHelper.saveVipCodeOffline(mEdt.getText().toString());
+            dismiss();
         }
 
     }
@@ -165,7 +167,6 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
     private RestResultHandler regHandler = new RestResultHandler() {
         @Override
         public void onSuccess(Map<String, Object> body) {
-            LogUtil.d("----body:" + body.toString());
             VipInfo vipInfo = TradeHelper.vip();
             vipInfo.setVipName(body.get("vipName").toString());
             vipInfo.setVipCode(body.get("vipCode").toString());

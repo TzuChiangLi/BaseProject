@@ -15,6 +15,7 @@ import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.model.VipInfo;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
@@ -24,6 +25,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import static com.raizlabs.android.dbflow.sql.language.Method.count;
 import static com.raizlabs.android.dbflow.sql.language.Method.sum;
 
 /**
@@ -81,6 +83,8 @@ public class TradeHelper {
     public static final int VIP_TWO = 2;
     // 超市版：会员优惠规则-3
     public static final int VIP_THREE = 3;
+    // 顾客类型：2-会员
+    public static final String TRADE_CUST_VIP = "2";
 
 
     // 交易流水
@@ -90,7 +94,7 @@ public class TradeHelper {
     // 支付信息
     private static TradePay pay = null;
     // 会员信息
-    private static VipInfo vip = null;
+    public static VipInfo vip = null;
 
 
     public static Trade getTrade() {
@@ -320,11 +324,22 @@ public class TradeHelper {
      * 更新交易状态
      */
     public static void setTradeStatus(String status) {
-        SQLite.update(Trade.class)
-                .set(Trade_Table.status.eq(status))
-                .where(Trade_Table.lsNo.is(trade.getLsNo()))
-                .async()
-                .execute(); // non-UI blocking
+        if (TradeHelper.vip != null) {
+            SQLite.update(Trade.class)
+                    .set(Trade_Table.status.eq(status), Trade_Table.vipCode.eq(TradeHelper.vip.getVipCode()),
+                            Trade_Table.vipTotal.eq(TradeHelper.trade.getVipTotal()),
+                            Trade_Table.custType.eq(TRADE_CUST_VIP),
+                            Trade_Table.cardCode.eq(TradeHelper.vip.getCardCode()))
+                    .where(Trade_Table.lsNo.is(trade.getLsNo()))
+                    .async()
+                    .execute(); // non-UI blocking
+        } else {
+            SQLite.update(Trade.class)
+                    .set(Trade_Table.status.eq(status))
+                    .where(Trade_Table.lsNo.is(trade.getLsNo()))
+                    .async()
+                    .execute(); // non-UI blocking
+        }
     }
 
 
@@ -542,6 +557,27 @@ public class TradeHelper {
         return true;
     }
 
+    /**
+     * 选择商品界面：获取每个商品的件数
+     *
+     * @param prodCode 商品码
+     * @param barCode  条码（可能为null）
+     * @return 数量
+     */
+    public static long getProdCount(String prodCode, String barCode) {
+        if (TextUtils.isEmpty(barCode)) {
+            return SQLite.select(count()).from(TradeProd.class)
+                    .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                    .and(TradeProd_Table.prodCode.eq(prodCode))
+                    .count();
+        } else {
+            return SQLite.select(count()).from(TradeProd.class)
+                    .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                    .and(TradeProd_Table.barCode.eq(barCode))
+                    .count();
+        }
+    }
+
 
     /**
      * 检查商品优惠权限
@@ -575,13 +611,13 @@ public class TradeHelper {
      * @param index 索引
      * @return 是或否
      */
-    public static boolean checkForDscAndNoSingleDsc(int index) {
+    public static boolean checkForDscAndNoDsc(int index) {
         if (index < 0 || index >= prodList.size()) {
             Log.e(TAG, "行清: 索引无效");
             return false;
         }
-        int forDsc = 0;
-        double singleDsc = 0;
+        int forDsc;
+        double singleDsc, vipDsc, tranDsc;
         if (TextUtils.isEmpty(prodList.get(index).getBarCode())) {
             //根据prodCode查商品优惠限制
             forDsc = SQLite.select().from(DepProduct.class)
@@ -594,8 +630,10 @@ public class TradeHelper {
                     .querySingle().getForDsc();
         }
         singleDsc = prodList.get(index).getSingleDsc();
+        vipDsc = prodList.get(index).getVipDsc();
+        tranDsc = prodList.get(index).getTranDsc();
         //forDsc:0否1是
-        return (forDsc != 0) && (singleDsc == 0);
+        return (forDsc != 0) && (singleDsc == 0) && (vipDsc == 0) && (tranDsc == 0);
     }
 
 
@@ -684,7 +722,22 @@ public class TradeHelper {
             price += prod.getPrice() * prod.getAmount();
         }
         return price;
+    }
 
+    /**
+     * 整单优惠：获取可整单优惠的所有商品的原价
+     *
+     * @return
+     */
+    public static double getWholeForDscPrice() {
+        double price = 0;
+        int i = 0;
+        for (TradeProd prod : prodList) {
+            if (checkForDsc(i) && prod.getSingleDsc() == 0 && prod.getVipDsc() == 0 && prod.getTranDsc() == 0) {
+                price += prod.getPrice() * prod.getAmount();
+            }
+        }
+        return price;
     }
 
 
@@ -736,7 +789,7 @@ public class TradeHelper {
         maxDscTotal = maxDscTotal >= ZgParams.getCurrentUser().getMaxDscTotal() ? ZgParams.getCurrentUser().getMaxDscTotal() : maxDscTotal;
         //当前商品的全部优惠
         for (TradeProd prod : prodList) {
-            dscTotal += prod.getVipTotal() + prod.getTranDsc() + prod.getSingleDsc();
+            dscTotal += prod.getVipDsc() + prod.getTranDsc() + prod.getSingleDsc();
         }
         //最大金额减去目前所有的优惠，即可优惠的金额
         dscTotal = maxDscTotal - dscTotal >= 0 ? maxDscTotal - dscTotal : 0;
@@ -806,15 +859,14 @@ public class TradeHelper {
         //本折扣率为实际折扣率，非界面显示折扣率
         double maxDsc = getMaxWholeDsc();
         double price = 0;
-        //region 需要筛选出来可以分摊且没有单项优惠的商品
+        //region 需要筛选出来可以分摊且没有单项优惠\会员优惠\促销优惠的商品
         List<TradeProd> tempList = new ArrayList<>();
         for (int i = 0; i < prodList.size(); i++) {
-            if (checkForDsc(i)) {
+            if (checkForDscAndNoDsc(i)) {
                 tempList.add(prodList.get(i));
             }
         }
         //endregion
-
         //可优惠商品的总金额
         for (TradeProd prod : tempList) {
             price += prod.getPrice() * prod.getAmount();
@@ -840,10 +892,18 @@ public class TradeHelper {
                 dsc = prod.getPrice() * rate;
                 //优惠金额与最低限价相比，超过最低限价则取最低限价
                 dsc = dsc >= prod.getPrice() - minumPrice ? prod.getPrice() - minumPrice : dsc;
-                prod.setWholeDsc(priceFormat(i == prodList.size() - 1 ? wholeDsc : dsc));
+                dsc = i == prodList.size() - 1 ? wholeDsc : dsc;
+                //如果会员优惠比整单优惠金额大，那么跳过本商品
+                //整单优惠为0，保留会员优惠
+                if (prod.getVipDsc() > dsc) {
+                    dsc = 0;
+                } else {
+                    prod.setVipDsc(0);
+                }
+                prod.setWholeDsc(dsc);
                 //整单优惠的时候，单项优惠清零
                 prod.setSingleDsc(0);
-                prod.setVipTotal(0);
+
                 prod.setManuDsc(priceFormat(prod.getSingleDsc() + dsc));
                 prod.setTotal(priceFormat((prod.getPrice() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()) * prod.getAmount()));
             }
@@ -872,9 +932,18 @@ public class TradeHelper {
      * 清空会员信息
      */
     public static void clearVip() {
-        if (vip != null) {
-            vip = null;
-        }
+        vip = null;
+    }
+
+    /**
+     * 离线模式下只保存vipCode
+     *
+     * @param vipCode 会员号
+     * @return 成功失败
+     */
+    public static boolean saveVipCodeOffline(String vipCode) {
+        trade.setVipCode(vipCode);
+        return trade.save();
     }
 
     /**
@@ -907,11 +976,13 @@ public class TradeHelper {
         if (ZgParams.getProgramEdition().equals(ZgParams.PROG_EDITION_BH)) {
             //百货版
             double rate = vip.getVipDscRate();
-            double vipPrice, ratePrice;
+            LogUtil.d("----rate：" + rate);
+            double vipDsc, rateDsc;
             for (TradeProd prod : tempList) {
-                ratePrice = prod.getPrice() * (100 - rate) / 100;
-                vipPrice = queryVipPrice(vipPriceType, prod);
-                prod.setVipDsc(Math.max(ratePrice, vipPrice));
+                rateDsc = prod.getPrice() * (100 - rate) / 100;
+                //此处vipPrice是优惠后的价格
+                vipDsc = prod.getPrice() - queryVipPrice(vipPriceType, prod);
+                prod.setVipDsc(Math.max(rateDsc, vipDsc));
                 prod.setManuDsc(0);
                 prod.setWholeDsc(0);
                 prod.setSingleDsc(0);
@@ -922,14 +993,14 @@ public class TradeHelper {
         } else {
             //超市版
             double rateRule = vip.getRateRule();
-            double vipPrice, ratePrice;
+            double vipDsc, rateDsc;
             for (TradeProd prod : tempList) {
                 //如果没有会员规则，rateRule=0;
                 rateRule = queryRateRule(rateRule, prod);
-                ratePrice = prod.getPrice() * (100 - rateRule) / 100;
+                rateDsc = prod.getPrice() * (100 - rateRule) / 100;
                 //如果没有会员价，vipPrice = prod.getPrice()商品原价
-                vipPrice = queryVipPrice(vipPriceType, prod);
-                prod.setVipDsc(Math.max(ratePrice, vipPrice));
+                vipDsc = prod.getPrice() - queryVipPrice(vipPriceType, prod);
+                prod.setVipDsc(Math.max(rateDsc, vipDsc));
                 prod.setManuDsc(0);
                 prod.setWholeDsc(0);
                 prod.setSingleDsc(0);

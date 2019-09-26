@@ -381,6 +381,11 @@ public interface Contract {
     }
 
     interface ShopListPresenter {
+
+        /**
+         * 检查是否拥有会员优惠权限并展示界面
+         */
+        void showVipInfo();
         /**
          * 商品是否允许优惠,弹出相应提示
          *
@@ -448,6 +453,10 @@ public interface Contract {
     }
 
     interface ShopListView extends BaseView<Contract.ShopListPresenter> {
+        /**
+         * 展示会员信息
+         */
+        void showVipInfo();
         /**
          * 显示流水单内商品
          *
