@@ -84,7 +84,19 @@ public class HomePresenter implements Contract.HomePresenter {
     }
 
     @Override
+    public void checkHandover() {
+        int handoverDay = HandoverHelper.mustHandover();
+        if (handoverDay != -1) {
+            mView.tipHandover();
+        }
+    }
+
+    @Override
     public void goShopCart() {
+        if (HandoverHelper.mustHandover() == 0) {
+            mView.mustHandover();
+            return;
+        }
         //初始化流水单信息
         TradeHelper.initSale();
         mView.goShopChartActivity(TradeHelper.getTrade().getLsNo());
@@ -109,6 +121,10 @@ public class HomePresenter implements Contract.HomePresenter {
 
     @Override
     public void getOutOrder() {
+        if (HandoverHelper.mustHandover() == 0) {
+            mView.mustHandover();
+            return;
+        }
         mView.goOrderOutActivity();
     }
 

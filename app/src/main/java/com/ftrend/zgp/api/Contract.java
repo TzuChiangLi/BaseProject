@@ -205,6 +205,10 @@ public interface Contract {
          */
         void setInfo();
 
+        /**
+         * 检查交班
+         */
+        void checkHandover();
 
         /**
          * 跳转收银-选择商品界面
@@ -249,6 +253,17 @@ public interface Contract {
          * @param info 字符串数组
          */
         void showInfo(String... info);
+
+        /**
+         * 必须交班
+         */
+        void mustHandover();
+
+        /**
+         * 提示交班
+         */
+        void tipHandover();
+
 
         /**
          * 跳转到收银选择商品界面
@@ -333,6 +348,14 @@ public interface Contract {
         void updateTradeInfo();
 
         /**
+         * 通过扫码识别并定位商品
+         *
+         * @param code     识别码
+         * @param prodList 商品列表
+         */
+        void searchProdByScan(String code, List<DepProduct> prodList);
+
+        /**
          * 销毁，防止泄露
          */
         void onDestory();
@@ -378,6 +401,18 @@ public interface Contract {
          * @param statusResult 状态结果
          */
         void returnHomeActivity(String statusResult);
+
+        /**
+         * 定位商品
+         *
+         * @param index 索引
+         */
+        void setScanProdPosition(int index);
+
+        /**
+         * 扫码的商品不存在
+         */
+        void noScanProdPosition();
     }
 
     interface ShopListPresenter {
@@ -386,6 +421,7 @@ public interface Contract {
          * 检查是否拥有会员优惠权限并展示界面
          */
         void showVipInfo();
+
         /**
          * 商品是否允许优惠,弹出相应提示
          *
@@ -457,6 +493,7 @@ public interface Contract {
          * 展示会员信息
          */
         void showVipInfo();
+
         /**
          * 显示流水单内商品
          *

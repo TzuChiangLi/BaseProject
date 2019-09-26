@@ -265,7 +265,6 @@ public class HandoverHelper {
                 lsNo = csr.getStringOrDefault(0);
             } while (csr.moveToNext());
         }
-        LogUtil.d("----maxLsNo:" + lsNo);
         return lsNo;
     }
 

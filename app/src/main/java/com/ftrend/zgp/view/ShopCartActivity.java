@@ -1,12 +1,16 @@
 package com.ftrend.zgp.view;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -35,6 +39,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindColor;
@@ -75,7 +81,9 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     private ShopAdapter<DepProduct> mProdAdapter;
     private ShopAdapter<DepCls> mClsAdapter;
     private int oldPosition = -1;
+    private static int START_SCAN = 001;
     private String lsNo = "";
+
 
     @Override
     protected int getLayoutID() {
@@ -138,6 +146,32 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == START_SCAN && data != null) {
+            Bundle bundle = data.getExtras();
+            ArrayList result = (ArrayList) bundle.getSerializable("data");
+            Iterator it = result.iterator();
+
+            while (it.hasNext()) {
+                HashMap hashMap = (HashMap) it.next();
+                //此处传入扫码结果
+                scanResult(String.valueOf(hashMap.get("VALUE")));
+                Log.i("----sunmi", String.valueOf(hashMap.get("TYPE")));//这个是扫码的类型
+                Log.i("----sunmi", String.valueOf(hashMap.get("VALUE")));//这个是扫码的结果
+            }
+
+        }
+    }
+
+    private void scanResult(String value) {
+        if (TextUtils.isEmpty(value)) {
+            return;
+        }
+        mPresenter.searchProdByScan(value, mProdAdapter.getData());
+    }
+
+    @Override
     public void setProdList(final List<DepProduct> prodList) {
         mProdRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item, prodList, 1);
@@ -157,7 +191,6 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
                 mPresenter.addToShopCart((DepProduct) adapter.getItem(position), lsNo);
                 //如果商品价格是0，那么就弹出窗口
                 if (prodList.get(position).getPrice() == 0) {
-                    //TODO 2019年9月19日11:07:20 如果价格是0，弹出改价提示窗
                     MessageUtil.showPriceChange(ShopCartActivity.this, position);
                 }
 
@@ -181,7 +214,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @Override
     public void updateTradeProd(double count, double price) {
         mTipTv.setText(String.valueOf(count).replace(".0", ""));
-        mTotalTv.setText(String.format("%.2f",price));
+        mTotalTv.setText(String.format("%.2f", price));
     }
 
     @Override
@@ -196,6 +229,23 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
                 startActivity(intent);
             }
         }, 1500);
+    }
+
+    @Override
+    public void setScanProdPosition(int index) {
+        mProdRecyclerView.scrollToPosition(index);
+        if (oldPosition != -1 && oldPosition < mProdAdapter.getItemCount()) {
+            mProdAdapter.getData().get(oldPosition).setSelect(false);
+            mProdAdapter.notifyItemChanged(oldPosition);
+        }
+        oldPosition = index;
+        mProdAdapter.getData().get(index).setSelect(true);
+        mProdAdapter.notifyItemChanged(index);
+    }
+
+    @Override
+    public void noScanProdPosition() {
+        MessageUtil.showError("商品库中无此商品");
     }
 
     @OnClick(R.id.shop_cart_bottom_btn_car)
@@ -226,7 +276,9 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @OnClick(R.id.shop_cart_top_ll_btn_scan)
     public void goScanActivity() {
-
+        Intent intent = new Intent("com.summi.scan");
+        intent.setPackage("com.sunmi.sunmiqrcodescanner");
+        startActivityForResult(intent, START_SCAN);
     }
 
 

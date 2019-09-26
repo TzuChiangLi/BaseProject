@@ -122,6 +122,23 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
         mView.updateTradeProd(count, price);
     }
 
+    @Override
+    public void searchProdByScan(String code, List<DepProduct> prodList) {
+        boolean hasFlag = false;
+        for (int i = 0; i < prodList.size(); i++) {
+            if (code.equals(prodList.get(i).getProdCode()) ||
+                    code.equals(prodList.get(i).getBarCode())) {
+                hasFlag = true;
+                mView.setScanProdPosition(i);
+                break;
+            }
+            if (i == prodList.size() && hasFlag == false) {
+                mView.noScanProdPosition();
+            }
+        }
+
+    }
+
 
     @Override
     public void onDestory() {

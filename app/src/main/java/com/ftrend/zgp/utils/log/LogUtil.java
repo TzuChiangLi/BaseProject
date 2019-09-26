@@ -4,7 +4,6 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 
-import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.AppUtils;
 
 import java.io.BufferedWriter;
@@ -20,6 +19,7 @@ import java.util.Date;
  * @author liziqiang@ftrend.cn
  */
 public class LogUtil {
+    private final static String TAG = "Ftrend";
     static String logPathStr = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DATA/" + AppUtils.getAppPackageName() + "/LogUtil/";
     /**
      * 允许保存Error错误到本地日志
@@ -75,7 +75,7 @@ public class LogUtil {
                     writer.close();
                 } catch (Exception e) {
                     e.printStackTrace();
-//                    Log.e(ActivityUtils.getTopActivity().getLocalClassName(), "为避免发生死循环错误: " + e.getMessage());
+                    Log.e(TAG, "为避免发生死循环错误: " + e.getMessage());
                 }
             }
         }
@@ -85,7 +85,7 @@ public class LogUtil {
     public static void d(String msg) {
         if (!TextUtils.isEmpty(msg)) {
             if (showLog) {
-                Log.d(ActivityUtils.getTopActivity().getLocalClassName(), msg);
+                Log.d(TAG, msg);
             }
         }
     }
@@ -93,7 +93,7 @@ public class LogUtil {
     public static void i(String msg) {
         if (!TextUtils.isEmpty(msg)) {
             if (showLog) {
-                Log.i(ActivityUtils.getTopActivity().getLocalClassName(), msg);
+                Log.i(TAG, msg);
             }
         }
     }

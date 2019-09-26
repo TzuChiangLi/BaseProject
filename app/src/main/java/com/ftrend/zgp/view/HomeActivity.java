@@ -53,6 +53,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         if (mPresenter == null) {
             mPresenter = HomePresenter.createPresenter(this);
         }
+
         //设置界面信息
         mPresenter.setInfo();
         //启动线程
@@ -103,6 +104,18 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         mDepTv.setText(ZgParams.getCurrentDep().getDepName());
     }
 
+    @Override
+    public void mustHandover() {
+        MessageUtil.showWarning("您已经长时间未交班，功能使用受限。请先交班。");
+    }
+
+
+
+    @Override
+    public void tipHandover() {
+
+    }
+
 
     @Override
     public void onMenuClick(View view, int position) {
@@ -116,6 +129,8 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 break;
             case "交班":
                 mPresenter.goHandover();
+                break;
+            case "退货":
                 break;
             case "注销登录":
                 mPresenter.logout();

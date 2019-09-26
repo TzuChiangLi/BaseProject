@@ -58,7 +58,6 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 helper.setText(R.id.shop_rv_product_tv_num, String.format("%d",TradeHelper.getProdCount(((DepProduct) item).getProdCode(), ((DepProduct) item).getBarCode())));
                 helper.setGone(R.id.shop_rv_product_tv_num, TradeHelper.getProdCount(((DepProduct) item).getProdCode(), ((DepProduct) item).getBarCode()) == 0 ? false : true);
                 helper.setBackgroundColor(R.id.shop_cart_rv_product_rl, ((DepProduct) item).isSelect() ? rv_item_selected : rv_item_normal);
-                LogUtil.d("----count:" + TradeHelper.getProdCount(((DepProduct) item).getProdCode(), ((DepProduct) item).getBarCode()));
                 break;
             case 2:
                 //购物车商品列表
