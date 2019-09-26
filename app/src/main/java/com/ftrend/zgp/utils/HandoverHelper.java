@@ -67,6 +67,24 @@ public class HandoverHelper {
      */
     public static HandoverPay handoverPay = null;
 
+    /**
+     * 当前是否可以交班
+     *
+     * @return 1 - 可以交班，0 - 没有可交班的流水， -1 - 单机状态不可交班
+     */
+    public static int canHandover() {
+        if (ZgParams.isIsOnline()) {
+            long tradeCount = SQLite.select(count()).from(Trade.class)
+                    .where(Trade_Table.status.eq(TradeHelper.TRADE_STATUS_PAID)).count();
+            if (tradeCount > 0) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            return -1;
+        }
+    }
 
     /**
      * 保存到交班数据库中

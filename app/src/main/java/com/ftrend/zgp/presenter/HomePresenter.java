@@ -3,22 +3,18 @@ package com.ftrend.zgp.presenter;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Menu;
-import com.ftrend.zgp.model.Trade;
-import com.ftrend.zgp.model.Trade_Table;
+import com.ftrend.zgp.utils.HandoverHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.task.LsUploadThread;
 import com.ftrend.zgp.utils.task.ServerWatcherThread;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-
-import static com.raizlabs.android.dbflow.sql.language.Method.count;
 
 /**
  * 主界面P层----所有业务逻辑在此
@@ -96,19 +92,19 @@ public class HomePresenter implements Contract.HomePresenter {
 
     @Override
     public void goHandover() {
-        if (ZgParams.isIsOnline()) {
-            long tradeCount = SQLite.select(count()).from(Trade.class)
-                    .where(Trade_Table.status.eq(TradeHelper.TRADE_STATUS_PAID)).count();
-            if (tradeCount > 0) {
+        switch (HandoverHelper.canHandover()) {
+            case 1:
                 mView.goHandoverActivity();
-            } else {
+                break;
+            case 0:
                 mView.hasNoTrade();
-            }
-        } else {
-            mView.showOfflineTip();
+                break;
+            case -1:
+                mView.showOfflineTip();
+                break;
+            default:
+                break;
         }
-
-
     }
 
     @Override
