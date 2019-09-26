@@ -13,9 +13,9 @@ import com.ftrend.zgp.utils.pop.VipCardDialog;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
-import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_CHANGE_PRICE;
 import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_SINGLE_RSC;
 import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_WHOLE_RSC;
+import static com.ftrend.zgp.utils.pop.PriceMobileDialog.DIALOG_CHANGE_PRICE;
 import static com.ftrend.zgp.utils.pop.PriceMobileDialog.DIALOG_MOBILE;
 
 /**

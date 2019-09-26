@@ -1,10 +1,12 @@
 package com.ftrend.zgp.utils.pop;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
 import com.ftrend.zgp.R;
+import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.lxj.xpopup.core.CenterPopupView;
 
@@ -51,7 +53,7 @@ public class VipWayDialog extends CenterPopupView {
 
     @OnClick(R.id.vip_way_ll_scan)
     public void scan() {
-
+        Event.sendEvent(Event.TARGET_SHOP_LIST,Event.TYPE_ENTER_SCAN);
     }
 
     @OnClick(R.id.vip_way_ll_card)

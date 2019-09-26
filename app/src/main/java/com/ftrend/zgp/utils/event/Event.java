@@ -30,9 +30,21 @@ public class Event {
      */
     public static final int TYPE_CANCEL_PRICE_CHANGE = 1;
 
+    /**
+     * 购物车----刷新整单优惠
+     */
     public static final int TYPE_REFRESH_WHOLE_PRICE = 2;
 
+    /**
+     * 购物车----刷新会员信息
+     */
     public static final int TYPE_REFRESH_VIP_INFO = 3;
+
+    /**
+     * 进入扫码界面
+     */
+    public static final int TYPE_ENTER_SCAN = 4;
+
     //-----------------------------------简单数据-----------------------------------------//
     //一般用不到
     private Object data;

@@ -76,7 +76,6 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     private ShopAdapter<DepCls> mClsAdapter;
     private int oldPosition = -1;
     private String lsNo = "";
-    private List<DepProduct> mProdList = new ArrayList<>();
 
     @Override
     protected int getLayoutID() {

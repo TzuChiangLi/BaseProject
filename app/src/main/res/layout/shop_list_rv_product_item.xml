@@ -68,9 +68,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/shop_list_rv_ll"
         android:layout_alignStart="@+id/shop_list_rv_ll"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:layout_toStartOf="@+id/shop_list_rv_product_tv_num_title"
         android:maxWidth="250dp"
         android:text="@string/shop_edt_search"
@@ -99,8 +99,8 @@
         android:background="@null"
         android:paddingStart="2dp"
         android:paddingEnd="2dp"
-        android:scaleX="1.1"
-        android:scaleY="1.1"
+        android:scaleX="1.2"
+        android:scaleY="1.2"
         android:src="@drawable/minus" />
 
 
@@ -127,8 +127,8 @@
         android:background="@null"
         android:paddingStart="2dp"
         android:paddingEnd="2dp"
-        android:scaleX="1.1"
-        android:scaleY="1.1"
+        android:scaleX="1.2"
+        android:scaleY="1.2"
         android:src="@drawable/add" />
 
     <TextView
@@ -181,8 +181,9 @@
             android:id="@+id/shop_list_rv_product_tv_discount"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3.1"
+            android:layout_weight="3.0"
             android:text="@string/shop_tv_num_replace"
+            android:letterSpacing="0.05"
             android:textColor="@color/text_black_first" />
 
         <TextView

@@ -25,6 +25,7 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.view.ShopCartActivity;
+import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.core.BottomPopupView;
 
 import butterknife.BindView;
@@ -47,10 +48,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
     Button mSubmitBtn;
     @BindView(R.id.vip_way_img_close)
     ImageView mCloseImg;
-    //会员弹窗：1-手机号
-    public static final int DIALOG_MOBILE = 1;
-    //购物车：  2-改价
-    public static final int DIALOG_CHANGE_PRICE = 2;
     //优惠：    3-单项优惠
     public static final int DIALOG_SINGLE_RSC = 3;
     //优惠：    3-整单优惠
@@ -89,26 +86,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         ButterKnife.bind(this);
         KeyboardUtils.hideSoftInput(this);
         switch (type) {
-            case DIALOG_MOBILE:
-                //手机号
-                mKeyViewStub = ((ViewStub) findViewById(R.id.vip_way_key_lite_view)).inflate();
-                mKeyView = mKeyViewStub.findViewById(R.id.vip_way_keyboard);
-                mKeyView.show();
-                mEdt.setInputType(InputType.TYPE_NULL);
-                mEdt.setOnClickListener(this);
-                mKeyView.setOnKeyboardClickListener(this);
-                break;
-            case DIALOG_CHANGE_PRICE:
-                //改价
-                mKeyViewStub = ((ViewStub) findViewById(R.id.vip_way_key_lite_view)).inflate();
-                mKeyView = mKeyViewStub.findViewById(R.id.vip_way_keyboard);
-                mKeyView.show();
-                mEdt.setInputType(InputType.TYPE_NULL);
-                mTitleTv.setText("请输入修改后的商品价格：");
-                mSubmitBtn.setText("修改");
-                mEdt.setOnClickListener(this);
-                mKeyView.setOnKeyboardClickListener(this);
-                break;
             case DIALOG_SINGLE_RSC:
                 //优惠
                 initSingleDscView();
@@ -133,7 +110,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                 : "(0-" + TradeHelper.getMaxWholeRate() + "%)");
         mMaxDscTv.setText(TradeHelper.getMaxWholeDsc() == 0 ? "(无优惠)"
                 : "(0-" + TradeHelper.getMaxWholeDsc() + "元)");
-        mPriceTv.setText(String.valueOf(TradeHelper.getWholePrice()));
+        mPriceTv.setText(String.valueOf(TradeHelper.getWholeForDscPrice()));
     }
 
     /**
@@ -390,8 +367,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                 }
 
                 break;
-            case DIALOG_MOBILE:
-            case DIALOG_CHANGE_PRICE:
             default:
                 mEdt.setText(mEdt.getText().append(String.valueOf(key)));
                 break;
@@ -413,8 +388,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                 }
 
                 break;
-            case DIALOG_MOBILE:
-            case DIALOG_CHANGE_PRICE:
             default:
                 mEdt.setText(TextUtils.isEmpty(mEdt.getText().toString()) ? "" :
                         mEdt.getText().toString().trim().substring(0, mEdt.getText().toString().trim().length() - 1));
@@ -432,8 +405,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                     mDscEdt.getText().append('.');
                 }
                 break;
-            case DIALOG_MOBILE:
-            case DIALOG_CHANGE_PRICE:
             default:
                 mEdt.getText().append('.');
                 break;
@@ -458,8 +429,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                     mRateEdt.selectAll();
                 }
                 break;
-            case DIALOG_MOBILE:
-            case DIALOG_CHANGE_PRICE:
             default:
                 break;
         }
@@ -478,8 +447,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                 restoreTextColor(mRateEdt);
                 restoreTextColor(mDscEdt);
                 break;
-            case DIALOG_MOBILE:
-            case DIALOG_CHANGE_PRICE:
             default:
                 mEdt.setText("");
                 break;
@@ -515,20 +482,40 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                     dismiss();
                     return;
                 }
-
+                //原价不为0，判断是否为空
                 if (Integer.parseInt(mRateEdt.getText().toString()) <= TradeHelper.getMaxWholeRate() &&
                         Double.parseDouble(mDscEdt.getText().toString()) <= TradeHelper.getMaxWholeDsc()) {
-                    //两个都为true的时候，才能保存成功
-                    if (TradeHelper.saveWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
-                        Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
-                        dismiss();
+                    if (TradeHelper.getWholeForDscPrice() == 0) {
+                        MessageUtil.info("本单商品已享受其他优惠，如确定将取消先前优惠，是否继续？");
+                        MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
+                            @Override
+                            public void onLeftBtnClick(BasePopupView popView) {
+                                //两个都为true的时候，才能保存成功
+                                if (TradeHelper.saveWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
+                                    Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
+                                    popView.dismiss();
+                                    dismiss();
+                                }else {
+                                    MessageUtil.showError("操作失败，请重试");
+                                }
+                            }
+
+                            @Override
+                            public void onRightBtnClick(BasePopupView popView) {
+                                popView.dismiss();
+                            }
+                        });
+                    } else {
+                        //两个都为true的时候，才能保存成功
+                        if (TradeHelper.saveWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
+                            Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
+                            dismiss();
+                        }
                     }
                 } else {
                     MessageUtil.showError("失败");
                 }
                 break;
-            case DIALOG_MOBILE:
-            case DIALOG_CHANGE_PRICE:
             default:
                 break;
         }

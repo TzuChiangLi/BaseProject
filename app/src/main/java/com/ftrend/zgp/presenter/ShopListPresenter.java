@@ -24,6 +24,13 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
 
 
     @Override
+    public void showVipInfo() {
+        if (TradeHelper.vip != null) {
+            mView.showVipInfo();
+        }
+    }
+
+    @Override
     public void checkProdForDsc(int index) {
         if (TradeHelper.checkForDsc(index)) {
             mView.showSingleDscDialog(index);
@@ -49,12 +56,14 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
         TradeHelper.setTradeStatus(status);
         mView.returnHomeActivity(TradeHelper.convertTradeStatus(status));
         TradeHelper.clear();
+        //完成后清理vip信息
+        TradeHelper.clearVip();
     }
 
     @Override
     public void changeAmount(int index, double changeAmount) {
-        if (changeAmount<0){
-            changeAmount=TradeHelper.getTradeProdList().get(index).getAmount()-1==0?1:-1;
+        if (changeAmount < 0) {
+            changeAmount = TradeHelper.getTradeProdList().get(index).getAmount() - 1 == 0 ? 1 : -1;
         }
         TradeHelper.changeAmount(index, changeAmount);
         updateTradeInfo();

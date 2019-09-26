@@ -107,6 +107,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
             mPresenter = ShopListPresenter.createPresenter(this);
         }
         EventBus.getDefault().register(this);
+        mPresenter.showVipInfo();
     }
 
     @Override
@@ -174,7 +175,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         if (event.getTarget() == Event.TARGET_SHOP_LIST) {
             switch (event.getType()) {
                 case Event.TYPE_REFRESH:
-                    //TODO 2019年9月19日15:08:49 此处数据上的更新后续考虑如何放进P层
                     if (event.getData() != null) {
                         mProdAdapter.getData().get(oldPosition).setPrice((Double) event.getData());
                     }
@@ -187,6 +187,13 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     break;
                 case Event.TYPE_REFRESH_VIP_INFO:
                     showVipInfo((VipInfo) event.getData());
+                    mProdAdapter.notifyDataSetChanged();
+                    mPresenter.updateTradeInfo();
+                    break;
+                case Event.TYPE_ENTER_SCAN:
+                    Intent intent = new Intent("com.summi.scan");
+                    intent.setPackage("com.sunmi.sunmiqrcodescanner");
+                    startActivityForResult(intent, 001);
                     break;
                 default:
                     break;
@@ -206,6 +213,14 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         mCardGradeTv.setText(String.format("%s/%s", body.getCardCode(), body.getVipGrade()));
     }
 
+
+    @Override
+    public void showVipInfo() {
+        mVipInfoLayout.setVisibility(View.VISIBLE);
+        mVipCodeTv.setText(TradeHelper.vip.getVipCode());
+        mVipNameTv.setText(TradeHelper.vip.getVipName());
+        mCardGradeTv.setText(String.format("%s/%s", TradeHelper.vip.getCardCode(), TradeHelper.vip.getVipGrade()));
+    }
 
     @Override
     public void showTradeProd(final List<TradeProd> prodList) {
