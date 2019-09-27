@@ -110,8 +110,9 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
     }
 
     @Override
-    public void cancelPriceChange() {
+    public void cancelPriceChange(int index) {
         TradeHelper.rollackPriceChangeInShopCart();
+        mView.cancelAddProduct(index);
         updateTradeInfo();
     }
 

@@ -233,7 +233,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @Override
     public void setScanProdPosition(int index) {
-        mProdRecyclerView.scrollToPosition(index);
+        mProdRecyclerView.smoothScrollToPosition(index);
         if (oldPosition != -1 && oldPosition < mProdAdapter.getItemCount()) {
             mProdAdapter.getData().get(oldPosition).setSelect(false);
             mProdAdapter.notifyItemChanged(oldPosition);
@@ -246,6 +246,11 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @Override
     public void noScanProdPosition() {
         MessageUtil.showError("商品库中无此商品");
+    }
+
+    @Override
+    public void cancelAddProduct(int index) {
+        mProdAdapter.notifyItemChanged(index);
     }
 
     @OnClick(R.id.shop_cart_bottom_btn_car)
@@ -289,7 +294,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
                 mPresenter.updateTradeInfo();
             }
             if (event.getType() == Event.TYPE_CANCEL_PRICE_CHANGE) {
-                mPresenter.cancelPriceChange();
+                mPresenter.cancelPriceChange((int) event.getData());
             }
         }
     }

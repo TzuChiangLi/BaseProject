@@ -194,7 +194,7 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
     public void close() {
         if (mContext instanceof ShopCartActivity) {
             //需要撤销添加的最后一条
-            Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE);
+            Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE,index);
         }
         KeyboardUtils.hideSoftInput(this);
         dismiss();
