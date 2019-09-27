@@ -339,8 +339,9 @@ public interface Contract {
 
         /**
          * 取消改价操作，购物车已添加的商品回滚
+         * @param index 索引
          */
-        void cancelPriceChange();
+        void cancelPriceChange(int index);
 
         /**
          * 更新交易信息
@@ -413,6 +414,13 @@ public interface Contract {
          * 扫码的商品不存在
          */
         void noScanProdPosition();
+
+        /**
+         * 撤销商品添加
+         *
+         * @param index 索引
+         */
+        void cancelAddProduct(int index);
     }
 
     interface ShopListPresenter {
