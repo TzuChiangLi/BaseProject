@@ -1,6 +1,8 @@
 package com.ftrend.zgp.presenter;
 
 import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.model.AppParams;
+import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Handover;
 import com.ftrend.zgp.model.HandoverRecord;
 import com.ftrend.zgp.utils.HandoverHelper;
@@ -9,6 +11,7 @@ import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,6 +146,22 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
     public void doHandover() {
         if (ZgParams.isIsOnline()) {
             RestSubscribe.getInstance().posEnd(ZgParams.getPosCode(), new RestCallback(regHandler));
+            // 上传APP配置参数，失败不影响交班结果（只上传必要的参数）
+            List<AppParams> appParamsList = SQLite.select().from(AppParams.class)
+                    .where(AppParams_Table.paramName.in("printerConfig", "lastDep", "lastUser"))
+                    .queryList();
+            RestSubscribe.getInstance().uploadAppParams(ZgParams.getPosCode(), appParamsList,
+                    new RestCallback(new RestResultHandler() {
+                        @Override
+                        public void onSuccess(Map<String, Object> body) {
+                            // 无需处理上传结果
+                        }
+
+                        @Override
+                        public void onFailed(String errorCode, String errorMsg) {
+                            // 无需处理上传结果
+                        }
+                    }));
         } else {
             mView.showOfflineTip();
         }
