@@ -3,12 +3,12 @@ package com.ftrend.zgp.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.Dep_Table;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.model.User_Table;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.EncryptUtill;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -53,6 +53,8 @@ public class LoginPresenter implements Contract.LoginPresenter {
             if (user != null) {
                 if (user.getUserPwd().equals(EncryptUtill.pwdEncrypt(userPwd))) {
                     mView.loginSuccess(user, dep);
+                    //保存静态变量
+                    ZgParams.saveCurrentInfo(user, dep);
                 } else {
                     mView.loginFailed("用户名或密码错误\n请重试！");
                 }

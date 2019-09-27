@@ -15,7 +15,6 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.presenter.LoginPresenter;
-import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
@@ -122,8 +121,6 @@ import butterknife.OnClick;
 
     @Override
     public void loginSuccess(User user, Dep dep) {
-        //此处保存静态变量
-        ZgParams.saveCurrentInfo(user, dep);
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         startActivity(intent);
         finish();
