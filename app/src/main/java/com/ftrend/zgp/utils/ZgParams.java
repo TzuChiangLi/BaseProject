@@ -172,6 +172,7 @@ public class ZgParams {
     public static void clearCurrentInfo() {
         currentDep = new Dep();
         currentUser = new User();
+        TradeHelper.clearVip();
     }
 
     /**

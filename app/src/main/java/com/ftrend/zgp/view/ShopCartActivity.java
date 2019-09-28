@@ -253,6 +253,11 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         mProdAdapter.notifyItemChanged(index);
     }
 
+    @Override
+    public void updateOrderInfo() {
+        mProdAdapter.notifyDataSetChanged();
+    }
+
     @OnClick(R.id.shop_cart_bottom_btn_car)
     public void goShopListActivity() {
         if (!"0".equals(mTipTv.getText().toString())) {
@@ -338,7 +343,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @Override
     protected void onRestart() {
         super.onRestart();
-        mPresenter.initOrderInfo(lsNo);
+        mPresenter.updateOrderInfo();
     }
 
     @Override

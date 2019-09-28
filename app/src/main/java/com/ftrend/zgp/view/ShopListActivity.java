@@ -16,11 +16,11 @@ import com.ftrend.zgp.adapter.ShopAdapter;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
-import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.presenter.ShopListPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.VipWayDialog;
 import com.gyf.immersionbar.ImmersionBar;
@@ -178,6 +178,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     if (event.getData() != null) {
                         mProdAdapter.getData().get(oldPosition).setPrice((Double) event.getData());
                     }
+                    LogUtil.d("----oldPosition："+oldPosition);
                     mProdAdapter.notifyItemChanged(oldPosition);
                     mPresenter.updateTradeInfo();
                     break;
@@ -186,7 +187,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     mPresenter.updateTradeInfo();
                     break;
                 case Event.TYPE_REFRESH_VIP_INFO:
-                    showVipInfo((VipInfo) event.getData());
+                    showVipInfoOnline();
                     mProdAdapter.notifyDataSetChanged();
                     mPresenter.updateTradeInfo();
                     break;
@@ -203,23 +204,27 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     /**
      * 展示会员信息
-     *
-     * @param body json数据
      */
-    private void showVipInfo(VipInfo body) {
-        mVipInfoLayout.setVisibility(View.VISIBLE);
-        mVipCodeTv.setText(body.getVipCode());
-        mVipNameTv.setText(body.getVipName());
-        mCardGradeTv.setText(String.format("%s/%s", body.getCardCode(), body.getVipGrade()));
-    }
-
-
     @Override
-    public void showVipInfo() {
+    public void showVipInfoOnline() {
         mVipInfoLayout.setVisibility(View.VISIBLE);
         mVipCodeTv.setText(TradeHelper.vip.getVipCode());
         mVipNameTv.setText(TradeHelper.vip.getVipName());
         mCardGradeTv.setText(String.format("%s/%s", TradeHelper.vip.getCardCode(), TradeHelper.vip.getVipGrade()));
+    }
+
+
+    @Override
+    public void showVipInfoOffline() {
+        mVipInfoLayout.setVisibility(View.VISIBLE);
+        mVipCodeTv.setText(TradeHelper.getTrade().getVipCode());
+        mVipNameTv.setVisibility(View.GONE);
+        mCardGradeTv.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showError(String error) {
+        MessageUtil.showError(error);
     }
 
     @Override

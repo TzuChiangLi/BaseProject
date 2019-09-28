@@ -56,6 +56,13 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
     @Override
     public void initOrderInfo(String lsNo) {
         mView.updateTradeProd(TradeHelper.getTradeCount(), TradeHelper.getTradeTotal());
+
+    }
+
+    @Override
+    public void updateOrderInfo() {
+        mView.updateOrderInfo();
+        mView.updateTradeProd(TradeHelper.getTradeCount(), TradeHelper.getTradeTotal());
     }
 
     @Override

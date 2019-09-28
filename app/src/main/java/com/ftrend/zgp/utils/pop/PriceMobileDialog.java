@@ -154,6 +154,7 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
 
     private void queryVipInfo() {
         if (ZgParams.isIsOnline()) {
+            //在线查询会员信息
             RestSubscribe.getInstance().queryVipInfo(mEdt.getText().toString(), new RestCallback(regHandler));
         } else {
             MessageUtil.showWarning("当前为单机模式，无法查询会员信息");
@@ -177,6 +178,8 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
             vipInfo.setForceDsc(body.get("forceDsc").toString());
             vipInfo.setCardCode(body.get("cardCode").toString());
             vipInfo.setDscProdIsDsc(body.get("dscProdIsDsc").toString());
+            //保存会员信息到流水
+            TradeHelper.saveVip();
             //刷新会员优惠
             TradeHelper.saveVipDsc();
             Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_VIP_INFO, vipInfo);
@@ -194,7 +197,7 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
     public void close() {
         if (mContext instanceof ShopCartActivity) {
             //需要撤销添加的最后一条
-            Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE,index);
+            Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE, index);
         }
         KeyboardUtils.hideSoftInput(this);
         dismiss();

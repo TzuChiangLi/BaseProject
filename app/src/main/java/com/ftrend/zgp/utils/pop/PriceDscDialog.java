@@ -21,6 +21,7 @@ import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.utils.DscHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
@@ -106,10 +107,11 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
      * 初始化整单优惠数据
      */
     private void initWholeDscData() {
+        DscHelper.beginWholeDsc();
         mMaxRateTv.setText(TradeHelper.getMaxWholeRate() == 0 ? "(无优惠)"
                 : "(0-" + TradeHelper.getMaxWholeRate() + "%)");
         mMaxDscTv.setText(TradeHelper.getMaxWholeDsc() == 0 ? "(无优惠)"
-                : "(0-" + TradeHelper.getMaxWholeDsc() + "元)");
+                : "(0-" + TradeHelper.priceFormat(TradeHelper.getMaxWholeDsc()) + "元)");
         mPriceTv.setText(String.valueOf(TradeHelper.getWholeForDscPrice()));
     }
 
@@ -182,14 +184,14 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
      */
     private void initSingleDscData() {
         //获取该条商品的信息
-        TradeProd tradeProd = TradeHelper.getTradeProdList().get(index);
+        TradeProd tradeProd = TradeHelper.getProdList().get(index);
         mPriceTv.setText(String.valueOf(tradeProd.getPrice()));
         mTotalTv.setText(String.valueOf(tradeProd.getTotal() / tradeProd.getAmount()));
         mProdNameTv.setText(tradeProd.getProdName());
         mMaxRateTv.setText(TradeHelper.getMaxSingleRate(index) == 0 ? "(无优惠)"
                 : "(0-" + TradeHelper.getMaxSingleRate(index) + "%)");
         mMaxDscTv.setText(TradeHelper.getMaxSingleDsc(index) == 0 ? "(无优惠)"
-                : "(0-" + TradeHelper.getMaxSingleDsc(index) + "元)");
+                : "(0-" + TradeHelper.priceFormat(TradeHelper.getMaxSingleDsc(index)) + "元)");
         mDscEdt.setText(String.valueOf(tradeProd.getManuDsc() + tradeProd.getVipDsc() + tradeProd.getTranDsc()));
         mRateEdt.setText(String.valueOf(TradeHelper.getSingleRate(index, Double.parseDouble(mDscEdt.getText().toString()))));
         mRateEdt.selectAll();
@@ -203,6 +205,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
             Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE);
         }
         KeyboardUtils.hideSoftInput(this);
+        DscHelper.cancelWholeDsc();
         dismiss();
     }
 
@@ -228,6 +231,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
             if (TextUtils.isEmpty(mEdt.getText().toString())) {
                 Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE);
             }
+            DscHelper.cancelWholeDsc();
         }
     }
 
@@ -275,8 +279,8 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                             errorTextColor(mRateEdt);
                         } else {
                             restoreTextColor(mRateEdt);
-                            mTotalTv.setText(String.format("%.2f", TradeHelper.getWholeTotal(Integer.valueOf(s.toString()))));
-                            mDscEdt.setText(String.format("%.2f", TradeHelper.getWholeDsc(Integer.valueOf(s.toString()))));
+                            mTotalTv.setText(String.format("%.2f", DscHelper.getWholeTotal(Integer.valueOf(s.toString()))));
+                            mDscEdt.setText(String.format("%.2f", DscHelper.getWholeDsc(Integer.valueOf(s.toString()))));
                         }
                         break;
                     default:
@@ -332,8 +336,8 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                             errorTextColor(mDscEdt);
                         } else {
                             restoreTextColor(mDscEdt);
-                            mRateEdt.setText(String.valueOf(TradeHelper.getWholeRate(Double.parseDouble(s.toString()))));
-                            mTotalTv.setText(String.format("%.2f", TradeHelper.getWholeTotal(Double.parseDouble(s.toString()))));
+                            mRateEdt.setText(String.valueOf(DscHelper.getWholeRate(Double.parseDouble(s.toString()))));
+                            mTotalTv.setText(String.format("%.2f", DscHelper.getWholeTotal(Double.parseDouble(s.toString()))));
                         }
                         break;
                     default:
@@ -413,6 +417,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
 
     @Override
     public void onHideClick(View v) {
+        DscHelper.cancelWholeDsc();
         dismiss();
     }
 
@@ -469,6 +474,8 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                 if (Integer.parseInt(mRateEdt.getText().toString()) <= TradeHelper.getMaxSingleRate(index) &&
                         Double.parseDouble(mDscEdt.getText().toString()) <= TradeHelper.getMaxSingleDsc(index)) {
                     //两个都为true的时候，才能保存成功
+                    //初始化整单优惠列表
+
                     if (TradeHelper.saveSingleDsc(index, Double.parseDouble(mDscEdt.getText().toString()))) {
                         Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH);
                         dismiss();
@@ -491,11 +498,11 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                             @Override
                             public void onLeftBtnClick(BasePopupView popView) {
                                 //两个都为true的时候，才能保存成功
-                                if (TradeHelper.saveWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
+                                if (DscHelper.commitWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
                                     Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
                                     popView.dismiss();
                                     dismiss();
-                                }else {
+                                } else {
                                     MessageUtil.showError("操作失败，请重试");
                                 }
                             }
@@ -507,7 +514,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                         });
                     } else {
                         //两个都为true的时候，才能保存成功
-                        if (TradeHelper.saveWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
+                        if (DscHelper.commitWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
                             Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
                             dismiss();
                         }

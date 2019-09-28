@@ -4,7 +4,15 @@ import android.text.TextUtils;
 
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.http.RestCallback;
+import com.ftrend.zgp.utils.http.RestResultHandler;
+import com.ftrend.zgp.utils.http.RestSubscribe;
+
+import java.util.Map;
 
 /**
  * 收银-选择商品P层
@@ -26,9 +34,44 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
     @Override
     public void showVipInfo() {
         if (TradeHelper.vip != null) {
-            mView.showVipInfo();
+            mView.showVipInfoOnline();
+            return;
+        }
+
+        if (!TextUtils.isEmpty(TradeHelper.getTrade().getVipCode())) {
+            //未结、未挂起的单据有会员优惠的信息，但是vip是null
+            if (ZgParams.isIsOnline()) {
+                RestSubscribe.getInstance().queryVipInfo(TradeHelper.getTrade().getVipCode(), new RestCallback(regHandler));
+            } else {
+                mView.showVipInfoOffline();
+            }
         }
     }
+
+    private RestResultHandler regHandler = new RestResultHandler() {
+        @Override
+        public void onSuccess(Map<String, Object> body) {
+            VipInfo vipInfo = TradeHelper.vip();
+            vipInfo.setVipName(body.get("vipName").toString());
+            vipInfo.setVipCode(body.get("vipCode").toString());
+            vipInfo.setVipDscRate(Double.parseDouble(body.get("vipDscRate").toString()));
+            vipInfo.setVipGrade(body.get("vipGrade").toString());
+            vipInfo.setVipPriceType(Double.parseDouble(body.get("vipPriceType").toString()));
+            vipInfo.setRateRule(Double.parseDouble(body.get("rateRule").toString()));
+            vipInfo.setForceDsc(body.get("forceDsc").toString());
+            vipInfo.setCardCode(body.get("cardCode").toString());
+            vipInfo.setDscProdIsDsc(body.get("dscProdIsDsc").toString());
+            //保存会员信息
+            TradeHelper.saveVip();
+            //刷新界面
+            Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_VIP_INFO, vipInfo);
+        }
+
+        @Override
+        public void onFailed(String errorCode, String errorMsg) {
+            mView.showError(errorCode + errorMsg);
+        }
+    };
 
     @Override
     public void checkProdForDsc(int index) {
@@ -44,7 +87,7 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
     public void initShopList(String lsNo) {
         TradeHelper.initSale();
         //加载商品列表
-        mView.showTradeProd(TradeHelper.getTradeProdList());
+        mView.showTradeProd(TradeHelper.getProdList());
         //获取商品总件数
         mView.updateCount(TradeHelper.getTradeCount());
         //获取商品总金额
@@ -63,7 +106,7 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
     @Override
     public void changeAmount(int index, double changeAmount) {
         if (changeAmount < 0) {
-            changeAmount = TradeHelper.getTradeProdList().get(index).getAmount() - 1 == 0 ? 1 : -1;
+            changeAmount = TradeHelper.getProdList().get(index).getAmount() - 1 == 0 ? 0 : -1;
         }
         TradeHelper.changeAmount(index, changeAmount);
         updateTradeInfo();

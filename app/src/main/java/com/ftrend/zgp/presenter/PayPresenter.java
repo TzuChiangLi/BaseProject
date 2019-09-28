@@ -46,6 +46,7 @@ public class PayPresenter implements Contract.PayPresenter {
             if (TradeHelper.pay(appPayType)) {
                 //插入交易流水队列
                 TradeHelper.uploadTradeQueue();
+                TradeHelper.clearVip();
                 return true;
             } else {
                 return false;

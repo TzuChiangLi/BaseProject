@@ -316,6 +316,11 @@ public interface Contract {
         void initOrderInfo(String lsNo);
 
         /**
+         * 刷新购物车信息
+         */
+        void updateOrderInfo();
+
+        /**
          * 筛选商品
          *
          * @param key 筛选关键字
@@ -339,6 +344,7 @@ public interface Contract {
 
         /**
          * 取消改价操作，购物车已添加的商品回滚
+         *
          * @param index 索引
          */
         void cancelPriceChange(int index);
@@ -421,6 +427,11 @@ public interface Contract {
          * @param index 索引
          */
         void cancelAddProduct(int index);
+
+        /**
+         * 刷新信息
+         */
+        void updateOrderInfo();
     }
 
     interface ShopListPresenter {
@@ -500,7 +511,19 @@ public interface Contract {
         /**
          * 展示会员信息
          */
-        void showVipInfo();
+        void showVipInfoOnline();
+
+        /**
+         * 检测到交易已有会员优惠，但是此时离线
+         */
+        void showVipInfoOffline();
+
+        /**
+         * 弹窗显示错误信息文本
+         *
+         * @param error 错误信息文本
+         */
+        void showError(String error);
 
         /**
          * 显示流水单内商品

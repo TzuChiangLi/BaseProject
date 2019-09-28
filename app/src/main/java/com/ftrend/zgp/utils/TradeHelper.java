@@ -23,7 +23,9 @@ import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.raizlabs.android.dbflow.sql.language.Method.count;
 import static com.raizlabs.android.dbflow.sql.language.Method.sum;
@@ -96,12 +98,13 @@ public class TradeHelper {
     // 会员信息
     public static VipInfo vip = null;
 
-
     public static Trade getTrade() {
         return trade;
     }
 
-
+    public static List<TradeProd> getProdList() {
+        return prodList;
+    }
     //region clear----清空当前交易信息
 
     /**
@@ -307,7 +310,7 @@ public class TradeHelper {
     /**
      * 重新汇总流水金额：优惠、合计
      */
-    private static boolean recalcTotal() {
+    public static boolean recalcTotal() {
         double dscTotal = 0;
         double total = 0;
 
@@ -358,6 +361,34 @@ public class TradeHelper {
         SQLite.delete(Trade.class).execute();
         SQLite.delete(TradePay.class).execute();
         SQLite.delete(TradeProd.class).execute();
+    }
+
+
+    /**
+     * @return 购物车中未行清的所有商品的数量
+     */
+    public static List<Map<String, Long>> getProdCountList() {
+        List<Map<String, Long>> prodCountList = new ArrayList<>();
+        Map<String, Long> map = new HashMap<>();
+        long count = 0;
+        for (TradeProd prod : prodList) {
+            if (TextUtils.isEmpty(prod.getBarCode())) {
+                count = SQLite.select(count()).from(TradeProd.class)
+                        .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                        .and(TradeProd_Table.prodCode.eq(prod.getProdCode()))
+                        .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
+                        .count();
+            } else {
+                count = SQLite.select(count()).from(TradeProd.class)
+                        .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                        .and(TradeProd_Table.barCode.eq(prod.getBarCode()))
+                        .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
+                        .count();
+            }
+            map.put(prod.getProdCode(), count);
+        }
+        prodCountList.add(map);
+        return prodCountList;
     }
 
 
@@ -413,14 +444,10 @@ public class TradeHelper {
     }
 
     /**
-     * 购物车 - 获取商品列表（过滤掉了已被行清的商品）
-     *
-     * @return 购物车内商品
+     * @return 刷新商品列表
      */
-    public static List<TradeProd> getTradeProdList() {
-        return prodList;
+    public static void getTradeProdList() {
     }
-
 
     /**
      * 该商品是否有改价权
@@ -569,11 +596,13 @@ public class TradeHelper {
             return SQLite.select(count()).from(TradeProd.class)
                     .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
                     .and(TradeProd_Table.prodCode.eq(prodCode))
+                    .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
                     .count();
         } else {
             return SQLite.select(count()).from(TradeProd.class)
                     .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
                     .and(TradeProd_Table.barCode.eq(barCode))
+                    .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
                     .count();
         }
     }
@@ -749,7 +778,9 @@ public class TradeHelper {
      * @return
      */
     public static double getWholeDsc(int rate) {
-        return priceFormat(getWholePrice() * rate / 100);
+
+        return priceFormat(DscHelper.getAfterWholePrice() * rate / 100);
+//        return priceFormat(getWholePrice() * rate / 100);
     }
 
     /**
@@ -885,14 +916,14 @@ public class TradeHelper {
                         .querySingle().getMinimumPrice();
             } else {
                 minumPrice = SQLite.select(DepProduct_Table.minimumPrice).from(DepProduct.class)
-                        .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
+                        .where(DepProduct_Table.barCode.eq(prod.getBarCode()))
                         .querySingle().getMinimumPrice();
             }
             if (maxDsc > 0) {
                 dsc = prod.getPrice() * rate;
                 //优惠金额与最低限价相比，超过最低限价则取最低限价
                 dsc = dsc >= prod.getPrice() - minumPrice ? prod.getPrice() - minumPrice : dsc;
-                dsc = i == prodList.size() - 1 ? wholeDsc : dsc;
+                dsc = i == tempList.size() - 1 ? wholeDsc : dsc;
                 //如果会员优惠比整单优惠金额大，那么跳过本商品
                 //整单优惠为0，保留会员优惠
                 if (prod.getVipDsc() > dsc) {
@@ -933,6 +964,20 @@ public class TradeHelper {
      */
     public static void clearVip() {
         vip = null;
+    }
+
+    /**
+     * 流水保存vip信息
+     *
+     * @return
+     */
+    public static boolean saveVip() {
+        if (vip != null) {
+            trade.setVipCode(vip.getVipCode());
+            trade.setCustType("2");
+            trade.setCardCode(vip.getCardCode());
+        }
+        return trade.save();
     }
 
     /**
@@ -1099,6 +1144,9 @@ public class TradeHelper {
                     .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
                     .limit(1)
                     .querySingle();
+            if (tradeProd == null) {
+                break;
+            }
             trade.setProdName(tradeProd.getProdName());
             trade.setProdNum(tradeProd.getAmount());
 
