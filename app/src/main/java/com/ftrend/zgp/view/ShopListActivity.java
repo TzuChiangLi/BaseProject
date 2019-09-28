@@ -19,8 +19,8 @@ import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.ShopListPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.VipWayDialog;
 import com.gyf.immersionbar.ImmersionBar;
@@ -57,6 +57,8 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     TextView mCountTv;
     @BindView(R.id.shop_list_btn_cancel)
     Button mCancelBtn;
+    @BindView(R.id.shop_list_btn_add)
+    Button mAddBtn;
     @BindView(R.id.shop_list_btn_vip)
     Button mVipBtn;
     @BindView(R.id.shop_list_btn_hang_up)
@@ -76,6 +78,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     private ShopAdapter<TradeProd> mProdAdapter;
     private Contract.ShopListPresenter mPresenter;
     private int oldPosition = -1;
+    private boolean fromOutOrder = false;
 
 
     /**
@@ -98,7 +101,15 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     protected void initData() {
-        mPresenter.initShopList(TradeHelper.getTrade().getLsNo());
+        //此处流水单号可能为空
+        Intent intent = getIntent();
+        fromOutOrder = intent.getBooleanExtra("from", false);
+        if (fromOutOrder) {
+            mPresenter.initShopList(intent.getStringExtra("lsNo"));
+        } else {
+            mPresenter.initShopList(null);
+        }
+        mPresenter.showVipInfo();
     }
 
     @Override
@@ -107,7 +118,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
             mPresenter = ShopListPresenter.createPresenter(this);
         }
         EventBus.getDefault().register(this);
-        mPresenter.showVipInfo();
     }
 
     @Override
@@ -146,6 +156,11 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         MessageUtil.showWholeDscChange(this);
     }
 
+    @OnClick(R.id.shop_list_btn_add)
+    public void add() {
+        finish();
+    }
+
 
     @Override
     public void onLeftClick(View v) {
@@ -178,7 +193,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     if (event.getData() != null) {
                         mProdAdapter.getData().get(oldPosition).setPrice((Double) event.getData());
                     }
-                    LogUtil.d("----oldPosition："+oldPosition);
                     mProdAdapter.notifyItemChanged(oldPosition);
                     mPresenter.updateTradeInfo();
                     break;
@@ -201,6 +215,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
             }
         }
     }
+
 
     /**
      * 展示会员信息
@@ -237,7 +252,9 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         mProdAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                double amount = prodList.get(position).getAmount();
+                if (ClickUtil.onceClick()) {
+                    return;
+                }
                 switch (view.getId()) {
                     case R.id.shop_list_rv_img_add:
                         //商品数量+1

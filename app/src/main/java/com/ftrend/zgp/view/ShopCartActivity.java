@@ -83,6 +83,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     private int oldPosition = -1;
     private static int START_SCAN = 001;
     private String lsNo = "";
+    private boolean fromOutOrder = false;
 
 
     @Override
@@ -103,8 +104,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
             mPresenter = ShopCartPresenter.createPresenter(this);
         }
         EventBus.getDefault().register(this);
-        lsNo = TradeHelper.getTrade().getLsNo();
-        mPresenter.initOrderInfo(lsNo);
+        mPresenter.fromOutOrder(getIntent());
         mSearchEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -130,6 +130,19 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         mTitleBar.setOnTitleBarListener(this);
     }
 
+
+    @Override
+    public void initOutOrder(String lsNo) {
+        mPresenter.initOrderInfo(lsNo);
+        fromOutOrder = true;
+        this.lsNo = lsNo;
+    }
+
+    @Override
+    public void initNewOrder() {
+        lsNo = TradeHelper.getTrade().getLsNo();
+        mPresenter.initOrderInfo(lsNo);
+    }
 
     @Override
     public void setClsList(final List<DepCls> clsList) {
@@ -262,6 +275,8 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     public void goShopListActivity() {
         if (!"0".equals(mTipTv.getText().toString())) {
             Intent intent = new Intent(ShopCartActivity.this, ShopListActivity.class);
+            intent.putExtra("from", fromOutOrder);
+            intent.putExtra("lsNo", lsNo);
             startActivity(intent);
         } else {
             MessageUtil.showWarning("购物车为空");

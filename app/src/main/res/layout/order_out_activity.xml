@@ -46,6 +46,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="@string/out_btn_close" />
+            android:background="@drawable/shop_btn_red_selector"
+            android:text="@string/out_btn_close"
+            android:textColor="@color/common_white" />
     </RelativeLayout>
 </RelativeLayout>

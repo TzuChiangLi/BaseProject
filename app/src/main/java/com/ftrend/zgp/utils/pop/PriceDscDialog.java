@@ -26,7 +26,6 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.view.ShopCartActivity;
-import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.core.BottomPopupView;
 
 import butterknife.BindView;
@@ -493,25 +492,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                 if (Integer.parseInt(mRateEdt.getText().toString()) <= TradeHelper.getMaxWholeRate() &&
                         Double.parseDouble(mDscEdt.getText().toString()) <= TradeHelper.getMaxWholeDsc()) {
                     if (TradeHelper.getWholeForDscPrice() == 0) {
-                        MessageUtil.info("本单商品已享受其他优惠，如确定将取消先前优惠，是否继续？");
-                        MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
-                            @Override
-                            public void onLeftBtnClick(BasePopupView popView) {
-                                //两个都为true的时候，才能保存成功
-                                if (DscHelper.commitWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
-                                    Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
-                                    popView.dismiss();
-                                    dismiss();
-                                } else {
-                                    MessageUtil.showError("操作失败，请重试");
-                                }
-                            }
-
-                            @Override
-                            public void onRightBtnClick(BasePopupView popView) {
-                                popView.dismiss();
-                            }
-                        });
+                        MessageUtil.show("本笔交易已无可优惠商品");
                     } else {
                         //两个都为true的时候，才能保存成功
                         if (DscHelper.commitWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
@@ -552,3 +533,23 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         edt.setTextColor(Color.BLACK);
     }
 }
+
+//                        MessageUtil.info("本单商品已享受其他优惠，如确定将取消先前优惠，是否继续？");
+//                        MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
+//                            @Override
+//                            public void onLeftBtnClick(BasePopupView popView) {
+//                                //两个都为true的时候，才能保存成功
+//                                if (DscHelper.commitWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
+//                                    Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
+//                                    popView.dismiss();
+//                                    dismiss();
+//                                } else {
+//                                    MessageUtil.showError("操作失败，请重试");
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onRightBtnClick(BasePopupView popView) {
+//                                popView.dismiss();
+//                            }
+//                        });

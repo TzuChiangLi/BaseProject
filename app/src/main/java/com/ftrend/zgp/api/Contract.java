@@ -1,6 +1,7 @@
 package com.ftrend.zgp.api;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.ftrend.zgp.base.BaseView;
 import com.ftrend.zgp.model.Dep;
@@ -28,6 +29,7 @@ public interface Contract {
          * 初始化界面数据
          */
         void initView();
+
 
         /**
          * 销毁，防止泄露
@@ -267,10 +269,8 @@ public interface Contract {
 
         /**
          * 跳转到收银选择商品界面
-         *
-         * @param lsNo 流水单号
          */
-        void goShopChartActivity(String lsNo);
+        void goShopChartActivity();
 
         /**
          * 跳转到交班界面
@@ -303,6 +303,11 @@ public interface Contract {
      *
      */
     interface ShopCartPresenter {
+        /**
+         * @param intent 跳转
+         */
+        void fromOutOrder(Intent intent);
+
         /**
          * 加载商品信息
          */
@@ -372,6 +377,16 @@ public interface Contract {
      *
      */
     interface ShopCartView extends BaseView<Contract.ShopCartPresenter> {
+        /**
+         * 取单入口
+         */
+        void initOutOrder(String lsNo);
+
+        /**
+         * 收银入口
+         */
+        void initNewOrder();
+
         /**
          * 设置商品类别
          *
@@ -449,11 +464,12 @@ public interface Contract {
         void checkProdForDsc(int index);
 
         /**
-         * 显示此时购物车内的所有商品
+         * 取单：显示此时购物车内的所有商品
          *
          * @param lsNo 流水单号
          */
         void initShopList(String lsNo);
+
 
         /**
          * 设置交易状态
@@ -508,6 +524,7 @@ public interface Contract {
     }
 
     interface ShopListView extends BaseView<Contract.ShopListPresenter> {
+
         /**
          * 展示会员信息
          */

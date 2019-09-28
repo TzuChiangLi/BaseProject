@@ -99,7 +99,7 @@ public class HomePresenter implements Contract.HomePresenter {
         }
         //初始化流水单信息
         TradeHelper.initSale();
-        mView.goShopChartActivity(TradeHelper.getTrade().getLsNo());
+        mView.goShopChartActivity();
     }
 
     @Override

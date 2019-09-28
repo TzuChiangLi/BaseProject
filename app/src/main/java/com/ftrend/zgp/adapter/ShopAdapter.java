@@ -84,12 +84,13 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 helper.setText(R.id.pay_way_rv_tv, ((Menu.MenuList) item).getMenuName());
                 break;
             case 4:
+                //取单
                 helper.setText(R.id.out_order_tv_lsno, ((Trade) item).getLsNo());
                 helper.setText(R.id.out_order_tv_num, String.valueOf(((Trade) item).getProdNum()).replace(".0", ""));
                 helper.setText(R.id.out_order_tv_total, String.format("%.2f", ((Trade) item).getTotal()));
                 helper.setText(R.id.out_order_tv_prod_name, ((Trade) item).getProdName());
                 helper.setText(R.id.out_order_tv_amount, String.valueOf(((Trade) item).getAmount()).replace(".0", ""));
-
+                helper.addOnClickListener(R.id.out_order_btn_get_out);
                 break;
             default:
                 break;

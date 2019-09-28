@@ -157,6 +157,27 @@ public class TradeHelper {
                     .querySingle();
         }
     }
+
+    /**
+     * 取单初始化单据信息
+     *
+     * @param lsNo 取单取出的流水单号
+     */
+    public static void initSale(String lsNo) {
+        trade = SQLite.select().from(Trade.class)
+                .where(Trade_Table.status.eq(TRADE_STATUS_HANGUP))
+                .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
+                .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
+                .and(Trade_Table.lsNo.eq(lsNo))
+                .querySingle();
+        prodList = SQLite.select().from(TradeProd.class)
+                .where(TradeProd_Table.lsNo.eq(lsNo))
+                .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
+                .queryList();
+        pay = SQLite.select().from(TradePay.class)
+                .where(TradePay_Table.lsNo.eq(lsNo))
+                .querySingle();
+    }
     //endregion
 
     //region addProduct----添加到商品表
@@ -370,7 +391,7 @@ public class TradeHelper {
     public static List<Map<String, Long>> getProdCountList() {
         List<Map<String, Long>> prodCountList = new ArrayList<>();
         Map<String, Long> map = new HashMap<>();
-        long count = 0;
+        long count;
         for (TradeProd prod : prodList) {
             if (TextUtils.isEmpty(prod.getBarCode())) {
                 count = SQLite.select(count()).from(TradeProd.class)
@@ -443,11 +464,6 @@ public class TradeHelper {
         return total;
     }
 
-    /**
-     * @return 刷新商品列表
-     */
-    public static void getTradeProdList() {
-    }
 
     /**
      * 该商品是否有改价权
@@ -501,10 +517,11 @@ public class TradeHelper {
         TradeProd tradeProd = prodList.get(index);
         if (tradeProd != null) {
             tradeProd.setPrice(priceFormat(price));
-            //改价把手动优惠清掉
+            //改价把手动优惠+会员优惠清掉
             tradeProd.setSingleDsc(0);
             tradeProd.setWholeDsc(0);
             tradeProd.setManuDsc(0);
+            tradeProd.setVipDsc(0);
             tradeProd.setTotal(priceFormat(tradeProd.getAmount() * price));
         }
         if (tradeProd.save()) {
@@ -1021,12 +1038,11 @@ public class TradeHelper {
         if (ZgParams.getProgramEdition().equals(ZgParams.PROG_EDITION_BH)) {
             //百货版
             double rate = vip.getVipDscRate();
-            LogUtil.d("----rate：" + rate);
             double vipDsc, rateDsc;
             for (TradeProd prod : tempList) {
-                rateDsc = prod.getPrice() * (100 - rate) / 100;
-                //此处vipPrice是优惠后的价格
+                rateDsc = prod.getPrice() * (rate) / 100;
                 vipDsc = prod.getPrice() - queryVipPrice(vipPriceType, prod);
+                LogUtil.d("----rate/vip:" + rateDsc + "/" + vipDsc);
                 prod.setVipDsc(Math.max(rateDsc, vipDsc));
                 prod.setManuDsc(0);
                 prod.setWholeDsc(0);
@@ -1137,7 +1153,8 @@ public class TradeHelper {
      */
     public static List<Trade> getOutOrder() {
         List<Trade> tradeList = SQLite.select().distinct().from(Trade.class)
-                .where(Trade_Table.status.eq(TRADE_STATUS_HANGUP)).queryList();
+                .where(Trade_Table.status.eq(TRADE_STATUS_HANGUP))
+                .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode())).queryList();
 
         for (Trade trade : tradeList) {
             TradeProd tradeProd = SQLite.select().from(TradeProd.class)

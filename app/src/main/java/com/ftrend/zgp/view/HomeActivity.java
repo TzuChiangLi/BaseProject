@@ -146,7 +146,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
 
 
     @Override
-    public void goShopChartActivity(String lsNo) {
+    public void goShopChartActivity() {
         Intent intent = new Intent(HomeActivity.this, ShopCartActivity.class);
         startActivity(intent);
     }

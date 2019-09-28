@@ -26,6 +26,8 @@ public class OrderOutPresenter implements Contract.OrderOutPresenter {
 
     @Override
     public void onDestory() {
-
+        if (mView != null) {
+            mView = null;
+        }
     }
 }

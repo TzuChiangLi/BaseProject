@@ -37,7 +37,6 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
             mView.showVipInfoOnline();
             return;
         }
-
         if (!TextUtils.isEmpty(TradeHelper.getTrade().getVipCode())) {
             //未结、未挂起的单据有会员优惠的信息，但是vip是null
             if (ZgParams.isIsOnline()) {
@@ -85,7 +84,11 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
 
     @Override
     public void initShopList(String lsNo) {
-        TradeHelper.initSale();
+        if (TextUtils.isEmpty(lsNo)) {
+            TradeHelper.initSale();
+        } else {
+            TradeHelper.initSale(lsNo);
+        }
         //加载商品列表
         mView.showTradeProd(TradeHelper.getProdList());
         //获取商品总件数
@@ -93,6 +96,7 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
         //获取商品总金额
         mView.updateTotal(TradeHelper.getTradeTotal());
     }
+
 
     @Override
     public void setTradeStatus(String status) {
