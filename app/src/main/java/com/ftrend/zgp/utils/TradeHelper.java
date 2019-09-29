@@ -120,14 +120,23 @@ public class TradeHelper {
     //region initSale----初始化当前操作流水
 
     /**
-     * 初始化当前操作的交易流水，读取未结销售流水，不存在则创建新的流水
+     * 查询当前购物车交易流水
+     *
+     * @return 交易流水主表信息，如果购物车为空，返回null
      */
-    public static void initSale() {
-        trade = SQLite.select().from(Trade.class)
+    private static Trade getCartLs() {
+        return SQLite.select().from(Trade.class)
                 .where(Trade_Table.status.eq(TRADE_STATUS_NOTPAY))
                 .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
                 .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
                 .querySingle();
+    }
+
+    /**
+     * 初始化当前操作的交易流水，读取未结销售流水，不存在则创建新的流水
+     */
+    public static void initSale() {
+        trade = getCartLs();
         if (trade == null) {
             trade = new Trade();
             trade.setDepCode(ZgParams.getCurrentDep().getDepCode());
@@ -163,6 +172,7 @@ public class TradeHelper {
      *
      * @param lsNo 取单取出的流水单号
      */
+    @Deprecated
     public static void initSale(String lsNo) {
         trade = SQLite.select().from(Trade.class)
                 .where(Trade_Table.status.eq(TRADE_STATUS_HANGUP))
@@ -1177,6 +1187,48 @@ public class TradeHelper {
             }
         }
         return tradeList;
+    }
+
+    /**
+     * 取单
+     *
+     * @param lsNo 流水号
+     * @return
+     */
+    public static boolean orderOut(String lsNo) {
+        // 验证购物车是否为空
+        if (!cartIsEmpty()) {
+            Log.e(TAG, "取单失败：购物车不为空");
+            return false;
+        }
+
+        Trade trade = SQLite.select().from(Trade.class)
+                .where(Trade_Table.lsNo.eq(lsNo))
+                .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
+                .querySingle();
+        // 验证流水状态为：挂起
+        if (trade == null || !TRADE_STATUS_HANGUP.equals(trade.getStatus())) {
+            Log.e(TAG, "取单失败：流水号无效或流水不是挂起状态");
+            return false;
+        }
+        // 修改流水状态为：未结
+        trade.setStatus(TRADE_STATUS_NOTPAY);
+        if (trade.update()) {
+            // 取单成功，自动读取购物车流水
+            initSale();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 判断购物车是否为空
+     *
+     * @return
+     */
+    public static boolean cartIsEmpty() {
+        return getCartLs() == null;
     }
 
 

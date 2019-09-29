@@ -82,9 +82,6 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     private ShopAdapter<DepCls> mClsAdapter;
     private int oldPosition = -1;
     private static int START_SCAN = 001;
-    private String lsNo = "";
-    private boolean fromOutOrder = false;
-
 
     @Override
     protected int getLayoutID() {
@@ -104,7 +101,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
             mPresenter = ShopCartPresenter.createPresenter(this);
         }
         EventBus.getDefault().register(this);
-        mPresenter.fromOutOrder(getIntent());
+        mPresenter.initOrderInfo();
         mSearchEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -128,20 +125,6 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white).autoDarkModeEnable(true).init();
         mTitleBar.setRightIcon(ZgParams.isIsOnline() ? R.drawable.online : R.drawable.offline);
         mTitleBar.setOnTitleBarListener(this);
-    }
-
-
-    @Override
-    public void initOutOrder(String lsNo) {
-        mPresenter.initOrderInfo(lsNo);
-        fromOutOrder = true;
-        this.lsNo = lsNo;
-    }
-
-    @Override
-    public void initNewOrder() {
-        lsNo = TradeHelper.getTrade().getLsNo();
-        mPresenter.initOrderInfo(lsNo);
     }
 
     @Override
@@ -173,7 +156,6 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
                 Log.i("----sunmi", String.valueOf(hashMap.get("TYPE")));//这个是扫码的类型
                 Log.i("----sunmi", String.valueOf(hashMap.get("VALUE")));//这个是扫码的结果
             }
-
         }
     }
 
@@ -201,12 +183,12 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
                 mProdAdapter.getData().get(position).setSelect(true);
                 mProdAdapter.notifyItemChanged(position);
                 //添加到购物车中
-                mPresenter.addToShopCart((DepProduct) adapter.getItem(position), lsNo);
+                mPresenter.addToShopCart((DepProduct) adapter.getItem(position));
                 //如果商品价格是0，那么就弹出窗口
+                // TODO: 2019/9/29 价格为0也有可能是赠品，此处判断逻辑待优化
                 if (prodList.get(position).getPrice() == 0) {
                     MessageUtil.showPriceChange(ShopCartActivity.this, position);
                 }
-
             }
         });
     }
@@ -221,7 +203,6 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
             mProdAdapter.setNewData(null);
             mProdAdapter.setEmptyView(getLayoutInflater().inflate(R.layout.rv_item_empty, (ViewGroup) mProdRecyclerView.getParent(), false));
         }
-
     }
 
     @Override
@@ -275,13 +256,10 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     public void goShopListActivity() {
         if (!"0".equals(mTipTv.getText().toString())) {
             Intent intent = new Intent(ShopCartActivity.this, ShopListActivity.class);
-            intent.putExtra("from", fromOutOrder);
-            intent.putExtra("lsNo", lsNo);
             startActivity(intent);
         } else {
             MessageUtil.showWarning("购物车为空");
         }
-
     }
 
     @OnClick(R.id.shop_cart_bottom_tv_payment)
@@ -306,7 +284,6 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         startActivityForResult(intent, START_SCAN);
     }
 
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessage(Event event) {
         if (event.getTarget() == Event.TARGET_SHOP_CART) {
@@ -318,7 +295,6 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
             }
         }
     }
-
 
     /**
      * 网络变化
@@ -332,7 +308,6 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         }
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
     }
-
 
     @Override
     public void setPresenter(Contract.ShopCartPresenter presenter) {
@@ -353,7 +328,6 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @Override
     public void onRightClick(View v) {
     }
-
 
     @Override
     protected void onRestart() {

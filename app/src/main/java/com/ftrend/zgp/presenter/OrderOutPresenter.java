@@ -25,6 +25,14 @@ public class OrderOutPresenter implements Contract.OrderOutPresenter {
     }
 
     @Override
+    public int doOrderOut(String lsNo) {
+        if (!TradeHelper.cartIsEmpty()) {
+            return -1;
+        }
+        return TradeHelper.orderOut(lsNo) ? 0 : 1;
+    }
+
+    @Override
     public void onDestory() {
         if (mView != null) {
             mView = null;

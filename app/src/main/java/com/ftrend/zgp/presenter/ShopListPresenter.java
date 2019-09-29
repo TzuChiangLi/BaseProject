@@ -30,7 +30,6 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
         return new ShopListPresenter(mView);
     }
 
-
     @Override
     public void showVipInfo() {
         if (TradeHelper.vip != null) {
@@ -79,16 +78,10 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
         } else {
             mView.showNoRightDscDialog("该商品无优惠");
         }
-
     }
 
     @Override
-    public void initShopList(String lsNo) {
-        if (TextUtils.isEmpty(lsNo)) {
-            TradeHelper.initSale();
-        } else {
-            TradeHelper.initSale(lsNo);
-        }
+    public void initShopList() {
         //加载商品列表
         mView.showTradeProd(TradeHelper.getProdList());
         //获取商品总件数
@@ -96,7 +89,6 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
         //获取商品总金额
         mView.updateTotal(TradeHelper.getTradeTotal());
     }
-
 
     @Override
     public void setTradeStatus(String status) {
@@ -140,7 +132,6 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
         updateTradeInfo();
     }
 
-
     /**
      * @param prodCode 商品编码，可能不唯一
      * @param barCode  商品条码，可能为空
@@ -161,7 +152,6 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
                 mView.showNoRightDscDialog("该商品不允许改价");
             }
         }
-
     }
 
     @Override
@@ -170,6 +160,5 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
             mView = null;
         }
     }
-
 
 }

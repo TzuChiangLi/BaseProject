@@ -78,8 +78,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     private ShopAdapter<TradeProd> mProdAdapter;
     private Contract.ShopListPresenter mPresenter;
     private int oldPosition = -1;
-    private boolean fromOutOrder = false;
-
 
     /**
      * 网络变化
@@ -101,14 +99,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     protected void initData() {
-        //此处流水单号可能为空
-        Intent intent = getIntent();
-        fromOutOrder = intent.getBooleanExtra("from", false);
-        if (fromOutOrder) {
-            mPresenter.initShopList(intent.getStringExtra("lsNo"));
-        } else {
-            mPresenter.initShopList(null);
-        }
+        mPresenter.initShopList();
         mPresenter.showVipInfo();
     }
 
@@ -184,7 +175,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         }
     }
 
-
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessage(Event event) {
         if (event.getTarget() == Event.TARGET_SHOP_LIST) {
@@ -216,7 +206,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         }
     }
 
-
     /**
      * 展示会员信息
      */
@@ -227,7 +216,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         mVipNameTv.setText(TradeHelper.vip.getVipName());
         mCardGradeTv.setText(String.format("%s/%s", TradeHelper.vip.getCardCode(), TradeHelper.vip.getVipGrade()));
     }
-
 
     @Override
     public void showVipInfoOffline() {
@@ -284,7 +272,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     default:
                         break;
                 }
-
             }
         });
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -337,13 +324,11 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         }, 1500);
     }
 
-
     @Override
     public void showPriceChangeDialog(int index) {
         //弹出改价窗口
         MessageUtil.showPriceChange(ShopListActivity.this, index);
     }
-
 
     @Override
     public void showNoRightDscDialog(String msg) {

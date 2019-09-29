@@ -1,6 +1,5 @@
 package com.ftrend.zgp.presenter;
 
-import android.content.Intent;
 import android.text.TextUtils;
 
 import com.ftrend.log.LogUtil;
@@ -33,18 +32,6 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
         return new ShopCartPresenter(mView);
     }
 
-
-    @Override
-    public void fromOutOrder(Intent intent) {
-        boolean fromOutOrder = intent.getBooleanExtra("from", false);
-        if (fromOutOrder) {
-            TradeHelper.initSale(intent.getStringExtra("lsNo"));
-            mView.initOutOrder(intent.getStringExtra("lsNo"));
-        } else {
-            mView.initNewOrder();
-        }
-    }
-
     @Override
     public void initProdList() {
         List<DepCls> clsList = SQLite.select().from(DepCls.class).where(DepCls_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode())).queryList();
@@ -66,9 +53,8 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
     }
 
     @Override
-    public void initOrderInfo(String lsNo) {
+    public void initOrderInfo() {
         mView.updateTradeProd(TradeHelper.getTradeCount(), TradeHelper.getTradeTotal());
-
     }
 
     @Override
@@ -111,14 +97,12 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
     }
 
     @Override
-    public void addToShopCart(DepProduct depProduct, String lsNo) {
+    public void addToShopCart(DepProduct depProduct) {
         if (TradeHelper.addProduct(depProduct) == -1) {
             LogUtil.e("向数据库添加商品失败");
         } else {
             updateTradeInfo();
         }
-
-
     }
 
     @Override

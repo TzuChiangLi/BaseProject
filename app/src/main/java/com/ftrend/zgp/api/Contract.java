@@ -1,7 +1,6 @@
 package com.ftrend.zgp.api;
 
 import android.content.Context;
-import android.content.Intent;
 
 import com.ftrend.zgp.base.BaseView;
 import com.ftrend.zgp.model.Dep;
@@ -30,6 +29,13 @@ public interface Contract {
          */
         void initView();
 
+        /**
+         * 取单操作
+         *
+         * @param lsNo
+         * @return -1 - 购物车不为空，0 - 取单成功， 1 - 取单失败
+         */
+        int doOrderOut(String lsNo);
 
         /**
          * 销毁，防止泄露
@@ -306,7 +312,7 @@ public interface Contract {
         /**
          * @param intent 跳转
          */
-        void fromOutOrder(Intent intent);
+//        void fromOutOrder(Intent intent);
 
         /**
          * 加载商品信息
@@ -315,10 +321,8 @@ public interface Contract {
 
         /**
          * 加载本次流水单号中的购物车信息
-         *
-         * @param lsNo 本次流水单号
          */
-        void initOrderInfo(String lsNo);
+        void initOrderInfo();
 
         /**
          * 刷新购物车信息
@@ -336,9 +340,8 @@ public interface Contract {
          * 添加到购物车
          *
          * @param depProduct 商品对象
-         * @param lsNo       流水单号
          */
-        void addToShopCart(DepProduct depProduct, String lsNo);
+        void addToShopCart(DepProduct depProduct);
 
         /**
          * 设置交易状态
@@ -377,16 +380,6 @@ public interface Contract {
      *
      */
     interface ShopCartView extends BaseView<Contract.ShopCartPresenter> {
-        /**
-         * 取单入口
-         */
-        void initOutOrder(String lsNo);
-
-        /**
-         * 收银入口
-         */
-        void initNewOrder();
-
         /**
          * 设置商品类别
          *
@@ -464,12 +457,9 @@ public interface Contract {
         void checkProdForDsc(int index);
 
         /**
-         * 取单：显示此时购物车内的所有商品
-         *
-         * @param lsNo 流水单号
+         * 显示购物车内的所有商品
          */
-        void initShopList(String lsNo);
-
+        void initShopList();
 
         /**
          * 设置交易状态

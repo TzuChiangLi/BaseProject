@@ -14,6 +14,7 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.OrderOutPresenter;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
@@ -102,10 +103,21 @@ public class OrderOutActivity extends BaseActivity implements Contract.OrderOutV
                     return;
                 }
 
-                Intent intent = new Intent(OrderOutActivity.this, ShopCartActivity.class);
-                intent.putExtra("lsNo", tradeList.get(position).getLsNo());
-                intent.putExtra("from",true);
-                startActivity(intent);
+                int result = mPresenter.doOrderOut(tradeList.get(position).getLsNo());
+                switch (result) {
+                    case 0:
+                        Intent intent = new Intent(OrderOutActivity.this, ShopCartActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+                        finish();
+                        break;
+                    case -1:
+                        MessageUtil.showError("购物车不为空，无法取单");
+                        break;
+                    default:
+                        MessageUtil.showError("取单失败");
+                        break;
+                }
             }
         });
     }
