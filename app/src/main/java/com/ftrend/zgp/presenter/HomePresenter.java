@@ -52,9 +52,13 @@ public class HomePresenter implements Contract.HomePresenter {
     public void initMenuList() {
         List<Menu> menuList = new ArrayList<>();
         List<Menu.MenuList> childList = new ArrayList<>();
-        String[] menuName = {"收银", "取单", "退货", "交班", "交班报表", "交易统计", "流水查询", "数据同步", "操作指南", "参数设置"
-                , "修改密码", "注销登录"};
-        int[] menuImg = {R.drawable.jy_sy, R.drawable.jy_qd, R.drawable.jy_th, R.drawable.jy_jb, R.drawable.jy_sy, R.drawable.jy_qd, R.drawable.jy_th, R.drawable.jy_jb,
+        String[] menuName = {
+                "收银", "取单", "退货", "交班",
+                "交班报表", "交易统计", "流水查询", "数据同步",
+                "操作指南", "参数设置", "修改密码", "注销登录"};
+        int[] menuImg = {
+                R.drawable.jy_sy, R.drawable.jy_qd, R.drawable.jy_th, R.drawable.jy_jb,
+                R.drawable.jy_sy, R.drawable.jy_qd, R.drawable.jy_th, R.drawable.jy_jb,
                 R.drawable.jy_sy, R.drawable.jy_qd, R.drawable.jy_th, R.drawable.jy_jb};
         for (int i = 0; i < 4; i++) {
             childList.add(new Menu.MenuList(menuImg[i], menuName[i]));
