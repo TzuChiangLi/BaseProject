@@ -56,13 +56,11 @@ public class Trade extends BaseModel {
     @Column
     private String CreateIp;
     //取单字段(非数据库字段)：流水单内第一个商品
-    private String prodName;
+    private transient String prodName;
     //取单字段(非数据库字段)：第一个商品的数量
-    private double prodNum;
+    private transient double prodNum;
     //取单字段(非数据库字段)：该流水单的商品总件数
-    private double amount;
-
-
+    private transient double amount;
 
     public int getId() {
         return id;
