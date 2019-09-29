@@ -310,11 +310,6 @@ public interface Contract {
      */
     interface ShopCartPresenter {
         /**
-         * @param intent 跳转
-         */
-//        void fromOutOrder(Intent intent);
-
-        /**
          * 加载商品信息
          */
         void initProdList();

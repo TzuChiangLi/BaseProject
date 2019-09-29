@@ -1,7 +1,6 @@
 package com.ftrend.zgp.utils.pop;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.widget.ImageView;
 
@@ -31,7 +30,7 @@ public class VipWayDialog extends CenterPopupView {
 
     @Override
     protected int getImplLayoutId() {
-        return R.layout.vip_way_select;
+        return R.layout.vip_way_select_dialog;
     }
 
     @Override
