@@ -454,7 +454,7 @@ public class TradeHelper {
      * 购物车 - 当前购物车内商品总金额
      * 优惠后的价钱
      *
-     * @return
+     * @return 当前购物车内商品总金额
      */
     public static double getTradeTotal() {
         double total = 0.00;
@@ -1208,7 +1208,9 @@ public class TradeHelper {
      * @return 是或否
      */
     public static boolean checkPriceFormat(Object price) {
+//        String match = "　^[0-9]+(.[0-9]{2})?$";
         String match = "(?!^0*(\\.0{1,2})?$)^\\d{1,13}(\\.\\d{1,2})?$";
+
         return String.valueOf(price).matches(match);
     }
 

@@ -1,5 +1,6 @@
 package com.ftrend.zgp.presenter;
 
+import android.content.Intent;
 import android.text.TextUtils;
 
 import com.ftrend.zgp.api.Contract;
@@ -83,11 +84,11 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
     }
 
     @Override
-    public void initShopList(String lsNo) {
-        if (TextUtils.isEmpty(lsNo)) {
-            TradeHelper.initSale();
+    public void initShopList(Intent intent) {
+        if ((Boolean) intent.getBooleanExtra("from", false)) {
+            TradeHelper.initSale(intent.getStringExtra("lsNo"));
         } else {
-            TradeHelper.initSale(lsNo);
+            TradeHelper.initSale();
         }
         //加载商品列表
         mView.showTradeProd(TradeHelper.getProdList());

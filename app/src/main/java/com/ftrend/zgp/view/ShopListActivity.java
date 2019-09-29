@@ -78,7 +78,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     private ShopAdapter<TradeProd> mProdAdapter;
     private Contract.ShopListPresenter mPresenter;
     private int oldPosition = -1;
-    private boolean fromOutOrder = false;
 
 
     /**
@@ -101,14 +100,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     protected void initData() {
-        //此处流水单号可能为空
-        Intent intent = getIntent();
-        fromOutOrder = intent.getBooleanExtra("from", false);
-        if (fromOutOrder) {
-            mPresenter.initShopList(intent.getStringExtra("lsNo"));
-        } else {
-            mPresenter.initShopList(null);
-        }
+        mPresenter.initShopList(getIntent());
         mPresenter.showVipInfo();
     }
 

@@ -466,9 +466,9 @@ public interface Contract {
         /**
          * 取单：显示此时购物车内的所有商品
          *
-         * @param lsNo 流水单号
+         * @param intent 信息
          */
-        void initShopList(String lsNo);
+        void initShopList(Intent intent);
 
 
         /**

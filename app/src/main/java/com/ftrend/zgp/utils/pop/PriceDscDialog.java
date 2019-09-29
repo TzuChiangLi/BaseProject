@@ -59,7 +59,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
     private View mKeyViewStub, mRateDscView;
     private EditText mRateEdt, mDscEdt;
     private TextView mPriceTv, mTotalTv, mProdNameTv, mMaxRateTv, mMaxDscTv;
-    private boolean isFirst = true;
+    private boolean isFirst = true, inputFlag = true;
 
 
     public PriceDscDialog(@NonNull Context context, int type) {
@@ -77,7 +77,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
 
     @Override
     protected int getImplLayoutId() {
-        return R.layout.vip_dsc_mobile;
+        return R.layout.vip_dsc_mobile_dialog;
     }
 
     @Override
@@ -243,6 +243,10 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (TradeHelper.getWholeForDscPrice() == 0) {
+                MessageUtil.show("当前无法优惠");
+                return;
+            }
             if (count != 0) {
                 if (s.toString().contains(".")) {
                     MessageUtil.show("格式不正确");
@@ -307,10 +311,11 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (count != 0) {
-                if (!TradeHelper.checkPriceFormat(s.toString())) {
-                    MessageUtil.show("格式不正确");
+                if (TradeHelper.getWholeForDscPrice() == 0) {
+                    MessageUtil.show("当前无法优惠");
                     return;
                 }
+
                 switch (type) {
                     case DIALOG_SINGLE_RSC:
                         if (Double.parseDouble(s.toString()) > TradeHelper.getMaxSingleDsc(index)) {
@@ -363,9 +368,33 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
             case DIALOG_SINGLE_RSC:
             case DIALOG_WHOLE_RSC:
                 if (mRateEdt.hasFocus()) {
+                    if (mRateEdt.getText().toString().length() >= 3) {
+                        MessageUtil.show("超出限制");
+                        errorTextColor(mRateEdt);
+                        return;
+                    }
                     mRateEdt.setText(isFirst ? String.valueOf(key) : mRateEdt.getText().append(String.valueOf(key)));
                     isFirst = false;
                 } else {
+                    if (mDscEdt.getText().toString().contains(".")) {
+                        int position = mDscEdt.getText().toString().indexOf(".");
+                        if (mDscEdt.getText().toString().substring(0, position).length() >= 6) {
+                            MessageUtil.show("超出限制");
+                            errorTextColor(mDscEdt);
+                            return;
+                        }
+                        if (mDscEdt.getText().toString().substring(position, mDscEdt.getText().toString().length() - 1).length() >= 2) {
+                            MessageUtil.show("超出限制");
+                            errorTextColor(mDscEdt);
+                            return;
+                        }
+                    } else {
+                        if (mDscEdt.getText().toString().length() >= 6) {
+                            MessageUtil.show("超出限制");
+                            errorTextColor(mDscEdt);
+                            return;
+                        }
+                    }
                     mDscEdt.setText(mDscEdt.getText().append(String.valueOf(key)));
                 }
 

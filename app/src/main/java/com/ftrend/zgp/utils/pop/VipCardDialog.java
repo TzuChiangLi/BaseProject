@@ -21,7 +21,7 @@ public class VipCardDialog extends BottomPopupView {
 
     @Override
     protected int getImplLayoutId() {
-        return R.layout.vip_login_card;
+        return R.layout.vip_login_card_dialog;
     }
 
     @Override

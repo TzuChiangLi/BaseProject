@@ -69,7 +69,7 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
 
     @Override
     protected int getImplLayoutId() {
-        return R.layout.vip_dsc_mobile;
+        return R.layout.vip_dsc_mobile_dialog;
     }
 
     @Override
@@ -235,6 +235,24 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
         switch (type) {
             case DIALOG_MOBILE:
             case DIALOG_CHANGE_PRICE:
+                if (type == DIALOG_CHANGE_PRICE) {
+                    if (mEdt.getText().toString().contains(".")) {
+                        int position = mEdt.getText().toString().indexOf(".");
+                        if (mEdt.getText().toString().substring(0, position).length() >= 6) {
+                            MessageUtil.show("超出限制");
+                            return;
+                        }
+                        if (mEdt.getText().toString().substring(position, mEdt.getText().toString().length() - 1).length() >= 2) {
+                            MessageUtil.show("超出限制");
+                            return;
+                        }
+                    } else {
+                        if (mEdt.getText().toString().length() >= 6) {
+                            MessageUtil.show("超出限制");
+                            return;
+                        }
+                    }
+                }
             default:
                 mEdt.setText(mEdt.getText().append(String.valueOf(key)));
                 break;
