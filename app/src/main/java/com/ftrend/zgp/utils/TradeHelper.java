@@ -166,28 +166,6 @@ public class TradeHelper {
                     .querySingle();
         }
     }
-
-    /**
-     * 取单初始化单据信息
-     *
-     * @param lsNo 取单取出的流水单号
-     */
-    @Deprecated
-    public static void initSale(String lsNo) {
-        trade = SQLite.select().from(Trade.class)
-                .where(Trade_Table.status.eq(TRADE_STATUS_HANGUP))
-                .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
-                .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
-                .and(Trade_Table.lsNo.eq(lsNo))
-                .querySingle();
-        prodList = SQLite.select().from(TradeProd.class)
-                .where(TradeProd_Table.lsNo.eq(lsNo))
-                .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
-                .queryList();
-        pay = SQLite.select().from(TradePay.class)
-                .where(TradePay_Table.lsNo.eq(lsNo))
-                .querySingle();
-    }
     //endregion
 
     //region addProduct----添加到商品表
@@ -1159,11 +1137,14 @@ public class TradeHelper {
 
 
     /**
-     * @return 获取本机内所有未结流水单
+     * 获取本机内所有挂起的流水
+     *
+     * @return
      */
     public static List<Trade> getOutOrder() {
         List<Trade> tradeList = SQLite.select().distinct().from(Trade.class)
                 .where(Trade_Table.status.eq(TRADE_STATUS_HANGUP))
+                .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
                 .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode())).queryList();
 
         for (Trade trade : tradeList) {
@@ -1204,6 +1185,7 @@ public class TradeHelper {
 
         Trade trade = SQLite.select().from(Trade.class)
                 .where(Trade_Table.lsNo.eq(lsNo))
+                .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
                 .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
                 .querySingle();
         // 验证流水状态为：挂起
