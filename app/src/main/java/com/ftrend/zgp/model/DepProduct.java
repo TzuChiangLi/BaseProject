@@ -76,13 +76,13 @@ public class DepProduct extends BaseModel {
     public DepProduct() {
     }
 
-    public DepProduct(String depCode, String prodCode, String barCode, String prodName, String clsCode, String spec, double price) {
+    public DepProduct(String depCode, String prodCode, String barCode, String prodName, String clsCode, String unit, double price) {
         this.depCode = depCode;
         this.prodCode = prodCode;
         this.barCode = barCode;
         this.prodName = prodName;
         this.clsCode = clsCode;
-        this.spec = spec;
+        this.unit = unit;
         this.price = price;
     }
 
@@ -93,6 +93,51 @@ public class DepProduct extends BaseModel {
         this.clsCode = clsCode;
     }
 
+    /**
+     * 设置销售参数
+     *
+     * @param priceFlag
+     * @param isLargess
+     * @param forSaleRet
+     * @param forDsc
+     * @param forLargess
+     * @param scoreSet
+     * @param minimumPrice
+     * @return
+     */
+    public DepProduct updateSaleInfo(int priceFlag, int isLargess, int forSaleRet, int forDsc,
+                                     int forLargess, double scoreSet, double minimumPrice) {
+        this.priceFlag = priceFlag;
+        this.isLargess = isLargess;
+        this.forSaleRet = forSaleRet;
+        this.forDsc = forDsc;
+        this.forLargess = forLargess;
+        this.scoreSet = scoreSet;
+        this.minimumPrice = minimumPrice;
+        return this;
+    }
+
+    /**
+     * 设置会员价
+     *
+     * @param vipPrice1
+     * @param vipPrice2
+     * @param vipPrice3
+     * @param vipRate1
+     * @param vipRate2
+     * @param vipRate3
+     * @return
+     */
+    public DepProduct updateVipPrice(double vipPrice1, double vipPrice2, double vipPrice3,
+                                     double vipRate1, double vipRate2, double vipRate3) {
+        this.vipPrice1 = vipPrice1;
+        this.vipPrice2 = vipPrice2;
+        this.vipPrice3 = vipPrice3;
+        this.vipRate1 = vipRate1;
+        this.vipRate2 = vipRate2;
+        this.vipRate3 = vipRate3;
+        return this;
+    }
 
     public int getId() {
         return id;
