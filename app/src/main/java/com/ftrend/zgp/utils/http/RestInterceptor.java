@@ -119,6 +119,7 @@ public class RestInterceptor implements Interceptor {
         if (!tokenExpired()) {
             return true;
         }
+        final boolean[] failed = {false};
         RestSubscribe.getInstance().clientLogin(ZgParams.getPosCode(), EncryptUtill.md5(ZgParams.getDevSn()),
                 new RestCallback(new RestResultHandler() {
                     @Override
@@ -131,16 +132,18 @@ public class RestInterceptor implements Interceptor {
 
                     @Override
                     public void onFailed(String errorCode, String errorMsg) {
-
+                        // 获取token失败时快速返回，避免等待超时
+                        failed[0] = true;
+                        Log.e(TAG, "获取token失败: " + errorCode + " - " + errorMsg);
                     }
                 }));
         // 异步获取token，如果30秒未成功，则认为超时失败
         Date checkStart = new Date();
-        while (tokenExpired()) {
+        while (tokenExpired() && !failed[0]) {
             if (new Date().after(new Date(checkStart.getTime() + 30 * 1000))) {
-                return false;
+                failed[0] = true;
             }
         }
-        return true;
+        return !failed[0];
     }
 }
