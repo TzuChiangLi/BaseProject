@@ -13,7 +13,8 @@ public class RestCallback implements HttpCallBack<Map<String, Object>> {
 
     private RestResultHandler resultHandler = null;
 
-    public RestCallback() {}
+    public RestCallback() {
+    }
 
     public RestCallback(RestResultHandler handler) {
         this.resultHandler = handler;

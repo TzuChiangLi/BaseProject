@@ -18,32 +18,36 @@ public class Event {
      * 目标界面：购物车
      */
     public static final int TARGET_SHOP_LIST = 1;
+    /**
+     * 目标界面：支付方式
+     */
+    public static final int TARGET_PAY_WAY = 2;
     //-----------------------------------操作命令-----------------------------------------//
 
     /**
      * 刷新界面
      */
     public static final int TYPE_REFRESH = 0;
-
     /**
      * 选择商品界面取消改价时撤销已添加的操作
      */
     public static final int TYPE_CANCEL_PRICE_CHANGE = 1;
-
     /**
      * 购物车----刷新整单优惠
      */
     public static final int TYPE_REFRESH_WHOLE_PRICE = 2;
-
     /**
      * 购物车----刷新会员信息
      */
     public static final int TYPE_REFRESH_VIP_INFO = 3;
-
     /**
      * 进入扫码界面
      */
     public static final int TYPE_ENTER_SCAN = 4;
+    /**
+     * 找零界面----结账按钮
+     */
+    public static final int TYPE_PAY_CASH = 5;
 
     //-----------------------------------简单数据-----------------------------------------//
     //一般用不到

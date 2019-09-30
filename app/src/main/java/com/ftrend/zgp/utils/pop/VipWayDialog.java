@@ -52,7 +52,7 @@ public class VipWayDialog extends CenterPopupView {
 
     @OnClick(R.id.vip_way_ll_scan)
     public void scan() {
-        Event.sendEvent(Event.TARGET_SHOP_LIST,Event.TYPE_ENTER_SCAN);
+        Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_ENTER_SCAN);
     }
 
     @OnClick(R.id.vip_way_ll_card)

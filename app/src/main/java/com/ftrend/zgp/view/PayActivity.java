@@ -18,11 +18,15 @@ import com.ftrend.zgp.presenter.PayPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
-import com.lxj.xpopup.core.BasePopupView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
 
@@ -58,6 +62,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
         if (mPresenter == null) {
             mPresenter = PayPresenter.createPresenter(this);
         }
+        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -126,31 +131,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                         break;
                     case 3:
                         //现金
-                        MessageUtil.info(String.format("确认使用现金收款%s元？", mTotalTv.getText().toString()));
-                        MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
-                            @Override
-                            public void onLeftBtnClick(BasePopupView popView) {
-                                if (mPresenter.paySuccess(TradeHelper.APP_PAY_TYPE_CASH)) {
-                                    popView.dismiss();
-                                    MessageUtil.showSuccess("交易已完成");
-
-                                    new Handler().postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Intent intent = new Intent(PayActivity.this, HomeActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    }, 1500);
-                                } else {
-                                    MessageUtil.showError("交易失败，请稍后重试");
-                                }
-                            }
-
-                            @Override
-                            public void onRightBtnClick(BasePopupView popView) {
-                                popView.dismiss();
-                            }
-                        });
+                        MessageUtil.showChargeDialog(PayActivity.this);
                         break;
                     default:
                         break;
@@ -164,9 +145,31 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
         mTotalTv.setText(String.format("%.2f", total));
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessage(Event event) {
+        if (event.getTarget() == Event.TARGET_PAY_WAY) {
+            if (event.getType() == Event.TYPE_PAY_CASH) {
+                if (mPresenter.paySuccess(TradeHelper.APP_PAY_TYPE_CASH)) {
+                    MessageUtil.showSuccess("交易已完成");
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Intent intent = new Intent(PayActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                        }
+                    }, 1500);
+                } else {
+                    MessageUtil.showError("交易失败，请稍后重试");
+                }
+            }
+        }
+    }
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mPresenter.onDestory();
+        EventBus.getDefault().unregister(this);
     }
 }

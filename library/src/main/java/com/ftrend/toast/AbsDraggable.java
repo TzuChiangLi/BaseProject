@@ -6,10 +6,10 @@ import android.view.View;
 import android.view.WindowManager;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/ToastUtils
- *    time   : 2019/01/04
- *    desc   : 拖拽抽象类
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/ToastUtils
+ * time   : 2019/01/04
+ * desc   : 拖拽抽象类
  */
 public abstract class AbsDraggable implements View.OnTouchListener {
 

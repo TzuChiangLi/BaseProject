@@ -282,8 +282,8 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                             errorTextColor(mRateEdt);
                         } else {
                             restoreTextColor(mRateEdt);
-                            mTotalTv.setText(String.format("%.2f", DscHelper.getWholeTotal(Integer.valueOf(s.toString()))));
-                            mDscEdt.setText(String.format("%.2f", DscHelper.getWholeDsc(Integer.valueOf(s.toString()))));
+                            mTotalTv.setText(String.format("%.2f", TradeHelper.getWholeTotal(Integer.valueOf(s.toString()))));
+                            mDscEdt.setText(String.format("%.2f", TradeHelper.getWholeDsc(Integer.valueOf(s.toString()))));
                         }
                         break;
                     default:
@@ -315,7 +315,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                     MessageUtil.show("当前无法优惠");
                     return;
                 }
-
                 switch (type) {
                     case DIALOG_SINGLE_RSC:
                         if (Double.parseDouble(s.toString()) > TradeHelper.getMaxSingleDsc(index)) {
@@ -327,7 +326,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                             mRateEdt.setText(String.valueOf(TradeHelper.getSingleRate(index, Double.parseDouble(s.toString()))));
                             //修改优惠后的价格
                             mTotalTv.setText(String.format("%.2f", TradeHelper.getSingleTotal(index, Double.parseDouble(mDscEdt.getText().toString()))));
-                            if (Integer.parseInt(mRateEdt.getText().toString()) > TradeHelper.getUserMaxDscRate()) {
+                            if (Long.valueOf(mRateEdt.getText().toString()) > TradeHelper.getMaxSingleRate(index)) {
                                 errorTextColor(mRateEdt);
                             } else {
                                 restoreTextColor(mRateEdt);
@@ -340,8 +339,8 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                             errorTextColor(mDscEdt);
                         } else {
                             restoreTextColor(mDscEdt);
-                            mRateEdt.setText(String.valueOf(DscHelper.getWholeRate(Double.parseDouble(s.toString()))));
-                            mTotalTv.setText(String.format("%.2f", DscHelper.getWholeTotal(Double.parseDouble(s.toString()))));
+                            mRateEdt.setText(String.valueOf(TradeHelper.getWholeRate(Double.parseDouble(s.toString()))));
+                            mTotalTv.setText(String.format("%.2f", TradeHelper.getWholeTotal(Double.parseDouble(s.toString()))));
                         }
                         break;
                     default:
@@ -378,7 +377,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                 } else {
                     if (mDscEdt.getText().toString().contains(".")) {
                         int position = mDscEdt.getText().toString().indexOf(".");
-                        if (mDscEdt.getText().toString().substring(0, position).length() >= 6) {
+                        if (mDscEdt.getText().toString().substring(0, position).length() > 6) {
                             MessageUtil.show("超出限制");
                             errorTextColor(mDscEdt);
                             return;
@@ -389,7 +388,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                             return;
                         }
                     } else {
-                        if (mDscEdt.getText().toString().length() >= 6) {
+                        if (mDscEdt.getText().toString().length() > 6) {
                             MessageUtil.show("超出限制");
                             errorTextColor(mDscEdt);
                             return;
@@ -434,11 +433,15 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
             case DIALOG_SINGLE_RSC:
             case DIALOG_WHOLE_RSC:
                 if (mDscEdt.hasFocus()) {
-                    mDscEdt.getText().append('.');
+                    if (!mDscEdt.getText().toString().contains(".")) {
+                        mDscEdt.getText().append('.');
+                    }
                 }
                 break;
             default:
-                mEdt.getText().append('.');
+                if (!mEdt.getText().toString().contains(".")) {
+                    mEdt.getText().append('.');
+                }
                 break;
         }
     }

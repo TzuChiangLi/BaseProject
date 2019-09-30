@@ -19,8 +19,9 @@ public interface RestResultHandler {
 
     /**
      * 请求失败
+     *
      * @param errorCode 错误码
-     * @param errorMsg 错误信息
+     * @param errorMsg  错误信息
      */
     void onFailed(String errorCode, String errorMsg);
 }

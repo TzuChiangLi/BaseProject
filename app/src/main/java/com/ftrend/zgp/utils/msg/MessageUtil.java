@@ -7,6 +7,7 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.toast.XToast;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
+import com.ftrend.zgp.utils.pop.PayChargeDialog;
 import com.ftrend.zgp.utils.pop.PriceDscDialog;
 import com.ftrend.zgp.utils.pop.PriceMobileDialog;
 import com.ftrend.zgp.utils.pop.VipCardDialog;
@@ -24,6 +25,17 @@ import static com.ftrend.zgp.utils.pop.PriceMobileDialog.DIALOG_MOBILE;
 public class MessageUtil {
 
 //-------------------------------------业务弹窗-----------------------------------------//
+
+    /**
+     * 现金找零
+     */
+    public static void showChargeDialog(Context context) {
+        new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
+                .asCustom(new PayChargeDialog(context))
+                .show();
+    }
+
 
     /**
      * 会员卡登录

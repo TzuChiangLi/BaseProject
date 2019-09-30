@@ -53,7 +53,6 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         if (mPresenter == null) {
             mPresenter = HomePresenter.createPresenter(this);
         }
-
         //设置界面信息
         mPresenter.setInfo();
         //启动线程
@@ -66,7 +65,6 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     protected void initTitleBar() {
         ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white).autoDarkModeEnable(true).init();
         mNetImg.setImageResource(ZgParams.isIsOnline() ? R.drawable.online : R.drawable.offline);
-
     }
 
 
@@ -108,7 +106,6 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     public void mustHandover() {
         MessageUtil.showWarning("您已经长时间未交班，功能使用受限。请先交班。");
     }
-
 
 
     @Override

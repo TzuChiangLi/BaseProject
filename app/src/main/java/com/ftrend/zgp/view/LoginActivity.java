@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.Spinner;
 
 import com.ftrend.cleareditview.ClearEditText;
-import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.LoginAdapter;
 import com.ftrend.zgp.api.Contract;
@@ -29,7 +28,7 @@ import butterknife.OnClick;
  *
  * @author liziqiang@ftrend.cn
  */
-    public class LoginActivity extends BaseActivity implements Contract.LoginView {
+public class LoginActivity extends BaseActivity implements Contract.LoginView {
     @BindView(R.id.login_sp_dep)
     Spinner mDepSp;
     @BindView(R.id.login_sp_user)
@@ -42,7 +41,6 @@ import butterknife.OnClick;
     private LoginAdapter<Dep> mDepAdapter;
     private LoginAdapter<User> mUserAdapter;
     private String depCode, userCode;
-    private int i = 0;
 
 
     @Override
@@ -73,7 +71,6 @@ import butterknife.OnClick;
 
     @OnClick(R.id.login_btn)
     public void doLogin() {
-        LogUtil.d(String.valueOf(i++));
         if (ClickUtil.onceClick()) {
             return;
         }

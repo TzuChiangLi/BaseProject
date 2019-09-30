@@ -104,9 +104,10 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
         if (changeAmount < 0) {
             changeAmount = TradeHelper.getProdList().get(index).getAmount() - 1 == 0 ? 0 : -1;
         }
-        TradeHelper.changeAmount(index, changeAmount);
-        updateTradeInfo();
-        mView.updateTradeProd(index);
+        if (TradeHelper.changeAmount(index, changeAmount) > 0) {
+            updateTradeInfo();
+            mView.updateTradeProd(index);
+        }
     }
 
     @Override

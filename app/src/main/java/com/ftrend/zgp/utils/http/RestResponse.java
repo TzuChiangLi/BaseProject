@@ -87,6 +87,7 @@ public class RestResponse<T> {
 
     /**
      * 判断是否执行成功
+     *
      * @return
      */
     public boolean succeed() {

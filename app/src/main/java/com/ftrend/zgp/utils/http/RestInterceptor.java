@@ -34,6 +34,7 @@ public class RestInterceptor implements Interceptor {
 
     /**
      * 设置token信息
+     *
      * @param token
      * @param expire
      */
@@ -90,6 +91,7 @@ public class RestInterceptor implements Interceptor {
 
     /**
      * 判断指定的url是否需要验证token
+     *
      * @param url
      * @return
      */
@@ -103,6 +105,7 @@ public class RestInterceptor implements Interceptor {
 
     /**
      * 判断token是否有效
+     *
      * @return
      */
     private boolean tokenExpired() {
@@ -113,6 +116,7 @@ public class RestInterceptor implements Interceptor {
 
     /**
      * 检查token是否有效，如果已失效则重新获取
+     *
      * @return
      */
     private boolean checkToken() {

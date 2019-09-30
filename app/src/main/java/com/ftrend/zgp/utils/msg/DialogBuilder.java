@@ -76,7 +76,6 @@ public class DialogBuilder extends CenterPopupView {
         if (context == null) {
             this.context = BaseActivity.mContext;
         } else {
-
             this.context = context;
         }
         this.btnNum = btnNum;

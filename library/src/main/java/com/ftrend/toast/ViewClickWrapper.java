@@ -3,10 +3,10 @@ package com.ftrend.toast;
 import android.view.View;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/ToastUtils
- *    time   : 2019/01/04
- *    desc   : {@link View.OnClickListener} 包装类
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/ToastUtils
+ * time   : 2019/01/04
+ * desc   : {@link View.OnClickListener} 包装类
  */
 final class ViewClickWrapper implements View.OnClickListener {
 

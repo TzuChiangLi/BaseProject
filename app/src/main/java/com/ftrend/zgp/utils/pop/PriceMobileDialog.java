@@ -48,7 +48,7 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
     //购物车：  2-改价
     public static final int DIALOG_CHANGE_PRICE = 2;
     private int type;
-    private int index = 0;
+    private int index = 0, changed = -1;
     private Context mContext;
     private KeyboardView mKeyView;
     private View mKeyViewStub;
@@ -110,17 +110,15 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
     public void submit() {
         switch (type) {
             case DIALOG_MOBILE:
-//                if (!TradeHelper.checkPhoneNoFormat(mEdt.getText().toString())) {
-//                    MessageUtil.show("格式不正确");
-//                    return;
-//                }
                 queryVipInfo();
                 break;
             case DIALOG_CHANGE_PRICE:
                 if (TextUtils.isEmpty(mEdt.getText().toString())) {
+                    changed = -1;
                     return;
                 }
                 if (!TradeHelper.checkPriceFormat(mEdt.getText().toString())) {
+                    changed = -1;
                     MessageUtil.show("格式不正确");
                     return;
                 }
@@ -128,10 +126,12 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
                     if (TradeHelper.priceChangeInShopList(index, Double.parseDouble(mEdt.getText().toString()))) {
                         Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH, Double.parseDouble(mEdt.getText().toString()));
                         MessageUtil.showSuccess("改价成功");
+                        changed = 0;
                         KeyboardUtils.hideSoftInput(this);
                         dismiss();
                     } else {
                         MessageUtil.showError("改价失败");
+                        changed = -1;
                     }
                     return;
                 }
@@ -139,10 +139,12 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
                     if (TradeHelper.priceChangeInShopCart(Double.parseDouble(mEdt.getText().toString()))) {
                         Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_REFRESH);
                         KeyboardUtils.hideSoftInput(this);
+                        changed = 0;
                         MessageUtil.showSuccess("改价成功");
                         dismiss();
                     } else {
                         MessageUtil.showError("改价失败");
+                        changed = -1;
                     }
                     return;
                 }
@@ -168,22 +170,26 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
     private RestResultHandler regHandler = new RestResultHandler() {
         @Override
         public void onSuccess(Map<String, Object> body) {
-            VipInfo vipInfo = TradeHelper.vip();
-            vipInfo.setVipName(body.get("vipName").toString());
-            vipInfo.setVipCode(body.get("vipCode").toString());
-            vipInfo.setVipDscRate(Double.parseDouble(body.get("vipDscRate").toString()));
-            vipInfo.setVipGrade(body.get("vipGrade").toString());
-            vipInfo.setVipPriceType(Double.parseDouble(body.get("vipPriceType").toString()));
-            vipInfo.setRateRule(Double.parseDouble(body.get("rateRule").toString()));
-            vipInfo.setForceDsc(body.get("forceDsc").toString());
-            vipInfo.setCardCode(body.get("cardCode").toString());
-            vipInfo.setDscProdIsDsc(body.get("dscProdIsDsc").toString());
-            //保存会员信息到流水
-            TradeHelper.saveVip();
-            //刷新会员优惠
-            TradeHelper.saveVipDsc();
-            Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_VIP_INFO, vipInfo);
-            dismiss();
+            if (body != null) {
+                VipInfo vipInfo = TradeHelper.vip();
+                vipInfo.setVipName(body.get("vipName").toString());
+                vipInfo.setVipCode(body.get("vipCode").toString());
+                vipInfo.setVipDscRate(Double.parseDouble(body.get("vipDscRate").toString()));
+                vipInfo.setVipGrade(body.get("vipGrade").toString());
+                vipInfo.setVipPriceType(Double.parseDouble(body.get("vipPriceType").toString()));
+                vipInfo.setRateRule(Double.parseDouble(body.get("rateRule").toString()));
+                vipInfo.setForceDsc(body.get("forceDsc").toString());
+                vipInfo.setCardCode(body.get("cardCode").toString());
+                vipInfo.setDscProdIsDsc(body.get("dscProdIsDsc").toString());
+                //保存会员信息到流水
+                TradeHelper.saveVip();
+                //刷新会员优惠
+                TradeHelper.saveVipDsc();
+                Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_VIP_INFO, vipInfo);
+                dismiss();
+            }else {
+                MessageUtil.show("服务返回异常错误");
+            }
         }
 
         @Override
@@ -196,7 +202,6 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
     @OnClick(R.id.vip_way_img_close)
     public void close() {
         if (mContext instanceof ShopCartActivity) {
-            //需要撤销添加的最后一条
             Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE, index);
         }
         KeyboardUtils.hideSoftInput(this);
@@ -222,8 +227,8 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
         super.onDismiss();
         if (mContext instanceof ShopCartActivity) {
             //需要撤销添加的最后一条
-            if (TextUtils.isEmpty(mEdt.getText().toString())) {
-                Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE);
+            if (changed == -1) {
+                Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE, index);
             }
         }
     }
@@ -234,11 +239,14 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
     public void onKeyClick(View v, int key) {
         switch (type) {
             case DIALOG_MOBILE:
+                if (mEdt.getText().toString().length() >= 11) {
+                    return;
+                }
             case DIALOG_CHANGE_PRICE:
                 if (type == DIALOG_CHANGE_PRICE) {
                     if (mEdt.getText().toString().contains(".")) {
                         int position = mEdt.getText().toString().indexOf(".");
-                        if (mEdt.getText().toString().substring(0, position).length() >= 6) {
+                        if (mEdt.getText().toString().substring(0, position).length() > 6) {
                             MessageUtil.show("超出限制");
                             return;
                         }
@@ -248,7 +256,6 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
                         }
                     } else {
                         if (mEdt.getText().toString().length() >= 6) {
-                            MessageUtil.show("超出限制");
                             return;
                         }
                     }

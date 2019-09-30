@@ -13,7 +13,6 @@ import com.raizlabs.android.dbflow.structure.database.transaction.FastStoreModel
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ftrend.zgp.utils.TradeHelper.getMaxWholeDsc;
 import static com.ftrend.zgp.utils.TradeHelper.priceFormat;
 
 /**
@@ -36,29 +35,10 @@ public class DscHelper {
      */
     public static void beginWholeDsc() {
         List<TradeProd> prodList = TradeHelper.getProdList();
-//        int forDsc;
-//        double singleDsc, vipDsc, tranDsc;
         dscList = new ArrayList<>();
         calcList = new ArrayList<>();
         prodTotal = 0;
         for (TradeProd prod : prodList) {
-            /*if (TextUtils.isEmpty(prod.getBarCode())) {
-                //根据prodCode查商品优惠限制
-                forDsc = SQLite.select().from(DepProduct.class)
-                        .where(DepProduct_Table.barCode.eq(prod.getBarCode()))
-                        .querySingle().getForDsc();
-            } else {
-                //根据barCode查商品优惠限制
-                forDsc = SQLite.select().from(DepProduct.class)
-                        .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
-                        .querySingle().getForDsc();
-            }
-            singleDsc = prod.getSingleDsc();
-            vipDsc = prod.getVipDsc();
-            tranDsc = prod.getTranDsc();
-            if ((forDsc != 0) && (singleDsc == 0) && (vipDsc == 0) && (tranDsc == 0)) {
-                dscList.add(prod);
-            }*/
             if (prod.getProdIsLargess() != 0) {
                 continue;//跳过赠品
             }
@@ -195,7 +175,7 @@ public class DscHelper {
         //需要筛选出来可以分摊的商品
         double dsc = 0, minumPrice, rate;
         //本折扣率为实际折扣率，非界面显示折扣率
-        double maxDsc = getMaxWholeDsc();
+        double maxDsc = TradeHelper.getMaxWholeDsc();
         double price = 0;
         for (TradeProd prod : dscList) {
             price += prod.getPrice() * prod.getAmount();
@@ -270,47 +250,5 @@ public class DscHelper {
         return price;
     }
 
-    /**
-     * 界面mDscTv展示金额
-     * 获取整单优惠金额
-     *
-     * @param rate
-     * @return
-     */
-    public static double getWholeDsc(int rate) {
-        return priceFormat(getAfterWholePrice() * rate / 100);
-    }
-
-    /**
-     * 界面mTotalTv展示金额
-     * 获取整单优惠后的当前总金额
-     *
-     * @param dsc
-     * @return
-     */
-    public static double getWholeTotal(double dsc) {
-        return priceFormat(getAfterWholePrice() - dsc);
-    }
-
-    /**
-     * 界面mTotalTv展示金额
-     * 获取整单优惠后的当前总金额
-     *
-     * @return
-     */
-    public static double getWholeTotal(int rate) {
-        return priceFormat(getAfterWholePrice() - getWholeDsc(rate));
-    }
-
-    /**
-     * 界面mRateEdt展示金额
-     * 获取当前整单优惠折扣率
-     *
-     * @param wholeDsc
-     * @return
-     */
-    public static long getWholeRate(double wholeDsc) {
-        return Math.round((wholeDsc / getAfterWholePrice()) * 100);
-    }
 
 }

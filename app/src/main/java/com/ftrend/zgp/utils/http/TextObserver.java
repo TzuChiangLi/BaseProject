@@ -9,8 +9,8 @@ import retrofit2.HttpException;
  * Copyright (C),青岛致远方象软件科技有限公司
  *
  * @author liuhongbin@ftrend.cn
- * @since 2019/9/3
  * @see RestObserver
+ * @since 2019/9/3
  */
 public class TextObserver extends AbstractObserver implements Observer<String> {
 

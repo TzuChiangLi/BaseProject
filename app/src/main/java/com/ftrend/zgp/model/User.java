@@ -32,13 +32,13 @@ public class User extends BaseModel {
     private String userRights;
     @Column
     @NotNull
-    private int maxDscRate=0;
+    private int maxDscRate = 0;
     @Column
     @NotNull
-    private double maxDscTotal=0;
+    private double maxDscTotal = 0;
     @Column
     @NotNull
-    private double maxTHTotal=0;
+    private double maxTHTotal = 0;
 
     public User() {
     }

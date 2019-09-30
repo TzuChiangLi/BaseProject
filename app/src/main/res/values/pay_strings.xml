@@ -7,5 +7,9 @@
     <string name="pay_tv_wechat">微信支付</string>
     <string name="pay_tv_card">储值卡</string>
     <string name="pay_tv_money">现金</string>
+    <string name="pay_tv_in">交纳：</string>
+    <string name="pay_tv_charge">找零:</string>
+    <string name="pay_tv_success">结账</string>
+    <string name="pay_tv_tip">请输入收到现金金额</string>
     <string name="pay_btn_pay">继续交易</string>
 </resources>

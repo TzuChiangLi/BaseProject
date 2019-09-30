@@ -2,7 +2,6 @@ package com.ftrend.zgp.utils.msg;
 
 import android.content.Context;
 
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.lxj.xpopup.XPopup;
 
 /**
@@ -45,7 +44,6 @@ public class DialogUtil {
                 .asCustom(builder)
                 .show();
     }
-
 
 
 }

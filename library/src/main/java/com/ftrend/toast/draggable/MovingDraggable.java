@@ -8,10 +8,10 @@ import com.ftrend.toast.AbsDraggable;
 
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/ToastUtils
- *    time   : 2019/01/04
- *    desc   : 移动拖拽处理实现类
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/ToastUtils
+ * time   : 2019/01/04
+ * desc   : 移动拖拽处理实现类
  */
 public class MovingDraggable extends AbsDraggable {
 
