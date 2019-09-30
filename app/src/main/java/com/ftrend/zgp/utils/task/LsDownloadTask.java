@@ -262,6 +262,11 @@ public class LsDownloadTask {
         for (Map<String, Object> map : values) {
             TradeProd prod = gson.fromJson(gson.toJson(map), TradeProd.class);
             prod.setDelFlag("0");
+            //手工优惠统一写入单项优惠，防止计算total出错
+            if (map.containsKey("manuDsc")) {
+                prod.setSingleDsc(Double.parseDouble(map.get("manuDsc").toString()));
+                prod.setWholeDsc(0);
+            }
             prodList.add(prod);
         }
 
