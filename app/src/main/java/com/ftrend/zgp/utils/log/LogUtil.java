@@ -58,9 +58,10 @@ public class LogUtil {
     public static void e(String msg) {
         if (!TextUtils.isEmpty(msg)) {
             if (showLog) {
+                Log.e(TAG, msg);
             }
             if (saveError) {
-                FileWriter writer = null;
+                FileWriter writer;
                 try {
                     init();
                     writer = new FileWriter(new File(logPathStr + "log.txt"), true);
@@ -79,7 +80,6 @@ public class LogUtil {
                 }
             }
         }
-
     }
 
     public static void d(String msg) {
@@ -119,3 +119,16 @@ public class LogUtil {
         LogUtil.showLog = showLog;
     }
 }
+//                //检查存储读写权限
+//                SoulPermission.getInstance().checkAndRequestPermissions(
+//                        Permissions.build(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+//                        new CheckRequestPermissionsListener() {
+//                            @Override
+//                            public void onAllPermissionOk(Permission[] allPermissions) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onPermissionDenied(Permission[] refusedPermissions) {
+//                            }
+//                        });

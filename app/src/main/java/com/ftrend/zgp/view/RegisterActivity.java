@@ -34,7 +34,6 @@ public class RegisterActivity extends BaseActivity implements Contract.RegisterV
 
     @Override
     protected void initData() {
-
     }
 
     @Override
@@ -72,6 +71,7 @@ public class RegisterActivity extends BaseActivity implements Contract.RegisterV
 
     /**
      * 网络变化
+     *
      * @param isOnline
      */
     @Override

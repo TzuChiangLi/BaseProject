@@ -46,7 +46,7 @@ public class LoginAdapter<T> extends BaseAdapter {
     }
 
     public String getItemCode(int position) {
-        return type == 0 ? ((List<Dep>) data).get(position).getDepCode(): ((List<User>) data).get(position).getUserCode();
+        return type == 0 ? ((List<Dep>) data).get(position).getDepCode() : ((List<User>) data).get(position).getUserCode();
     }
 
 

@@ -279,9 +279,13 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @OnClick(R.id.shop_cart_top_ll_btn_scan)
     public void goScanActivity() {
-        Intent intent = new Intent("com.summi.scan");
-        intent.setPackage("com.sunmi.sunmiqrcodescanner");
-        startActivityForResult(intent, START_SCAN);
+        try {
+            Intent intent = new Intent("com.summi.scan");
+            intent.setPackage("com.sunmi.sunmiqrcodescanner");
+            startActivityForResult(intent, START_SCAN);
+        } catch (Exception e) {
+            MessageUtil.showError("本设备不兼容");
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -1,10 +1,10 @@
 package com.ftrend.toast;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/ToastUtils
- *    time   : 2019/01/04
- *    desc   : Toast 显示销毁监听
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/ToastUtils
+ * time   : 2019/01/04
+ * desc   : Toast 显示销毁监听
  */
 public interface OnToastLifecycle {
 

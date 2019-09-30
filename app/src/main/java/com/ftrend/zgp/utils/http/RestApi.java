@@ -20,6 +20,7 @@ public interface RestApi {
 
     /**
      * 客户端登录
+     *
      * @param request
      * @return
      */
@@ -55,6 +56,7 @@ public interface RestApi {
 
     /**
      * 2 获取指定机器号可登录专柜列表
+     *
      * @param request
      * @return
      */
@@ -63,6 +65,7 @@ public interface RestApi {
 
     /**
      * 3 获取指定机器号可登录用户列表
+     *
      * @param request
      * @return
      */
@@ -71,6 +74,7 @@ public interface RestApi {
 
     /**
      * 4 获取指定机器号系统参数列表
+     *
      * @param request
      * @return
      */
@@ -79,6 +83,7 @@ public interface RestApi {
 
     /**
      * 5 获取指定专柜的商品类别列表
+     *
      * @param request
      * @return
      */
@@ -87,6 +92,7 @@ public interface RestApi {
 
     /**
      * 6 获取指定专柜的商品列表
+     *
      * @param request
      * @return
      */
@@ -95,6 +101,7 @@ public interface RestApi {
 
     /**
      * 7 获取指定专柜的支付方式列表
+     *
      * @param request
      * @return
      */

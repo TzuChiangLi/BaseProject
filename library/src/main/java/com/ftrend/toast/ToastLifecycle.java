@@ -5,10 +5,10 @@ import android.app.Application;
 import android.os.Bundle;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/ToastUtils
- *    time   : 2019/01/04
- *    desc   : Toast 生命周期管理，防止内存泄露
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/ToastUtils
+ * time   : 2019/01/04
+ * desc   : Toast 生命周期管理，防止内存泄露
  */
 final class ToastLifecycle implements Application.ActivityLifecycleCallbacks {
 
@@ -25,13 +25,16 @@ final class ToastLifecycle implements Application.ActivityLifecycleCallbacks {
     }
 
     @Override
-    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {}
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+    }
 
     @Override
-    public void onActivityStarted(Activity activity) {}
+    public void onActivityStarted(Activity activity) {
+    }
 
     @Override
-    public void onActivityResumed(Activity activity) {}
+    public void onActivityResumed(Activity activity) {
+    }
 
     @Override
     public void onActivityPaused(Activity activity) {
@@ -42,11 +45,14 @@ final class ToastLifecycle implements Application.ActivityLifecycleCallbacks {
     }
 
     @Override
-    public void onActivityStopped(Activity activity) {}
+    public void onActivityStopped(Activity activity) {
+    }
 
     @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+    }
 
     @Override
-    public void onActivityDestroyed(Activity activity) {}
+    public void onActivityDestroyed(Activity activity) {
+    }
 }

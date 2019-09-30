@@ -10,7 +10,6 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.ftrend.zgp.utils.TradeHelper.getMaxWholeDsc;
 import static com.ftrend.zgp.utils.TradeHelper.priceFormat;
 
 /**
@@ -22,11 +21,10 @@ public class DscHelper {
     //可整单优惠的商品
     private static List<TradeProd> dscList = null;
 
-
     /**
      * @return 能整单优惠的商品列表
      */
-    public static void beginWholeDsc() {
+    public static List<TradeProd> beginWholeDsc() {
         List<TradeProd> prodList = TradeHelper.getProdList();
         int forDsc;
         double singleDsc, vipDsc, tranDsc;
@@ -50,6 +48,7 @@ public class DscHelper {
                 dscList.add(prod);
             }
         }
+        return dscList;
     }
 
     /**
@@ -63,7 +62,7 @@ public class DscHelper {
         //需要筛选出来可以分摊的商品
         double dsc = 0, minumPrice, rate;
         //本折扣率为实际折扣率，非界面显示折扣率
-        double maxDsc = getMaxWholeDsc();
+        double maxDsc = TradeHelper.getMaxWholeDsc();
         double price = 0;
         for (TradeProd prod : dscList) {
             price += prod.getPrice() * prod.getAmount();
@@ -135,47 +134,5 @@ public class DscHelper {
         return price;
     }
 
-    /**
-     * 界面mDscTv展示金额
-     * 获取整单优惠金额
-     *
-     * @param rate
-     * @return
-     */
-    public static double getWholeDsc(int rate) {
-        return priceFormat(getAfterWholePrice() * rate / 100);
-    }
-
-    /**
-     * 界面mTotalTv展示金额
-     * 获取整单优惠后的当前总金额
-     *
-     * @param dsc
-     * @return
-     */
-    public static double getWholeTotal(double dsc) {
-        return priceFormat(getAfterWholePrice() - dsc);
-    }
-
-    /**
-     * 界面mTotalTv展示金额
-     * 获取整单优惠后的当前总金额
-     *
-     * @return
-     */
-    public static double getWholeTotal(int rate) {
-        return priceFormat(getAfterWholePrice() - getWholeDsc(rate));
-    }
-
-    /**
-     * 界面mRateEdt展示金额
-     * 获取当前整单优惠折扣率
-     *
-     * @param wholeDsc
-     * @return
-     */
-    public static long getWholeRate(double wholeDsc) {
-        return Math.round((wholeDsc / getAfterWholePrice()) * 100);
-    }
 
 }

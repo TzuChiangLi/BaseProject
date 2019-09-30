@@ -158,6 +158,7 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
 
     /**
      * 网络变化
+     *
      * @param isOnline
      */
     @Override

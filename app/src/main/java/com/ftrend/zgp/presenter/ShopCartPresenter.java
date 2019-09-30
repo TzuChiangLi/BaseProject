@@ -134,6 +134,7 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
                     code.equals(prodList.get(i).getBarCode())) {
                 hasFlag = true;
                 mView.setScanProdPosition(i);
+                addToShopCart(prodList.get(i));
                 break;
             }
             if (i == prodList.size() && hasFlag == false) {

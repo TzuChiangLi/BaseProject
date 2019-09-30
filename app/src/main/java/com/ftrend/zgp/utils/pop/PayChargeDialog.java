@@ -1,26 +1,25 @@
 package com.ftrend.zgp.utils.pop;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewStub;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.keyboard.KeyboardView;
-import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.R;
-import com.ftrend.zgp.utils.DscHelper;
 import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
-import com.ftrend.zgp.view.ShopCartActivity;
 import com.lxj.xpopup.core.BottomPopupView;
 
 import butterknife.BindView;
@@ -32,46 +31,26 @@ import butterknife.OnClick;
  *
  * @author liziqiang@ftrend.cn
  */
-public class PayChargeDialog extends BottomPopupView implements View.OnClickListener, KeyboardView.OnItemClickListener {
-    @BindView(R.id.vip_way_ll_info)
-    LinearLayout mInfoLayout;
-    @BindView(R.id.vip_way_edt)
+public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnItemClickListener {
+    @BindView(R.id.pay_charge_edt)
     ClearEditText mEdt;
-    @BindView(R.id.vip_way_tv_title)
-    TextView mTitleTv;
-    @BindView(R.id.vip_mobile_btn_submit)
-    Button mSubmitBtn;
-    @BindView(R.id.vip_way_img_close)
+    @BindView(R.id.pay_charge_img_close)
     ImageView mCloseImg;
-    //优惠：    3-单项优惠
-    public static final int DIALOG_SINGLE_RSC = 3;
-    //优惠：    3-整单优惠
-    public static final int DIALOG_WHOLE_RSC = 4;
-    private int type;
-    private int index = 0;
-    private Context mContext;
-    private KeyboardView mKeyView;
+    @BindView(R.id.pay_charge_tv_charge)
+    TextView mChargeTv;
+    @BindView(R.id.pay_charge_btn_submit)
+    Button mPayBtn;
     private View mKeyViewStub;
-    private EditText mRateEdt, mDscEdt;
-    private boolean isFirst = true;
+    private KeyboardView mKeyView;
 
 
-    public PayChargeDialog(@NonNull Context context, int type) {
+    public PayChargeDialog(@NonNull Context context) {
         super(context);
-        this.type = type;
-        mContext = context;
-    }
-
-    public PayChargeDialog(@NonNull Context context, int type, int index) {
-        super(context);
-        this.type = type;
-        this.index = index;
-        mContext = context;
     }
 
     @Override
     protected int getImplLayoutId() {
-        return R.layout.vip_dsc_mobile_dialog;
+        return R.layout.pay_charge_dialog;
     }
 
     @Override
@@ -79,234 +58,110 @@ public class PayChargeDialog extends BottomPopupView implements View.OnClickList
         super.onCreate();
         ButterKnife.bind(this);
         KeyboardUtils.hideSoftInput(this);
+        mEdt.setInputType(InputType.TYPE_NULL);
+        mKeyViewStub = ((ViewStub) findViewById(R.id.pay_charge_key_lite_view)).inflate();
+        mKeyView = mKeyViewStub.findViewById(R.id.vip_way_keyboard);
+        mKeyView.show();
+        mKeyView.setOnKeyboardClickListener(this);
+        mEdt.addTextChangedListener(edtWatcher);
     }
 
 
-
-
-
-
-
-    @OnClick(R.id.vip_way_img_close)
-    public void close() {
-        if (mContext instanceof ShopCartActivity) {
-            //需要撤销添加的最后一条
-            Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE);
+    TextWatcher edtWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
-        KeyboardUtils.hideSoftInput(this);
-        DscHelper.cancelWholeDsc();
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (!TextUtils.isEmpty(s.toString())) {
+                mChargeTv.setText(String.format("%.2f", Double.parseDouble(s.toString()) - TradeHelper.getTrade().getTotal()));
+            } else {
+                mChargeTv.setText("");
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+        }
+    };
+
+    @OnClick(R.id.pay_charge_btn_submit)
+    public void pay() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
+        if (TextUtils.isEmpty(mEdt.getText())) {
+            MessageUtil.show("请输入收入现金金额");
+        } else if (mEdt.getText().toString().contains("-")) {
+            MessageUtil.show("收入现金金额不足");
+        } else {
+            Event.sendEvent(Event.TARGET_PAY_WAY, Event.TYPE_PAY_CASH);
+        }
+
+    }
+
+    @OnClick(R.id.pay_charge_img_close)
+    public void close() {
         dismiss();
     }
 
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.vip_way_edt:
-                if (mKeyView.isShow()) {
-                    mKeyView.show();
-                }
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    protected void onDismiss() {
-        super.onDismiss();
-        if (mContext instanceof ShopCartActivity) {
-            //需要撤销添加的最后一条
-            if (TextUtils.isEmpty(mEdt.getText().toString())) {
-                Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE);
-            }
-            DscHelper.cancelWholeDsc();
-        }
-    }
-
-    //-------------------------------------键盘响应--------------------------------------------//
     @Override
     public void onKeyClick(View v, int key) {
-        switch (type) {
-            case DIALOG_SINGLE_RSC:
-            case DIALOG_WHOLE_RSC:
-                if (mRateEdt.hasFocus()) {
-                    mRateEdt.setText(isFirst ? String.valueOf(key) : mRateEdt.getText().append(String.valueOf(key)));
-                    isFirst = false;
-                } else {
-                    mDscEdt.setText(mDscEdt.getText().append(String.valueOf(key)));
-                }
-
-                break;
-            default:
-                mEdt.setText(mEdt.getText().append(String.valueOf(key)));
-                break;
+        if (mEdt.getText().toString().contains(".")) {
+            int position = mEdt.getText().toString().indexOf(".");
+            if (mEdt.getText().toString().substring(0, position).length() > 6) {
+                MessageUtil.show("超出限制");
+                return;
+            }
+            if (mEdt.getText().toString().substring(position, mEdt.getText().toString().length() - 1).length() >= 2) {
+                MessageUtil.show("超出限制");
+                return;
+            }
+        } else {
+            if (mEdt.getText().toString().length() >= 6) {
+                return;
+            }
         }
-
+        mEdt.setText(mEdt.getText().append(String.valueOf(key)));
     }
 
     @Override
     public void onDeleteClick() {
-        switch (type) {
-            case DIALOG_SINGLE_RSC:
-            case DIALOG_WHOLE_RSC:
-                if (mRateEdt.hasFocus()) {
-                    mRateEdt.setText(TextUtils.isEmpty(mRateEdt.getText().toString()) ? "" :
-                            mRateEdt.getText().toString().trim().substring(0, mRateEdt.getText().toString().trim().length() - 1));
-                } else {
-                    mDscEdt.setText(TextUtils.isEmpty(mDscEdt.getText().toString()) ? "" :
-                            mDscEdt.getText().toString().trim().substring(0, mDscEdt.getText().toString().trim().length() - 1));
-                }
-
-                break;
-            default:
-                mEdt.setText(TextUtils.isEmpty(mEdt.getText().toString()) ? "" :
-                        mEdt.getText().toString().trim().substring(0, mEdt.getText().toString().trim().length() - 1));
-                break;
-        }
-
+        mEdt.setText(TextUtils.isEmpty(mEdt.getText().toString()) ? "" :
+                mEdt.getText().toString().trim().substring(0, mEdt.getText().toString().trim().length() - 1));
     }
 
     @Override
     public void onPointClick() {
-        switch (type) {
-            case DIALOG_SINGLE_RSC:
-            case DIALOG_WHOLE_RSC:
-                if (mDscEdt.hasFocus()) {
-                    mDscEdt.getText().append('.');
-                }
-                break;
-            default:
-                mEdt.getText().append('.');
-                break;
+        if (mEdt.getText().toString().contains(".") || TextUtils.isEmpty(mEdt.getText().toString())) {
+            return;
         }
+        mEdt.getText().append('.');
     }
 
     @Override
     public void onHideClick(View v) {
-        DscHelper.cancelWholeDsc();
         dismiss();
     }
 
     @Override
     public void onNextClick() {
-        switch (type) {
-            case DIALOG_SINGLE_RSC:
-            case DIALOG_WHOLE_RSC:
-                if (mRateEdt.hasFocus()) {
-                    mDscEdt.requestFocus();
-                    mDscEdt.selectAll();
-                } else {
-                    mRateEdt.requestFocus();
-                    mRateEdt.selectAll();
-                }
-                break;
-            default:
-                break;
-        }
+
     }
 
     @Override
     public void onClearClick() {
-        switch (type) {
-            case DIALOG_SINGLE_RSC:
-            case DIALOG_WHOLE_RSC:
-                if (mRateEdt.hasFocus()) {
-                    mRateEdt.setText("");
-                } else {
-                    mDscEdt.setText("");
-                }
-                restoreTextColor(mRateEdt);
-                restoreTextColor(mDscEdt);
-                break;
-            default:
-                mEdt.setText("");
-                break;
-        }
+
     }
 
     @Override
     public void onCancelClick() {
-        dismiss();
+
     }
 
     @Override
     public void onEnterClick() {
-        switch (type) {
-            case DIALOG_SINGLE_RSC:
-                if (TextUtils.isEmpty(mRateEdt.getText().toString()) && TextUtils.isEmpty(mDscEdt.getText().toString())) {
-                    dismiss();
-                    return;
-                }
-                if (Integer.parseInt(mRateEdt.getText().toString()) <= TradeHelper.getMaxSingleRate(index) &&
-                        Double.parseDouble(mDscEdt.getText().toString()) <= TradeHelper.getMaxSingleDsc(index)) {
-                    //两个都为true的时候，才能保存成功
-                    //初始化整单优惠列表
 
-                    if (TradeHelper.saveSingleDsc(index, Double.parseDouble(mDscEdt.getText().toString()))) {
-                        Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH);
-                        dismiss();
-                    }
-                } else {
-                    MessageUtil.showError("失败");
-                }
-                break;
-            case DIALOG_WHOLE_RSC:
-                if (TextUtils.isEmpty(mRateEdt.getText().toString()) && TextUtils.isEmpty(mDscEdt.getText().toString())) {
-                    dismiss();
-                    return;
-                }
-                //原价不为0，判断是否为空
-                if (Integer.parseInt(mRateEdt.getText().toString()) <= TradeHelper.getMaxWholeRate() &&
-                        Double.parseDouble(mDscEdt.getText().toString()) <= TradeHelper.getMaxWholeDsc()) {
-                    if (TradeHelper.getWholeForDscPrice() == 0) {
-                        MessageUtil.show("本笔交易已无可优惠商品");
-                    } else {
-                        //两个都为true的时候，才能保存成功
-                        if (DscHelper.commitWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
-                            Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
-                            dismiss();
-                        }
-                    }
-                } else {
-                    MessageUtil.showError("失败");
-                }
-                break;
-            default:
-                break;
-        }
-
-
-    }
-
-
-
-
-    private void errorTextColor(EditText edt) {
-        edt.setTextColor(Color.RED);
-    }
-
-    private void restoreTextColor(EditText edt) {
-        edt.setTextColor(Color.BLACK);
     }
 }
-
-//                        MessageUtil.info("本单商品已享受其他优惠，如确定将取消先前优惠，是否继续？");
-//                        MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
-//                            @Override
-//                            public void onLeftBtnClick(BasePopupView popView) {
-//                                //两个都为true的时候，才能保存成功
-//                                if (DscHelper.commitWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
-//                                    Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
-//                                    popView.dismiss();
-//                                    dismiss();
-//                                } else {
-//                                    MessageUtil.showError("操作失败，请重试");
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onRightBtnClick(BasePopupView popView) {
-//                                popView.dismiss();
-//                            }
-//                        });

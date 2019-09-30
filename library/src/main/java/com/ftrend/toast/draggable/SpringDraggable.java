@@ -8,10 +8,10 @@ import android.view.View;
 import com.ftrend.toast.AbsDraggable;
 
 /**
- *    author : Android 轮子哥
- *    github : https://github.com/getActivity/ToastUtils
- *    time   : 2019/01/04
- *    desc   : 拖拽后回弹处理实现类
+ * author : Android 轮子哥
+ * github : https://github.com/getActivity/ToastUtils
+ * time   : 2019/01/04
+ * desc   : 拖拽后回弹处理实现类
  */
 public class SpringDraggable extends AbsDraggable {
 
@@ -61,10 +61,9 @@ public class SpringDraggable extends AbsDraggable {
     /**
      * 执行动画
      *
-     * @param startX        X轴起点坐标
-     * @param endX          X轴终点坐标
-     *
-     * @param y             Y轴坐标
+     * @param startX X轴起点坐标
+     * @param endX   X轴终点坐标
+     * @param y      Y轴坐标
      */
     private void startAnimation(int startX, int endX, final int y) {
         ValueAnimator animator = ValueAnimator.ofInt(startX, endX);

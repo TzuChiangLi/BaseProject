@@ -10,6 +10,6 @@
         <attr name="defualtText" format="string" />
         <attr name="originColor" format="color" />
         <attr name="finishColor" format="color" />
-        <attr name="errorColor" format="color"/>
+        <attr name="errorColor" format="color" />
     </declare-styleable>
 </resources>
