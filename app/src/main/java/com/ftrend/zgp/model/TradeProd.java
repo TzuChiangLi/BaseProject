@@ -41,7 +41,7 @@ public class TradeProd extends BaseModel {
     @NotNull
     private double amount = 0;
     @Column
-    private double manuDsc = 0;
+    private double manuDsc;
     @Column
     private double vipDsc = 0;
     @Column
@@ -58,11 +58,19 @@ public class TradeProd extends BaseModel {
     private double singleDsc = 0;
     @Column
     private double wholeDsc = 0;
+    @Column
+    private int prodForDsc;
+    @Column
+    private int prodPriceFlag = 0;
+    @Column
+    private int prodIsLargess = 0;
+    @Column
+    private double prodMinPrice;
 
     /**
      * 该变量为了改变变量选中状态而创建，与数据库字段无关
      */
-    private boolean isSelect = false;
+    private transient boolean isSelect = false;
 
 
 //    public TradeProd() {
@@ -141,6 +149,7 @@ public class TradeProd extends BaseModel {
     }
 
     public double getManuDsc() {
+        manuDsc = singleDsc + wholeDsc;
         return manuDsc;
     }
 
@@ -165,6 +174,7 @@ public class TradeProd extends BaseModel {
     }
 
     public double getTotal() {
+        total = price * amount - singleDsc - wholeDsc - vipDsc - tranDsc;
         return total;
     }
 
@@ -218,5 +228,37 @@ public class TradeProd extends BaseModel {
 
     public void setWholeDsc(double wholeDsc) {
         this.wholeDsc = wholeDsc;
+    }
+
+    public int getProdForDsc() {
+        return prodForDsc;
+    }
+
+    public void setProdForDsc(int prodForDsc) {
+        this.prodForDsc = prodForDsc;
+    }
+
+    public int getProdPriceFlag() {
+        return prodPriceFlag;
+    }
+
+    public void setProdPriceFlag(int prodPriceFlag) {
+        this.prodPriceFlag = prodPriceFlag;
+    }
+
+    public int getProdIsLargess() {
+        return prodIsLargess;
+    }
+
+    public void setProdIsLargess(int prodIsLargess) {
+        this.prodIsLargess = prodIsLargess;
+    }
+
+    public double getProdMinPrice() {
+        return prodMinPrice;
+    }
+
+    public void setProdMinPrice(double prodMinPrice) {
+        this.prodMinPrice = prodMinPrice;
     }
 }

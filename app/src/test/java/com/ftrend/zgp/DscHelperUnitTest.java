@@ -73,7 +73,8 @@ public class DscHelperUnitTest {
         assert initUserAndDep("063", "2037");
         initCartWithFullDsc();
 
-        doWholeDsc();
+        double dscRate = 10.0;
+        doWholeDsc(dscRate);
 
         outputProdTotal();
         outputTradeTotal();
@@ -82,7 +83,7 @@ public class DscHelperUnitTest {
         double tradeTotal = TradeHelper.getTradeTotal();
         double dscTotal = TradeHelper.getTrade().getDscTotal();
         assert doubleEq(prodTotal, tradeTotal + dscTotal);
-        assert doubleEq(dscTotal, prodTotal * 10.0 / 100.0);
+        assert doubleEq(dscTotal, prodTotal * dscRate / 100.0);
         System.out.println("fullDscTest PASS");
     }
 
@@ -94,7 +95,8 @@ public class DscHelperUnitTest {
         assert initUserAndDep("063", "2037");
         initCartWithHalfDsc();
 
-        doWholeDsc();
+        double dscRate = 10.0;
+        doWholeDsc(dscRate);
 
         outputProdTotal();
         outputTradeTotal();
@@ -103,7 +105,7 @@ public class DscHelperUnitTest {
         double tradeTotal = TradeHelper.getTradeTotal();
         double dscTotal = TradeHelper.getTrade().getDscTotal();
         assert doubleEq(prodTotal, tradeTotal + dscTotal);
-        assert doubleLt(dscTotal, prodTotal * 10.0 / 100.0);
+        assert doubleLt(dscTotal, prodTotal * dscRate / 100.0);
         System.out.println("halfDscTest PASS");
     }
 
@@ -115,7 +117,8 @@ public class DscHelperUnitTest {
         assert initUserAndDep("063", "2009");
         initCartWithNoDsc();
 
-        doWholeDsc();
+        double dscRate = 10.0;
+        doWholeDsc(dscRate);
 
         outputProdTotal();
         outputTradeTotal();
@@ -218,11 +221,14 @@ public class DscHelperUnitTest {
 
     /**
      * 执行整单优惠
+     * @param dscRate 折扣率
      */
-    private void doWholeDsc() {
+    private void doWholeDsc(double dscRate) {
         DscHelper.beginWholeDsc();
-        double dsc = DscHelper.getWholeDsc(10);
-        DscHelper.commitWholeDsc(dsc);
+        DscHelper.wholeDscByRate(dscRate);
+        DscHelper.commitWholeDsc();
+        /*double dsc = DscHelper.getWholeDsc(10);
+        DscHelper.commitWholeDsc(dsc);*/
     }
 
     /**

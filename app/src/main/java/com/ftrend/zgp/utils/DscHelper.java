@@ -5,7 +5,10 @@ import android.text.TextUtils;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.utils.db.ZgpDb;
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.database.transaction.FastStoreModelTransaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,20 +22,27 @@ import static com.ftrend.zgp.utils.TradeHelper.priceFormat;
 
 public class DscHelper {
     private static final String TAG = "DscHelper";
-    //可整单优惠的商品
+    //可优惠商品列表
     private static List<TradeProd> dscList = null;
-
+    //可优惠商品总价
+    private static double prodTotal = 0;
+    //计算结果（避免直接修改商品的整单优惠金额）
+    private static List<Double> calcList = null;
+    //计算类型：1 - 打折，2 - 抹零，其他 - 计算结果无效
+    private static int calcType = 0;
 
     /**
      * @return 能整单优惠的商品列表
      */
     public static void beginWholeDsc() {
         List<TradeProd> prodList = TradeHelper.getProdList();
-        int forDsc;
-        double singleDsc, vipDsc, tranDsc;
+//        int forDsc;
+//        double singleDsc, vipDsc, tranDsc;
         dscList = new ArrayList<>();
+        calcList = new ArrayList<>();
+        prodTotal = 0;
         for (TradeProd prod : prodList) {
-            if (TextUtils.isEmpty(prod.getBarCode())) {
+            /*if (TextUtils.isEmpty(prod.getBarCode())) {
                 //根据prodCode查商品优惠限制
                 forDsc = SQLite.select().from(DepProduct.class)
                         .where(DepProduct_Table.barCode.eq(prod.getBarCode()))
@@ -48,13 +58,135 @@ public class DscHelper {
             tranDsc = prod.getTranDsc();
             if ((forDsc != 0) && (singleDsc == 0) && (vipDsc == 0) && (tranDsc == 0)) {
                 dscList.add(prod);
+            }*/
+            if (prod.getProdIsLargess() != 0) {
+                continue;//跳过赠品
+            }
+            if (prod.getProdForDsc() == 0) {
+                continue;//跳过不允许优惠商品
+            }
+            dscList.add(prod);
+            calcList.add(0D);
+            prodTotal += prod.getAmount() * prod.getPrice();
+        }
+    }
+
+    /**
+     * 按折扣率计算整单优惠（打折）
+     *
+     * @param rate 折扣率
+     * @return 实际优惠金额
+     */
+    public static double wholeDscByRate(double rate) {
+        calcType = 1;
+        double dscTotal = 0;
+        for (int i = 0; i < dscList.size(); i++) {
+            TradeProd prod = dscList.get(i);
+            double dscPrice = prod.getPrice() * (100 - rate) / 100D;//折扣后价格
+            //折扣后价格不能低于最低售价
+            if (dscPrice < prod.getProdMinPrice()) {
+                dscPrice = prod.getProdMinPrice();
+            }
+            //根据折扣后价格计算优惠金额
+            double dsc = prod.getAmount() * (prod.getPrice() - dscPrice);
+            calcList.set(i, dsc);
+            dscTotal += dsc;
+        }
+        return dscTotal;
+    }
+
+    /**
+     * 按优惠金额分摊整单优惠（抹零）
+     *
+     * @param dscTotal 抹零金额
+     * @return 实际抹零金额
+     */
+    public static double wholeDscByTotal(double dscTotal) {
+        calcType = 2;
+        double remainTotal = dscTotal;
+        for (int i = 0; i < dscList.size() - 1; i++) {
+            TradeProd prod = dscList.get(i);
+            double dsc = dscTotal * prod.getPrice() * prod.getAmount() / prodTotal;//按金额比例分摊
+            //折扣后价格不能低于最低售价（抹零与其他优惠共存）
+            double dscMax = prodMaxDscByTotal(prod); //最大整单优惠金额
+            if (dsc > dscMax) {
+                dsc = dscMax;
+            }
+            calcList.set(i, dsc);
+            remainTotal -= dsc;
+        }
+        //余额分摊到最后一个商品
+        int index = dscList.size() - 2;
+        double max = prodMaxDscByTotal(dscList.get(index));
+        if (max >= remainTotal) {
+            calcList.set(index, remainTotal);
+            return dscTotal;
+        }
+
+        //余额超过最后一个商品最低售价限制，再次进行分摊
+        calcList.set(index, max);
+        remainTotal -= max;
+        for (int i = 0; i < dscList.size() - 1; i++) {
+            TradeProd prod = dscList.get(i);
+            double dscMax = prodMaxDscByTotal(prod) - calcList.get(i); //可再次分摊金额
+            if (dscMax >= remainTotal) {
+                calcList.set(i, calcList.get(i) + remainTotal);
+                remainTotal = 0;
+                break;//分摊完毕
+            } else {
+                calcList.set(i, calcList.get(i) + dscMax);
+                remainTotal -= dscMax;
             }
         }
+        if (remainTotal > 0) {
+            //剩余金额无法再分摊，直接舍弃
+        }
+        //返回实际抹零金额
+        return dscTotal - remainTotal;
+    }
+
+    /**
+     * 计算指定流水商品的最大抹零金额
+     *
+     * @param prod
+     * @return
+     */
+    private static double prodMaxDscByTotal(TradeProd prod) {
+        return (prod.getPrice() - prod.getProdMinPrice())
+                - prod.getSingleDsc() - prod.getVipDsc() - prod.getTranDsc();
+    }
+
+    /**
+     * 将整单优惠计算结果保存到当前交易流水
+     *
+     * @return
+     */
+    public static boolean commitWholeDsc() {
+        if (calcType != 1 && calcType != 2) {
+            return false;//计算结果无效
+        }
+        for (int i = 0; i < dscList.size(); i++) {
+            TradeProd prod = dscList.get(i);
+            prod.setWholeDsc(calcList.get(i));
+            if (calcType == 1) {
+                //打折，清除其他优惠
+                prod.setSingleDsc(0);
+                prod.setVipDsc(0);
+                prod.setTranDsc(0);
+            }
+        }
+        FlowManager.getDatabase(ZgpDb.class).executeTransaction(
+                FastStoreModelTransaction
+                        .insertBuilder(FlowManager.getModelAdapter(TradeProd.class))
+                        .addAll(dscList)
+                        .build());
+        return TradeHelper.recalcTotal();
     }
 
     /**
      * 保存整单优惠
      */
+    @Deprecated
     public static boolean commitWholeDsc(double wholeDsc) {
         //获取可整单优惠的商品列表
         //优惠金额=商品总价*折扣率
@@ -119,6 +251,9 @@ public class DscHelper {
      */
     public static void cancelWholeDsc() {
         dscList = null;
+        calcList.clear();
+        calcList = null;
+        prodTotal = 0;
     }
 
 

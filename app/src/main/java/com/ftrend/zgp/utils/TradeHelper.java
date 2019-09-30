@@ -186,11 +186,15 @@ public class TradeHelper {
         prod.setBarCode(product.getBarCode());
         prod.setDepCode(product.getDepCode());
         prod.setPrice(product.getPrice());
+        prod.setProdForDsc(product.getForDsc());
+        prod.setProdPriceFlag(product.getPriceFlag());
+        prod.setProdIsLargess(product.getIsLargess());
+        prod.setProdMinPrice(product.getMinimumPrice());
         prod.setAmount(1);
-        prod.setManuDsc(0);
+        prod.setSingleDsc(0);
+        prod.setWholeDsc(0);
         prod.setVipDsc(0);
         prod.setTranDsc(0);
-        prod.setTotal(prod.getPrice() * prod.getAmount());
         prod.setVipDsc(0);
         prod.setSaleInfo("");
         prod.setDelFlag("0");
@@ -508,7 +512,6 @@ public class TradeHelper {
             //改价把手动优惠+会员优惠清掉
             tradeProd.setSingleDsc(0);
             tradeProd.setWholeDsc(0);
-            tradeProd.setManuDsc(0);
             tradeProd.setVipDsc(0);
             tradeProd.setTotal(priceFormat(tradeProd.getAmount() * price));
         }
@@ -871,7 +874,6 @@ public class TradeHelper {
         //单项优惠的时候，清空整单优惠
         prod.setWholeDsc(0);
         prod.setVipTotal(0);
-        prod.setManuDsc(priceFormat(prod.getSingleDsc() + prod.getWholeDsc()));
         prod.setTotal(priceFormat((prod.getPrice() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()) * prod.getAmount()));
         if (prod.save()) {
             return recalcTotal();
@@ -939,8 +941,6 @@ public class TradeHelper {
                 prod.setWholeDsc(dsc);
                 //整单优惠的时候，单项优惠清零
                 prod.setSingleDsc(0);
-
-                prod.setManuDsc(priceFormat(prod.getSingleDsc() + dsc));
                 prod.setTotal(priceFormat((prod.getPrice() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()) * prod.getAmount()));
             }
             if (prod.save()) {
@@ -1032,7 +1032,6 @@ public class TradeHelper {
                 vipDsc = prod.getPrice() - queryVipPrice(vipPriceType, prod);
                 LogUtil.d("----rate/vip:" + rateDsc + "/" + vipDsc);
                 prod.setVipDsc(Math.max(rateDsc, vipDsc));
-                prod.setManuDsc(0);
                 prod.setWholeDsc(0);
                 prod.setSingleDsc(0);
                 //已存在手工优惠的不参与会员优惠
@@ -1050,7 +1049,6 @@ public class TradeHelper {
                 //如果没有会员价，vipPrice = prod.getPrice()商品原价
                 vipDsc = prod.getPrice() - queryVipPrice(vipPriceType, prod);
                 prod.setVipDsc(Math.max(rateDsc, vipDsc));
-                prod.setManuDsc(0);
                 prod.setWholeDsc(0);
                 prod.setSingleDsc(0);
                 //已存在手工优惠的不参与会员优惠
