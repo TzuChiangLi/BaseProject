@@ -800,6 +800,7 @@ public class TradeHelper {
      */
     public static double getMaxWholeDsc() {
         double dscTotal = 0;
+        double mPrice = 0;
         //按照系统折扣设置该收款员在交易中最多优惠金额
         //商品原价*折扣率
         double maxDscTotal = getWholePrice() * getUserMaxDscRate() / 100;
@@ -808,19 +809,7 @@ public class TradeHelper {
         //当前商品的全部优惠
         for (TradeProd prod : prodList) {
             dscTotal += (prod.getVipDsc() + prod.getTranDsc() + prod.getSingleDsc()) * prod.getAmount();
-        }
-        double minumPrice, mPrice = 0;
-        for (TradeProd prod : DscHelper.beginWholeDsc()) {
-            if (TextUtils.isEmpty(prod.getBarCode())) {
-                minumPrice = SQLite.select(DepProduct_Table.minimumPrice).from(DepProduct.class)
-                        .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
-                        .querySingle().getMinimumPrice();
-            } else {
-                minumPrice = SQLite.select(DepProduct_Table.minimumPrice).from(DepProduct.class)
-                        .where(DepProduct_Table.barCode.eq(prod.getBarCode()))
-                        .querySingle().getMinimumPrice();
-            }
-            mPrice += (prod.getPrice() - minumPrice) * prod.getAmount();
+            mPrice = (prod.getProdForDsc() != 1) ? 0 : (prod.getPrice() - prod.getProdMinPrice()) * prod.getAmount();
         }
         //最大金额减去目前所有的优惠，即可优惠的金额
         dscTotal = maxDscTotal - dscTotal >= 0 ? ((maxDscTotal - dscTotal) > mPrice ? mPrice : maxDscTotal - dscTotal) : 0;
