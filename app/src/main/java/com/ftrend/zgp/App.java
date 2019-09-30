@@ -27,6 +27,8 @@ public class App extends Application {
         //初始化数据库框架
         FlowManager.init(this);
 
+        // TODO: 2019/9/29 此行代码用于生成单元测试用数据，仅在需要时启用
+//        TestHelper.BaseData2Code();
 
         //加载全局参数
         ZgParams.loadParams();
