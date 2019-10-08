@@ -1052,9 +1052,8 @@ public class TradeHelper {
             double rate = vip.getVipDscRate();
             double vipDsc, rateDsc;
             for (TradeProd prod : tempList) {
-                rateDsc = prod.getPrice() * (rate) / 100;
+                rateDsc = prod.getPrice() * (100-rate) / 100;
                 vipDsc = prod.getPrice() - queryVipPrice(vipPriceType, prod);
-                LogUtil.d("----rate/vip:" + rateDsc + "/" + vipDsc);
                 //TODO AMOUNT
                 prod.setVipDsc(Math.max(rateDsc, vipDsc) * prod.getAmount());
                 prod.setWholeDsc(0);

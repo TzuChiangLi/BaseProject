@@ -84,7 +84,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
 
     @Override
     public void showError(String msg) {
-
+        MessageUtil.showError(msg);
     }
 
     @Override
