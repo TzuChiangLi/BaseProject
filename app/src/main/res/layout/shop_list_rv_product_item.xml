@@ -83,25 +83,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/shop_list_rv_product_tv_prodname"
-        android:layout_toStartOf="@+id/shop_list_rv_img_minus"
+        android:layout_toStartOf="@+id/shop_list_rv_product_tv_num"
         android:text="@string/shop_tv_num"
         android:textColor="@color/text_black_first"
         android:textSize="14sp" />
 
 
-    <ImageButton
-        android:id="@+id/shop_list_rv_img_minus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/shop_list_rv_product_tv_num_title"
-        android:layout_alignBottom="@+id/shop_list_rv_product_tv_prodname"
-        android:layout_toStartOf="@+id/shop_list_rv_product_tv_num"
-        android:background="@null"
-        android:paddingStart="2dp"
-        android:paddingEnd="2dp"
-        android:scaleX="1.2"
-        android:scaleY="1.2"
-        android:src="@drawable/minus" />
+    <!--<ImageButton-->
+    <!--android:id="@+id/shop_list_rv_img_minus"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignTop="@+id/shop_list_rv_product_tv_num_title"-->
+    <!--android:layout_alignBottom="@+id/shop_list_rv_product_tv_prodname"-->
+    <!--android:layout_toStartOf="@+id/shop_list_rv_product_tv_num"-->
+    <!--android:background="@null"-->
+    <!--android:paddingStart="2dp"-->
+    <!--android:paddingEnd="2dp"-->
+    <!--android:scaleX="1.2"-->
+    <!--android:scaleY="1.2"-->
+    <!--android:src="@drawable/minus" />-->
 
 
     <TextView
@@ -109,27 +109,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/shop_list_rv_product_tv_prodname"
-        android:layout_marginStart="4dp"
-        android:layout_marginEnd="4dp"
-
-        android:layout_toStartOf="@+id/shop_list_rv_img_add"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_toStartOf="@+id/shop_list_rv_product_tv_num_unit"
         android:textColor="@color/text_black_first"
         android:textSize="14sp" />
 
 
-    <ImageButton
-        android:id="@+id/shop_list_rv_img_add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/shop_list_rv_product_tv_num_title"
-        android:layout_alignBottom="@+id/shop_list_rv_product_tv_prodname"
-        android:layout_toStartOf="@+id/shop_list_rv_product_tv_num_unit"
-        android:background="@null"
-        android:paddingStart="2dp"
-        android:paddingEnd="2dp"
-        android:scaleX="1.2"
-        android:scaleY="1.2"
-        android:src="@drawable/add" />
+    <!--<ImageButton-->
+    <!--android:id="@+id/shop_list_rv_img_add"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_alignTop="@+id/shop_list_rv_product_tv_num_title"-->
+    <!--android:layout_alignBottom="@+id/shop_list_rv_product_tv_prodname"-->
+    <!--android:layout_toStartOf="@+id/shop_list_rv_product_tv_num_unit"-->
+    <!--android:background="@null"-->
+    <!--android:paddingStart="2dp"-->
+    <!--android:paddingEnd="2dp"-->
+    <!--android:scaleX="1.2"-->
+    <!--android:visibility="gone"-->
+    <!--android:scaleY="1.2"-->
+    <!--android:src="@drawable/add" />-->
 
     <TextView
         android:id="@+id/shop_list_rv_product_tv_num_unit"
@@ -137,7 +137,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/shop_list_rv_product_tv_prodname"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="12dp"
         android:text="单位"
         android:textColor="@color/text_black_first"
         android:textSize="14sp" />
@@ -166,6 +166,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:gravity="center"
             android:text="@string/shop_tv_num_replace"
             android:textColor="@color/text_black_first" />
 
@@ -174,6 +175,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.2"
+            android:gravity="center"
             android:text="@string/shop_tv_discount"
             android:textColor="@color/text_black_first" />
 
@@ -182,8 +184,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2.9"
-            android:text="@string/shop_tv_num_replace"
+            android:gravity="center"
             android:letterSpacing="0.05"
+            android:text="@string/shop_tv_num_replace"
             android:textColor="@color/text_black_first" />
 
         <TextView
@@ -191,6 +194,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.2"
+            android:gravity="end"
             android:text="@string/shop_tv_sub_total"
             android:textColor="@color/text_black_first" />
 
@@ -199,44 +203,89 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2"
+            android:gravity="center"
             android:text="@string/shop_tv_num_replace"
             android:textColor="@color/text_black_first" />
     </LinearLayout>
 
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/shop_list_rv_ll_btn"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/shop_list_rv_ll_info"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="@dimen/dp_4"
-        android:orientation="horizontal"
         android:visibility="gone">
 
-        <Button
+        <TextView
             android:id="@+id/shop_list_rv_btn_change_price"
-            android:layout_width="0dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/shop_btn_price" />
+            android:layout_marginEnd="4dp"
+            android:layout_toStartOf="@+id/shop_list_rv_btn_discount"
+            android:background="@drawable/shop_btn_blue_selector"
+            android:gravity="center"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:text="@string/shop_btn_price"
+            android:textColor="@color/common_white" />
 
-        <Button
+        <TextView
             android:id="@+id/shop_list_rv_btn_discount"
-            android:layout_width="0dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/shop_btn_discount" />
+            android:layout_marginEnd="4dp"
+            android:layout_toStartOf="@+id/shop_list_rv_img_minus"
+            android:background="@drawable/shop_btn_blue_selector"
+            android:gravity="center"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:text="@string/shop_btn_discount"
+            android:textColor="@color/common_white" />
 
-        <Button
+        <TextView
+            android:id="@+id/shop_list_rv_img_minus"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_toStartOf="@+id/shop_list_rv_img_add"
+            android:background="@drawable/shop_btn_blue_selector"
+            android:gravity="center"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:text="-"
+            android:textColor="@color/common_white" />
+
+        <TextView
+            android:id="@+id/shop_list_rv_img_add"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_toStartOf="@+id/shop_list_rv_btn_del"
+            android:background="@drawable/shop_btn_blue_selector"
+            android:gravity="center"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:text="+"
+            android:textColor="@color/common_white" />
+
+        <TextView
             android:id="@+id/shop_list_rv_btn_del"
-            android:layout_width="0dp"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/shop_btn_delete" />
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/shop_btn_blue_selector"
+            android:gravity="center"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:text="@string/shop_btn_delete"
+            android:textColor="@color/common_white" />
 
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </RelativeLayout>

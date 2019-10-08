@@ -28,6 +28,10 @@ public class DepCls extends BaseModel {
     @Column
     @NotNull
     private String clsName;
+    /**
+     * 该变量为了改变变量选中状态而创建，与数据库字段无关
+     */
+    private transient boolean isSelect = false;
 
     public DepCls() {
     }
@@ -68,5 +72,13 @@ public class DepCls extends BaseModel {
 
     public void setClsName(String clsName) {
         this.clsName = clsName;
+    }
+
+    public boolean isSelect() {
+        return isSelect;
+    }
+
+    public void setSelect(boolean select) {
+        isSelect = select;
     }
 }

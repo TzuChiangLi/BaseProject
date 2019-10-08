@@ -29,6 +29,8 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
      * 4是取单界面
      */
     private int type;
+    @BindColor(R.color.common_gray_bg)
+    int rv_cls_selected;
     @BindColor(R.color.common_rv_item)
     int rv_item_selected;
     @BindColor(R.color.common_white)
@@ -46,6 +48,7 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
         switch (type) {
             case 0:
                 //选择商品界面左部类别分栏
+                helper.setBackgroundColor(R.id.shop_cart_rv_classes_item_tv, ((DepCls) item).isSelect() ? rv_item_normal : rv_cls_selected);
                 helper.setText(R.id.shop_cart_rv_classes_item_tv, ((DepCls) item).getClsName());
                 break;
             case 1:

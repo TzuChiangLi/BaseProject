@@ -31,7 +31,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/home_img_dep"
-        android:layout_alignBottom="@+id/home_img_dep"
         android:layout_marginStart="16dp"
         android:layout_toEndOf="@+id/home_img_dep"
         android:gravity="center"
@@ -42,22 +41,23 @@
 
     <RelativeLayout
         android:id="@+id/home_ll_info"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/home_img_dep"
-        android:layout_marginTop="8dp"
-        android:background="@color/common_blue"
+        android:layout_alignBottom="@+id/home_img_dep"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/home_img_dep"
         android:orientation="horizontal"
         android:paddingTop="2dp"
         android:paddingBottom="2dp">
 
-        <TextView
+        <ImageView
             android:id="@+id/home_tv_date_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginStart="16dp"
-            android:text="@string/home_tv_date"
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@+id/home_tv_date"
+            android:src="@drawable/date"
             android:textColor="@color/common_white" />
 
         <TextView
@@ -65,27 +65,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/home_tv_date_title"
-            android:textColor="@color/common_white" />
+            android:layout_marginEnd="8dp"
+            android:layout_toStartOf="@+id/home_img_user_title"
+            android:textColor="@color/home_title_tv_blue" />
 
 
         <ImageView
+            android:id="@+id/home_img_user_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginEnd="8dp"
-            android:layout_toStartOf="@+id/home_tv_user_title"
+            android:layout_toStartOf="@+id/home_tv_user"
             android:scaleType="centerInside"
             android:src="@drawable/user" />
-
-        <TextView
-            android:id="@+id/home_tv_user_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/home_tv_user"
-            android:text="@string/home_tv_user"
-            android:textColor="@color/common_white" />
 
         <TextView
             android:id="@+id/home_tv_user"
@@ -94,16 +87,32 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="16dp"
-            android:textColor="@color/common_white" />
+            android:textColor="@color/home_title_tv_blue" />
 
     </RelativeLayout>
 
+    <View
+        android:id="@+id/home_img_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/home_ll_info"
+        android:layout_marginTop="8dp"
+        android:background="@color/home_title_tv_blue" />
+
+    <ImageView
+        android:id="@+id/home_img_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/home_img_line"
+        android:background="@color/common_white"
+        android:scaleType="centerInside"
+        android:src="@drawable/title_bar_bottom" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/home_rv_menu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/home_ll_info"
+        android:layout_below="@+id/home_img_top"
         android:background="@color/common_gray_bg"
         android:overScrollMode="never"
         android:scrollbars="none"

@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    android:background="@color/common_white">
+    android:background="@color/common_white"
+    android:paddingBottom="8dp">
 
     <TextView
         android:id="@+id/main_rv_menu_title"
@@ -19,18 +19,18 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <View
-        android:id="@+id/main_rv_menu_line"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_below="@+id/main_rv_menu_title"
-        android:layout_marginStart="8dp"
-        android:background="@color/divide_line" />
+    <!--<View-->
+    <!--android:id="@+id/main_rv_menu_line"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1px"-->
+    <!--android:layout_below="@+id/main_rv_menu_title"-->
+    <!--android:layout_marginStart="8dp"-->
+    <!--android:background="@color/divide_line" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_rv_menu_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/main_rv_menu_line"
+        android:layout_below="@+id/main_rv_menu_title"
         tools:listitem="@layout/menu_rv_func_item" />
 </RelativeLayout>

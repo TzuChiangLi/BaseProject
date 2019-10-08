@@ -80,7 +80,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     private Contract.ShopCartPresenter mPresenter;
     private ShopAdapter<DepProduct> mProdAdapter;
     private ShopAdapter<DepCls> mClsAdapter;
-    private int oldPosition = -1;
+    private int oldProdIndex = -1, oldClsIndex = -1;
     private static int START_SCAN = 001;
 
     @Override
@@ -132,10 +132,20 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         mClassRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mClsAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_classes_item, clsList, 0);
         mClassRecyclerView.setAdapter(mClsAdapter);
-        mClassRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mClsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (oldClsIndex == -1 && oldClsIndex <= clsList.size()) {
+                    mClsAdapter.getData().get(0).setSelect(false);
+                    mClsAdapter.notifyItemChanged(0);
+                }
+                if (oldClsIndex != -1 && oldClsIndex <= clsList.size()) {
+                    mClsAdapter.getData().get(oldClsIndex).setSelect(false);
+                    mClsAdapter.notifyItemChanged(oldClsIndex);
+                }
+                oldClsIndex = position;
+                mClsAdapter.getData().get(position).setSelect(true);
+                mClsAdapter.notifyItemChanged(position);
                 mPresenter.searchProdList(clsList.get(position).getClsCode());
             }
         });
@@ -175,11 +185,11 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (oldPosition != -1 && oldPosition < adapter.getItemCount()) {
-                    mProdAdapter.getData().get(oldPosition).setSelect(false);
-                    mProdAdapter.notifyItemChanged(oldPosition);
+                if (oldProdIndex != -1 && oldProdIndex < adapter.getItemCount()) {
+                    mProdAdapter.getData().get(oldProdIndex).setSelect(false);
+                    mProdAdapter.notifyItemChanged(oldProdIndex);
                 }
-                oldPosition = position;
+                oldProdIndex = position;
                 mProdAdapter.getData().get(position).setSelect(true);
                 mProdAdapter.notifyItemChanged(position);
                 //添加到购物车中
@@ -228,11 +238,11 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @Override
     public void setScanProdPosition(int index) {
         mProdRecyclerView.smoothScrollToPosition(index);
-        if (oldPosition != -1 && oldPosition < mProdAdapter.getItemCount()) {
-            mProdAdapter.getData().get(oldPosition).setSelect(false);
-            mProdAdapter.notifyItemChanged(oldPosition);
+        if (oldProdIndex != -1 && oldProdIndex < mProdAdapter.getItemCount()) {
+            mProdAdapter.getData().get(oldProdIndex).setSelect(false);
+            mProdAdapter.notifyItemChanged(oldProdIndex);
         }
-        oldPosition = index;
+        oldProdIndex = index;
         mProdAdapter.getData().get(index).setSelect(true);
         mProdAdapter.notifyItemChanged(index);
     }

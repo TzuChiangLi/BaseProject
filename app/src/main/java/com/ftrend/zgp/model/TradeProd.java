@@ -66,7 +66,6 @@ public class TradeProd extends BaseModel {
     private int prodIsLargess = 0;
     @Column
     private double prodMinPrice;
-
     /**
      * 该变量为了改变变量选中状态而创建，与数据库字段无关
      */

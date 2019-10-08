@@ -40,12 +40,16 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
                 mProdList) {
             product.setSelect(false);
         }
+        for (DepCls cls : clsList) {
+            cls.setSelect(false);
+        }
         //region 可能数据表自己测试用的有点问题，此处修复那个问题后再把牵扯到V层的代码修正掉
         mView.setProdList(mProdList);
         DepCls depCls = new DepCls();
         depCls.setClsName("全部类别");
         depCls.setDepCode("all");
         depCls.setClsCode("all");
+        depCls.setSelect(true);
 
         clsList.add(0, depCls);
         mView.setClsList(clsList);

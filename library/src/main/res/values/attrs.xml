@@ -12,4 +12,9 @@
         <attr name="finishColor" format="color" />
         <attr name="errorColor" format="color" />
     </declare-styleable>
+    <declare-styleable name="ClearEditText">
+        <attr name="clearIcon" format="reference" />
+        <attr name="scaleSize" format="float" />
+        <attr name="drawableWidth" format="dimension" />
+    </declare-styleable>
 </resources>
