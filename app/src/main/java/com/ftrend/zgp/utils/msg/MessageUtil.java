@@ -29,10 +29,10 @@ public class MessageUtil {
     /**
      * 现金找零
      */
-    public static void showChargeDialog(Context context) {
+    public static void showChargeDialog(Context context,double total) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new PayChargeDialog(context))
+                .asCustom(new PayChargeDialog(context,total))
                 .show();
     }
 

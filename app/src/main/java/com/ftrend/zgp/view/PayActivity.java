@@ -131,7 +131,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                         break;
                     case 3:
                         //现金
-                        MessageUtil.showChargeDialog(PayActivity.this);
+                        MessageUtil.showChargeDialog(PayActivity.this, Double.parseDouble(mTotalTv.getText().toString()));
                         break;
                     default:
                         break;

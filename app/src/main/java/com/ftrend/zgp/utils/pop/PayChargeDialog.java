@@ -16,9 +16,9 @@ import com.blankj.utilcode.util.KeyboardUtils;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.R;
-import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.lxj.xpopup.core.BottomPopupView;
 
@@ -38,14 +38,22 @@ public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnI
     ImageView mCloseImg;
     @BindView(R.id.pay_charge_tv_charge)
     TextView mChargeTv;
+    @BindView(R.id.pay_charge_tv_total)
+    TextView mTotalTv;
     @BindView(R.id.pay_charge_btn_submit)
     Button mPayBtn;
     private View mKeyViewStub;
     private KeyboardView mKeyView;
+    private double total;
 
 
     public PayChargeDialog(@NonNull Context context) {
         super(context);
+    }
+
+    public PayChargeDialog(@NonNull Context context, double total) {
+        super(context);
+        this.total = total;
     }
 
     @Override
@@ -64,6 +72,8 @@ public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnI
         mKeyView.show();
         mKeyView.setOnKeyboardClickListener(this);
         mEdt.addTextChangedListener(edtWatcher);
+        mTotalTv.setText(String.format("%.2f", total));
+        LogUtil.d("----total:" + total);
     }
 
 
@@ -75,7 +85,11 @@ public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnI
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (!TextUtils.isEmpty(s.toString())) {
-                mChargeTv.setText(String.format("%.2f", Double.parseDouble(s.toString()) - TradeHelper.getTrade().getTotal()));
+                if (Double.parseDouble(s.toString()) - total < 0) {
+                    mChargeTv.setText("");
+                } else {
+                    mChargeTv.setText(String.format("%.2f", Double.parseDouble(s.toString()) - total));
+                }
             } else {
                 mChargeTv.setText("");
             }
