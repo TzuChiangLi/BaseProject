@@ -5,6 +5,7 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.utils.HandoverHelper;
 import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.UserRightsHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.task.LsUploadThread;
@@ -101,13 +102,19 @@ public class HomePresenter implements Contract.HomePresenter {
             mView.mustHandover();
             return;
         }
-        //初始化流水单信息
-        TradeHelper.initSale();
-        mView.goShopChartActivity();
+        if (UserRightsHelper.hasRights(UserRightsHelper.SALE)) {
+            //初始化流水单信息
+            TradeHelper.initSale();
+            mView.goShopChartActivity();
+        } else {
+            mView.showError("无此权限");
+        }
+
     }
 
     @Override
     public void goHandover() {
+
         switch (HandoverHelper.canHandover()) {
             case 1:
                 mView.goHandoverActivity();
@@ -131,7 +138,7 @@ public class HomePresenter implements Contract.HomePresenter {
         }
         if (TradeHelper.outOrderCount()) {
             mView.goOrderOutActivity();
-        }else{
+        } else {
             mView.hasNoHangUpTrade();
         }
     }

@@ -6,6 +6,7 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.UserRightsHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.http.RestCallback;
@@ -28,6 +29,15 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
 
     public static ShopListPresenter createPresenter(Contract.ShopListView mView) {
         return new ShopListPresenter(mView);
+    }
+
+    @Override
+    public void checkCancelTradeRight() {
+        if (UserRightsHelper.hasRights(UserRightsHelper.CANCEL_TRADE)) {
+            setTradeStatus(TradeHelper.TRADE_STATUS_CANCELLED);
+        } else {
+
+        }
     }
 
     @Override
@@ -128,9 +138,14 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
      */
     @Override
     public void delTradeProd(int index) {
-        TradeHelper.delProduct(index);
-        mView.delTradeProd(index);
-        updateTradeInfo();
+        if (UserRightsHelper.hasRights(UserRightsHelper.CANCEL_PROD)) {
+            TradeHelper.delProduct(index);
+            mView.delTradeProd(index);
+            updateTradeInfo();
+        } else {
+            mView.showError("无行清权限");
+        }
+
     }
 
     /**

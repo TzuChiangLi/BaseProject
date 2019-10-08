@@ -249,6 +249,13 @@ public interface Contract {
      */
     interface HomeView extends BaseView<Contract.HomePresenter> {
         /**
+         * 显示错误
+         *
+         * @param msg 文本信息
+         */
+        void showError(String msg);
+
+        /**
          * 返回数据显示界面
          *
          * @param menuList 数据
@@ -443,6 +450,11 @@ public interface Contract {
     }
 
     interface ShopListPresenter {
+
+        /**
+         * 检查取消交易权限
+         */
+        void checkCancelTradeRight();
 
         /**
          * 检查是否拥有会员优惠权限并展示界面

@@ -262,12 +262,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                         break;
                     case R.id.shop_list_rv_btn_del:
                         //检查行清权限
-                        if (TradeHelper.getUserRight(TradeHelper.USER_RIGHT_DEL)) {
-                            mPresenter.delTradeProd(position);
-                        } else {
-                            //提示用户无此权限
-                            MessageUtil.show("当前用户无此权限");
-                        }
+                        mPresenter.delTradeProd(position);
                         break;
                     default:
                         break;
@@ -343,7 +338,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @OnClick(R.id.shop_list_btn_cancel)
     public void cancelTrade() {
-        mPresenter.setTradeStatus(TradeHelper.TRADE_STATUS_CANCELLED);
+        mPresenter.checkCancelTradeRight();
     }
 
     @Override

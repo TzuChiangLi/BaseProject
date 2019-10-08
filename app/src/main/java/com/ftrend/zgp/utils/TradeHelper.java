@@ -599,15 +599,6 @@ public class TradeHelper {
     }
 
 
-    /**
-     * 购物车 - 行清、取消交易权限
-     *
-     * @param rightType 查看权限类型
-     * @return 是否有此权限
-     */
-    public static boolean getUserRight(int rightType) {
-        return true;
-    }
 
     /**
      * 选择商品界面：获取每个商品的件数

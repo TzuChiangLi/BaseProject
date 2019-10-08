@@ -83,6 +83,11 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
 
 
     @Override
+    public void showError(String msg) {
+
+    }
+
+    @Override
     public void setMenuList(List<Menu> menuList) {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMenuAdapter = new MenuAdapter(this, R.layout.home_rv_menu_item, menuList);
