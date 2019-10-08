@@ -68,7 +68,7 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                     helper.setText(R.id.shop_list_rv_product_tv_total, String.format("%.2f", ((TradeProd) item).getTotal()));
                     helper.setText(R.id.shop_list_rv_product_tv_barcode, ((TradeProd) item).getBarCode());
                     helper.setText(R.id.shop_list_rv_product_tv_discount, String.format("%.2f%s%s", ((TradeProd) item).getManuDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getTranDsc(),
-                            String.format("(-%d", Math.round(100 * (((TradeProd) item).getManuDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getTranDsc()) / ((TradeProd) item).getPrice())), "%)"));
+                            String.format("(-%d", Math.round(100 * ((((TradeProd) item).getManuDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getTranDsc()) / ((TradeProd) item).getAmount()) / ((TradeProd) item).getPrice())), "%)"));
                     helper.setBackgroundColor(R.id.shop_list_rv_product_rl, ((TradeProd) item).isSelect() ? rv_item_selected : rv_item_normal);
                     helper.setGone(R.id.shop_list_rv_ll_btn, ((TradeProd) item).isSelect() ? true : false);
                     helper.addOnClickListener(R.id.shop_list_rv_img_add);

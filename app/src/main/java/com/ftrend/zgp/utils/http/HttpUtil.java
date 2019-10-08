@@ -52,7 +52,6 @@ public class HttpUtil {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .create();
-
         mRetrofit = new Retrofit.Builder()
                 // 设置解析转换工厂，用自己定义的
                 .baseUrl(BASE_URL)

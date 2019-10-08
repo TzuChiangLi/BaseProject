@@ -656,6 +656,7 @@ public class HandoverHelper {
                 userName = csr.getStringOrDefault(0);
             } while (csr.moveToNext());
         }
+        csr.close();
         return userName;
     }
 

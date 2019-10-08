@@ -11,6 +11,7 @@ import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
@@ -79,7 +80,6 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
         if (userCodeList.size() == 0 || userCodeList == null) {
             return;
         } else {
-
             List<String> lsNoList = new ArrayList<>();
             //根据用户名能够获取到交易收银、退货的金额、次数，总的金额、次数
             for (int i = 0; i < userCodeList.size(); i++) {

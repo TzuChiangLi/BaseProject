@@ -25,7 +25,7 @@ public class HomePresenter implements Contract.HomePresenter {
     private Contract.HomeView mView;
 
 
-    public HomePresenter(Contract.HomeView mView) {
+    private HomePresenter(Contract.HomeView mView) {
         this.mView = mView;
     }
 
@@ -129,14 +129,17 @@ public class HomePresenter implements Contract.HomePresenter {
             mView.mustHandover();
             return;
         }
-        mView.goOrderOutActivity();
+        if (TradeHelper.outOrderCount()) {
+            mView.goOrderOutActivity();
+        }else{
+            mView.hasNoHangUpTrade();
+        }
     }
 
     @Override
     public void logout() {
         //清除登录信息
         ZgParams.clearCurrentInfo();
-
         mView.logout();
     }
 

@@ -243,10 +243,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (TradeHelper.getWholeForDscPrice() == 0) {
-                MessageUtil.show("当前无法优惠");
-                return;
-            }
             if (count != 0) {
                 if (s.toString().contains(".")) {
                     MessageUtil.show("格式不正确");
@@ -277,11 +273,16 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                         }
                         break;
                     case DIALOG_WHOLE_RSC:
+                        if (TradeHelper.getWholeForDscPrice() == 0) {
+                            MessageUtil.show("当前无法优惠");
+                            return;
+                        }
                         if (Long.valueOf(s.toString()) > TradeHelper.getMaxWholeRate()) {
                             //超过限制
                             errorTextColor(mRateEdt);
                         } else {
                             restoreTextColor(mRateEdt);
+                            DscHelper.wholeDscByRate(Integer.valueOf(s.toString()));
                             mTotalTv.setText(String.format("%.2f", TradeHelper.getWholeTotal(Integer.valueOf(s.toString()))));
                             mDscEdt.setText(String.format("%.2f", TradeHelper.getWholeDsc(Integer.valueOf(s.toString()))));
                         }
@@ -311,10 +312,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (count != 0) {
-                if (TradeHelper.getWholeForDscPrice() == 0) {
-                    MessageUtil.show("当前无法优惠");
-                    return;
-                }
                 switch (type) {
                     case DIALOG_SINGLE_RSC:
                         if (Double.parseDouble(s.toString()) > TradeHelper.getMaxSingleDsc(index)) {
@@ -334,11 +331,16 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                         }
                         break;
                     case DIALOG_WHOLE_RSC:
+                        if (TradeHelper.getWholeForDscPrice() == 0) {
+                            MessageUtil.show("当前无法优惠");
+                            return;
+                        }
                         if (Double.parseDouble(s.toString()) > TradeHelper.getMaxWholeDsc()) {
                             //超过限制
                             errorTextColor(mDscEdt);
                         } else {
                             restoreTextColor(mDscEdt);
+                            DscHelper.wholeDscByTotal(Double.parseDouble(s.toString()));
                             mRateEdt.setText(String.valueOf(TradeHelper.getWholeRate(Double.parseDouble(s.toString()))));
                             mTotalTv.setText(String.format("%.2f", TradeHelper.getWholeTotal(Double.parseDouble(s.toString()))));
                         }
@@ -506,7 +508,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                         Double.parseDouble(mDscEdt.getText().toString()) <= TradeHelper.getMaxSingleDsc(index)) {
                     //两个都为true的时候，才能保存成功
                     //初始化整单优惠列表
-
                     if (TradeHelper.saveSingleDsc(index, Double.parseDouble(mDscEdt.getText().toString()))) {
                         Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH);
                         dismiss();
@@ -527,9 +528,12 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                         MessageUtil.show("本笔交易已无可优惠商品");
                     } else {
                         //两个都为true的时候，才能保存成功
-                        if (DscHelper.commitWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
+                        //TODO 2019年9月30日17:08:44 把提交操作放到Activity的P层
+                        if (DscHelper.commitWholeDsc()) {
                             Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
                             dismiss();
+                        } else {
+                            MessageUtil.showError("失败");
                         }
                     }
                 } else {

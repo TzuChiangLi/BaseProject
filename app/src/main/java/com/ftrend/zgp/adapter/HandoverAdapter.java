@@ -27,22 +27,22 @@ public class HandoverAdapter extends BaseQuickAdapter<HandoverRecord, BaseViewHo
         helper.setText(R.id.handover_tv_usercode, String.valueOf(item.getCashier()));
         helper.setText(R.id.handover_tv_username, String.valueOf(item.getCashierName()));
 
-        helper.setText(R.id.handover_cash_total, String.valueOf(item.getSaleTotal()));
+        helper.setText(R.id.handover_cash_total, String.format("%.2f",item.getSaleTotal()));
         helper.setText(R.id.handover_cash_count, String.valueOf(item.getSaleCount()));
-        helper.setText(R.id.handover_th_total, String.valueOf(item.getRtnCount()));
+        helper.setText(R.id.handover_th_total, String.format("%.2f",item.getRtnCount()));
         helper.setText(R.id.handover_th_count, String.valueOf(item.getRtnCount()));
-        helper.setText(R.id.handover_trade_total, String.valueOf(item.getTotal()));
+        helper.setText(R.id.handover_trade_total, String.format("%.2f",item.getTotal()));
         helper.setText(R.id.handover_trade_count, String.valueOf(item.getCount()));
 
-        helper.setText(R.id.handover_money_total, String.valueOf(item.getMoneyTotal()));
+        helper.setText(R.id.handover_money_total, String.format("%.2f",item.getMoneyTotal()));
         helper.setText(R.id.handover_money_count, String.valueOf(item.getMoneyCount()));
-        helper.setText(R.id.handover_alipay_total, String.valueOf(item.getAliPayTotal()));
+        helper.setText(R.id.handover_alipay_total, String.format("%.2f",item.getAliPayTotal()));
         helper.setText(R.id.handover_alipay_count, String.valueOf(item.getAliPayCount()));
-        helper.setText(R.id.handover_wechat_total, String.valueOf(item.getWechatTotal()));
+        helper.setText(R.id.handover_wechat_total, String.format("%.2f",item.getWechatTotal()));
         helper.setText(R.id.handover_wechat_count, String.valueOf(item.getWechatCount()));
-        helper.setText(R.id.handover_card_total, String.valueOf(item.getCardTotal()));
+        helper.setText(R.id.handover_card_total, String.format("%.2f",item.getCardTotal()));
         helper.setText(R.id.handover_card_count, String.valueOf(item.getCardCount()));
-        helper.setText(R.id.handover_pay_total, String.valueOf(item.getPayTotal()));
+        helper.setText(R.id.handover_pay_total, String.format("%.2f",item.getPayTotal()));
         helper.setText(R.id.handover_pay_count, String.valueOf(item.getPayCount()));
 
     }

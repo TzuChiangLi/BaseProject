@@ -419,21 +419,28 @@ public class TradeHelper {
         }
         double dsc = 0;
         for (int i = 0; i < prodList.size(); i++) {
-            dsc += (prodList.get(i).getManuDsc() + prodList.get(i).getVipDsc() + prodList.get(i).getTranDsc()) * prodList.get(i).getAmount();
+            dsc += prodList.get(i).getManuDsc() + prodList.get(i).getVipDsc() + prodList.get(i).getTranDsc();
         }
         TradeProd tradeProd = prodList.get(index);
-        if ((dsc + changeAmount * (tradeProd.getManuDsc() + tradeProd.getVipDsc() + tradeProd.getTranDsc()) > ZgParams.getCurrentUser().getMaxDscTotal())) {
+        if ((dsc + changeAmount * ((tradeProd.getManuDsc() + tradeProd.getVipDsc() + tradeProd.getTranDsc()) / tradeProd.getAmount()) > ZgParams.getCurrentUser().getMaxDscTotal())) {
             return 0;
         }
-        tradeProd.setAmount(tradeProd.getAmount() + changeAmount);
-        tradeProd.setTotal(priceFormat(tradeProd.getAmount() * (tradeProd.getPrice() - tradeProd.getManuDsc() - tradeProd.getVipDsc() - tradeProd.getTranDsc())));
+        double oldAmount = tradeProd.getAmount();
+        double newAmount = oldAmount + changeAmount;
+        tradeProd.setVipDsc((tradeProd.getVipDsc() / oldAmount) * newAmount);
+        tradeProd.setSingleDsc((tradeProd.getSingleDsc() / oldAmount) * newAmount);
+        tradeProd.setWholeDsc((tradeProd.getWholeDsc() / oldAmount) * newAmount);
+        tradeProd.setManuDsc(tradeProd.getSingleDsc() + tradeProd.getWholeDsc());
+        tradeProd.setTranDsc((tradeProd.getTranDsc() / oldAmount) * newAmount);
+
+        tradeProd.setAmount(newAmount);
+        tradeProd.setTotal(priceFormat((newAmount * tradeProd.getPrice()) - tradeProd.getManuDsc() - tradeProd.getVipDsc() - tradeProd.getTranDsc()));
         if (tradeProd.save()) {
             if (recalcTotal()) {
                 return 1;
             } else {
                 return -1;
             }
-
         } else {
             return -1;
         }
@@ -789,6 +796,7 @@ public class TradeHelper {
             if (checkForDsc(i) && prod.getSingleDsc() == 0 && prod.getVipDsc() == 0 && prod.getTranDsc() == 0) {
                 price += prod.getPrice() * prod.getAmount();
             }
+            i++;
         }
         return price;
     }
@@ -808,7 +816,8 @@ public class TradeHelper {
         maxDscTotal = maxDscTotal >= ZgParams.getCurrentUser().getMaxDscTotal() ? ZgParams.getCurrentUser().getMaxDscTotal() : maxDscTotal;
         //当前商品的全部优惠
         for (TradeProd prod : prodList) {
-            dscTotal += (prod.getVipDsc() + prod.getTranDsc() + prod.getSingleDsc()) * prod.getAmount();
+            //TODO AMOUNT
+            dscTotal += (prod.getVipDsc() + prod.getTranDsc() + prod.getSingleDsc());
             mPrice = (prod.getProdForDsc() != 1) ? 0 : (prod.getPrice() - prod.getProdMinPrice()) * prod.getAmount();
         }
         //最大金额减去目前所有的优惠，即可优惠的金额
@@ -893,11 +902,12 @@ public class TradeHelper {
             return false;
         }
         TradeProd prod = prodList.get(index);
-        prod.setSingleDsc(priceFormat(singleDsc));
+        //TODO AMOUNT
+        prod.setSingleDsc(priceFormat(singleDsc * prod.getAmount()));
         //单项优惠的时候，清空整单优惠
         prod.setWholeDsc(0);
         prod.setVipTotal(0);
-        prod.setTotal(priceFormat((prod.getPrice() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()) * prod.getAmount()));
+        prod.setTotal(priceFormat(prod.getPrice() * prod.getAmount() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()));
         if (prod.save()) {
             return recalcTotal();
         }
@@ -961,10 +971,10 @@ public class TradeHelper {
                 } else {
                     prod.setVipDsc(0);
                 }
-                prod.setWholeDsc(dsc);
+                prod.setWholeDsc(dsc * prod.getAmount());
                 //整单优惠的时候，单项优惠清零
                 prod.setSingleDsc(0);
-                prod.setTotal(priceFormat((prod.getPrice() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()) * prod.getAmount()));
+                prod.setTotal(priceFormat(prod.getPrice() * prod.getAmount() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()));
             }
             if (prod.save()) {
                 wholeDsc = wholeDsc - dsc < 0 ? 0 : wholeDsc - dsc;
@@ -1054,11 +1064,12 @@ public class TradeHelper {
                 rateDsc = prod.getPrice() * (rate) / 100;
                 vipDsc = prod.getPrice() - queryVipPrice(vipPriceType, prod);
                 LogUtil.d("----rate/vip:" + rateDsc + "/" + vipDsc);
-                prod.setVipDsc(Math.max(rateDsc, vipDsc));
+                //TODO AMOUNT
+                prod.setVipDsc(Math.max(rateDsc, vipDsc) * prod.getAmount());
                 prod.setWholeDsc(0);
                 prod.setSingleDsc(0);
                 //已存在手工优惠的不参与会员优惠
-                prod.setTotal(priceFormat((prod.getPrice() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()) * prod.getAmount()));
+                prod.setTotal(priceFormat(prod.getPrice() * prod.getAmount() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()));
                 prod.save();
             }
         } else {
@@ -1071,11 +1082,11 @@ public class TradeHelper {
                 rateDsc = prod.getPrice() * (100 - rateRule) / 100;
                 //如果没有会员价，vipPrice = prod.getPrice()商品原价
                 vipDsc = prod.getPrice() - queryVipPrice(vipPriceType, prod);
-                prod.setVipDsc(Math.max(rateDsc, vipDsc));
+                prod.setVipDsc(Math.max(rateDsc, vipDsc) * prod.getAmount());
                 prod.setWholeDsc(0);
                 prod.setSingleDsc(0);
                 //已存在手工优惠的不参与会员优惠
-                prod.setTotal(priceFormat((prod.getPrice() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()) * prod.getAmount()));
+                prod.setTotal(priceFormat(prod.getPrice() * prod.getAmount() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()));
                 prod.save();
             }
         }
@@ -1226,6 +1237,17 @@ public class TradeHelper {
     }
 
     /**
+     * @return 取单数量
+     */
+    public static boolean outOrderCount() {
+        long count = SQLite.select(count()).from(Trade.class)
+                .where(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
+                .and(Trade_Table.status.eq(TRADE_STATUS_HANGUP))
+                .count();
+        return count != 0;
+    }
+
+    /**
      * 判断购物车是否为空
      *
      * @return
@@ -1233,7 +1255,6 @@ public class TradeHelper {
     public static boolean cartIsEmpty() {
         return getCartLs() == null;
     }
-
 
     /**
      * 价格格式化

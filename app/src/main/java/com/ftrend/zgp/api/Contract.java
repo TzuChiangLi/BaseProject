@@ -32,7 +32,7 @@ public interface Contract {
         /**
          * 取单操作
          *
-         * @param lsNo
+         * @param lsNo 流水单号
          * @return -1 - 购物车不为空，0 - 取单成功， 1 - 取单失败
          */
         int doOrderOut(String lsNo);
@@ -287,6 +287,11 @@ public interface Contract {
          * 跳转到取单界面
          */
         void goOrderOutActivity();
+
+        /**
+         * 无挂单流水
+         */
+        void hasNoHangUpTrade();
 
         /**
          * 没有交易流水，无法进入交班界面

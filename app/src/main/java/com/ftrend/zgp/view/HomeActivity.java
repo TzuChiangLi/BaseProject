@@ -161,6 +161,11 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     }
 
     @Override
+    public void hasNoHangUpTrade() {
+        MessageUtil.showWarning("当前无挂单流水");
+    }
+
+    @Override
     public void hasNoTrade() {
         MessageUtil.showWarning("当前没有交易流水！");
     }
