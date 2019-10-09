@@ -17,6 +17,7 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.ShopListPresenter;
+import com.ftrend.zgp.utils.DscHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
@@ -198,6 +199,13 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     Intent intent = new Intent("com.summi.scan");
                     intent.setPackage("com.sunmi.sunmiqrcodescanner");
                     startActivityForResult(intent, 001);
+                    break;
+                case Event.TYPE_COMMIT_WHOLE_DSC:
+                    if (DscHelper.commitWholeDsc()) {
+                        Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
+                    } else {
+                        MessageUtil.showError("失败");
+                    }
                     break;
                 default:
                     break;

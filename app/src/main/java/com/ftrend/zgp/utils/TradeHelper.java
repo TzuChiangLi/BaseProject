@@ -15,7 +15,6 @@ import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.model.VipInfo;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
@@ -599,7 +598,6 @@ public class TradeHelper {
     }
 
 
-
     /**
      * 选择商品界面：获取每个商品的件数
      *
@@ -807,7 +805,7 @@ public class TradeHelper {
         maxDscTotal = maxDscTotal >= ZgParams.getCurrentUser().getMaxDscTotal() ? ZgParams.getCurrentUser().getMaxDscTotal() : maxDscTotal;
         //当前商品的全部优惠
         for (TradeProd prod : prodList) {
-            //TODO AMOUNT
+            //TODO amount
             dscTotal += (prod.getVipDsc() + prod.getTranDsc() + prod.getSingleDsc());
             mPrice = (prod.getProdForDsc() != 1) ? 0 : (prod.getPrice() - prod.getProdMinPrice()) * prod.getAmount();
         }
@@ -1052,7 +1050,7 @@ public class TradeHelper {
             double rate = vip.getVipDscRate();
             double vipDsc, rateDsc;
             for (TradeProd prod : tempList) {
-                rateDsc = prod.getPrice() * (100-rate) / 100;
+                rateDsc = prod.getPrice() * (100 - rate) / 100;
                 vipDsc = prod.getPrice() - queryVipPrice(vipPriceType, prod);
                 //TODO AMOUNT
                 prod.setVipDsc(Math.max(rateDsc, vipDsc) * prod.getAmount());

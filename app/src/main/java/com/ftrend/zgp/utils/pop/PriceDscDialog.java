@@ -528,13 +528,8 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                         MessageUtil.show("本笔交易已无可优惠商品");
                     } else {
                         //两个都为true的时候，才能保存成功
-                        //TODO 2019年9月30日17:08:44 把提交操作放到Activity的P层
-                        if (DscHelper.commitWholeDsc()) {
-                            Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
-                            dismiss();
-                        } else {
-                            MessageUtil.showError("失败");
-                        }
+                        Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_COMMIT_WHOLE_DSC);
+                        dismiss();
                     }
                 } else {
                     MessageUtil.showError("失败");

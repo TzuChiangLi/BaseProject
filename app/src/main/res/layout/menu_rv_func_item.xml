@@ -7,7 +7,9 @@
     android:background="@color/common_white"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
+   >
 
     <ImageView
         android:id="@+id/menu_img_func"
@@ -20,8 +22,9 @@
         android:id="@+id/menu_tv_func"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_gravity="top|center_horizontal"
         android:textColor="@color/text_black_second"
+        android:gravity="top|center_horizontal"
         android:text="@string/app_test" />
 
 </LinearLayout>

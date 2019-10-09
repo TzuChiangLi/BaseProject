@@ -49,6 +49,8 @@ public class Event {
      */
     public static final int TYPE_PAY_CASH = 5;
 
+    public static final int TYPE_COMMIT_WHOLE_DSC = 6;
+
     //-----------------------------------简单数据-----------------------------------------//
     //一般用不到
     private Object data;
