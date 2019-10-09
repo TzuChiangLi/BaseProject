@@ -27,6 +27,7 @@ import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.core.BasePopupView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -63,8 +64,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     Button mVipBtn;
     @BindView(R.id.shop_list_btn_hang_up)
     Button mHangUpBtn;
-    @BindView(R.id.shop_list_tv_vip_code)
-    TextView mVipCodeTv;
     @BindView(R.id.shop_list_tv_vip_name)
     TextView mVipNameTv;
     @BindView(R.id.shop_list_tv_card_grade)
@@ -212,7 +211,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     @Override
     public void showVipInfoOnline() {
         mVipInfoLayout.setVisibility(View.VISIBLE);
-        mVipCodeTv.setText(TradeHelper.vip.getVipCode());
         mVipNameTv.setText(TradeHelper.vip.getVipName());
         mCardGradeTv.setText(String.format("%s/%s", TradeHelper.vip.getCardCode(), TradeHelper.vip.getVipGrade()));
     }
@@ -220,7 +218,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     @Override
     public void showVipInfoOffline() {
         mVipInfoLayout.setVisibility(View.VISIBLE);
-        mVipCodeTv.setText(TradeHelper.getTrade().getVipCode());
         mVipNameTv.setVisibility(View.GONE);
         mCardGradeTv.setVisibility(View.GONE);
     }
@@ -262,7 +259,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                         break;
                     case R.id.shop_list_rv_btn_del:
                         //检查行清权限
-                        mPresenter.delTradeProd(position);
+                        mPresenter.checkDelProdRight(position);
                         break;
                     default:
                         break;
@@ -328,6 +325,23 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     @Override
     public void showNoRightDscDialog(String msg) {
         MessageUtil.showError(msg);
+    }
+
+    @Override
+    public void hasDelProdRight(final int index) {
+        MessageUtil.info("确定删除此商品？");
+        MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
+            @Override
+            public void onLeftBtnClick(BasePopupView popView) {
+                mPresenter.delTradeProd(index);
+                popView.dismiss();
+            }
+
+            @Override
+            public void onRightBtnClick(BasePopupView popView) {
+                popView.dismiss();
+            }
+        });
     }
 
     @Override

@@ -52,68 +52,62 @@
         android:id="@+id/shop_list_rl_vip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/shop_list_rl_discount"
+        android:layout_above="@+id/shop_list_rl_mid"
+        android:layout_marginBottom="1px"
         android:background="@color/common_white"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
         android:visibility="gone">
 
         <TextView
             android:id="@+id/shop_list_tv_vip_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:paddingStart="8dp"
-            android:paddingTop="4dp"
+            android:text="@string/shop_tv_vip"
             android:textColor="@color/text_black_first"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/shop_list_tv_vip_code_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/shop_list_tv_vip_name"
-            android:paddingStart="8dp"
-            android:text="@string/shop_tv_vip_code"
-            android:textColor="@color/text_black_first"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/shop_list_tv_vip_code"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/shop_list_tv_vip_code_title"
-            android:layout_toEndOf="@+id/shop_list_tv_vip_code_title"
-            android:textColor="@color/text_black_first"
-            android:textSize="12sp" />
-
-
-        <TextView
-            android:id="@+id/shop_list_tv_vip_card_grade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/shop_list_tv_vip_code_title"
-            android:paddingStart="8dp"
-            android:text="@string/shop_tv_vip_card_grade"
-            android:textColor="@color/text_black_first"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/shop_list_tv_card_grade"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/shop_list_tv_vip_card_grade"
-            android:layout_toEndOf="@+id/shop_list_tv_vip_card_grade"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/shop_list_tv_vip_name"
+            android:paddingStart="4dp"
             android:textColor="@color/text_black_first"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
+
+        <!--<TextView-->
+        <!--android:id="@+id/shop_list_tv_vip_code_title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/shop_list_tv_vip_name"-->
+        <!--android:paddingStart="8dp"-->
+        <!--android:text="@string/shop_tv_vip_code"-->
+        <!--android:textColor="@color/text_black_first"-->
+        <!--android:textSize="12sp" />-->
+
+        <!--<TextView-->
+        <!--android:id="@+id/shop_list_tv_vip_code"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignTop="@+id/shop_list_tv_vip_code_title"-->
+        <!--android:layout_toEndOf="@+id/shop_list_tv_vip_code_title"-->
+        <!--android:textColor="@color/text_black_first"-->
+        <!--android:textSize="12sp" />-->
 
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/shop_list_rl_discount"
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_above="@+id/shop_list_rl_mid"
-        android:background="@color/common_white"
-        android:visibility="gone"></RelativeLayout>
+    <!--<RelativeLayout-->
+    <!--android:id="@+id/shop_list_rl_discount"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="20dp"-->
+    <!--android:layout_above="@+id/shop_list_rl_mid"-->
+    <!--android:background="@color/common_white"-->
+    <!--android:visibility="gone"></RelativeLayout>-->
 
 
     <RelativeLayout
@@ -233,6 +227,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/shop_list_btn_vip"
+            android:layout_toStartOf="@+id/shop_list_btn_hang_up"
             android:layout_toEndOf="@+id/shop_list_btn_vip"
             android:background="@drawable/shop_btn_gray_selector"
             android:text="@string/shop_tv_whole_discount" />

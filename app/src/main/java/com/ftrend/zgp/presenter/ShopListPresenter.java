@@ -12,7 +12,6 @@ import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
-import com.ftrend.zgp.utils.log.LogUtil;
 
 import java.util.Map;
 
@@ -134,6 +133,15 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
         mView.updateTradeProd(index);
     }
 
+    @Override
+    public void checkDelProdRight(int index) {
+        if (UserRightsHelper.hasRights(UserRightsHelper.CANCEL_PROD)) {
+            mView.hasDelProdRight(index);
+        } else {
+            mView.showError("无行清权限");
+        }
+    }
+
     /**
      * @param index 索引
      */
@@ -146,7 +154,6 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
         } else {
             mView.showError("无行清权限");
         }
-
     }
 
     /**

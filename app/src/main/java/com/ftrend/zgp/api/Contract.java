@@ -342,7 +342,7 @@ public interface Contract {
          *
          * @param key 筛选关键字
          */
-        void searchProdList(String...key);
+        void searchProdList(String... key);
 
         /**
          * 添加到购物车
@@ -504,6 +504,12 @@ public interface Contract {
         void updateTradeList(int index, TradeProd tradeProd);
 
         /**
+         * 检查行情权限
+         * @param index 索引
+         */
+        void checkDelProdRight(int index);
+
+        /**
          * 行清商品
          *
          * @param index 索引
@@ -604,6 +610,11 @@ public interface Contract {
          */
         void showNoRightDscDialog(String msg);
 
+        /**
+         * 允许行清
+         * @param index 索引
+         */
+        void hasDelProdRight(int index);
 
     }
 
