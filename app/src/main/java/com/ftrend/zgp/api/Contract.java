@@ -321,6 +321,7 @@ public interface Contract {
      *
      */
     interface ShopCartPresenter {
+
         /**
          * 加载商品信息
          */
@@ -341,7 +342,7 @@ public interface Contract {
          *
          * @param key 筛选关键字
          */
-        void searchProdList(String key);
+        void searchProdList(String...key);
 
         /**
          * 添加到购物车

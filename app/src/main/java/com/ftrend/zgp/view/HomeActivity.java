@@ -18,6 +18,7 @@ import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
+import com.lxj.xpopup.core.BasePopupView;
 
 import java.util.List;
 
@@ -124,7 +125,6 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         if (ClickUtil.onceClick()) {
             return;
         }
-        MessageUtil.show((String) view.getTag());
         switch ((String) view.getTag()) {
             case "收银":
                 mPresenter.goShopCart();
@@ -139,6 +139,71 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 break;
             case "取单":
                 mPresenter.getOutOrder();
+                break;
+            case "交班报表":
+                MessageUtil.showError();
+                break;
+            case "交易统计":
+                MessageUtil.showSuccess();
+                break;
+            case "流水查询":
+                MessageUtil.showWarning("警告");
+                break;
+            case "数据同步":
+                MessageUtil.info("数据同步");
+                MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
+                    @Override
+                    public void onLeftBtnClick(BasePopupView popView) {
+                        popView.dismiss();
+                    }
+
+                    @Override
+                    public void onRightBtnClick(BasePopupView popView) {
+
+                    }
+                });
+                break;
+            case "操作指南":
+                MessageUtil.error("操作指南");
+                MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
+                    @Override
+                    public void onLeftBtnClick(BasePopupView popView) {
+                        popView.dismiss();
+                    }
+
+                    @Override
+                    public void onRightBtnClick(BasePopupView popView) {
+
+                    }
+                });
+                break;
+            case "参数设置":
+                MessageUtil.warning("参数设置");
+                MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
+                    @Override
+                    public void onLeftBtnClick(BasePopupView popView) {
+                        popView.dismiss();
+                    }
+
+                    @Override
+                    public void onRightBtnClick(BasePopupView popView) {
+
+                    }
+                });
+                break;
+            case "修改密码":
+                MessageUtil.question("修改密码");
+                MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
+                    @Override
+                    public void onLeftBtnClick(BasePopupView popView) {
+                        popView.dismiss();
+                    }
+
+                    @Override
+                    public void onRightBtnClick(BasePopupView popView) {
+
+                    }
+                });
                 break;
             default:
                 LogUtil.e("无此功能");

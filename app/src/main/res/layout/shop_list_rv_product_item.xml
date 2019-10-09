@@ -159,6 +159,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1.2"
             android:text="@string/shop_tv_per_price"
+            android:textSize="12sp"
             android:textColor="@color/text_black_first" />
 
         <TextView
@@ -175,7 +176,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1.2"
-            android:gravity="center"
+            android:textSize="12sp"
             android:text="@string/shop_tv_discount"
             android:textColor="@color/text_black_first" />
 
@@ -193,9 +194,9 @@
             android:id="@+id/shop_list_rv_product_tv_total_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.2"
-            android:gravity="end"
+            android:layout_weight="1.3"
             android:text="@string/shop_tv_sub_total"
+            android:textSize="12sp"
             android:textColor="@color/text_black_first" />
 
         <TextView

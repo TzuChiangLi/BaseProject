@@ -29,6 +29,7 @@ import com.ftrend.zgp.presenter.ShopCartPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -110,7 +111,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mPresenter.searchProdList(s.toString());
+                mPresenter.searchProdList(mClsAdapter.getData().get(oldClsIndex == -1 ? 0 : oldClsIndex).getClsCode(), s.toString());
             }
 
             @Override
@@ -146,7 +147,8 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
                 oldClsIndex = position;
                 mClsAdapter.getData().get(position).setSelect(true);
                 mClsAdapter.notifyItemChanged(position);
-                mPresenter.searchProdList(clsList.get(position).getClsCode());
+                LogUtil.d("----edt:"+mSearchEdt.getText().toString());
+                mPresenter.searchProdList(clsList.get(position).getClsCode(),mSearchEdt.getText().toString());
             }
         });
     }
