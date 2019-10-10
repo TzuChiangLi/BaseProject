@@ -49,7 +49,20 @@ public class Event {
      */
     public static final int TYPE_PAY_CASH = 5;
 
+    /**
+     * 购物车----提交优惠
+     */
     public static final int TYPE_COMMIT_WHOLE_DSC = 6;
+
+    public static final int TYPE_DIALOG_CANCEL_TRADE = 7;
+    public static final int TYPE_DIALOG_VIP_DSC = 8;
+    public static final int TYPE_DIALOG_WHOLE_DSC = 9;
+    public static final int TYPE_DIALOG_HANG_UP = 10;
+
+    /**
+     * 提示信息
+     */
+    public static final int TYPE_TOAST = 700;
 
     //-----------------------------------简单数据-----------------------------------------//
     //一般用不到

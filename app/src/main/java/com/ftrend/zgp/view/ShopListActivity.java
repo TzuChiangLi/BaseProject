@@ -23,11 +23,9 @@ import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
-import com.ftrend.zgp.utils.pop.VipWayDialog;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
-import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -61,8 +59,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     Button mCancelBtn;
     @BindView(R.id.shop_list_btn_add)
     Button mAddBtn;
-    @BindView(R.id.shop_list_btn_vip)
-    Button mVipBtn;
     @BindView(R.id.shop_list_btn_hang_up)
     Button mHangUpBtn;
     @BindView(R.id.shop_list_tv_vip_name)
@@ -99,6 +95,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     protected void initData() {
+        MessageUtil.show("界面未做更改");
         mPresenter.initShopList();
         mPresenter.showVipInfo();
     }
@@ -119,14 +116,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     }
 
 
-    @OnClick(R.id.shop_list_btn_vip)
-    public void selectVipLoginWay() {
-        new XPopup.Builder(this)
-                .dismissOnTouchOutside(false)
-                .asCustom(new VipWayDialog(this))
-                .show();
-    }
-
     @OnClick(R.id.shop_list_btn_pay)
     public void doPay() {
         if (mProdAdapter.getData().size() > 0) {
@@ -137,15 +126,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         }
     }
 
-    @OnClick(R.id.shop_list_btn_hang_up)
-    public void hangUp() {
-        mPresenter.setTradeStatus(TradeHelper.TRADE_STATUS_HANGUP);
-    }
-
-    @OnClick(R.id.shop_list_btn_whole_discount)
-    public void wholeDsc() {
-        MessageUtil.showWholeDscChange(this);
-    }
 
     @OnClick(R.id.shop_list_btn_add)
     public void add() {
@@ -173,6 +153,11 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         if (presenter != null) {
             mPresenter = presenter;
         }
+    }
+
+    @OnClick(R.id.shop_list_btn_more)
+    public void more() {
+        MessageUtil.showMoreFuncDialog(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -206,6 +191,21 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     } else {
                         MessageUtil.showError("失败");
                     }
+                    break;
+                case Event.TYPE_TOAST:
+                    MessageUtil.show((String) event.getData());
+                    break;
+                case Event.TYPE_DIALOG_CANCEL_TRADE:
+                    mPresenter.checkCancelTradeRight();
+                    break;
+                case Event.TYPE_DIALOG_VIP_DSC:
+                    MessageUtil.showVipWayDialog(this);
+                    break;
+                case Event.TYPE_DIALOG_HANG_UP:
+                    mPresenter.setTradeStatus(TradeHelper.TRADE_STATUS_HANGUP);
+                    break;
+                case Event.TYPE_DIALOG_WHOLE_DSC:
+                    MessageUtil.showWholeDscChange(this);
                     break;
                 default:
                     break;
@@ -358,10 +358,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         MessageUtil.showSingleDscChange(ShopListActivity.this, index);
     }
 
-    @OnClick(R.id.shop_list_btn_cancel)
-    public void cancelTrade() {
-        mPresenter.checkCancelTradeRight();
-    }
 
     @Override
     protected void onDestroy() {

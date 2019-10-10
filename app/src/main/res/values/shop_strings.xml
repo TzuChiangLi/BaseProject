@@ -13,7 +13,7 @@
     <string name="shop_tv_vip">会员</string>
     <string name="shop_tv_vip_code">编号：</string>
     <string name="shop_tv_vip_card_grade">卡号/类型：</string>
-    <string name="shop_tv_whole_discount">整单优惠</string>
+    <string name="shop_tv_whole_dsc">整单优惠</string>
     <string name="shop_tv_cancel">取消交易</string>
     <string name="shop_tv_add">添加商品</string>
     <string name="shop_tv_buy">加入购物车</string>
@@ -24,10 +24,12 @@
     <string name="shop_tv_num_replace">480.00</string>
     <string name="shop_tv_bar_replace">132456789123</string>
     <string name="shop_tv_prod_replace">LM66000</string>
+    <string name="shop_tv_more_title">更多功能</string>
     <string name="shop_btn_discount">优惠</string>
     <string name="shop_btn_price">改价</string>
     <string name="shop_btn_delete">行清</string>
     <string name="shop_btn_hang_up">挂单</string>
+    <string name="shop_btn_more">更多</string>
 
     <string name="shop_btn_pay">结算</string>
     <string name="shop_btn_list">购物车</string>

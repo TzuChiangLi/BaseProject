@@ -11,6 +11,7 @@ import com.ftrend.zgp.utils.pop.PayChargeDialog;
 import com.ftrend.zgp.utils.pop.PriceDscDialog;
 import com.ftrend.zgp.utils.pop.PriceMobileDialog;
 import com.ftrend.zgp.utils.pop.VipCardDialog;
+import com.ftrend.zgp.utils.pop.VipMoreBtnDialog;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -27,12 +28,38 @@ public class MessageUtil {
 //-------------------------------------业务弹窗-----------------------------------------//
 
     /**
-     * 现金找零
+     * 会员登录方式选择
+     *
+     * @param context 上下文
      */
-    public static void showChargeDialog(Context context,double total) {
+    public static void showVipWayDialog(Context context) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new PayChargeDialog(context,total))
+                .asCustom(new VipMoreBtnDialog(context, 0))
+                .show();
+    }
+
+
+    /**
+     * 更多功能按钮
+     *
+     * @param context 上下文
+     */
+    public static void showMoreFuncDialog(Context context) {
+        new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
+                .asCustom(new VipMoreBtnDialog(context, 1))
+                .show();
+    }
+
+
+    /**
+     * 现金找零
+     */
+    public static void showChargeDialog(Context context, double total) {
+        new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
+                .asCustom(new PayChargeDialog(context, total))
                 .show();
     }
 
@@ -272,7 +299,7 @@ public class MessageUtil {
         new XToast(ActivityUtils.getTopActivity())
                 .setView(R.layout.toast_state_hint)
                 .setDuration(Duration)
-                .setImageDrawable(android.R.id.icon, R.drawable.toast_success)
+                .setImageDrawable(android.R.id.icon, R.drawable.dialog_state_success)
                 .setText(android.R.id.message, text)
                 .show();
     }
@@ -293,7 +320,7 @@ public class MessageUtil {
         new XToast(ActivityUtils.getTopActivity())
                 .setView(R.layout.toast_state_hint)
                 .setDuration(Duration)
-                .setImageDrawable(android.R.id.icon, R.drawable.toast_error)
+                .setImageDrawable(android.R.id.icon, R.drawable.dialog_state_error)
                 .setText(android.R.id.message, text)
                 .show();
     }
@@ -307,7 +334,7 @@ public class MessageUtil {
         new XToast(ActivityUtils.getTopActivity())
                 .setView(R.layout.toast_state_hint)
                 .setDuration(Duration)
-                .setImageDrawable(android.R.id.icon, R.drawable.toast_warning)
+                .setImageDrawable(android.R.id.icon, R.drawable.dialog_state_warning)
                 .setText(android.R.id.message, text)
                 .show();
     }

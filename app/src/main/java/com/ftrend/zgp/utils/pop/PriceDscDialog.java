@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.keyboard.KeyboardView;
-import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.DscHelper;
@@ -26,6 +25,7 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.view.ShopCartActivity;
+import com.ftrend.zgp.view.ShopListActivity;
 import com.lxj.xpopup.core.BottomPopupView;
 
 import butterknife.BindView;
@@ -142,7 +142,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         mProdNameTv.setVisibility(GONE);
         mKeyView.setOnKeyboardClickListener(this);
         mRateEdt.selectAll();
-
         mRateEdt.setOnFocusChangeListener(this);
     }
 
@@ -174,7 +173,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         mSubmitBtn.setVisibility(GONE);
         mKeyView.setOnKeyboardClickListener(this);
         mRateEdt.selectAll();
-
         mRateEdt.setOnFocusChangeListener(this);
     }
 
@@ -203,8 +201,9 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
             //需要撤销添加的最后一条
             Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE);
         }
-        KeyboardUtils.hideSoftInput(this);
-        DscHelper.cancelWholeDsc();
+        if (mContext instanceof ShopListActivity) {
+            DscHelper.cancelWholeDsc();
+        }
         dismiss();
     }
 
@@ -225,12 +224,14 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
     @Override
     protected void onDismiss() {
         super.onDismiss();
+        if (mContext instanceof ShopListActivity) {
+            DscHelper.cancelWholeDsc();
+        }
         if (mContext instanceof ShopCartActivity) {
             //需要撤销添加的最后一条
             if (TextUtils.isEmpty(mEdt.getText().toString())) {
                 Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE);
             }
-            DscHelper.cancelWholeDsc();
         }
     }
 
@@ -245,12 +246,12 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             if (count != 0) {
                 if (s.toString().contains(".")) {
-                    MessageUtil.show("格式不正确");
+                    Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_TOAST, "格式不正确");
                     errorTextColor(mRateEdt);
                     return;
                 }
                 if (!TradeHelper.checkRateFormat(s.toString())) {
-                    MessageUtil.show("格式不正确");
+                    Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_TOAST, "格式不正确");
                     return;
                 }
                 switch (type) {
@@ -274,7 +275,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                         break;
                     case DIALOG_WHOLE_RSC:
                         if (TradeHelper.getWholeForDscPrice() == 0) {
-                            MessageUtil.show("当前无法优惠");
+                            Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_TOAST, "当前无法优惠");
                             return;
                         }
                         if (Long.valueOf(s.toString()) > TradeHelper.getMaxWholeRate()) {
@@ -370,7 +371,8 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
             case DIALOG_WHOLE_RSC:
                 if (mRateEdt.hasFocus()) {
                     if (mRateEdt.getText().toString().length() >= 3) {
-                        MessageUtil.show("超出限制");
+                        Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH);
+                        Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_TOAST, "超出限制");
                         errorTextColor(mRateEdt);
                         return;
                     }
@@ -380,25 +382,24 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                     if (mDscEdt.getText().toString().contains(".")) {
                         int position = mDscEdt.getText().toString().indexOf(".");
                         if (mDscEdt.getText().toString().substring(0, position).length() > 6) {
-                            MessageUtil.show("超出限制");
+                            Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_TOAST, "超出限制");
                             errorTextColor(mDscEdt);
                             return;
                         }
                         if (mDscEdt.getText().toString().substring(position, mDscEdt.getText().toString().length() - 1).length() >= 2) {
-                            MessageUtil.show("超出限制");
+                            Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_TOAST, "超出限制");
                             errorTextColor(mDscEdt);
                             return;
                         }
                     } else {
                         if (mDscEdt.getText().toString().length() > 6) {
-                            MessageUtil.show("超出限制");
+                            Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_TOAST, "超出限制");
                             errorTextColor(mDscEdt);
                             return;
                         }
                     }
                     mDscEdt.setText(mDscEdt.getText().append(String.valueOf(key)));
                 }
-
                 break;
             default:
                 mEdt.setText(mEdt.getText().append(String.valueOf(key)));
@@ -419,7 +420,6 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                     mDscEdt.setText(TextUtils.isEmpty(mDscEdt.getText().toString()) ? "" :
                             mDscEdt.getText().toString().trim().substring(0, mDscEdt.getText().toString().trim().length() - 1));
                 }
-
                 break;
             default:
                 mEdt.setText(TextUtils.isEmpty(mEdt.getText().toString()) ? "" :
@@ -538,23 +538,20 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
             default:
                 break;
         }
-
-
     }
-
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
-        LogUtil.d(String.valueOf(hasFocus));
         if (hasFocus) {
+            mRateEdt.selectAll();
             mDscEdt.removeTextChangedListener(dscWatcher);
             mRateEdt.addTextChangedListener(rateWatcher);
         } else {
+            mDscEdt.selectAll();
             mRateEdt.removeTextChangedListener(rateWatcher);
             mDscEdt.addTextChangedListener(dscWatcher);
         }
     }
-
 
     private void errorTextColor(EditText edt) {
         edt.setTextColor(Color.RED);

@@ -5,6 +5,9 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="common_blue">#3063E4</color>
+    <color name="common_yellow">#e69d43</color>
+    <color name="common_red">#df6251</color>
+    <color name="common_green">#3cad00</color>
     <color name="common_white">#FFF</color>
     <color name="common_black">#000</color>
     <color name="common_gray_bg">#e4e8ea</color>

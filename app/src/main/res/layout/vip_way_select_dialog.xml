@@ -20,7 +20,7 @@
 
 
     <ImageView
-        android:id="@+id/vip_way_img_close"
+        android:id="@+id/img_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/vip_way_tv_title"
