@@ -59,7 +59,6 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
         LogUtil.d("----getScreenDensity:" + ScreenUtils.getScreenDensity());
         LogUtil.d("----getScreenWidth:" + ScreenUtils.getScreenWidth());
         LogUtil.d("----getScreenHeight:" + ScreenUtils.getScreenHeight());
-
         if (mPresenter == null) {
             mPresenter = InitPresenter.createPresenter(this);
         }

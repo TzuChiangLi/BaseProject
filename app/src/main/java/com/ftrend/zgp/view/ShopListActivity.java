@@ -95,7 +95,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     protected void initData() {
-        MessageUtil.show("界面未做更改");
         mPresenter.initShopList();
         mPresenter.showVipInfo();
     }
@@ -132,7 +131,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         finish();
     }
 
-
     @Override
     public void onLeftClick(View v) {
         finish();
@@ -140,12 +138,10 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     public void onTitleClick(View v) {
-
     }
 
     @Override
     public void onRightClick(View v) {
-
     }
 
     @Override
@@ -218,14 +214,12 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
      */
     @Override
     public void showVipInfoOnline() {
-        mVipInfoLayout.setVisibility(View.VISIBLE);
         mVipNameTv.setText(TradeHelper.vip.getVipName());
         mCardGradeTv.setText(String.format("%s/%s", TradeHelper.vip.getCardCode(), TradeHelper.vip.getVipGrade()));
     }
 
     @Override
     public void showVipInfoOffline() {
-        mVipInfoLayout.setVisibility(View.VISIBLE);
         mVipNameTv.setVisibility(View.GONE);
         mCardGradeTv.setVisibility(View.GONE);
     }
