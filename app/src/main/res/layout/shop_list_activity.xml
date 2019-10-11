@@ -45,62 +45,63 @@
         android:layout_above="@+id/shop_list_rl_vip"
         android:layout_below="@+id/shop_list_title_line"
         android:layout_marginBottom="1dp"
+        android:layout_marginTop="4dp"
         tools:listitem="@layout/shop_list_rv_product_item" />
 
 
-    <RelativeLayout
-        android:id="@+id/shop_list_rl_vip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/shop_list_rl_mid"
-        android:layout_marginBottom="1px"
-        android:background="@color/common_white"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:visibility="gone">
-
-        <!--<TextView-->
-        <!--android:id="@+id/shop_list_tv_vip_name"-->
-        <!--android:layout_width="wrap_content"-->
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/shop_list_rl_vip"-->
+        <!--android:layout_width="match_parent"-->
         <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:paddingStart="8dp"-->
-        <!--android:text="@string/shop_tv_vip"-->
-        <!--android:textColor="@color/text_black_first"-->
-        <!--android:textSize="16sp" />-->
+        <!--android:layout_above="@+id/shop_list_rl_mid"-->
+        <!--android:layout_marginBottom="1px"-->
+        <!--android:background="@color/common_white"-->
+        <!--android:paddingTop="4dp"-->
+        <!--android:paddingBottom="4dp"-->
+        <!--android:visibility="gone">-->
 
-        <!--<TextView-->
-        <!--android:id="@+id/shop_list_tv_card_grade"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_centerVertical="true"-->
-        <!--android:layout_toEndOf="@+id/shop_list_tv_vip_name"-->
-        <!--android:paddingStart="4dp"-->
-        <!--android:text="0000000005555/金卡"-->
-        <!--android:textColor="@color/text_black_first"-->
-        <!--android:textSize="16sp" />-->
+        <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/shop_list_tv_vip_name"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_centerVertical="true"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:paddingStart="8dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="@string/shop_tv_vip"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textColor="@color/text_black_first"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textSize="16sp" />&ndash;&gt;-->
 
-        <!--<TextView-->
-        <!--android:id="@+id/shop_list_tv_vip_code_title"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/shop_list_tv_vip_name"-->
-        <!--android:paddingStart="8dp"-->
-        <!--android:text="@string/shop_tv_vip_code"-->
-        <!--android:textColor="@color/text_black_first"-->
-        <!--android:textSize="12sp" />-->
+        <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/shop_list_tv_card_grade"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_centerVertical="true"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_toEndOf="@+id/shop_list_tv_vip_name"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:paddingStart="4dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="0000000005555/金卡"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textColor="@color/text_black_first"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textSize="16sp" />&ndash;&gt;-->
 
-        <!--<TextView-->
-        <!--android:id="@+id/shop_list_tv_vip_code"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignTop="@+id/shop_list_tv_vip_code_title"-->
-        <!--android:layout_toEndOf="@+id/shop_list_tv_vip_code_title"-->
-        <!--android:textColor="@color/text_black_first"-->
-        <!--android:textSize="12sp" />-->
+        <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/shop_list_tv_vip_code_title"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_below="@+id/shop_list_tv_vip_name"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:paddingStart="8dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="@string/shop_tv_vip_code"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textColor="@color/text_black_first"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textSize="12sp" />&ndash;&gt;-->
+
+        <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/shop_list_tv_vip_code"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_alignTop="@+id/shop_list_tv_vip_code_title"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_toEndOf="@+id/shop_list_tv_vip_code_title"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textColor="@color/text_black_first"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textSize="12sp" />&ndash;&gt;-->
 
 
-    </RelativeLayout>
+    <!--</RelativeLayout>-->
 
     <!--<RelativeLayout-->
     <!--android:id="@+id/shop_list_rl_discount"-->
@@ -208,8 +209,7 @@
             android:layout_alignParentEnd="true"
             android:paddingEnd="8dp"
             android:textColor="@color/text_black_first"
-            android:textSize="14sp"
-      />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/shop_list_tv_card_grade"
@@ -219,8 +219,7 @@
             android:layout_alignParentEnd="true"
             android:paddingEnd="8dp"
             android:textColor="@color/text_black_first"
-            android:textSize="14sp"
-            />
+            android:textSize="14sp" />
 
         <!--<Button-->
         <!--android:id="@+id/shop_list_btn_cancel"-->

@@ -229,6 +229,11 @@ public interface Contract {
         void goHandover();
 
         /**
+         * 跳转到退货界面
+         */
+        void goRtnProd();
+
+        /**
          * 跳转到取单界面
          */
         void getOutOrder();
@@ -294,6 +299,11 @@ public interface Contract {
          * 跳转到取单界面
          */
         void goOrderOutActivity();
+
+        /**
+         * 跳转到退货界面
+         */
+        void goRtnProdActivity();
 
         /**
          * 无挂单流水
@@ -505,6 +515,7 @@ public interface Contract {
 
         /**
          * 检查行情权限
+         *
          * @param index 索引
          */
         void checkDelProdRight(int index);
@@ -612,6 +623,7 @@ public interface Contract {
 
         /**
          * 允许行清
+         *
          * @param index 索引
          */
         void hasDelProdRight(int index);

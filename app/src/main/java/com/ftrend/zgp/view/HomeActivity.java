@@ -116,7 +116,6 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
 
     @Override
     public void tipHandover() {
-
     }
 
 
@@ -133,6 +132,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 mPresenter.goHandover();
                 break;
             case "退货":
+                mPresenter.goRtnProd();
                 break;
             case "注销登录":
                 mPresenter.logout();
@@ -201,7 +201,6 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
 
                     @Override
                     public void onRightBtnClick(BasePopupView popView) {
-
                     }
                 });
                 break;
@@ -227,6 +226,12 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     @Override
     public void goOrderOutActivity() {
         Intent intent = new Intent(HomeActivity.this, OrderOutActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void goRtnProdActivity() {
+        Intent intent = new Intent(HomeActivity.this, RtnProdActivity.class);
         startActivity(intent);
     }
 
