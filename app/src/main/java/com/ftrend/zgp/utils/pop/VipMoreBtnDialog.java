@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ftrend.zgp.R;
+import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.lxj.xpopup.core.CenterPopupView;
@@ -64,12 +65,18 @@ public class VipMoreBtnDialog extends CenterPopupView implements View.OnClickLis
 
     @OnClick(R.id.img_close)
     public void close() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
         dismiss();
     }
 
 
     @Override
     public void onClick(View v) {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
         switch (v.getId()) {
             case R.id.vip_way_ll_card:
                 MessageUtil.showVipCard(mContext);

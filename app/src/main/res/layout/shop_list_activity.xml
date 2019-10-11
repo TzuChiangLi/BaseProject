@@ -190,6 +190,17 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/shop_list_tv_not_vip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:paddingEnd="8dp"
+            android:text="@string/shop_tv_not_vip"
+            android:textColor="@color/text_black_first"
+            android:textSize="14sp" />
+
+        <TextView
             android:id="@+id/shop_list_tv_vip_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -197,7 +208,8 @@
             android:layout_alignParentEnd="true"
             android:paddingEnd="8dp"
             android:textColor="@color/text_black_first"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+      />
 
         <TextView
             android:id="@+id/shop_list_tv_card_grade"
@@ -207,7 +219,8 @@
             android:layout_alignParentEnd="true"
             android:paddingEnd="8dp"
             android:textColor="@color/text_black_first"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            />
 
         <!--<Button-->
         <!--android:id="@+id/shop_list_btn_cancel"-->

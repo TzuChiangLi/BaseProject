@@ -65,6 +65,8 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     TextView mVipNameTv;
     @BindView(R.id.shop_list_tv_card_grade)
     TextView mCardGradeTv;
+    @BindView(R.id.shop_list_tv_not_vip)
+    TextView mNotVipTv;
     @BindView(R.id.shop_list_rl_vip)
     RelativeLayout mVipInfoLayout;
     @BindColor(R.color.common_rv_item)
@@ -214,12 +216,14 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
      */
     @Override
     public void showVipInfoOnline() {
+        mNotVipTv.setVisibility(View.GONE);
         mVipNameTv.setText(TradeHelper.vip.getVipName());
         mCardGradeTv.setText(String.format("%s/%s", TradeHelper.vip.getCardCode(), TradeHelper.vip.getVipGrade()));
     }
 
     @Override
     public void showVipInfoOffline() {
+        mNotVipTv.setVisibility(View.GONE);
         mVipNameTv.setVisibility(View.GONE);
         mCardGradeTv.setVisibility(View.GONE);
     }
