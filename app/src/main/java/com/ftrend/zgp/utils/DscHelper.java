@@ -232,8 +232,10 @@ public class DscHelper {
      */
     public static void cancelWholeDsc() {
         dscList = null;
-        calcList.clear();
-        calcList = null;
+        if (calcList != null) {
+            calcList.clear();
+            calcList = null;
+        }
         prodTotal = 0;
     }
 
