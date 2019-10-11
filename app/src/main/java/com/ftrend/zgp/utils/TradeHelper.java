@@ -1121,23 +1121,23 @@ public class TradeHelper {
 
 
     /**
-     * @param rateRule
-     * @param prod
-     * @return
+     * @param rateRule 折扣规则
+     * @param prod     商品信息
+     * @return 折扣
      */
     private static double queryRateRule(double rateRule, TradeProd prod) {
         double rate = 0;
         if (TextUtils.isEmpty(prod.getBarCode())) {
             if (rateRule == VIP_ONE) {
-                rateRule = SQLite.select(DepProduct_Table.vipRate1).from(DepProduct.class)
+                rate = SQLite.select(DepProduct_Table.vipRate1).from(DepProduct.class)
                         .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
                         .querySingle().getVipRate1();
             } else if (rateRule == VIP_TWO) {
-                rateRule = SQLite.select(DepProduct_Table.vipRate2).from(DepProduct.class)
+                rate = SQLite.select(DepProduct_Table.vipRate2).from(DepProduct.class)
                         .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
                         .querySingle().getVipRate2();
             } else if (rateRule == VIP_THREE) {
-                rateRule = SQLite.select(DepProduct_Table.vipRate3).from(DepProduct.class)
+                rate = SQLite.select(DepProduct_Table.vipRate3).from(DepProduct.class)
                         .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
                         .querySingle().getVipRate3();
             }
