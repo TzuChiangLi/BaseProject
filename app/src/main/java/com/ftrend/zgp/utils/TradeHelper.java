@@ -3,6 +3,9 @@ package com.ftrend.zgp.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.ftrend.zgp.model.AppParams;
+import com.ftrend.zgp.model.AppParams_Table;
+import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.DepPayInfo;
 import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.DepProduct;
@@ -14,6 +17,7 @@ import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
+import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.model.VipInfo;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -237,7 +241,7 @@ public class TradeHelper {
      * @param amount     支付金额
      * @param change     找零金额
      * @param payCode    支付账号
-     * @return
+     * @return 支付结果
      */
     public static boolean pay(String appPayType, double amount, double change, String payCode) {
         try {
@@ -1234,6 +1238,58 @@ public class TradeHelper {
                 .count();
         return count != 0;
     }
+
+
+    /**
+     * @return 可登录专柜
+     */
+    public static List<Dep> getDepList() {
+        return SQLite.select().from(Dep.class).queryList();
+    }
+
+    /**
+     * @return 可登录用户
+     */
+    public static List<User> getUserList() {
+        return SQLite.select().from(User.class).queryList();
+    }
+
+    /**
+     * 获取参数字段
+     *
+     * @param paramName 字段名
+     * @return 字段值
+     */
+    public static String getAppParamValue(String paramName) {
+        return SQLite.select().from(AppParams.class).where(AppParams_Table.paramName.eq(paramName))
+                .querySingle().getParamValue();
+    }
+
+    /**
+     * 根据编码条码获取商品的单位
+     *
+     * @param prodCode 商品码
+     * @param barCode  条码
+     * @return 单位
+     */
+    public static String getProdUnit(String prodCode, String barCode) {
+        String unit = "";
+        if (TextUtils.isEmpty(barCode)) {
+            unit = SQLite.select(DepProduct_Table.unit)
+                    .from(DepProduct.class)
+                    .where(DepProduct_Table.prodCode.eq(prodCode))
+                    .querySingle()
+                    .getUnit();
+        } else {
+            unit = SQLite.select(DepProduct_Table.unit)
+                    .from(DepProduct.class)
+                    .where(DepProduct_Table.barCode.eq(barCode))
+                    .querySingle()
+                    .getUnit();
+        }
+        return unit;
+    }
+
 
     /**
      * 判断购物车是否为空

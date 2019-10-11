@@ -8,6 +8,7 @@ import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.Dep_Table;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.model.User_Table;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.EncryptUtill;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -34,13 +35,33 @@ public class LoginPresenter implements Contract.LoginPresenter {
 
     @Override
     public void initDepData(Context context) {
-        List<Dep> depList = SQLite.select().from(Dep.class).queryList();
+        List<Dep> depList = TradeHelper.getDepList();
+        String depCode = TradeHelper.getAppParamValue("lastDep");
+        if (!TextUtils.isEmpty(TradeHelper.getAppParamValue("lastDep"))) {
+            for (int i = 0; i < depList.size(); i++) {
+                if (depCode.equals(depList.get(i).getDepCode())) {
+                    Dep dep = depList.get(i);
+                    depList.remove(i);
+                    depList.add(0, dep);
+                }
+            }
+        }
         mView.setDepData(depList);
     }
 
     @Override
     public void initUserData() {
-        List<User> userList = SQLite.select().from(User.class).queryList();
+        List<User> userList = TradeHelper.getUserList();
+        String userCode = TradeHelper.getAppParamValue("lastUser");
+        if (!TextUtils.isEmpty(TradeHelper.getAppParamValue("lastUser"))) {
+            for (int i = 0; i < userList.size(); i++) {
+                if (userCode.equals(userList.get(i).getUserCode())) {
+                    User user = userList.get(i);
+                    userList.remove(i);
+                    userList.add(0, user);
+                }
+            }
+        }
         mView.setUserData(userList);
     }
 

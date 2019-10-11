@@ -153,11 +153,11 @@
         android:id="@+id/shop_cart_bottom_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_above="@+id/shop_cart_bottom_tv_toal_price"
+        android:layout_above="@+id/shop_cart_bottom_tv_total_price"
         android:background="@color/common_gray_bg" />
 
     <TextView
-        android:id="@+id/shop_cart_bottom_tv_toal_price"
+        android:id="@+id/shop_cart_bottom_tv_total_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/shop_cart_fl"

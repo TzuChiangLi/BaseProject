@@ -68,7 +68,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     Button mPayBtn;
     @BindView(R.id.shop_cart_top_bar)
     TitleBar mTitleBar;
-    @BindView(R.id.shop_cart_bottom_tv_toal_price)
+    @BindView(R.id.shop_cart_bottom_tv_total_price)
     TextView mTotalTv;
     @BindView(R.id.shop_cart_top_ll_btn_scan)
     ImageButton mScanBtn;
@@ -147,8 +147,8 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
                 oldClsIndex = position;
                 mClsAdapter.getData().get(position).setSelect(true);
                 mClsAdapter.notifyItemChanged(position);
-                LogUtil.d("----edt:"+mSearchEdt.getText().toString());
-                mPresenter.searchProdList(clsList.get(position).getClsCode(),mSearchEdt.getText().toString());
+                LogUtil.d("----edt:" + mSearchEdt.getText().toString());
+                mPresenter.searchProdList(clsList.get(position).getClsCode(), mSearchEdt.getText().toString());
             }
         });
     }
@@ -220,7 +220,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @Override
     public void updateTradeProd(double count, double price) {
         mTipTv.setText(String.valueOf(count).replace(".0", ""));
-        mTotalTv.setText(String.format("%.2f", price));
+        mTotalTv.setText(String.format("￥%.2f", price));
     }
 
     @Override
