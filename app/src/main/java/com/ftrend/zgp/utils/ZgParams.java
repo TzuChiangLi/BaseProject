@@ -189,6 +189,13 @@ public class ZgParams {
         appParams.update();
     }
 
+    /**
+     * 设置初始化完成标志
+     */
+    public static void updateInitFlag() {
+        saveAppParams("initFlag", "1");
+    }
+
     public static boolean isIsOnline() {
         return isOnline;
     }

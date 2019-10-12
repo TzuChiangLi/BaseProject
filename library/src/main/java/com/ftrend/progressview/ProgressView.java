@@ -144,7 +144,7 @@ public class ProgressView extends FrameLayout {
     public void setProgress(int progress) {
         this.progress = progress;
         mProgressTv.setText(String.format("%d%%", progress));
-
+        mProgressTv.postInvalidate();
     }
 
     public void start() {

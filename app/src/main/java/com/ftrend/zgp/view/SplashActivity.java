@@ -9,10 +9,13 @@ import android.text.TextUtils;
 
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.qw.soul.permission.SoulPermission;
 import com.qw.soul.permission.bean.Permission;
 import com.qw.soul.permission.bean.Permissions;
 import com.qw.soul.permission.callbcak.CheckRequestPermissionsListener;
+
+import java.util.Locale;
 
 /**
  * 启动闪屏
@@ -34,15 +37,30 @@ public class SplashActivity extends AppCompatActivity {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                //后面根据首页再做延时操作
-                                Intent intent;
                                 if (TextUtils.isEmpty(ZgParams.getPosCode())) {
-                                    intent = new Intent(SplashActivity.this, RegisterActivity.class);
+                                    //未注册，进入注册界面
+                                    Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                } else if (!ZgParams.getInitFlag().equals("1")) {
+                                    //已注册但未完成初始化，进入初始化界面
+                                    Intent intent = new Intent(SplashActivity.this, InitActivity.class);
+                                    startActivity(intent);
+                                    finish();
                                 } else {
-                                    intent = new Intent(SplashActivity.this, LoginActivity.class);
+                                    //已注册，自动更新数据并进入登录界面
+                                    new DataDownloadTask(false, new DataDownloadTask.ProgressHandler() {
+                                        @Override
+                                        public void handleProgress(int percent, boolean isFailed, String msg) {
+                                            System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
+                                            if (percent >= 100) {
+                                                Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        }
+                                    }).start();
                                 }
-                                startActivity(intent);
-                                finish();
                             }
                         }, 2 * 1000);
                     }
