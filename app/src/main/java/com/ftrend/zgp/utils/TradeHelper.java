@@ -573,8 +573,9 @@ public class TradeHelper {
     public static void rollackPriceChangeInShopCart() {
         TradeProd tradeProd = prodList.get(prodList.size() - 1);
         if (tradeProd != null) {
-            tradeProd.delete();
-            prodList.remove(prodList.size() - 1);
+            if (tradeProd.delete()) {
+                prodList.remove(prodList.size() - 1);
+            }
         }
         recalcTotal();
     }
