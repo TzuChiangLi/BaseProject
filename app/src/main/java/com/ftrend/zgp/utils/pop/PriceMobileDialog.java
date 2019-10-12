@@ -187,7 +187,7 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
                 TradeHelper.saveVipDsc();
                 Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_VIP_INFO, vipInfo);
                 dismiss();
-            }else {
+            } else {
                 MessageUtil.show("服务返回异常错误");
             }
         }
@@ -201,9 +201,6 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
 
     @OnClick(R.id.vip_way_img_close)
     public void close() {
-        if (mContext instanceof ShopCartActivity) {
-            Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE, index);
-        }
         KeyboardUtils.hideSoftInput(this);
         dismiss();
     }
