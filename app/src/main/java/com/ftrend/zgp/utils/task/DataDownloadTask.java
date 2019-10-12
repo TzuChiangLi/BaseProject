@@ -78,7 +78,7 @@ public class DataDownloadTask {
      */
     private void retry(String err) {
         retryCount++;
-        if (retryCount > MAX_RETRY) {
+        if (retryCount >= MAX_RETRY) {
             // TODO: 2019/9/4 优化：数据下载达到最大重试次数的提示消息
             postFailed(err + "达到最大重试次数");
         } else {
@@ -161,7 +161,7 @@ public class DataDownloadTask {
      * @param msg
      */
     private void postFailed(String msg) {
-        int percent = step * 100 / updateInfoList.size();
+        int percent = updateInfoList.size() == 0 ? 0 : step * 100 / updateInfoList.size();
         handler.handleProgress(percent, true, msg);
     }
 
