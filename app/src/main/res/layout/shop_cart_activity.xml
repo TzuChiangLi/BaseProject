@@ -98,14 +98,6 @@
         android:visibility="gone"
         tools:listitem="@layout/shop_cart_rv_classes_item" />
 
-    <!--<View-->
-    <!--android:id="@+id/shop_cart_rv_verticle_line"-->
-    <!--android:layout_width="1px"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_above="@+id/shop_cart_bottom_line"-->
-    <!--android:layout_below="@+id/shop_cart_top_ll_btn_scan"-->
-    <!--android:layout_toEndOf="@+id/shop_cart_rv_classes"-->
-    <!--android:background="@color/divide_line" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/shop_cart_rv_product"
@@ -116,13 +108,6 @@
         android:layout_toEndOf="@+id/shop_cart_rv_classes"
         android:background="@color/common_gray_bg"
         tools:listitem="@layout/shop_cart_rv_product_item" />
-
-    <!--<RelativeLayout-->
-    <!--android:id="@+id/shop_cart_ll_bottom"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:clipChildren="true">-->
 
     <!--为了实现角标覆盖Button在Button上层，有两种方式，一个是button的android:stateListAnimator
     属性设置为@null，另一个方法就是如下方式，用一个布局把Button给套起来-->
