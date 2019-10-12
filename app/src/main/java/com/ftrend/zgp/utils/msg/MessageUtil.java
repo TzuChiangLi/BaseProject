@@ -162,10 +162,10 @@ public class MessageUtil {
      */
     public static void info(String message) {
         mContext = BaseActivity.mContext;
-        builder = new DialogBuilder(mContext, 2);
+        builder = new DialogBuilder(mContext, 1);
         builder.setContent(message);
         builder.setLeftBtn("确定");
-        builder.setRightBtn("返回");
+        //builder.setRightBtn("返回");
         builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
             @Override
             public void onLeftBtnClick(BasePopupView v) {
