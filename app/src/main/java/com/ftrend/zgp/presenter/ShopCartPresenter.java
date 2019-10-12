@@ -7,7 +7,6 @@ import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepCls_Table;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.DepProduct_Table;
-import com.ftrend.zgp.utils.DscHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.log.LogUtil;
@@ -41,18 +40,20 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
         for (DepProduct product : mProdList) {
             product.setSelect(false);
         }
-        for (DepCls cls : clsList) {
-            cls.setSelect(false);
-        }
         mView.setProdList(mProdList);
-        DepCls depCls = new DepCls();
-        depCls.setClsName("全部类别");
-        depCls.setDepCode("all");
-        depCls.setClsCode("all");
-        depCls.setSelect(true);
+        if (ZgParams.isShowCls(ZgParams.getCurrentDep().getDepCode())) {
+            for (DepCls cls : clsList) {
+                cls.setSelect(false);
+            }
+            DepCls depCls = new DepCls();
+            depCls.setClsName("全部类别");
+            depCls.setDepCode("all");
+            depCls.setClsCode("all");
+            depCls.setSelect(true);
 
-        clsList.add(0, depCls);
-        mView.setClsList(clsList);
+            clsList.add(0, depCls);
+            mView.setClsList(clsList);
+        }
     }
 
     @Override

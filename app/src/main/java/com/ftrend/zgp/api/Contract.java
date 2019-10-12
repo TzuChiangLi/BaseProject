@@ -137,7 +137,6 @@ public interface Contract {
         void finishUpdate(String posCode, String dep, String user);
     }
 
-
     interface LoginPresenter {
         /**
          * 初始化可登录专柜数据
@@ -187,10 +186,6 @@ public interface Contract {
 
     }
 
-
-    /**
-     *
-     */
     interface HomePresenter {
 
         /**
@@ -249,9 +244,6 @@ public interface Contract {
         void onDestory();
     }
 
-    /**
-     *
-     */
     interface HomeView extends BaseView<Contract.HomePresenter> {
         /**
          * 显示错误
@@ -327,9 +319,6 @@ public interface Contract {
 
     }
 
-    /**
-     *
-     */
     interface ShopCartPresenter {
 
         /**
@@ -394,9 +383,6 @@ public interface Contract {
         void onDestory();
     }
 
-    /**
-     *
-     */
     interface ShopCartView extends BaseView<Contract.ShopCartPresenter> {
         /**
          * 设置商品类别
@@ -630,7 +616,6 @@ public interface Contract {
 
     }
 
-
     interface PayPresenter {
         /**
          * 初始化界面
@@ -677,6 +662,10 @@ public interface Contract {
          */
         void doHandover();
 
+        /**
+         * 销毁，防止泄露
+         */
+        void onDestory();
     }
 
     interface HandoverView extends BaseView<Contract.HandoverPresenter> {
@@ -770,5 +759,73 @@ public interface Contract {
 
     }
 
+    interface RtnProdPresenter {
+        /**
+         * 获取流水
+         *
+         * @param lsNo 流水号
+         */
+        void getTradeByLsNo(String lsNo);
+
+        /**
+         * 检查行情权限
+         *
+         * @param index 索引
+         */
+        void checkDelProdRight(int index);
+
+        /**
+         * 行清商品
+         *
+         * @param index 索引
+         */
+        void delTradeProd(int index);
+
+
+        /**
+         * 查询专柜商品信息表中该商品的改价权限
+         *
+         * @param prodCode 商品编码，可能不唯一
+         * @param barCode  商品条码，可能为空
+         * @param index    商品索引
+         */
+        void getProdPriceFlag(String prodCode, String barCode, int index);
+
+        /**
+         * 更改商品数量
+         *
+         * @param index        商品索引
+         * @param changeAmount 改变数量
+         */
+        void changeAmount(int index, double changeAmount);
+
+        /**
+         * 商品是否允许优惠,弹出相应提示
+         *
+         * @param index 索引
+         */
+        void checkProdForDsc(int index);
+
+        /**
+         * 销毁，防止泄露
+         */
+        void onDestory();
+    }
+
+    interface RtnProdView extends BaseView<Contract.RtnProdPresenter> {
+        /**
+         * 存在此流水并显示
+         *
+         * @param data 流水内商品信息
+         */
+        void existTrade(List<TradeProd> data);
+
+        /**
+         * 异常信息
+         *
+         * @param msg 文本
+         */
+        void showError(String msg);
+    }
 
 }

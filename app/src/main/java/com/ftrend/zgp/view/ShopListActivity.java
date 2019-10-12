@@ -65,8 +65,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     TextView mCardGradeTv;
     @BindView(R.id.shop_list_tv_not_vip)
     TextView mNotVipTv;
-//    @BindView(R.id.shop_list_rl_vip)
-//    RelativeLayout mVipInfoLayout;
     @BindColor(R.color.common_rv_item)
     int rv_item_selected;
     @BindColor(R.color.common_white)

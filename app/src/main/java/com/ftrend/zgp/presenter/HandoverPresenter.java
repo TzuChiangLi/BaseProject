@@ -11,7 +11,6 @@ import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
@@ -133,9 +132,7 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
                 handoverRecord.setPayTotal(getTotalByPayType);
                 handoverRecord.setPayCount(getCountByPayType);
                 //endregion
-
                 handoverRecord.setDepCode(ZgParams.getCurrentDep().getDepCode());
-
                 mRecordList.add(handoverRecord);
             }
             mView.showHandoverRecord(mRecordList);
@@ -164,6 +161,13 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
                     }));
         } else {
             mView.showOfflineTip();
+        }
+    }
+
+    @Override
+    public void onDestory() {
+        if (mView != null) {
+            mView = null;
         }
     }
 }
