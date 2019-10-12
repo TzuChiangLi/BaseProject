@@ -5,10 +5,9 @@ import android.text.TextUtils;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.TradeProd;
-import com.ftrend.zgp.utils.db.ZgpDb;
-import com.raizlabs.android.dbflow.config.FlowManager;
+import com.ftrend.zgp.utils.db.TransHelper;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
-import com.raizlabs.android.dbflow.structure.database.transaction.FastStoreModelTransaction;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -142,6 +141,15 @@ public class DscHelper {
      * @return
      */
     public static boolean commitWholeDsc() {
+        return TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                return doCommitWholeDsc(databaseWrapper);
+            }
+        });
+    }
+
+    private static boolean doCommitWholeDsc(DatabaseWrapper databaseWrapper) {
         if (calcType != 1 && calcType != 2) {
             return false;//计算结果无效
         }
@@ -156,12 +164,15 @@ public class DscHelper {
                 prod.setTranDsc(0);
             }
         }
-        FlowManager.getDatabase(ZgpDb.class).executeTransaction(
+        /*FlowManager.getDatabase(ZgpDb.class).executeTransaction(
                 FastStoreModelTransaction
                         .updateBuilder(FlowManager.getModelAdapter(TradeProd.class))
                         .addAll(dscList)
-                        .build());
-        return TradeHelper.recalcTotal();
+                        .build());*/
+        for (TradeProd prod : dscList) {
+            prod.update(databaseWrapper);
+        }
+        return TradeHelper.recalcTotal(databaseWrapper);
     }
 
     /**
