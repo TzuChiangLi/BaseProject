@@ -2,8 +2,8 @@ package com.ftrend.zgp.utils.task;
 
 import android.util.Log;
 
-import com.ftrend.zgp.model.SysParams;
-import com.ftrend.zgp.model.SysParams_Table;
+import com.ftrend.zgp.model.AppParams;
+import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
@@ -12,6 +12,7 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -105,6 +106,7 @@ public class DataDownloadTask {
         UpdateInfo info = updateInfoList.get(step);
         if (!isForce && !info.needUpdate()) {
             //无需更新，跳过
+            System.out.println(String.format(Locale.getDefault(), "无需更新，跳过：%d", step));
             next();
             return;
         }
@@ -292,8 +294,8 @@ public class DataDownloadTask {
          * @return
          */
         boolean needUpdate() {
-            SysParams params = SQLite.select().from(SysParams.class)
-                    .where(SysParams_Table.paramName.eq(key))
+            AppParams params = SQLite.select().from(AppParams.class)
+                    .where(AppParams_Table.paramName.eq(key))
                     .querySingle();
             return params == null || !dataSign.equals(params.getParamValue());
         }
