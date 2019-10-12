@@ -25,7 +25,6 @@ import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
-import com.lxj.xpopup.core.BasePopupView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -334,17 +333,14 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     public void hasDelProdRight(final int index) {
-        MessageUtil.question("确定删除此商品？");
-        MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
+        MessageUtil.question("确定删除此商品？", new MessageUtil.MessageBoxYesNoListener() {
             @Override
-            public void onLeftBtnClick(BasePopupView popView) {
+            public void onYes() {
                 mPresenter.delTradeProd(index);
-                popView.dismiss();
             }
 
             @Override
-            public void onRightBtnClick(BasePopupView popView) {
-                popView.dismiss();
+            public void onNo() {
             }
         });
     }

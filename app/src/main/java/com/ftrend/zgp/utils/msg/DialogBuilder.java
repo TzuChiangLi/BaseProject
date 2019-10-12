@@ -42,10 +42,11 @@ public class DialogBuilder extends CenterPopupView {
     private Context context;
     private String title, content, leftBtn, rightBtn;
     private OnBtnClickListener mOnClickListener;
+
     /**
      * 0:提示，1：警告，2：错误，3：询问
      */
-    private int dialogType = 0;
+    private DialogType dialogType = DialogType.info;
     /**
      * 按钮数量
      */
@@ -91,20 +92,20 @@ public class DialogBuilder extends CenterPopupView {
         super.onCreate();
         ButterKnife.bind(this);
         switch (dialogType) {
-            case 0:
+            case info:
             default:
                 mStateImg.setImageResource(R.drawable.dialog_state_tip);
                 mTitleTv.setText("提示");
                 break;
-            case 1:
+            case warning:
                 mStateImg.setImageResource(R.drawable.dialog_state_warning);
                 mTitleTv.setText("警告");
                 break;
-            case 2:
+            case error:
                 mStateImg.setImageResource(R.drawable.dialog_state_error);
                 mTitleTv.setText("错误");
                 break;
-            case 3:
+            case question:
                 mStateImg.setImageResource(R.drawable.dialog_state_ask);
                 mTitleTv.setText("询问");
                 break;
@@ -206,7 +207,7 @@ public class DialogBuilder extends CenterPopupView {
         this.rightBtn = rightBtn;
     }
 
-    public void setDialogType(int dialogType) {
+    public void setDialogType(DialogType dialogType) {
         this.dialogType = dialogType;
     }
 
@@ -215,4 +216,14 @@ public class DialogBuilder extends CenterPopupView {
     }
 
     //endregion
+
+    /**
+     * 对话框类型定义
+     */
+    enum DialogType {
+        info,
+        warning,
+        error,
+        question
+    }
 }

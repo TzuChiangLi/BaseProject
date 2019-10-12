@@ -138,6 +138,7 @@ public class MessageUtil {
         MessageUtil.mListener = mListener;
     }
 
+    @Deprecated
     public interface OnBtnClickListener {
         /**
          * 左按钮响应
@@ -155,29 +156,84 @@ public class MessageUtil {
 
     }
 
+    public interface MessageBoxOkListener {
+        void onOk();
+    }
+
+    public interface MessageBoxYesNoListener {
+        void onYes();
+
+        void onNo();
+    }
+
+    /**
+     * 默认的OK按钮点击事件处理
+     */
+    private static MessageBoxOkListener defaultOkListener = new MessageBoxOkListener() {
+        @Override
+        public void onOk() {
+        }
+    };
+
+    /**
+     * 显示只有一个按钮的消息对话框
+     *
+     * @param message    消息内容
+     * @param btnText    按钮文字
+     * @param dialogType 对话框类型：0-info, 1-waring, 2-error
+     * @param listener   按钮点击事件监听
+     */
+    private static void oneBtnDialog(String message, String btnText,
+                                     DialogBuilder.DialogType dialogType,
+                                     final MessageBoxOkListener listener) {
+        mContext = BaseActivity.mContext;
+        builder = new DialogBuilder(mContext, 1);
+        builder.setContent(message);
+        builder.setLeftBtn(btnText);
+        builder.setDialogType(dialogType);
+        builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
+            @Override
+            public void onLeftBtnClick(BasePopupView v) {
+                listener.onOk();
+                v.dismiss();
+            }
+
+            @Override
+            public void onRightBtnClick(BasePopupView v) {
+
+            }
+        });
+        new XPopup.Builder(mContext)
+                .dismissOnTouchOutside(false)
+                .asCustom(builder)
+                .show();
+    }
+
+    private static void oneBtnDialog(String message, String btnText,
+                                     DialogBuilder.DialogType dialogType) {
+        oneBtnDialog(message, btnText, dialogType, defaultOkListener);
+    }
+
+    private static void oneBtnDialog(String message, DialogBuilder.DialogType dialogType,
+                                     MessageBoxOkListener listener) {
+        oneBtnDialog(message, "确定", dialogType, listener);
+    }
+
+    private static void oneBtnDialog(String message, DialogBuilder.DialogType dialogType) {
+        oneBtnDialog(message, dialogType, defaultOkListener);
+    }
+
     /**
      * 提示弹窗
      *
      * @param message 提示文本
      */
     public static void info(String message) {
-        mContext = BaseActivity.mContext;
-        builder = new DialogBuilder(mContext, 1);
-        builder.setContent(message);
-        builder.setLeftBtn("确定");
-        //builder.setRightBtn("返回");
-        builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
-            @Override
-            public void onLeftBtnClick(BasePopupView v) {
-                mListener.onLeftBtnClick(v);
-            }
+        oneBtnDialog(message, DialogBuilder.DialogType.info);
+    }
 
-            @Override
-            public void onRightBtnClick(BasePopupView v) {
-                mListener.onRightBtnClick(v);
-            }
-        });
-        DialogUtil.showTipDialog(mContext, builder);
+    public static void info(String message, MessageBoxOkListener listener) {
+        oneBtnDialog(message, DialogBuilder.DialogType.info, listener);
     }
 
     /**
@@ -186,22 +242,11 @@ public class MessageUtil {
      * @param message 警告文本
      */
     public static void warning(String message) {
-        mContext = BaseActivity.mContext;
-        builder = new DialogBuilder(mContext, 1);
-        builder.setLeftBtn("确定");
-        builder.setContent(message);
-        builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
-            @Override
-            public void onLeftBtnClick(BasePopupView v) {
-                mListener.onLeftBtnClick(v);
-            }
+        oneBtnDialog(message, DialogBuilder.DialogType.warning);
+    }
 
-            @Override
-            public void onRightBtnClick(BasePopupView v) {
-                mListener.onRightBtnClick(v);
-            }
-        });
-        DialogUtil.showWarningDialog(mContext, builder);
+    public static void warning(String message, MessageBoxOkListener listener) {
+        oneBtnDialog(message, DialogBuilder.DialogType.warning, listener);
     }
 
     /**
@@ -210,23 +255,11 @@ public class MessageUtil {
      * @param message 错误文本
      */
     public static void error(String message) {
-        mContext = BaseActivity.mContext;
-        builder = new DialogBuilder(mContext, 1);
-        builder.setLeftBtn("确定");
-        builder.setContent(message);
-        builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
-            @Override
-            public void onLeftBtnClick(BasePopupView v) {
-                mListener.onLeftBtnClick(v);
-            }
+        oneBtnDialog(message, DialogBuilder.DialogType.error);
+    }
 
-            @Override
-            public void onRightBtnClick(BasePopupView v) {
-                mListener.onRightBtnClick(v);
-            }
-        });
-
-        DialogUtil.showErrorDialog(mContext, builder);
+    public static void error(String message, MessageBoxOkListener listener) {
+        oneBtnDialog(message, DialogBuilder.DialogType.error, listener);
     }
 
     /**
@@ -235,24 +268,35 @@ public class MessageUtil {
      *
      * @param message 询问文本
      */
-    public static void question(String message) {
+    public static void question(String message, String btnTextYes, String btnTextNo,
+                                final MessageBoxYesNoListener listener) {
         mContext = BaseActivity.mContext;
         builder = new DialogBuilder(mContext, 2);
-        builder.setLeftBtn("是");
-        builder.setRightBtn("否");
         builder.setContent(message);
+        builder.setLeftBtn(btnTextYes);
+        builder.setRightBtn(btnTextNo);
+        builder.setDialogType(DialogBuilder.DialogType.question);
         builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
             @Override
             public void onLeftBtnClick(BasePopupView v) {
-                mListener.onLeftBtnClick(v);
+                listener.onYes();
+                v.dismiss();
             }
 
             @Override
             public void onRightBtnClick(BasePopupView v) {
-                mListener.onRightBtnClick(v);
+                listener.onNo();
+                v.dismiss();
             }
         });
-        DialogUtil.showAskDialog(mContext, builder);
+        new XPopup.Builder(mContext)
+                .dismissOnTouchOutside(false)
+                .asCustom(builder)
+                .show();
+    }
+
+    public static void question(String message, final MessageBoxYesNoListener listener) {
+        question(message, "是", "否", listener);
     }
     //endregion
 

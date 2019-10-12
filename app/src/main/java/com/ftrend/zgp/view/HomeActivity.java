@@ -18,7 +18,6 @@ import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
-import com.lxj.xpopup.core.BasePopupView;
 
 import java.util.List;
 
@@ -151,56 +150,21 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 break;
             case "数据同步":
                 MessageUtil.info("数据同步");
-                MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
-                    @Override
-                    public void onLeftBtnClick(BasePopupView popView) {
-                        popView.dismiss();
-                    }
-
-                    @Override
-                    public void onRightBtnClick(BasePopupView popView) {
-
-                    }
-                });
                 break;
             case "操作指南":
                 MessageUtil.error("操作指南");
-                MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
-                    @Override
-                    public void onLeftBtnClick(BasePopupView popView) {
-                        popView.dismiss();
-                    }
-
-                    @Override
-                    public void onRightBtnClick(BasePopupView popView) {
-
-                    }
-                });
                 break;
             case "参数设置":
                 MessageUtil.warning("参数设置");
-                MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
-                    @Override
-                    public void onLeftBtnClick(BasePopupView popView) {
-                        popView.dismiss();
-                    }
-
-                    @Override
-                    public void onRightBtnClick(BasePopupView popView) {
-
-                    }
-                });
                 break;
             case "修改密码":
-                MessageUtil.question("修改密码");
-                MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
+                MessageUtil.question("修改密码", new MessageUtil.MessageBoxYesNoListener() {
                     @Override
-                    public void onLeftBtnClick(BasePopupView popView) {
-                        popView.dismiss();
+                    public void onYes() {
                     }
 
                     @Override
-                    public void onRightBtnClick(BasePopupView popView) {
+                    public void onNo() {
                     }
                 });
                 break;
