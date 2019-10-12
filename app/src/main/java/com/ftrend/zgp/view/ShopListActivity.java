@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -335,7 +334,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     public void hasDelProdRight(final int index) {
-        MessageUtil.info("确定删除此商品？");
+        MessageUtil.question("确定删除此商品？");
         MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
             @Override
             public void onLeftBtnClick(BasePopupView popView) {
