@@ -29,7 +29,6 @@ import com.ftrend.zgp.presenter.ShopCartPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.event.Event;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -80,7 +79,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     int rv_item_normal;
     private Contract.ShopCartPresenter mPresenter;
     private ShopAdapter<DepProduct> mProdAdapter;
-    private ShopAdapter<DepCls> mClsAdapter;
+    private ShopAdapter<DepCls> mClsAdapter = null;
     private int oldProdIndex = -1, oldClsIndex = -1;
     private static int START_SCAN = 001;
 
@@ -106,17 +105,15 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         mSearchEdt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mPresenter.searchProdList(mClsAdapter.getData().get(oldClsIndex == -1 ? 0 : oldClsIndex).getClsCode(), s.toString());
+                mPresenter.searchProdList(mClsAdapter == null ? "" : mClsAdapter.getData().get(oldClsIndex == -1 ? 0 : oldClsIndex).getClsCode(), s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
     }
@@ -130,27 +127,29 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @Override
     public void setClsList(final List<DepCls> clsList) {
-        mClassRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mClsAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_classes_item, clsList, 0);
-        mClassRecyclerView.setAdapter(mClsAdapter);
-        mClsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (oldClsIndex == -1 && oldClsIndex <= clsList.size()) {
-                    mClsAdapter.getData().get(0).setSelect(false);
-                    mClsAdapter.notifyItemChanged(0);
+        mClassRecyclerView.setVisibility(View.VISIBLE);
+        if (clsList != null && clsList.size() != 0) {
+            mClassRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            mClsAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_classes_item, clsList, 0);
+            mClassRecyclerView.setAdapter(mClsAdapter);
+            mClsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                @Override
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    if (oldClsIndex == -1 && oldClsIndex <= clsList.size()) {
+                        mClsAdapter.getData().get(0).setSelect(false);
+                        mClsAdapter.notifyItemChanged(0);
+                    }
+                    if (oldClsIndex != -1 && oldClsIndex <= clsList.size()) {
+                        mClsAdapter.getData().get(oldClsIndex).setSelect(false);
+                        mClsAdapter.notifyItemChanged(oldClsIndex);
+                    }
+                    oldClsIndex = position;
+                    mClsAdapter.getData().get(position).setSelect(true);
+                    mClsAdapter.notifyItemChanged(position);
+                    mPresenter.searchProdList(clsList.get(position).getClsCode(), mSearchEdt.getText().toString());
                 }
-                if (oldClsIndex != -1 && oldClsIndex <= clsList.size()) {
-                    mClsAdapter.getData().get(oldClsIndex).setSelect(false);
-                    mClsAdapter.notifyItemChanged(oldClsIndex);
-                }
-                oldClsIndex = position;
-                mClsAdapter.getData().get(position).setSelect(true);
-                mClsAdapter.notifyItemChanged(position);
-                LogUtil.d("----edt:" + mSearchEdt.getText().toString());
-                mPresenter.searchProdList(clsList.get(position).getClsCode(), mSearchEdt.getText().toString());
-            }
-        });
+            });
+        }
     }
 
     @Override
@@ -160,7 +159,6 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
             Bundle bundle = data.getExtras();
             ArrayList result = (ArrayList) bundle.getSerializable("data");
             Iterator it = result.iterator();
-
             while (it.hasNext()) {
                 HashMap hashMap = (HashMap) it.next();
                 //此处传入扫码结果

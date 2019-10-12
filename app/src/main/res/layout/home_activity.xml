@@ -114,6 +114,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/home_img_top"
         android:background="@color/common_gray_bg"
+        android:layout_marginTop="8dp"
         android:overScrollMode="never"
         android:scrollbars="none"
         tools:listitem="@layout/home_rv_menu_item" />

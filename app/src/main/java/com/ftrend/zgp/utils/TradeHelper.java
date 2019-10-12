@@ -112,6 +112,7 @@ public class TradeHelper {
     public static List<TradeProd> getProdList() {
         return prodList;
     }
+
     //region clear----清空当前交易信息
 
     /**
@@ -171,6 +172,43 @@ public class TradeHelper {
             pay = SQLite.select().from(TradePay.class)
                     .where(TradePay_Table.lsNo.eq(trade.getLsNo()))
                     .querySingle();
+        }
+    }
+
+    /**
+     * 退货----根据流水单号获取流水信息
+     *
+     * @param lsNo 流水单号
+     * @return 流水信息
+     */
+    private static Trade getPaidLs(String lsNo) {
+        return SQLite.select().from(Trade.class)
+                .where(Trade_Table.status.eq(TRADE_STATUS_PAID))
+                .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
+                .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
+                .and(Trade_Table.lsNo.eq(lsNo))
+                .querySingle();
+    }
+
+    /**
+     * 退货----初始化根据流水号查到的流水
+     *
+     * @param lsNo
+     * @return 是否有该流水
+     */
+    public static boolean initSale(String lsNo) {
+        trade = getPaidLs(lsNo);
+        if (trade == null) {
+            return false;
+        } else {
+            prodList = SQLite.select().from(TradeProd.class)
+                    .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                    .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
+                    .queryList();
+            pay = SQLite.select().from(TradePay.class)
+                    .where(TradePay_Table.lsNo.eq(trade.getLsNo()))
+                    .querySingle();
+            return true;
         }
     }
     //endregion
