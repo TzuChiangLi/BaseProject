@@ -138,6 +138,11 @@ public class DataDownloadTask {
      */
     private void postProgress() {
         int percent = step * 100 / updateInfoList.size();
+        if (percent < 0) {
+            percent = 0;
+        } else if (percent > 100) {
+            percent = 100;
+        }
         handler.handleProgress(percent, false, "");
     }
 
