@@ -408,18 +408,21 @@ public class TradeHelper {
      */
     public static void setTradeStatus(String status) {
         // TODO: 2019/10/12 重构：保存vip信息不应该在这里处理
+        SQLite.update(Trade.class)
+                .set(Trade_Table.status.eq(status))
+                .where(Trade_Table.lsNo.is(trade.getLsNo()))
+                .async()
+                .execute(); // non-UI
+    }
+
+
+    public static void saveVipInfo() {
         if (TradeHelper.vip != null) {
             SQLite.update(Trade.class)
-                    .set(Trade_Table.status.eq(status), Trade_Table.vipCode.eq(TradeHelper.vip.getVipCode()),
+                    .set(Trade_Table.vipCode.eq(TradeHelper.vip.getVipCode()),
                             Trade_Table.vipTotal.eq(TradeHelper.trade.getVipTotal()),
                             Trade_Table.custType.eq(TRADE_CUST_VIP),
                             Trade_Table.cardCode.eq(TradeHelper.vip.getCardCode()))
-                    .where(Trade_Table.lsNo.is(trade.getLsNo()))
-                    .async()
-                    .execute(); // non-UI blocking
-        } else {
-            SQLite.update(Trade.class)
-                    .set(Trade_Table.status.eq(status))
                     .where(Trade_Table.lsNo.is(trade.getLsNo()))
                     .async()
                     .execute(); // non-UI blocking
