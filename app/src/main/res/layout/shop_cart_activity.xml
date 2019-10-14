@@ -12,7 +12,7 @@
     <com.hjq.bar.TitleBar
         android:id="@+id/shop_cart_top_bar"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/dp_45"
         app:leftIcon="@drawable/back"
         app:lineColor="@color/common_blue"
         app:lineSize="1px"
@@ -26,7 +26,7 @@
             android:letterSpacing="0.05"
             android:text="@string/shop_title_bar_shop"
             android:textColor="@color/common_blue"
-            android:textSize="16sp"
+            android:textSize="@dimen/sp_16"
             android:textStyle="bold" />
     </com.hjq.bar.TitleBar>
 
@@ -45,35 +45,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/shop_cart_top_bar"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="@dimen/dp_4"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="horizontal"
-        android:paddingStart="8dp"
-        android:paddingTop="4dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="4dp">
+        android:paddingTop="@dimen/dp_4"
+        android:paddingBottom="@dimen/dp_4">
 
         <ImageButton
             android:id="@+id/shop_cart_top_ll_btn_scan"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="1"
-            android:background="@drawable/shop_btn_blue_selector"
-            android:maxHeight="32dp"
-            android:padding="8dp"
+            android:layout_width="@dimen/dp_80"
+            android:layout_height="@dimen/dp_40"
+            android:background="@null"
+            android:maxHeight="@dimen/dp_32"
             android:scaleType="centerInside"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
             android:src="@drawable/scan" />
 
         <com.ftrend.cleareditview.ClearEditText
             android:id="@+id/shop_cart_top_ll_edt_search"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_weight="5"
-            android:background="@null"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:background="@drawable/shop_cart_edt_bg"
             android:hint="@string/shop_edt_search"
-            android:paddingStart="8dp"
-            android:textSize="14sp" />
+            android:paddingStart="@dimen/dp_8"
+            android:textCursorDrawable="@drawable/shop_cart_edt_cursor"
+            android:textSize="@dimen/sp_14" />
 
     </LinearLayout>
 
@@ -86,13 +85,13 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/shop_cart_rv_classes"
-        android:layout_width="80dp"
+        android:layout_width="@dimen/dp_80"
         android:layout_height="match_parent"
         android:layout_above="@+id/shop_cart_fl"
         android:layout_below="@+id/shop_cart_line"
         android:layout_alignParentStart="true"
-        android:background="@color/common_gray_bg"
-        android:visibility="gone"
+        android:background="@color/shop_rv_cls_bg"
+        android:visibility="visible"
         tools:listitem="@layout/shop_cart_rv_classes_item" />
 
 
@@ -110,7 +109,7 @@
     属性设置为@null，另一个方法就是如下方式，用一个布局把Button给套起来-->
     <FrameLayout
         android:id="@+id/shop_cart_fl"
-        android:layout_width="80dp"
+        android:layout_width="@dimen/dp_80"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true">
@@ -166,12 +165,12 @@
 
     <TextView
         android:id="@+id/shop_cart_bottom_tip"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:layout_width="@dimen/dp_28"
+        android:layout_height="@dimen/dp_28"
         android:layout_alignTop="@+id/shop_cart_fl"
         android:layout_alignEnd="@+id/shop_cart_fl"
-        android:layout_marginTop="-10dp"
-        android:layout_marginEnd="-10dp"
+        android:layout_marginTop="@dimen/dp_m_10"
+        android:layout_marginEnd="@dimen/dp_m_10"
         android:background="@drawable/shop_tip_num"
         android:gravity="center"
         android:textColor="@color/shop_white_text"
@@ -183,7 +182,7 @@
 
     <!--<RelativeLayout--><!--android:id="@+id/shop_cart_top_rl"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content">-->
 
-    <!--<ImageView--><!--android:id="@+id/shop_cart_top_img_dep"--><!--android:layout_width="80dp"--><!--android:layout_height="80dp"--><!--android:layout_margin="8dp"--><!--android:background="@color/divide_line" />-->
+    <!--<ImageView--><!--android:id="@+id/shop_cart_top_img_dep"--><!--android:layout_width="@dimen/dp_80"--><!--android:layout_height="@dimen/dp_80"--><!--android:layout_margin="@dimen/dp_8"--><!--android:background="@color/divide_line" />-->
 
     <!--<TextView--><!--android:id="@+id/shop_cart_top_img_depname"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_alignTop="@+id/shop_cart_top_img_dep"--><!--android:layout_toEndOf="@+id/shop_cart_top_img_dep"--><!--android:text="XXXX专柜名称"--><!--android:textSize="20sp" />-->
 
@@ -193,4 +192,4 @@
 
     <!--<TextView--><!--android:id="@+id/shop_cart_top_tv_title_assistant"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_alignTop="@+id/shop_cart_top_tv_time"--><!--android:layout_toStartOf="@+id/shop_cart_top_tv_assistant"--><!--android:text="营业员：" />-->
 
-    <!--<TextView--><!--android:id="@+id/shop_cart_top_tv_assistant"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_alignTop="@+id/shop_cart_top_tv_title_assistant"--><!--android:layout_alignParentEnd="true"--><!--android:layout_marginEnd="8dp"--><!--android:text="收款员2" />--><!--</RelativeLayout>-->
+    <!--<TextView--><!--android:id="@+id/shop_cart_top_tv_assistant"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_alignTop="@+id/shop_cart_top_tv_title_assistant"--><!--android:layout_alignParentEnd="true"--><!--android:layout_marginEnd="@dimen/dp_8"--><!--android:text="收款员2" />--><!--</RelativeLayout>-->

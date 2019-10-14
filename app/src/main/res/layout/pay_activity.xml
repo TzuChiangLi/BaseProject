@@ -11,7 +11,7 @@
     <com.hjq.bar.TitleBar
         android:id="@+id/pay_top_bar"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/dp_45"
         android:layout_alignParentTop="true"
         android:background="@color/common_white"
         app:leftIcon="@drawable/back"
@@ -27,7 +27,7 @@
             android:letterSpacing="0.05"
             android:text="@string/pay_tv_title"
             android:textColor="@color/common_blue"
-            android:textSize="16sp"
+            android:textSize="@dimen/sp_16"
             android:textStyle="bold" />
     </com.hjq.bar.TitleBar>
 
@@ -53,10 +53,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:padding="16dp"
+            android:padding="@dimen/dp_16"
             android:text="@string/pay_tv_should_pay"
             android:textColor="@color/pay_tv_red"
-            android:textSize="26sp" />
+            android:textSize="@dimen/sp_20" />
 
 
         <TextView
@@ -65,11 +65,11 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/pay_tv_total_title"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
+            android:paddingTop="@dimen/dp_16"
+            android:paddingBottom="@dimen/dp_16"
             android:text="159.33"
             android:textColor="@color/pay_tv_red"
-            android:textSize="25sp"
+            android:textSize="@dimen/sp_20"
             android:textStyle="bold" />
 
     </RelativeLayout>
@@ -80,13 +80,13 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/pay_rl_money"
         android:background="@color/common_blue"
-        android:paddingStart="16dp"
-        android:paddingTop="4dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="4dp"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingEnd="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_4"
         android:text="@string/pay_tv_method"
         android:textColor="@color/common_white"
-        android:textSize="16sp" />
+        android:textSize="@dimen/sp_16" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/pay_rv_pay_way"

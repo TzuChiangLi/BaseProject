@@ -9,7 +9,7 @@
     <com.hjq.bar.TitleBar
         android:id="@+id/rtn_prod_top_bar"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/dp_45"
         app:leftIcon="@drawable/back"
         app:lineColor="@color/common_blue"
         app:lineSize="1px"
@@ -23,7 +23,7 @@
             android:letterSpacing="0.05"
             android:text="@string/rtn_prod_title_order"
             android:textColor="@color/common_blue"
-            android:textSize="16sp"
+            android:textSize="@dimen/sp_16"
             android:textStyle="bold" />
 
     </com.hjq.bar.TitleBar>
@@ -42,9 +42,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/rtn_prod_title_line"
-        android:layout_marginTop="4dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
+        android:layout_marginTop="@dimen/dp_4"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingBottom="@dimen/dp_4"
         android:text="@string/rtn_prod_btn_not_order" />
 
     <com.ftrend.cleareditview.ClearEditText
@@ -59,9 +59,9 @@
         android:hint="@string/rtn_prod_tv_search"
         android:inputType="text"
         android:maxLines="1"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:textSize="13sp" />
+        android:paddingTop="@dimen/dp_4"
+        android:paddingBottom="@dimen/dp_4"
+        android:textSize="@dimen/sp_13" />
 
     <Button
         android:id="@+id/rtn_prod_btn_search"
@@ -70,8 +70,8 @@
         android:layout_alignTop="@+id/rtn_prod_edt_trade"
         android:layout_alignBottom="@+id/rtn_prod_edt_trade"
         android:layout_alignParentEnd="true"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingBottom="@dimen/dp_4"
         android:text="@string/rtn_prod_btn_search" />
 
     <android.support.v7.widget.RecyclerView

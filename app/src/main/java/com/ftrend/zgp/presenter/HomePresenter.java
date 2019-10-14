@@ -59,8 +59,8 @@ public class HomePresenter implements Contract.HomePresenter {
                 "操作指南", "参数设置", "修改密码", "注销登录"};
         int[] menuImg = {
                 R.drawable.jy_sy, R.drawable.jy_qd, R.drawable.jy_th, R.drawable.jy_jb,
-                R.drawable.jy_sy, R.drawable.jy_qd, R.drawable.jy_th, R.drawable.jy_jb,
-                R.drawable.jy_sy, R.drawable.jy_qd, R.drawable.jy_th, R.drawable.jy_jb};
+                R.drawable.bbcx_jbbb, R.drawable.bbcx_jytj, R.drawable.bbcx_lscx, R.drawable.xtgn_sjtb,
+                R.drawable.xtgn_czzn, R.drawable.xtgn_cssz, R.drawable.xtgn_xgmm, R.drawable.xtgn_zxdl};
         for (int i = 0; i < 4; i++) {
             childList.add(new Menu.MenuList(menuImg[i], menuName[i]));
         }

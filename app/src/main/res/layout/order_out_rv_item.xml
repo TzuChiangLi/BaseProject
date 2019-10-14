@@ -2,26 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="12dp">
+    android:padding="@dimen/dp_12">
 
     <TextView
         android:id="@+id/out_order_tv_lsno_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="@dimen/dp_4"
         android:text="@string/out_tv_lsno"
-        android:textSize="12sp" />
+        android:textSize="@dimen/sp_12" />
 
     <TextView
         android:id="@+id/out_order_tv_lsno"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/out_order_tv_lsno_title"
-        android:layout_marginStart="2dp"
-        android:layout_marginEnd="6dp"
+        android:layout_marginStart="@dimen/dp_2"
+        android:layout_marginEnd="@dimen/dp_6"
         android:layout_toEndOf="@+id/out_order_tv_lsno_title"
         android:text="10112345"
-        android:textSize="12sp" />
+        android:textSize="@dimen/sp_12" />
 
     <TextView
         android:id="@+id/out_order_tv_amount_title"
@@ -30,18 +30,18 @@
         android:layout_alignTop="@+id/out_order_tv_lsno_title"
         android:layout_toEndOf="@+id/out_order_tv_lsno"
         android:text="@string/out_tv_num"
-        android:textSize="12sp" />
+        android:textSize="@dimen/sp_12" />
 
     <TextView
         android:id="@+id/out_order_tv_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/out_order_tv_lsno_title"
-        android:layout_marginStart="2dp"
-        android:layout_marginEnd="6dp"
+        android:layout_marginStart="@dimen/dp_2"
+        android:layout_marginEnd="@dimen/dp_6"
         android:layout_toEndOf="@+id/out_order_tv_amount_title"
         android:text="15"
-        android:textSize="12sp" />
+        android:textSize="@dimen/sp_12" />
 
     <TextView
         android:id="@+id/out_order_tv_total_title"
@@ -50,7 +50,7 @@
         android:layout_alignTop="@+id/out_order_tv_amount_title"
         android:layout_toEndOf="@+id/out_order_tv_amount"
         android:text="@string/out_tv_total"
-        android:textSize="12sp" />
+        android:textSize="@dimen/sp_12" />
 
     <TextView
         android:id="@+id/out_order_tv_total"
@@ -58,10 +58,10 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/out_order_tv_total_title"
 
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="@dimen/dp_8"
         android:layout_toEndOf="@+id/out_order_tv_total_title"
         android:text="123"
-        android:textSize="12sp" />
+        android:textSize="@dimen/sp_12" />
 
 
     <TextView
@@ -70,11 +70,11 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/out_order_tv_lsno_title"
         android:layout_alignStart="@+id/out_order_tv_lsno_title"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/dp_8"
         android:layout_toStartOf="@+id/out_order_tv_num_title"
         android:text="@string/out_tv_prodname_demo"
         android:textColor="@color/text_black_first"
-        android:textSize="14sp"
+        android:textSize="@dimen/sp_14"
         android:textStyle="bold" />
 
 
@@ -85,18 +85,18 @@
         android:layout_alignBottom="@+id/out_order_tv_prod_name"
         android:layout_toStartOf="@+id/out_order_tv_num"
         android:text="@string/out_tv_amount"
-        android:textSize="12sp" />
+        android:textSize="@dimen/sp_12" />
 
     <TextView
         android:id="@+id/out_order_tv_num"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/out_order_tv_prod_name"
-        android:layout_marginStart="2dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="@dimen/dp_2"
+        android:layout_marginEnd="@dimen/dp_8"
         android:layout_toStartOf="@+id/out_order_btn_get_out"
         android:text="20"
-        android:textSize="12sp" />
+        android:textSize="@dimen/sp_12" />
 
     <Button
         android:id="@+id/out_order_btn_get_out"
@@ -105,6 +105,6 @@
         android:layout_alignParentEnd="true"
         android:text="@string/out_btn_get_out"
 
-        android:textSize="13sp" />
+        android:textSize="@dimen/sp_13" />
 
 </RelativeLayout>
