@@ -54,6 +54,7 @@ public class RegisterActivity extends BaseActivity implements Contract.RegisterV
             return;
         }
         mPresenter.register(mURLEdt.getText().toString().trim(), mPosCodeEdt.getText().toString().trim(), mRegCodeEdt.getText().toString().trim());
+
     }
 
 

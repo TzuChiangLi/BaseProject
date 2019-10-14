@@ -39,6 +39,10 @@ public class RestSubscribe {
         api = HttpUtil.getInstance().create(RestApi.class);
     }
 
+    public static void resetInstance() {
+        INSTANCE = null;
+    }
+
     /**
      * 订阅
      *

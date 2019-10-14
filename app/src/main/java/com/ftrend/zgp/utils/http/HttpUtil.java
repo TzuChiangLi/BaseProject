@@ -39,7 +39,6 @@ public class HttpUtil {
     private static final int CONNECT_TIMEOUT = 3;
     private static final int READ_TIMEOUT = 10;
     private static final int WRITE_TIMEOUT = 10;
-    private static final String BASE_URL = String.format("http://%s/pos/", ZgParams.getServerUrl());
 
     private HttpUtil() {
         initRetrofit();
@@ -48,7 +47,8 @@ public class HttpUtil {
     /**
      * 初始化Retrofit
      */
-    private static void initRetrofit() {
+    private void initRetrofit() {
+        String BASE_URL = String.format("http://%s/pos/", ZgParams.getServerUrl());
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .create();
@@ -69,6 +69,13 @@ public class HttpUtil {
             INSTANCE = new HttpUtil();
         }
         return INSTANCE;
+    }
+
+    /**
+     * 刷新BASE_URL
+     */
+    public static void resetBaseUrl() {
+        INSTANCE = null;
     }
 
     /**

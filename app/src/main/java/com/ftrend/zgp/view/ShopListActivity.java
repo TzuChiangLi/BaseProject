@@ -115,6 +115,9 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @OnClick(R.id.shop_list_btn_pay)
     public void doPay() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
         if (mProdAdapter.getData().size() > 0) {
             Intent intent = new Intent(ShopListActivity.this, PayActivity.class);
             startActivity(intent);
@@ -126,6 +129,9 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @OnClick(R.id.shop_list_btn_add)
     public void add() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
         finish();
     }
 
@@ -151,6 +157,9 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @OnClick(R.id.shop_list_btn_more)
     public void more() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
         MessageUtil.showMoreFuncDialog(this);
     }
 
@@ -271,6 +280,9 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (ClickUtil.onceClick()) {
+                    return;
+                }
                 if (oldPosition != -1 && oldPosition < adapter.getItemCount()) {
                     mProdAdapter.getData().get(oldPosition).setSelect(false);
                     mProdAdapter.notifyItemChanged(oldPosition);
