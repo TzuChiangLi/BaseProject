@@ -40,7 +40,6 @@
         android:scaleType="centerInside"
         android:src="@drawable/title_bar_bottom" />
 
-
     <LinearLayout
         android:id="@+id/shop_cart_top_ll"
         android:layout_width="match_parent"
@@ -54,7 +53,6 @@
         android:paddingTop="4dp"
         android:paddingEnd="8dp"
         android:paddingBottom="4dp">
-
 
         <ImageButton
             android:id="@+id/shop_cart_top_ll_btn_scan"
@@ -76,7 +74,6 @@
             android:hint="@string/shop_edt_search"
             android:paddingStart="8dp"
             android:textSize="14sp" />
-
 
     </LinearLayout>
 

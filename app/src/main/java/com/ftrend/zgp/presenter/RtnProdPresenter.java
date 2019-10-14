@@ -8,7 +8,6 @@ import com.ftrend.zgp.utils.TradeHelper;
 /**
  * @author liziqiang@ftrend.cn
  */
-
 public class RtnProdPresenter implements Contract.RtnProdPresenter {
     private Contract.RtnProdView mView;
 
@@ -30,8 +29,15 @@ public class RtnProdPresenter implements Contract.RtnProdPresenter {
                 //有此流水
                 mView.existTrade(TradeHelper.getProdList());
             } else {
-                //无此流水
-                mView.showError("流水号不存在");
+                //本地无此流水，开始联网查询
+                //TODO 联网操作
+                if (false) {
+                    //网络有数据
+                } else {
+                    //网络无数据
+                    mView.showError("流水号不存在");
+                }
+
             }
         }
     }
