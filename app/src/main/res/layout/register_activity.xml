@@ -12,8 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
         android:src="@drawable/online" />
 
     <TextView
@@ -22,19 +22,19 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/reg_img_online_status"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_16"
         android:background="@drawable/reg_bg_tip"
         android:gravity="start"
         android:letterSpacing="0.05"
-        android:lineSpacingExtra="2dp"
-        android:paddingStart="8dp"
-        android:paddingTop="16dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="16dp"
+        android:lineSpacingExtra="@dimen/dp_2"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingTop="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_8"
+        android:paddingBottom="@dimen/dp_16"
         android:text="@string/app_reg"
         android:textColor="@color/text_black_first"
-        android:textSize="13sp"
+        android:textSize="@dimen/sp_13"
         android:textStyle="bold" />
 
     <TextView
@@ -42,10 +42,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/reg_tv_big_tip"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/dp_16"
         android:background="@color/common_blue"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingBottom="@dimen/dp_4"
         android:text="@string/reg_title_first"
         android:textColor="@color/common_white" />
 
@@ -61,22 +61,22 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:layout_marginBottom="@dimen/dp_8"
             android:background="@color/common_white">
 
             <com.ftrend.cleareditview.ClearEditText
                 android:id="@+id/reg_edt_url"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginStart="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_4"
+                android:layout_marginEnd="@dimen/dp_16"
+                android:layout_marginBottom="@dimen/dp_4"
                 android:background="@null"
-                android:padding="2dp" />
+                android:padding="@dimen/dp_2" />
         </FrameLayout>
     </LinearLayout>
 
@@ -86,10 +86,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/reg_ll_url"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/dp_16"
         android:background="@color/common_blue"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingBottom="@dimen/dp_4"
         android:text="@string/reg_title_second"
         android:textColor="@color/common_white" />
 
@@ -100,7 +100,7 @@
         android:layout_below="@+id/reg_tv_title2"
         android:layout_marginTop="@dimen/dp_4"
         android:background="@color/common_gray_bg"
-        android:paddingStart="16dp">
+        android:paddingStart="@dimen/dp_16">
 
 
         <TextView
@@ -116,10 +116,10 @@
             android:id="@+id/reg_fl_pos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:layout_marginBottom="@dimen/dp_8"
             android:layout_toEndOf="@+id/reg_tv_poscode_title"
             android:background="@color/common_white">
 
@@ -128,12 +128,12 @@
                 android:id="@+id/reg_edt_posCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginStart="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_4"
+                android:layout_marginEnd="@dimen/dp_16"
+                android:layout_marginBottom="@dimen/dp_4"
                 android:background="@null"
-                android:padding="2dp" />
+                android:padding="@dimen/dp_2" />
         </FrameLayout>
 
         <TextView
@@ -150,9 +150,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/reg_fl_pos"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:layout_marginBottom="@dimen/dp_8"
             android:layout_toEndOf="@+id/reg_tv_poscode_title"
             android:background="@color/common_white">
 
@@ -160,12 +160,12 @@
                 android:id="@+id/reg_edt_regCode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="4dp"
+                android:layout_marginStart="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_4"
+                android:layout_marginEnd="@dimen/dp_16"
+                android:layout_marginBottom="@dimen/dp_4"
                 android:background="@null"
-                android:padding="2dp" />
+                android:padding="@dimen/dp_2" />
         </FrameLayout>
     </RelativeLayout>
 
@@ -174,7 +174,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/reg_rl_code"
-        android:padding="16dp"
+        android:padding="@dimen/dp_16"
         android:text="@string/reg_title_warning"
         android:textColor="@color/reg_warning" />
 
@@ -185,11 +185,11 @@
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="64dp"
+        android:layout_marginBottom="@dimen/dp_64"
         android:background="@drawable/login_btn_selector"
         android:letterSpacing="0.2"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16"
         android:text="@string/reg_btn_register"
         android:textColor="@color/common_white" />
 

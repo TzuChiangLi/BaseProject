@@ -1,5 +1,7 @@
 package com.ftrend.zgp;
 
+import com.blankj.utilcode.util.ConvertUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.ftrend.zgp.utils.common.EncryptUtill;
 
 import org.junit.Test;

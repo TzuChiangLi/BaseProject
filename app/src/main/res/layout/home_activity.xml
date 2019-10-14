@@ -12,50 +12,41 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/home_tv_depname"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="@dimen/dp_16"
         android:src="@drawable/online" />
 
-    <ImageView
-        android:id="@+id/home_img_dep"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ftrend_logo" />
 
     <TextView
         android:id="@+id/home_tv_depname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/home_img_dep"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/dp_16"
         android:layout_toEndOf="@+id/home_img_dep"
         android:gravity="center"
         android:textColor="@color/common_blue"
-        android:textSize="20sp"
+        android:textSize="@dimen/sp_20"
         android:textStyle="bold" />
 
 
     <RelativeLayout
         android:id="@+id/home_ll_info"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/home_img_dep"
+        android:layout_below="@+id/home_img_dep"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/home_img_dep"
+        android:layout_marginTop="@dimen/dp_m_16"
+        android:background="@color/common_blue"
         android:orientation="horizontal"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp">
+        android:paddingTop="@dimen/dp_4"
+        android:paddingBottom="@dimen/dp_4">
 
         <ImageView
             android:id="@+id/home_tv_date_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/dp_8"
             android:layout_toStartOf="@+id/home_tv_date"
             android:src="@drawable/date"
             android:textColor="@color/common_white" />
@@ -65,9 +56,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/dp_8"
             android:layout_toStartOf="@+id/home_img_user_title"
-            android:textColor="@color/home_title_tv_blue" />
+            android:textColor="@color/common_white" />
 
 
         <ImageView
@@ -75,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/dp_8"
             android:layout_toStartOf="@+id/home_tv_user"
             android:scaleType="centerInside"
             android:src="@drawable/user" />
@@ -86,17 +77,28 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="16dp"
-            android:textColor="@color/home_title_tv_blue" />
+            android:layout_marginEnd="@dimen/dp_16"
+            android:textColor="@color/common_white" />
 
     </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/home_img_dep"
+        android:layout_width="@dimen/dp_64"
+        android:layout_height="@dimen/dp_64"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_16"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ftrend_logo" />
 
     <View
         android:id="@+id/home_img_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_below="@+id/home_ll_info"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/dp_4"
         android:background="@color/home_title_tv_blue" />
 
     <ImageView
@@ -113,8 +115,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/home_img_top"
-        android:background="@color/common_gray_bg"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/dp_4"
         android:overScrollMode="never"
         android:scrollbars="none"
         tools:listitem="@layout/home_rv_menu_item" />

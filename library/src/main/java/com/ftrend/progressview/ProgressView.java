@@ -56,13 +56,16 @@ public class ProgressView extends FrameLayout {
     private int originColor = -1, finishColor = -1, errorColor = -1;
 
     public ProgressView(@NonNull Context context) {
-        super(context);
-        mContext = context;
-        initView();
+        this(context, null);
     }
 
     public ProgressView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
+
+    }
+
+    public ProgressView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         mContext = context;
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ProgressView);
         //获取属性
@@ -72,12 +75,6 @@ public class ProgressView extends FrameLayout {
         errorColor = typedArray.getColor(R.styleable.ProgressView_errorColor, getResources().getColor(R.color.progress_load_red));
         //回收变量
         typedArray.recycle();
-        initView();
-    }
-
-    public ProgressView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        mContext = context;
         initView();
     }
 

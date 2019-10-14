@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/init_bg"
-
     tools:context=".view.InitActivity">
 
     <TextView
@@ -13,10 +12,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="@dimen/dp_56"
         android:text="@string/init_title"
         android:textColor="@color/text_black_first"
-        android:textSize="18sp"
+        android:textSize="@dimen/sp_18"
         android:textStyle="bold" />
 
     <TextView
@@ -25,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/init_tv_title"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/dp_16"
         android:text="@string/init_warning"
         android:textColor="@color/init_warning" />
 
@@ -33,7 +32,7 @@
     <com.ftrend.progressview.ProgressView
         android:id="@+id/init_progress_view"
         android:layout_width="match_parent"
-        android:layout_height="280dp"
+        android:layout_height="@dimen/dp_280"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         app:defualtText="开始"
@@ -45,18 +44,18 @@
         android:id="@+id/init_tv_result_title1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="36dp"
+        android:layout_marginStart="@dimen/dp_36"
+        android:layout_marginTop="@dimen/dp_36"
         android:text="@string/init_result_title"
         android:textColor="@color/text_black_first"
-        android:textSize="18sp"
+        android:textSize="@dimen/sp_18"
         android:textStyle="bold"
         android:visibility="gone" />
 
     <ScrollView
         android:id="@+id/init_scl_info"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="@dimen/dp_300"
         android:layout_below="@+id/init_tv_result_title1"
         android:visibility="gone">
 
@@ -64,14 +63,14 @@
             android:id="@+id/init_rl_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp">
+            android:padding="@dimen/dp_16">
 
 
             <TextView
                 android:id="@+id/init_tv_result_title2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="36dp"
+                android:layout_marginStart="@dimen/dp_36"
                 android:text="@string/init_result_title_machine"
                 android:textColor="@color/text_black_second" />
 
@@ -83,7 +82,7 @@
                 android:layout_below="@+id/init_tv_result_title2"
                 android:layout_toEndOf="@+id/init_tv_result_title2"
                 android:letterSpacing="0.05"
-                android:lineSpacingExtra="4dp"
+                android:lineSpacingExtra="@dimen/dp_4"
                 android:text="@string/init_result_machine" />
 
 
@@ -92,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/init_result_posCode"
-                android:layout_marginStart="36dp"
+                android:layout_marginStart="@dimen/dp_36"
                 android:text="@string/init_result_title_desk"
                 android:textColor="@color/text_black_second" />
 
@@ -104,7 +103,7 @@
                 android:layout_below="@+id/init_tv_result_title3"
                 android:layout_toEndOf="@+id/init_tv_result_title2"
                 android:letterSpacing="0.05"
-                android:lineSpacingExtra="4dp"
+                android:lineSpacingExtra="@dimen/dp_4"
                 android:text="@string/init_result_desk" />
 
 
@@ -113,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/init_result_dep"
-                android:layout_marginStart="36dp"
+                android:layout_marginStart="@dimen/dp_36"
                 android:text="@string/init_result_title_user"
                 android:textColor="@color/text_black_second" />
 
@@ -124,7 +123,7 @@
                 android:layout_below="@+id/init_tv_result_title4"
                 android:layout_toEndOf="@+id/init_tv_result_title2"
                 android:letterSpacing="0.05"
-                android:lineSpacingExtra="4dp"
+                android:lineSpacingExtra="@dimen/dp_4"
                 android:text="@string/init_result_user" />
 
         </RelativeLayout>

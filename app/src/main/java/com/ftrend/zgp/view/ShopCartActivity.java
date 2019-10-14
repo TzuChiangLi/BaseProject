@@ -28,6 +28,7 @@ import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.presenter.ShopCartPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
@@ -135,6 +136,9 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
             mClsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    if (ClickUtil.onceClick()) {
+                        return;
+                    }
                     if (oldClsIndex == -1 && oldClsIndex <= clsList.size()) {
                         mClsAdapter.getData().get(0).setSelect(false);
                         mClsAdapter.notifyItemChanged(0);
@@ -185,6 +189,9 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (ClickUtil.onceClick()) {
+                    return;
+                }
                 if (oldProdIndex != -1 && oldProdIndex < adapter.getItemCount()) {
                     mProdAdapter.getData().get(oldProdIndex).setSelect(false);
                     mProdAdapter.notifyItemChanged(oldProdIndex);
@@ -264,6 +271,9 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @OnClick(R.id.shop_cart_bottom_btn_car)
     public void goShopListActivity() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
         if (!"0".equals(mTipTv.getText().toString())) {
             Intent intent = new Intent(ShopCartActivity.this, ShopListActivity.class);
             startActivity(intent);
@@ -274,6 +284,9 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @OnClick(R.id.shop_cart_bottom_tv_payment)
     public void goPayActivity() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
         if (!"0".equals(mTipTv.getText().toString())) {
             Intent intent = new Intent(ShopCartActivity.this, PayActivity.class);
             startActivity(intent);
@@ -284,11 +297,16 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
     @OnClick(R.id.shop_cart_bottom_tv_hang_up)
     public void hangUp() {
-        mPresenter.setTradeStatus(TradeHelper.TRADE_STATUS_HANGUP);
+        if (ClickUtil.onceClick()) {
+            return;
+        }mPresenter.setTradeStatus(TradeHelper.TRADE_STATUS_HANGUP);
     }
 
     @OnClick(R.id.shop_cart_top_ll_btn_scan)
     public void goScanActivity() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
         try {
             Intent intent = new Intent("com.summi.scan");
             intent.setPackage("com.sunmi.sunmiqrcodescanner");

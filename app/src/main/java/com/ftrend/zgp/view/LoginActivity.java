@@ -6,6 +6,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.blankj.utilcode.util.ConvertUtils;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.LoginAdapter;
@@ -52,6 +53,7 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
     protected void initData() {
         mPresenter.initDepData(this);
         mPresenter.initUserData();
+        System.out.println("边距大小: top => " + ConvertUtils.px2dp(35));
 
     }
 

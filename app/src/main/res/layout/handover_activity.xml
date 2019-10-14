@@ -10,7 +10,7 @@
     <com.hjq.bar.TitleBar
         android:id="@+id/handover_top_bar"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/dp_45"
         app:leftIcon="@drawable/back"
         app:lineColor="@color/common_blue"
         app:lineSize="1px"
@@ -24,7 +24,7 @@
             android:letterSpacing="0.05"
             android:text="@string/handover_title"
             android:textColor="@color/common_blue"
-            android:textSize="16sp"
+            android:textSize="@dimen/sp_16"
             android:textStyle="bold" />
     </com.hjq.bar.TitleBar>
 
@@ -42,7 +42,7 @@
         android:id="@+id/handover_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/dp_8"
         android:layout_above="@+id/handover_ll_bottom"
         android:layout_below="@+id/handover_title_line"
         tools:listitem="@layout/handover_rv_item" />

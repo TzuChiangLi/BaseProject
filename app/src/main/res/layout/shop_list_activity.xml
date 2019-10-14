@@ -10,7 +10,7 @@
     <com.hjq.bar.TitleBar
         android:id="@+id/shop_list_top_bar"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/dp_45"
         app:leftIcon="@drawable/back"
         app:lineColor="@color/common_blue"
         app:lineSize="1px"
@@ -24,7 +24,7 @@
             android:letterSpacing="0.05"
             android:text="@string/shop_title_bar_list"
             android:textColor="@color/common_blue"
-            android:textSize="16sp"
+            android:textSize="@dimen/sp_16"
             android:textStyle="bold" />
 
     </com.hjq.bar.TitleBar>
@@ -44,8 +44,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/shop_list_rl_vip"
         android:layout_below="@+id/shop_list_title_line"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginBottom="@dimen/dp_1"
         tools:listitem="@layout/shop_list_rv_product_item" />
 
 
@@ -56,8 +56,8 @@
     <!--android:layout_above="@+id/shop_list_rl_mid"-->
     <!--android:layout_marginBottom="1px"-->
     <!--android:background="@color/common_white"-->
-    <!--android:paddingTop="4dp"-->
-    <!--android:paddingBottom="4dp"-->
+    <!--android:paddingTop="@dimen/dp_4"-->
+    <!--android:paddingBottom="@dimen/dp_4"-->
     <!--android:visibility="gone">-->
 
     <!--&lt;!&ndash;<TextView&ndash;&gt;-->
@@ -65,7 +65,7 @@
     <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
     <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
     <!--&lt;!&ndash;android:layout_centerVertical="true"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:paddingStart="8dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:paddingStart="@dimen/dp_8"&ndash;&gt;-->
     <!--&lt;!&ndash;android:text="@string/shop_tv_vip"&ndash;&gt;-->
     <!--&lt;!&ndash;android:textColor="@color/text_black_first"&ndash;&gt;-->
     <!--&lt;!&ndash;android:textSize="16sp" />&ndash;&gt;-->
@@ -76,7 +76,7 @@
     <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
     <!--&lt;!&ndash;android:layout_centerVertical="true"&ndash;&gt;-->
     <!--&lt;!&ndash;android:layout_toEndOf="@+id/shop_list_tv_vip_name"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:paddingStart="4dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:paddingStart="@dimen/dp_4"&ndash;&gt;-->
     <!--&lt;!&ndash;android:text="0000000005555/金卡"&ndash;&gt;-->
     <!--&lt;!&ndash;android:textColor="@color/text_black_first"&ndash;&gt;-->
     <!--&lt;!&ndash;android:textSize="16sp" />&ndash;&gt;-->
@@ -86,7 +86,7 @@
     <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
     <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
     <!--&lt;!&ndash;android:layout_below="@+id/shop_list_tv_vip_name"&ndash;&gt;-->
-    <!--&lt;!&ndash;android:paddingStart="8dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:paddingStart="@dimen/dp_8"&ndash;&gt;-->
     <!--&lt;!&ndash;android:text="@string/shop_tv_vip_code"&ndash;&gt;-->
     <!--&lt;!&ndash;android:textColor="@color/text_black_first"&ndash;&gt;-->
     <!--&lt;!&ndash;android:textSize="12sp" />&ndash;&gt;-->
@@ -125,12 +125,12 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:paddingStart="8dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingBottom="@dimen/dp_12"
             android:text="@string/shop_tv_symbol"
             android:textColor="@color/pay_tv_red"
-            android:textSize="13sp"
+            android:textSize="@dimen/sp_13"
             android:textStyle="bold" />
 
         <TextView
@@ -140,10 +140,10 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/shop_list_tv_total_title"
             android:gravity="center"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingBottom="@dimen/dp_12"
             android:textColor="@color/pay_tv_red"
-            android:textSize="20sp"
+            android:textSize="@dimen/sp_20"
             android:textStyle="bold" />
 
         <TextView
@@ -153,13 +153,13 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/shop_list_tv_total"
             android:gravity="center"
-            android:paddingStart="4dp"
-            android:paddingTop="12dp"
-            android:paddingEnd="4dp"
-            android:paddingBottom="12dp"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingEnd="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_12"
             android:text="@string/shop_tv_total_unit"
             android:textColor="@color/pay_tv_red"
-            android:textSize="13sp"
+            android:textSize="@dimen/sp_13"
             android:textStyle="bold" />
 
         <TextView
@@ -169,10 +169,10 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/shop_list_tv_total_unit"
             android:gravity="center"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingBottom="@dimen/dp_12"
             android:textColor="@color/pay_tv_red"
-            android:textSize="20sp"
+            android:textSize="@dimen/sp_20"
             android:textStyle="bold" />
 
         <TextView
@@ -182,12 +182,12 @@
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/shop_list_tv_count"
             android:gravity="center"
-            android:paddingStart="4dp"
-            android:paddingTop="12dp"
-            android:paddingBottom="12dp"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingBottom="@dimen/dp_12"
             android:text="@string/shop_tv_count_unit"
             android:textColor="@color/pay_tv_red"
-            android:textSize="13sp"
+            android:textSize="@dimen/sp_13"
             android:textStyle="bold" />
 
         <TextView
@@ -196,10 +196,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:paddingEnd="8dp"
+            android:paddingEnd="@dimen/dp_8"
             android:text="@string/shop_tv_not_vip"
             android:textColor="@color/text_black_first"
-            android:textSize="14sp" />
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/shop_list_tv_vip_name"
@@ -207,9 +207,9 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/shop_list_tv_card_grade"
             android:layout_alignParentEnd="true"
-            android:paddingEnd="8dp"
+            android:paddingEnd="@dimen/dp_8"
             android:textColor="@color/text_black_first"
-            android:textSize="14sp" />
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/shop_list_tv_card_grade"
@@ -217,9 +217,9 @@
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/shop_list_tv_count_unit"
             android:layout_alignParentEnd="true"
-            android:paddingEnd="8dp"
+            android:paddingEnd="@dimen/dp_8"
             android:textColor="@color/text_black_first"
-            android:textSize="14sp" />
+            android:textSize="@dimen/sp_14" />
 
         <!--<Button-->
         <!--android:id="@+id/shop_list_btn_cancel"-->

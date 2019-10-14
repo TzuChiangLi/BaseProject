@@ -51,27 +51,21 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
 
 
     public KeyboardView(Context context) {
-        super(context);
-        mContext = context;
-        initData();
-        initView();
+        this(context, null);
     }
 
     public KeyboardView(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
+    }
+
+    public KeyboardView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
         mContext = context;
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.KeyboardView);
         //获取属性
         style = typedArray.getInt(R.styleable.KeyboardView_style, 0);
         //回收变量
         typedArray.recycle();
-        initData();
-        initView();
-    }
-
-    public KeyboardView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        mContext = context;
         initData();
         initView();
     }
@@ -96,7 +90,6 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
         View mLineView = new View(mContext);
         mLineView.setBackgroundColor(Color.parseColor("#DADADA"));
         addView(mLineView, new LinearLayoutCompat.LayoutParams(MATCH_PARENT, ConvertUtils.dp2px(1)));
-
 
         //添加键盘布局
         RecyclerView mRecyclerView = new RecyclerView(mContext);
