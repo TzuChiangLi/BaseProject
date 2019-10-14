@@ -29,7 +29,7 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
      * 4是取单界面
      */
     private int type;
-    @BindColor(R.color.common_gray_bg)
+    @BindColor(R.color.shop_rv_cls_bg)
     int rv_cls_selected;
     @BindColor(R.color.common_rv_item)
     int rv_item_selected;
