@@ -92,6 +92,7 @@ public class DataDownloadTask {
     private void exec() {
         if (interrupted) {
             //线程中断，停止执行
+            postFailed("已取消");
             return;
         }
         if (step >= updateInfoList.size()) {

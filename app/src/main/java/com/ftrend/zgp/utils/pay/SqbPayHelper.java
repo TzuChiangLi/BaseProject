@@ -2,7 +2,7 @@ package com.ftrend.zgp.utils.pay;
 
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.utils.TradeHelper;
-import com.ftrend.zgp.utils.common.CommonUtil;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.wosai.upay.bean.UpayOrder;
 import com.wosai.upay.bean.UpayResult;
@@ -83,18 +83,37 @@ public class SqbPayHelper {
         //appId, deviceSn, deviceName,
     }
 
+    /*
+    https://api.shouqianba.com/upay/v2/pay
+    {"terminal_sn":"100035370009271610","client_sn":"20112019101530100003","total_amount":"1",
+     "dynamic_id":"288868636158142336","subject":"交易测试","operator":"508","description":"购物",
+     "longitude":"4.9E-324","latitude":"4.9E-324","device_id":"1F0070AA33AB6AE195D74BC1899F3EA1",
+     "reflect":"30100003"}
+     Authorization:100035370009271610 100c09a03bce88e8df413808296a8606
+     Content-Type:application/json
+
+    UpayResult
+    {terminal_sn='null', terminal_key='null', sn='7895238408655453', client_sn='client8673787',
+     trade_no='242019101522001493110554510275', status='SUCCESS', order_status='PAID', payway='1',
+     sub_payway='1', qr_code='null', payer_uid='2088002572693112', payer_login='red***@sina.com',
+     total_amount='100', net_amount='100', subject='购物', finish_time='1571129271594',
+     channel_finish_time='1571129271000', operator='508', description='零售商品', reflect='30100003',
+     refund_request_no='null', result_code='PAY_SUCCESS', error_code='', error_message=''}
+     */
     public static void pay(String scanCode) {
         Trade trade = TradeHelper.getTrade();
         trade.setTradeTime(new Date());
-        String clientSn = trade.getDepCode() + CommonUtil.dateToString(trade.getTradeTime()) + trade.getLsNo();
+        //String clientSn = trade.getDepCode() + CommonUtil.dateToString(trade.getTradeTime()) + trade.getLsNo();
+        String clientSn = "client" + (int) (Math.random() * 10000000);
 
         UpayOrder order = new UpayOrder();
         order.setClient_sn(clientSn);//商户订单号
-        order.setTotal_amount("1");//交易总金额 order.setPayway("1");//支付方式
+        order.setTotal_amount("100");//交易总金额
+        // order.setPayway("1");//支付方式--无需指定
         order.setDynamic_id(scanCode);//付款码内容
-        order.setSubject("交易测试");//交易简介
+        order.setSubject("购物");//交易简介
         order.setOperator(trade.getCashier());//门店操作员
-        order.setDescription("购物");//商品详情
+        order.setDescription("零售商品");//商品详情
         order.setReflect(trade.getLsNo());//反射参数
         order.setPayModel(UpayOrder.PayModel.NO_UI);//指定 SDK 启动模式为无界面模式
 
@@ -106,9 +125,25 @@ public class SqbPayHelper {
         });
     }
 
-    public static void refund(String requestNo) {
-        Trade trade = TradeHelper.getTrade();
-        String clientSn = trade.getDepCode() + CommonUtil.dateToString(trade.getTradeTime()) + trade.getLsNo();
+    /*
+    https://api.shouqianba.com/upay/v2/refund
+    {"terminal_sn":"100035370009271610","client_sn":"client8673787","refund_request_no":"7894259244086017",
+     "operator":"508","refund_amount":"100","longitude":"4.9E-324","latitude":"4.9E-324",
+     "device_id":"1F0070AA33AB6AE195D74BC1899F3EA1","reflect":"7894259244086017"}
+
+     UpayResult
+     {terminal_sn='null', terminal_key='null', sn='7895238408655453', client_sn='client8673787',
+      trade_no='242019101522001493110554510275', status='SUCCESS', order_status='REFUNDED',
+      payway='1', sub_payway='1', qr_code='null', payer_uid='2088002572693112',
+      payer_login='red***@sina.com', total_amount='100', net_amount='0', subject='购物',
+      finish_time='1571129661145', channel_finish_time='1571129660000', operator='508',
+      description='零售商品', reflect='7894259244086017', refund_request_no='7894259244086017',
+      result_code='REFUND_SUCCESS', error_code='', error_message=''}
+     */
+    public static void refund(String clientSn) {
+//        Trade trade = TradeHelper.getTrade();
+        //String clientSn = trade.getDepCode() + CommonUtil.dateToString(trade.getTradeTime()) + trade.getLsNo();
+        String requestNo = "7894259244086017";
 
         UpayOrder order = new UpayOrder();
         //无UI(sn和client_sn不能同时为空)
@@ -118,10 +153,11 @@ public class SqbPayHelper {
         // 正常情况下，对同一笔订单进行多次退款请求时该字段不能重复；
         // 而当通信质量不佳，终端不确认退款请求是否成功，自动或手动发起的退款请求重试，则务必要保持序列号不变
         order.setRefund_request_no(requestNo);//退款序列号
-        order.setOperator(trade.getCashier());//操作员
-        order.setRefund_amount("1");//退款金额
+        order.setOperator(ZgParams.getCurrentUser().getUserCode());//操作员
+        order.setRefund_amount("100");//退款金额
         order.setReflect(requestNo);//反射参数
         order.setRefundModel(UpayOrder.RefundModel.CLIENT_SN);//指定退款模式为商户订单号退款
+        order.setPayModel(UpayOrder.PayModel.NO_UI);//指定 SDK 启动模式为无界面模式
 
         UpayTask.getInstance().refund(order, new UpayCallBack() {
             @Override

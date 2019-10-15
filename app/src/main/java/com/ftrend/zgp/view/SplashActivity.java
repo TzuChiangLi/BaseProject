@@ -9,13 +9,10 @@ import android.text.TextUtils;
 
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.msg.MessageUtil;
-import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.qw.soul.permission.SoulPermission;
 import com.qw.soul.permission.bean.Permission;
 import com.qw.soul.permission.bean.Permissions;
 import com.qw.soul.permission.callbcak.CheckRequestPermissionsListener;
-
-import java.util.Locale;
 
 /**
  * 启动闪屏
@@ -49,17 +46,17 @@ public class SplashActivity extends AppCompatActivity {
                                     finish();
                                 } else {
                                     //已注册，自动更新数据并进入登录界面
-                                    new DataDownloadTask(false, new DataDownloadTask.ProgressHandler() {
-                                        @Override
-                                        public void handleProgress(int percent, boolean isFailed, String msg) {
-                                            System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
-                                            if (percent >= 100 || isFailed) {
+//                                    new DataDownloadTask(false, new DataDownloadTask.ProgressHandler() {
+//                                        @Override
+//                                        public void handleProgress(int percent, boolean isFailed, String msg) {
+//                                            System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
+//                                            if (percent >= 100 || isFailed) {
                                                 Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                                                 startActivity(intent);
                                                 finish();
-                                            }
-                                        }
-                                    }).start();
+//                                            }
+//                                        }
+//                                    }).start();
                                 }
                             }
                         }, 2 * 1000);
