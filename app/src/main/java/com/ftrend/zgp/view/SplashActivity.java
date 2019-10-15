@@ -53,7 +53,7 @@ public class SplashActivity extends AppCompatActivity {
                                         @Override
                                         public void handleProgress(int percent, boolean isFailed, String msg) {
                                             System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
-                                            if (percent >= 100) {
+                                            if (percent >= 100 || isFailed) {
                                                 Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                                                 startActivity(intent);
                                                 finish();
