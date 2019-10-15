@@ -145,6 +145,7 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
     @Override
     public void setTradeStatus(String status) {
         TradeHelper.setTradeStatus(status);
+        TradeHelper.saveVipInfo();
         mView.returnHomeActivity(TradeHelper.convertTradeStatus(status));
         TradeHelper.clear();
     }

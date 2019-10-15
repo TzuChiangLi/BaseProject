@@ -1,4 +1,3 @@
-
 package com.ftrend.cleareditview;
 
 import android.content.Context;

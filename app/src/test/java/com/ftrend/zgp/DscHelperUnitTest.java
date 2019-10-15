@@ -221,6 +221,7 @@ public class DscHelperUnitTest {
 
     /**
      * 执行整单优惠
+     *
      * @param dscRate 折扣率
      */
     private void doWholeDsc(double dscRate) {

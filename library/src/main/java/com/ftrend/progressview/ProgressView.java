@@ -34,6 +34,7 @@ public class ProgressView extends FrameLayout {
     private int progress;
     public static int maxProgress = 100;
     public int FLAG = -1;
+    public static final int ORIGIN = -1, START = 0, FINISHI = 1;
     private ImageView mBigestCircle;
     private ImageView mBigCircle;
     private ImageView mMidCircle;
@@ -133,11 +134,6 @@ public class ProgressView extends FrameLayout {
         addView(mProgressTv);
     }
 
-
-    public int getProgress() {
-        return progress;
-    }
-
     public void setProgress(int progress) {
         this.progress = progress;
         mProgressTv.setText(String.format("%d%%", progress));
@@ -145,7 +141,7 @@ public class ProgressView extends FrameLayout {
     }
 
     public void start() {
-        FLAG = 0;
+        FLAG = START;
         animation_bigest = AnimationUtils.loadAnimation(mContext, R.anim.progress_load_anim);
         animation_big = AnimationUtils.loadAnimation(mContext, R.anim.progress_load_anim);
         animation_mid = AnimationUtils.loadAnimation(mContext, R.anim.progress_load_anim);
@@ -209,7 +205,7 @@ public class ProgressView extends FrameLayout {
      * @param finish 是否完成，true表示完成，false表示中断
      */
     public void restore(final boolean finish) {
-        FLAG = finish ? 1 : -1;
+        FLAG = finish ? FINISHI : ORIGIN;
         AnimatorSet bigest = finishAnimator(mBigestCircle);
         AnimatorSet big = finishAnimator(mBigCircle);
         AnimatorSet mid = finishAnimator(mMidCircle);

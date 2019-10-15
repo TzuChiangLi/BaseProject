@@ -4,6 +4,7 @@ import com.ftrend.zgp.App;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.CommonUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
@@ -20,6 +21,9 @@ import java.util.Locale;
  */
 public class InitPresenter implements Contract.InitPresenter {
     private Contract.InitView mView;
+    private DataDownloadTask downloadTask;
+    private LsDownloadTask lsDownloadTask;
+    private boolean flag = true;
 
     private InitPresenter(Contract.InitView mView) {
         this.mView = mView;
@@ -36,30 +40,37 @@ public class InitPresenter implements Contract.InitPresenter {
 
     @Override
     public void startInitData(int step) {
+        flag = true;
         if (step == 1) {
-            new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
+            downloadTask = new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
                 @Override
                 public void handleProgress(int percent, boolean isFailed, String msg) {
-                    mView.updateProgress(1, percent);
+                    if (flag) {
+                        mView.updateProgress(1, percent);
+                    }
                     System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
                     if (isFailed) {
                         //失败退出
                         iniFailed();
                     }
                 }
-            }).start();
+            });
+            downloadTask.start();
         } else if (step == 2) {
-            new LsDownloadTask(new DataDownloadTask.ProgressHandler() {
+            lsDownloadTask = new LsDownloadTask(new DataDownloadTask.ProgressHandler() {
                 @Override
                 public void handleProgress(int percent, boolean isFailed, String msg) {
-                    mView.updateProgress(2, percent);
+                    if (flag) {
+                        mView.updateProgress(2, percent);
+                    }
                     System.out.println(String.format(Locale.getDefault(), "实时流水下载进度：%d%% %s", percent, msg));
                     if (isFailed) {
                         //失败退出
                         iniFailed();
                     }
                 }
-            }).start();
+            });
+            lsDownloadTask.start();
         }
     }
 
@@ -78,6 +89,14 @@ public class InitPresenter implements Contract.InitPresenter {
 
     @Override
     public void stopInitData() {
+        if (downloadTask != null) {
+            downloadTask.interrupt();
+        }
+        if (lsDownloadTask != null) {
+            lsDownloadTask.interrupt();
+        }
+        TradeHelper.rollbackInitTask();
+        flag = false;
         mView.stopUpdate();
     }
 
@@ -98,7 +117,6 @@ public class InitPresenter implements Contract.InitPresenter {
         for (User user : userList) {
             userStr.append(user.getUserCode()).append(" ").append(user.getUserName()).append("\n");
         }
-
         mView.finishUpdate(ZgParams.getPosCode() + "\n", depStr.toString(), userStr.toString());
     }
 

@@ -56,7 +56,7 @@ public class DscHelper {
      * @param rate 折扣率
      * @return 实际优惠金额
      */
-    public static double wholeDscByRate(double rate)    {
+    public static double wholeDscByRate(double rate) {
         calcType = 1;
         double dscTotal = 0;
         for (int i = 0; i < dscList.size(); i++) {
@@ -156,7 +156,7 @@ public class DscHelper {
         for (int i = 0; i < dscList.size(); i++) {
             TradeProd prod = dscList.get(i);
             //TODO AMOUNT
-            prod.setWholeDsc(calcList.get(i)*prod.getAmount());
+            prod.setWholeDsc(calcList.get(i) * prod.getAmount());
             if (calcType == 1) {
                 //打折，清除其他优惠
                 prod.setSingleDsc(0);

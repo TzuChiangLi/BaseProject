@@ -32,7 +32,7 @@
     <com.ftrend.progressview.ProgressView
         android:id="@+id/init_progress_view"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_280"
+        android:layout_height="@dimen/dp_250"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         app:defualtText="开始"
@@ -55,7 +55,8 @@
     <ScrollView
         android:id="@+id/init_scl_info"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_300"
+        android:layout_height="@dimen/dp_330"
+        android:layout_above="@+id/init_progress_view"
         android:layout_below="@+id/init_tv_result_title1"
         android:visibility="gone">
 

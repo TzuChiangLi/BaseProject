@@ -11,7 +11,6 @@ import com.ftrend.zgp.utils.http.HttpUtil;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.qw.soul.permission.SoulPermission;
 
@@ -62,7 +61,7 @@ public class RegisterPresenter implements Contract.RegisterPresenter {
         this.regCode = regCode;
         this.posCode = posCode;
 
-        if (!url.equals(ZgParams.getServerUrl())){
+        if (!url.equals(ZgParams.getServerUrl())) {
             ZgParams.setServerUrl(url);
             RestSubscribe.resetInstance();
             HttpUtil.resetBaseUrl();

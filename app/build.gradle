@@ -119,6 +119,8 @@ dependencies {
     implementation project(':library')
     //商米支付SDK
     implementation(name: 'PayLib-release-1.4.18', ext: 'aar')
+    //商米打印机远程导入
+    implementation 'com.sunmi:printerlibrary:1.0.4'
     //单元测试框架
     //http://robolectric.org
     testImplementation 'org.robolectric:robolectric:4.3'

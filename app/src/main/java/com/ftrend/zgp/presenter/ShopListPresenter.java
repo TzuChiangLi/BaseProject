@@ -103,6 +103,7 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
     @Override
     public void setTradeStatus(String status) {
         TradeHelper.setTradeStatus(status);
+        TradeHelper.saveVipInfo();
         mView.returnHomeActivity(TradeHelper.convertTradeStatus(status));
         TradeHelper.clear();
         //完成后清理vip信息
