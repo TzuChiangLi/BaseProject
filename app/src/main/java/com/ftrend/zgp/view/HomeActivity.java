@@ -61,6 +61,8 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         mPresenter.initServerThread();
         //初始化商米支付SDK
         mPresenter.initSunmiPaySdk();
+        //初始化收钱吧SDK
+        mPresenter.initSqbSdk();
     }
 
     @Override

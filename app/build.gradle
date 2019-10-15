@@ -6,17 +6,33 @@ def dbflow_version = '4.2.4'
 
 
 android {
+    signingConfigs {
+        release {
+            storeFile file('../key/zgpos.jks')
+            storePassword 'ftrend.cn'
+            keyAlias = 'zgpos'
+            keyPassword 'ftrend.cn'
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.ftrend.zgp"
         minSdkVersion 21
         targetSdkVersion 28
         versionCode 1
-        versionName "0.2"
+        versionName "1.0.0.A1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        applicationIdSuffix = 'zgpos'
+        maxSdkVersion 28
+        signingConfig signingConfigs.release
+        proguardFiles
     }
     buildTypes {
         release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -24,7 +40,7 @@ android {
     //apk文件重命名
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = "zgp-${variant.buildType.name}-v${versionName}.apk"
+            outputFileName = "ftrend-zgp-${variant.buildType.name}-v${versionName}.apk"
         }
     }
     //单元测试
@@ -33,6 +49,11 @@ android {
             includeAndroidResources = true
         }
     }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_7
+        targetCompatibility = JavaVersion.VERSION_1_7
+    }
+    buildToolsVersion = '29.0.2'
 }
 
 repositories {
@@ -59,15 +80,15 @@ dependencies {
     implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
     //Square的Retrofit网络请求库
     //https://github.com/square/retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-gson:2.6.1'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
     //丰富的工具类
     // https://github.com/Blankj/AndroidUtilCode
     implementation 'com.blankj:utilcode:1.25.0'
     //GSON库
     // https://github.com/google/gson
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
     //控件绑定框架
     // https://github.com/JakeWharton/butterknife
     implementation 'com.jakewharton:butterknife:8.7.0'
@@ -98,6 +119,11 @@ dependencies {
     implementation project(':library')
     //商米支付SDK
     implementation(name: 'PayLib-release-1.4.18', ext: 'aar')
+    //收钱吧（gson包冲突，exclude方式无效，通过module方式引用解决冲突）
+    implementation project(':SQB-Android-SDK-2.1.5')
+//    implementation(name: 'SQB-Android-SDK-2.1.5', ext: 'aar') {
+//        exclude group: 'com.google.code.gson'
+//    }
     //单元测试框架
     //http://robolectric.org
     testImplementation 'org.robolectric:robolectric:4.3'

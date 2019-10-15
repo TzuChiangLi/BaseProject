@@ -1,5 +1,6 @@
 package com.ftrend.zgp.presenter;
 
+import com.ftrend.zgp.App;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Menu;
@@ -7,9 +8,13 @@ import com.ftrend.zgp.utils.HandoverHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.UserRightsHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.task.LsUploadThread;
 import com.ftrend.zgp.utils.task.ServerWatcherThread;
+import com.wosai.upay.common.DebugConfig;
+import com.wosai.upay.common.UpayTask;
+import com.wosai.upay.http.Env;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,6 +42,13 @@ public class HomePresenter implements Contract.HomePresenter {
     @Override
     public void initSunmiPaySdk() {
         SunmiPayHelper.getInstance().connectPayService();
+    }
+
+    @Override
+    public void initSqbSdk() {
+        DebugConfig.setDebug(true);//默认为非调试模式,如果需要调试,请设置为 true,打印和保存相关日志
+        UpayTask.getInstance().initUpay(App.getContext(), SqbPayHelper.playSound, Env.UrlType.PRO);
+        SqbPayHelper.activate();
     }
 
     @Override

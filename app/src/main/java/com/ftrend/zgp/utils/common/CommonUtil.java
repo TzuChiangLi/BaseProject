@@ -3,6 +3,10 @@ package com.ftrend.zgp.utils.common;
 import android.content.Context;
 import android.content.Intent;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import static com.blankj.utilcode.util.ActivityUtils.startActivity;
 
 /**
@@ -25,5 +29,13 @@ public class CommonUtil {
         //与正常页面跳转一样可传递序列化数据,在Launch页面内获得
         intent.putExtra("REBOOT", "reboot");
         startActivity(intent);
+    }
+
+    public static String todayToString() {
+        return dateToString(new Date());
+    }
+
+    public static String dateToString(Date date) {
+        return new SimpleDateFormat("yyyyMMdd", Locale.CHINA).format(date);
     }
 }

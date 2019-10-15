@@ -194,6 +194,11 @@ public interface Contract {
         void initSunmiPaySdk();
 
         /**
+         * 初始化收钱吧SDK
+         */
+        void initSqbSdk();
+
+        /**
          * 启动后台线程
          */
         void initServerThread();
