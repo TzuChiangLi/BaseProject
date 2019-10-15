@@ -59,7 +59,6 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
         LogUtil.d("----getScreenDensity:" + ScreenUtils.getScreenDensity());
         LogUtil.d("----getScreenWidth:" + ScreenUtils.getScreenWidth());
         LogUtil.d("----getScreenHeight:" + ScreenUtils.getScreenHeight());
-
         if (mPresenter == null) {
             mPresenter = InitPresenter.createPresenter(this);
         }
@@ -105,7 +104,7 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
     public void updateProgress(int step, int progress) {
         // 确保进度值在0～100之间
         int current = progress < 0 ? 0 : progress > 100 ? 100 : progress;
-        mLoadView.setProgress(current * (50 * step / 100));
+        mLoadView.setProgress((current + (step - 1) * 100) / 2);
         if (current == 100) {
             if (step == 1) {
                 mPresenter.startInitData(2);

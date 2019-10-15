@@ -13,6 +13,7 @@ import java.util.Map;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
+import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -70,7 +71,15 @@ public class RestInterceptor implements Interceptor {
         Request.Builder requestBuilder = request.newBuilder();
         //注入公共header
         if (needToken(request.url())) {
-            checkToken();// TODO: 2019/9/3 如果token获取失败，这里直接返回401错误
+            if (!checkToken()) {
+                // token获取失败，直接返回401错误
+                return new Response.Builder()
+                        .request(request)
+                        .protocol(Protocol.HTTP_1_1)
+                        .code(401)
+                        .message("token获取失败")
+                        .build();
+            }
             requestBuilder
                     .addHeader("Content-Type", "application/json")
                     .addHeader("Authorization", "bearer " + token)
@@ -79,7 +88,7 @@ public class RestInterceptor implements Interceptor {
 
         request = requestBuilder.build();
         Response response = chain.proceed(request);
-        if (response.code() == 401) {
+        if (response.code() == 401) {//401 - token无效
             clearToken();
             //获取token后重新发送请求
             if (checkToken()) {

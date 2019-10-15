@@ -70,7 +70,6 @@ public class ProgressView extends FrameLayout {
         originColor = typedArray.getColor(R.styleable.ProgressView_originColor, getResources().getColor(R.color.progress_load_blue));
         finishColor = typedArray.getColor(R.styleable.ProgressView_finishColor, getResources().getColor(R.color.progress_load_orange));
         errorColor = typedArray.getColor(R.styleable.ProgressView_errorColor, getResources().getColor(R.color.progress_load_red));
-
         //回收变量
         typedArray.recycle();
         initView();
@@ -129,15 +128,12 @@ public class ProgressView extends FrameLayout {
         initViewScale(mSmallCircle);
         initViewScale(mSmallestCircle);
 
-
         addView(mBigestCircle);
         addView(mBigCircle);
         addView(mMidCircle);
         addView(mSmallCircle);
         addView(mSmallestCircle);
         addView(mProgressTv);
-
-
     }
 
 
@@ -148,7 +144,7 @@ public class ProgressView extends FrameLayout {
     public void setProgress(int progress) {
         this.progress = progress;
         mProgressTv.setText(String.format("%d%%", progress));
-
+        mProgressTv.postInvalidate();
     }
 
     public void start() {
@@ -194,7 +190,6 @@ public class ProgressView extends FrameLayout {
                 }
             });
         } else {
-
             mBigestCircle.startAnimation(animation_bigest);
 
             animation_big.setStartOffset(300);

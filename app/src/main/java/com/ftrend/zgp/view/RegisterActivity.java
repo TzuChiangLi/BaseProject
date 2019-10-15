@@ -65,6 +65,7 @@ public class RegisterActivity extends BaseActivity implements Contract.RegisterV
             public void run() {
                 Intent intent = new Intent(RegisterActivity.this, InitActivity.class);
                 startActivity(intent);
+                finish();
             }
         }, 1500);
     }

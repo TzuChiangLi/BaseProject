@@ -77,7 +77,7 @@ public class ZgParams {
     /**
      * 读取参数，包括系统参数和APP本地参数
      *
-     * @return
+     * @return 是否成功
      */
     public static boolean loadParams() {
         //系统参数
@@ -164,6 +164,8 @@ public class ZgParams {
     public static void saveCurrentInfo(User user, Dep dep) {
         currentDep = dep;
         currentUser = user;
+        saveAppParams("lastUser", user.getUserCode());
+        saveAppParams("lastDep", dep.getDepCode());
     }
 
     /**
@@ -185,6 +187,13 @@ public class ZgParams {
         AppParams appParams = SQLite.select().from(AppParams.class).where(AppParams_Table.paramName.eq(paramName)).querySingle();
         appParams.setParamValue(paramValue);
         appParams.update();
+    }
+
+    /**
+     * 设置初始化完成标志
+     */
+    public static void updateInitFlag() {
+        saveAppParams("initFlag", "1");
     }
 
     public static boolean isIsOnline() {

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="rtn_prod_title_order">按单退货</string>
+    <string name="rtn_prod_btn_not_order">不按单退</string>
+    <string name="rtn_prod_tv_search">请输入流水号查找交易记录</string>
+    <string name="rtn_prod_btn_search">查找</string>
+</resources>

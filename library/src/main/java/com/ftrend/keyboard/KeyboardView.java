@@ -106,7 +106,7 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
         //根据屏幕大小动态设置按键高度
         mKeyboardAdapter.setParentHeight((ScreenUtils.getScreenHeight() / 13) * 5);
         mRecyclerView.setAdapter(mKeyboardAdapter);
-        mRecyclerView.addItemDecoration(new GridItemDecoration(mContext, Color.parseColor("#707070"), ConvertUtils.dp2px(1), GridItemDecoration.ALL));
+        mRecyclerView.addItemDecoration(new GridItemDecoration(mContext, Color.parseColor("#9c9c9c"), ConvertUtils.dp2px(1), GridItemDecoration.ALL));
         mKeyboardAdapter.setItemClickListener(this);
         addView(mRecyclerView, new LayoutParams(MATCH_PARENT, (ScreenUtils.getScreenHeight() / 13) * 5));
     }
@@ -218,7 +218,6 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
 
     @Override
     public void onItemClick(View v, int position) {
-
         //待后续样式确定后，逻辑再做优化
         switch (style) {
             case 1:

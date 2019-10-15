@@ -131,6 +131,11 @@ public class HomePresenter implements Contract.HomePresenter {
     }
 
     @Override
+    public void goRtnProd() {
+        mView.goRtnProdActivity();
+    }
+
+    @Override
     public void getOutOrder() {
         if (HandoverHelper.mustHandover() == 0) {
             mView.mustHandover();

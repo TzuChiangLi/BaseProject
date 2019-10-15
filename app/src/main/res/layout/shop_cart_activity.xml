@@ -46,6 +46,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/shop_cart_top_bar"
+        android:layout_marginTop="4dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="horizontal"
@@ -59,9 +60,6 @@
             android:id="@+id/shop_cart_top_ll_btn_scan"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_below="@+id/shop_cart_title_line"
-            android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/shop_cart_rv_product"
             android:layout_weight="1"
             android:background="@drawable/shop_btn_blue_selector"
             android:maxHeight="32dp"
@@ -73,10 +71,6 @@
             android:id="@+id/shop_cart_top_ll_edt_search"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_above="@+id/shop_cart_rv_classes"
-            android:layout_alignTop="@+id/shop_cart_top_ll_btn_scan"
-            android:layout_alignEnd="@+id/shop_cart_line"
-            android:layout_toEndOf="@+id/shop_cart_top_ll_btn_scan"
             android:layout_weight="5"
             android:background="@null"
             android:hint="@string/shop_edt_search"
@@ -95,22 +89,15 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/shop_cart_rv_classes"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="match_parent"
         android:layout_above="@+id/shop_cart_fl"
         android:layout_below="@+id/shop_cart_line"
         android:layout_alignParentStart="true"
         android:background="@color/common_gray_bg"
+        android:visibility="gone"
         tools:listitem="@layout/shop_cart_rv_classes_item" />
 
-    <!--<View-->
-    <!--android:id="@+id/shop_cart_rv_verticle_line"-->
-    <!--android:layout_width="1px"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_above="@+id/shop_cart_bottom_line"-->
-    <!--android:layout_below="@+id/shop_cart_top_ll_btn_scan"-->
-    <!--android:layout_toEndOf="@+id/shop_cart_rv_classes"-->
-    <!--android:background="@color/divide_line" />-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/shop_cart_rv_product"
@@ -122,26 +109,18 @@
         android:background="@color/common_gray_bg"
         tools:listitem="@layout/shop_cart_rv_product_item" />
 
-    <!--<RelativeLayout-->
-    <!--android:id="@+id/shop_cart_ll_bottom"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentBottom="true"-->
-    <!--android:clipChildren="true">-->
-
     <!--为了实现角标覆盖Button在Button上层，有两种方式，一个是button的android:stateListAnimator
     属性设置为@null，另一个方法就是如下方式，用一个布局把Button给套起来-->
     <FrameLayout
         android:id="@+id/shop_cart_fl"
-        android:layout_width="wrap_content"
+        android:layout_width="80dp"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/shop_cart_rv_classes"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true">
 
         <Button
             android:id="@+id/shop_cart_bottom_btn_car"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/shop_btn_blue_selector"
             android:gravity="center"
@@ -153,11 +132,11 @@
         android:id="@+id/shop_cart_bottom_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_above="@+id/shop_cart_bottom_tv_toal_price"
+        android:layout_above="@+id/shop_cart_bottom_tv_total_price"
         android:background="@color/common_gray_bg" />
 
     <TextView
-        android:id="@+id/shop_cart_bottom_tv_toal_price"
+        android:id="@+id/shop_cart_bottom_tv_total_price"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/shop_cart_fl"
@@ -166,7 +145,6 @@
         android:layout_toEndOf="@+id/shop_cart_fl"
         android:background="@color/common_white"
         android:gravity="center"
-        android:text="9999.99"
         android:textColor="@color/pay_tv_red" />
 
     <Button

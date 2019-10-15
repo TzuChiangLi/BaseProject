@@ -7,10 +7,12 @@
     <string name="shop_rv_title_sn">SN：</string>
     <string name="shop_rv_title_sn_line">/</string>
     <string name="shop_tv_total">合计：</string>
+    <string name="shop_tv_symbol">￥</string>
     <string name="shop_tv_count">共</string>
-    <string name="shop_tv_total_unit">元 /</string>
-    <string name="shop_tv_count_unit">件</string>
+    <string name="shop_tv_total_unit">(</string>
+    <string name="shop_tv_count_unit">)</string>
     <string name="shop_tv_vip">会员</string>
+    <string name="shop_tv_not_vip">非会员</string>
     <string name="shop_tv_vip_code">编号：</string>
     <string name="shop_tv_vip_card_grade">卡号/类型：</string>
     <string name="shop_tv_whole_dsc">整单优惠</string>

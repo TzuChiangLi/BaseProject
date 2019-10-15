@@ -17,7 +17,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 
 import com.ftrend.library.R;
 
@@ -25,9 +24,8 @@ import com.ftrend.library.R;
 /**
  * Created by cretin on 2017/8/11.
  */
-
 public class ClearEditText extends android.support.v7.widget.AppCompatEditText {
-    private static final float DEFAUT_SCALE = 0.3f;
+    private static final float DEFAUT_SCALE = 0.4f;
     private Bitmap mClearBitmap;
     private Paint mPaint;
     private int mWidth;
@@ -141,7 +139,6 @@ public class ClearEditText extends android.support.v7.widget.AppCompatEditText {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         if (showClose) {
             Rect mSrcRect = new Rect(0, 0, mBitWidth, mBitWidth);
             RectF mDestRect = new RectF(mWidth - mBitWidth - padding,
@@ -187,10 +184,8 @@ public class ClearEditText extends android.support.v7.widget.AppCompatEditText {
         super.onSizeChanged(w, h, oldw, oldh);
         mWidth = w;
         mHeight = h;
-
         //第一次进来的时候对图片进行处理
         deal();
-
     }
 }
 

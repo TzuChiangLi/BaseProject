@@ -3,6 +3,9 @@ package com.ftrend.zgp.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.ftrend.zgp.model.AppParams;
+import com.ftrend.zgp.model.AppParams_Table;
+import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.DepPayInfo;
 import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.DepProduct;
@@ -14,9 +17,14 @@ import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
+import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.model.VipInfo;
+import com.ftrend.zgp.utils.db.TransHelper;
+import com.ftrend.zgp.utils.db.ZgpDb;
+import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 
 import java.util.ArrayList;
@@ -104,6 +112,7 @@ public class TradeHelper {
     public static List<TradeProd> getProdList() {
         return prodList;
     }
+
     //region clear----清空当前交易信息
 
     /**
@@ -165,6 +174,43 @@ public class TradeHelper {
                     .querySingle();
         }
     }
+
+    /**
+     * 退货----根据流水单号获取流水信息
+     *
+     * @param lsNo 流水单号
+     * @return 流水信息
+     */
+    private static Trade getPaidLs(String lsNo) {
+        return SQLite.select().from(Trade.class)
+                .where(Trade_Table.status.eq(TRADE_STATUS_PAID))
+                .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
+                .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
+                .and(Trade_Table.lsNo.eq(lsNo))
+                .querySingle();
+    }
+
+    /**
+     * 退货----初始化根据流水号查到的流水
+     *
+     * @param lsNo
+     * @return 是否有该流水
+     */
+    public static boolean initSale(String lsNo) {
+        trade = getPaidLs(lsNo);
+        if (trade == null) {
+            return false;
+        } else {
+            prodList = SQLite.select().from(TradeProd.class)
+                    .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                    .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
+                    .queryList();
+            pay = SQLite.select().from(TradePay.class)
+                    .where(TradePay_Table.lsNo.eq(trade.getLsNo()))
+                    .querySingle();
+            return true;
+        }
+    }
     //endregion
 
     //region addProduct----添加到商品表
@@ -175,9 +221,21 @@ public class TradeHelper {
      * @param product 商品信息
      * @return
      */
-    public static long addProduct(DepProduct product) {
+    public static long addProduct(final DepProduct product) {
+        final long[] index = {-1};
+        TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                index[0] = doAddProduct(databaseWrapper, product);
+                return index[0] >= 0;
+            }
+        });
+        return index[0];
+    }
+
+    private static long doAddProduct(DatabaseWrapper databaseWrapper, DepProduct product) {
         long index = prodList.size();
-        TradeProd prod = new TradeProd();
+        final TradeProd prod = new TradeProd();
         prod.setLsNo(trade.getLsNo());
         prod.setSortNo(index + 1);//商品序号从1开始
         prod.setProdCode(product.getProdCode());
@@ -198,8 +256,7 @@ public class TradeHelper {
         prod.setSaleInfo("");
         prod.setDelFlag("0");
         //保存商品记录并重新汇总流水金额（此时会保存交易流水）
-        // TODO: 2019/9/7 启用事务，避免数据异常
-        if (prod.insert() > 0 && recalcTotal()) {
+        if (prod.insert(databaseWrapper) > 0 && recalcTotal(databaseWrapper)) {
             prodList.add(prod);
             return index;
         } else {
@@ -237,9 +294,19 @@ public class TradeHelper {
      * @param amount     支付金额
      * @param change     找零金额
      * @param payCode    支付账号
-     * @return
+     * @return 支付结果
      */
-    public static boolean pay(String appPayType, double amount, double change, String payCode) {
+    public static boolean pay(final String appPayType, final double amount, final double change, final String payCode) {
+        return TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                return doPay(databaseWrapper, appPayType, amount, change, payCode);
+            }
+        });
+    }
+
+    private static boolean doPay(DatabaseWrapper databaseWrapper,
+                                 String appPayType, double amount, double change, String payCode) {
         try {
             String payTypeCode = SQLite.select(DepPayInfo_Table.payTypeCode).from(DepPayInfo.class)
                     .where(DepPayInfo_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
@@ -256,22 +323,18 @@ public class TradeHelper {
             pay.setChange(change);
             pay.setPayCode(payCode);
             pay.setPayTime(new Date());
-            // TODO: 2019/9/7 启用事务，避免数据异常
-            if (pay.save()) {
-                trade.setTradeTime(pay.getPayTime());
-                trade.setCashier(ZgParams.getCurrentUser().getUserCode());
-                trade.setStatus(TRADE_STATUS_PAID);
-                return trade.save();
-            } else {
+            if (!pay.save(databaseWrapper)) {
                 return false;
             }
+            trade.setTradeTime(pay.getPayTime());
+            trade.setCashier(ZgParams.getCurrentUser().getUserCode());
+            trade.setStatus(TRADE_STATUS_PAID);
+            return trade.save(databaseWrapper);
         } catch (Exception e) {
             Log.e(TAG, "支付异常: " + pay.getLsNo() + " - " + appPayType, e);
             return false;
         }
-
     }
-
 
     /**
      * 完成支付（仅适用于现金支付）
@@ -323,6 +386,11 @@ public class TradeHelper {
      * 重新汇总流水金额：优惠、合计
      */
     public static boolean recalcTotal() {
+//        FlowManager.getDatabaseForTable(Trade_Table.class).getWritableDatabase();
+        return recalcTotal(FlowManager.getDatabase(ZgpDb.class).getWritableDatabase());
+    }
+
+    public static boolean recalcTotal(DatabaseWrapper databaseWrapper) {
         double dscTotal = 0;
         double total = 0;
 
@@ -332,13 +400,14 @@ public class TradeHelper {
         }
         trade.setDscTotal(dscTotal);
         trade.setTotal(total);
-        return trade.save();
+        return trade.save(databaseWrapper);
     }
 
     /**
      * 更新交易状态
      */
     public static void setTradeStatus(String status) {
+        // TODO: 2019/10/12 重构：保存vip信息不应该在这里处理
         if (TradeHelper.vip != null) {
             SQLite.update(Trade.class)
                     .set(Trade_Table.status.eq(status), Trade_Table.vipCode.eq(TradeHelper.vip.getVipCode()),
@@ -357,7 +426,6 @@ public class TradeHelper {
         }
     }
 
-
     /**
      * 上传交易流水
      */
@@ -374,7 +442,6 @@ public class TradeHelper {
         SQLite.delete(TradePay.class).execute();
         SQLite.delete(TradeProd.class).execute();
     }
-
 
     /**
      * @return 购物车中未行清的所有商品的数量
@@ -411,7 +478,19 @@ public class TradeHelper {
      * @param changeAmount 加减的数量
      * @return -1:异常  0：超过优惠  >0:成功
      */
-    public static int changeAmount(int index, double changeAmount) {
+    public static int changeAmount(final int index, final double changeAmount) {
+        final int[] result = {-1};
+        TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                result[0] = doChangeAmount(databaseWrapper, index, changeAmount);
+                return result[0] > 0;
+            }
+        });
+        return result[0];
+    }
+
+    private static int doChangeAmount(DatabaseWrapper databaseWrapper, int index, double changeAmount) {
         if (index < 0 || index >= prodList.size()) {
             Log.e(TAG, "改变数量: 索引无效");
             return -1;
@@ -434,8 +513,8 @@ public class TradeHelper {
 
         tradeProd.setAmount(newAmount);
         tradeProd.setTotal(priceFormat((newAmount * tradeProd.getPrice()) - tradeProd.getManuDsc() - tradeProd.getVipDsc() - tradeProd.getTranDsc()));
-        if (tradeProd.save()) {
-            if (recalcTotal()) {
+        if (tradeProd.save(databaseWrapper)) {
+            if (recalcTotal(databaseWrapper)) {
                 return 1;
             } else {
                 return -1;
@@ -444,7 +523,6 @@ public class TradeHelper {
             return -1;
         }
     }
-
 
     /**
      * 购物车 - 当前购物车内商品总件数,需要Amount的和
@@ -517,7 +595,17 @@ public class TradeHelper {
      * @param price 价格
      * @return 是否成功
      */
-    public static boolean priceChangeInShopList(int index, double price) {
+    public static boolean priceChangeInShopList(final int index, final double price) {
+        return TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                return doPriceChangeInShopList(databaseWrapper, index, price);
+            }
+        });
+    }
+
+    private static boolean doPriceChangeInShopList(DatabaseWrapper databaseWrapper,
+                                                   int index, double price) {
         if (price < 0) {
             Log.e(TAG, "改价: 价格无效");
             return false;
@@ -532,8 +620,8 @@ public class TradeHelper {
             tradeProd.setVipDsc(0);
             tradeProd.setTotal(priceFormat(tradeProd.getAmount() * price));
         }
-        if (tradeProd.save()) {
-            recalcTotal();
+        if (tradeProd.save(databaseWrapper)) {
+            recalcTotal(databaseWrapper);
             return true;
         } else {
             return false;
@@ -546,7 +634,16 @@ public class TradeHelper {
      * @param price 价格
      * @return 是否成功
      */
-    public static boolean priceChangeInShopCart(double price) {
+    public static boolean priceChangeInShopCart(final double price) {
+        return TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                return doPriceChangeInShopCart(databaseWrapper, price);
+            }
+        });
+    }
+
+    private static boolean doPriceChangeInShopCart(DatabaseWrapper databaseWrapper, double price) {
         if (price < 0) {
             Log.e(TAG, "改价: 价格无效");
             return false;
@@ -556,8 +653,8 @@ public class TradeHelper {
             tradeProd.setPrice(priceFormat(price));
             tradeProd.setTotal(priceFormat(tradeProd.getAmount() * price));
         }
-        if (tradeProd.save()) {
-            return recalcTotal();
+        if (tradeProd.save(databaseWrapper)) {
+            return recalcTotal(databaseWrapper);
         } else {
             return false;
         }
@@ -567,12 +664,23 @@ public class TradeHelper {
      * 选择商品界面改价撤销
      */
     public static void rollackPriceChangeInShopCart() {
+        TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                doRollackPriceChangeInShopCart(databaseWrapper);
+                return true;
+            }
+        });
+    }
+
+    private static void doRollackPriceChangeInShopCart(DatabaseWrapper databaseWrapper) {
         TradeProd tradeProd = prodList.get(prodList.size() - 1);
         if (tradeProd != null) {
-            tradeProd.delete();
-            prodList.remove(prodList.size() - 1);
+            if (tradeProd.delete(databaseWrapper)) {
+                prodList.remove(tradeProd);
+            }
         }
-        recalcTotal();
+        recalcTotal(databaseWrapper);
     }
 
 
@@ -885,7 +993,17 @@ public class TradeHelper {
      * @param singleDsc
      * @return
      */
-    public static boolean saveSingleDsc(int index, double singleDsc) {
+    public static boolean saveSingleDsc(final int index, final double singleDsc) {
+        return TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                return doSaveSingleDsc(databaseWrapper, index, singleDsc);
+            }
+        });
+    }
+
+    private static boolean doSaveSingleDsc(DatabaseWrapper databaseWrapper,
+                                           int index, double singleDsc) {
         if (index < 0 || index >= prodList.size()) {
             Log.e(TAG, "行清: 索引无效");
             return false;
@@ -897,8 +1015,8 @@ public class TradeHelper {
         prod.setWholeDsc(0);
         prod.setVipTotal(0);
         prod.setTotal(priceFormat(prod.getPrice() * prod.getAmount() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()));
-        if (prod.save()) {
-            return recalcTotal();
+        if (prod.save(databaseWrapper)) {
+            return recalcTotal(databaseWrapper);
         }
         return false;
     }
@@ -910,6 +1028,7 @@ public class TradeHelper {
      * @param wholeDsc 输入的整单优惠金额
      * @return
      */
+    @Deprecated
     public static boolean saveWholeDsc(double wholeDsc) {
         //优惠金额=商品总价*折扣率
         //优惠金额不能大于：商品原价-最低限价
@@ -1024,6 +1143,15 @@ public class TradeHelper {
      * @return
      */
     public static boolean saveVipDsc() {
+        return TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                return doSaveVipDsc(databaseWrapper);
+            }
+        });
+    }
+
+    private static boolean doSaveVipDsc(DatabaseWrapper databaseWrapper) {
         //筛选没有单项优惠、整项优惠的商品
         List<TradeProd> tempList = new ArrayList<>();
         if (VIP_DSC_FORCE.equals(vip.getForceDsc())) {
@@ -1058,7 +1186,7 @@ public class TradeHelper {
                 prod.setSingleDsc(0);
                 //已存在手工优惠的不参与会员优惠
                 prod.setTotal(priceFormat(prod.getPrice() * prod.getAmount() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()));
-                prod.save();
+                prod.save(databaseWrapper);
             }
         } else {
             //超市版
@@ -1075,10 +1203,10 @@ public class TradeHelper {
                 prod.setSingleDsc(0);
                 //已存在手工优惠的不参与会员优惠
                 prod.setTotal(priceFormat(prod.getPrice() * prod.getAmount() - prod.getManuDsc() - prod.getVipDsc() - prod.getTranDsc()));
-                prod.save();
+                prod.save(databaseWrapper);
             }
         }
-        return recalcTotal();
+        return recalcTotal(databaseWrapper);
     }
 
     private static double queryVipPrice(double vipPriceType, TradeProd prod) {
@@ -1117,23 +1245,23 @@ public class TradeHelper {
 
 
     /**
-     * @param rateRule
-     * @param prod
-     * @return
+     * @param rateRule 折扣规则
+     * @param prod     商品信息
+     * @return 折扣
      */
     private static double queryRateRule(double rateRule, TradeProd prod) {
         double rate = 0;
         if (TextUtils.isEmpty(prod.getBarCode())) {
             if (rateRule == VIP_ONE) {
-                rateRule = SQLite.select(DepProduct_Table.vipRate1).from(DepProduct.class)
+                rate = SQLite.select(DepProduct_Table.vipRate1).from(DepProduct.class)
                         .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
                         .querySingle().getVipRate1();
             } else if (rateRule == VIP_TWO) {
-                rateRule = SQLite.select(DepProduct_Table.vipRate2).from(DepProduct.class)
+                rate = SQLite.select(DepProduct_Table.vipRate2).from(DepProduct.class)
                         .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
                         .querySingle().getVipRate2();
             } else if (rateRule == VIP_THREE) {
-                rateRule = SQLite.select(DepProduct_Table.vipRate3).from(DepProduct.class)
+                rate = SQLite.select(DepProduct_Table.vipRate3).from(DepProduct.class)
                         .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
                         .querySingle().getVipRate3();
             }
@@ -1234,6 +1362,58 @@ public class TradeHelper {
                 .count();
         return count != 0;
     }
+
+
+    /**
+     * @return 可登录专柜
+     */
+    public static List<Dep> getDepList() {
+        return SQLite.select().from(Dep.class).queryList();
+    }
+
+    /**
+     * @return 可登录用户
+     */
+    public static List<User> getUserList() {
+        return SQLite.select().from(User.class).queryList();
+    }
+
+    /**
+     * 获取参数字段
+     *
+     * @param paramName 字段名
+     * @return 字段值
+     */
+    public static String getAppParamValue(String paramName) {
+        return SQLite.select().from(AppParams.class).where(AppParams_Table.paramName.eq(paramName))
+                .querySingle().getParamValue();
+    }
+
+    /**
+     * 根据编码条码获取商品的单位
+     *
+     * @param prodCode 商品码
+     * @param barCode  条码
+     * @return 单位
+     */
+    public static String getProdUnit(String prodCode, String barCode) {
+        String unit = "";
+        if (TextUtils.isEmpty(barCode)) {
+            unit = SQLite.select(DepProduct_Table.unit)
+                    .from(DepProduct.class)
+                    .where(DepProduct_Table.prodCode.eq(prodCode))
+                    .querySingle()
+                    .getUnit();
+        } else {
+            unit = SQLite.select(DepProduct_Table.unit)
+                    .from(DepProduct.class)
+                    .where(DepProduct_Table.barCode.eq(barCode))
+                    .querySingle()
+                    .getUnit();
+        }
+        return unit;
+    }
+
 
     /**
      * 判断购物车是否为空

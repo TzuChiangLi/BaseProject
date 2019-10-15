@@ -103,7 +103,6 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 userCode = userData.get(position).getUserCode();
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 userCode = null;

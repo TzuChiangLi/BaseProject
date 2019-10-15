@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.view.View;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -26,7 +25,6 @@ import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
-import com.lxj.xpopup.core.BasePopupView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -65,8 +63,8 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     TextView mVipNameTv;
     @BindView(R.id.shop_list_tv_card_grade)
     TextView mCardGradeTv;
-    @BindView(R.id.shop_list_rl_vip)
-    RelativeLayout mVipInfoLayout;
+    @BindView(R.id.shop_list_tv_not_vip)
+    TextView mNotVipTv;
     @BindColor(R.color.common_rv_item)
     int rv_item_selected;
     @BindColor(R.color.common_white)
@@ -95,7 +93,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     protected void initData() {
-        MessageUtil.show("界面未做更改");
         mPresenter.initShopList();
         mPresenter.showVipInfo();
     }
@@ -132,7 +129,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         finish();
     }
 
-
     @Override
     public void onLeftClick(View v) {
         finish();
@@ -140,12 +136,10 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     public void onTitleClick(View v) {
-
     }
 
     @Override
     public void onRightClick(View v) {
-
     }
 
     @Override
@@ -218,14 +212,14 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
      */
     @Override
     public void showVipInfoOnline() {
-        mVipInfoLayout.setVisibility(View.VISIBLE);
+        mNotVipTv.setVisibility(View.GONE);
         mVipNameTv.setText(TradeHelper.vip.getVipName());
         mCardGradeTv.setText(String.format("%s/%s", TradeHelper.vip.getCardCode(), TradeHelper.vip.getVipGrade()));
     }
 
     @Override
     public void showVipInfoOffline() {
-        mVipInfoLayout.setVisibility(View.VISIBLE);
+        mNotVipTv.setVisibility(View.GONE);
         mVipNameTv.setVisibility(View.GONE);
         mCardGradeTv.setVisibility(View.GONE);
     }
@@ -337,17 +331,14 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     public void hasDelProdRight(final int index) {
-        MessageUtil.info("确定删除此商品？");
-        MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
+        MessageUtil.question("确定删除此商品？", new MessageUtil.MessageBoxYesNoListener() {
             @Override
-            public void onLeftBtnClick(BasePopupView popView) {
+            public void onYes() {
                 mPresenter.delTradeProd(index);
-                popView.dismiss();
             }
 
             @Override
-            public void onRightBtnClick(BasePopupView popView) {
-                popView.dismiss();
+            public void onNo() {
             }
         });
     }

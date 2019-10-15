@@ -17,10 +17,11 @@ import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.gyf.immersionbar.ImmersionBar;
-import com.lxj.xpopup.core.BasePopupView;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 
@@ -116,7 +117,6 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
 
     @Override
     public void tipHandover() {
-
     }
 
 
@@ -133,6 +133,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 mPresenter.goHandover();
                 break;
             case "退货":
+                mPresenter.goRtnProd();
                 break;
             case "注销登录":
                 mPresenter.logout();
@@ -151,57 +152,32 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 break;
             case "数据同步":
                 MessageUtil.info("数据同步");
-                MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
+                // TODO: 2019/10/12 重构：改为弹窗显示数据下载进度，以下代码移动到弹窗界面中执行
+                // 以下代码仅做测试用
+                new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
                     @Override
-                    public void onLeftBtnClick(BasePopupView popView) {
-                        popView.dismiss();
+                    public void handleProgress(int percent, boolean isFailed, String msg) {
+                        System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
+                        if (percent >= 100) {
+                            MessageUtil.showSuccess("数据同步已完成");
+                        }
                     }
-
-                    @Override
-                    public void onRightBtnClick(BasePopupView popView) {
-
-                    }
-                });
+                }).start();
                 break;
             case "操作指南":
                 MessageUtil.error("操作指南");
-                MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
-                    @Override
-                    public void onLeftBtnClick(BasePopupView popView) {
-                        popView.dismiss();
-                    }
-
-                    @Override
-                    public void onRightBtnClick(BasePopupView popView) {
-
-                    }
-                });
                 break;
             case "参数设置":
                 MessageUtil.warning("参数设置");
-                MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
-                    @Override
-                    public void onLeftBtnClick(BasePopupView popView) {
-                        popView.dismiss();
-                    }
-
-                    @Override
-                    public void onRightBtnClick(BasePopupView popView) {
-
-                    }
-                });
                 break;
             case "修改密码":
-                MessageUtil.question("修改密码");
-                MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
+                MessageUtil.question("修改密码", new MessageUtil.MessageBoxYesNoListener() {
                     @Override
-                    public void onLeftBtnClick(BasePopupView popView) {
-                        popView.dismiss();
+                    public void onYes() {
                     }
 
                     @Override
-                    public void onRightBtnClick(BasePopupView popView) {
-
+                    public void onNo() {
                     }
                 });
                 break;
@@ -227,6 +203,12 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     @Override
     public void goOrderOutActivity() {
         Intent intent = new Intent(HomeActivity.this, OrderOutActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void goRtnProdActivity() {
+        Intent intent = new Intent(HomeActivity.this, RtnProdActivity.class);
         startActivity(intent);
     }
 

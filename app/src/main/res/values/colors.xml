@@ -10,10 +10,10 @@
     <color name="common_green">#3cad00</color>
     <color name="common_white">#FFF</color>
     <color name="common_black">#000</color>
-    <color name="common_gray_bg">#e4e8ea</color>
+    <color name="common_gray_bg">#ebebeb</color>
     <!--<color name="common_gray_bg">#f0f1f3</color>-->
     <!--<color name="common_gray_bg">#f2f0f1</color>-->
-    <color name="common_rv_item">#FFFAC4</color>
+    <color name="common_rv_item">#fffcdd</color>
 
     <color name="text_black">#141418</color>
     <color name="text_black_first">#393B4D</color>

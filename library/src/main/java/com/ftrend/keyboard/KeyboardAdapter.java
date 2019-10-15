@@ -70,7 +70,7 @@ public class KeyboardAdapter extends RecyclerView.Adapter<KeyboardAdapter.ViewHo
                 viewHolder.mNumberTv.setText(mList.get(i));
                 viewHolder.mNumberTv.setTextColor(Color.BLACK);
                 viewHolder.mNumberTv.setTag(i);
-                viewHolder.mNumberTv.setBackgroundColor((i == 3 || i == 7 || i == 11 || i == 14 || i == 15) ? Color.parseColor("#dadada") : Color.WHITE);
+                viewHolder.mNumberTv.setBackgroundColor((i == 3 || i == 7 || i == 11 || i == 14 || i == 15) ? Color.parseColor("#FFFFFF") : Color.WHITE);
                 viewHolder.mNumberTv.setLayoutParams(
                         new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, parentHeight / 4));
                 viewHolder.mNumberTv.setOnClickListener(this);
@@ -87,7 +87,7 @@ public class KeyboardAdapter extends RecyclerView.Adapter<KeyboardAdapter.ViewHo
                             case MotionEvent.ACTION_MOVE:
                                 break;
                             default:
-                                viewHolder.mNumberTv.setBackgroundColor((i == 3 || i == 7 || i == 11 || i == 14 || i == 15) ? Color.parseColor("#dadada") : Color.WHITE);
+                                viewHolder.mNumberTv.setBackgroundColor((i == 3 || i == 7 || i == 11 || i == 14 || i == 15) ? Color.parseColor("#ffffff") : Color.WHITE);
                                 viewHolder.mNumberTv.setTextColor(Color.BLACK);
                                 break;
                         }

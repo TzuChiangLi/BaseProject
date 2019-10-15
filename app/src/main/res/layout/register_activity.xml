@@ -37,7 +37,6 @@
         android:textSize="13sp"
         android:textStyle="bold" />
 
-
     <TextView
         android:id="@+id/reg_tv_title1"
         android:layout_width="match_parent"
@@ -49,7 +48,6 @@
         android:paddingBottom="4dp"
         android:text="@string/reg_title_first"
         android:textColor="@color/common_white" />
-
 
     <LinearLayout
         android:id="@+id/reg_ll_url"
@@ -68,7 +66,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             android:background="@color/common_white">
-
 
             <com.ftrend.cleareditview.ClearEditText
                 android:id="@+id/reg_edt_url"
@@ -158,7 +155,6 @@
             android:layout_marginBottom="8dp"
             android:layout_toEndOf="@+id/reg_tv_poscode_title"
             android:background="@color/common_white">
-
 
             <com.ftrend.cleareditview.ClearEditText
                 android:id="@+id/reg_edt_regCode"

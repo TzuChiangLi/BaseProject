@@ -1,9 +1,12 @@
 package com.ftrend.zgp.presenter;
 
+import com.ftrend.zgp.App;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.common.CommonUtil;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.ftrend.zgp.utils.task.LsDownloadTask;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -17,7 +20,6 @@ import java.util.Locale;
  */
 public class InitPresenter implements Contract.InitPresenter {
     private Contract.InitView mView;
-    private boolean isStart = false;
 
     private InitPresenter(Contract.InitView mView) {
         this.mView = mView;
@@ -34,39 +36,55 @@ public class InitPresenter implements Contract.InitPresenter {
 
     @Override
     public void startInitData(int step) {
-        isStart = true;
         if (step == 1) {
             new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
                 @Override
                 public void handleProgress(int percent, boolean isFailed, String msg) {
-//                if (isStart) {
                     mView.updateProgress(1, percent);
                     System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
-//                }
+                    if (isFailed) {
+                        //失败退出
+                        iniFailed();
+                    }
                 }
             }).start();
         } else if (step == 2) {
             new LsDownloadTask(new DataDownloadTask.ProgressHandler() {
                 @Override
                 public void handleProgress(int percent, boolean isFailed, String msg) {
-//                if (isStart) {
                     mView.updateProgress(2, percent);
                     System.out.println(String.format(Locale.getDefault(), "实时流水下载进度：%d%% %s", percent, msg));
-//                }
+                    if (isFailed) {
+                        //失败退出
+                        iniFailed();
+                    }
                 }
             }).start();
         }
     }
 
+    /**
+     * 初始化失败
+     */
+    private void iniFailed() {
+        MessageUtil.error("初始化失败。请确认网络畅通后，重启应用继续初始化操作！",
+                new MessageUtil.MessageBoxOkListener() {
+                    @Override
+                    public void onOk() {
+                        CommonUtil.rebootApp(App.getContext());
+                    }
+                });
+    }
 
     @Override
     public void stopInitData() {
-        isStart = false;
         mView.stopUpdate();
     }
 
     @Override
     public void finishInitData() {
+        //设置初始化完成标志
+        ZgParams.updateInitFlag();
         // 数据初始化完成，重新加载参数
         ZgParams.loadParams();
 
@@ -90,43 +108,4 @@ public class InitPresenter implements Contract.InitPresenter {
             mView = null;
         }
     }
-
-
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (isStart)
-//                        mView.updateProgress(0);
-//                }
-//            }, 200);
-//
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (isStart)
-//                        mView.updateProgress(20);
-//                }
-//            }, 1000);
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (isStart)
-//                        mView.updateProgress(50);
-//                }
-//            }, 2000);
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    if (isStart)
-//                        mView.updateProgress(90);
-//                }
-//            }, 3000);
-//
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (isStart)
-//                    mView.updateProgress(100);
-//            }
-//        }, 5000);
 }
