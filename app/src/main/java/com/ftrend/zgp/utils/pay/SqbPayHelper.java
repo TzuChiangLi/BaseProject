@@ -53,6 +53,20 @@ public class SqbPayHelper {
     public static boolean playSound = false;
 
     /**
+     * 支付结果回调
+     */
+    public interface PayResultCallback {
+        /**
+         * 支付结果
+         *
+         * @param isDone    是否已完成支付（支付平台处理延迟，接口会返回中间状态，此时需要轮询支付结果）
+         * @param isSuccess 是否支付成功
+         * @param errMsg    错误消息
+         */
+        void onResult(boolean isDone, boolean isSuccess, String errMsg);
+    }
+
+    /**
      * 设备激活
      */
     public static void activate() {
@@ -100,7 +114,14 @@ public class SqbPayHelper {
      channel_finish_time='1571129271000', operator='508', description='零售商品', reflect='30100003',
      refund_request_no='null', result_code='PAY_SUCCESS', error_code='', error_message=''}
      */
-    public static void pay(String scanCode) {
+
+    /**
+     * 支付请求
+     *
+     * @param scanCode 用户支付码内容（扫描的支付条码或二维码）
+     * @param callback 支付结果回调
+     */
+    public static void pay(String scanCode, final PayResultCallback callback) {
         Trade trade = TradeHelper.getTrade();
         trade.setTradeTime(new Date());
         //String clientSn = trade.getDepCode() + CommonUtil.dateToString(trade.getTradeTime()) + trade.getLsNo();
@@ -121,6 +142,19 @@ public class SqbPayHelper {
             @Override
             public void onExecuteResult(UpayResult result) {
                 LogUtil.e(result.toString());
+                if (callback == null) {
+                    return;
+                }
+                // TODO: 2019/10/16 这里需要综合判断：status流水状态, order_status订单状态, result_code业务执行结果返回码
+                //PAID
+                //PAY_CANCELED
+                if (result.getOrder_status().equals(UpayResult.ORDER_PAID)) {
+                    callback.onResult(true, true, "");
+                } else if (result.getOrder_status().equals(UpayResult.ORDER_PAY_CANCELED)) {
+                    callback.onResult(true, false, result.getError_message());
+                } else {
+                    callback.onResult(false, true, "");
+                }
             }
         });
     }
