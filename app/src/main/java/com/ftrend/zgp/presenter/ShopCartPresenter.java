@@ -41,6 +41,7 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
             product.setSelect(false);
         }
         mView.setProdList(mProdList);
+        LogUtil.d("----show:"+ZgParams.isShowCls(ZgParams.getCurrentDep().getDepCode()));
         if (ZgParams.isShowCls(ZgParams.getCurrentDep().getDepCode())) {
             for (DepCls cls : clsList) {
                 cls.setSelect(false);

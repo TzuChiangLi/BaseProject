@@ -390,7 +390,7 @@ public class MessageUtil {
         new XToast(ActivityUtils.getTopActivity())
                 .setView(R.layout.toast_state_hint)
                 .setDuration(Duration)
-                .setImageDrawable(android.R.id.icon, R.drawable.dialog_state_success)
+                .setImageDrawable(android.R.id.icon, R.drawable.toast_success)
                 .setText(android.R.id.message, text)
                 .show();
     }
@@ -411,7 +411,7 @@ public class MessageUtil {
         new XToast(ActivityUtils.getTopActivity())
                 .setView(R.layout.toast_state_hint)
                 .setDuration(Duration)
-                .setImageDrawable(android.R.id.icon, R.drawable.dialog_state_error)
+                .setImageDrawable(android.R.id.icon, R.drawable.toast_error)
                 .setText(android.R.id.message, text)
                 .show();
     }
@@ -425,7 +425,7 @@ public class MessageUtil {
         new XToast(ActivityUtils.getTopActivity())
                 .setView(R.layout.toast_state_hint)
                 .setDuration(Duration)
-                .setImageDrawable(android.R.id.icon, R.drawable.dialog_state_warning)
+                .setImageDrawable(android.R.id.icon, R.drawable.toast_warning)
                 .setText(android.R.id.message, text)
                 .show();
     }
