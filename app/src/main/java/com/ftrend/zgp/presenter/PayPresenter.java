@@ -31,7 +31,7 @@ public class PayPresenter implements Contract.PayPresenter {
     @Override
     public void initPayWay() {
         List<Menu.MenuList> payWays = new ArrayList<>();
-        payWays.add(new Menu.MenuList(R.drawable.shouqian, "收钱吧"));
+        payWays.add(new Menu.MenuList(R.drawable.shouqianba, "收钱吧"));
         payWays.add(new Menu.MenuList(R.drawable.card, "储值卡"));
         payWays.add(new Menu.MenuList(R.drawable.money, "现金"));
         mView.showPayway(payWays);
