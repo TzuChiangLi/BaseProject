@@ -15,13 +15,13 @@ import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.HomePresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.common.TypeUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
+import com.ftrend.zgp.utils.msg.DialogBuilder;
 import com.ftrend.zgp.utils.msg.MessageUtil;
-import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 
@@ -142,7 +142,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 mPresenter.getOutOrder();
                 break;
             case "交班报表":
-                MessageUtil.showError();
+                MessageUtil.waitBegin("请稍等");
                 break;
             case "交易统计":
                 MessageUtil.showSuccess();
@@ -151,18 +151,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 MessageUtil.showWarning("警告");
                 break;
             case "数据同步":
-                MessageUtil.info("数据同步");
-                // TODO: 2019/10/12 重构：改为弹窗显示数据下载进度，以下代码移动到弹窗界面中执行
-                // 以下代码仅做测试用
-                new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
-                    @Override
-                    public void handleProgress(int percent, boolean isFailed, String msg) {
-                        System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
-                        if (percent >= 100) {
-                            MessageUtil.showSuccess("数据同步已完成");
-                        }
-                    }
-                }).start();
+                MessageUtil.async("数据同步", TypeUtil.AsyncType.data);
                 break;
             case "操作指南":
                 MessageUtil.error("操作指南");

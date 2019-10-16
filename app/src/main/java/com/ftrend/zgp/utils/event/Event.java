@@ -2,6 +2,8 @@ package com.ftrend.zgp.utils.event;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.security.PublicKey;
+
 /**
  * EventBus传递指令
  *
@@ -22,6 +24,10 @@ public class Event {
      * 目标界面：支付方式
      */
     public static final int TARGET_PAY_WAY = 2;
+    /**
+     * 目标界面：弹窗进度
+     */
+    public static final int TARGET_DIALOG_PROGRESS = 3;
     //-----------------------------------操作命令-----------------------------------------//
 
     /**
@@ -58,6 +64,11 @@ public class Event {
     public static final int TYPE_DIALOG_VIP_DSC = 8;
     public static final int TYPE_DIALOG_WHOLE_DSC = 9;
     public static final int TYPE_DIALOG_HANG_UP = 10;
+
+    /**
+     * 进度弹窗
+     */
+    public static final int TYPE_DIALOG_PROGRESS = 11;
 
     /**
      * 提示信息

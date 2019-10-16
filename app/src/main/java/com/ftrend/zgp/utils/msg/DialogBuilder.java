@@ -10,8 +10,12 @@ import android.widget.TextView;
 
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
+import com.ftrend.zgp.utils.common.TypeUtil;
+import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.core.CenterPopupView;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,10 +47,12 @@ public class DialogBuilder extends CenterPopupView {
     private String title, content, leftBtn, rightBtn;
     private OnBtnClickListener mOnClickListener;
 
+
     /**
      * 0:提示，1：警告，2：错误，3：询问
      */
-    private DialogType dialogType = DialogType.info;
+    private TypeUtil.DialogType dialogType = TypeUtil.DialogType.info;
+    private TypeUtil.AsyncType asyncType = TypeUtil.AsyncType.data;
     /**
      * 按钮数量
      */
@@ -58,12 +64,7 @@ public class DialogBuilder extends CenterPopupView {
      * @param context 控制上下文
      */
     public DialogBuilder(Context context) {
-        super(context);
-        if (context == null) {
-            this.context = BaseActivity.mContext;
-        } else {
-            this.context = context;
-        }
+        this(context, 0);
     }
 
     /**
@@ -91,7 +92,30 @@ public class DialogBuilder extends CenterPopupView {
     protected void onCreate() {
         super.onCreate();
         ButterKnife.bind(this);
+        if (!TextUtils.isEmpty(title)) {
+            mTitleTv.setText(title);
+        }
+        if (!TextUtils.isEmpty(content)) {
+            mMsgTv.setText(content);
+        }
+        if (btnNum != 0) {
+            if (!TextUtils.isEmpty(leftBtn)) {
+                mLeftBtn.setText(leftBtn);
+            }
+            if (!TextUtils.isEmpty(rightBtn)) {
+                mRightBtn.setText(rightBtn);
+            }
+        }
+        initDialogType(dialogType);
+
+        initBtnNum(btnNum);
+
+        asyncTask(asyncType);
+    }
+
+    private void initDialogType(TypeUtil.DialogType dialogType) {
         switch (dialogType) {
+            case async:
             case info:
             default:
                 mStateImg.setImageResource(R.drawable.dialog_state_tip);
@@ -110,6 +134,9 @@ public class DialogBuilder extends CenterPopupView {
                 mTitleTv.setText("询问");
                 break;
         }
+    }
+
+    private void initBtnNum(int btnNum) {
         switch (btnNum) {
             case 0:
                 mBtnLayout.setVisibility(GONE);
@@ -123,24 +150,26 @@ public class DialogBuilder extends CenterPopupView {
             default:
                 break;
         }
-        if (!TextUtils.isEmpty(title)) {
-            mTitleTv.setText(title);
-        }
-        if (!TextUtils.isEmpty(content)) {
-            mMsgTv.setText(content);
-        }
-        if (btnNum != 0) {
-            if (!TextUtils.isEmpty(leftBtn)) {
-                mLeftBtn.setText(leftBtn);
-            }
-            if (!TextUtils.isEmpty(rightBtn)) {
-                mRightBtn.setText(rightBtn);
-            }
-        }
     }
 
-
-    public static void close() {
+    private void asyncTask(TypeUtil.AsyncType asyncType) {
+        switch (asyncType) {
+            case data:
+                new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
+                    @Override
+                    public void handleProgress(int percent, boolean isFailed, String msg) {
+                        System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
+                        mMsgTv.setText(String.format("%s%d%s", "已完成进度", percent, "%"));
+                        if (percent >= 100) {
+                            dismiss();
+                            MessageUtil.showSuccess("数据同步已完成");
+                        }
+                    }
+                }).start();
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -207,8 +236,12 @@ public class DialogBuilder extends CenterPopupView {
         this.rightBtn = rightBtn;
     }
 
-    public void setDialogType(DialogType dialogType) {
+    public void setDialogType(TypeUtil.DialogType dialogType) {
         this.dialogType = dialogType;
+    }
+
+    public void setAsyncType(TypeUtil.AsyncType asyncType) {
+        this.asyncType = asyncType;
     }
 
     public void setBtnNum(int btnNum) {
@@ -217,13 +250,5 @@ public class DialogBuilder extends CenterPopupView {
 
     //endregion
 
-    /**
-     * 对话框类型定义
-     */
-    enum DialogType {
-        info,
-        warning,
-        error,
-        question
-    }
+
 }
