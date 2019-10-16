@@ -6,6 +6,7 @@ import android.content.Intent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 import static com.blankj.utilcode.util.ActivityUtils.startActivity;
 
@@ -31,11 +32,22 @@ public class CommonUtil {
         startActivity(intent);
     }
 
-    public static String todayToString() {
-        return dateToString(new Date());
+    /**
+     * 生成新的UUID
+     *
+     * @return
+     */
+    public static String newUuid() {
+        return UUID.randomUUID().toString().replaceAll("-", "");
     }
 
-    public static String dateToString(Date date) {
+    /**
+     * 日期格式化：yyyyMMdd
+     *
+     * @param date
+     * @return
+     */
+    public static String dateToYyyyMmDd(Date date) {
         return new SimpleDateFormat("yyyyMMdd", Locale.CHINA).format(date);
     }
 }

@@ -1,8 +1,11 @@
 package com.ftrend.zgp.utils.pay;
 
+import com.ftrend.zgp.model.SqbPayOrder;
+import com.ftrend.zgp.model.SqbPayResult;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.common.CommonUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.wosai.upay.bean.UpayOrder;
 import com.wosai.upay.bean.UpayResult;
@@ -65,6 +68,17 @@ public class SqbPayHelper {
          */
         void onResult(boolean isDone, boolean isSuccess, String errMsg);
     }
+
+    /*
+如果 激活 接口 result_code返回的不是 ACTIVATE_SUCCESS，则认为激活失败
+如果 付款 接口 result_code返回的不是 PAY_SUCCESS，则认为付款失败
+如果 退款 接口 result_code返回的不是 REFUND_SUCCESS，则认为退款失败
+如果 撤单 接口 result_code返回的不是 CANCEL_SUCCESS 或者 CANCEL_ABORT_SUCCESS 则认为撤单失败
+如果 预下单 接口 result_code返回的不是 PRECREATE_SUCCESS，则认为预下单失败
+如果 查询 接口 result_code返回的不是 SUCCESS，则认为查询失败
+如果 result_code 返回值为 null 或者 0，通过 error_code 和 error_message 信息处理。
+如果 result_code 返回的是失败响应码,可先通过 error_code 和 error_message 信息处理,如果不存在 error_code 和 error_message,再根据 result_code 的含义及下一步处理。
+     */
 
     /**
      * 设备激活
@@ -138,16 +152,21 @@ public class SqbPayHelper {
         order.setReflect(trade.getLsNo());//反射参数
         order.setPayModel(UpayOrder.PayModel.NO_UI);//指定 SDK 启动模式为无界面模式
 
+        final String requestNo = CommonUtil.newUuid();
+        // 记录支付请求信息
+        new SqbPayOrder(order, requestNo, "1", trade.getLsNo()).insert();//1-付款，2-退款，3-查询，4-撤单，5-预下单
+
         UpayTask.getInstance().pay(order, new UpayCallBack() {
             @Override
             public void onExecuteResult(UpayResult result) {
                 LogUtil.e(result.toString());
+                // 记录支付结果信息
+                new SqbPayResult(result, requestNo).insert();
+
                 if (callback == null) {
                     return;
                 }
                 // TODO: 2019/10/16 这里需要综合判断：status流水状态, order_status订单状态, result_code业务执行结果返回码
-                //PAID
-                //PAY_CANCELED
                 if (result.getOrder_status().equals(UpayResult.ORDER_PAID)) {
                     callback.onResult(true, true, "");
                 } else if (result.getOrder_status().equals(UpayResult.ORDER_PAY_CANCELED)) {
@@ -174,14 +193,40 @@ public class SqbPayHelper {
       description='零售商品', reflect='7894259244086017', refund_request_no='7894259244086017',
       result_code='REFUND_SUCCESS', error_code='', error_message=''}
      */
-    public static void refund(String clientSn) {
-//        Trade trade = TradeHelper.getTrade();
-        //String clientSn = trade.getDepCode() + CommonUtil.dateToString(trade.getTradeTime()) + trade.getLsNo();
-        String requestNo = "7894259244086017";
+
+    /**
+     * 按商户订单号退款
+     *
+     * @param clientSn 商户订单号
+     * @param callback 退款结果回调
+     */
+    public static void refundByClientSn(String clientSn, final PayResultCallback callback) {
+        refund("", clientSn, callback);
+    }
+
+    /**
+     * 按收钱吧订单号退款
+     *
+     * @param sn       收钱吧订单号
+     * @param callback 退款结果回调
+     */
+    public static void refundBySn(String sn, final PayResultCallback callback) {
+        refund(sn, "", callback);
+    }
+
+    /**
+     * 退款操作（sn和clientSn不能同时为空）
+     *
+     * @param sn       收钱吧订单号
+     * @param clientSn 商户订单号
+     * @param callback 退款结果回调
+     */
+    private static void refund(String sn, String clientSn, final PayResultCallback callback) {
+        final String requestNo = CommonUtil.newUuid().substring(0, 30);
 
         UpayOrder order = new UpayOrder();
         //无UI(sn和client_sn不能同时为空)
-        //order.setSn("7894259244086017");//收钱吧订单号
+        order.setSn(sn);//收钱吧订单号
         order.setClient_sn(clientSn);//商户订单号
         //商户退款所需序列号，用于唯一标识某次退款请求，以防止意外的重复退款。
         // 正常情况下，对同一笔订单进行多次退款请求时该字段不能重复；
@@ -193,10 +238,26 @@ public class SqbPayHelper {
         order.setRefundModel(UpayOrder.RefundModel.CLIENT_SN);//指定退款模式为商户订单号退款
         order.setPayModel(UpayOrder.PayModel.NO_UI);//指定 SDK 启动模式为无界面模式
 
+        // 记录退款请求信息
+        new SqbPayOrder(order, requestNo, "2", "").insert();//1-付款，2-退款，3-查询，4-撤单，5-预下单
+
         UpayTask.getInstance().refund(order, new UpayCallBack() {
             @Override
             public void onExecuteResult(UpayResult result) {
                 LogUtil.e(result.toString());
+                // 记录退款结果信息
+                new SqbPayResult(result, requestNo).insert();
+
+                if (callback == null) {
+                    return;
+                }
+                // TODO: 2019/10/16 这里需要综合判断：status流水状态, order_status订单状态, result_code业务执行结果返回码
+                if (result.getOrder_status().equals(UpayResult.ORDER_REFUNDED)
+                        || result.getOrder_status().equals(UpayResult.ORDER_PARTIAL_REFUNDED)) {
+                    callback.onResult(true, true, "");
+                } else {
+                    callback.onResult(false, true, "");
+                }
             }
         });
     }
