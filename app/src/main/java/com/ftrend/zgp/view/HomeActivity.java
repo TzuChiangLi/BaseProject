@@ -242,6 +242,11 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     }
 
     @Override
+    public void doAsyncTask() {
+
+    }
+
+    @Override
     public void logout() {
         Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
         startActivity(intent);

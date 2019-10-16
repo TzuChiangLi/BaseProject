@@ -76,6 +76,8 @@ public class TradeHelper {
     public static final String APP_PAY_TYPE_WXPAY = "3";
     // APP支付类型: 4-储值卡
     public static final String APP_PAY_TYPE_VIPCARD = "4";
+    // APP支付类型: 4-储值卡
+    public static final String APP_PAY_TYPE_SHOUQIANBA = "5";
 
 
     // 用户权限: 0-行清权限

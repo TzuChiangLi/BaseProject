@@ -239,6 +239,11 @@ public interface Contract {
         void getOutOrder();
 
         /**
+         * 执行数据同步
+         */
+        void goAsyncTask();
+
+        /**
          * 注销登录
          */
         void logout();
@@ -316,6 +321,11 @@ public interface Contract {
          * 单机运行
          */
         void showOfflineTip();
+
+        /**
+         * 执行数据同步
+         */
+        void doAsyncTask();
 
         /**
          * 注销登录
@@ -628,6 +638,13 @@ public interface Contract {
         void initPayWay();
 
         /**
+         * 收钱吧
+         *
+         * @param value 扫码结果
+         */
+        void payByShouQian(String value);
+
+        /**
          * 交易完成
          *
          * @param appPayType APP支付方式
@@ -654,6 +671,22 @@ public interface Contract {
          * @param total 订单总金额
          */
         void showTradeInfo(double total);
+
+        /**
+         * 等待付款结果
+         */
+        void waitPayResult();
+
+        /**
+         * 支付成功
+         */
+        void paySuccess();
+
+        /**
+         * 显示错误
+         * @param msg 错误信息
+         */
+        void showError(String msg);
     }
 
     interface HandoverPresenter {

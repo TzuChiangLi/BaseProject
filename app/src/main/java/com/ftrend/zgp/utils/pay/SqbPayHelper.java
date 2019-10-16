@@ -1,5 +1,7 @@
 package com.ftrend.zgp.utils.pay;
 
+import android.text.TextUtils;
+
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
@@ -100,15 +102,16 @@ public class SqbPayHelper {
      channel_finish_time='1571129271000', operator='508', description='零售商品', reflect='30100003',
      refund_request_no='null', result_code='PAY_SUCCESS', error_code='', error_message=''}
      */
-    public static void pay(String scanCode) {
+    public static void pay(String scanCode, final PayCallBack callBack) {
+        LogUtil.d("----scanCode:" + scanCode);
         Trade trade = TradeHelper.getTrade();
         trade.setTradeTime(new Date());
         //String clientSn = trade.getDepCode() + CommonUtil.dateToString(trade.getTradeTime()) + trade.getLsNo();
         String clientSn = "client" + (int) (Math.random() * 10000000);
-
+        LogUtil.e("----clientSn:" + clientSn);
         UpayOrder order = new UpayOrder();
         order.setClient_sn(clientSn);//商户订单号
-        order.setTotal_amount("100");//交易总金额
+        order.setTotal_amount("1");//交易总金额
         // order.setPayway("1");//支付方式--无需指定
         order.setDynamic_id(scanCode);//付款码内容
         order.setSubject("购物");//交易简介
@@ -120,7 +123,14 @@ public class SqbPayHelper {
         UpayTask.getInstance().pay(order, new UpayCallBack() {
             @Override
             public void onExecuteResult(UpayResult result) {
-                LogUtil.e(result.toString());
+                LogUtil.e("----" + result.getClient_sn());
+                LogUtil.e("----" + result.toString());
+                if (TextUtils.isEmpty(result.toString())) {
+                    callBack.isDone();
+                }
+                if (result.getStatus().equals("SUCCESS")) {
+                    callBack.isSuccesss();
+                }
             }
         });
     }
