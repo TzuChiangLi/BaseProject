@@ -13,12 +13,15 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.HomePresenter;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.common.TypeUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.DialogBuilder;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.pay.SqbPayHelper;
+import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.List;
@@ -61,6 +64,8 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         mPresenter.initServerThread();
         //初始化商米支付SDK
         mPresenter.initSunmiPaySdk();
+        //初始化收钱吧SDK
+        mPresenter.initSqbSdk();
     }
 
     @Override
@@ -152,6 +157,29 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 break;
             case "数据同步":
                 MessageUtil.async("数据同步", TypeUtil.AsyncType.data);
+                //MessageUtil.info("数据同步");
+                // TODO: 2019/10/12 重构：改为弹窗显示数据下载进度，以下代码移动到弹窗界面中执行
+                // 以下代码仅做测试用
+                final DataDownloadTask task = new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
+                    @Override
+                    public void handleProgress(int percent, boolean isFailed, String msg) {
+                        System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
+                        if (percent >= 100) {
+                            MessageUtil.waitEnd();
+                            MessageUtil.showSuccess("数据同步已完成");
+                        } else if (isFailed) {
+                            MessageUtil.waitEnd();
+                            MessageUtil.showError("数据同步失败：" + msg);
+                        }
+                    }
+                });
+                MessageUtil.waitBegin("正在同步数据，请稍候...", new MessageUtil.MessageBoxCancelListener() {
+                    @Override
+                    public void onCancel() {
+                        task.interrupt();
+                    }
+                });
+                task.start();
                 break;
             case "操作指南":
                 MessageUtil.error("操作指南");

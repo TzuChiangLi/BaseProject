@@ -12,7 +12,7 @@ import com.sunmi.pay.hardware.aidlv2.AidlConstantsV2;
  * @since 2019/9/23
  */
 public class SunmiCardConfig {
-    // （1）支持的卡类型：1-磁卡，2-M1卡
+    // （1）支持的卡类型：1-磁卡，8-M1卡
     private int cardTypes;
     // （2）磁卡轨道号（会员卡号所在轨道）：1～3
     private int magTrackNo;

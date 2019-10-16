@@ -1,1 +1,1 @@
-include ':app', ':library'
+include ':app', ':library', ':SQB-Android-SDK-2.1.5'

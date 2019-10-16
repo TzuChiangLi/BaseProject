@@ -188,6 +188,10 @@ public class MessageUtil {
         void onOk();
     }
 
+    public interface MessageBoxCancelListener {
+        void onCancel();
+    }
+
     public interface MessageBoxYesNoListener {
         void onYes();
 
@@ -345,6 +349,46 @@ public class MessageUtil {
     public static void question(String message, final MessageBoxYesNoListener listener) {
         question(message, "是", "否", listener);
     }
+
+    private static BasePopupView waitDialog = null;
+
+    public static void waitBegin(String message, final MessageBoxCancelListener listener) {
+        if (waitDialog != null) {
+            waitEnd();
+        }
+        mContext = BaseActivity.mContext;
+        builder = new DialogBuilder(mContext, 1);
+        builder.setContent(message);
+        builder.setLeftBtn("取消");
+        builder.setDialogType(DialogBuilder.DialogType.wait);
+        builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
+            @Override
+            public void onLeftBtnClick(BasePopupView v) {
+                if (listener != null) {
+                    listener.onCancel();
+                }
+                waitEnd();
+            }
+
+            @Override
+            public void onRightBtnClick(BasePopupView v) {
+
+            }
+        });
+        waitDialog = new XPopup.Builder(mContext)
+                .dismissOnTouchOutside(false)
+                .asCustom(builder)
+                .show();
+    }
+
+    public static void waitEnd() {
+        if (waitDialog == null) {
+            return;
+        }
+        waitDialog.dismiss();
+        waitDialog = null;
+    }
+
     //endregion
 
 

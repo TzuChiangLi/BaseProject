@@ -50,8 +50,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = '1.7'
-        targetCompatibility = '1.7'
+        sourceCompatibility = JavaVersion.VERSION_1_7
+        targetCompatibility = JavaVersion.VERSION_1_7
     }
     buildToolsVersion = '29.0.2'
 }
@@ -121,6 +121,11 @@ dependencies {
     implementation(name: 'PayLib-release-1.4.18', ext: 'aar')
     //商米打印机远程导入
     implementation 'com.sunmi:printerlibrary:1.0.4'
+    //收钱吧（gson包冲突，exclude方式无效，通过module方式引用解决冲突）
+    implementation project(':SQB-Android-SDK-2.1.5')
+//    implementation(name: 'SQB-Android-SDK-2.1.5', ext: 'aar') {
+//        exclude group: 'com.google.code.gson'
+//    }
     //单元测试框架
     //http://robolectric.org
     testImplementation 'org.robolectric:robolectric:4.3'
