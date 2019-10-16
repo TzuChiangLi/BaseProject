@@ -159,7 +159,7 @@ public class DialogBuilder extends CenterPopupView {
                     @Override
                     public void handleProgress(int percent, boolean isFailed, String msg) {
                         System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
-                        mMsgTv.setText(String.format("%s%d%s", "已完成进度", percent, "%"));
+                        mMsgTv.setText(String.format("%s%d%s", content, percent, "%"));
                         if (percent >= 100) {
                             dismiss();
                             MessageUtil.showSuccess("数据同步已完成");

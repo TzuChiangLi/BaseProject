@@ -77,7 +77,7 @@
     <View
         android:id="@+id/shop_cart_line"
         android:layout_width="match_parent"
-        android:layout_height="1px"
+        android:layout_height="0px"
         android:layout_below="@+id/shop_cart_top_ll"
         android:background="@color/divide_line" />
 
@@ -89,7 +89,7 @@
         android:layout_below="@+id/shop_cart_line"
         android:layout_alignParentStart="true"
         android:background="@color/shop_rv_cls_bg"
-        android:visibility="visible"
+        android:visibility="gone"
         tools:listitem="@layout/shop_cart_rv_classes_item" />
 
 
@@ -101,6 +101,7 @@
         android:layout_below="@+id/shop_cart_line"
         android:layout_toEndOf="@+id/shop_cart_rv_classes"
         android:background="@color/common_gray_bg"
+        android:paddingTop="@dimen/dp_4"
         tools:listitem="@layout/shop_cart_rv_product_item" />
 
     <!--为了实现角标覆盖Button在Button上层，有两种方式，一个是button的android:stateListAnimator

@@ -185,7 +185,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         mProdRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item, prodList, 1);
         mProdRecyclerView.setAdapter(mProdAdapter);
-        mProdRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+//        mProdRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
