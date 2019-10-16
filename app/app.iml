@@ -165,6 +165,7 @@
     <orderEntry type="library" scope="TEST" name="Gradle: org.bouncycastle:bcprov-jdk15on:1.52@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: com.google.guava:failureaccess:1.0.1@jar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.apache.maven:maven-plugin-registry:2.2.1@jar" level="project" />
+    <orderEntry type="library" name="Gradle: com.sunmi:printerlibrary:1.0.4@aar" level="project" />
     <orderEntry type="library" scope="TEST" name="Gradle: org.robolectric:plugins-maven-dependency-resolver:4.3@jar" level="project" />
     <orderEntry type="library" name="Gradle: com.lxj:xpopup:1.8.8@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.gyf.immersionbar:immersionbar:3.0.0-beta07@aar" level="project" />

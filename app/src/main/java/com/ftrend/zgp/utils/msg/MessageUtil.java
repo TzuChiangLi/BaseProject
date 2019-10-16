@@ -1,13 +1,11 @@
 package com.ftrend.zgp.utils.msg;
 
-import android.app.Application;
 import android.content.Context;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.toast.XToast;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
-import com.ftrend.zgp.utils.common.TypeUtil;
 import com.ftrend.zgp.utils.pop.PayChargeDialog;
 import com.ftrend.zgp.utils.pop.PriceDscDialog;
 import com.ftrend.zgp.utils.pop.PriceMobileDialog;
@@ -26,35 +24,8 @@ import static com.ftrend.zgp.utils.pop.PriceMobileDialog.DIALOG_MOBILE;
  */
 public class MessageUtil {
 
-
-    //-------------------------------------进度弹窗-----------------------------------------//
-    private static BasePopupView waitDialog = null;
-
-    public static void waitBegin(String message) {
-        if (waitDialog != null) {
-            waitEnd();
-        }
-        mContext = BaseActivity.mContext;
-        builder = new DialogBuilder(mContext, 0);
-        builder.setContent(message);
-        builder.setLeftBtn("取消");
-        builder.setDialogType(TypeUtil.DialogType.info);
-        waitDialog = new XPopup.Builder(mContext)
-                .dismissOnTouchOutside(false)
-                .asCustom(builder)
-                .show();
-    }
-
-    public static void waitEnd() {
-        if (waitDialog == null) {
-            return;
-        }
-        waitDialog.dismiss();
-        waitDialog = null;
-    }
-
 //-------------------------------------业务弹窗-----------------------------------------//
-
+// TODO: 2019/10/16 业务弹窗移到专门的工具类，例如：InputPanel
     /**
      * 会员登录方式选择
      *
@@ -155,34 +126,6 @@ public class MessageUtil {
 //-------------------------------------模态弹窗-----------------------------------------//
 
     //region 模态弹窗
-    /**
-     * 模态弹窗需要获取上下文
-     */
-    private static Context mContext;
-    private static OnBtnClickListener mListener = null;
-    private static DialogBuilder builder;
-
-    public static void setMessageUtilClickListener(OnBtnClickListener mListener) {
-        MessageUtil.mListener = mListener;
-    }
-
-    @Deprecated
-    public interface OnBtnClickListener {
-        /**
-         * 左按钮响应
-         *
-         * @param popView 弹窗控件
-         */
-        void onLeftBtnClick(BasePopupView popView);
-
-        /**
-         * 右按钮响应
-         *
-         * @param popView 弹窗控件
-         */
-        void onRightBtnClick(BasePopupView popView);
-
-    }
 
     public interface MessageBoxOkListener {
         void onOk();
@@ -217,14 +160,13 @@ public class MessageUtil {
      * @param listener   按钮点击事件监听
      */
     private static void oneBtnDialog(String message, String btnText,
-                                     TypeUtil.DialogType dialogType,
-                                     final MessageBoxOkListener listener, TypeUtil.AsyncType asyncType) {
-        mContext = BaseActivity.mContext;
-        builder = new DialogBuilder(mContext, 1);
+                                     DialogBuilder.DialogType dialogType,
+                                     final MessageBoxOkListener listener) {
+        Context context = BaseActivity.mContext;
+        DialogBuilder builder = new DialogBuilder(context, 1);
         builder.setContent(message);
         builder.setLeftBtn(btnText);
         builder.setDialogType(dialogType);
-        builder.setAsyncType(asyncType);
         builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
             @Override
             public void onLeftBtnClick(BasePopupView v) {
@@ -237,40 +179,24 @@ public class MessageUtil {
 
             }
         });
-        new XPopup.Builder(mContext)
+        new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
                 .asCustom(builder)
                 .show();
     }
 
     private static void oneBtnDialog(String message, String btnText,
-                                     TypeUtil.DialogType dialogType,
-                                     final MessageBoxOkListener listener) {
-        oneBtnDialog(message, btnText, dialogType, listener, TypeUtil.AsyncType.none);
-    }
-
-
-    private static void oneBtnDialog(String message, String btnText,
-                                     TypeUtil.DialogType dialogType) {
+                                     DialogBuilder.DialogType dialogType) {
         oneBtnDialog(message, btnText, dialogType, defaultOkListener);
     }
 
-    private static void oneBtnDialog(String message, TypeUtil.DialogType dialogType,
+    private static void oneBtnDialog(String message, DialogBuilder.DialogType dialogType,
                                      MessageBoxOkListener listener) {
         oneBtnDialog(message, "确定", dialogType, listener);
     }
 
-    private static void oneBtnDialog(String message, TypeUtil.DialogType dialogType) {
+    private static void oneBtnDialog(String message, DialogBuilder.DialogType dialogType) {
         oneBtnDialog(message, dialogType, defaultOkListener);
-    }
-
-    /**
-     * 数据同步
-     *
-     * @param message 文本（不包含进度）
-     */
-    public static void async(String message, TypeUtil.AsyncType asyncType) {
-        oneBtnDialog(message, "返回", TypeUtil.DialogType.async, defaultOkListener, asyncType);
     }
 
     /**
@@ -279,12 +205,12 @@ public class MessageUtil {
      * @param message 提示文本
      */
     public static void info(String message) {
-        oneBtnDialog(message, TypeUtil.DialogType.info);
+        oneBtnDialog(message, DialogBuilder.DialogType.info);
     }
 
 
     public static void info(String message, MessageBoxOkListener listener) {
-        oneBtnDialog(message, TypeUtil.DialogType.info, listener);
+        oneBtnDialog(message, DialogBuilder.DialogType.info, listener);
     }
 
     /**
@@ -293,11 +219,11 @@ public class MessageUtil {
      * @param message 警告文本
      */
     public static void warning(String message) {
-        oneBtnDialog(message, TypeUtil.DialogType.warning);
+        oneBtnDialog(message, DialogBuilder.DialogType.warning);
     }
 
     public static void warning(String message, MessageBoxOkListener listener) {
-        oneBtnDialog(message, TypeUtil.DialogType.warning, listener);
+        oneBtnDialog(message, DialogBuilder.DialogType.warning, listener);
     }
 
     /**
@@ -306,11 +232,11 @@ public class MessageUtil {
      * @param message 错误文本
      */
     public static void error(String message) {
-        oneBtnDialog(message, TypeUtil.DialogType.error);
+        oneBtnDialog(message, DialogBuilder.DialogType.error);
     }
 
     public static void error(String message, MessageBoxOkListener listener) {
-        oneBtnDialog(message, TypeUtil.DialogType.error, listener);
+        oneBtnDialog(message, DialogBuilder.DialogType.error, listener);
     }
 
     /**
@@ -321,12 +247,12 @@ public class MessageUtil {
      */
     public static void question(String message, String btnTextYes, String btnTextNo,
                                 final MessageBoxYesNoListener listener) {
-        mContext = BaseActivity.mContext;
-        builder = new DialogBuilder(mContext, 2);
+        Context context = BaseActivity.mContext;
+        DialogBuilder builder = new DialogBuilder(context, 2);
         builder.setContent(message);
         builder.setLeftBtn(btnTextYes);
         builder.setRightBtn(btnTextNo);
-        builder.setDialogType(TypeUtil.DialogType.question);
+        builder.setDialogType(DialogBuilder.DialogType.question);
         builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
             @Override
             public void onLeftBtnClick(BasePopupView v) {
@@ -340,7 +266,7 @@ public class MessageUtil {
                 v.dismiss();
             }
         });
-        new XPopup.Builder(mContext)
+        new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
                 .asCustom(builder)
                 .show();
@@ -350,17 +276,26 @@ public class MessageUtil {
         question(message, "是", "否", listener);
     }
 
+
+    /**
+     * 当前显示的等待提示框对象
+     */
     private static BasePopupView waitDialog = null;
 
+    /**
+     * 显示等待提示框
+     * @param message
+     * @param listener
+     */
     public static void waitBegin(String message, final MessageBoxCancelListener listener) {
         if (waitDialog != null) {
             waitEnd();
         }
-        mContext = BaseActivity.mContext;
-        builder = new DialogBuilder(mContext, 1);
+        Context context = BaseActivity.mContext;
+        DialogBuilder builder = new DialogBuilder(context, 1);
         builder.setContent(message);
         builder.setLeftBtn("取消");
-        builder.setDialogType(DialogBuilder.DialogType.wait);
+        builder.setDialogType(DialogBuilder.DialogType.info);
         builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
             @Override
             public void onLeftBtnClick(BasePopupView v) {
@@ -375,12 +310,29 @@ public class MessageUtil {
 
             }
         });
-        waitDialog = new XPopup.Builder(mContext)
+        waitDialog = new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
                 .asCustom(builder)
                 .show();
     }
 
+    /**
+     * 更新等待提示框消息内容，可用于更新执行进度等
+     *
+     * @param msg
+     */
+    public static void waitUpdate(String msg) {
+        if (waitDialog == null) {
+            return;
+        }
+        if (waitDialog instanceof DialogBuilder) {
+            ((DialogBuilder) waitDialog).updateMsg(msg);
+        }
+    }
+
+    /**
+     * 关闭等待提示框
+     */
     public static void waitEnd() {
         if (waitDialog == null) {
             return;
@@ -395,15 +347,6 @@ public class MessageUtil {
 //-------------------------------------吐司工具-----------------------------------------//
 
     //region 吐司
-
-    /**
-     * 初始化
-     */
-    public static void init(Application app) {
-        setAPP(app);
-    }
-
-
     /**
      * 纯文字吐司
      *
@@ -474,15 +417,6 @@ public class MessageUtil {
                 .show();
     }
 
-
-    public static void setAPP(Application APP) {
-        MessageUtil.APP = APP;
-    }
-
-    /**
-     * 吐司工具初始化所需app
-     */
-    private static Application APP;
     /**
      * 设置吐司停留时长
      */

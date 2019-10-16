@@ -13,18 +13,15 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.HomePresenter;
-import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
-import com.ftrend.zgp.utils.common.TypeUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
-import com.ftrend.zgp.utils.msg.DialogBuilder;
 import com.ftrend.zgp.utils.msg.MessageUtil;
-import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.gyf.immersionbar.ImmersionBar;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 
@@ -147,7 +144,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 mPresenter.getOutOrder();
                 break;
             case "交班报表":
-                MessageUtil.waitBegin("请稍等");
+                MessageUtil.waitBegin("请稍等", null);
                 break;
             case "交易统计":
                 MessageUtil.showSuccess();
@@ -156,14 +153,14 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 MessageUtil.showWarning("警告");
                 break;
             case "数据同步":
-                MessageUtil.async("数据同步", TypeUtil.AsyncType.data);
-                //MessageUtil.info("数据同步");
-                // TODO: 2019/10/12 重构：改为弹窗显示数据下载进度，以下代码移动到弹窗界面中执行
-                // 以下代码仅做测试用
+                // TODO: 2019/10/12 重构：移动到presenter类
+                final String waitMsg = "正在同步数据，请稍候...";
                 final DataDownloadTask task = new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
                     @Override
                     public void handleProgress(int percent, boolean isFailed, String msg) {
-                        System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
+                        System.out.println(String.format(Locale.getDefault(), "数据下载进度：%d%% %s", percent, msg));
+                        String custMsg = String.format(Locale.getDefault(), waitMsg + "(%d%%)", percent);
+                        MessageUtil.waitUpdate(custMsg);
                         if (percent >= 100) {
                             MessageUtil.waitEnd();
                             MessageUtil.showSuccess("数据同步已完成");
@@ -173,7 +170,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                         }
                     }
                 });
-                MessageUtil.waitBegin("正在同步数据，请稍候...", new MessageUtil.MessageBoxCancelListener() {
+                MessageUtil.waitBegin(waitMsg, new MessageUtil.MessageBoxCancelListener() {
                     @Override
                     public void onCancel() {
                         task.interrupt();

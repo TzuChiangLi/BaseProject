@@ -10,12 +10,8 @@ import android.widget.TextView;
 
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
-import com.ftrend.zgp.utils.common.TypeUtil;
-import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.core.CenterPopupView;
-
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,8 +47,7 @@ public class DialogBuilder extends CenterPopupView {
     /**
      * 0:提示，1：警告，2：错误，3：询问
      */
-    private TypeUtil.DialogType dialogType = TypeUtil.DialogType.info;
-    private TypeUtil.AsyncType asyncType = TypeUtil.AsyncType.data;
+    private DialogType dialogType = DialogType.info;
     /**
      * 按钮数量
      */
@@ -109,15 +104,11 @@ public class DialogBuilder extends CenterPopupView {
         initDialogType(dialogType);
 
         initBtnNum(btnNum);
-
-        asyncTask(asyncType);
     }
 
-    private void initDialogType(TypeUtil.DialogType dialogType) {
+    private void initDialogType(DialogType dialogType) {
         switch (dialogType) {
-            case async:
             case info:
-            default:
                 mStateImg.setImageResource(R.drawable.dialog_state_tip);
                 mTitleTv.setText("提示");
                 break;
@@ -132,6 +123,10 @@ public class DialogBuilder extends CenterPopupView {
             case question:
                 mStateImg.setImageResource(R.drawable.dialog_state_ask);
                 mTitleTv.setText("询问");
+                break;
+            case wait:
+                mStateImg.setImageResource(R.drawable.dialog_state_tip);
+                mTitleTv.setText("等待");
                 break;
         }
     }
@@ -152,24 +147,13 @@ public class DialogBuilder extends CenterPopupView {
         }
     }
 
-    private void asyncTask(TypeUtil.AsyncType asyncType) {
-        switch (asyncType) {
-            case data:
-                new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
-                    @Override
-                    public void handleProgress(int percent, boolean isFailed, String msg) {
-                        System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
-                        mMsgTv.setText(String.format("%s%d%s", content, percent, "%"));
-                        if (percent >= 100) {
-                            dismiss();
-                            MessageUtil.showSuccess("数据同步已完成");
-                        }
-                    }
-                }).start();
-                break;
-            default:
-                break;
-        }
+    /**
+     * 更新提示消息
+     *
+     * @param newMsg
+     */
+    public void updateMsg(String newMsg) {
+        mMsgTv.setText(newMsg);
     }
 
     @Override
@@ -236,12 +220,8 @@ public class DialogBuilder extends CenterPopupView {
         this.rightBtn = rightBtn;
     }
 
-    public void setDialogType(TypeUtil.DialogType dialogType) {
+    public void setDialogType(DialogType dialogType) {
         this.dialogType = dialogType;
-    }
-
-    public void setAsyncType(TypeUtil.AsyncType asyncType) {
-        this.asyncType = asyncType;
     }
 
     public void setBtnNum(int btnNum) {
@@ -250,5 +230,30 @@ public class DialogBuilder extends CenterPopupView {
 
     //endregion
 
+    /**
+     * 对话框类型定义
+     */
+    public enum DialogType {
+        /**
+         * 信息弹窗
+         */
+        info,
+        /**
+         * 警告弹窗
+         */
+        warning,
+        /**
+         * 错误弹窗
+         */
+        error,
+        /**
+         * 询问弹窗
+         */
+        question,
+        /**
+         * 等待提示框
+         */
+        wait
+    }
 
 }
