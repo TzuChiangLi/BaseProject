@@ -128,6 +128,8 @@ public class DialogBuilder extends CenterPopupView {
                 mStateImg.setImageResource(R.drawable.dialog_state_tip);
                 mTitleTv.setText("等待");
                 break;
+            default:
+                break;
         }
     }
 

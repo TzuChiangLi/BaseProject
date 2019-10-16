@@ -1,10 +1,13 @@
 package com.ftrend.zgp.view;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -28,6 +31,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,7 +51,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     @BindView(R.id.pay_rv_pay_way)
     RecyclerView mRecyclerView;
     private Contract.PayPresenter mPresenter;
-    private String total = "", lsNo = "";
+    private static int START_SCAN = 002;
 
     @Override
     protected int getLayoutID() {
@@ -121,15 +127,19 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                 }
                 switch (position) {
                     case 0:
-                        //支付宝
+                        //收钱吧
+                        try {
+                            Intent intent = new Intent("com.summi.scan");
+                            intent.setPackage("com.sunmi.sunmiqrcodescanner");
+                            startActivityForResult(intent, START_SCAN);
+                        } catch (Exception e) {
+                            MessageUtil.showError("本设备不兼容");
+                        }
                         break;
                     case 1:
-                        //微信支付
-                        break;
-                    case 2:
                         //储值卡
                         break;
-                    case 3:
+                    case 2:
                         //现金
                         MessageUtil.showChargeDialog(PayActivity.this, Double.parseDouble(mTotalTv.getText().toString()));
                         break;
@@ -143,6 +153,34 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     @Override
     public void showTradeInfo(double total) {
         mTotalTv.setText(String.format("%.2f", total));
+    }
+
+    @Override
+    public void waitPayResult() {
+        MessageUtil.waitBegin("正在完成付款，请稍后...", new MessageUtil.MessageBoxCancelListener() {
+            @Override
+            public void onCancel() {
+                MessageUtil.waitEnd();
+            }
+        });
+    }
+
+    @Override
+    public void paySuccess() {
+        MessageUtil.waitEnd();
+        MessageUtil.showSuccess("交易已完成");
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(PayActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        }, 1500);
+    }
+
+    @Override
+    public void showError(String msg) {
+        MessageUtil.showError(msg);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -165,6 +203,22 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == START_SCAN && data != null) {
+            Bundle bundle = data.getExtras();
+            ArrayList result = (ArrayList) bundle.getSerializable("data");
+            Iterator it = result.iterator();
+            while (it.hasNext()) {
+                HashMap hashMap = (HashMap) it.next();
+                //此处传入扫码结果
+                mPresenter.payByShouQian(String.valueOf(hashMap.get("VALUE")));
+                Log.i("----sunmi", String.valueOf(hashMap.get("TYPE")));//这个是扫码的类型
+                Log.i("----sunmi", String.valueOf(hashMap.get("VALUE")));//这个是扫码的结果
+            }
+        }
+    }
 
     @Override
     protected void onDestroy() {

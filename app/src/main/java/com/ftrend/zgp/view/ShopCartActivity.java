@@ -167,8 +167,8 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
                 HashMap hashMap = (HashMap) it.next();
                 //此处传入扫码结果
                 scanResult(String.valueOf(hashMap.get("VALUE")));
-                Log.i("----sunmi", String.valueOf(hashMap.get("TYPE")));//这个是扫码的类型
-                Log.i("----sunmi", String.valueOf(hashMap.get("VALUE")));//这个是扫码的结果
+//                Log.i("----sunmi", String.valueOf(hashMap.get("TYPE")));//这个是扫码的类型
+//                Log.i("----sunmi", String.valueOf(hashMap.get("VALUE")));//这个是扫码的结果
             }
         }
     }
