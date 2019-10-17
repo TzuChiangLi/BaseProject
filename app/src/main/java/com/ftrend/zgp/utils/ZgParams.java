@@ -9,6 +9,7 @@ import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.SysParams;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.utils.sunmi.SunmiCardConfig;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
@@ -147,8 +148,8 @@ public class ZgParams {
         map.clear();
         try {
             JsonObject json = GsonUtils.fromJson(value, JsonObject.class);
-            for (String key : json.keySet()) {
-                map.put(key, json.getAsJsonObject(key));
+            for (Map.Entry<String, JsonElement> key : json.entrySet()) {
+                map.put(key.getKey(), json.getAsJsonObject(key.getKey()));
             }
         } catch (Exception e) {
             Log.e(TAG, "parseJson: 解析JSON格式参数发生异常", e);
