@@ -53,12 +53,8 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     TextView mTotalTv;
     @BindView(R.id.shop_list_tv_count)
     TextView mCountTv;
-    @BindView(R.id.shop_list_btn_cancel)
-    Button mCancelBtn;
     @BindView(R.id.shop_list_btn_add)
     Button mAddBtn;
-    @BindView(R.id.shop_list_btn_hang_up)
-    Button mHangUpBtn;
     @BindView(R.id.shop_list_tv_vip_name)
     TextView mVipNameTv;
     @BindView(R.id.shop_list_tv_card_grade)

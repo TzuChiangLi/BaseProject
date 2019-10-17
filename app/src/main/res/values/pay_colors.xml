@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="pay_tv_red">#c10000</color>
+    <color name="pay_submit_red">#d41817</color>
+    <color name="pay_vip_blue">#00adaf</color>
 </resources>

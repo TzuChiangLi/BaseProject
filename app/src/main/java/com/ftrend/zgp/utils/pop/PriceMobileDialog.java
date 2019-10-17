@@ -1,6 +1,7 @@
 package com.ftrend.zgp.utils.pop;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -27,12 +28,14 @@ import com.lxj.xpopup.core.BottomPopupView;
 
 import java.util.Map;
 
+import butterknife.BindColor;
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * 改价、输入手机号、单项优惠、整单优惠弹出窗口
+ * 改价、输入手机号弹出窗口
  *
  * @author liziqiang@ftrend.cn
  */
@@ -43,6 +46,8 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
     TextView mTitleTv;
     @BindView(R.id.vip_mobile_btn_submit)
     Button mSubmitBtn;
+    @BindDrawable(R.drawable.vip_query_btn_selector)
+    Drawable vip_query_blue;
     //会员弹窗：1-手机号
     public static final int DIALOG_MOBILE = 1;
     //购物车：  2-改价
@@ -97,6 +102,7 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
                 mEdt.setOnClickListener(this);
                 mEdt.setText("13637366688");
                 mKeyView.setOnKeyboardClickListener(this);
+                mSubmitBtn.setBackground(vip_query_blue);
                 break;
             case DIALOG_CHANGE_PRICE:
                 //改价
