@@ -17,6 +17,8 @@ import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.pay.SqbPayHelper;
+import com.ftrend.zgp.utils.pop.PriceMobileDialog;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.gyf.immersionbar.ImmersionBar;
 
@@ -192,6 +194,31 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
 
                     @Override
                     public void onNo() {
+                    }
+                });
+                break;
+            case "测试退款":
+                String msg = "请输入支付记录中的商家订单号：";
+                MessageUtil.showInput(HomeActivity.this, msg, new PriceMobileDialog.InputCallback() {
+                    @Override
+                    public void onOk(String value) {
+                        SqbPayHelper.refundBySn(value, new SqbPayHelper.PayResultCallback() {
+                            @Override
+                            public void onResult(boolean isDone, boolean isSuccess, String payType, String payCode, String errMsg) {
+                                if (isDone && isSuccess) {
+                                    MessageUtil.showSuccess("退款成功");
+                                } else if (isDone && !isSuccess) {
+                                    MessageUtil.showError("退款失败");
+                                } else {
+                                    MessageUtil.show("退款中...");
+                                }
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        MessageUtil.show("已取消退款");
                     }
                 });
                 break;
