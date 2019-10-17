@@ -134,7 +134,7 @@ public class ZgParams {
      * @return
      */
     public static boolean isShowCls(String depCode) {
-        return noClsDep.contains("," + depCode + ",");
+        return !noClsDep.contains("," + depCode + ",");
     }
 
     /**
