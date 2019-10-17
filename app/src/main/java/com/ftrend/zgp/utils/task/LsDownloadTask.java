@@ -44,6 +44,8 @@ public class LsDownloadTask {
     // 进度消息处理器
     private DataDownloadTask.ProgressHandler handler;
 
+    // 线程是否正在运行
+    private volatile boolean running = false;
     // 是否已强制终止执行
     private volatile boolean interrupted = false;
     // 流水号列表
@@ -55,14 +57,42 @@ public class LsDownloadTask {
     // 最大重试次数
     private final int MAX_RETRY = 3;
 
-    public LsDownloadTask(DataDownloadTask.ProgressHandler handler) {
+    // 线程唯一实例，避免重复运行
+    private static LsDownloadTask task = null;
+
+    /**
+     * 启动线程
+     *
+     * @param handler
+     * @return
+     */
+    public static boolean taskStart(DataDownloadTask.ProgressHandler handler) {
+        if (task != null && task.running) {
+            return false;
+        }
+        task = new LsDownloadTask(handler);
+        task.start();
+        return true;
+    }
+
+    /**
+     * 停止线程
+     */
+    public static void taskCancel() {
+        if (task != null) {
+            task.interrupt();
+        }
+    }
+
+    private LsDownloadTask(DataDownloadTask.ProgressHandler handler) {
         this.handler = handler;
     }
 
     /**
      * 开始执行数据下载任务
      */
-    public void start() {
+    private void start() {
+        running = true;
         step = -1;
         queryLsList();
     }
@@ -70,7 +100,7 @@ public class LsDownloadTask {
     /**
      * 终止数据下载
      */
-    public void interrupt() {
+    private void interrupt() {
         this.interrupted = true;
     }
 
@@ -132,6 +162,7 @@ public class LsDownloadTask {
      * 推送下载完成消息
      */
     private void postFinished() {
+        running = false;
         handler.handleProgress(100, false, "流水下载完成");
     }
 
@@ -141,6 +172,7 @@ public class LsDownloadTask {
      * @param msg
      */
     private void postFailed(String msg) {
+        running = false;
         int percent = step * 100 / lsList.size();
         handler.handleProgress(percent, true, msg);
     }

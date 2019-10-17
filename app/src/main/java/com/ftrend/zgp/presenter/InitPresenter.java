@@ -21,8 +21,6 @@ import java.util.Locale;
  */
 public class InitPresenter implements Contract.InitPresenter {
     private Contract.InitView mView;
-    private DataDownloadTask downloadTask;
-    private LsDownloadTask lsDownloadTask;
     private boolean flag = true;
 
     private InitPresenter(Contract.InitView mView) {
@@ -42,7 +40,7 @@ public class InitPresenter implements Contract.InitPresenter {
     public void startInitData(int step) {
         flag = true;
         if (step == 1) {
-            downloadTask = new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
+            DataDownloadTask.taskStart(true, new DataDownloadTask.ProgressHandler() {
                 @Override
                 public void handleProgress(int percent, boolean isFailed, String msg) {
                     if (flag) {
@@ -51,13 +49,12 @@ public class InitPresenter implements Contract.InitPresenter {
                     System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
                     if (isFailed) {
                         //失败退出
-                        iniFailed();
+                        initFailed();
                     }
                 }
             });
-            downloadTask.start();
         } else if (step == 2) {
-            lsDownloadTask = new LsDownloadTask(new DataDownloadTask.ProgressHandler() {
+            LsDownloadTask.taskStart(new DataDownloadTask.ProgressHandler() {
                 @Override
                 public void handleProgress(int percent, boolean isFailed, String msg) {
                     if (flag) {
@@ -66,18 +63,17 @@ public class InitPresenter implements Contract.InitPresenter {
                     System.out.println(String.format(Locale.getDefault(), "实时流水下载进度：%d%% %s", percent, msg));
                     if (isFailed) {
                         //失败退出
-                        iniFailed();
+                        initFailed();
                     }
                 }
             });
-            lsDownloadTask.start();
         }
     }
 
     /**
      * 初始化失败
      */
-    private void iniFailed() {
+    private void initFailed() {
         MessageUtil.error("初始化失败。请确认网络畅通后，重启应用继续初始化操作！",
                 new MessageUtil.MessageBoxOkListener() {
                     @Override
@@ -89,12 +85,8 @@ public class InitPresenter implements Contract.InitPresenter {
 
     @Override
     public void stopInitData() {
-        if (downloadTask != null) {
-            downloadTask.interrupt();
-        }
-        if (lsDownloadTask != null) {
-            lsDownloadTask.interrupt();
-        }
+        DataDownloadTask.taskCancel();
+        LsDownloadTask.taskCancel();
         TradeHelper.rollbackInitTask();
         flag = false;
         mView.stopUpdate();

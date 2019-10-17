@@ -49,7 +49,7 @@ public class SplashActivity extends AppCompatActivity {
                                     finish();
                                 } else {
                                     //已注册，自动更新数据并进入登录界面
-                                    new DataDownloadTask(false, new DataDownloadTask.ProgressHandler() {
+                                    DataDownloadTask.taskStart(false, new DataDownloadTask.ProgressHandler() {
                                         @Override
                                         public void handleProgress(int percent, boolean isFailed, String msg) {
                                             System.out.println(String.format(Locale.getDefault(), "基础数据下载进度：%d%% %s", percent, msg));
@@ -59,7 +59,7 @@ public class SplashActivity extends AppCompatActivity {
                                                 finish();
                                             }
                                         }
-                                    }).start();
+                                    });
                                 }
                             }
                         }, 2 * 1000);

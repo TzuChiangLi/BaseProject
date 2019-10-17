@@ -132,7 +132,7 @@ public class MessageUtil {
     }
 
     public interface MessageBoxCancelListener {
-        void onCancel();
+        boolean onCancel();
     }
 
     public interface MessageBoxYesNoListener {
@@ -285,7 +285,7 @@ public class MessageUtil {
     /**
      * 显示等待提示框
      * @param message
-     * @param listener
+     * @param listener 取消按钮监听回调，如果不希望点击取消按钮立即关闭对话框，onCancel请返回false
      */
     public static void waitBegin(String message, final MessageBoxCancelListener listener) {
         if (waitDialog != null) {
@@ -300,9 +300,14 @@ public class MessageUtil {
             @Override
             public void onLeftBtnClick(BasePopupView v) {
                 if (listener != null) {
-                    listener.onCancel();
+                    if (listener.onCancel()) {
+                        waitEnd();
+                    } else {
+                        // TODO: 2019/10/17 按钮显示“正在取消”，且不可用
+                    }
+                } else {
+                    waitEnd();
                 }
-                waitEnd();
             }
 
             @Override

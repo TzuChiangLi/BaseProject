@@ -159,8 +159,9 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     public void waitPayResult() {
         MessageUtil.waitBegin("正在完成付款，请稍后...", new MessageUtil.MessageBoxCancelListener() {
             @Override
-            public void onCancel() {
+            public boolean onCancel() {
                 MessageUtil.waitEnd();
+                return true;
             }
         });
     }

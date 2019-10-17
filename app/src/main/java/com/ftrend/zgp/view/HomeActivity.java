@@ -155,7 +155,14 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
             case "数据同步":
                 // TODO: 2019/10/12 重构：移动到presenter类
                 final String waitMsg = "正在同步数据，请稍候...";
-                final DataDownloadTask task = new DataDownloadTask(true, new DataDownloadTask.ProgressHandler() {
+                MessageUtil.waitBegin(waitMsg, new MessageUtil.MessageBoxCancelListener() {
+                    @Override
+                    public boolean onCancel() {
+                        DataDownloadTask.taskCancel();
+                        return false;
+                    }
+                });
+                DataDownloadTask.taskStart(true, new DataDownloadTask.ProgressHandler() {
                     @Override
                     public void handleProgress(int percent, boolean isFailed, String msg) {
                         System.out.println(String.format(Locale.getDefault(), "数据下载进度：%d%% %s", percent, msg));
@@ -170,13 +177,6 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                         }
                     }
                 });
-                MessageUtil.waitBegin(waitMsg, new MessageUtil.MessageBoxCancelListener() {
-                    @Override
-                    public void onCancel() {
-                        task.interrupt();
-                    }
-                });
-                task.start();
                 break;
             case "操作指南":
                 MessageUtil.error("操作指南");

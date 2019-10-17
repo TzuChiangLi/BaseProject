@@ -30,6 +30,8 @@ public class DataDownloadTask {
     // 是否强制更新
     private boolean isForce;
 
+    // 线程是否正在运行
+    private volatile boolean running = false;
     // 是否已强制终止执行
     private volatile boolean interrupted = false;
     // 数据更新标志列表，强制更新时不做比对
@@ -41,7 +43,35 @@ public class DataDownloadTask {
     // 最大重试次数
     private final int MAX_RETRY = 3;
 
-    public DataDownloadTask(boolean isForce, ProgressHandler handler) {
+    // 线程唯一实例，避免重复运行
+    private static DataDownloadTask task = null;
+
+    /**
+     * 启动线程
+     *
+     * @param isForce
+     * @param handler
+     * @return
+     */
+    public static boolean taskStart(boolean isForce, ProgressHandler handler) {
+        if (task != null && task.running) {
+            return false;
+        }
+        task = new DataDownloadTask(isForce, handler);
+        task.start();
+        return true;
+    }
+
+    /**
+     * 停止线程
+     */
+    public static void taskCancel() {
+        if (task != null) {
+            task.interrupt();
+        }
+    }
+
+    private DataDownloadTask(boolean isForce, ProgressHandler handler) {
         this.handler = handler;
         this.isForce = isForce;
     }
@@ -49,7 +79,8 @@ public class DataDownloadTask {
     /**
      * 开始执行数据下载任务
      */
-    public void start() {
+    private void start() {
+        running = true;
         step = -1;
         checkUpdateSign();
     }
@@ -57,8 +88,8 @@ public class DataDownloadTask {
     /**
      * 终止数据下载
      */
-    public void interrupt() {
-        this.interrupted = true;
+    private void interrupt() {
+        interrupted = true;
     }
 
     /**
@@ -153,6 +184,7 @@ public class DataDownloadTask {
      * 推送更新完成消息（全部更新成功）
      */
     private void postFinished() {
+        running = false;
         handler.handleProgress(100, false, "数据更新完成");
     }
 
@@ -162,6 +194,7 @@ public class DataDownloadTask {
      * @param msg
      */
     private void postFailed(String msg) {
+        running = false;
         int percent = updateInfoList.size() == 0 ? 0 : step * 100 / updateInfoList.size();
         handler.handleProgress(percent, true, msg);
     }
