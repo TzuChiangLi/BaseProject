@@ -45,6 +45,9 @@ public class PayPresenter implements Contract.PayPresenter {
             public void onResult(boolean isDone, boolean isSuccess, String payType, String payCode, String errMsg) {
                 if (isDone && isSuccess) {
                     TradeHelper.pay(payType, payCode);
+                    //插入交易流水队列
+                    TradeHelper.uploadTradeQueue();
+                    TradeHelper.clearVip();
                     mView.paySuccess();
                 } else if (isDone && !isSuccess) {
                     mView.payFail("支付失败：" + errMsg);
