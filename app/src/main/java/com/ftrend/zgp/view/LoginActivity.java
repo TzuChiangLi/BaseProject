@@ -1,6 +1,7 @@
 package com.ftrend.zgp.view;
 
 import android.content.Intent;
+import android.text.InputType;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -62,7 +63,8 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
         if (mPresenter == null) {
             mPresenter = LoginPresenter.createPresenter(this);
         }
-
+        // 默认显示数字键盘
+        mPwdEdt.setRawInputType(InputType.TYPE_CLASS_NUMBER);
     }
 
     @Override

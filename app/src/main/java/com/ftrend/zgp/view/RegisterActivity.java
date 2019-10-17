@@ -2,6 +2,7 @@ package com.ftrend.zgp.view;
 
 import android.content.Intent;
 import android.os.Handler;
+import android.text.InputType;
 
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.zgp.R;
@@ -41,6 +42,10 @@ public class RegisterActivity extends BaseActivity implements Contract.RegisterV
         if (mPresenter == null) {
             mPresenter = RegisterPresenter.createPresenter(this);
         }
+        // 默认显示数字键盘
+        mPosCodeEdt.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+        mRegCodeEdt.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+        mURLEdt.setRawInputType(InputType.TYPE_CLASS_NUMBER);
     }
 
     @Override
