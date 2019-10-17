@@ -169,7 +169,9 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
             default:
                 if (callback != null) {
                     callback.onOk(mEdt.getText().toString());
+                    callback = null;
                 }
+                dismiss();
                 break;
         }
     }
