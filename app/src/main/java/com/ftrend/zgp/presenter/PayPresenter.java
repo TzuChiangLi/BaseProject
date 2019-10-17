@@ -43,9 +43,14 @@ public class PayPresenter implements Contract.PayPresenter {
         SqbPayHelper.pay(value, new SqbPayHelper.PayResultCallback() {
 
             @Override
-            public void onResult(boolean isDone, boolean isSuccess, String errMsg) {
+            public void onResult(boolean isDone, boolean isSuccess, String payType, String payCode, String errMsg) {
                 if (isDone && isSuccess) {
+                    TradeHelper.pay(payType, payCode);
                     mView.paySuccess();
+                } else if (isDone && !isSuccess) {
+                    mView.payFail("支付失败：" + errMsg);
+                } else {
+                    // TODO: 2019/10/17 中间状态，开始轮询支付订单状态
                 }
             }
         });

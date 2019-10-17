@@ -18,11 +18,12 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.PayPresenter;
-import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.pay.PayType;
+import com.ftrend.zgp.utils.pop.PriceMobileDialog;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
@@ -133,7 +134,19 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                             intent.setPackage("com.sunmi.sunmiqrcodescanner");
                             startActivityForResult(intent, START_SCAN);
                         } catch (Exception e) {
-                            MessageUtil.showError("本设备不兼容");
+                            //MessageUtil.showError("本设备不兼容");
+                            String msg = "本设备不支持刷卡，请输入顾客支付码：";
+                            MessageUtil.showInput(PayActivity.this, msg, new PriceMobileDialog.InputCallback() {
+                                @Override
+                                public void onOk(String value) {
+                                    mPresenter.payByShouQian(value);
+                                }
+
+                                @Override
+                                public void onCancel() {
+                                    MessageUtil.show("已取消支付");
+                                }
+                            });
                         }
                         break;
                     case 1:
@@ -180,6 +193,12 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     }
 
     @Override
+    public void payFail(String msg) {
+        MessageUtil.waitEnd();
+        MessageUtil.showError(msg);
+    }
+
+    @Override
     public void showError(String msg) {
         MessageUtil.showError(msg);
     }
@@ -188,7 +207,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     public void onMessage(Event event) {
         if (event.getTarget() == Event.TARGET_PAY_WAY) {
             if (event.getType() == Event.TYPE_PAY_CASH) {
-                if (mPresenter.paySuccess(TradeHelper.APP_PAY_TYPE_CASH)) {
+                if (mPresenter.paySuccess(PayType.PAYTYPE_CASH)) {
                     MessageUtil.showSuccess("交易已完成");
                     new Handler().postDelayed(new Runnable() {
                         @Override

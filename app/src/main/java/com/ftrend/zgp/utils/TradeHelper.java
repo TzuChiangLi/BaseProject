@@ -8,7 +8,6 @@ import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepPayInfo;
-import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.SysParams;
@@ -23,6 +22,7 @@ import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
+import com.ftrend.zgp.utils.pay.PayType;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -67,18 +67,6 @@ public class TradeHelper {
     public static final String TRADE_STATUS_PAID = "2";
     // 交易状态：3-取消
     public static final String TRADE_STATUS_CANCELLED = "3";
-
-    // APP支付类型: 1-现金
-    public static final String APP_PAY_TYPE_CASH = "1";
-    // APP支付类型: 2-支付宝
-    public static final String APP_PAY_TYPE_ALIPAY = "2";
-    // APP支付类型: 3-微信支付
-    public static final String APP_PAY_TYPE_WXPAY = "3";
-    // APP支付类型: 4-储值卡
-    public static final String APP_PAY_TYPE_VIPCARD = "4";
-    // APP支付类型: 4-储值卡
-    public static final String APP_PAY_TYPE_SHOUQIANBA = "5";
-
 
     // 用户权限: 0-行清权限
     public static final int USER_RIGHT_DEL = 0;
@@ -312,10 +300,7 @@ public class TradeHelper {
     private static boolean doPay(DatabaseWrapper databaseWrapper,
                                  String appPayType, double amount, double change, String payCode) {
         try {
-            String payTypeCode = SQLite.select(DepPayInfo_Table.payTypeCode).from(DepPayInfo.class)
-                    .where(DepPayInfo_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
-                    .and(DepPayInfo_Table.appPayType.eq(appPayType))
-                    .querySingle().getPayTypeCode();
+            String payTypeCode = PayType.appPayTypeToPayType(ZgParams.getCurrentDep().getDepCode(), appPayType);
 
             if (pay == null) {
                 pay = new TradePay();

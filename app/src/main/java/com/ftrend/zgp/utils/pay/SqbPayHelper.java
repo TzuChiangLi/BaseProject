@@ -3,6 +3,7 @@ package com.ftrend.zgp.utils.pay;
 import com.ftrend.zgp.model.SqbPayOrder;
 import com.ftrend.zgp.model.SqbPayResult;
 import com.ftrend.zgp.model.Trade;
+import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.CommonUtil;
@@ -13,6 +14,8 @@ import com.wosai.upay.common.UpayCallBack;
 import com.wosai.upay.common.UpayTask;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * 收钱吧API接口功能类
@@ -64,9 +67,11 @@ public class SqbPayHelper {
          *
          * @param isDone    是否已完成支付（支付平台处理延迟，接口会返回中间状态，此时需要轮询支付结果）
          * @param isSuccess 是否支付成功
+         * @param payType   支付方式
+         * @param payCode   付款账号
          * @param errMsg    错误消息
          */
-        void onResult(boolean isDone, boolean isSuccess, String errMsg);
+        void onResult(boolean isDone, boolean isSuccess, String payType, String payCode, String errMsg);
     }
 
     /*
@@ -138,17 +143,19 @@ public class SqbPayHelper {
     public static void pay(String scanCode, final PayResultCallback callback) {
         Trade trade = TradeHelper.getTrade();
         trade.setTradeTime(new Date());
-        //String clientSn = trade.getDepCode() + CommonUtil.dateToString(trade.getTradeTime()) + trade.getLsNo();
-        String clientSn = "client" + (int) (Math.random() * 10000000);
+        String clientSn = trade.getDepCode() + CommonUtil.dateToYyyyMmDd(trade.getTradeTime()) + trade.getLsNo();
+        //String clientSn = "client" + (int) (Math.random() * 10000000);
+        List<TradeProd> prodList = TradeHelper.getProdList();
+        String tradeInfo = String.format(Locale.CHINA, "%s等%d件", prodList.get(0).getProdName(), prodList.size());
 
         UpayOrder order = new UpayOrder();
         order.setClient_sn(clientSn);//商户订单号
         order.setTotal_amount("100");//交易总金额
         // order.setPayway("1");//支付方式--无需指定
         order.setDynamic_id(scanCode);//付款码内容
-        order.setSubject("购物");//交易简介
+        order.setSubject(ZgParams.getCurrentDep().getDepName() + "-购物消费");//交易简介
         order.setOperator(trade.getCashier());//门店操作员
-        order.setDescription("零售商品");//商品详情
+        order.setDescription(tradeInfo);//商品详情
         order.setReflect(trade.getLsNo());//反射参数
         order.setPayModel(UpayOrder.PayModel.NO_UI);//指定 SDK 启动模式为无界面模式
 
@@ -260,17 +267,27 @@ public class SqbPayHelper {
             return;
         }
         // TODO: 2019/10/16 这里需要综合判断：status流水状态, order_status订单状态, result_code业务执行结果返回码
-        if (result.getOrder_status().equals(UpayResult.ORDER_PAID)
-                || result.getOrder_status().equals(UpayResult.ORDER_REFUNDED)
-                || result.getOrder_status().equals(UpayResult.ORDER_PARTIAL_REFUNDED)
-                || result.getOrder_status().equals(UpayResult.ORDER_CANCELED)) {
-            callback.onResult(true, true, "");
-        } else if (result.getOrder_status().equals(UpayResult.ORDER_PAY_CANCELED)) {
-            callback.onResult(true, false, result.getError_message());
+        boolean isDone;
+        boolean isSuccess;
+        if (UpayResult.ORDER_PAID.equals(result.getOrder_status())
+                || UpayResult.ORDER_REFUNDED.equals(result.getOrder_status())
+                || UpayResult.ORDER_PARTIAL_REFUNDED.equals(result.getOrder_status())
+                || UpayResult.ORDER_CANCELED.equals(result.getOrder_status())) {
+            isDone = true;
+            isSuccess = true;
+        } else if (UpayResult.ORDER_PAY_CANCELED.equals(result.getOrder_status())) {
+            isDone = true;
+            isSuccess = false;
         } else {
-            callback.onResult(false, true, "");
+            isDone = false;
+            isSuccess = true;
         }
+        callback.onResult(isDone, isSuccess,
+                PayType.sqbPaywayToAppPayType(result.getPayway()),
+                result.getPayer_uid(),
+                result.getError_message());
     }
+
     /*
 biz_response.result_code,状态分为：状态分为 SUCCESS、FAIL、INPROGRESS和 ERROR 四类，
 SUCCESS: 本次业务执行成功

@@ -683,6 +683,13 @@ public interface Contract {
         void paySuccess();
 
         /**
+         * 支付失败
+         *
+         * @param msg 错误信息
+         */
+        void payFail(String msg);
+
+        /**
          * 显示错误
          * @param msg 错误信息
          */
