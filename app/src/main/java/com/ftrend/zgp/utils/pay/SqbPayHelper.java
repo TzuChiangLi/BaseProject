@@ -159,21 +159,7 @@ public class SqbPayHelper {
         UpayTask.getInstance().pay(order, new UpayCallBack() {
             @Override
             public void onExecuteResult(UpayResult result) {
-                LogUtil.e(result.toString());
-                // 记录支付结果信息
-                new SqbPayResult(result, requestNo).insert();
-
-                if (callback == null) {
-                    return;
-                }
-                // TODO: 2019/10/16 这里需要综合判断：status流水状态, order_status订单状态, result_code业务执行结果返回码
-                if (result.getOrder_status().equals(UpayResult.ORDER_PAID)) {
-                    callback.onResult(true, true, "");
-                } else if (result.getOrder_status().equals(UpayResult.ORDER_PAY_CANCELED)) {
-                    callback.onResult(true, false, result.getError_message());
-                } else {
-                    callback.onResult(false, true, "");
-                }
+                dealWithResult(requestNo, result, callback);
             }
         });
     }
@@ -244,47 +230,112 @@ public class SqbPayHelper {
         UpayTask.getInstance().refund(order, new UpayCallBack() {
             @Override
             public void onExecuteResult(UpayResult result) {
-                LogUtil.e(result.toString());
-                // 记录退款结果信息
-                new SqbPayResult(result, requestNo).insert();
-
-                if (callback == null) {
-                    return;
-                }
-                // TODO: 2019/10/16 这里需要综合判断：status流水状态, order_status订单状态, result_code业务执行结果返回码
-                if (result.getOrder_status().equals(UpayResult.ORDER_REFUNDED)
-                        || result.getOrder_status().equals(UpayResult.ORDER_PARTIAL_REFUNDED)) {
-                    callback.onResult(true, true, "");
-                } else {
-                    callback.onResult(false, true, "");
-                }
+                dealWithResult(requestNo, result, callback);
             }
         });
     }
 
+    private static void query(String sn, String clientSn, final PayResultCallback callback) {
+        UpayOrder order = new UpayOrder();
+        order.setSn(sn);//收钱吧订单号
+        order.setClient_sn(clientSn);//商户订单号
+
+        final String requestNo = CommonUtil.newUuid();
+        // 记录查询请求信息
+        new SqbPayOrder(order, requestNo, "3", "").insert();//1-付款，2-退款，3-查询，4-撤单，5-预下单
+
+        UpayTask.getInstance().query(order, new UpayCallBack() {
+            @Override
+            public void onExecuteResult(UpayResult result) {
+                dealWithResult(requestNo, result, callback);
+            }
+        });
+    }
+
+    private static void dealWithResult(String requestNo, UpayResult result, final PayResultCallback callback) {
+        // 记录查询结果信息
+        new SqbPayResult(result, requestNo).insert();
+
+        if (callback == null) {
+            return;
+        }
+        // TODO: 2019/10/16 这里需要综合判断：status流水状态, order_status订单状态, result_code业务执行结果返回码
+        if (result.getOrder_status().equals(UpayResult.ORDER_PAID)
+                || result.getOrder_status().equals(UpayResult.ORDER_REFUNDED)
+                || result.getOrder_status().equals(UpayResult.ORDER_PARTIAL_REFUNDED)
+                || result.getOrder_status().equals(UpayResult.ORDER_CANCELED)) {
+            callback.onResult(true, true, "");
+        } else if (result.getOrder_status().equals(UpayResult.ORDER_PAY_CANCELED)) {
+            callback.onResult(true, false, result.getError_message());
+        } else {
+            callback.onResult(false, true, "");
+        }
+    }
     /*
-UpayResult类说明
-属性	属性名称	描述
-sn	收钱吧订单号	收钱吧系统内部唯一订单号
-client_sn	商户订单号	商户系统订单号
-trade_no	支付服务商订单号	支付通道交易凭证号
-status	流水状态	本次操作产生的流水的状态
-order_status	订单状态	当前订单状态
-payway	支付方式	一级支付方式(支付宝、微信、百付宝、京东)
-sub_payway	二级支付方式	二级支付方式(条码支付、二维码支付)
-payer_uid	付款人ID	支付平台(微信,支付宝)上的付款人 ID
-payer_login	付款人账号	支付平台上(微信,支付宝)的付款人账号
-total_amount	交易总额	本次交易总金额
-net_amount	实收金额	如果没有退款,这个字段等于 total_amount。否则等于 total_amount 减去退款金额
-subject	交易概述	本次交易概述
-finish_time	付款动作在收钱吧的完成时间	时间戳
-channel_finish_time	付款动作在支付服务商的完成时间	时间戳
-operator	操作员	门店操作员
-description	商品详情	对商品或本次交易的描述
-reflect	反射参数	透传参数
-qr_code	二维码内容	预下单成功后生成的二维码
-result_code	业务执行响应码
-error_code	业务执行结果返回码
-error_message	业务执行错误信息
+biz_response.result_code,状态分为：状态分为 SUCCESS、FAIL、INPROGRESS和 ERROR 四类，
+SUCCESS: 本次业务执行成功
+FAIL: 本次业务执行失败
+INPROGRESS: 本次业务进行中
+ERROR: 本次业务执行结果未知
+具体到业务场景，分别有下列状态：
+取值	                        含义                                         下一步动作
+PAY_SUCCESS	                支付操作成功                                  银货两讫
+PAY_FAIL	                支付操作失败并且已冲正                         重新进行一笔交易
+PAY_IN_PROGRESS	            支付中                                       调用查询接口查询
+PAY_FAIL_ERROR	            支付操作失败并且不确定第三方支付通道状态         联系客服
+PAY_FAIL_IN_PROGRESS	    支付操作失败中并且不清楚状态	                 联系客服
+CANCEL_SUCCESS	            撤单操作成功                                  --
+CANCEL_ERROR	            撤单操作失败并且不确定第三方支付通道状态        联系客服
+CANCEL_ABORT_ERROR	        撤单操作试图终止进行中的支付流程，但是失败，
+                            不确定第三方支付通道的状态	                    联系客服
+CANCEL_ABORT_SUCCESS	    撤单操作试图终止进行中的支付流程并且成功        --
+CANCEL_IN_PROGRESS	        撤单进行中                                   调用查询接口进行查询
+CANCEL_ABORT_IN_PROGRESS	撤单操作试图终止进行中的支付流程，
+                            但是撤单状态不明确                            调用查询接口进行查询
+REFUND_SUCCESS	            退款操作成功
+REFUND_ERROR	            退款操作失败并且不确定第三方支付通状态	        联系客服
+REFUND_FAIL	                退款失败
+REFUND_IN_PROGRESS	        退款进行中
+PRECREATE_SUCCESS	        预下单操作成功
+PRECREATE_FAIL	            预下单操作失败
+PRECREATE_FAIL_ERROR	    预下单状态失败并且不确定第三方支付通道状态	    联系客服
+PRECREATE_FAIL_IN_PROGRESS	预下单状态失败并且不清楚状态	                联系客服
+SUCCESS	                    操作成功,开发者根据返回的biz_response.data.order_status属性判断当前收钱吧订单的状态。
+FAIL	                    操作失败（不会触发流程）
+     */
+    /*
+订单状态列表
+biz_response.data.order_status
+取值	                含义
+CREATED	            订单已创建/支付中
+PAID	            订单支付成功
+PAY_CANCELED	    支付失败并且已经成功充正
+PAY_ERROR	        支付失败，不确定是否已经成功充正,请联系收钱吧客服确认是否支付成功
+REFUNDED	        已成功全额退款
+PARTIAL_REFUNDED	已成功部分退款
+REFUND_ERROR	    退款失败并且不确定第三方支付通道的最终退款状态
+CANCELED	        客户端发起的撤单已成功
+CANCEL_ERROR	    客户端发起的撤单失败并且不确定第三方支付通道的最终状态
+CANCEL_INPROGRESS	撤单进行中
+INVALID_STATUS_CODE	无效的状态码
+开发者根据返回的biz_response.data.order_status属性判断当前收钱吧订单的状态。
+哪些状态是订单最终状态
+    PAID
+    PAY_CANCELED
+    REFUNDED
+    PARTIAL_REFUNDED
+    CANCELED
+     */
+    /*
+status流水状态列表
+取值	            含义	                                        处理逻辑
+SUCCESS	        业务执行确认成功（即收钱吧后台和消费者端均成功）	银货两讫（无论是交货还是退货）
+FAIL_CANCELED	确认失败（即收钱吧后台和消费者端均失败）	        银货两讫，（不交货或是不退货）
+其他          	错误	                                        小概率事件，失败但不确认消费者端状态
+                                                            （即收钱吧后台强制认为是失败，但不确认消费者端是否同步失败）
+                                                            （如果是收款，则不交货，但立即联系收钱吧客服，
+                                                            （即算是消费者显示成功付款；
+                                                            （如果是退货，则马上把货品回收，
+                                                            （同时立即联系收钱吧客服，由收钱吧客服负责将钱款退回。
      */
 }
