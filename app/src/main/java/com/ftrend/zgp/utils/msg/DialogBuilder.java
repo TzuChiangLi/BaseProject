@@ -155,6 +155,9 @@ public class DialogBuilder extends CenterPopupView {
      * @param newMsg
      */
     public void updateMsg(String newMsg) {
+        if (mMsgTv == null) {
+            return;
+        }
         mMsgTv.setText(newMsg);
     }
 
