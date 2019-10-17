@@ -93,6 +93,10 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
     @Override
     public void initShopList() {
         //加载商品列表
+        for (TradeProd prod :
+                TradeHelper.getProdList()) {
+            prod.setSelect(false);
+        }
         mView.showTradeProd(TradeHelper.getProdList());
         //获取商品总件数
         mView.updateCount(TradeHelper.getTradeCount());

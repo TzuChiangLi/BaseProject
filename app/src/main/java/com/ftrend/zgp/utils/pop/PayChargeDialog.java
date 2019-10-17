@@ -1,6 +1,7 @@
 package com.ftrend.zgp.utils.pop;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.InputType;
@@ -22,6 +23,7 @@ import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.lxj.xpopup.core.BottomPopupView;
 
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -42,6 +44,8 @@ public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnI
     TextView mTotalTv;
     @BindView(R.id.pay_charge_btn_submit)
     Button mPayBtn;
+    @BindDrawable(R.drawable.pay_dialog_btn_selector)
+    Drawable pay_red_selector;
     private View mKeyViewStub;
     private KeyboardView mKeyView;
     private double total;
@@ -73,7 +77,7 @@ public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnI
         mKeyView.setOnKeyboardClickListener(this);
         mEdt.addTextChangedListener(edtWatcher);
         mTotalTv.setText(String.format("%.2f", total));
-        LogUtil.d("----total:" + total);
+        mPayBtn.setBackground(pay_red_selector);
     }
 
 

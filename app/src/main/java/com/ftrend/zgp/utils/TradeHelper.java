@@ -507,8 +507,10 @@ public class TradeHelper {
             dsc += prodList.get(i).getManuDsc() + prodList.get(i).getVipDsc() + prodList.get(i).getTranDsc();
         }
         TradeProd tradeProd = prodList.get(index);
-        if ((dsc + changeAmount * ((tradeProd.getManuDsc() + tradeProd.getVipDsc() + tradeProd.getTranDsc()) / tradeProd.getAmount()) > ZgParams.getCurrentUser().getMaxDscTotal())) {
-            return 0;
+        if (tradeProd.getManuDsc() + tradeProd.getTranDsc() + tradeProd.getVipDsc() > 0) {
+            if ((dsc + changeAmount * ((tradeProd.getManuDsc() + tradeProd.getVipDsc() + tradeProd.getTranDsc()) / tradeProd.getAmount()) > ZgParams.getCurrentUser().getMaxDscTotal())) {
+                return 0;
+            }
         }
         double oldAmount = tradeProd.getAmount();
         double newAmount = oldAmount + changeAmount;
