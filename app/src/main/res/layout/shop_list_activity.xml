@@ -185,26 +185,26 @@
             android:background="@drawable/shop_btn_gray_selector"
             android:text="@string/shop_btn_more" />
 
-        <Button
-            android:id="@+id/shop_list_btn_whole_discount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/shop_list_btn_vip"
-            android:layout_toStartOf="@+id/shop_list_btn_hang_up"
-            android:layout_toEndOf="@+id/shop_list_btn_vip"
-            android:background="@drawable/shop_btn_gray_selector"
-            android:text="@string/shop_tv_whole_dsc"
-            android:visibility="gone" />
+        <!--<Button-->
+            <!--android:id="@+id/shop_list_btn_whole_discount"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignTop="@+id/shop_list_btn_vip"-->
+            <!--android:layout_toStartOf="@+id/shop_list_btn_hang_up"-->
+            <!--android:layout_toEndOf="@+id/shop_list_btn_vip"-->
+            <!--android:background="@drawable/shop_btn_gray_selector"-->
+            <!--android:text="@string/shop_tv_whole_dsc"-->
+            <!--android:visibility="gone" />-->
 
-        <Button
-            android:id="@+id/shop_list_btn_hang_up"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/shop_list_btn_vip"
-            android:layout_toStartOf="@+id/shop_list_btn_add"
-            android:background="@drawable/shop_btn_gray_selector"
-            android:text="@string/shop_btn_hang_up"
-            android:visibility="gone" />
+        <!--<Button-->
+            <!--android:id="@+id/shop_list_btn_hang_up"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignTop="@+id/shop_list_btn_vip"-->
+            <!--android:layout_toStartOf="@+id/shop_list_btn_add"-->
+            <!--android:background="@drawable/shop_btn_gray_selector"-->
+            <!--android:text="@string/shop_btn_hang_up"-->
+            <!--android:visibility="gone" />-->
 
         <Button
             android:id="@+id/shop_list_btn_add"
@@ -226,12 +226,5 @@
             android:textColor="@color/shop_white_text" />
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/shop_list_btn_cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/shop_btn_gray_selector"
-        android:text="@string/shop_tv_cancel"
-        android:visibility="gone" />
 
 </RelativeLayout>

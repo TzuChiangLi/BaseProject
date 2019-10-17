@@ -138,6 +138,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                         break;
                     case 1:
                         //储值卡
+//                        SqbPayHelper.refund("client8935856");
                         break;
                     case 2:
                         //现金

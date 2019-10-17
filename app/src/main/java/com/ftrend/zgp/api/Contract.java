@@ -399,6 +399,7 @@ public interface Contract {
     }
 
     interface ShopCartView extends BaseView<Contract.ShopCartPresenter> {
+
         /**
          * 设置商品类别
          *
@@ -684,6 +685,7 @@ public interface Contract {
 
         /**
          * 显示错误
+         *
          * @param msg 错误信息
          */
         void showError(String msg);

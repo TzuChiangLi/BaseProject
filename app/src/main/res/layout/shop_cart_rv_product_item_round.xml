@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/dp_6"
     android:layout_marginEnd="@dimen/dp_6"
-    android:layout_marginBottom="@dimen/dp_6"
+    android:layout_marginTop="@dimen/dp_4"
+    android:layout_marginBottom="@dimen/dp_2"
     app:cardCornerRadius="@dimen/dp_4"
     app:cardElevation="@dimen/dp_0">
 
@@ -14,6 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/dp_8">
+
 
         <LinearLayout
             android:id="@+id/shop_cart_rv_ll"
@@ -36,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_8"
                 android:layout_marginBottom="@dimen/dp_8"
+                android:text="@string/shop_tv_prod_replace"
                 android:textColor="@color/text_black_second"
                 android:textSize="@dimen/sp_14" />
 
@@ -54,6 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_8"
                 android:layout_marginEnd="@dimen/dp_8"
+                android:text="@string/shop_tv_bar_replace"
                 android:layout_marginBottom="@dimen/dp_8"
                 android:textSize="@dimen/sp_14" />
 

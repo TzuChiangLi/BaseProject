@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -126,6 +125,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         mTitleBar.setOnTitleBarListener(this);
     }
 
+
     @Override
     public void setClsList(final List<DepCls> clsList) {
         mClassRecyclerView.setVisibility(View.VISIBLE);
@@ -183,9 +183,13 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     @Override
     public void setProdList(final List<DepProduct> prodList) {
         mProdRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item, prodList, 1);
+        if (ZgParams.isShowCls(ZgParams.getCurrentDep().getDepCode())) {
+            mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item_normal, prodList, 1);
+            mProdRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        } else {
+            mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item_round, prodList, 1);
+        }
         mProdRecyclerView.setAdapter(mProdAdapter);
-//        mProdRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

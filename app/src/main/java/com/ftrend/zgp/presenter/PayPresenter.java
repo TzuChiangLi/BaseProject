@@ -41,7 +41,6 @@ public class PayPresenter implements Contract.PayPresenter {
     public void payByShouQian(String value) {
         mView.waitPayResult();
         SqbPayHelper.pay(value, new SqbPayHelper.PayResultCallback() {
-
             @Override
             public void onResult(boolean isDone, boolean isSuccess, String errMsg) {
                 if (isDone && isSuccess) {
