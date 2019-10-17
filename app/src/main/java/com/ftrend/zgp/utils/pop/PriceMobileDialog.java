@@ -52,11 +52,20 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
     private Context mContext;
     private KeyboardView mKeyView;
     private View mKeyViewStub;
+    // 输入提示信息
+    private String title = "请输入：";
 
 
     public PriceMobileDialog(@NonNull Context context, int type) {
         super(context);
         this.type = type;
+        mContext = context;
+    }
+
+    public PriceMobileDialog(@NonNull Context context, String title, InputCallback callback) {
+        super(context);
+        this.title = title;
+        this.callback = callback;
         mContext = context;
     }
 
@@ -101,6 +110,14 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
                 mKeyView.setOnKeyboardClickListener(this);
                 break;
             default:
+                mKeyViewStub = ((ViewStub) findViewById(R.id.vip_way_key_lite_view)).inflate();
+                mKeyView = mKeyViewStub.findViewById(R.id.vip_way_keyboard);
+                mKeyView.show();
+                mTitleTv.setText(title);
+                mSubmitBtn.setText("确定");
+                mEdt.setInputType(InputType.TYPE_NULL);
+                mEdt.setOnClickListener(this);
+                mKeyView.setOnKeyboardClickListener(this);
                 break;
         }
     }
@@ -150,8 +167,19 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
                 }
                 break;
             default:
+                if (callback != null) {
+                    callback.onOk(mEdt.getText().toString());
+                }
                 break;
         }
+    }
+
+    private InputCallback callback = null;
+
+    public interface InputCallback {
+        void onOk(final String value);
+
+        void onCancel();
     }
 
     private void queryVipInfo() {
@@ -227,6 +255,9 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
             if (changed == -1) {
                 Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE, index);
             }
+        }
+        if (callback != null) {
+            callback.onCancel();
         }
     }
 

@@ -122,6 +122,20 @@ public class MessageUtil {
                 .show();
     }
 
+    /**
+     * 通用输入对话框
+     *
+     * @param context  上下文
+     * @param title    对话框输入提示信息
+     * @param callback 输入结果回调
+     */
+    public static void showInput(Context context, String title, PriceMobileDialog.InputCallback callback) {
+        new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
+                .asCustom(new PriceMobileDialog(context, title, callback))
+                .show();
+    }
+
 
 //-------------------------------------模态弹窗-----------------------------------------//
 
