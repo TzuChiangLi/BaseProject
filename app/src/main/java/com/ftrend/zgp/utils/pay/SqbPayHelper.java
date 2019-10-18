@@ -12,14 +12,17 @@ import com.wosai.upay.bean.UpayOrder;
 import com.wosai.upay.bean.UpayResult;
 import com.wosai.upay.common.UpayCallBack;
 import com.wosai.upay.common.UpayTask;
+import com.wosai.upay.util.StringUtil;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 /**
- * 收钱吧API接口功能类
+ * 收钱吧SDK接口功能类
  * Copyright (C),青岛致远方象软件科技有限公司
+ *
+ * 为了方便理解业务逻辑，对收钱吧SDK部分文件做了反编译处理，见test的com.ftrend.zgp.upay包
  *
  * @author liuhongbin@ftrend.cn
  * @since 2019/10/11
@@ -242,7 +245,7 @@ public class SqbPayHelper {
         });
     }
 
-    private static void query(String sn, String clientSn, final PayResultCallback callback) {
+    /*private static void query(String sn, String clientSn, final PayResultCallback callback) {
         UpayOrder order = new UpayOrder();
         order.setSn(sn);//收钱吧订单号
         order.setClient_sn(clientSn);//商户订单号
@@ -257,7 +260,7 @@ public class SqbPayHelper {
                 dealWithResult(requestNo, result, callback);
             }
         });
-    }
+    }*/
 
     private static void dealWithResult(String requestNo, UpayResult result, final PayResultCallback callback) {
         // 记录查询结果信息
@@ -269,7 +272,16 @@ public class SqbPayHelper {
         // TODO: 2019/10/16 这里需要综合判断：status流水状态, order_status订单状态, result_code业务执行结果返回码
         boolean isDone;
         boolean isSuccess;
-        if (UpayResult.ORDER_PAID.equals(result.getOrder_status())
+        String errMsg = "";
+        String orderStatus = result.getOrder_status();
+        if (StringUtil.isNotEmpty(result.getError_code()) || StringUtil.isEmpty(orderStatus)) {
+            //SDK返回了错误信息，表明交易已失败
+            isDone = true;
+            isSuccess = false;
+            errMsg = "交易失败，请根据以下提示信息拨打客服电话或排查故障！\n"
+                    + "\n错误码：" + result.getError_code()
+                    + "\n错误消息：" + result.getError_message();
+        } else if (UpayResult.ORDER_PAID.equals(result.getOrder_status())
                 || UpayResult.ORDER_REFUNDED.equals(result.getOrder_status())
                 || UpayResult.ORDER_PARTIAL_REFUNDED.equals(result.getOrder_status())
                 || UpayResult.ORDER_CANCELED.equals(result.getOrder_status())) {
@@ -278,14 +290,20 @@ public class SqbPayHelper {
         } else if (UpayResult.ORDER_PAY_CANCELED.equals(result.getOrder_status())) {
             isDone = true;
             isSuccess = false;
+            errMsg = "交易失败，本次交易已被收钱吧平台取消，请稍后重试！";
         } else {
-            isDone = false;
-            isSuccess = true;
+            //其他状态码，当前版本SDK理论上不可能出现。这里生成提示信息，防止意外。
+            isDone = true;
+            isSuccess = false;
+            errMsg = "交易失败，请根据以下提示信息拨打客服电话:！\n"
+                    + "\n状态码：" + orderStatus
+                    + "\n错误码：" + result.getError_code()
+                    + "\n错误消息：" + result.getError_message();
         }
         callback.onResult(isDone, isSuccess,
                 PayType.sqbPaywayToAppPayType(result.getPayway()),
                 result.getPayer_uid(),
-                result.getError_message());
+                errMsg);
     }
 
     /*
@@ -325,9 +343,9 @@ FAIL	                    操作失败（不会触发流程）
 biz_response.data.order_status
 取值	                含义
 CREATED	            订单已创建/支付中
-PAID	            订单支付成功
-PAY_CANCELED	    支付失败并且已经成功充正
-PAY_ERROR	        支付失败，不确定是否已经成功充正,请联系收钱吧客服确认是否支付成功
+-PAID	            订单支付成功
+-PAY_CANCELED	    支付失败并且已经成功充正
+-PAY_ERROR	        支付失败，不确定是否已经成功充正,请联系收钱吧客服确认是否支付成功
 REFUNDED	        已成功全额退款
 PARTIAL_REFUNDED	已成功部分退款
 REFUND_ERROR	    退款失败并且不确定第三方支付通道的最终退款状态
