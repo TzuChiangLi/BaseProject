@@ -196,7 +196,8 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     @Override
     public void payFail(String msg) {
         MessageUtil.waitEnd();
-        MessageUtil.showError(msg);
+        MessageUtil.error(msg);
+//        MessageUtil.showError(msg);
     }
 
     @Override

@@ -12,6 +12,7 @@ import com.ftrend.zgp.adapter.MenuAdapter;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
+import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.HomePresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
@@ -198,19 +199,23 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 });
                 break;
             case "测试退款":
+                // 此功能仅用于测试
+                if (!SqbPayHelper.DEMO_MODE) {
+                    return;
+                }
                 String msg = "请输入支付记录中的商家订单号：";
                 MessageUtil.showInput(HomeActivity.this, msg, new PriceMobileDialog.InputCallback() {
                     @Override
                     public void onOk(String value) {
-                        SqbPayHelper.refundBySn(value, new SqbPayHelper.PayResultCallback() {
+                        Trade trade = new Trade();
+                        trade.setLsNo("TEST");
+                        SqbPayHelper.refundBySn(trade, value, new SqbPayHelper.PayResultCallback() {
                             @Override
-                            public void onResult(boolean isDone, boolean isSuccess, String payType, String payCode, String errMsg) {
-                                if (isDone && isSuccess) {
+                            public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
+                                if (isSuccess) {
                                     MessageUtil.showSuccess("退款成功");
-                                } else if (isDone && !isSuccess) {
-                                    MessageUtil.showError("退款失败");
                                 } else {
-                                    MessageUtil.show("退款中...");
+                                    MessageUtil.showError("退款失败");
                                 }
                             }
                         });
@@ -227,7 +232,6 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 break;
         }
     }
-
 
     @Override
     public void goShopChartActivity() {

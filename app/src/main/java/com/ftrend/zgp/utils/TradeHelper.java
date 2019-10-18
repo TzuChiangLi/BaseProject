@@ -68,11 +68,6 @@ public class TradeHelper {
     // 交易状态：3-取消
     public static final String TRADE_STATUS_CANCELLED = "3";
 
-    // 用户权限: 0-行清权限
-    public static final int USER_RIGHT_DEL = 0;
-    // 用户权限: 1-取消交易权限
-    public static final int USER_RIGHT_CANCEL = 1;
-
     // VIP强制优惠：1-强制优惠，无视商品的forDsc属性
     public static final String VIP_DSC_FORCE = "1";
     // VIP强制优惠：0-不强制
@@ -86,7 +81,6 @@ public class TradeHelper {
     public static final int VIP_THREE = 3;
     // 顾客类型：2-会员
     public static final String TRADE_CUST_VIP = "2";
-
 
     // 交易流水
     private static Trade trade = null;
@@ -396,7 +390,6 @@ public class TradeHelper {
      * 更新交易状态
      */
     public static void setTradeStatus(String status) {
-        // TODO: 2019/10/12 重构：保存vip信息不应该在这里处理
         SQLite.update(Trade.class)
                 .set(Trade_Table.status.eq(status))
                 .where(Trade_Table.lsNo.is(trade.getLsNo()))
@@ -404,7 +397,9 @@ public class TradeHelper {
                 .execute(); // non-UI
     }
 
-
+    /**
+     * 保存会员信息
+     */
     public static void saveVipInfo() {
         if (TradeHelper.vip != null) {
             SQLite.update(Trade.class)
@@ -436,7 +431,8 @@ public class TradeHelper {
     }
 
     /**
-     * @return 购物车中未行清的所有商品的数量
+     * 获取购物车中未行清的所有商品列表
+     * @return
      */
     public static List<Map<String, Long>> getProdCountList() {
         List<Map<String, Long>> prodCountList = new ArrayList<>();
@@ -461,7 +457,6 @@ public class TradeHelper {
         prodCountList.add(map);
         return prodCountList;
     }
-
 
     /**
      * 购物车 - 加减按钮、更改单个商品的数量
@@ -544,7 +539,6 @@ public class TradeHelper {
         }
         return total;
     }
-
 
     /**
      * 该商品是否有改价权

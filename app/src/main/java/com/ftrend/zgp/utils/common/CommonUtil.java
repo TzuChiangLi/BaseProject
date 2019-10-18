@@ -50,4 +50,14 @@ public class CommonUtil {
     public static String dateToYyyyMmDd(Date date) {
         return new SimpleDateFormat("yyyyMMdd", Locale.CHINA).format(date);
     }
+
+    /**
+     * 金额格式化
+     *
+     * @param amount
+     * @return
+     */
+    public static String moneyToString(double amount) {
+        return String.format(Locale.CHINA, "%.2f", amount);
+    }
 }

@@ -40,19 +40,17 @@ public class PayPresenter implements Contract.PayPresenter {
     @Override
     public void payByShouQian(String value) {
         mView.waitPayResult();
-        SqbPayHelper.pay(value, new SqbPayHelper.PayResultCallback() {
+        SqbPayHelper.pay(TradeHelper.getTrade(), value, new SqbPayHelper.PayResultCallback() {
             @Override
-            public void onResult(boolean isDone, boolean isSuccess, String payType, String payCode, String errMsg) {
-                if (isDone && isSuccess) {
+            public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
+                if (isSuccess) {
                     TradeHelper.pay(payType, payCode);
                     //插入交易流水队列
                     TradeHelper.uploadTradeQueue();
                     TradeHelper.clearVip();
                     mView.paySuccess();
-                } else if (isDone && !isSuccess) {
-                    mView.payFail("支付失败：" + errMsg);
                 } else {
-                    // TODO: 2019/10/17 中间状态，开始轮询支付订单状态
+                    mView.payFail(errMsg);
                 }
             }
         });
