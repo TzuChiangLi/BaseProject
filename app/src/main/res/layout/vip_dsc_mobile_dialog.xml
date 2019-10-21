@@ -61,8 +61,8 @@
             <Button
                 android:id="@+id/vip_mobile_btn_submit"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_36"
-                android:stateListAnimator="@null"
+                android:layout_height="@dimen/dp_35"
+                android:background="@android:color/transparent"
                 android:text="@string/vip_btn_submit"
                 android:textColor="@color/common_white" />
         </LinearLayout>
