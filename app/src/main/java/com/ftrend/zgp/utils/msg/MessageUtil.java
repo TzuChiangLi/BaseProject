@@ -170,7 +170,7 @@ public class MessageUtil {
      *
      * @param message    消息内容
      * @param btnText    按钮文字
-     * @param dialogType 对话框类型：0-info, 1-waring, 2-error
+     * @param dialogType 对话框类型
      * @param listener   按钮点击事件监听
      */
     private static void oneBtnDialog(String message, String btnText,
