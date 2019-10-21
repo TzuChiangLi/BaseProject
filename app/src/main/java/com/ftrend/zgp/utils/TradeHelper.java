@@ -681,9 +681,9 @@ public class TradeHelper {
     public static String convertTradeStatus(String status) {
         switch (status) {
             case TradeHelper.TRADE_STATUS_CANCELLED:
-                return "取消交易";
+                return "交易已取消";
             case TradeHelper.TRADE_STATUS_HANGUP:
-                return "已挂单";
+                return "挂单成功";
             case TradeHelper.TRADE_STATUS_NOTPAY:
                 return "尚未支付";
             case TradeHelper.TRADE_STATUS_PAID:
