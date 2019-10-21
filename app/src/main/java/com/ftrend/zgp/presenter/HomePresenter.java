@@ -1,5 +1,7 @@
 package com.ftrend.zgp.presenter;
 
+import android.os.RemoteException;
+
 import com.ftrend.zgp.App;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
@@ -9,9 +11,12 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.UserRightsHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
+import com.ftrend.zgp.utils.printer.PrintFormat;
+import com.ftrend.zgp.utils.printer.PrinterHelper;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.task.LsUploadThread;
 import com.ftrend.zgp.utils.task.ServerWatcherThread;
+import com.sunmi.peripheral.printer.SunmiPrinterService;
 import com.wosai.upay.common.DebugConfig;
 import com.wosai.upay.common.UpayTask;
 import com.wosai.upay.http.Env;
@@ -38,6 +43,7 @@ public class HomePresenter implements Contract.HomePresenter {
     public static HomePresenter createPresenter(Contract.HomeView mView) {
         return new HomePresenter(mView);
     }
+
 
     @Override
     public void initSunmiPaySdk() {

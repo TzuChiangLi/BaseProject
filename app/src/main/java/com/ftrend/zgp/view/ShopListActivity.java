@@ -115,6 +115,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         if (ClickUtil.onceClick()) {
             return;
         }
+        mPresenter.refreshTrade();
         if (mProdAdapter.getData().size() > 0) {
             Intent intent = new Intent(ShopListActivity.this, PayActivity.class);
             startActivity(intent);

@@ -33,6 +33,11 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
     }
 
     @Override
+    public void refreshTrade() {
+        TradeHelper.initSale();
+    }
+
+    @Override
     public void checkCancelTradeRight() {
         if (UserRightsHelper.hasRights(UserRightsHelper.CANCEL_TRADE)) {
             MessageUtil.question("是否取消当前交易？", new MessageUtil.MessageBoxYesNoListener() {

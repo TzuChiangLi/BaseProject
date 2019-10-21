@@ -34,6 +34,11 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
 
 
     @Override
+    public void refreshTrade() {
+        TradeHelper.initSale();
+    }
+
+    @Override
     public void initProdList() {
         List<DepCls> clsList = SQLite.select().from(DepCls.class).where(DepCls_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode())).queryList();
         mProdList = SQLite.select().from(DepProduct.class).where(DepProduct_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode())).queryList();
@@ -185,7 +190,6 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
                 mView.noScanProdPosition();
             }
         }
-
     }
 
 

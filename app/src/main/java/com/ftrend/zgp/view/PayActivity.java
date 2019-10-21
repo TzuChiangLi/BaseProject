@@ -52,6 +52,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     RecyclerView mRecyclerView;
     private Contract.PayPresenter mPresenter;
     private static int START_SCAN = 002;
+    private String lsNo;
 
     @Override
     protected int getLayoutID() {
@@ -68,6 +69,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
         if (mPresenter == null) {
             mPresenter = PayPresenter.createPresenter(this);
         }
+        lsNo = TradeHelper.getTrade().getLsNo();
     }
 
     @Override
@@ -84,12 +86,10 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
 
     @Override
     public void onTitleClick(View v) {
-
     }
 
     @Override
     public void onRightClick(View v) {
-
     }
 
     /**
