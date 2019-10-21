@@ -323,10 +323,19 @@ public class TradeHelper {
      * 完成支付（仅适用于现金支付）
      *
      * @param appPayType APP支付类型
+     * @param value 实际支付金额，为0时全额支付
      * @return
      */
-    public static boolean pay(String appPayType) {
-        return pay(appPayType, trade.getTotal(), 0, "(无)");
+    public static boolean pay(String appPayType, double value) {
+        if (value > 0) {
+            if (value < trade.getTotal()) {
+                return false;
+            } else {
+                return pay(appPayType, value, value - trade.getTotal(), "(无)");
+            }
+        } else {
+            return pay(appPayType, trade.getTotal(), 0, "(无)");
+        }
     }
 
     /**

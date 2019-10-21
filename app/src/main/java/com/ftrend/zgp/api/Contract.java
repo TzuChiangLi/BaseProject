@@ -653,6 +653,14 @@ public interface Contract {
         boolean paySuccess(String appPayType);
 
         /**
+         * 交易完成
+         *
+         * @param appPayType APP支付方式
+         * @param value      实际支付金额
+         */
+        boolean paySuccess(String appPayType, double value);
+
+        /**
          * 销毁，防止泄露
          */
         void onDestory();

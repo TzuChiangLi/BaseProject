@@ -6,6 +6,7 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.toast.XToast;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
+import com.ftrend.zgp.utils.pop.MoneyInputCallback;
 import com.ftrend.zgp.utils.pop.PayChargeDialog;
 import com.ftrend.zgp.utils.pop.PriceDscDialog;
 import com.ftrend.zgp.utils.pop.PriceMobileDialog;
@@ -55,10 +56,10 @@ public class MessageUtil {
     /**
      * 现金找零
      */
-    public static void showChargeDialog(Context context, double total) {
+    public static void showChargeDialog(Context context, double total, MoneyInputCallback callback) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new PayChargeDialog(context, total))
+                .asCustom(new PayChargeDialog(context, total, callback))
                 .show();
     }
 

@@ -18,7 +18,6 @@ import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.utils.common.ClickUtil;
-import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.lxj.xpopup.core.BottomPopupView;
 
@@ -48,15 +47,17 @@ public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnI
     private View mKeyViewStub;
     private KeyboardView mKeyView;
     private double total;
-
+    // 回调
+    private MoneyInputCallback mCallback = null;
 
     public PayChargeDialog(@NonNull Context context) {
         super(context);
     }
 
-    public PayChargeDialog(@NonNull Context context, double total) {
+    public PayChargeDialog(@NonNull Context context, double total, MoneyInputCallback callback) {
         super(context);
         this.total = total;
+        this.mCallback = callback;
     }
 
     @Override
@@ -109,18 +110,33 @@ public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnI
             return;
         }
         if (TextUtils.isEmpty(mEdt.getText())) {
-            MessageUtil.show("请输入收入现金金额");
-        } else if (TextUtils.isEmpty(mChargeTv.getText())) {
-            MessageUtil.show("付款金额不足");
+            MessageUtil.show("请输入付款金额");
         } else {
-            Event.sendEvent(Event.TARGET_PAY_WAY, Event.TYPE_PAY_CASH);
+            if (mCallback != null) {
+                double value = Double.parseDouble(mEdt.getText().toString());
+                String msg = mCallback.validate(value);
+                if (TextUtils.isEmpty(msg)) {
+                    dismiss();
+                    mCallback.onOk(value);
+                } else {
+                    MessageUtil.show(msg);
+                }
+            }
         }
-
     }
 
     @OnClick(R.id.pay_charge_img_close)
     public void close() {
+        KeyboardUtils.hideSoftInput(this);
         dismiss();
+    }
+
+    @Override
+    protected void onDismiss() {
+        super.onDismiss();
+        if (mCallback != null) {
+            mCallback.onCancel();
+        }
     }
 
     @Override
