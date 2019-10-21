@@ -366,6 +366,14 @@ public interface Contract {
         void addToShopCart(DepProduct depProduct);
 
         /**
+         * 添加到购物车
+         *
+         * @param depProduct 商品对象
+         * @param price      价格
+         */
+        void addToShopCart(DepProduct depProduct, double price);
+
+        /**
          * 设置交易状态
          *
          * @param status 交易状态

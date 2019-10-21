@@ -31,6 +31,7 @@ import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.pop.MoneyInputCallback;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
@@ -195,7 +196,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         mProdRecyclerView.setAdapter(mProdAdapter);
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(final BaseQuickAdapter adapter, View view, final int position) {
                 if (ClickUtil.onceClick()) {
                     return;
                 }
@@ -206,12 +207,33 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
                 oldProdIndex = position;
                 mProdAdapter.getData().get(position).setSelect(true);
                 mProdAdapter.notifyItemChanged(position);
-                //添加到购物车中
-                mPresenter.addToShopCart((DepProduct) adapter.getItem(position));
-                //如果商品价格是0，那么就弹出窗口
-                // TODO: 2019/9/29 价格为0也有可能是赠品，此处判断逻辑待优化
-                if (prodList.get(position).getPrice() == 0) {
-                    MessageUtil.showPriceChange(ShopCartActivity.this, position);
+
+                final DepProduct prod = (DepProduct) adapter.getItem(position);
+                if (prod.getPrice() == 0 && prod.getPriceFlag() == 1) {
+                    //修改价格
+                    MessageUtil.showPriceChange(ShopCartActivity.this, new MoneyInputCallback() {
+                        @Override
+                        public void onOk(double value) {
+                            //添加到购物车中
+                            mPresenter.addToShopCart(prod, value);
+                            mProdAdapter.notifyItemChanged(position);
+                            mPresenter.updateTradeInfo();
+                        }
+
+                        @Override
+                        public void onCancel() {
+                        }
+
+                        @Override
+                        public String validate(double value) {
+                            return null;
+                        }
+                    });
+                } else {
+                    //添加到购物车中
+                    mPresenter.addToShopCart(prod);
+                    mProdAdapter.notifyItemChanged(position);
+                    mPresenter.updateTradeInfo();
                 }
             }
         });

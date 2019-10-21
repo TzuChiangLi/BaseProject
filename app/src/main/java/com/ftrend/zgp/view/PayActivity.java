@@ -24,7 +24,7 @@ import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
-import com.ftrend.zgp.utils.pop.PriceMobileDialog;
+import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
@@ -132,9 +132,8 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                             intent.setPackage("com.sunmi.sunmiqrcodescanner");
                             startActivityForResult(intent, START_SCAN);
                         } catch (Exception e) {
-                            //MessageUtil.showError("本设备不兼容");
                             String msg = "本设备不支持刷卡，请输入顾客支付码：";
-                            MessageUtil.showInput(PayActivity.this, msg, new PriceMobileDialog.InputCallback() {
+                            MessageUtil.showInput(PayActivity.this, msg, new StringInputCallback() {
                                 @Override
                                 public void onOk(String value) {
                                     mPresenter.payByShouQian(value);
@@ -143,6 +142,11 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                                 @Override
                                 public void onCancel() {
                                     MessageUtil.show("已取消支付");
+                                }
+
+                                @Override
+                                public String validate(String value) {
+                                    return null;
                                 }
                             });
                         }

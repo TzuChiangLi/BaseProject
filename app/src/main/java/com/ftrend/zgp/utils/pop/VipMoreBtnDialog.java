@@ -8,10 +8,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.ftrend.zgp.R;
+import com.ftrend.zgp.model.VipInfo;
+import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.http.RestCallback;
+import com.ftrend.zgp.utils.http.RestResultHandler;
+import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.lxj.xpopup.core.CenterPopupView;
+
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,7 +93,22 @@ public class VipMoreBtnDialog extends CenterPopupView implements View.OnClickLis
                 Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_ENTER_SCAN);
                 break;
             case R.id.vip_way_ll_mobile:
-                MessageUtil.showVipMobile(mContext, PriceMobileDialog.DIALOG_MOBILE);
+                MessageUtil.showVipMobile(mContext, new StringInputCallback() {
+                    @Override
+                    public void onOk(String value) {
+                        queryVipInfo(value); // TODO: 2019/10/21 移到购物车界面去处理
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public String validate(String value) {
+                        return null;
+                    }
+                });
                 break;
             case R.id.more_btn_cancel:
                 Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_DIALOG_CANCEL_TRADE);
@@ -104,4 +127,46 @@ public class VipMoreBtnDialog extends CenterPopupView implements View.OnClickLis
         }
         dismiss();
     }
+
+    private void queryVipInfo(String value) {
+        if (ZgParams.isIsOnline()) {
+            //在线查询会员信息
+            RestSubscribe.getInstance().queryVipInfo(value, new RestCallback(regHandler));
+        } else {
+            MessageUtil.showWarning("当前为单机模式，无法查询会员信息");
+            //保存vipCode
+            TradeHelper.saveVipCodeOffline(value);
+        }
+
+    }
+
+    private RestResultHandler regHandler = new RestResultHandler() {
+        @Override
+        public void onSuccess(Map<String, Object> body) {
+            if (body != null) {
+                VipInfo vipInfo = TradeHelper.vip();
+                vipInfo.setVipName(body.get("vipName").toString());
+                vipInfo.setVipCode(body.get("vipCode").toString());
+                vipInfo.setVipDscRate(Double.parseDouble(body.get("vipDscRate").toString()));
+                vipInfo.setVipGrade(body.get("vipGrade").toString());
+                vipInfo.setVipPriceType(Double.parseDouble(body.get("vipPriceType").toString()));
+                vipInfo.setRateRule(Double.parseDouble(body.get("rateRule").toString()));
+                vipInfo.setForceDsc(body.get("forceDsc").toString());
+                vipInfo.setCardCode(body.get("cardCode").toString());
+                vipInfo.setDscProdIsDsc(body.get("dscProdIsDsc").toString());
+                //保存会员信息到流水
+                TradeHelper.saveVip();
+                //刷新会员优惠
+                TradeHelper.saveVipDsc();
+                Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_VIP_INFO, vipInfo);
+            } else {
+                MessageUtil.show("服务返回异常错误");
+            }
+        }
+
+        @Override
+        public void onFailed(String errorCode, String errorMsg) {
+            MessageUtil.show(errorCode + errorMsg);
+        }
+    };
 }

@@ -116,8 +116,8 @@ public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnI
                 double value = Double.parseDouble(mEdt.getText().toString());
                 String msg = mCallback.validate(value);
                 if (TextUtils.isEmpty(msg)) {
-                    dismiss();
                     mCallback.onOk(value);
+                    dismiss();
                 } else {
                     MessageUtil.show(msg);
                 }
@@ -141,19 +141,21 @@ public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnI
 
     @Override
     public void onKeyClick(View v, int key) {
-        if (mEdt.getText().toString().contains(".")) {
-            int position = mEdt.getText().toString().indexOf(".");
-            if (mEdt.getText().toString().length() - position >= 3) {
-                MessageUtil.show("超出限制");
+        String text = mEdt.getText().toString();
+        if ("0".equals(text)) {
+            text = "";
+        }
+        if (text.contains(".")) {
+            int position = text.indexOf(".");
+            if (text.length() - position >= 3) {
                 return;
             }
         } else {
-            if (mEdt.getText().toString().length() >= 6) {
-                MessageUtil.show("超出限制");
+            if (text.length() >= 6) {
                 return;
             }
         }
-        mEdt.setText(mEdt.getText().append(String.valueOf(key)));
+        mEdt.setText(text + key);
     }
 
     @Override

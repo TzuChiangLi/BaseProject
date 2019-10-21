@@ -22,6 +22,7 @@ import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.pop.MoneyInputCallback;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
@@ -335,9 +336,31 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     }
 
     @Override
-    public void showPriceChangeDialog(int index) {
+    public void showPriceChangeDialog(final int index) {
         //弹出改价窗口
-        MessageUtil.showPriceChange(ShopListActivity.this, index);
+        MessageUtil.showPriceChange(ShopListActivity.this, new MoneyInputCallback() {
+            @Override
+            public void onOk(double value) {
+                if (TradeHelper.priceChangeInShopList(index, value)) {
+                    mProdAdapter.getData().get(oldPosition).setPrice(value);
+                    mProdAdapter.notifyItemChanged(oldPosition);
+                    mPresenter.updateTradeInfo();
+                    MessageUtil.showSuccess("改价成功");
+                } else {
+                    MessageUtil.showError("改价失败");
+                }
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public String validate(double value) {
+                return null;
+            }
+        });
     }
 
     @Override

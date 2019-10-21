@@ -135,9 +135,15 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
 
     @Override
     public void addToShopCart(DepProduct depProduct) {
+        addToShopCart(depProduct, depProduct.getPrice());
+    }
+
+    @Override
+    public void addToShopCart(DepProduct depProduct, double price) {
         if (TradeHelper.addProduct(depProduct) == -1) {
             LogUtil.e("向数据库添加商品失败");
         } else {
+            TradeHelper.priceChangeInShopCart(price);
             updateTradeInfo();
         }
     }
