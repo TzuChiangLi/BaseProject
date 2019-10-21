@@ -19,7 +19,6 @@ import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.lxj.xpopup.core.BottomPopupView;
 
@@ -111,8 +110,8 @@ public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnI
         }
         if (TextUtils.isEmpty(mEdt.getText())) {
             MessageUtil.show("请输入收入现金金额");
-        } else if (mEdt.getText().toString().contains("-")) {
-            MessageUtil.show("收入现金金额不足");
+        } else if (TextUtils.isEmpty(mChargeTv.getText())) {
+            MessageUtil.show("付款金额不足");
         } else {
             Event.sendEvent(Event.TARGET_PAY_WAY, Event.TYPE_PAY_CASH);
         }
@@ -128,16 +127,13 @@ public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnI
     public void onKeyClick(View v, int key) {
         if (mEdt.getText().toString().contains(".")) {
             int position = mEdt.getText().toString().indexOf(".");
-            if (mEdt.getText().toString().substring(0, position).length() > 6) {
-                MessageUtil.show("超出限制");
-                return;
-            }
-            if (mEdt.getText().toString().substring(position, mEdt.getText().toString().length() - 1).length() >= 2) {
+            if (mEdt.getText().toString().length() - position >= 3) {
                 MessageUtil.show("超出限制");
                 return;
             }
         } else {
             if (mEdt.getText().toString().length() >= 6) {
+                MessageUtil.show("超出限制");
                 return;
             }
         }
