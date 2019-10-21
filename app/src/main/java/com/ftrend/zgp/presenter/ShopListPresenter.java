@@ -12,6 +12,7 @@ import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 
 import java.util.Map;
 
@@ -34,9 +35,19 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
     @Override
     public void checkCancelTradeRight() {
         if (UserRightsHelper.hasRights(UserRightsHelper.CANCEL_TRADE)) {
-            setTradeStatus(TradeHelper.TRADE_STATUS_CANCELLED);
-        } else {
+            MessageUtil.question("是否取消当前交易？", new MessageUtil.MessageBoxYesNoListener() {
+                @Override
+                public void onYes() {
+                    setTradeStatus(TradeHelper.TRADE_STATUS_CANCELLED);
+                }
 
+                @Override
+                public void onNo() {
+                    MessageUtil.show("已放弃当前操作");
+                }
+            });
+        } else {
+            MessageUtil.showError("无此操作权限！");
         }
     }
 

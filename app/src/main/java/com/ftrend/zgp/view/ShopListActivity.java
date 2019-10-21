@@ -201,7 +201,17 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     MessageUtil.showVipWayDialog(this);
                     break;
                 case Event.TYPE_DIALOG_HANG_UP:
-                    mPresenter.setTradeStatus(TradeHelper.TRADE_STATUS_HANGUP);
+                    MessageUtil.question("是否挂起当前交易？", new MessageUtil.MessageBoxYesNoListener() {
+                        @Override
+                        public void onYes() {
+                            mPresenter.setTradeStatus(TradeHelper.TRADE_STATUS_HANGUP);
+                        }
+
+                        @Override
+                        public void onNo() {
+                            MessageUtil.show("已放弃当前操作");
+                        }
+                    });
                     break;
                 case Event.TYPE_DIALOG_WHOLE_DSC:
                     MessageUtil.showWholeDscChange(this);
@@ -313,17 +323,15 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     }
 
     @Override
-    public void returnHomeActivity(String status) {
-        //HomeActivity的启动模式设置为栈内复用
-        //如果Activity栈内有HomeActivity存在，把他之上的所有栈全部移除，并将他置顶
-        MessageUtil.showSuccess(status);
+    public void returnHomeActivity(final String status) {
+        Intent intent = new Intent(ShopListActivity.this, HomeActivity.class);
+        startActivity(intent);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(ShopListActivity.this, HomeActivity.class);
-                startActivity(intent);
+                MessageUtil.showSuccess(status);
             }
-        }, 1500);
+        }, 200);
     }
 
     @Override

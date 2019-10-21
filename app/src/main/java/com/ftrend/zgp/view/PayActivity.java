@@ -180,17 +180,21 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
         });
     }
 
-    @Override
-    public void paySuccess() {
-        MessageUtil.waitEnd();
-        MessageUtil.showSuccess("交易已完成");
+    public void returnHomeActivity(final String status) {
+        Intent intent = new Intent(PayActivity.this, HomeActivity.class);
+        startActivity(intent);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(PayActivity.this, HomeActivity.class);
-                startActivity(intent);
+                MessageUtil.showSuccess(status);
             }
-        }, 1500);
+        }, 200);
+    }
+
+    @Override
+    public void paySuccess() {
+        MessageUtil.waitEnd();
+        returnHomeActivity("交易已完成");
     }
 
     @Override
@@ -210,14 +214,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
         if (event.getTarget() == Event.TARGET_PAY_WAY) {
             if (event.getType() == Event.TYPE_PAY_CASH) {
                 if (mPresenter.paySuccess(PayType.PAYTYPE_CASH)) {
-                    MessageUtil.showSuccess("交易已完成");
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            Intent intent = new Intent(PayActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                        }
-                    }, 1500);
+                    returnHomeActivity("交易已完成");
                 } else {
                     MessageUtil.showError("交易失败，请稍后重试");
                 }

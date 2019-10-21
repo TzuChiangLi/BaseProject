@@ -236,17 +236,15 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     }
 
     @Override
-    public void returnHomeActivity(String status) {
-        //HomeActivity的启动模式设置为栈内复用
-        //如果Activity栈内有HomeActivity存在，把他之上的所有栈全部移除，并将他置顶
-        MessageUtil.showSuccess(status);
+    public void returnHomeActivity(final String status) {
+        Intent intent = new Intent(ShopCartActivity.this, HomeActivity.class);
+        startActivity(intent);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(ShopCartActivity.this, HomeActivity.class);
-                startActivity(intent);
+                MessageUtil.showSuccess(status);
             }
-        }, 1500);
+        }, 200);
     }
 
     @Override
@@ -307,7 +305,21 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         if (ClickUtil.onceClick()) {
             return;
         }
-        mPresenter.setTradeStatus(TradeHelper.TRADE_STATUS_HANGUP);
+        if (!"0".equals(mTipTv.getText().toString())) {
+            MessageUtil.question("是否挂起当前交易？", new MessageUtil.MessageBoxYesNoListener() {
+                @Override
+                public void onYes() {
+                    mPresenter.setTradeStatus(TradeHelper.TRADE_STATUS_HANGUP);
+                }
+
+                @Override
+                public void onNo() {
+                    MessageUtil.show("已放弃当前操作");
+                }
+            });
+        } else {
+            MessageUtil.showWarning("当前无可挂单流水");
+        }
     }
 
     @OnClick(R.id.shop_cart_top_ll_btn_scan)
@@ -320,7 +332,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
             intent.setPackage("com.sunmi.sunmiqrcodescanner");
             startActivityForResult(intent, START_SCAN);
         } catch (Exception e) {
-            MessageUtil.showError("本设备不兼容");
+            MessageUtil.showError("本设备不支持扫码");
         }
     }
 
