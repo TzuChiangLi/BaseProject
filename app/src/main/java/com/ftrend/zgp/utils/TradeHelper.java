@@ -86,6 +86,7 @@ public class TradeHelper {
     private static Trade trade = null;
     // 商品列表
     private static List<TradeProd> prodList = null;
+
     // 支付信息
     private static TradePay pay = null;
     // 会员信息
@@ -93,6 +94,10 @@ public class TradeHelper {
 
     public static Trade getTrade() {
         return trade;
+    }
+
+    public static TradePay getPay() {
+        return pay;
     }
 
     public static List<TradeProd> getProdList() {
@@ -242,8 +247,11 @@ public class TradeHelper {
         prod.setSaleInfo("");
         prod.setDelFlag("0");
         //保存商品记录并重新汇总流水金额（此时会保存交易流水）
-        if (prod.insert(databaseWrapper) > 0 && recalcTotal(databaseWrapper)) {
+        //TODO 2019年10月21日11:13:42 recalcTotal方法应该在prodList添加商品之后再重新刷新一次
+        if (prod.insert(databaseWrapper) > 0) {
+//        if (prod.insert(databaseWrapper) > 0 && recalcTotal(databaseWrapper)) {
             prodList.add(prod);
+            recalcTotal(databaseWrapper);
             return index;
         } else {
             return -1;
@@ -432,6 +440,7 @@ public class TradeHelper {
 
     /**
      * 获取购物车中未行清的所有商品列表
+     *
      * @return
      */
     public static List<Map<String, Long>> getProdCountList() {
@@ -524,6 +533,18 @@ public class TradeHelper {
             count += prodList.get(i).getAmount();
         }
         return count;
+    }
+
+
+    /**
+     * @return 获取商品原价
+     */
+    public static double getTradePrice() {
+        double price = 0;
+        for (TradeProd prod : prodList) {
+            price += prod.getPrice() * prod.getAmount();
+        }
+        return price;
     }
 
     /**
@@ -774,7 +795,6 @@ public class TradeHelper {
         //forDsc:0否1是
         return (forDsc != 0) && (singleDsc == 0) && (vipDsc == 0) && (tranDsc == 0);
     }
-
 
     /**
      * @return 单项优惠
@@ -1428,6 +1448,31 @@ public class TradeHelper {
 
 
     /**
+     * 根据流水号查询商品明细
+     *
+     * @param lsNo 流水号
+     * @return 商品明细
+     */
+    public static List<TradeProd> getProdListByLsNo(String lsNo) {
+        return SQLite.select().from(TradeProd.class)
+                .where(TradeProd_Table.lsNo.eq(lsNo))
+                .queryList();
+    }
+
+    /**
+     * 根据流水单号查询交易记录
+     *
+     * @param lsNo 流水单号
+     * @return 交易流水
+     */
+    public static Trade getTradeByLsNo(String lsNo) {
+        return SQLite.select().from(Trade.class)
+                .where(Trade_Table.lsNo.eq(lsNo))
+                .and(Trade_Table.status.eq(TRADE_STATUS_PAID))
+                .querySingle();
+    }
+
+    /**
      * 价格格式化
      *
      * @param before 格式化前的价格
@@ -1484,5 +1529,24 @@ public class TradeHelper {
         return String.valueOf(phone).matches(match);
     }
 
-
+    /**
+     * @param payType 支付方式
+     * @return 支付方式
+     */
+    public static String convertAppPayType(String payType) {
+        switch (payType) {
+            case "0":
+                return "现金";
+            case "1":
+                return "支付宝";
+            case "2":
+                return "微信支付";
+            case "3":
+                return "储值卡";
+            case "4":
+                return "聚合支付";
+            default:
+                return "未知方式";
+        }
+    }
 }

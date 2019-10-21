@@ -18,6 +18,7 @@ import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.PayPresenter;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
@@ -53,6 +54,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     RecyclerView mRecyclerView;
     private Contract.PayPresenter mPresenter;
     private static int START_SCAN = 002;
+    private String lsNo;
 
     @Override
     protected int getLayoutID() {
@@ -70,6 +72,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
             mPresenter = PayPresenter.createPresenter(this);
         }
         EventBus.getDefault().register(this);
+        lsNo = TradeHelper.getTrade().getLsNo();
     }
 
     @Override
@@ -86,12 +89,10 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
 
     @Override
     public void onTitleClick(View v) {
-
     }
 
     @Override
     public void onRightClick(View v) {
-
     }
 
     /**

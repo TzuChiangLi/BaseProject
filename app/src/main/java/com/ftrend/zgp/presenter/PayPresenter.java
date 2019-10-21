@@ -1,11 +1,18 @@
 package com.ftrend.zgp.presenter;
 
+import android.os.RemoteException;
+
 import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
+import com.ftrend.zgp.utils.printer.PrintFormat;
+import com.ftrend.zgp.utils.printer.PrinterHelper;
+import com.ftrend.zgp.view.PayActivity;
+import com.sunmi.peripheral.printer.SunmiPrinterService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +33,15 @@ public class PayPresenter implements Contract.PayPresenter {
         return new PayPresenter(mView);
     }
 
+
+    @Override
+    public void getPrintData(SunmiPrinterService service) {
+        if (service == null) {
+            return;
+        }
+        //TODO 2019年10月18日10:56:56 生成数据，执行打印命令
+        PrinterHelper.print(PrintFormat.printFormat());
+    }
 
     @Override
     public void initPayWay() {
@@ -66,6 +82,17 @@ public class PayPresenter implements Contract.PayPresenter {
                 //插入交易流水队列
                 TradeHelper.uploadTradeQueue();
                 TradeHelper.clearVip();
+                PrinterHelper.initPrinter(PayActivity.mContext, new PrinterHelper.PrintInitCallBack() {
+                    @Override
+                    public void onSuccess(SunmiPrinterService service) throws RemoteException {
+                        getPrintData(service);
+                    }
+
+                    @Override
+                    public void onFailed() {
+                        MessageUtil.showError("打印机出现故障，请检查");
+                    }
+                });
                 return true;
             } else {
                 return false;

@@ -42,7 +42,7 @@ import butterknife.OnClick;
 public class PriceMobileDialog extends BottomPopupView implements View.OnClickListener, KeyboardView.OnItemClickListener {
     @BindView(R.id.vip_way_edt)
     ClearEditText mEdt;
-    @BindView(R.id.vip_way_tv_title)
+    @BindView(R.id.vip_dsc_tv_title)
     TextView mTitleTv;
     @BindView(R.id.vip_mobile_btn_submit)
     Button mSubmitBtn;
@@ -113,6 +113,7 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
                 mTitleTv.setText("请输入修改后的商品价格：");
                 mSubmitBtn.setText("修改");
                 mEdt.setOnClickListener(this);
+                mSubmitBtn.setBackground(vip_query_blue);
                 mKeyView.setOnKeyboardClickListener(this);
                 break;
             default:

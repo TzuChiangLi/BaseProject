@@ -165,21 +165,17 @@ public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnI
 
     @Override
     public void onNextClick() {
-
     }
 
     @Override
     public void onClearClick() {
-
     }
 
     @Override
     public void onCancelClick() {
-
     }
 
     @Override
     public void onEnterClick() {
-
     }
 }

@@ -42,7 +42,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
     LinearLayout mInfoLayout;
     @BindView(R.id.vip_way_edt)
     ClearEditText mEdt;
-    @BindView(R.id.vip_way_tv_title)
+    @BindView(R.id.vip_dsc_tv_title)
     TextView mTitleTv;
     @BindView(R.id.vip_mobile_btn_submit)
     Button mSubmitBtn;
@@ -136,7 +136,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         //展示自家小键盘
         mKeyView.show();
         //初始化其他界面信息
-        mTitleTv.setText("请输入本笔交易优惠信息：");
+        mTitleTv.setText("整单优惠");
         mEdt.setVisibility(GONE);
         mSubmitBtn.setVisibility(GONE);
         mProdNameTv.setVisibility(GONE);
@@ -168,7 +168,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         //展示自家小键盘
         mKeyView.show();
         //初始化其他界面信息
-        mTitleTv.setText("商品单项优惠：");
+        mTitleTv.setText("单项优惠");
         mEdt.setVisibility(GONE);
         mSubmitBtn.setVisibility(GONE);
         mKeyView.setOnKeyboardClickListener(this);

@@ -126,7 +126,7 @@ dependencies {
     //商米支付SDK
     implementation(name: 'PayLib-release-1.4.18', ext: 'aar')
     //商米打印机远程导入
-    implementation 'com.sunmi:printerlibrary:1.0.4'
+    implementation 'com.sunmi:printerlibrary:1.0.6'
     //收钱吧（gson包冲突，exclude方式无效，通过module方式引用解决冲突）
     implementation project(':SQB-Android-SDK-2.1.5')
 //    implementation(name: 'SQB-Android-SDK-2.1.5', ext: 'aar') {

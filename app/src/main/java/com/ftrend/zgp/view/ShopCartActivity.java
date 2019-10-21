@@ -292,6 +292,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
         if (ClickUtil.onceClick()) {
             return;
         }
+        mPresenter.refreshTrade();
         if (!"0".equals(mTipTv.getText().toString())) {
             Intent intent = new Intent(ShopCartActivity.this, PayActivity.class);
             startActivity(intent);

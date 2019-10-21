@@ -11,6 +11,7 @@ import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.User;
+import com.sunmi.peripheral.printer.SunmiPrinterService;
 
 import java.util.List;
 
@@ -187,7 +188,6 @@ public interface Contract {
     }
 
     interface HomePresenter {
-
         /**
          * 初始化商米支付SDK
          */
@@ -335,7 +335,10 @@ public interface Contract {
     }
 
     interface ShopCartPresenter {
-
+        /**
+         * 刷新交易信息
+         */
+        void refreshTrade();
         /**
          * 加载商品信息
          */
@@ -463,7 +466,10 @@ public interface Contract {
     }
 
     interface ShopListPresenter {
-
+        /**
+         * 刷新交易信息
+         */
+        void refreshTrade();
         /**
          * 检查取消交易权限
          */
@@ -633,6 +639,9 @@ public interface Contract {
     }
 
     interface PayPresenter {
+        //TODO 测试打印
+        void getPrintData(SunmiPrinterService service);
+
         /**
          * 初始化界面
          */
