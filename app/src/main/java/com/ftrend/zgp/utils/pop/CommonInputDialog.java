@@ -264,7 +264,5 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
 
     @Override
     public void onEnterClick() {
-
-
     }
 }

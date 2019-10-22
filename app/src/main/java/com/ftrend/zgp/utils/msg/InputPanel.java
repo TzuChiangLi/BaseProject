@@ -2,17 +2,17 @@ package com.ftrend.zgp.utils.msg;
 
 import android.content.Context;
 
+import com.ftrend.zgp.utils.pop.CommonInputDialog;
+import com.ftrend.zgp.utils.pop.MoneyInputCallback;
 import com.ftrend.zgp.utils.pop.PayChargeDialog;
 import com.ftrend.zgp.utils.pop.PriceDscDialog;
-import com.ftrend.zgp.utils.pop.PriceMobileDialog;
+import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.ftrend.zgp.utils.pop.VipCardDialog;
 import com.ftrend.zgp.utils.pop.VipMoreBtnDialog;
 import com.lxj.xpopup.XPopup;
 
 import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_SINGLE_RSC;
 import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_WHOLE_RSC;
-import static com.ftrend.zgp.utils.pop.PriceMobileDialog.DIALOG_CHANGE_PRICE;
-import static com.ftrend.zgp.utils.pop.PriceMobileDialog.DIALOG_MOBILE;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -51,10 +51,10 @@ public class InputPanel {
     /**
      * 现金找零
      */
-    public static void showChargeDialog(Context context, double total) {
+    public static void showChargeDialog(Context context, double total, MoneyInputCallback callback) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new PayChargeDialog(context, total))
+                .asCustom(new PayChargeDialog(context, total, callback))
                 .show();
     }
 
@@ -72,24 +72,24 @@ public class InputPanel {
     /**
      * 改价弹窗
      *
-     * @param index 索引
+     * @param callback 回调
      */
-    public static void showPriceChange(Context context, int index) {
+    public static void showPriceChange(Context context, MoneyInputCallback callback) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new PriceMobileDialog(context, DIALOG_CHANGE_PRICE, index))
+                .asCustom(new CommonInputDialog(context, "请输入修改后的商品价格：", "修改", 0, callback))
                 .show();
     }
 
     /**
      * 会员输入弹窗
      *
-     * @param index 索引
+     * @param callback 回调
      */
-    public static void showVipMobile(Context context, int index) {
+    public static void showVipMobile(Context context, StringInputCallback callback) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new PriceMobileDialog(context, DIALOG_MOBILE, index))
+                .asCustom(new CommonInputDialog(context, "请输入会员手机号：", "查询", "13637366688", 11, false, callback))
                 .show();
     }
 
@@ -125,11 +125,10 @@ public class InputPanel {
      * @param title    对话框输入提示信息
      * @param callback 输入结果回调
      */
-    public static void showInput(Context context, String title, PriceMobileDialog.InputCallback callback) {
+    public static void showInput(Context context, String title, StringInputCallback callback) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new PriceMobileDialog(context, title, callback))
+                .asCustom(new CommonInputDialog(context, title, "确定", "", 50, true, callback))
                 .show();
     }
-
 }

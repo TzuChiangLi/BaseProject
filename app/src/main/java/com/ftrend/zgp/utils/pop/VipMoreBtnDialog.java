@@ -16,6 +16,7 @@ import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.lxj.xpopup.core.CenterPopupView;
 
@@ -87,13 +88,13 @@ public class VipMoreBtnDialog extends CenterPopupView implements View.OnClickLis
         }
         switch (v.getId()) {
             case R.id.vip_way_ll_card:
-                MessageUtil.showVipCard(mContext);
+                InputPanel.showVipCard(mContext);
                 break;
             case R.id.vip_way_ll_scan:
                 Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_ENTER_SCAN);
                 break;
             case R.id.vip_way_ll_mobile:
-                MessageUtil.showVipMobile(mContext, new StringInputCallback() {
+                InputPanel.showVipMobile(mContext, new StringInputCallback() {
                     @Override
                     public void onOk(String value) {
                         queryVipInfo(value); // TODO: 2019/10/21 移到购物车界面去处理
