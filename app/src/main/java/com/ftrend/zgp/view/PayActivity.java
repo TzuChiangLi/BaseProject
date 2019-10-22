@@ -21,6 +21,7 @@ import com.ftrend.zgp.presenter.PayPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
@@ -138,7 +139,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                             startActivityForResult(intent, START_SCAN);
                         } catch (Exception e) {
                             String msg = "本设备不支持刷卡，请输入顾客支付码：";
-                            MessageUtil.showInput(PayActivity.this, msg, new StringInputCallback() {
+                            InputPanel.showInput(PayActivity.this, msg, new StringInputCallback() {
                                 @Override
                                 public void onOk(String value) {
                                     mPresenter.payByShouQian(value);
@@ -162,7 +163,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                     case 2:
                         //现金
                         final double total = TradeHelper.getTradeTotal();
-                        MessageUtil.showChargeDialog(PayActivity.this, total,
+                        InputPanel.showChargeDialog(PayActivity.this, total,
                                 new MoneyInputCallback() {
                                     @Override
                                     public void onOk(double value) {

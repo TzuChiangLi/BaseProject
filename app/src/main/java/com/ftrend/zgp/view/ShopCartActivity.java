@@ -30,6 +30,7 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
 import com.gyf.immersionbar.ImmersionBar;
@@ -211,7 +212,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
                 final DepProduct prod = (DepProduct) adapter.getItem(position);
                 if (prod.getPrice() == 0 && prod.getPriceFlag() == 1) {
                     //修改价格
-                    MessageUtil.showPriceChange(ShopCartActivity.this, new MoneyInputCallback() {
+                    InputPanel.showPriceChange(ShopCartActivity.this, new MoneyInputCallback() {
                         @Override
                         public void onOk(double value) {
                             //添加到购物车中

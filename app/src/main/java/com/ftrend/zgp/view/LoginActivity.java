@@ -54,8 +54,6 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
     protected void initData() {
         mPresenter.initDepData(this);
         mPresenter.initUserData();
-        System.out.println("边距大小: top => " + ConvertUtils.px2dp(35));
-
     }
 
     @Override

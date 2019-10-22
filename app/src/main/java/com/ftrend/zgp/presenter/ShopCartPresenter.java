@@ -141,6 +141,10 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
     @Override
     public void addToShopCart(DepProduct depProduct) {
         addToShopCart(depProduct, depProduct.getPrice());
+        if (TradeHelper.vip != null) {
+            //如果会员已登录且有会员信息
+            TradeHelper.saveVipDsc();
+        }
     }
 
     @Override
@@ -149,6 +153,9 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
             LogUtil.e("向数据库添加商品失败");
         } else {
             TradeHelper.priceChangeInShopCart(price);
+            if (TradeHelper.vip != null) {
+                TradeHelper.saveVipDsc();
+            }
             updateTradeInfo();
         }
     }

@@ -17,6 +17,7 @@ import com.ftrend.zgp.presenter.HomePresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
+import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.pop.StringInputCallback;
@@ -26,6 +27,7 @@ import com.gyf.immersionbar.ImmersionBar;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindDrawable;
 import butterknife.BindView;
 
 /**
@@ -42,6 +44,8 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     TextView mUserTv;
     @BindView(R.id.home_tv_depname)
     TextView mDepTv;
+    @BindView(R.id.home_tv_pos_code)
+    TextView mPosCodeTv;
     @BindView(R.id.home_img_online_status)
     ImageView mNetImg;
     private Contract.HomePresenter mPresenter;
@@ -112,6 +116,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         mDateTv.setText(info[0]);
         mUserTv.setText(ZgParams.getCurrentUser().getUserName());
         mDepTv.setText(ZgParams.getCurrentDep().getDepName());
+        mPosCodeTv.setText(ZgParams.getPosCode());
     }
 
     @Override
@@ -204,7 +209,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                     return;
                 }
                 String msg = "请输入支付记录中的商家订单号：";
-                MessageUtil.showInput(HomeActivity.this, msg, new StringInputCallback() {
+                InputPanel.showInput(HomeActivity.this, msg, new StringInputCallback() {
                     @Override
                     public void onOk(String value) {
                         Trade trade = new Trade();

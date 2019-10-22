@@ -109,6 +109,8 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
             case MONEY:
                 mEdt.setText(mDefMoney > 0 ? String.valueOf(mDefMoney) : "");
                 break;
+            default:
+                break;
         }
     }
 
@@ -264,7 +266,5 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
 
     @Override
     public void onEnterClick() {
-
-
     }
 }

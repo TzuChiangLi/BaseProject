@@ -16,31 +16,45 @@ import java.util.regex.Pattern;
  */
 
 public class PrintFormat {
+    /**
+     * 根据打印纸宽度定义字符总数
+     */
     public static int iSplitCount = 32;//默认是58mm=32的,也有80mm=48
+    /**
+     * 前半部分空格数量
+     */
     private static int startSpace = iSplitCount == 32 ? 19 : 24;
+    /**
+     * 居左
+     */
     public static final int ALIGN_LEFT = 0;
+    /**
+     * 居中
+     */
     public static final int ALIGN_CENTER = 1;
+    /**
+     * 居右
+     */
     public static final int ALIGN_RIGHT = 2;
+    /**
+     * 加粗指令
+     */
     public static final byte[] BOLD_ON = {0x1B, 0x45, 0x1};
+    /**
+     * 取消加粗
+     */
     public static final byte[] BOLD_OFF = {0x1B, 0x45, 0x0};
+    /**
+     * 中文区域
+     */
     private static String ChinaRegEx = "[\u4e00-\u9fa5]";
 
+    /**
+     * @return 生成打印数据
+     */
     public static List<PrintData> printFormat() {
         List<PrintData> printDataList = new ArrayList<>();
-        PrintData printData = new PrintData();
-        //产品名称
-//        printData.setAlign(ALIGN_CENTER);
-//        printData.setFontSize(36);
-//        printData.setBold(true);
-//        printData.setPrintData("方象柜台收银");
-//        printDataList.add(printData);
-//        //测试标题
-//        printData = new PrintData();
-//        printData.setAlign(ALIGN_CENTER);
-//        printData.setFontSize(26);
-//        printData.setBold(true);
-//        printData.setPrintData("方象柜台收银打印测试第一单");
-//        printDataList.add(printData);
+        PrintData printData;
         //分割线
         printDataList.add(newLine());
         //柜台名
@@ -69,7 +83,6 @@ public class PrintFormat {
         //商品        数量    小计
         printData = new PrintData();
         printData.setInitStyle(true);
-        //TODO 2019年10月18日16:45:43 需要自适应
         printData.setPrintData(mergeTitle("商品", "数量", "小计", 32));
 //        printData.setPrintData("商品--------------数量------小计");
         printDataList.add(printData);
@@ -127,11 +140,21 @@ public class PrintFormat {
         return line;
     }
 
+    /**
+     * 标题格式化
+     *
+     * @param start  左标题
+     * @param mid    中间标题
+     * @param end    右标题
+     * @param length 长度
+     * @return 文本
+     */
     private static String mergeTitle(String start, String mid, String end, int length) {
         String resultStr = "";
         int startLength = 0;
         int midLength = 0;
         int endLength = 0;
+        //TODO 24这个值不准确，需要拿到80mm机器实际测试
         startSpace = iSplitCount == 32 ? 19 : 24;
         //int chineseCharNum = 0;
         // 计算开始的字符的总长度和中文字符串的数量
