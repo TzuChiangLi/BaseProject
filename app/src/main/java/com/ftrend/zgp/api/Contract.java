@@ -369,6 +369,14 @@ public interface Contract {
         void addToShopCart(DepProduct depProduct);
 
         /**
+         * 添加到购物车
+         *
+         * @param depProduct 商品对象
+         * @param price      价格
+         */
+        void addToShopCart(DepProduct depProduct, double price);
+
+        /**
          * 设置交易状态
          *
          * @param status 交易状态
@@ -660,6 +668,14 @@ public interface Contract {
          * @param appPayType APP支付方式
          */
         boolean paySuccess(String appPayType);
+
+        /**
+         * 交易完成
+         *
+         * @param appPayType APP支付方式
+         * @param value      实际支付金额
+         */
+        boolean paySuccess(String appPayType, double value);
 
         /**
          * 销毁，防止泄露

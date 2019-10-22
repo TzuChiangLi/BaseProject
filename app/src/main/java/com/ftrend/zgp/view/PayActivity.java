@@ -21,18 +21,15 @@ import com.ftrend.zgp.presenter.PayPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
-import com.ftrend.zgp.utils.event.Event;
-import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.PayType;
-import com.ftrend.zgp.utils.pop.PriceMobileDialog;
+import com.ftrend.zgp.utils.pop.MoneyInputCallback;
+import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,7 +69,6 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
         if (mPresenter == null) {
             mPresenter = PayPresenter.createPresenter(this);
         }
-        EventBus.getDefault().register(this);
         lsNo = TradeHelper.getTrade().getLsNo();
     }
 
@@ -136,9 +132,8 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                             intent.setPackage("com.sunmi.sunmiqrcodescanner");
                             startActivityForResult(intent, START_SCAN);
                         } catch (Exception e) {
-                            //MessageUtil.showError("本设备不兼容");
                             String msg = "本设备不支持刷卡，请输入顾客支付码：";
-                            InputPanel.showInput(PayActivity.this, msg, new PriceMobileDialog.InputCallback() {
+                            MessageUtil.showInput(PayActivity.this, msg, new StringInputCallback() {
                                 @Override
                                 public void onOk(String value) {
                                     mPresenter.payByShouQian(value);
@@ -148,16 +143,41 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                                 public void onCancel() {
                                     MessageUtil.show("已取消支付");
                                 }
+
+                                @Override
+                                public String validate(String value) {
+                                    return null;
+                                }
                             });
                         }
                         break;
                     case 1:
                         //储值卡
-//                        SqbPayHelper.refund("client8935856");
                         break;
                     case 2:
                         //现金
-                        InputPanel.showChargeDialog(PayActivity.this, Double.parseDouble(mTotalTv.getText().toString()));
+                        final double total = TradeHelper.getTradeTotal();
+                        MessageUtil.showChargeDialog(PayActivity.this, total,
+                                new MoneyInputCallback() {
+                                    @Override
+                                    public void onOk(double value) {
+                                        if (mPresenter.paySuccess(PayType.PAYTYPE_CASH, value)) {
+                                            returnHomeActivity("交易已完成");
+                                        } else {
+                                            MessageUtil.showError("交易失败，请稍后重试");
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancel() {
+                                        MessageUtil.show("已取消支付");
+                                    }
+
+                                    @Override
+                                    public String validate(double value) {
+                                        return (value >= total) ? "" : "支付金额不足！";
+                                    }
+                                });
                         break;
                     default:
                         break;
@@ -211,7 +231,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
         MessageUtil.showError(msg);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    /*@Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessage(Event event) {
         if (event.getTarget() == Event.TARGET_PAY_WAY) {
             if (event.getType() == Event.TYPE_PAY_CASH) {
@@ -222,7 +242,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                 }
             }
         }
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

@@ -17,10 +17,9 @@ import com.ftrend.zgp.presenter.HomePresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
-import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
-import com.ftrend.zgp.utils.pop.PriceMobileDialog;
+import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.gyf.immersionbar.ImmersionBar;
 
@@ -205,7 +204,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                     return;
                 }
                 String msg = "请输入支付记录中的商家订单号：";
-                InputPanel.showInput(HomeActivity.this, msg, new PriceMobileDialog.InputCallback() {
+                MessageUtil.showInput(HomeActivity.this, msg, new StringInputCallback() {
                     @Override
                     public void onOk(String value) {
                         Trade trade = new Trade();
@@ -225,6 +224,11 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                     @Override
                     public void onCancel() {
                         MessageUtil.show("已取消退款");
+                    }
+
+                    @Override
+                    public String validate(String value) {
+                        return null;
                     }
                 });
                 break;

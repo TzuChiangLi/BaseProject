@@ -74,11 +74,16 @@ public class PayPresenter implements Contract.PayPresenter {
 
     @Override
     public boolean paySuccess(String appPayType) {
+        return paySuccess(appPayType, 0);
+    }
+
+    @Override
+    public boolean paySuccess(String appPayType, double value) {
         //付款成功
         //更新交易流水表
         try {
             //完成支付
-            if (TradeHelper.pay(appPayType)) {
+            if (TradeHelper.pay(appPayType, value)) {
                 //插入交易流水队列
                 TradeHelper.uploadTradeQueue();
                 TradeHelper.clearVip();
@@ -102,6 +107,7 @@ public class PayPresenter implements Contract.PayPresenter {
             return false;
         }
     }
+
 
     @Override
     public void onDestory() {

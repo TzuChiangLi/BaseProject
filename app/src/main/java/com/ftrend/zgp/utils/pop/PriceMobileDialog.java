@@ -28,7 +28,6 @@ import com.lxj.xpopup.core.BottomPopupView;
 
 import java.util.Map;
 
-import butterknife.BindColor;
 import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -48,6 +47,8 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
     Button mSubmitBtn;
     @BindDrawable(R.drawable.vip_query_btn_selector)
     Drawable vip_query_blue;
+    @BindDrawable(R.drawable.pay_dialog_btn_selector)
+    Drawable pay_red_selector;
     //会员弹窗：1-手机号
     public static final int DIALOG_MOBILE = 1;
     //购物车：  2-改价
@@ -115,6 +116,7 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
                 mEdt.setOnClickListener(this);
                 mSubmitBtn.setBackground(vip_query_blue);
                 mKeyView.setOnKeyboardClickListener(this);
+                mSubmitBtn.setBackground(pay_red_selector);
                 break;
             default:
                 mKeyViewStub = ((ViewStub) findViewById(R.id.vip_way_key_lite_view)).inflate();
@@ -125,6 +127,7 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
                 mEdt.setInputType(InputType.TYPE_NULL);
                 mEdt.setOnClickListener(this);
                 mKeyView.setOnKeyboardClickListener(this);
+                mSubmitBtn.setBackground(pay_red_selector);
                 break;
         }
     }

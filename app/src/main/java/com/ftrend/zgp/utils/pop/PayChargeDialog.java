@@ -18,8 +18,6 @@ import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.utils.common.ClickUtil;
-import com.ftrend.zgp.utils.event.Event;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.lxj.xpopup.core.BottomPopupView;
 
@@ -49,15 +47,17 @@ public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnI
     private View mKeyViewStub;
     private KeyboardView mKeyView;
     private double total;
-
+    // 回调
+    private MoneyInputCallback mCallback = null;
 
     public PayChargeDialog(@NonNull Context context) {
         super(context);
     }
 
-    public PayChargeDialog(@NonNull Context context, double total) {
+    public PayChargeDialog(@NonNull Context context, double total, MoneyInputCallback callback) {
         super(context);
         this.total = total;
+        this.mCallback = callback;
     }
 
     @Override
@@ -110,38 +110,52 @@ public class PayChargeDialog extends BottomPopupView implements KeyboardView.OnI
             return;
         }
         if (TextUtils.isEmpty(mEdt.getText())) {
-            MessageUtil.show("请输入收入现金金额");
-        } else if (mEdt.getText().toString().contains("-")) {
-            MessageUtil.show("收入现金金额不足");
+            MessageUtil.show("请输入付款金额");
         } else {
-            Event.sendEvent(Event.TARGET_PAY_WAY, Event.TYPE_PAY_CASH);
+            if (mCallback != null) {
+                double value = Double.parseDouble(mEdt.getText().toString());
+                String msg = mCallback.validate(value);
+                if (TextUtils.isEmpty(msg)) {
+                    mCallback.onOk(value);
+                    dismiss();
+                } else {
+                    MessageUtil.show(msg);
+                }
+            }
         }
-
     }
 
     @OnClick(R.id.pay_charge_img_close)
     public void close() {
+        KeyboardUtils.hideSoftInput(this);
         dismiss();
     }
 
     @Override
+    protected void onDismiss() {
+        super.onDismiss();
+        if (mCallback != null) {
+            mCallback.onCancel();
+        }
+    }
+
+    @Override
     public void onKeyClick(View v, int key) {
-        if (mEdt.getText().toString().contains(".")) {
-            int position = mEdt.getText().toString().indexOf(".");
-            if (mEdt.getText().toString().substring(0, position).length() > 6) {
-                MessageUtil.show("超出限制");
-                return;
-            }
-            if (mEdt.getText().toString().substring(position, mEdt.getText().toString().length() - 1).length() >= 2) {
-                MessageUtil.show("超出限制");
+        String text = mEdt.getText().toString();
+        if ("0".equals(text)) {
+            text = "";
+        }
+        if (text.contains(".")) {
+            int position = text.indexOf(".");
+            if (text.length() - position >= 3) {
                 return;
             }
         } else {
-            if (mEdt.getText().toString().length() >= 6) {
+            if (text.length() >= 6) {
                 return;
             }
         }
-        mEdt.setText(mEdt.getText().append(String.valueOf(key)));
+        mEdt.setText(text + key);
     }
 
     @Override
