@@ -205,7 +205,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 break;
             case "测试退款":
                 // 此功能仅用于测试
-                if (!SqbPayHelper.DEMO_MODE) {
+                if (!ZgParams.getSqbConfig().isDemoMode()) {
                     return;
                 }
                 String msg = "请输入支付记录中的商家订单号：";

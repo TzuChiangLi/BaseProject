@@ -8,6 +8,7 @@ import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.SysParams;
 import com.ftrend.zgp.model.User;
+import com.ftrend.zgp.utils.pay.SqbConfig;
 import com.ftrend.zgp.utils.sunmi.SunmiCardConfig;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -49,7 +50,8 @@ public class ZgParams {
     private static String wxPayAccount = "";
     //系统参数：优惠版本 null或者“超市版”时为超市版，否则为百货版
     private static String programEdition = "";
-
+    //系统参数：收钱吧参数
+    private static SqbConfig sqbConfig = new SqbConfig();
 
     //本地参数：服务器地址
     private static String serverUrl = "";
@@ -94,11 +96,10 @@ public class ZgParams {
                 wxPayAccount = param.getParamValue();
             } else if ("CardConfig".equalsIgnoreCase(param.getParamName())) {
                 cardConfig = SunmiCardConfig.fromJson(param.getParamValue());
-            } else if ("ProgramEdition".equalsIgnoreCase(param.getParamName())) {
-                programEdition = param.getParamValue();
+            } else if ("SqbConfig".equalsIgnoreCase(param.getParamName())) {
+                sqbConfig = SqbConfig.fromJson(param.getParamValue());
             }
         }
-        Log.e(TAG, "cardConfig: " + GsonUtils.toJson(cardConfig));
 
         //本地参数
         List<AppParams> appParamsList = SQLite.select().from(AppParams.class)
@@ -243,6 +244,10 @@ public class ZgParams {
 
     public static SunmiCardConfig getCardConfig() {
         return cardConfig;
+    }
+
+    public static SqbConfig getSqbConfig() {
+        return sqbConfig;
     }
 
     public static String getLastDep() {
