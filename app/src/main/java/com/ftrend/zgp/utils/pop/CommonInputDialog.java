@@ -32,7 +32,7 @@ import butterknife.OnClick;
 public class CommonInputDialog extends BottomPopupView implements View.OnClickListener, KeyboardView.OnItemClickListener {
     @BindView(R.id.vip_way_edt)
     ClearEditText mEdt;
-    @BindView(R.id.vip_way_tv_title)
+    @BindView(R.id.vip_dsc_tv_title)
     TextView mTitleTv;
     @BindView(R.id.vip_mobile_btn_submit)
     Button mSubmitBtn;
@@ -108,6 +108,8 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
                 break;
             case MONEY:
                 mEdt.setText(mDefMoney > 0 ? String.valueOf(mDefMoney) : "");
+                break;
+            default:
                 break;
         }
     }
