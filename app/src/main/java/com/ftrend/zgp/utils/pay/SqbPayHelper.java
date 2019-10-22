@@ -31,31 +31,6 @@ public class SqbPayHelper {
     private static String REQUEST_CANCEL = "4";
 
     /**
-     * 当前是否演示模式。演示模式下，付款和退款金额都为100（1元）
-     */
-    public static boolean DEMO_MODE = true;
-
-    /** 收钱吧接入域名 */
-//    public static final String apiDomain = "https://api.shouqianba.com";
-    /**
-     * 服务商ID
-     */
-    public static final String vendorId = "20160407103537";
-    /** 服务商Key */
-    public static final String vendorKey = "a8bbaa0aeb3daf40f5924a3a9b694d00";
-    /** 服务商AppId */
-    public static String appId = "";//ftrend.zgpos
-    /** 终端号 */
-    public static String terminalSn = "100035370009266786";
-    /** 终端密钥 */
-    public static String terminalKey = "316849581b75841b8b3f61f7cac0194f";
-// "terminal_sn":"100035370009266786","terminal_key":"316849581b75841b8b3f61f7cac0194f",
-// "merchant_sn":"1680000635494","merchant_name":"青岛方象",
-// "store_sn":"1580000002217123","store_name":"方象测试"
-    /** 是否打开交易完成时,成功和失败的提示声音 */
-    public static boolean playSound = false;
-
-    /**
      * 交易结果回调
      */
     public interface PayResultCallback {
@@ -71,15 +46,28 @@ public class SqbPayHelper {
     }
 
     /**
+     * 判断当前设备是否已激活
+     *
+     * @return
+     */
+    public static boolean isActivated() {
+        return UpayTask.getInstance().isActivated();
+    }
+
+    /**
      * 设备激活
      */
-    public static void activate() {
-        if (UpayTask.getInstance().isActivated()) {
+    public static void activate(final PayResultCallback callback) {
+        if (isActivated()) {
+            if (callback != null) {
+                callback.onResult(true, "", "", "");
+            }
             return;
         }
-        String activateCode = "16060878";
+        /*String activateCode = "16060878";
         String deviceSn = "FT0001";
-        String deviceName = "ZGPOS001";
+        String deviceName = "ZGPOS001";*/
+        SqbConfig config = ZgParams.getSqbConfig();
         /**
          * activate 激活
          * @param code 激活码内容
@@ -91,11 +79,20 @@ public class SqbPayHelper {
          * @param payModel 支付模式
          * @param callBack 请求回调
          */
-        UpayTask.getInstance().activate(activateCode, vendorId, vendorKey, UpayOrder.PayModel.NO_UI,
+        UpayTask.getInstance().activate(config.getActivateCode(), config.getVendorId(), config.getVendorKey(),
+                UpayOrder.PayModel.NO_UI,
                 new UpayCallBack() {
                     @Override
                     public void onExecuteResult(UpayResult result) {
                         LogUtil.e(result.toString());
+                        if (callback == null) {
+                            return;
+                        }
+                        if (UpayResult.ACTIVATE_SUCCESS.equals(result.getOrder_status())) {
+                            callback.onResult(true, "", "", "");
+                        } else {
+                            callback.onResult(false, "", "", result.getError_message());
+                        }
                     }
                 });
         // TODO: 2019/10/18 目前无法获得APPID，激活时无法指定设备信息
@@ -114,7 +111,8 @@ public class SqbPayHelper {
         final String requestNo = CommonUtil.newUuid();
         UpayOrder order = new UpayOrder();
         order.setClient_sn(clientSn);//商户订单号
-        order.setTotal_amount(DEMO_MODE ? "100" : CommonUtil.moneyToString(trade.getTotal()));//交易总金额
+        order.setTotal_amount(ZgParams.getSqbConfig().isDemoMode()
+                ? "100" : CommonUtil.moneyToString(trade.getTotal()));//交易总金额
         // order.setPayway("1");//支付方式--无需指定
         order.setDynamic_id(scanCode);//付款码内容
         order.setSubject(ZgParams.getCurrentDep().getDepName() + "-购物消费");//交易简介
@@ -177,7 +175,8 @@ public class SqbPayHelper {
         // 而当通信质量不佳，终端不确认退款请求是否成功，自动或手动发起的退款请求重试，则务必要保持序列号不变
         order.setRefund_request_no(requestNo);//退款序列号
         order.setOperator(ZgParams.getCurrentUser().getUserCode());//操作员
-        order.setRefund_amount(DEMO_MODE ? "100" : CommonUtil.moneyToString(trade.getTotal()));//退款金额
+        order.setRefund_amount(ZgParams.getSqbConfig().isDemoMode()
+                ? "100" : CommonUtil.moneyToString(trade.getTotal()));//退款金额
         order.setReflect(requestNo);//反射参数
         order.setRefundModel(UpayOrder.RefundModel.CLIENT_SN);//指定退款模式为商户订单号退款
         order.setPayModel(UpayOrder.PayModel.NO_UI);//指定 SDK 启动模式为无界面模式
@@ -286,7 +285,7 @@ public class SqbPayHelper {
                     + "\n错误码：" + result.getError_code()
                     + "\n错误消息：" + result.getError_message();
             //（1）微信支付：微信弹出支付密码输入界面，直接关闭。返回错误：UNEXPECTED_PROVIDER_ERROR，该笔交易异常，请稍后重试[EP99]（官方文档为：不认识的支付通道）
-            //
+            //（2）支付宝：
         } else if (REQUEST_PAY.equals(request.getRequestType())
                 && UpayResult.ORDER_PAID.equals(orderStatus)) {
             isSuccess = true;

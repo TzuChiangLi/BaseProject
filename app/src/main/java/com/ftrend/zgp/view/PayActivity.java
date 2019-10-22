@@ -23,6 +23,7 @@ import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.PayType;
+import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
 import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.gyf.immersionbar.ImmersionBar;
@@ -127,6 +128,10 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                 switch (position) {
                     case 0:
                         //收钱吧
+                        if (!SqbPayHelper.isActivated()) {
+                            MessageUtil.showError("当前设备未激活收钱吧服务，无法使用");
+                            return;
+                        }
                         try {
                             Intent intent = new Intent("com.summi.scan");
                             intent.setPackage("com.sunmi.sunmiqrcodescanner");

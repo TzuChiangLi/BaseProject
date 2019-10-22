@@ -1,7 +1,5 @@
 package com.ftrend.zgp.presenter;
 
-import android.os.RemoteException;
-
 import com.ftrend.zgp.App;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
@@ -10,13 +8,11 @@ import com.ftrend.zgp.utils.HandoverHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.UserRightsHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
-import com.ftrend.zgp.utils.printer.PrintFormat;
-import com.ftrend.zgp.utils.printer.PrinterHelper;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.task.LsUploadThread;
 import com.ftrend.zgp.utils.task.ServerWatcherThread;
-import com.sunmi.peripheral.printer.SunmiPrinterService;
 import com.wosai.upay.common.DebugConfig;
 import com.wosai.upay.common.UpayTask;
 import com.wosai.upay.http.Env;
@@ -53,8 +49,15 @@ public class HomePresenter implements Contract.HomePresenter {
     @Override
     public void initSqbSdk() {
         DebugConfig.setDebug(true);//默认为非调试模式,如果需要调试,请设置为 true,打印和保存相关日志
-        UpayTask.getInstance().initUpay(App.getContext(), SqbPayHelper.playSound, Env.UrlType.PRO);
-        SqbPayHelper.activate();
+        UpayTask.getInstance().initUpay(App.getContext(), ZgParams.getSqbConfig().isPlaySound(), Env.UrlType.PRO);
+        SqbPayHelper.activate(new SqbPayHelper.PayResultCallback() {
+            @Override
+            public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
+                if (!isSuccess) {
+                    MessageUtil.showError("收钱吧客户端激活失败");
+                }
+            }
+        });
     }
 
     @Override
