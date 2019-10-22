@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.lxj.xpopup.core.CenterPopupView;
 
@@ -79,13 +80,13 @@ public class VipMoreBtnDialog extends CenterPopupView implements View.OnClickLis
         }
         switch (v.getId()) {
             case R.id.vip_way_ll_card:
-                MessageUtil.showVipCard(mContext);
+                InputPanel.showVipCard(mContext);
                 break;
             case R.id.vip_way_ll_scan:
                 Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_ENTER_SCAN);
                 break;
             case R.id.vip_way_ll_mobile:
-                MessageUtil.showVipMobile(mContext, PriceMobileDialog.DIALOG_MOBILE);
+                InputPanel.showVipMobile(mContext, PriceMobileDialog.DIALOG_MOBILE);
                 break;
             case R.id.more_btn_cancel:
                 Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_DIALOG_CANCEL_TRADE);

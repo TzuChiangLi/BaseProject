@@ -21,6 +21,7 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -157,7 +158,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
         if (ClickUtil.onceClick()) {
             return;
         }
-        MessageUtil.showMoreFuncDialog(this);
+        InputPanel.showMoreFuncDialog(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -199,7 +200,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     mPresenter.checkCancelTradeRight();
                     break;
                 case Event.TYPE_DIALOG_VIP_DSC:
-                    MessageUtil.showVipWayDialog(this);
+                    InputPanel.showVipWayDialog(this);
                     break;
                 case Event.TYPE_DIALOG_HANG_UP:
                     MessageUtil.question("是否挂起当前交易？", new MessageUtil.MessageBoxYesNoListener() {
@@ -215,7 +216,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     });
                     break;
                 case Event.TYPE_DIALOG_WHOLE_DSC:
-                    MessageUtil.showWholeDscChange(this);
+                    InputPanel.showWholeDscChange(this);
                     break;
                 default:
                     break;
@@ -338,7 +339,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     @Override
     public void showPriceChangeDialog(int index) {
         //弹出改价窗口
-        MessageUtil.showPriceChange(ShopListActivity.this, index);
+        InputPanel.showPriceChange(ShopListActivity.this, index);
     }
 
     @Override
@@ -363,7 +364,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     @Override
     public void showSingleDscDialog(int index) {
         //弹出改价窗口
-        MessageUtil.showSingleDscChange(ShopListActivity.this, index);
+        InputPanel.showSingleDscChange(ShopListActivity.this, index);
     }
 
 

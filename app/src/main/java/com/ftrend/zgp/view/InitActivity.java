@@ -50,7 +50,6 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
 
     @Override
     protected void initData() {
-
     }
 
     @Override
@@ -84,7 +83,6 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
                     Intent intent = new Intent(InitActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
-                    return;
                 }
             }
         });

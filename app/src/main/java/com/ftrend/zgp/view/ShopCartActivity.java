@@ -30,6 +30,7 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -211,7 +212,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
                 //如果商品价格是0，那么就弹出窗口
                 // TODO: 2019/9/29 价格为0也有可能是赠品，此处判断逻辑待优化
                 if (prodList.get(position).getPrice() == 0) {
-                    MessageUtil.showPriceChange(ShopCartActivity.this, position);
+                    InputPanel.showPriceChange(ShopCartActivity.this, position);
                 }
             }
         });

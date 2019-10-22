@@ -17,6 +17,7 @@ import com.ftrend.zgp.presenter.HomePresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
+import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.pop.PriceMobileDialog;
@@ -204,7 +205,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                     return;
                 }
                 String msg = "请输入支付记录中的商家订单号：";
-                MessageUtil.showInput(HomeActivity.this, msg, new PriceMobileDialog.InputCallback() {
+                InputPanel.showInput(HomeActivity.this, msg, new PriceMobileDialog.InputCallback() {
                     @Override
                     public void onOk(String value) {
                         Trade trade = new Trade();
