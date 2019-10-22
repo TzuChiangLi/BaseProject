@@ -42,6 +42,25 @@
         android:paddingBottom="@dimen/dp_4">
 
         <ImageView
+            android:id="@+id/home_tv_pos_code_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:layout_toStartOf="@+id/home_tv_pos_code"
+            android:src="@drawable/pos_code"
+            android:textColor="@color/common_white" />
+
+        <TextView
+            android:id="@+id/home_tv_pos_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_12"
+            android:layout_toStartOf="@+id/home_tv_date_title"
+            android:textColor="@color/common_white" />
+
+        <ImageView
             android:id="@+id/home_tv_date_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

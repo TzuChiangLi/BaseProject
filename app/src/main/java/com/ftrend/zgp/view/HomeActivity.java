@@ -27,6 +27,7 @@ import com.gyf.immersionbar.ImmersionBar;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.BindDrawable;
 import butterknife.BindView;
 
 /**
@@ -43,6 +44,8 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     TextView mUserTv;
     @BindView(R.id.home_tv_depname)
     TextView mDepTv;
+    @BindView(R.id.home_tv_pos_code)
+    TextView mPosCodeTv;
     @BindView(R.id.home_img_online_status)
     ImageView mNetImg;
     private Contract.HomePresenter mPresenter;
@@ -113,6 +116,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         mDateTv.setText(info[0]);
         mUserTv.setText(ZgParams.getCurrentUser().getUserName());
         mDepTv.setText(ZgParams.getCurrentDep().getDepName());
+        mPosCodeTv.setText(ZgParams.getPosCode());
     }
 
     @Override

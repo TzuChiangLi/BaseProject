@@ -153,7 +153,9 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
             LogUtil.e("向数据库添加商品失败");
         } else {
             TradeHelper.priceChangeInShopCart(price);
-            TradeHelper.saveVipDsc();
+            if (TradeHelper.vip != null) {
+                TradeHelper.saveVipDsc();
+            }
             updateTradeInfo();
         }
     }
