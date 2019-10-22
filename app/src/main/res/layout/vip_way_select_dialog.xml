@@ -98,7 +98,7 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/vip_way_mobile" />
+                android:src="@drawable/vip_way_card" />
 
             <TextView
                 android:layout_width="wrap_content"
