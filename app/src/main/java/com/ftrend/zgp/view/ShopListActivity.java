@@ -201,7 +201,8 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     mPresenter.checkCancelTradeRight();
                     break;
                 case Event.TYPE_DIALOG_VIP_DSC:
-                    InputPanel.showVipWayDialog(this);
+                    //InputPanel.showVipWayDialog(this);
+                    mPresenter.vipInput(this);
                     break;
                 case Event.TYPE_DIALOG_HANG_UP:
                     MessageUtil.question("是否挂起当前交易？", new MessageUtil.MessageBoxYesNoListener() {

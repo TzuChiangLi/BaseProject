@@ -1,5 +1,6 @@
 package com.ftrend.zgp.presenter;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.ftrend.zgp.api.Contract;
@@ -12,7 +13,10 @@ import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.pop.StringInputCallback;
+import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 
 import java.util.Map;
 
@@ -174,6 +178,89 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
             updateTradeInfo();
         } else {
             mView.showError("无行清权限");
+        }
+    }
+
+    @Override
+    public void vipInput(final Context context) {
+        MessageUtil.waitBegin("请刷卡...", new MessageUtil.MessageBoxCancelListener() {
+            @Override
+            public boolean onCancel() {
+                // 取消刷卡，切换到手机号输入界面
+                InputPanel.showVipMobile(context, new StringInputCallback() {
+                    @Override
+                    public void onOk(String value) {
+                        queryVipInfo(value);
+                    }
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+
+                    @Override
+                    public String validate(String value) {
+                        // TODO: 2019/10/23 手机号校验
+                        return null;
+                    }
+                });
+                return true;
+            }
+        });
+        SunmiPayHelper.getInstance().readCard(new SunmiPayHelper.ReadCardCallback() {
+            @Override
+            public void onSuccess(String cardNo) {
+                queryVipInfo(cardNo);
+            }
+
+            @Override
+            public void onError(String msg) {
+                MessageUtil.showError(msg);
+            }
+        });
+    }
+
+    /**
+     * 查询会员信息并计算会员优惠
+     *
+     * @param code 手机号或会员卡号
+     */
+    private void queryVipInfo(String code) {
+        if (ZgParams.isIsOnline()) {
+            //在线查询会员信息
+            RestSubscribe.getInstance().queryVipInfo(code, new RestCallback(new RestResultHandler() {
+                @Override
+                public void onSuccess(Map<String, Object> body) {
+                    if (body != null) {
+                        VipInfo vipInfo = TradeHelper.vip();
+                        vipInfo.setVipName(body.get("vipName").toString());
+                        vipInfo.setVipCode(body.get("vipCode").toString());
+                        vipInfo.setVipDscRate(Double.parseDouble(body.get("vipDscRate").toString()));
+                        vipInfo.setVipGrade(body.get("vipGrade").toString());
+                        vipInfo.setVipPriceType(Double.parseDouble(body.get("vipPriceType").toString()));
+                        vipInfo.setRateRule(Double.parseDouble(body.get("rateRule").toString()));
+                        vipInfo.setForceDsc(body.get("forceDsc").toString());
+                        vipInfo.setCardCode(body.get("cardCode").toString());
+                        vipInfo.setDscProdIsDsc(body.get("dscProdIsDsc").toString());
+                        //保存会员信息到流水
+                        TradeHelper.saveVip();
+                        //刷新会员优惠
+                        TradeHelper.saveVipDsc();
+                        Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_VIP_INFO, vipInfo);
+                    } else {
+                        MessageUtil.show("服务返回异常错误");
+                    }
+                }
+
+                @Override
+                public void onFailed(String errorCode, String errorMsg) {
+                    MessageUtil.show(errorCode + errorMsg);
+                }
+            }));
+        } else {
+            MessageUtil.showWarning("当前为单机模式，无法查询会员信息");
+            //保存vipCode
+            TradeHelper.saveVipCodeOffline(code);
         }
     }
 

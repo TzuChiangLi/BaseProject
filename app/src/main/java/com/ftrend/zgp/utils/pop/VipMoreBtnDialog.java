@@ -16,7 +16,6 @@ import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
-import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.lxj.xpopup.core.CenterPopupView;
 
@@ -87,7 +86,8 @@ public class VipMoreBtnDialog extends CenterPopupView implements View.OnClickLis
             return;
         }
         switch (v.getId()) {
-            case R.id.vip_way_ll_card:
+            // 已取消会员输入方式选择界面
+            /*case R.id.vip_way_ll_card:
                 InputPanel.showVipCard(mContext);
                 break;
             case R.id.vip_way_ll_scan:
@@ -110,7 +110,7 @@ public class VipMoreBtnDialog extends CenterPopupView implements View.OnClickLis
                         return null;
                     }
                 });
-                break;
+                break;*/
             case R.id.more_btn_cancel:
                 Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_DIALOG_CANCEL_TRADE);
                 break;

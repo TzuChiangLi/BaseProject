@@ -543,6 +543,10 @@ public interface Contract {
          */
         void delTradeProd(int index);
 
+        /**
+         * 会员输入（刷卡或者输入手机号）
+         */
+        void vipInput(final Context context);
 
         /**
          * 查询专柜商品信息表中该商品的改价权限
