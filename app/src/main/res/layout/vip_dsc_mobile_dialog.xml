@@ -43,15 +43,15 @@
             android:layout_marginStart="@dimen/dp_16"
             android:layout_marginEnd="@dimen/dp_16"
             android:gravity="center_vertical"
+            android:background="@drawable/shop_cart_edt_bg"
             android:orientation="horizontal">
 
             <com.ftrend.cleareditview.ClearEditText
                 android:id="@+id/vip_way_edt"
                 android:layout_width="@dimen/dp_0"
                 android:layout_height="@dimen/dp_35"
-                android:layout_marginEnd="@dimen/dp_8"
                 android:layout_weight="5"
-                android:background="@drawable/shop_cart_edt_bg"
+                android:background="@android:color/transparent"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:inputType="none"
@@ -64,6 +64,7 @@
                 android:layout_height="@dimen/dp_35"
                 android:background="@android:color/transparent"
                 android:text="@string/vip_btn_submit"
+                android:stateListAnimator="@null"
                 android:textColor="@color/common_white" />
         </LinearLayout>
 

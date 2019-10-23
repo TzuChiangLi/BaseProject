@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><!--<shape xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:shape="rectangle">--><!--<solid android:color="@color/handover_title_blue" />--><!--<stroke--><!--android:width="1px"--><!--android:color="@color/common_black" />-->
-
-
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- This is the main color -->
-    <item>
+    <item >
         <shape>
             <!--    边框颜色 -->
             <solid android:color="@color/common_black" />

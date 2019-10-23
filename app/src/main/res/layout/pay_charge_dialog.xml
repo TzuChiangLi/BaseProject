@@ -75,6 +75,7 @@
         android:layout_below="@+id/pay_charge_tv_title"
         android:layout_marginStart="@dimen/dp_16"
         android:layout_marginEnd="@dimen/dp_16"
+        android:background="@drawable/shop_cart_edt_bg"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -82,10 +83,9 @@
             android:id="@+id/pay_charge_edt"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_35"
-            android:layout_marginEnd="@dimen/dp_8"
             android:layout_weight="5"
             android:autoSizeTextType="uniform"
-            android:background="@drawable/shop_cart_edt_bg"
+            android:background="@android:color/transparent"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:hint="@string/pay_tv_tip"
@@ -98,6 +98,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_35"
             android:background="@android:color/transparent"
+            android:stateListAnimator="@null"
             android:text="@string/pay_tv_success"
             android:textColor="@color/common_white" />
 
