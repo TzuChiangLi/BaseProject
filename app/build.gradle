@@ -135,5 +135,7 @@ dependencies {
     //单元测试框架
     //http://robolectric.org
     testImplementation 'org.robolectric:robolectric:4.3'
-
+//    //UI测试
+//    androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.6.3'
+//    androidTestImplementation 'com.android.support.test:rules:1.0.2'
 }

@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
+    android:layout_marginBottom="@dimen/dp_4"
     android:background="@color/common_white"
     android:gravity="center"
-    android:layout_marginBottom="@dimen/dp_4"
     android:orientation="vertical"
     android:paddingStart="@dimen/dp_8"
     android:paddingEnd="@dimen/dp_8">

@@ -357,7 +357,7 @@ public class TradeHelper {
      * 完成支付（仅适用于现金支付）
      *
      * @param appPayType APP支付类型
-     * @param value 实际支付金额，为0时全额支付
+     * @param value      实际支付金额，为0时全额支付
      * @return
      */
     public static boolean pay(String appPayType, double value) {
@@ -1307,7 +1307,8 @@ public class TradeHelper {
                         .querySingle().getVipPrice3();
             }
         }
-        return vipPrice;
+        //如果商品的会员价为0，那还是执行商品原价
+        return vipPrice == 0 ? prod.getPrice() : vipPrice;
     }
 
 
