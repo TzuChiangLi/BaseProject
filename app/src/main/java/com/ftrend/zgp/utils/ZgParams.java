@@ -69,6 +69,8 @@ public class ZgParams {
     private static String lastDep = "";
     //本地参数：上次登录用户
     private static String lastUser = "";
+    //本地参数：上次生成的交易流水号
+    private static String lastLsNo = "";
 
     //业务参数：本次登录的专柜
     private static Dep currentDep = new Dep();
@@ -120,6 +122,8 @@ public class ZgParams {
                 lastDep = param.getParamValue();
             } else if ("lastUser".equalsIgnoreCase(param.getParamName())) {
                 lastUser = param.getParamValue();
+            } else if ("lastLsNo".equalsIgnoreCase(param.getParamName())) {
+                lastLsNo = param.getParamValue();
             }
         }
 
@@ -185,10 +189,14 @@ public class ZgParams {
      * @param paramName  列名
      * @param paramValue 列值
      */
-    public static void saveAppParams(String paramName, String paramValue) {
+    public static boolean saveAppParams(String paramName, String paramValue) {
         AppParams appParams = SQLite.select().from(AppParams.class).where(AppParams_Table.paramName.eq(paramName)).querySingle();
+        if (appParams == null) {
+            appParams = new AppParams();
+            appParams.setParamName(paramName);
+        }
         appParams.setParamValue(paramValue);
-        appParams.update();
+        return appParams.save();
     }
 
     /**
@@ -276,5 +284,13 @@ public class ZgParams {
 
     public static void setProgramEdition(String programEdition) {
         ZgParams.programEdition = programEdition;
+    }
+
+    public static String getLastLsNo() {
+        return lastLsNo;
+    }
+
+    public static void setLastLsNo(String lastLsNo) {
+        ZgParams.lastLsNo = lastLsNo;
     }
 }

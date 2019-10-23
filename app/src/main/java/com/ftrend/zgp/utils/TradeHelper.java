@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.raizlabs.android.dbflow.sql.language.Method.count;
@@ -247,12 +248,16 @@ public class TradeHelper {
         prod.setSaleInfo("");
         prod.setDelFlag("0");
         //保存商品记录并重新汇总流水金额（此时会保存交易流水）
-        //TODO 2019年10月21日11:13:42 recalcTotal方法应该在prodList添加商品之后再重新刷新一次
         if (prod.insert(databaseWrapper) > 0) {
-//        if (prod.insert(databaseWrapper) > 0 && recalcTotal(databaseWrapper)) {
             prodList.add(prod);
-            recalcTotal(databaseWrapper);
-            return index;
+            if (recalcTotal(databaseWrapper)) {
+                return index;
+            } else {
+                //流水保存失败，删除新添加的商品
+                prodList.remove(prod);
+                recalcTotal(databaseWrapper);
+                return -1;
+            }
         } else {
             return -1;
         }
@@ -282,9 +287,21 @@ public class TradeHelper {
             return false;
         }
         TradeProd prod = prodList.get(index);
-        prod.setDelFlag("1");
-        prodList.remove(index);
-        return prod.save(databaseWrapper) && recalcTotal(databaseWrapper);
+        prod.setDelFlag(DELFLAG_YES);
+        //保存商品记录并重新汇总流水金额（此时会保存交易流水）
+        if (prod.save(databaseWrapper)) {
+            prodList.remove(prod);
+            if (recalcTotal(databaseWrapper)) {
+                return true;
+            } else {
+                //流水保存失败，重新添加删除的商品
+                prodList.add(index, prod);
+                recalcTotal(databaseWrapper);
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
     //endregion
 
@@ -368,27 +385,51 @@ public class TradeHelper {
     //endregion
 
     /**
+     * 最小流水号
+     *
+     * @return
+     */
+    public static String lsNoMin() {
+        return ZgParams.getPosCode() + "00001";
+    }
+
+    /**
+     * 最大流水号
+     *
+     * @return
+     */
+    public static String lsNoMax() {
+        return ZgParams.getPosCode() + "99999";
+    }
+
+    /**
      * 生成新的流水号
      *
      * @return
      */
     private static String newLsNo() {
-        //初始流水号
-        final String DEF_LS_NO = ZgParams.getPosCode() + "00001";
-
+        String lastNo = "";
+        //查询数据库中当前最大的流水号
         FlowCursor cursor = SQLite.select(Method.max(Trade_Table.lsNo)).from(Trade.class).query();
-        if (cursor == null) {
-            return DEF_LS_NO;
+        if (cursor != null) {
+            if (cursor.moveToNext()) {
+                lastNo = cursor.getStringOrDefault(0);
+            }
         }
-        cursor.moveToNext();
-        if (cursor.getCount() == 0 || cursor.isNull(0)) {
-            return DEF_LS_NO;
+        //数据库无流水，则取本地参数中的最大流水号
+        if (TextUtils.isEmpty(lastNo)) {
+            lastNo = ZgParams.getLastLsNo();
         }
 
-        String lsNo = cursor.getStringOrDefault(0);
-        int max = Integer.valueOf(lsNo.substring(3));
-        int current = max == 99999 ? 1 : max + 1;
-        return ZgParams.getPosCode() + String.format("%05d", current);
+        String lsNo = lsNoMin();
+        if (!TextUtils.isEmpty(lastNo)) {
+            int max = Integer.valueOf(lastNo.substring(3));
+            int current = (max == 99999) ? 1 : max + 1;
+            lsNo = ZgParams.getPosCode() + String.format(Locale.CHINA, "%05d", current);
+        }
+        ZgParams.saveAppParams("lastLsNo", lsNo);
+        ZgParams.setLastLsNo(lsNo);
+        return lsNo;
     }
 
     /**
