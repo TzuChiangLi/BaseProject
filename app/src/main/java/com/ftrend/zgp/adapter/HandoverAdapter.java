@@ -36,10 +36,12 @@ public class HandoverAdapter extends BaseQuickAdapter<HandoverRecord, BaseViewHo
 
         helper.setText(R.id.handover_money_total, String.format("%.2f", item.getMoneyTotal()));
         helper.setText(R.id.handover_money_count, String.valueOf(item.getMoneyCount()));
-        helper.setText(R.id.handover_alipay_total, String.format("%.2f", item.getAliPayTotal()));
-        helper.setText(R.id.handover_alipay_count, String.valueOf(item.getAliPayCount()));
-        helper.setText(R.id.handover_wechat_total, String.format("%.2f", item.getWechatTotal()));
-        helper.setText(R.id.handover_wechat_count, String.valueOf(item.getWechatCount()));
+        helper.setText(R.id.handover_sqb_total, String.format("%.2f", item.getSqbTotal()));
+        helper.setText(R.id.handover_sqb_count, String.valueOf(item.getSqbCount()));
+//        helper.setText(R.id.handover_alipay_total, String.format("%.2f", item.getAliPayTotal()));
+//        helper.setText(R.id.handover_alipay_count, String.valueOf(item.getAliPayCount()));
+//        helper.setText(R.id.handover_wechat_total, String.format("%.2f", item.getWechatTotal()));
+//        helper.setText(R.id.handover_wechat_count, String.valueOf(item.getWechatCount()));
         helper.setText(R.id.handover_card_total, String.format("%.2f", item.getCardTotal()));
         helper.setText(R.id.handover_card_count, String.valueOf(item.getCardCount()));
         helper.setText(R.id.handover_pay_total, String.format("%.2f", item.getPayTotal()));

@@ -17,11 +17,11 @@ public class HandoverRecord {
     private double rtnCount = 0;
     private double rtnTotal = 0;
 
-    private double total = 0;
-    private double count = 0;
-
     private double moneyTotal = 0;
     private double moneyCount = 0;
+
+    private double sqbTotal = 0;
+    private double sqbCount = 0;
 
     private double aliPayTotal = 0;
     private double aliPayCount = 0;
@@ -31,11 +31,6 @@ public class HandoverRecord {
 
     private double cardTotal = 0;
     private double cardCount = 0;
-
-
-    private double payTotal = 0;
-    private double payCount = 0;
-
 
     public HandoverRecord() {
     }
@@ -89,19 +84,11 @@ public class HandoverRecord {
     }
 
     public double getTotal() {
-        return total;
-    }
-
-    public void setTotal(double total) {
-        this.total = total;
+        return saleTotal + rtnTotal;
     }
 
     public double getCount() {
-        return count;
-    }
-
-    public void setCount(double count) {
-        this.count = count;
+        return saleCount + rtnCount;
     }
 
     public double getMoneyTotal() {
@@ -122,6 +109,22 @@ public class HandoverRecord {
 
     public double getAliPayTotal() {
         return aliPayTotal;
+    }
+
+    public double getSqbTotal() {
+        return sqbTotal;
+    }
+
+    public void setSqbTotal(double sqbTotal) {
+        this.sqbTotal = sqbTotal;
+    }
+
+    public double getSqbCount() {
+        return sqbCount;
+    }
+
+    public void setSqbCount(double sqbCount) {
+        this.sqbCount = sqbCount;
     }
 
     public void setAliPayTotal(double aliPayTotal) {
@@ -169,19 +172,11 @@ public class HandoverRecord {
     }
 
     public double getPayTotal() {
-        return payTotal;
-    }
-
-    public void setPayTotal(double payTotal) {
-        this.payTotal = payTotal;
+        return moneyTotal + aliPayTotal + wechatTotal + cardTotal;
     }
 
     public double getPayCount() {
-        return payCount;
-    }
-
-    public void setPayCount(double payCount) {
-        this.payCount = payCount;
+        return moneyCount + aliPayCount + wechatCount + cardCount;
     }
 
     public String getDepCode() {

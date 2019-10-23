@@ -1,5 +1,6 @@
 package com.ftrend.zgp.utils.db;
 
+import com.ftrend.zgp.model.HandoverPay;
 import com.ftrend.zgp.model.TradeProd;
 import com.raizlabs.android.dbflow.annotation.Database;
 import com.raizlabs.android.dbflow.annotation.Migration;
@@ -20,7 +21,7 @@ public class ZgpDb {
     // 数据库名称
     public static final String DATABASE_NAME = "zgp";
     // 数据库版本号
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
 
     @Migration(version = 0, database = ZgpDb.class, priority = 0)
     public static class Migration0 extends BaseMigration {
@@ -34,9 +35,9 @@ public class ZgpDb {
     }
 
     @Migration(version = 2, database = ZgpDb.class, priority = 1)
-    public static class Migration2 extends AlterTableMigration<TradeProd> {
+    public static class Migration2_TradeProd extends AlterTableMigration<TradeProd> {
 
-        public Migration2(Class<TradeProd> table) {
+        public Migration2_TradeProd(Class<TradeProd> table) {
             super(table);
         }
 
@@ -50,7 +51,7 @@ public class ZgpDb {
     }
 
     @Migration(version = 2, database = ZgpDb.class, priority = 2)
-    public static class Migration2_1 extends BaseMigration {
+    public static class Migration2 extends BaseMigration {
         @Override
         public void migrate(DatabaseWrapper database) {
             DbUpdateHelper.update_2(database);
@@ -62,6 +63,29 @@ public class ZgpDb {
         @Override
         public void migrate(DatabaseWrapper database) {
 
+        }
+    }
+
+    @Migration(version = 4, database = ZgpDb.class, priority = 1)
+    public static class Migration4 extends BaseMigration {
+        @Override
+        public void migrate(DatabaseWrapper database) {
+
+        }
+    }
+
+    @Migration(version = 4, database = ZgpDb.class, priority = 2)
+    public static class Migration4_HandoverPay extends AlterTableMigration<HandoverPay> {
+
+        public Migration4_HandoverPay(Class<HandoverPay> table) {
+            super(table);
+        }
+
+        @Override
+        public void onPreMigrate() {
+            addColumn(SQLiteType.TEXT, "cashier");
+            addColumn(SQLiteType.TEXT, "cashierName");
+            addColumn(SQLiteType.TEXT, "payTypeName");
         }
     }
 

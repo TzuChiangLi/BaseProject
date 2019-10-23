@@ -272,6 +272,41 @@
                     android:background="@drawable/view_white_left_line"
                     android:gravity="center"
                     android:padding="@dimen/dp_8"
+                    android:text="@string/handover_sqb" />
+
+                <TextView
+                    android:id="@+id/handover_sqb_total"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/view_white_mid_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_total_replace" />
+
+                <TextView
+                    android:id="@+id/handover_sqb_count"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/view_white_right_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_count_replace" />
+            </LinearLayout>
+
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/view_white_left_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
                     android:text="@string/handover_alipay" />
 
                 <TextView
@@ -293,9 +328,9 @@
                     android:gravity="center"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_count_replace" />
-            </LinearLayout>
+            </LinearLayout>-->
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
@@ -328,7 +363,7 @@
                     android:gravity="center"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_count_replace" />
-            </LinearLayout>
+            </LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"
