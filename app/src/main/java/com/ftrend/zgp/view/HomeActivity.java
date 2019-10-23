@@ -16,7 +16,6 @@ import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.HomePresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
@@ -27,7 +26,6 @@ import com.gyf.immersionbar.ImmersionBar;
 import java.util.List;
 import java.util.Locale;
 
-import butterknife.BindDrawable;
 import butterknife.BindView;
 
 /**
@@ -142,23 +140,11 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
             case "交班":
                 mPresenter.goHandover();
                 break;
-            case "退货":
-                mPresenter.goRtnProd();
-                break;
             case "注销登录":
                 mPresenter.logout();
                 break;
             case "取单":
                 mPresenter.getOutOrder();
-                break;
-            case "交班报表":
-                MessageUtil.waitBegin("请稍等", null);
-                break;
-            case "交易统计":
-                MessageUtil.showSuccess();
-                break;
-            case "流水查询":
-                MessageUtil.showWarning("警告");
                 break;
             case "数据同步":
                 // TODO: 2019/10/12 重构：移动到presenter类
@@ -183,23 +169,6 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                             MessageUtil.waitEnd();
                             MessageUtil.showError("数据同步失败：" + msg);
                         }
-                    }
-                });
-                break;
-            case "操作指南":
-                MessageUtil.error("操作指南");
-                break;
-            case "参数设置":
-                MessageUtil.warning("参数设置");
-                break;
-            case "修改密码":
-                MessageUtil.question("修改密码", new MessageUtil.MessageBoxYesNoListener() {
-                    @Override
-                    public void onYes() {
-                    }
-
-                    @Override
-                    public void onNo() {
                     }
                 });
                 break;
@@ -237,8 +206,15 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                     }
                 });
                 break;
+            case "退货":
+            case "交班报表":
+            case "交易统计":
+            case "流水查询":
+            case "操作指南":
+            case "参数设置":
+            case "修改密码":
             default:
-                LogUtil.e("无此功能");
+                MessageUtil.showError("此功能暂不可用");
                 break;
         }
     }
