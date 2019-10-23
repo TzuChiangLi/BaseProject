@@ -51,25 +51,31 @@
 
             <Button
                 android:id="@+id/more_btn_vip_dsc"
-                android:layout_width="@dimen/dp_64"
-                android:layout_height="@dimen/dp_64"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_16"
-                android:layout_marginEnd="@dimen/dp_16"
-                android:background="@drawable/more_btn_shape"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/vip_dsc"
+                android:drawablePadding="@dimen/dp_4"
                 android:maxLines="1"
                 android:text="@string/shop_tv_vip"
                 android:textSize="@dimen/sp_13" />
 
             <Button
                 android:id="@+id/more_btn_vip_whole_dsc"
-                android:layout_width="@dimen/dp_64"
-                android:layout_height="@dimen/dp_64"
-                android:layout_marginStart="@dimen/dp_16"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_8"
                 android:layout_marginEnd="@dimen/dp_16"
-                android:background="@drawable/more_btn_shape"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/whole_dsc"
+                android:drawablePadding="@dimen/dp_4"
                 android:maxLines="1"
                 android:text="@string/shop_tv_whole_dsc"
-                android:textSize="13sp" />
+                android:textSize="@dimen/sp_13" />
 
 
         </LinearLayout>
@@ -90,23 +96,29 @@
 
             <Button
                 android:id="@+id/more_btn_cancel"
-                android:layout_width="@dimen/dp_64"
-                android:layout_height="@dimen/dp_64"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_16"
-                android:layout_marginEnd="@dimen/dp_16"
-                android:background="@drawable/more_btn_shape"
+                android:layout_marginEnd="@dimen/dp_8"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/cancel_trade"
+                android:drawablePadding="@dimen/dp_4"
                 android:maxWidth="@dimen/dp_48"
                 android:maxLines="1"
                 android:text="@string/shop_tv_cancel"
-                android:textSize="13sp" />
+                android:textSize="@dimen/sp_13" />
 
             <Button
                 android:id="@+id/more_btn_hang_up"
-                android:layout_width="@dimen/dp_64"
-                android:layout_height="@dimen/dp_64"
-                android:layout_marginStart="@dimen/dp_16"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_8"
                 android:layout_marginEnd="@dimen/dp_16"
-                android:background="@drawable/more_btn_shape"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:drawableTop="@drawable/hang_up"
+                android:drawablePadding="@dimen/dp_4"
                 android:maxLines="1"
                 android:text="@string/shop_btn_hang_up"
                 android:textSize="@dimen/sp_13" />

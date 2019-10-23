@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_4"
             android:layout_toStartOf="@+id/home_tv_pos_code"
             android:src="@drawable/pos_code"
             android:textColor="@color/common_white" />
@@ -56,16 +56,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/dp_12"
+            android:layout_marginEnd="@dimen/dp_8"
             android:layout_toStartOf="@+id/home_tv_date_title"
-            android:textColor="@color/common_white" />
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/sp_13" />
 
         <ImageView
             android:id="@+id/home_tv_date_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_4"
             android:layout_toStartOf="@+id/home_tv_date"
             android:src="@drawable/date"
             android:textColor="@color/common_white" />
@@ -75,9 +76,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginEnd="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_4"
             android:layout_toStartOf="@+id/home_img_user_title"
-            android:textColor="@color/common_white" />
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/sp_13" />
 
 
         <ImageView
@@ -97,7 +99,8 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/dp_16"
-            android:textColor="@color/common_white" />
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/sp_13" />
 
     </RelativeLayout>
 

@@ -4,6 +4,5 @@
     <size
         android:width="64dp"
         android:height="64dp" />
-    <solid android:color="@color/common_gray_bg" />
-
+    <solid android:color="@android:color/transparent"/>
 </shape>
