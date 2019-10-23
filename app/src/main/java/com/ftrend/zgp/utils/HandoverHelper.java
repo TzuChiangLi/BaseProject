@@ -65,6 +65,8 @@ public class HandoverHelper {
      * 处理未完成的交班记录（只处理最新的一条），在交班初始化前完成
      */
     public static void dealWithNotFinished(@NonNull OperateCallback callback) {
+        // TODO: 2019/10/23 目前交班后流水号从1开始，不适合做以下处理
+       /* // 查询上次交班信息
         Handover handover = SQLite.select().from(Handover.class)
                 .orderBy(Handover_Table.id, false)
                 .limit(1)
@@ -81,7 +83,7 @@ public class HandoverHelper {
         }
         // TODO: 2019/10/22 查询后台交班状态
         // 1. 已完成，更新交班状态并删除对应的流水
-        // 2. 未完成，设置该交班记录已失败（或者删除？）
+        // 2. 未完成，设置该交班记录已失败（或者删除？）*/
     }
 
     /**
@@ -418,6 +420,11 @@ public class HandoverHelper {
         return result;
     }
 
+    /**
+     * 保存交班信息（调用后台接口前，先保存交班记录）
+     *
+     * @return
+     */
     public static boolean save() {
         final boolean[] result = {false};
         TransHelper.transSync(new TransHelper.TransRunner() {
@@ -443,6 +450,9 @@ public class HandoverHelper {
         return result[0];
     }
 
+    /**
+     * 交班完成（更新交班记录状态，清空流水表）
+     */
     public static void finish() {
         TransHelper.transSync(new TransHelper.TransRunner() {
             @Override
