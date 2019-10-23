@@ -90,7 +90,7 @@ public class SunmiPayHelper {
      */
     public void readCard(ReadCardCallback callback) {
         if (!sdkConnected) {
-            callback.onError("支付SDK服务未连接");
+            callback.onError("刷卡服务不可用");
             return;
         }
         this.readCardCallback = callback;
