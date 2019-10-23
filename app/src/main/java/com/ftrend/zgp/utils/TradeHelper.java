@@ -267,7 +267,16 @@ public class TradeHelper {
      * @param index 行清的商品索引
      * @return 是否成功
      */
-    public static boolean delProduct(int index) {
+    public static boolean delProduct(final int index) {
+        return TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                return doDelProduct(databaseWrapper, index);
+            }
+        });
+    }
+
+    private static boolean doDelProduct(DatabaseWrapper databaseWrapper, int index) {
         if (index < 0 || index >= prodList.size()) {
             Log.e(TAG, "行清: 索引无效");
             return false;
@@ -275,7 +284,7 @@ public class TradeHelper {
         TradeProd prod = prodList.get(index);
         prod.setDelFlag("1");
         prodList.remove(index);
-        return prod.save();
+        return prod.save(databaseWrapper) && recalcTotal(databaseWrapper);
     }
     //endregion
 

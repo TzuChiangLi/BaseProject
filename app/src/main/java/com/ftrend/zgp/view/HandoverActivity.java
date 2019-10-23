@@ -1,6 +1,5 @@
 package com.ftrend.zgp.view;
 
-import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -140,13 +139,12 @@ public class HandoverActivity extends BaseActivity implements Contract.HandoverV
 
     @Override
     public void showSuccess() {
-        MessageUtil.showSuccess("交班成功！");
-        new Handler().postDelayed(new Runnable() {
+        MessageUtil.info("交班成功！", new MessageUtil.MessageBoxOkListener() {
             @Override
-            public void run() {
+            public void onOk() {
                 finish();
             }
-        }, 1500);
+        });
     }
 
     @Override

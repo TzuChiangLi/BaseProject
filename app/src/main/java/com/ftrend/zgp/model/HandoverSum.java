@@ -8,10 +8,14 @@ import com.raizlabs.android.dbflow.annotation.Table;
 import com.raizlabs.android.dbflow.structure.BaseModel;
 
 /**
- * @author liziqiang@ftrend.cn
+ * 交班记录（交易统计）
+ * Copyright (C),青岛致远方象软件科技有限公司
+ *
+ * @author liuhongbin@ftrend.cn
+ * @since 2019/10/22
  */
 @Table(database = ZgpDb.class)
-public class HandoverPay extends BaseModel {
+public class HandoverSum extends BaseModel {
     @PrimaryKey(autoincrement = true)
     @NotNull
     private int id;
@@ -26,12 +30,6 @@ public class HandoverPay extends BaseModel {
     private String cashierName;
     @Column
     @NotNull
-    private String payType;
-    @Column
-    @NotNull
-    private String payTypeName;
-    @Column
-    @NotNull
     private double saleCount = 0;
     @Column
     @NotNull
@@ -42,11 +40,24 @@ public class HandoverPay extends BaseModel {
     @Column
     @NotNull
     private double rtnTotal = 0;
-
     @Column
     @NotNull
-    @Deprecated
-    private String tradeFlag = "";
+    private double delCount = 0;
+    @Column
+    @NotNull
+    private double delTotal = 0;
+    @Column
+    @NotNull
+    private double cancelCount = 0;
+    @Column
+    @NotNull
+    private double cancelTotal = 0;
+    @Column
+    @NotNull
+    private double hangupCount = 0;
+    @Column
+    @NotNull
+    private double hangupTotal = 0;
 
     public int getId() {
         return id;
@@ -64,6 +75,7 @@ public class HandoverPay extends BaseModel {
         this.handoverNo = handoverNo;
     }
 
+
     public String getCashier() {
         return cashier;
     }
@@ -78,30 +90,6 @@ public class HandoverPay extends BaseModel {
 
     public void setCashierName(String cashierName) {
         this.cashierName = cashierName;
-    }
-
-    public String getTradeFlag() {
-        return tradeFlag;
-    }
-
-    public void setTradeFlag(String tradeFlag) {
-        this.tradeFlag = tradeFlag;
-    }
-
-    public String getPayType() {
-        return payType;
-    }
-
-    public void setPayType(String payType) {
-        this.payType = payType;
-    }
-
-    public String getPayTypeName() {
-        return payTypeName;
-    }
-
-    public void setPayTypeName(String payTypeName) {
-        this.payTypeName = payTypeName;
     }
 
     public double getSaleCount() {
@@ -136,25 +124,51 @@ public class HandoverPay extends BaseModel {
         this.rtnTotal = rtnTotal;
     }
 
-    public void init() {
-        saleCount = 0;
-        saleTotal = 0;
-        rtnCount = 0;
-        rtnTotal = 0;
+    public double getDelCount() {
+        return delCount;
     }
 
-    public void add(HandoverPay other) {
-        saleCount += other.saleCount;
-        saleTotal += other.saleTotal;
-        rtnCount += other.rtnCount;
-        rtnTotal += other.rtnTotal;
+    public void setDelCount(double delCount) {
+        this.delCount = delCount;
     }
 
-    public double getCount() {
-        return saleCount + rtnCount;
+    public double getDelTotal() {
+        return delTotal;
     }
 
-    public double getTotal() {
-        return saleTotal + rtnTotal;
+    public void setDelTotal(double delTotal) {
+        this.delTotal = delTotal;
+    }
+
+    public double getCancelCount() {
+        return cancelCount;
+    }
+
+    public void setCancelCount(double cancelCount) {
+        this.cancelCount = cancelCount;
+    }
+
+    public double getCancelTotal() {
+        return cancelTotal;
+    }
+
+    public void setCancelTotal(double cancelTotal) {
+        this.cancelTotal = cancelTotal;
+    }
+
+    public double getHangupCount() {
+        return hangupCount;
+    }
+
+    public void setHangupCount(double hangupCount) {
+        this.hangupCount = hangupCount;
+    }
+
+    public double getHangupTotal() {
+        return hangupTotal;
+    }
+
+    public void setHangupTotal(double hangupTotal) {
+        this.hangupTotal = hangupTotal;
     }
 }

@@ -10,6 +10,7 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 import java.util.Date;
 
 /**
+ * 交班记录
  * @author liziqiang@ftrend.cn
  */
 @Table(database = ZgpDb.class)
@@ -28,47 +29,58 @@ public class Handover extends BaseModel {
     private String depCode;
     @Column
     @NotNull
-    private String cashier;
-    @Column
-    @NotNull
     private String lsNoMin;
     @Column
     @NotNull
     private String lsNoMax;
     @Column
     @NotNull
+    private String status = "0";
+
+    @Column
+    @NotNull
+    @Deprecated
+    private String cashier = "";
+    @Column
+    @NotNull
+    @Deprecated
     private double saleCount = 0;
     @Column
     @NotNull
+    @Deprecated
     private double saleTotal = 0;
     @Column
     @NotNull
+    @Deprecated
     private double rtnCount = 0;
     @Column
     @NotNull
+    @Deprecated
     private double rtnTotal = 0;
     @Column
     @NotNull
+    @Deprecated
     private double delCount = 0;
     @Column
     @NotNull
+    @Deprecated
     private double delTotal = 0;
     @Column
     @NotNull
+    @Deprecated
     private double cancelCount = 0;
     @Column
     @NotNull
+    @Deprecated
     private double cancelTotal = 0;
     @Column
     @NotNull
+    @Deprecated
     private double hangupCount = 0;
     @Column
     @NotNull
+    @Deprecated
     private double hangupTotal = 0;
-    @Column
-    @NotNull
-    private String status = "0";
-
 
     public int getId() {
         return id;
