@@ -120,4 +120,10 @@ public class OrderOutActivity extends BaseActivity implements Contract.OrderOutV
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestory();
+    }
 }

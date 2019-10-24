@@ -294,5 +294,4 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
             mView = null;
         }
     }
-
 }

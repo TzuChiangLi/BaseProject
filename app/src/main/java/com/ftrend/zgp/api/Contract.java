@@ -83,6 +83,9 @@ public interface Contract {
     }
 
     interface InitPresenter {
+        /**
+         * 开始动画
+         */
         void startAnimator();
 
         /**

@@ -242,5 +242,4 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
             mView = null;
         }
     }
-
 }

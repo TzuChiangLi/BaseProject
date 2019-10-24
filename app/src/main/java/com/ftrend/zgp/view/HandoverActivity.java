@@ -192,7 +192,11 @@ public class HandoverActivity extends BaseActivity implements Contract.HandoverV
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestory();
+    }
 }
 //@BindView(R.id.handover_tv_usercode)
 //    TextView mUserCodeTv;

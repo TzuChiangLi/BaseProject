@@ -162,4 +162,10 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
     public void showError(String msg) {
         MessageUtil.showError(msg);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestory();
+    }
 }
