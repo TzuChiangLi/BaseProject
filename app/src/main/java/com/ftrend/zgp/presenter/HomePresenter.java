@@ -85,17 +85,17 @@ public class HomePresenter implements Contract.HomePresenter {
                 R.drawable.xtgn_czzn, R.drawable.xtgn_cssz, R.drawable.xtgn_xgmm, R.drawable.xtgn_zxdl, R.drawable.xtgn_zxdl
         };
         for (int i = 0; i < 4; i++) {
-            childList.add(new Menu.MenuList(menuImg[i], menuName[i]));
+            childList.add(new Menu.MenuList(menuImg[i], menuName[i], i == 1 ? TradeHelper.getHangUpCount() : 0));
         }
         menuList.add(new Menu("交易", childList));
         childList = new ArrayList<>();
         for (int i = 4; i < 7; i++) {
-            childList.add(new Menu.MenuList(menuImg[i], menuName[i]));
+            childList.add(new Menu.MenuList(menuImg[i], menuName[i], 0));
         }
         menuList.add(new Menu("报表查询", childList));
         childList = new ArrayList<>();
         for (int i = 7; i < menuName.length; i++) {
-            childList.add(new Menu.MenuList(menuImg[i], menuName[i]));
+            childList.add(new Menu.MenuList(menuImg[i], menuName[i], 0));
         }
         menuList.add(new Menu("系统功能", childList));
         mView.setMenuList(menuList);

@@ -276,6 +276,12 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         mPresenter.onDestory();
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mPresenter.initMenuList();
+    }
+
     /**
      * 网络变化
      *

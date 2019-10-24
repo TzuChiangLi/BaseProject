@@ -1346,6 +1346,17 @@ public class TradeHelper {
         return rate;
     }
 
+    /**
+     * @return 挂单交易总数
+     */
+    public static long getHangUpCount() {
+        long count = 0;
+        count = SQLite.select(count()).from(Trade.class)
+                .where(Trade_Table.status.eq(TRADE_STATUS_HANGUP))
+                .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
+                .count();
+        return count;
+    }
 
     /**
      * 获取本机内所有挂起的流水

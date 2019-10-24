@@ -1,13 +1,8 @@
 package com.ftrend.zgp;
 
-import android.content.Context;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -16,11 +11,29 @@ import static org.junit.Assert.assertEquals;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
-    @Test
-    public void useAppContext() {
-        // Context of the app under test.
-        Context appContext = InstrumentationRegistry.getTargetContext();
-
-        assertEquals("com.ftrend.Application", appContext.getPackageName());
-    }
+//    @Rule
+//    public ActivityTestRule<LoginActivity> activityTestRule =
+//            new ActivityTestRule<>(LoginActivity.class);
+//
+//    private Solo solo;
+//
+//    @Before
+//    public void setUp() {
+//        solo = new Solo(InstrumentationRegistry.getInstrumentation(),
+//                activityTestRule.getActivity());
+//    }
+//
+//    @After
+//    public void tearDown() {
+////        solo.finishOpenedActivities();
+//    }
+//
+//    @Test
+//    public void testLogin() throws Exception {
+//        ClearEditText pwd = (ClearEditText) solo.getView(R.id.login_edt_password);
+//        solo.enterText(pwd,"951753");
+//        solo.clickOnView(solo.getView("login_btn"));
+//        boolean result = solo.waitForActivity(HomeActivity.class);
+//        Assert.assertEquals(true, result);
+//    }
 }
