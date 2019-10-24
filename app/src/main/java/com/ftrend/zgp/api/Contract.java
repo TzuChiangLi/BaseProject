@@ -339,6 +339,7 @@ public interface Contract {
          * 刷新交易信息
          */
         void refreshTrade();
+
         /**
          * 加载商品信息
          */
@@ -410,6 +411,12 @@ public interface Contract {
     }
 
     interface ShopCartView extends BaseView<Contract.ShopCartPresenter> {
+        /**
+         * 弹窗显示错误信息文本
+         *
+         * @param error 错误信息文本
+         */
+        void showError(String error);
 
         /**
          * 设置商品类别
@@ -478,6 +485,7 @@ public interface Contract {
          * 刷新交易信息
          */
         void refreshTrade();
+
         /**
          * 检查取消交易权限
          */

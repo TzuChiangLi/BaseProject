@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.VipInfo;
+import com.ftrend.zgp.utils.DscHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.UserRightsHelper;
 import com.ftrend.zgp.utils.ZgParams;
@@ -195,7 +196,6 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
 
                     @Override
                     public void onCancel() {
-
                     }
 
                     @Override
@@ -245,7 +245,9 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
                         //保存会员信息到流水
                         TradeHelper.saveVip();
                         //刷新会员优惠
-                        TradeHelper.saveVipDsc();
+                        for (int i = 0; i < TradeHelper.getProdList().size(); i++) {
+                            DscHelper.saveVipProdDsc(i);
+                        }
                         Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_VIP_INFO, vipInfo);
                     } else {
                         MessageUtil.show("服务返回异常错误");

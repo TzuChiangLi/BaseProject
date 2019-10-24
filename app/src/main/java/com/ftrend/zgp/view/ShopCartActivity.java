@@ -132,6 +132,11 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
 
 
     @Override
+    public void showError(String error) {
+        MessageUtil.error(error);
+    }
+
+    @Override
     public void setClsList(final List<DepCls> clsList) {
         mClassRecyclerView.setVisibility(View.VISIBLE);
         if (clsList != null && clsList.size() != 0) {

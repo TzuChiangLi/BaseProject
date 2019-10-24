@@ -102,7 +102,6 @@ public class OrderOutActivity extends BaseActivity implements Contract.OrderOutV
                 if (ClickUtil.onceClick()) {
                     return;
                 }
-
                 int result = mPresenter.doOrderOut(tradeList.get(position).getLsNo());
                 switch (result) {
                     case 0:
@@ -112,7 +111,7 @@ public class OrderOutActivity extends BaseActivity implements Contract.OrderOutV
                         finish();
                         break;
                     case -1:
-                        MessageUtil.showError("购物车不为空，无法取单");
+                        MessageUtil.showError("存在未处理单据\n请处理完毕后重试");
                         break;
                     default:
                         MessageUtil.showError("取单失败");
