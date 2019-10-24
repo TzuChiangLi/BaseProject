@@ -68,18 +68,17 @@ public class TradeHelper {
     public static final String TRADE_STATUS_PAID = "2";
     // 交易状态：3-取消
     public static final String TRADE_STATUS_CANCELLED = "3";
-
-    // VIP强制优惠：1-强制优惠，无视商品的forDsc属性
-    public static final String VIP_DSC_FORCE = "1";
-    // VIP强制优惠：0-不强制
-    public static final String VIP_DSC_NORMAL = "0";
-
     // 超市版：会员优惠规则-1
     public static final int VIP_ONE = 1;
     // 超市版：会员优惠规则-2
     public static final int VIP_TWO = 2;
     // 超市版：会员优惠规则-3
     public static final int VIP_THREE = 3;
+    // VIP强制优惠：1-强制优惠，无视商品的forDsc属性
+    public static final String VIP_DSC_FORCE = "1";
+    // VIP强制优惠：0-不强制
+    public static final String VIP_DSC_NORMAL = "0";
+
     // 顾客类型：2-会员
     public static final String TRADE_CUST_VIP = "2";
 
@@ -105,7 +104,6 @@ public class TradeHelper {
         return prodList;
     }
 
-    //region clear----清空当前交易信息
 
     /**
      * 清空当前交易信息
@@ -115,9 +113,7 @@ public class TradeHelper {
         prodList = null;
         pay = null;
     }
-    //endregion
 
-    //region initSale----初始化当前操作流水
 
     /**
      * 查询当前购物车交易流水
@@ -203,9 +199,7 @@ public class TradeHelper {
             return true;
         }
     }
-    //endregion
 
-    //region addProduct----添加到商品表
 
     /**
      * 添加商品到商品列表
@@ -262,9 +256,7 @@ public class TradeHelper {
             return -1;
         }
     }
-    //endregion
 
-    //region delProduct----行清
 
     /**
      * 行清
@@ -305,7 +297,6 @@ public class TradeHelper {
     }
     //endregion
 
-    //region pay----完成支付
 
     /**
      * 完成支付
@@ -382,7 +373,6 @@ public class TradeHelper {
     public static boolean pay(String appPayType, String payCode) {
         return pay(appPayType, trade.getTotal(), 0, payCode);
     }
-    //endregion
 
     /**
      * 最小流水号
@@ -555,8 +545,9 @@ public class TradeHelper {
             dsc += prodList.get(i).getManuDsc() + prodList.get(i).getVipDsc() + prodList.get(i).getTranDsc();
         }
         TradeProd tradeProd = prodList.get(index);
-        if (tradeProd.getManuDsc() + tradeProd.getTranDsc() + tradeProd.getVipDsc() > 0) {
-            if ((dsc + changeAmount * ((tradeProd.getManuDsc() + tradeProd.getVipDsc() + tradeProd.getTranDsc()) / tradeProd.getAmount()) > ZgParams.getCurrentUser().getMaxDscTotal())) {
+        // TODO 2019年10月24日13:50:44 员工权限仅限手工优惠
+        if (tradeProd.getManuDsc() + tradeProd.getTranDsc() > 0) {
+            if ((dsc + changeAmount * ((tradeProd.getManuDsc() + tradeProd.getTranDsc()) / tradeProd.getAmount()) > ZgParams.getCurrentUser().getMaxDscTotal())) {
                 return 0;
             }
         }
@@ -1209,6 +1200,7 @@ public class TradeHelper {
      *
      * @return
      */
+    @Deprecated
     public static boolean saveVipDsc() {
         return TransHelper.transSync(new TransHelper.TransRunner() {
             @Override
@@ -1218,6 +1210,7 @@ public class TradeHelper {
         });
     }
 
+    @Deprecated
     private static boolean doSaveVipDsc(DatabaseWrapper databaseWrapper) {
         //筛选没有单项优惠、整项优惠的商品
         List<TradeProd> tempList = new ArrayList<>();
@@ -1276,6 +1269,8 @@ public class TradeHelper {
         return recalcTotal(databaseWrapper);
     }
 
+
+    @Deprecated
     private static double queryVipPrice(double vipPriceType, TradeProd prod) {
         double vipPrice = prod.getPrice();
         if (TextUtils.isEmpty(prod.getBarCode())) {
@@ -1311,12 +1306,12 @@ public class TradeHelper {
         return vipPrice == 0 ? prod.getPrice() : vipPrice;
     }
 
-
     /**
      * @param rateRule 折扣规则
      * @param prod     商品信息
      * @return 折扣
      */
+    @Deprecated
     private static double queryRateRule(double rateRule, TradeProd prod) {
         double rate = 0;
         if (TextUtils.isEmpty(prod.getBarCode())) {

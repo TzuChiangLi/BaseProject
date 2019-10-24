@@ -100,6 +100,8 @@ public class ZgParams {
                 cardConfig = SunmiCardConfig.fromJson(param.getParamValue());
             } else if ("SqbConfig".equalsIgnoreCase(param.getParamName())) {
                 sqbConfig = SqbConfig.fromJson(param.getParamValue());
+            } else if ("ProgramEdition".equalsIgnoreCase(param.getParamName())) {
+                programEdition = param.getParamValue();
             }
         }
 
