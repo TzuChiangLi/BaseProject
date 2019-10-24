@@ -98,6 +98,16 @@ public class SunmiPayHelper {
     }
 
     /**
+     * 取消读卡
+     */
+    public void cancelReadCard() {
+        if (!sdkConnected) {
+            return;
+        }
+        cancelCheckCard();
+    }
+
+    /**
      * 连接状态回调
      */
     private SunmiPayKernel.ConnectCallback mConnectCallback = new SunmiPayKernel.ConnectCallback() {

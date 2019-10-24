@@ -186,36 +186,52 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
         MessageUtil.waitBegin("请刷卡...", new MessageUtil.MessageBoxCancelListener() {
             @Override
             public boolean onCancel() {
-                // 取消刷卡，切换到手机号输入界面
-                InputPanel.showVipMobile(context, new StringInputCallback() {
-                    @Override
-                    public void onOk(String value) {
-                        queryVipInfo(value);
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-
-                    @Override
-                    public String validate(String value) {
-                        // TODO: 2019/10/23 手机号校验
-                        return null;
-                    }
-                });
+                // 取消刷卡
+                SunmiPayHelper.getInstance().cancelReadCard();
+                // 切换到手机号输入界面
+                vipMobileInput(context);
                 return true;
             }
         });
         SunmiPayHelper.getInstance().readCard(new SunmiPayHelper.ReadCardCallback() {
             @Override
             public void onSuccess(String cardNo) {
+                MessageUtil.waitEnd();
                 queryVipInfo(cardNo);
             }
 
             @Override
             public void onError(String msg) {
+                MessageUtil.waitEnd();
                 MessageUtil.showError(msg);
+                vipMobileInput(context);
+            }
+        });
+    }
+
+    /**
+     * 输入会员手机号查询会员信息
+     *
+     * @param context
+     */
+    private void vipMobileInput(final Context context) {
+        InputPanel.showVipMobile(context, new StringInputCallback() {
+            @Override
+            public void onOk(String value) {
+                queryVipInfo(value);
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public String validate(String value) {
+                if (!TradeHelper.checkPhoneNoFormat(value)) {
+                    return "手机号无效";
+                }
+                return null;
             }
         });
     }
@@ -247,8 +263,9 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
                         //刷新会员优惠
                         TradeHelper.saveVipDsc();
                         Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_VIP_INFO, vipInfo);
+                        MessageUtil.show("会员设置成功");
                     } else {
-                        MessageUtil.show("服务返回异常错误");
+                        MessageUtil.show("查询会员信息失败：返回结果为空");
                     }
                 }
 
