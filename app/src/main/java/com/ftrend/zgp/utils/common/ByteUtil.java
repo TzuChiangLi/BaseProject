@@ -16,6 +16,10 @@ import java.util.Locale;
 public class ByteUtil {
 
     public static String bytes2HexStr(byte[] bytes) {
+        if (bytes == null) {
+            return "";
+        }
+
         StringBuilder sb = new StringBuilder();
         String temp;
         for (byte b : bytes) {
