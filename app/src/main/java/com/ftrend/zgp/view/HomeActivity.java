@@ -20,6 +20,7 @@ import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.pop.StringInputCallback;
+import com.ftrend.zgp.utils.printer.PrintConfig;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.gyf.immersionbar.ImmersionBar;
 
@@ -210,12 +211,21 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                     }
                 });
                 break;
+            case "参数设置":
+                PrintConfig printConfig = ZgParams.getPrinterConfig();
+                if (printConfig.isPrintTrade()) {
+                    printConfig.setPrintTrade(false);
+                    MessageUtil.show("已禁用小票打印");
+                } else {
+                    printConfig.setPrintTrade(true);
+                    MessageUtil.show("已启用小票打印");
+                }
+                break;
             case "退货":
             case "交班报表":
             case "交易统计":
             case "流水查询":
             case "操作指南":
-            case "参数设置":
             case "修改密码":
             default:
                 MessageUtil.showError("此功能暂不可用");
