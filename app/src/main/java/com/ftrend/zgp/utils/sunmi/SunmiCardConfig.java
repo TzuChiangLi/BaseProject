@@ -88,10 +88,10 @@ public class SunmiCardConfig {
 
     public void setM1Key(String m1Key) {
         this.m1Key = m1Key;
-        this.m1KeyBytes = ByteUtil.hexStr2Bytes(m1Key);
     }
 
     public byte[] getM1KeyBytes() {
+        this.m1KeyBytes = ByteUtil.hexStr2Bytes(m1Key);
         return m1KeyBytes;
     }
 

@@ -222,7 +222,7 @@ public class SunmiPayHelper {
                 String hexStr = ByteUtil.bytes2HexStr(Arrays.copyOf(outData, res));
                 Log.e(TAG, "read block:" + hexStr);
                 //回调
-                String code = new String(outData, 0, 16);
+                String code = new String(outData, 0, 16).trim();
                 if (readCardCallback != null && cardConfig.getM1Block() == 0) {
                     readCardCallback.onSuccess(m1ParseCardCode(code));
                 }
@@ -230,8 +230,12 @@ public class SunmiPayHelper {
                 Log.e(TAG, "read block: FAILED");
                 //回调
                 if (readCardCallback != null) {
-                    readCardCallback.onError("读取数据失败");
+                    readCardCallback.onError("读取卡片数据失败");
                 }
+            }
+        } else {
+            if (readCardCallback != null) {
+                readCardCallback.onError("卡片认证失败");
             }
         }
     }
