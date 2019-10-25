@@ -310,7 +310,9 @@ public class MessageUtil {
      * @param errMsg  错误信息
      */
     public static void showServerError(String errCode, String errMsg) {
-        String msg = String.format(Locale.CHINA, "%s - %s", errCode, errMsg);
+        String msg = String.format(Locale.CHINA, "%s - %s",
+                errCode,
+                errCode.equals("9999") ? "网络通讯异常" : errMsg);
         showError(msg);
     }
 
