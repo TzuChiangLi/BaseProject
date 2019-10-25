@@ -10,6 +10,7 @@ import com.ftrend.zgp.model.SysParams;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.utils.pay.SqbConfig;
 import com.ftrend.zgp.utils.sunmi.SunmiCardConfig;
+import com.ftrend.zgp.utils.sunmi.VipCardParams;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
@@ -52,6 +53,8 @@ public class ZgParams {
     private static String programEdition = "";
     //系统参数：收钱吧参数
     private static SqbConfig sqbConfig = new SqbConfig();
+    //系统参数：会员卡参数
+    private static VipCardParams vipCardParams = new VipCardParams();
 
     //本地参数：服务器地址
     private static String serverUrl = "";
@@ -100,6 +103,8 @@ public class ZgParams {
                 cardConfig = SunmiCardConfig.fromJson(param.getParamValue());
             } else if ("SqbConfig".equalsIgnoreCase(param.getParamName())) {
                 sqbConfig = SqbConfig.fromJson(param.getParamValue());
+            } else if ("CardOpt".equalsIgnoreCase(param.getParamName())) {
+                vipCardParams = VipCardParams.fromJson(param.getParamValue());
             } else if ("ProgramEdition".equalsIgnoreCase(param.getParamName())) {
                 programEdition = param.getParamValue();
             }
@@ -284,8 +289,8 @@ public class ZgParams {
         return programEdition;
     }
 
-    public static void setProgramEdition(String programEdition) {
-        ZgParams.programEdition = programEdition;
+    public static VipCardParams getVipCardParams() {
+        return vipCardParams;
     }
 
     public static String getLastLsNo() {

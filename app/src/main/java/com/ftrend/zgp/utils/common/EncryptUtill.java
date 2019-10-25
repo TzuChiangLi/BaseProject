@@ -54,6 +54,19 @@ public class EncryptUtill {
     }
 
     /**
+     * 磁卡卡号界面
+     *
+     * @param code
+     * @param pwd
+     * @return
+     */
+    public static String cardCodeDecrypt(String code, String pwd) {
+        String realPwd = pwdDecrypt(pwd);//密码是经过加密的
+        // TODO: 2019/10/25 return CardDecryptor.cardDecryStr(code, realPwd);
+        return code;
+    }
+
+    /**
      * 用户登录密码加密
      *
      * @param src

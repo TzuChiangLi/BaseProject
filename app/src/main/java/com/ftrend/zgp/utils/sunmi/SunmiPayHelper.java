@@ -8,6 +8,7 @@ import android.util.Log;
 import com.ftrend.zgp.App;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ByteUtil;
+import com.ftrend.zgp.utils.common.EncryptUtill;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.sunmi.pay.hardware.aidlv2.readcard.CheckCardCallbackV2;
 import com.sunmi.pay.hardware.aidlv2.readcard.ReadCardOptV2;
@@ -34,6 +35,8 @@ public class SunmiPayHelper {
     private ReadCardOptV2 readCardOptV2 = null;
     // 读卡器参数
     private SunmiCardConfig cardConfig = null;
+    // 会员卡参数
+    private VipCardParams vipCardParams = null;
     // 读卡回调
     private ReadCardCallback readCardCallback = null;
     // 卡片状态
@@ -118,6 +121,7 @@ public class SunmiPayHelper {
             try {
                 readCardOptV2 = kernel.mReadCardOptV2;
                 cardConfig = ZgParams.getCardConfig();
+                vipCardParams = ZgParams.getVipCardParams();
                 sdkConnected = true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -220,7 +224,7 @@ public class SunmiPayHelper {
                 //回调
                 String code = new String(outData, 0, 16);
                 if (readCardCallback != null && cardConfig.getM1Block() == 0) {
-                    readCardCallback.onSuccess(code);
+                    readCardCallback.onSuccess(m1ParseCardCode(code));
                 }
             } else {
                 Log.e(TAG, "read block: FAILED");
@@ -230,6 +234,23 @@ public class SunmiPayHelper {
                 }
             }
         }
+    }
+
+    /**
+     * 解析M1卡卡号
+     *
+     * @param code
+     * @return
+     */
+    private String m1ParseCardCode(String code) {
+        String cardCode = code;
+        if (code.length() > vipCardParams.getVipCodeMaxLen()) {
+            cardCode = code.substring(code.length() - vipCardParams.getVipCodeMaxLen());
+        } else if (vipCardParams.isVipAndCardFixLen()) {
+            String preCode = vipCardParams.getCardPreCode() + "00000000000000000000";
+            cardCode = preCode.substring(0, vipCardParams.getVipCodeMaxLen() - code.length()) + code;
+        }
+        return cardCode;
     }
 
     /**
@@ -293,13 +314,13 @@ public class SunmiPayHelper {
                 // 根据配置参数返回卡号
                 switch (cardConfig.getMagTrackNo()) {
                     case 1:
-                        readCardCallback.onSuccess(track1);
+                        readCardCallback.onSuccess(magParseCardCode(track1));
                         break;
                     case 2:
-                        readCardCallback.onSuccess(track2);
+                        readCardCallback.onSuccess(magParseCardCode(track2));
                         break;
                     case 3:
-                        readCardCallback.onSuccess(track3);
+                        readCardCallback.onSuccess(magParseCardCode(track3));
                         break;
                     default:
                         break;
@@ -309,6 +330,25 @@ public class SunmiPayHelper {
             Log.e(TAG, "handleMagneticData result 2: " + track2);
             Log.e(TAG, "handleMagneticData result 3: " + track3);
         }
+    }
+
+    /**
+     * 解析磁卡卡号
+     *
+     * @param code
+     * @return
+     */
+    private String magParseCardCode(String code) {
+        String tempCode;
+        if (vipCardParams.isDecryptCard()//卡号加密
+                && !TextUtils.isEmpty(vipCardParams.getCardPass())//密码不为空
+                && code.length() >= 24) {//卡号不少于24位
+            tempCode = EncryptUtill.cardCodeDecrypt(code, vipCardParams.getCardPass());
+        } else {
+            tempCode = code;
+        }
+        // 解密后的卡号处理方式与M1卡一致
+        return m1ParseCardCode(tempCode);
     }
 
     /**
