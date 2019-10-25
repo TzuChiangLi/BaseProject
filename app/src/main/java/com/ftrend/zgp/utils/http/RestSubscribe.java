@@ -328,4 +328,18 @@ public class RestSubscribe {
         detachAndSubscribe(api.uploadAppParams(request), callback);
     }
 
+    /**
+     * 查询APP配置参数
+     *
+     * @param posCode  机器号
+     * @param callback
+     */
+    public void queryAppParams(final String posCode, final RestCallback callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("posCode", posCode);
+        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        request.setBody(params);
+        detachAndSubscribe(api.queryAppParams(request), callback);
+    }
+
 }

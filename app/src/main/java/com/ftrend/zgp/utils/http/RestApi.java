@@ -162,4 +162,13 @@ public interface RestApi {
     @POST("upload/params")
     Observable<RestResponse<Map<String, Object>>> uploadAppParams(@Body RestRequest<Map<String, Object>> request);
 
+    /**
+     * 上传APP配置参数
+     *
+     * @param request
+     * @return
+     */
+    @POST("update/params")
+    Observable<RestResponse<Map<String, Object>>> queryAppParams(@Body RestRequest<Map<String, Object>> request);
+
 }

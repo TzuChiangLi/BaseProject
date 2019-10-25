@@ -106,6 +106,9 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
         if (current == 100) {
             if (step == 1) {
                 mPresenter.startInitData(2);
+            }
+            if (step == 2) {
+                mPresenter.startInitData(3);
             } else {
                 mPresenter.finishInitData();
             }

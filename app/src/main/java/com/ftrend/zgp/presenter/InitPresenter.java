@@ -7,6 +7,9 @@ import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.CommonUtil;
+import com.ftrend.zgp.utils.http.RestCallback;
+import com.ftrend.zgp.utils.http.RestResultHandler;
+import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.ftrend.zgp.utils.task.LsDownloadTask;
@@ -14,6 +17,7 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 
 /**
@@ -67,6 +71,24 @@ public class InitPresenter implements Contract.InitPresenter {
                     }
                 }
             });
+        } else if (step == 3) {
+            RestSubscribe.getInstance().queryAppParams(ZgParams.getPosCode(),
+                    new RestCallback(new RestResultHandler() {
+                        @Override
+                        public void onSuccess(Map<String, Object> body) {
+                            for (String key : body.keySet()) {
+                                ZgParams.saveAppParams(key, String.valueOf(body.get(key)));
+                            }
+                            ZgParams.loadParams();
+                            mView.updateProgress(3, 100);
+                        }
+
+                        @Override
+                        public void onFailed(String errorCode, String errorMsg) {
+                            //失败退出
+                            initFailed();
+                        }
+                    }));
         }
     }
 
