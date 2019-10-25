@@ -48,7 +48,7 @@ public class HomePresenter implements Contract.HomePresenter {
 
     @Override
     public void initSqbSdk() {
-        DebugConfig.setDebug(true);//默认为非调试模式,如果需要调试,请设置为 true,打印和保存相关日志
+        DebugConfig.setDebug(false);//默认为非调试模式,如果需要调试,请设置为 true,打印和保存相关日志
         UpayTask.getInstance().initUpay(App.getContext(), ZgParams.getSqbConfig().isPlaySound(), Env.UrlType.PRO);
         SqbPayHelper.activate(new SqbPayHelper.PayResultCallback() {
             @Override

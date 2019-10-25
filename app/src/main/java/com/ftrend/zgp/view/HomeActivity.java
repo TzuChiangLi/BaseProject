@@ -163,6 +163,10 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                         String custMsg = String.format(Locale.getDefault(), waitMsg + "(%d%%)", percent);
                         MessageUtil.waitUpdate(custMsg);
                         if (percent >= 100) {
+                            //重新读取配置参数
+                            ZgParams.loadParams();
+                            //重新初始化收钱吧SDK
+                            mPresenter.initSqbSdk();
                             MessageUtil.waitEnd();
                             MessageUtil.showSuccess("数据同步已完成");
                         } else if (isFailed) {
