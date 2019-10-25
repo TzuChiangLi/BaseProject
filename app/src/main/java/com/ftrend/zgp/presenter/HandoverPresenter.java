@@ -42,6 +42,7 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
                 }
             });
             if (!HandoverHelper.save()) {
+                MessageUtil.waitEnd();
                 mView.showError();
                 return;
             }
@@ -56,7 +57,8 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
 
                 @Override
                 public void onFailed(String errorCode, String errorMsg) {
-                    mView.showError();
+                    MessageUtil.waitEnd();
+                    MessageUtil.serverError(errorCode, "交班失败：" + errorMsg);
                 }
             }));
             // 上传APP配置参数，失败不影响交班结果

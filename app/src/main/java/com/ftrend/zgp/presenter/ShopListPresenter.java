@@ -267,13 +267,13 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
                         Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_VIP_INFO, vipInfo);
                         MessageUtil.show("会员设置成功");
                     } else {
-                        MessageUtil.show("查询会员信息失败：返回结果为空");
+                        MessageUtil.showError("查询会员信息失败：返回结果为空");
                     }
                 }
 
                 @Override
                 public void onFailed(String errorCode, String errorMsg) {
-                    MessageUtil.showServerError(errorCode, errorMsg);
+                    MessageUtil.serverError(errorCode, errorMsg);
                 }
             }));
         } else {

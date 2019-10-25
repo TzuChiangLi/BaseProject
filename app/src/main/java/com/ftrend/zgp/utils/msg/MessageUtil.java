@@ -134,6 +134,16 @@ public class MessageUtil {
         oneBtnDialog(message, DialogBuilder.DialogType.error, listener);
     }
 
+    public static void serverError(String errCode, String errMsg) {
+        String msg = String.format(Locale.CHINA, "%s - %s", errCode, errMsg);
+        error(msg);
+    }
+
+    public static void serverError(String errCode, String errMsg, MessageBoxOkListener listener) {
+        String msg = String.format(Locale.CHINA, "%s - %s", errCode, errMsg);
+        error(msg, listener);
+    }
+
     /**
      * 询问弹窗
      * 默认两个按钮
@@ -310,9 +320,7 @@ public class MessageUtil {
      * @param errMsg  错误信息
      */
     public static void showServerError(String errCode, String errMsg) {
-        String msg = String.format(Locale.CHINA, "%s - %s",
-                errCode,
-                errCode.equals("9999") ? "网络通讯异常" : errMsg);
+        String msg = String.format(Locale.CHINA, "%s - %s", errCode, errMsg);
         showError(msg);
     }
 
