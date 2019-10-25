@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.RemoteException;
 
 import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.sunmi.peripheral.printer.InnerPrinterCallback;
 import com.sunmi.peripheral.printer.InnerPrinterException;
@@ -86,6 +87,9 @@ public class PrinterHelper {
      * @return 是否打印成功
      */
     public static boolean print(List<PrintData> printDataList) {
+        if (!ZgParams.getPrinterConfig().isPrintTrade()) {
+            return true;
+        }
         try {
             for (PrintData p : printDataList) {
                 //处理样式

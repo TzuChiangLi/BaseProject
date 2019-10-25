@@ -1,23 +1,17 @@
 package com.ftrend.zgp.utils;
 
-import android.util.Log;
-
-import com.blankj.utilcode.util.GsonUtils;
 import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.SysParams;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.utils.pay.SqbConfig;
+import com.ftrend.zgp.utils.printer.PrintConfig;
 import com.ftrend.zgp.utils.sunmi.SunmiCardConfig;
 import com.ftrend.zgp.utils.sunmi.VipCardParams;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 全局参数
@@ -65,7 +59,7 @@ public class ZgParams {
     //本地参数：初始化标识（0-未完成，1-已完成）
     private static String initFlag = "0";
     //本地参数：打印机设置
-    private static Map<String, Object> printerConfig = new HashMap<>();
+    private static PrintConfig printerConfig = new PrintConfig();
     //本地参数：读卡器设置
     private static SunmiCardConfig cardConfig = SunmiCardConfig.def();
     //本地参数：上次登录专柜
@@ -124,7 +118,7 @@ public class ZgParams {
             } else if ("initFlag".equalsIgnoreCase(param.getParamName())) {
                 initFlag = param.getParamValue();
             } else if ("printerConfig".equalsIgnoreCase(param.getParamName())) {
-                parseJson(printerConfig, param.getParamValue());
+                printerConfig = PrintConfig.fromJson(param.getParamValue());
             } else if ("lastDep".equalsIgnoreCase(param.getParamName())) {
                 lastDep = param.getParamValue();
             } else if ("lastUser".equalsIgnoreCase(param.getParamName())) {
@@ -148,24 +142,6 @@ public class ZgParams {
      */
     public static boolean isShowCls(String depCode) {
         return !noClsDep.contains("," + depCode + ",");
-    }
-
-    /**
-     * 解析JSON格式参数
-     *
-     * @param map   输出解析结果到此Map对象
-     * @param value json字符串
-     */
-    private static void parseJson(Map<String, Object> map, String value) {
-        map.clear();
-        try {
-            JsonObject json = GsonUtils.fromJson(value, JsonObject.class);
-            for (Map.Entry<String, JsonElement> key : json.entrySet()) {
-                map.put(key.getKey(), json.getAsJsonObject(key.getKey()));
-            }
-        } catch (Exception e) {
-            Log.e(TAG, "parseJson: 解析JSON格式参数发生异常", e);
-        }
     }
 
     /**
@@ -253,7 +229,7 @@ public class ZgParams {
         return wxPayAccount;
     }
 
-    public static Map<String, Object> getPrinterConfig() {
+    public static PrintConfig getPrinterConfig() {
         return printerConfig;
     }
 
