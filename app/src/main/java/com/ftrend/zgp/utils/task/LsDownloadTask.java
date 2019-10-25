@@ -173,7 +173,7 @@ public class LsDownloadTask {
      */
     private void postFailed(String msg) {
         running = false;
-        int percent = step * 100 / lsList.size();
+        int percent = lsList.size() > 0 ? step * 100 / lsList.size() : 0;
         handler.handleProgress(percent, true, msg);
     }
 
