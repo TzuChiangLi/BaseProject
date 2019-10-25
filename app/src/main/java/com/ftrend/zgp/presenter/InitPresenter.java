@@ -116,17 +116,27 @@ public class InitPresenter implements Contract.InitPresenter {
 
     @Override
     public void finishInitData() {
+        List<Dep> depList = SQLite.select().distinct().from(Dep.class).queryList();
+        List<User> userList = SQLite.select().distinct().from(User.class).queryList();
+        if (depList.size() == 0 || userList.size() == 0) {
+            MessageUtil.error("请在后台配置可登录专柜和用户！", new MessageUtil.MessageBoxOkListener() {
+                @Override
+                public void onOk() {
+                    CommonUtil.rebootApp(App.getContext());
+                }
+            });
+            return;
+        }
+
         //设置初始化完成标志
         ZgParams.updateInitFlag();
         // 数据初始化完成，重新加载参数
         ZgParams.loadParams();
 
-        List<Dep> depList = SQLite.select().distinct().from(Dep.class).queryList();
         StringBuilder depStr = new StringBuilder();
         for (Dep dep : depList) {
             depStr.append(dep.getDepCode()).append(" ").append(dep.getDepName()).append("\n");
         }
-        List<User> userList = SQLite.select().distinct().from(User.class).queryList();
         StringBuilder userStr = new StringBuilder();
         for (User user : userList) {
             userStr.append(user.getUserCode()).append(" ").append(user.getUserName()).append("\n");
