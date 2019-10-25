@@ -46,20 +46,28 @@ public class RegisterPresenter implements Contract.RegisterPresenter {
             //注册成功后，刷新全局变量
             ZgParams.loadParams();
             //调用UI
+            MessageUtil.waitEnd();
             mView.registerSuccess();
         }
 
         @Override
         public void onFailed(String errorCode, String errorMsg) {
-            MessageUtil.showError("注册失败，请稍后重试");
+            MessageUtil.waitEnd();
+            MessageUtil.serverError(errorCode, errorMsg);
         }
     };
 
     @Override
     public void register(String url, final String posCode, final String regCode) {
-        //保存注册码
         this.regCode = regCode;
         this.posCode = posCode;
+
+        MessageUtil.waitBegin("设备注册中，请稍候...", new MessageUtil.MessageBoxCancelListener() {
+            @Override
+            public boolean onCancel() {
+                return false;
+            }
+        });
 
         if (!url.equals(ZgParams.getServerUrl())) {
             ZgParams.setServerUrl(url);
@@ -84,7 +92,8 @@ public class RegisterPresenter implements Contract.RegisterPresenter {
 
             @Override
             public void onHttpError(int errorCode, String errorMsg) {
-                MessageUtil.showError("服务器请求失败：请检查服务地址是否正确，并处于良好的网络环境下");
+                MessageUtil.waitEnd();
+                MessageUtil.error("服务器请求失败：请检查服务地址是否正确，并处于良好的网络环境下");
             }
 
             @Override
