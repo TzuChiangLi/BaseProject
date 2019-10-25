@@ -286,6 +286,8 @@ public class DataDownloadHelper {
             product.setVipRate2(Float.valueOf(String.valueOf(map.get("vipRate2"))));
             product.setVipRate3(Float.valueOf(String.valueOf(map.get("vipRate3"))));
             product.setMinimumPrice(Float.valueOf(String.valueOf(map.get("minimumPrice"))));
+            product.setProdStatus(String.valueOf(map.get("prodStatus")));
+            product.setSeason(String.valueOf(map.get("season")));
             product.insert();
         }
     }

@@ -15,9 +15,11 @@ import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.log.LogUtil;
+import com.raizlabs.android.dbflow.sql.language.OperatorGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -44,10 +46,38 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
         TradeHelper.initSale();
     }
 
+    /**
+     * 生成季节查询条件
+     *
+     * @return
+     */
+    private String makeSeanFilter() {
+        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        if (month <= 3) {
+            return "1___";
+        } else if (month <= 6) {
+            return "_1__";
+        } else if (month <= 9) {
+            return "__1_";
+        } else {
+            return "___1";
+        }
+    }
+
     @Override
     public void initProdList() {
-        List<DepCls> clsList = SQLite.select().from(DepCls.class).where(DepCls_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode())).queryList();
-        mProdList = SQLite.select().from(DepProduct.class).where(DepProduct_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode())).queryList();
+        List<DepCls> clsList = SQLite.select().from(DepCls.class)
+                .where(DepCls_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
+                .queryList();
+        //注意：状态为注销、暂停销售的商品，以及季节商品在商品列表不显示；但已经添加到购物车的不受影响
+        mProdList = SQLite.select().from(DepProduct.class)
+                .where(DepProduct_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
+                //3-注销；2-暂停销售
+                .and(DepProduct_Table.prodStatus.notIn("2", "3"))
+                //季节销售商品
+                .and(OperatorGroup.clause(DepProduct_Table.season.eq("0000"))
+                        .or(DepProduct_Table.season.like(makeSeanFilter())))
+                .queryList();
         for (DepProduct product : mProdList) {
             product.setSelect(false);
         }

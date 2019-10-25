@@ -1,5 +1,6 @@
 package com.ftrend.zgp.utils.db;
 
+import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.HandoverPay;
 import com.ftrend.zgp.model.TradeProd;
 import com.raizlabs.android.dbflow.annotation.Database;
@@ -21,7 +22,7 @@ public class ZgpDb {
     // 数据库名称
     public static final String DATABASE_NAME = "zgp";
     // 数据库版本号
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
 
     @Migration(version = 0, database = ZgpDb.class, priority = 0)
     public static class Migration0 extends BaseMigration {
@@ -86,6 +87,20 @@ public class ZgpDb {
             addColumn(SQLiteType.TEXT, "cashier");
             addColumn(SQLiteType.TEXT, "cashierName");
             addColumn(SQLiteType.TEXT, "payTypeName");
+        }
+    }
+
+    @Migration(version = 5, database = ZgpDb.class, priority = 1)
+    public static class Migration5_DepProduct extends AlterTableMigration<DepProduct> {
+
+        public Migration5_DepProduct(Class<DepProduct> table) {
+            super(table);
+        }
+
+        @Override
+        public void onPreMigrate() {
+            addColumn(SQLiteType.TEXT, "prodStatus");
+            addColumn(SQLiteType.TEXT, "season");
         }
     }
 

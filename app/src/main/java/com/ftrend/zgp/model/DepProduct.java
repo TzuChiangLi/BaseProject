@@ -68,10 +68,14 @@ public class DepProduct extends BaseModel {
     private double vipRate3;
     @Column
     private double minimumPrice;
+    @Column
+    private String prodStatus;
+    @Column
+    private String season;
     /**
      * 该变量为了改变变量选中状态而创建，与数据库字段无关
      */
-    private boolean isSelect = false;
+    private transient boolean isSelect = false;
 
     public DepProduct() {
     }
@@ -330,6 +334,22 @@ public class DepProduct extends BaseModel {
 
     public void setMinimumPrice(double minimumPrice) {
         this.minimumPrice = minimumPrice;
+    }
+
+    public String getProdStatus() {
+        return prodStatus;
+    }
+
+    public void setProdStatus(String prodStatus) {
+        this.prodStatus = prodStatus;
+    }
+
+    public String getSeason() {
+        return season;
+    }
+
+    public void setSeason(String season) {
+        this.season = season;
     }
 
     public boolean isSelect() {
