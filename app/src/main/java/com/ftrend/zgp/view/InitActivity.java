@@ -100,10 +100,10 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
 
     @Override
     public void updateProgress(int step, int progress) {
+        int current = (progress + (step - 1) * 100) / 2;
         // 确保进度值在0～100之间
-        int current = progress < 0 ? 0 : progress > 100 ? 100 : progress;
-        mLoadView.setProgress((current + (step - 1) * 100) / 2);
-        if (current == 100) {
+        mLoadView.setProgress(current < 0 ? 0 : current > 100 ? 100 : current);
+        if (progress >= 100) {
             if (step == 1) {
                 mPresenter.startInitData(2);
             }
