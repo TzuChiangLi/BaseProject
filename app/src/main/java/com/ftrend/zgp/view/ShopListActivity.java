@@ -309,9 +309,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                 oldPosition = position;
                 mProdAdapter.getData().get(position).setSelect(true);
                 mProdAdapter.notifyItemChanged(position);
-                if (position == adapter.getItemCount() - 1) {
-                    mRecyclerView.smoothScrollToPosition(position);
-                }
+                mRecyclerView.smoothScrollToPosition(position);
             }
         });
     }
