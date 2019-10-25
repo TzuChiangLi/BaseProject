@@ -2,8 +2,6 @@ package com.ftrend.zgp.utils.event;
 
 import org.greenrobot.eventbus.EventBus;
 
-import java.security.PublicKey;
-
 /**
  * EventBus传递指令
  *
@@ -69,6 +67,12 @@ public class Event {
      * 进度弹窗
      */
     public static final int TYPE_DIALOG_PROGRESS = 11;
+
+    /**
+     * 会员卡刷卡结果消息，会员卡刷卡为异步操作，此消息用于通知界面刷新
+     */
+    public static final int TYPE_VIPCARD_SUCCESS = 12;
+    public static final int TYPE_VIPCARD_FAILE = 13;
 
     /**
      * 提示信息
