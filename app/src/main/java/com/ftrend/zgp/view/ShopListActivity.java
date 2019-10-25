@@ -177,6 +177,15 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     mProdAdapter.notifyDataSetChanged();
                     mPresenter.updateTradeInfo();
                     break;
+                case Event.TYPE_VIPCARD_SUCCESS:
+                    MessageUtil.waitEnd();
+                    break;
+                case Event.TYPE_VIPCARD_FAILE:
+                    if (event.getData() != null) {
+                        MessageUtil.waitEnd();
+                        MessageUtil.showError(event.getData().toString());
+                    }
+                    break;
                 case Event.TYPE_REFRESH_VIP_INFO:
                     showVipInfoOnline();
                     mProdAdapter.notifyDataSetChanged();

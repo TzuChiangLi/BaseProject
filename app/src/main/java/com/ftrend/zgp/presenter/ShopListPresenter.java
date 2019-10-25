@@ -195,17 +195,16 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
             }
         });
         SunmiPayHelper.getInstance().readCard(new SunmiPayHelper.ReadCardCallback() {
+            //在这里显示或隐藏消息框会出错（Animators may only be run on Looper threads），改为事件通知
             @Override
             public void onSuccess(String cardNo) {
-                MessageUtil.waitEnd();
+                Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_VIPCARD_SUCCESS);
                 queryVipInfo(cardNo);
             }
 
             @Override
             public void onError(String msg) {
-                MessageUtil.waitEnd();
-                MessageUtil.showError(msg);
-                vipMobileInput(context);
+                Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_VIPCARD_FAILE, msg);
             }
         });
     }
@@ -274,7 +273,7 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
 
                 @Override
                 public void onFailed(String errorCode, String errorMsg) {
-                    MessageUtil.show(errorCode + errorMsg);
+                    MessageUtil.showServerError(errorCode, errorMsg);
                 }
             }));
         } else {
