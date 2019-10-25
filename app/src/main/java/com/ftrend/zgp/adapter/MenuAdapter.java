@@ -53,7 +53,9 @@ public class MenuAdapter extends BaseQuickAdapter<Menu, BaseViewHolder> {
         protected void convert(@NonNull BaseViewHolder helper, Menu.MenuList item) {
             helper.setImageResource(R.id.menu_img_func, item.getMenuImg());
             helper.setText(R.id.menu_tv_func, item.getMenuName());
-            helper.setTag(R.id.menu_ll_func, item.getMenuName());
+            helper.setTag(R.id.menu_rl_func, item.getMenuName());
+            helper.setText(R.id.menu_tv_num, String.format("%d", item.getTipNum()));
+            helper.setGone(R.id.menu_tv_num, item.getTipNum() == 0 ? false : true);
         }
     }
 

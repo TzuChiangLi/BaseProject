@@ -48,10 +48,20 @@ public class Menu {
          * 功能文本
          */
         private String menuName;
+        /**
+         * 角标数量
+         */
+        private long tipNum;
 
         public MenuList(int menuImg, String menuName) {
             this.menuImg = menuImg;
             this.menuName = menuName;
+        }
+
+        public MenuList(int menuImg, String menuName, long tipNum) {
+            this.menuImg = menuImg;
+            this.menuName = menuName;
+            this.tipNum = tipNum;
         }
 
         public int getMenuImg() {
@@ -68,6 +78,14 @@ public class Menu {
 
         public void setMenuName(String menuName) {
             this.menuName = menuName;
+        }
+
+        public long getTipNum() {
+            return tipNum;
+        }
+
+        public void setTipNum(int tipNum) {
+            this.tipNum = tipNum;
         }
     }
 }
