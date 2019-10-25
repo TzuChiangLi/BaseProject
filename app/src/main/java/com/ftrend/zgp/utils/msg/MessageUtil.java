@@ -5,19 +5,10 @@ import android.content.Context;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.toast.XToast;
 import com.ftrend.zgp.R;
-import com.ftrend.zgp.base.BaseActivity;
-import com.ftrend.zgp.utils.pop.CommonInputDialog;
-import com.ftrend.zgp.utils.pop.MoneyInputCallback;
-import com.ftrend.zgp.utils.pop.PayChargeDialog;
-import com.ftrend.zgp.utils.pop.PriceDscDialog;
-import com.ftrend.zgp.utils.pop.StringInputCallback;
-import com.ftrend.zgp.utils.pop.VipCardDialog;
-import com.ftrend.zgp.utils.pop.VipMoreBtnDialog;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
-import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_SINGLE_RSC;
-import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_WHOLE_RSC;
+import java.util.Locale;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -310,6 +301,17 @@ public class MessageUtil {
                 .setImageDrawable(android.R.id.icon, R.drawable.toast_error)
                 .setText(android.R.id.message, text)
                 .show();
+    }
+
+    /**
+     * 显示错误消息
+     *
+     * @param errCode 错误码
+     * @param errMsg  错误信息
+     */
+    public static void showServerError(String errCode, String errMsg) {
+        String msg = String.format(Locale.CHINA, "%s - %s", errCode, errMsg);
+        showError(msg);
     }
 
     /**
