@@ -122,10 +122,10 @@ public class DialogBuilder extends CenterPopupView {
                 break;
             case question:
                 mStateImg.setImageResource(R.drawable.dialog_state_ask);
-                mTitleTv.setText("询问");
+                mTitleTv.setText("确认");
                 break;
             case wait:
-                mStateImg.setImageResource(R.drawable.dialog_state_tip);
+                mStateImg.setImageResource(R.drawable.dialog_state_wait);
                 mTitleTv.setText("等待");
                 break;
             default:

@@ -155,19 +155,19 @@ public class MessageUtil {
         Context context = ActivityUtils.getTopActivity();
         DialogBuilder builder = new DialogBuilder(context, 2);
         builder.setContent(message);
-        builder.setLeftBtn(btnTextYes);
-        builder.setRightBtn(btnTextNo);
+        builder.setLeftBtn(btnTextNo);
+        builder.setRightBtn(btnTextYes);
         builder.setDialogType(DialogBuilder.DialogType.question);
         builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
             @Override
             public void onLeftBtnClick(BasePopupView v) {
-                listener.onYes();
+                listener.onNo();
                 v.dismiss();
             }
 
             @Override
             public void onRightBtnClick(BasePopupView v) {
-                listener.onNo();
+                listener.onYes();
                 v.dismiss();
             }
         });
@@ -200,7 +200,7 @@ public class MessageUtil {
         DialogBuilder builder = new DialogBuilder(context, 1);
         builder.setContent(message);
         builder.setLeftBtn("取消");
-        builder.setDialogType(DialogBuilder.DialogType.info);
+        builder.setDialogType(DialogBuilder.DialogType.wait);
         builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
             @Override
             public void onLeftBtnClick(BasePopupView v) {

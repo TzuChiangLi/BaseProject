@@ -13,4 +13,5 @@
     <color name="progress_load_red">#FF4646</color>
     <color name="progress_load_blue">#95cefd</color>
     <color name="progress_load_orange">#FFA25A</color>
+    <color name="dialog_button_ok">#DA5858</color>
 </resources>

@@ -42,12 +42,13 @@
         android:layout_marginTop="@dimen/dp_8"
         android:layout_marginEnd="@dimen/dp_16"
         android:layout_marginBottom="@dimen/dp_16"
-        android:gravity="center"
         android:maxLines="10"
         android:minWidth="@dimen/dp_150"
         android:text="@string/text_demo_long_msg"
         android:textColor="@color/text_black_second"
-        android:textSize="@dimen/sp_14" />
+        android:textSize="@dimen/sp_16"
+        android:textAlignment="textStart" />
+    <!--android:gravity="center"-->
 
     <View
         android:id="@+id/dialog_divide_line"
@@ -71,7 +72,8 @@
             android:layout_weight="1"
             android:background="@drawable/dialog_bg_bottom_left"
             android:maxHeight="40dp"
-            android:text="Left" />
+            android:text="Left"
+            android:textSize="@dimen/sp_17" />
 
         <View
             android:id="@+id/dialog_ll_btn_line"
@@ -87,8 +89,9 @@
             android:layout_weight="1"
             android:background="@drawable/dialog_bg_bottom_right"
             android:maxHeight="40dp"
-
-            android:text="Right" />
+            android:text="Right"
+            android:textSize="@dimen/sp_17"
+            android:textColor="@color/text_white" />
 
     </LinearLayout>
 
