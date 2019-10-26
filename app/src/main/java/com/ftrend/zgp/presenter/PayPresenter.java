@@ -60,7 +60,9 @@ public class PayPresenter implements Contract.PayPresenter {
             @Override
             public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
                 if (isSuccess) {
-                    TradeHelper.pay(payType, payCode);
+                    // TODO: 2019/10/26 微信支付账号长度超过后台数据库对应字段长度，暂时先不记录支付账号
+//                    TradeHelper.pay(payType, payCode);
+                    TradeHelper.pay(payType, "");
                     //插入交易流水队列
                     TradeHelper.uploadTradeQueue();
                     TradeHelper.clearVip();
