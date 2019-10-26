@@ -172,11 +172,11 @@ public class HandoverRecord {
     }
 
     public double getPayTotal() {
-        return moneyTotal + aliPayTotal + wechatTotal + cardTotal;
+        return moneyTotal + sqbTotal + aliPayTotal + wechatTotal + cardTotal;
     }
 
     public double getPayCount() {
-        return moneyCount + aliPayCount + wechatCount + cardCount;
+        return moneyCount + sqbCount + aliPayCount + wechatCount + cardCount;
     }
 
     public String getDepCode() {
