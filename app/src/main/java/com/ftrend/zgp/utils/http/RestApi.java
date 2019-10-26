@@ -163,12 +163,21 @@ public interface RestApi {
     Observable<RestResponse<Map<String, Object>>> uploadAppParams(@Body RestRequest<Map<String, Object>> request);
 
     /**
-     * 上传APP配置参数
+     * 查询APP配置参数
      *
      * @param request
      * @return
      */
     @POST("update/params")
     Observable<RestResponse<Map<String, Object>>> queryAppParams(@Body RestRequest<Map<String, Object>> request);
+
+    /**
+     * 上传收钱吧交易记录
+     *
+     * @param request
+     * @return
+     */
+    @POST("upload/sqb")
+    Observable<RestResponse<Map<String, Object>>> uploadSqb(@Body RestRequest<Map<String, Object>> request);
 
 }

@@ -2,6 +2,10 @@ package com.ftrend.zgp.utils.task;
 
 import android.util.Log;
 
+import com.ftrend.zgp.model.SqbPayOrder;
+import com.ftrend.zgp.model.SqbPayOrder_Table;
+import com.ftrend.zgp.model.SqbPayResult;
+import com.ftrend.zgp.model.SqbPayResult_Table;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradePay_Table;
@@ -80,10 +84,8 @@ public class LsUploadThread extends Thread {
                         new RestCallback(new RestResultHandler() {
                             @Override
                             public void onSuccess(Map<String, Object> body) {
-                                //记录上传时间
-                                queue.setUploadTime(new Date());
-                                queue.update();
-                                isUploading = false;
+                                //上传收钱吧交易记录
+                                uploadSqb(queue);
                             }
 
                             @Override
@@ -105,5 +107,69 @@ public class LsUploadThread extends Thread {
         }
     }
 
+    /**
+     * 上传对应的收钱吧交易记录
+     *
+     * @param queue
+     */
+    private void uploadSqb(final TradeUploadQueue queue) {
+        List<SqbPayOrder> orderList = SQLite.select().from(SqbPayOrder.class)
+                .where(SqbPayOrder_Table.lsNo.eq(queue.getLsNo()))
+                .queryList();
+        if (orderList.size() == 0) {
+            //没有收钱吧交易记录，流水上传完毕
+            setUploaded(queue);
+        }
+
+        final int total = orderList.size();
+        final int[] uploadCount = {0};
+        for (SqbPayOrder order : orderList) {
+            if (!isUploading || isInterrupted()) {
+                break;
+            }
+            SqbPayResult result = SQLite.select().from(SqbPayResult.class)
+                    .where(SqbPayResult_Table.requestNo.eq(order.getRequestNo()))
+                    .querySingle();
+            if (result == null) {
+                //没有对应的交易结果，该请求可能没有发送出去，无需上传
+                uploadCount[0]++;
+                if (uploadCount[0] >= total) {
+                    //流水上传完毕
+                    setUploaded(queue);
+                    break;
+                }
+                continue;
+            }
+            RestSubscribe.getInstance().uploadSqb(order, result,
+                    new RestCallback(new RestResultHandler() {
+                        @Override
+                        public void onSuccess(Map<String, Object> body) {
+                            uploadCount[0]++;
+                            if (uploadCount[0] >= total) {
+                                //流水上传完毕
+                                setUploaded(queue);
+                            }
+                        }
+
+                        @Override
+                        public void onFailed(String errorCode, String errorMsg) {
+                            Log.e(TAG, "收钱吧交易记录上传失败: " + errorCode + " - " + errorMsg);
+                            isUploading = false;//上传失败不做处理，下次再上传
+                        }
+                    }));
+        }
+    }
+
+    /**
+     * 设置当前流水上传完毕
+     *
+     * @param queue
+     */
+    private void setUploaded(final TradeUploadQueue queue) {
+        //记录上传时间
+        queue.setUploadTime(new Date());
+        queue.update();
+        isUploading = false;
+    }
 
 }

@@ -22,11 +22,11 @@ public class SqbPayOrder extends BaseModel {
     @PrimaryKey(autoincrement = true)
     private int id;
     @Column
-    private String paramName;
-    @Column
     private String posCode;
     @Column
     private String depCode;
+    @Column
+    private String userCode;
     @Column
     private String lsNo;
     @Column
@@ -72,6 +72,7 @@ public class SqbPayOrder extends BaseModel {
     public SqbPayOrder(UpayOrder order, String requestNo, String requestType, String lsNo) {
         this.posCode = ZgParams.getPosCode();
         this.depCode = ZgParams.getCurrentDep().getDepCode();
+        this.userCode = ZgParams.getCurrentUser().getUserCode();
         this.lsNo = lsNo;
         this.createTime = new Date();
         this.requestNo = requestNo;
@@ -102,14 +103,6 @@ public class SqbPayOrder extends BaseModel {
         this.id = id;
     }
 
-    public String getParamName() {
-        return paramName;
-    }
-
-    public void setParamName(String paramName) {
-        this.paramName = paramName;
-    }
-
     public String getPosCode() {
         return posCode;
     }
@@ -124,6 +117,14 @@ public class SqbPayOrder extends BaseModel {
 
     public void setDepCode(String depCode) {
         this.depCode = depCode;
+    }
+
+    public String getUserCode() {
+        return userCode;
+    }
+
+    public void setUserCode(String userCode) {
+        this.userCode = userCode;
     }
 
     public String getLsNo() {

@@ -1,6 +1,8 @@
 package com.ftrend.zgp.utils.http;
 
 import com.ftrend.zgp.model.AppParams;
+import com.ftrend.zgp.model.SqbPayOrder;
+import com.ftrend.zgp.model.SqbPayResult;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradeProd;
@@ -340,6 +342,22 @@ public class RestSubscribe {
         RestRequest<Map<String, Object>> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.queryAppParams(request), callback);
+    }
+
+    /**
+     * 上传收钱吧交易记录
+     *
+     * @param order
+     * @param result
+     * @param callback
+     */
+    public void uploadSqb(SqbPayOrder order, SqbPayResult result, final RestCallback callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("order", order);
+        params.put("result", result);
+        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        request.setBody(params);
+        detachAndSubscribe(api.uploadSqb(request), callback);
     }
 
 }
