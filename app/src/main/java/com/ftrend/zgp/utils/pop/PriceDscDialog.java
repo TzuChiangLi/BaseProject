@@ -107,10 +107,12 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
      */
     private void initWholeDscData() {
         DscHelper.beginWholeDsc();
-        mMaxRateTv.setText(TradeHelper.getMaxWholeRate() == 0 ? "(无优惠)"
+        /*mMaxRateTv.setText(TradeHelper.getMaxWholeRate() == 0 ? "(无优惠)"
                 : "(0-" + TradeHelper.getMaxWholeRate() + "%)");
         mMaxDscTv.setText(TradeHelper.getMaxWholeDsc() == 0 ? "(无优惠)"
-                : "(0-" + TradeHelper.priceFormat(TradeHelper.getMaxWholeDsc()) + "元)");
+                : "(0-" + TradeHelper.priceFormat(TradeHelper.getMaxWholeDsc()) + "元)");*/
+        mMaxRateTv.setText("(0-" + TradeHelper.getMaxWholeRate() + "%)");
+        mMaxDscTv.setText("(0-" + TradeHelper.priceFormat(TradeHelper.getMaxWholeDsc()) + "元)");
         mPriceTv.setText(String.valueOf(TradeHelper.getWholeForDscPrice()));
     }
 
@@ -185,10 +187,12 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         mPriceTv.setText(String.valueOf(tradeProd.getPrice()));
         mTotalTv.setText(String.valueOf(tradeProd.getTotal() / tradeProd.getAmount()));
         mProdNameTv.setText(tradeProd.getProdName());
-        mMaxRateTv.setText(TradeHelper.getMaxSingleRate(index) == 0 ? "(无优惠)"
+        /*mMaxRateTv.setText(TradeHelper.getMaxSingleRate(index) == 0 ? "(无优惠)"
                 : "(0-" + TradeHelper.getMaxSingleRate(index) + "%)");
         mMaxDscTv.setText(TradeHelper.getMaxSingleDsc(index) == 0 ? "(无优惠)"
-                : "(0-" + TradeHelper.priceFormat(TradeHelper.getMaxSingleDsc(index)) + "元)");
+                : "(0-" + TradeHelper.priceFormat(TradeHelper.getMaxSingleDsc(index)) + "元)");*/
+        mMaxRateTv.setText("(0-" + TradeHelper.getMaxSingleRate(index) + "%)");
+        mMaxDscTv.setText("(0-" + TradeHelper.priceFormat(TradeHelper.getMaxSingleDsc(index)) + "元)");
         mDscEdt.setText(String.valueOf(tradeProd.getManuDsc() + tradeProd.getVipDsc() + tradeProd.getTranDsc()));
         mRateEdt.setText(String.valueOf(TradeHelper.getSingleRate(index, Double.parseDouble(mDscEdt.getText().toString()))));
         mRateEdt.selectAll();
@@ -513,7 +517,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                         dismiss();
                     }
                 } else {
-                    MessageUtil.showError("失败");
+                    MessageUtil.showError("超出最大可优惠范围");
                 }
                 break;
             case DIALOG_WHOLE_RSC:
@@ -532,7 +536,7 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
                         dismiss();
                     }
                 } else {
-                    MessageUtil.showError("失败");
+                    MessageUtil.showError("超出最大可优惠范围");
                 }
                 break;
             default:

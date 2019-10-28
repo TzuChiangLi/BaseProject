@@ -199,7 +199,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     if (DscHelper.commitWholeDsc()) {
                         Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
                     } else {
-                        MessageUtil.showError("失败");
+                        MessageUtil.showError("整单优惠失败");
                     }
                     break;
                 case Event.TYPE_TOAST:
