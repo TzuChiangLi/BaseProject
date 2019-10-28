@@ -96,7 +96,7 @@ public class DscHelper {
             remainTotal -= dsc;
         }
         //余额分摊到最后一个商品
-        int index = dscList.size() - 2;
+        int index = dscList.size() - 1;
         double max = prodMaxDscByTotal(dscList.get(index));
         if (max >= remainTotal) {
             calcList.set(index, remainTotal);
