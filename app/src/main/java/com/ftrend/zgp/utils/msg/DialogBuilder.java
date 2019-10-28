@@ -161,6 +161,8 @@ public class DialogBuilder extends CenterPopupView {
         mMsgTv.setText(newMsg);
     }
 
+
+
     @Override
     protected void onShow() {
         super.onShow();

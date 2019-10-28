@@ -1,5 +1,7 @@
 package com.ftrend.zgp.presenter;
 
+import android.content.Context;
+
 import com.ftrend.zgp.App;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
@@ -47,9 +49,9 @@ public class HomePresenter implements Contract.HomePresenter {
     }
 
     @Override
-    public void initSqbSdk() {
+    public void initSqbSdk(Context context) {
         DebugConfig.setDebug(false);//默认为非调试模式,如果需要调试,请设置为 true,打印和保存相关日志
-        UpayTask.getInstance().initUpay(App.getContext(), ZgParams.getSqbConfig().isPlaySound(), Env.UrlType.PRO);
+        UpayTask.getInstance().initUpay(context, ZgParams.getSqbConfig().isPlaySound(), Env.UrlType.PRO);
         SqbPayHelper.activate(new SqbPayHelper.PayResultCallback() {
             @Override
             public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
@@ -137,7 +139,6 @@ public class HomePresenter implements Contract.HomePresenter {
 
     @Override
     public void goHandover() {
-
         switch (HandoverHelper.canHandover()) {
             case 1:
                 mView.goHandoverActivity();

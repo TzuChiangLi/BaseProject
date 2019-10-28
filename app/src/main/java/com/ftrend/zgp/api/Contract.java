@@ -199,7 +199,7 @@ public interface Contract {
         /**
          * 初始化收钱吧SDK
          */
-        void initSqbSdk();
+        void initSqbSdk(Context context);
 
         /**
          * 启动后台线程

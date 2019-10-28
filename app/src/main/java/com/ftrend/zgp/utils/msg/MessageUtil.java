@@ -16,8 +16,6 @@ import java.util.Locale;
 public class MessageUtil {
 
 
-
-
 //-------------------------------------模态弹窗-----------------------------------------//
 
     //region 模态弹窗
@@ -189,6 +187,7 @@ public class MessageUtil {
 
     /**
      * 显示等待提示框
+     *
      * @param message
      * @param listener 取消按钮监听回调，如果不希望点击取消按钮立即关闭对话框，onCancel请返回false
      */
@@ -257,6 +256,7 @@ public class MessageUtil {
 //-------------------------------------吐司工具-----------------------------------------//
 
     //region 吐司
+
     /**
      * 纯文字吐司
      *

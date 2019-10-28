@@ -69,7 +69,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         //初始化商米支付SDK
         mPresenter.initSunmiPaySdk();
         //初始化收钱吧SDK
-        mPresenter.initSqbSdk();
+        mPresenter.initSqbSdk(this);
     }
 
     @Override
@@ -146,8 +146,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 mPresenter.logout();
                 break;
             case "取单":
-                CommonUtil.rebootApp(this);
-//                mPresenter.getOutOrder();
+                mPresenter.getOutOrder();
                 break;
             case "数据同步":
                 // TODO: 2019/10/12 重构：移动到presenter类
@@ -169,7 +168,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                             //重新读取配置参数
                             ZgParams.loadParams();
                             //重新初始化收钱吧SDK
-                            mPresenter.initSqbSdk();
+                            mPresenter.initSqbSdk(HomeActivity.this);
                             MessageUtil.waitEnd();
                             MessageUtil.showSuccess("数据同步已完成");
                         } else if (isFailed) {
