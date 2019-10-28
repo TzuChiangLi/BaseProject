@@ -76,7 +76,8 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
                     return;
                 }
                 if (((ProgressView) v).FLAG == 0) {
-                    mPresenter.stopInitData();
+                    //初始化过程不支持取消
+//                    mPresenter.stopInitData();
                     return;
                 }
                 if (((ProgressView) v).FLAG > 0) {
