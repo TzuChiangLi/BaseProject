@@ -182,7 +182,6 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     break;
                 case Event.TYPE_VIPCARD_FAILE:
                     if (event.getData() != null) {
-                        MessageUtil.waitEnd();
                         MessageUtil.showError(event.getData().toString());
                     }
                     break;
