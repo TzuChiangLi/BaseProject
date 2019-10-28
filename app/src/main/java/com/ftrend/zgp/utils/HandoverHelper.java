@@ -528,7 +528,9 @@ public class HandoverHelper {
     @NonNull
     public static List<String> getUserList() {
         List<String> userCode = new ArrayList<>();
-        List<Trade> temp = SQLite.select(Trade_Table.cashier).distinct().from(Trade.class).queryList();
+        List<Trade> temp = SQLite.select(Trade_Table.cashier).distinct().from(Trade.class)
+                .where(Trade_Table.status.eq(TradeHelper.TRADE_STATUS_PAID))
+                .queryList();
         for (Trade t : temp) {
             userCode.add(t.getCashier());
         }
