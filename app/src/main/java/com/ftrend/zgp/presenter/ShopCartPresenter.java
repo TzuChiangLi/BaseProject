@@ -192,7 +192,9 @@ public class ShopCartPresenter implements Contract.ShopCartPresenter {
                 if (ZgParams.isIsOnline()) {
                     RestSubscribe.getInstance().queryVipInfo(TradeHelper.getTrade().getVipCode(), new RestCallback(regHandler));
                 } else {
-                    mView.showError("无法获取会员优惠信息");
+                    if (TradeHelper.vip != null) {
+                        mView.showError("无法获取会员优惠信息");
+                    }
                 }
             }
             TradeHelper.priceChangeInShopCart(price);

@@ -16,6 +16,7 @@ import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.HomePresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.common.CommonUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
@@ -145,7 +146,8 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                 mPresenter.logout();
                 break;
             case "取单":
-                mPresenter.getOutOrder();
+                CommonUtil.rebootApp(this);
+//                mPresenter.getOutOrder();
                 break;
             case "数据同步":
                 // TODO: 2019/10/12 重构：移动到presenter类

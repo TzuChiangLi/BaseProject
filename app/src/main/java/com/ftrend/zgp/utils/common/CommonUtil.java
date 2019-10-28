@@ -1,7 +1,12 @@
 package com.ftrend.zgp.utils.common;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.support.annotation.Nullable;
+
+import com.ftrend.zgp.utils.log.LogUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,7 +35,29 @@ public class CommonUtil {
         //与正常页面跳转一样可传递序列化数据,在Launch页面内获得
         intent.putExtra("REBOOT", "reboot");
         startActivity(intent);
+        try {
+            Activity activity = findActivity(context);
+            if (activity != null) {
+                activity.finish();
+            }
+        } catch (Exception e) {
+            LogUtil.e("rebootApp：" + e.getMessage());
+        }
     }
+
+    @Nullable
+    public static Activity findActivity(Context context) {
+        if (context instanceof Activity) {
+            return (Activity) context;
+        }
+        if (context instanceof ContextWrapper) {
+            ContextWrapper wrapper = (ContextWrapper) context;
+            return findActivity(wrapper.getBaseContext());
+        } else {
+            return null;
+        }
+    }
+
 
     /**
      * 生成新的UUID
