@@ -88,7 +88,7 @@ public class SqbPayHelper {
                         if (callback == null) {
                             return;
                         }
-                        if (UpayResult.ACTIVATE_SUCCESS.equals(result.getOrder_status())) {
+                        if (UpayResult.ACTIVATE_SUCCESS.equals(result.getResult_code())) {
                             callback.onResult(true, "", "", "");
                         } else {
                             callback.onResult(false, "", "", result.getError_message());
