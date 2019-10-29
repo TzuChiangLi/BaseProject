@@ -8,6 +8,7 @@ import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -51,14 +52,16 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
                 @Override
                 public void onSuccess(Map<String, Object> body) {
                     HandoverHelper.finish();
-                    MessageUtil.waitEnd();
-                    mView.showSuccess();
+                    MessageUtil.waitSuccesss("已完成");
+//                    MessageUtil.waitEnd();
+//                    mView.showSuccess();
                 }
 
                 @Override
                 public void onFailed(String errorCode, String errorMsg) {
-                    MessageUtil.waitEnd();
-                    MessageUtil.serverError(errorCode, "交班失败：" + errorMsg);
+//                    MessageUtil.waitEnd();
+                    MessageUtil.waitError(String.format(Locale.CHINA, "%s - %s", errorCode, errorMsg));
+//                    MessageUtil.serverError(errorCode, "交班失败：" + errorMsg);
                 }
             }));
             // 上传APP配置参数，失败不影响交班结果

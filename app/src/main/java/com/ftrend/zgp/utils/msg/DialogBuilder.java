@@ -161,6 +161,35 @@ public class DialogBuilder extends CenterPopupView {
         mMsgTv.setText(newMsg);
     }
 
+    /**
+     * 更新提示消息
+     */
+    public void updateSucccess(String msg) {
+        if (mMsgTv == null) {
+            return;
+        }
+        mTitleTv.setText("成功");
+        mStateImg.setImageResource(R.drawable.dialog_state_tip);
+        if (!TextUtils.isEmpty(msg)) {
+            mMsgTv.setText(msg);
+        }
+        mLeftBtn.setText("确认");
+    }
+
+    /**
+     * 更新提示消息
+     */
+    public void updateError(String msg) {
+        if (mMsgTv == null) {
+            return;
+        }
+        mTitleTv.setText("错误");
+        mStateImg.setImageResource(R.drawable.dialog_state_error);
+        if (!TextUtils.isEmpty(msg)) {
+            mMsgTv.setText(msg);
+        }
+        mLeftBtn.setText("返回");
+    }
 
 
     @Override
