@@ -19,14 +19,11 @@ import com.blankj.utilcode.util.KeyboardUtils;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.R;
-import com.ftrend.zgp.model.TradeProd;
-import com.ftrend.zgp.utils.DscHelper;
-import com.ftrend.zgp.utils.TradeHelper;
-import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.common.CommonUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
-import com.ftrend.zgp.view.ShopCartActivity;
-import com.ftrend.zgp.view.ShopListActivity;
 import com.lxj.xpopup.core.BottomPopupView;
+
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,7 +34,8 @@ import butterknife.OnClick;
  *
  * @author liziqiang@ftrend.cn
  */
-public class PriceDscDialog extends BottomPopupView implements View.OnClickListener, KeyboardView.OnItemClickListener, View.OnFocusChangeListener {
+public class PriceDscDialog extends BottomPopupView
+        implements View.OnClickListener, KeyboardView.OnItemClickListener, View.OnFocusChangeListener {
     @BindView(R.id.vip_way_ll_info)
     LinearLayout mInfoLayout;
     @BindView(R.id.vip_way_edt)
@@ -48,31 +46,57 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
     Button mSubmitBtn;
     @BindView(R.id.vip_way_img_close)
     ImageView mCloseImg;
-    //优惠：    3-单项优惠
-    public static final int DIALOG_SINGLE_RSC = 3;
-    //优惠：    3-整单优惠
-    public static final int DIALOG_WHOLE_RSC = 4;
-    private int type;
-    private int index = 0;
-    private Context mContext;
+    //优惠类别：    3-单项优惠
+    private static final int DIALOG_SINGLE_RSC = 3;
+    //优惠类别：    4-整单优惠
+    private static final int DIALOG_WHOLE_RSC = 4;
+    //优惠类别
+    private int dscType;
+    //数据更新：全部更新
+    private final int UPDATE_DATA_ALL = 0;
+    //数据更新：除折扣比例输入框以外全部更新
+    private final int UPDATE_DATA_EXCEPT_RATE = 1;
+    //数据更新：除优惠金额输入框以外全部更新
+    private final int UPDATE_DATA_EXCEPT_MONEY = 2;
     private KeyboardView mKeyView;
     private View mKeyViewStub, mRateDscView;
     private EditText mRateEdt, mDscEdt;
     private TextView mPriceTv, mTotalTv, mProdNameTv, mMaxRateTv, mMaxDscTv;
-    private boolean isFirst = true, inputFlag = true;
+    //优惠计算参数
+    private DscData dscData = null;
+    //优惠计算回调
+    private DscInputCallback callback = null;
 
-
-    public PriceDscDialog(@NonNull Context context, int type) {
-        super(context);
-        this.type = type;
-        mContext = context;
+    /**
+     * 单项优惠输入框
+     *
+     * @param context
+     * @return
+     */
+    public static PriceDscDialog singleDscInput(@NonNull Context context, @NonNull DscData data,
+                                                @NonNull DscInputCallback callback) {
+        PriceDscDialog dlg = new PriceDscDialog(context, DIALOG_SINGLE_RSC, callback);
+        dlg.dscData = data;
+        return dlg;
     }
 
-    public PriceDscDialog(@NonNull Context context, int type, int index) {
+    /**
+     * 整单优惠输入框
+     *
+     * @param context
+     * @return
+     */
+    public static PriceDscDialog wholeDscInput(@NonNull Context context, @NonNull DscData data,
+                                               @NonNull DscInputCallback callback) {
+        PriceDscDialog dlg = new PriceDscDialog(context, DIALOG_WHOLE_RSC, callback);
+        dlg.dscData = data;
+        return dlg;
+    }
+
+    public PriceDscDialog(@NonNull Context context, int dscType, @NonNull DscInputCallback callback) {
         super(context);
-        this.type = type;
-        this.index = index;
-        mContext = context;
+        this.dscType = dscType;
+        this.callback = callback;
     }
 
     @Override
@@ -85,128 +109,84 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
         super.onCreate();
         ButterKnife.bind(this);
         KeyboardUtils.hideSoftInput(this);
-        switch (type) {
-            case DIALOG_SINGLE_RSC:
-                //优惠
-                initSingleDscView();
-                initSingleDscData();
-                break;
-            case DIALOG_WHOLE_RSC:
-                //优惠
-                initWholeDscView();
-                initWholeDscData();
-                break;
-            default:
-                break;
+        initDscView();
+        updateDscData(UPDATE_DATA_ALL);
+        mRateEdt.setText(String.valueOf(dscData.getDscRate()));
+//        mRateEdt.selectAll();
+    }
+
+    /**
+     * 初始化界面
+     */
+    private void initDscView() {
+        //懒加载
+        mKeyViewStub = ((ViewStub) findViewById(R.id.vip_way_key_func_view)).inflate();
+        mKeyView = mKeyViewStub.findViewById(R.id.vip_way_keyboard);
+        mRateDscView = ((ViewStub) findViewById(R.id.vip_dsc_rate_view)).inflate();
+        //注册控件
+        mDscEdt = mRateDscView.findViewById(R.id.vip_dsc_edt_dsc);
+        mRateEdt = mRateDscView.findViewById(R.id.vip_dsc_edt_rate);
+        mProdNameTv = mRateDscView.findViewById(R.id.vip_dsc_tv_prodname);
+        mPriceTv = mRateDscView.findViewById(R.id.vip_dsc_tv_price);
+        mTotalTv = mRateDscView.findViewById(R.id.vip_dsc_tv_total);
+        mMaxDscTv = mRateDscView.findViewById(R.id.vip_dsc_tv_dsc_range);
+        mMaxRateTv = mRateDscView.findViewById(R.id.vip_dsc_tv_rate_range);
+        //防止键盘弹出
+        mRateEdt.setInputType(InputType.TYPE_NULL);
+        mDscEdt.setInputType(InputType.TYPE_NULL);
+        //展示自家小键盘
+        mKeyView.show();
+        //初始化其他界面信息
+        mEdt.setVisibility(GONE);
+        mSubmitBtn.setVisibility(GONE);
+        mKeyView.setOnKeyboardClickListener(this);
+//        mRateEdt.selectAll();
+        mRateEdt.setOnFocusChangeListener(this);
+        if (dscType == DIALOG_WHOLE_RSC) {
+            mTitleTv.setText("整单优惠");
+            mProdNameTv.setVisibility(GONE);
+        } else if (dscType == DIALOG_SINGLE_RSC) {
+            mTitleTv.setText("单项优惠");
         }
     }
 
-
     /**
-     * 初始化整单优惠数据
+     * 更新折扣优惠数据面板
      */
-    private void initWholeDscData() {
-        DscHelper.beginWholeDsc();
-        /*mMaxRateTv.setText(TradeHelper.getMaxWholeRate() == 0 ? "(无优惠)"
-                : "(0-" + TradeHelper.getMaxWholeRate() + "%)");
-        mMaxDscTv.setText(TradeHelper.getMaxWholeDsc() == 0 ? "(无优惠)"
-                : "(0-" + TradeHelper.priceFormat(TradeHelper.getMaxWholeDsc()) + "元)");*/
-        mMaxRateTv.setText("(0-" + TradeHelper.getMaxWholeRate() + "%)");
-        mMaxDscTv.setText("(0-" + TradeHelper.priceFormat(TradeHelper.getMaxWholeDsc()) + "元)");
-        mPriceTv.setText(String.valueOf(TradeHelper.getWholeForDscPrice()));
+    private void updateDscData(int type) {
+        mMaxRateTv.setText(String.format(Locale.CHINA, "(0-%d%%)", dscData.getDscRateMax()));
+        mMaxDscTv.setText(String.format(Locale.CHINA, "(0-%s元)", CommonUtil.moneyToString(dscData.getDscMoneyMax())));
+        if (dscType == DIALOG_SINGLE_RSC) {
+            mPriceTv.setText(CommonUtil.moneyToString(dscData.getPrice()));//原价
+            mTotalTv.setText(CommonUtil.moneyToString((dscData.getTotal() - dscData.getDscMoney()) / dscData.getAmount()));//优惠价
+        } else if (dscType == DIALOG_WHOLE_RSC) {
+            mPriceTv.setText(CommonUtil.moneyToString(dscData.getTotal()));//原价
+            mTotalTv.setText(CommonUtil.moneyToString(dscData.getTotal() - dscData.getDscMoney()));//优惠价
+        }
+
+        mProdNameTv.setText(dscData.getProdName());
+        if (type != UPDATE_DATA_EXCEPT_RATE) {
+            mRateEdt.setText(String.valueOf(dscData.getDscRate()));
+        }
+        if (type != UPDATE_DATA_EXCEPT_MONEY) {
+            mDscEdt.setText(CommonUtil.moneyToString(dscData.getDscMoney()));
+        }
+        if (dscData.getDscRate() > dscData.getDscRateMax()) {
+            errorTextColor(mRateEdt);
+        } else {
+            restoreTextColor(mRateEdt);
+        }
+        if (dscData.getDscMoney() > dscData.getDscMoneyMax()) {
+            errorTextColor(mDscEdt);
+        } else {
+            restoreTextColor(mDscEdt);
+        }
     }
-
-    /**
-     * 初始化整单优惠面板界面
-     */
-    private void initWholeDscView() {
-        //懒加载
-        mKeyViewStub = ((ViewStub) findViewById(R.id.vip_way_key_func_view)).inflate();
-        mKeyView = mKeyViewStub.findViewById(R.id.vip_way_keyboard);
-        mRateDscView = ((ViewStub) findViewById(R.id.vip_dsc_rate_view)).inflate();
-        //注册控件
-        mDscEdt = mRateDscView.findViewById(R.id.vip_dsc_edt_dsc);
-        mRateEdt = mRateDscView.findViewById(R.id.vip_dsc_edt_rate);
-        mProdNameTv = mRateDscView.findViewById(R.id.vip_dsc_tv_prodname);
-        mPriceTv = mRateDscView.findViewById(R.id.vip_dsc_tv_price);
-        mTotalTv = mRateDscView.findViewById(R.id.vip_dsc_tv_total);
-        mMaxDscTv = mRateDscView.findViewById(R.id.vip_dsc_tv_dsc_range);
-        mMaxRateTv = mRateDscView.findViewById(R.id.vip_dsc_tv_rate_range);
-        //防止键盘弹出
-        mRateEdt.setInputType(InputType.TYPE_NULL);
-        mDscEdt.setInputType(InputType.TYPE_NULL);
-        //展示自家小键盘
-        mKeyView.show();
-        //初始化其他界面信息
-        mTitleTv.setText("整单优惠");
-        mEdt.setVisibility(GONE);
-        mSubmitBtn.setVisibility(GONE);
-        mProdNameTv.setVisibility(GONE);
-        mKeyView.setOnKeyboardClickListener(this);
-        mRateEdt.selectAll();
-        mRateEdt.setOnFocusChangeListener(this);
-    }
-
-
-    /**
-     * 折扣单项优惠初始化界面
-     */
-    private void initSingleDscView() {
-        //懒加载
-        mKeyViewStub = ((ViewStub) findViewById(R.id.vip_way_key_func_view)).inflate();
-        mKeyView = mKeyViewStub.findViewById(R.id.vip_way_keyboard);
-        mRateDscView = ((ViewStub) findViewById(R.id.vip_dsc_rate_view)).inflate();
-        //注册控件
-        mDscEdt = mRateDscView.findViewById(R.id.vip_dsc_edt_dsc);
-        mRateEdt = mRateDscView.findViewById(R.id.vip_dsc_edt_rate);
-        mProdNameTv = mRateDscView.findViewById(R.id.vip_dsc_tv_prodname);
-        mPriceTv = mRateDscView.findViewById(R.id.vip_dsc_tv_price);
-        mTotalTv = mRateDscView.findViewById(R.id.vip_dsc_tv_total);
-        mMaxDscTv = mRateDscView.findViewById(R.id.vip_dsc_tv_dsc_range);
-        mMaxRateTv = mRateDscView.findViewById(R.id.vip_dsc_tv_rate_range);
-        //防止键盘弹出
-        mRateEdt.setInputType(InputType.TYPE_NULL);
-        mDscEdt.setInputType(InputType.TYPE_NULL);
-        //展示自家小键盘
-        mKeyView.show();
-        //初始化其他界面信息
-        mTitleTv.setText("单项优惠");
-        mEdt.setVisibility(GONE);
-        mSubmitBtn.setVisibility(GONE);
-        mKeyView.setOnKeyboardClickListener(this);
-        mRateEdt.selectAll();
-        mRateEdt.setOnFocusChangeListener(this);
-    }
-
-    /**
-     * 折扣优惠初始化数据面板
-     */
-    private void initSingleDscData() {
-        //获取该条商品的信息
-        TradeProd tradeProd = TradeHelper.getProdList().get(index);
-        mPriceTv.setText(String.valueOf(tradeProd.getPrice()));
-        mTotalTv.setText(String.valueOf(tradeProd.getTotal() / tradeProd.getAmount()));
-        mProdNameTv.setText(tradeProd.getProdName());
-        /*mMaxRateTv.setText(TradeHelper.getMaxSingleRate(index) == 0 ? "(无优惠)"
-                : "(0-" + TradeHelper.getMaxSingleRate(index) + "%)");
-        mMaxDscTv.setText(TradeHelper.getMaxSingleDsc(index) == 0 ? "(无优惠)"
-                : "(0-" + TradeHelper.priceFormat(TradeHelper.getMaxSingleDsc(index)) + "元)");*/
-        mMaxRateTv.setText("(0-" + TradeHelper.getMaxSingleRate(index) + "%)");
-        mMaxDscTv.setText("(0-" + TradeHelper.priceFormat(TradeHelper.getMaxSingleDsc(index)) + "元)");
-        mDscEdt.setText(String.valueOf(tradeProd.getManuDsc() + tradeProd.getVipDsc() + tradeProd.getTranDsc()));
-        mRateEdt.setText(String.valueOf(TradeHelper.getSingleRate(index, Double.parseDouble(mDscEdt.getText().toString()))));
-        mRateEdt.selectAll();
-    }
-
 
     @OnClick(R.id.vip_way_img_close)
     public void close() {
-        if (mContext instanceof ShopCartActivity) {
-            //需要撤销添加的最后一条
-            Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE);
-        }
-        if (mContext instanceof ShopListActivity) {
-            DscHelper.cancelWholeDsc();
+        if (callback != null) {
+            callback.onCancel();
         }
         dismiss();
     }
@@ -214,29 +194,11 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.vip_way_edt:
-                if (mKeyView.isShow()) {
-                    mKeyView.show();
-                }
-                break;
-            default:
-                break;
-        }
     }
 
     @Override
     protected void onDismiss() {
         super.onDismiss();
-        if (mContext instanceof ShopListActivity) {
-            DscHelper.cancelWholeDsc();
-        }
-        if (mContext instanceof ShopCartActivity) {
-            //需要撤销添加的最后一条
-            if (TextUtils.isEmpty(mEdt.getText().toString())) {
-                Event.sendEvent(Event.TARGET_SHOP_CART, Event.TYPE_CANCEL_PRICE_CHANGE);
-            }
-        }
     }
 
     //-------------------------------------输入实时监听--------------------------------------------//
@@ -248,64 +210,26 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (count != 0) {
-                if (s.toString().contains(".")) {
-                    Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_TOAST, "格式不正确");
-                    errorTextColor(mRateEdt);
-                    return;
-                }
-                if (!TradeHelper.checkRateFormat(s.toString())) {
-                    Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_TOAST, "格式不正确");
-                    return;
-                }
-                switch (type) {
-                    case DIALOG_SINGLE_RSC:
-                        if (Long.valueOf(s.toString()) > TradeHelper.getMaxSingleRate(index)) {
-                            //超过限制
-                            errorTextColor(mRateEdt);
-                        } else {
-                            restoreTextColor(mRateEdt);
-                            //设置优惠金额
-                            mDscEdt.setText(String.format("%.2f", TradeHelper.getSingleDsc(index, Integer.valueOf(s.toString()))));
-                            //修改优惠后的价格
-                            mTotalTv.setText(String.format("%.2f", TradeHelper.getSingleTotal(index, Double.parseDouble(mDscEdt.getText().toString()))));
-                            //如果优惠金额大于最大金额
-                            if (Double.parseDouble(mDscEdt.getText().toString()) > TradeHelper.getMaxSingleDsc(index)) {
-                                errorTextColor(mDscEdt);
-                            } else {
-                                restoreTextColor(mDscEdt);
-                            }
-                        }
-                        break;
-                    case DIALOG_WHOLE_RSC:
-                        if (TradeHelper.getWholeForDscPrice() == 0) {
-                            Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_TOAST, "当前无法优惠");
-                            return;
-                        }
-                        if (Long.valueOf(s.toString()) > TradeHelper.getMaxWholeRate()) {
-                            //超过限制
-                            errorTextColor(mRateEdt);
-                        } else {
-                            restoreTextColor(mRateEdt);
-                            DscHelper.wholeDscByRate(Integer.valueOf(s.toString()));
-                            mTotalTv.setText(String.format("%.2f", TradeHelper.getWholeTotal(Integer.valueOf(s.toString()))));
-                            mDscEdt.setText(String.format("%.2f", TradeHelper.getWholeDsc(Integer.valueOf(s.toString()))));
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                mDscEdt.setText("");
-                restoreTextColor(mRateEdt);
-                restoreTextColor(mDscEdt);
-                mTotalTv.setText(mPriceTv.getText().toString());
-            }
         }
 
         @Override
         public void afterTextChanged(Editable s) {
-
+            if (callback != null) {
+                try {
+                    int rate = Integer.valueOf(s.toString());
+                    if (rate > dscData.getDscRateMax()) {
+                        //超过限制
+                        errorTextColor(mRateEdt);
+                    } else {
+                        restoreTextColor(mRateEdt);
+                        dscData.setDscRate(rate);
+                        dscData.setDscMoney(callback.onDscByRate(rate));
+                        updateDscData(UPDATE_DATA_EXCEPT_RATE);
+                    }
+                } catch (Exception e) {
+                    mRateEdt.setText("0");
+                }
+            }
         }
     };
     private TextWatcher dscWatcher = new TextWatcher() {
@@ -316,242 +240,158 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (count != 0) {
-                switch (type) {
-                    case DIALOG_SINGLE_RSC:
-                        if (Double.parseDouble(s.toString()) > TradeHelper.getMaxSingleDsc(index)) {
-                            //超过限制
-                            errorTextColor(mDscEdt);
-                        } else {
-                            restoreTextColor(mDscEdt);
-                            //设置折扣率
-                            mRateEdt.setText(String.valueOf(TradeHelper.getSingleRate(index, Double.parseDouble(s.toString()))));
-                            //修改优惠后的价格
-                            mTotalTv.setText(String.format("%.2f", TradeHelper.getSingleTotal(index, Double.parseDouble(mDscEdt.getText().toString()))));
-                            if (Long.valueOf(mRateEdt.getText().toString()) > TradeHelper.getMaxSingleRate(index)) {
-                                errorTextColor(mRateEdt);
-                            } else {
-                                restoreTextColor(mRateEdt);
-                            }
-                        }
-                        break;
-                    case DIALOG_WHOLE_RSC:
-                        if (TradeHelper.getWholeForDscPrice() == 0) {
-                            MessageUtil.show("当前无法优惠");
-                            return;
-                        }
-                        if (Double.parseDouble(s.toString()) > TradeHelper.getMaxWholeDsc()) {
-                            //超过限制
-                            errorTextColor(mDscEdt);
-                        } else {
-                            restoreTextColor(mDscEdt);
-                            DscHelper.wholeDscByTotal(Double.parseDouble(s.toString()));
-                            mRateEdt.setText(String.valueOf(TradeHelper.getWholeRate(Double.parseDouble(s.toString()))));
-                            mTotalTv.setText(String.format("%.2f", TradeHelper.getWholeTotal(Double.parseDouble(s.toString()))));
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                mRateEdt.setText("");
-                restoreTextColor(mRateEdt);
-                restoreTextColor(mDscEdt);
-                mTotalTv.setText(mPriceTv.getText().toString());
-            }
         }
 
         @Override
         public void afterTextChanged(Editable s) {
-
+            if (callback != null) {
+                try {
+                    double money = Double.valueOf(s.toString());
+                    if (money > dscData.getDscMoneyMax()) {
+                        //超过限制
+                        errorTextColor(mDscEdt);
+                    } else {
+                        restoreTextColor(mDscEdt);
+                        dscData.setDscMoney(callback.onDscByTotal(money));
+                        dscData.setDscRate((int) Math.round(dscData.getDscMoney() * 100 / dscData.getTotal()));
+                        updateDscData(UPDATE_DATA_EXCEPT_MONEY);
+                    }
+                } catch (Exception e) {
+                    mDscEdt.setText("0");
+                }
+            }
         }
     };
 
     //-------------------------------------键盘响应--------------------------------------------//
     @Override
     public void onKeyClick(View v, int key) {
-        switch (type) {
-            case DIALOG_SINGLE_RSC:
-            case DIALOG_WHOLE_RSC:
-                if (mRateEdt.hasFocus()) {
-                    if (mRateEdt.getText().toString().length() >= 3) {
-                        Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH);
-                        Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_TOAST, "超出限制");
-                        errorTextColor(mRateEdt);
-                        return;
-                    }
-                    mRateEdt.setText(isFirst ? String.valueOf(key) : mRateEdt.getText().append(String.valueOf(key)));
-                    isFirst = false;
-                } else {
-                    if (mDscEdt.getText().toString().contains(".")) {
-                        int position = mDscEdt.getText().toString().indexOf(".");
-                        if (mDscEdt.getText().toString().substring(0, position).length() > 6) {
-                            Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_TOAST, "超出限制");
-                            errorTextColor(mDscEdt);
-                            return;
-                        }
-                        if (mDscEdt.getText().toString().substring(position, mDscEdt.getText().toString().length() - 1).length() >= 2) {
-                            Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_TOAST, "超出限制");
-                            errorTextColor(mDscEdt);
-                            return;
-                        }
-                    } else {
-                        if (mDscEdt.getText().toString().length() > 6) {
-                            Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_TOAST, "超出限制");
-                            errorTextColor(mDscEdt);
-                            return;
-                        }
-                    }
-                    mDscEdt.setText(mDscEdt.getText().append(String.valueOf(key)));
+        if (mRateEdt.hasFocus()) {
+            String val = mRateEdt.getText().toString();
+            if (val.length() >= 3) {
+                //折扣比例最长3位
+                return;
+            }
+            if (TextUtils.isEmpty(val) || val.equals("0")) {
+                val = "";
+            }
+            mRateEdt.setText(val + key);
+        } else {
+            String val = mDscEdt.getText().toString();
+            if (val.contains(".")) {
+                int position = val.indexOf(".");
+                if (val.substring(position, val.length() - 1).length() >= 2) {
+                    //优惠金额小数点后最长2位
+                    return;
                 }
-                break;
-            default:
-                mEdt.setText(mEdt.getText().append(String.valueOf(key)));
-                break;
+            } else {
+                if (val.length() >= 6) {
+                    //优惠金额小数点前最长6位
+                    return;
+                }
+            }
+            if (TextUtils.isEmpty(val) || val.equals("0")) {
+                val = "";
+            }
+            mDscEdt.setText(val + key);
         }
-
     }
 
     @Override
     public void onDeleteClick() {
-        switch (type) {
-            case DIALOG_SINGLE_RSC:
-            case DIALOG_WHOLE_RSC:
-                if (mRateEdt.hasFocus()) {
-                    mRateEdt.setText(TextUtils.isEmpty(mRateEdt.getText().toString()) ? "" :
-                            mRateEdt.getText().toString().trim().substring(0, mRateEdt.getText().toString().trim().length() - 1));
-                } else {
-                    mDscEdt.setText(TextUtils.isEmpty(mDscEdt.getText().toString()) ? "" :
-                            mDscEdt.getText().toString().trim().substring(0, mDscEdt.getText().toString().trim().length() - 1));
-                }
-                break;
-            default:
-                mEdt.setText(TextUtils.isEmpty(mEdt.getText().toString()) ? "" :
-                        mEdt.getText().toString().trim().substring(0, mEdt.getText().toString().trim().length() - 1));
-                break;
+        if (mRateEdt.hasFocus()) {
+            String val = mRateEdt.getText().toString();
+            if (!TextUtils.isEmpty(val)) {
+                val = val.substring(0, val.length() - 1);
+            }
+            if (TextUtils.isEmpty(val)) {
+                val = "0";
+            }
+            mRateEdt.setText(val);
+        } else {
+            String val = mDscEdt.getText().toString();
+            if (!TextUtils.isEmpty(val)) {
+                val = val.substring(0, val.length() - 1);
+            }
+            if (TextUtils.isEmpty(val)) {
+                val = "0";
+            }
+            mDscEdt.setText(val);
         }
-
     }
 
     @Override
     public void onPointClick() {
-        switch (type) {
-            case DIALOG_SINGLE_RSC:
-            case DIALOG_WHOLE_RSC:
-                if (mDscEdt.hasFocus()) {
-                    if (!mDscEdt.getText().toString().contains(".")) {
-                        mDscEdt.getText().append('.');
-                    }
-                }
-                break;
-            default:
-                if (!mEdt.getText().toString().contains(".")) {
-                    mEdt.getText().append('.');
-                }
-                break;
+        if (mDscEdt.hasFocus()) {
+            if (!mDscEdt.getText().toString().contains(".")) {
+                mDscEdt.getText().append('.');
+            }
         }
+        //折扣比例不允许输入小数点
     }
 
     @Override
     public void onHideClick(View v) {
-        DscHelper.cancelWholeDsc();
+        if (callback != null) {
+            callback.onCancel();
+        }
         dismiss();
     }
 
     @Override
     public void onNextClick() {
-        switch (type) {
-            case DIALOG_SINGLE_RSC:
-            case DIALOG_WHOLE_RSC:
-                if (mRateEdt.hasFocus()) {
-                    mDscEdt.requestFocus();
-                    mDscEdt.selectAll();
-                } else {
-                    mRateEdt.requestFocus();
-                    mRateEdt.selectAll();
-                }
-                break;
-            default:
-                break;
+        if (mRateEdt.hasFocus()) {
+            mDscEdt.requestFocus();
+//                    mDscEdt.selectAll();
+        } else {
+            mRateEdt.requestFocus();
+//                    mRateEdt.selectAll();
         }
     }
 
     @Override
     public void onClearClick() {
-        switch (type) {
-            case DIALOG_SINGLE_RSC:
-            case DIALOG_WHOLE_RSC:
-                if (mRateEdt.hasFocus()) {
-                    mRateEdt.setText("");
-                } else {
-                    mDscEdt.setText("");
-                }
-                restoreTextColor(mRateEdt);
-                restoreTextColor(mDscEdt);
-                break;
-            default:
-                mEdt.setText("");
-                break;
+        if (mRateEdt.hasFocus()) {
+            mRateEdt.setText("0");
+        } else {
+            mDscEdt.setText("0");
         }
     }
 
     @Override
     public void onCancelClick() {
+        if (callback != null) {
+            callback.onCancel();
+        }
         dismiss();
     }
 
     @Override
     public void onEnterClick() {
-        switch (type) {
-            case DIALOG_SINGLE_RSC:
-                if (TextUtils.isEmpty(mRateEdt.getText().toString()) && TextUtils.isEmpty(mDscEdt.getText().toString())) {
-                    dismiss();
-                    return;
-                }
-                if (Integer.parseInt(mRateEdt.getText().toString()) <= TradeHelper.getMaxSingleRate(index) &&
-                        Double.parseDouble(mDscEdt.getText().toString()) <= TradeHelper.getMaxSingleDsc(index)) {
-                    //两个都为true的时候，才能保存成功
-                    //初始化整单优惠列表
-                    if (TradeHelper.saveSingleDsc(index, Double.parseDouble(mDscEdt.getText().toString()))) {
-                        Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH);
-                        dismiss();
-                    }
-                } else {
-                    MessageUtil.showError("超出最大可优惠范围");
-                }
-                break;
-            case DIALOG_WHOLE_RSC:
-                if (TextUtils.isEmpty(mRateEdt.getText().toString()) && TextUtils.isEmpty(mDscEdt.getText().toString())) {
-                    dismiss();
-                    return;
-                }
-                //原价不为0，判断是否为空
-                if (Integer.parseInt(mRateEdt.getText().toString()) <= TradeHelper.getMaxWholeRate() &&
-                        Double.parseDouble(mDscEdt.getText().toString()) <= TradeHelper.getMaxWholeDsc()) {
-                    if (TradeHelper.getWholeForDscPrice() == 0) {
-                        MessageUtil.show("本笔交易已无可优惠商品");
-                    } else {
-                        //两个都为true的时候，才能保存成功
-                        Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_COMMIT_WHOLE_DSC);
-                        dismiss();
-                    }
-                } else {
-                    MessageUtil.showError("超出最大可优惠范围");
-                }
-                break;
-            default:
-                break;
+        int rate = Integer.parseInt(mRateEdt.getText().toString());
+        double money = Double.parseDouble(mDscEdt.getText().toString());
+        if (callback != null) {
+            if (rate > dscData.getDscRateMax() || money > dscData.getDscMoneyMax()) {
+                MessageUtil.showError("超出最大可优惠范围");
+                return;
+            }
+            dscData.setDscMoney(money);
+            dscData.setDscRate(rate);
+            if (callback.onOk(rate, money)) {
+                dismiss();
+            }
         }
+
     }
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
         if (hasFocus) {
-            mRateEdt.selectAll();
+//            mRateEdt.selectAll();
             mDscEdt.removeTextChangedListener(dscWatcher);
             mRateEdt.addTextChangedListener(rateWatcher);
         } else {
-            mDscEdt.selectAll();
+//            mDscEdt.selectAll();
             mRateEdt.removeTextChangedListener(rateWatcher);
             mDscEdt.addTextChangedListener(dscWatcher);
         }
@@ -564,24 +404,5 @@ public class PriceDscDialog extends BottomPopupView implements View.OnClickListe
     private void restoreTextColor(EditText edt) {
         edt.setTextColor(Color.BLACK);
     }
-}
 
-//                        MessageUtil.info("本单商品已享受其他优惠，如确定将取消先前优惠，是否继续？");
-//                        MessageUtil.setMessageUtilClickListener(new MessageUtil.OnBtnClickListener() {
-//                            @Override
-//                            public void onLeftBtnClick(BasePopupView popView) {
-//                                //两个都为true的时候，才能保存成功
-//                                if (DscHelper.commitWholeDsc(Double.parseDouble(mDscEdt.getText().toString()))) {
-//                                    Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
-//                                    popView.dismiss();
-//                                    dismiss();
-//                                } else {
-//                                    MessageUtil.showError("操作失败，请重试");
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onRightBtnClick(BasePopupView popView) {
-//                                popView.dismiss();
-//                            }
-//                        });
+}

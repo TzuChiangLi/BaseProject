@@ -23,6 +23,8 @@ import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.pop.DscData;
+import com.ftrend.zgp.utils.pop.DscInputCallback;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -226,7 +228,34 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
                     });
                     break;
                 case Event.TYPE_DIALOG_WHOLE_DSC:
-                    InputPanel.showWholeDscChange(this);
+                    DscData dscData = DscHelper.beginWholeDsc();
+                    InputPanel.showWholeDscChange(this, dscData, new DscInputCallback() {
+                        @Override
+                        public boolean onOk(int dscRate, double dscMoney) {
+                            if (DscHelper.commitWholeDsc()) {
+                                //刷新商品列表
+                                Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_WHOLE_PRICE);
+                                return true;
+                            } else {
+                                return false;
+                            }
+                        }
+
+                        @Override
+                        public double onDscByRate(double dscRate) {
+                            return DscHelper.wholeDscByRate(dscRate);
+                        }
+
+                        @Override
+                        public double onDscByTotal(double dscTotal) {
+                            return DscHelper.wholeDscByTotal(dscTotal);
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            DscHelper.cancelWholeDsc();
+                        }
+                    });
                     break;
                 default:
                     break;
@@ -396,8 +425,38 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     public void showSingleDscDialog(int index) {
-        //弹出改价窗口
-        InputPanel.showSingleDscChange(ShopListActivity.this, index);
+        DscData dscData = DscHelper.beginSingleDsc(index);
+        if (dscData == null) {
+            MessageUtil.showError("该商品不允许优惠");
+            return;
+        }
+        InputPanel.showSingleDscChange(ShopListActivity.this, dscData, new DscInputCallback() {
+            @Override
+            public boolean onOk(int dscRate, double dscMoney) {
+                if (DscHelper.commitSingleDsc()) {
+                    //刷新商品列表
+                    Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            @Override
+            public double onDscByRate(double dscRate) {
+                return DscHelper.singleDscByRate(dscRate);
+            }
+
+            @Override
+            public double onDscByTotal(double dscTotal) {
+                return DscHelper.singleDscByTotal(dscTotal);
+            }
+
+            @Override
+            public void onCancel() {
+                DscHelper.cancelSingleDsc();
+            }
+        });
     }
 
 

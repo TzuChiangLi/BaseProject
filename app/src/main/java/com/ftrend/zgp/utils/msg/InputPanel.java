@@ -3,6 +3,8 @@ package com.ftrend.zgp.utils.msg;
 import android.content.Context;
 
 import com.ftrend.zgp.utils.pop.CommonInputDialog;
+import com.ftrend.zgp.utils.pop.DscData;
+import com.ftrend.zgp.utils.pop.DscInputCallback;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
 import com.ftrend.zgp.utils.pop.PayChargeDialog;
 import com.ftrend.zgp.utils.pop.PriceDscDialog;
@@ -10,9 +12,6 @@ import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.ftrend.zgp.utils.pop.VipCardDialog;
 import com.ftrend.zgp.utils.pop.VipMoreBtnDialog;
 import com.lxj.xpopup.XPopup;
-
-import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_SINGLE_RSC;
-import static com.ftrend.zgp.utils.pop.PriceDscDialog.DIALOG_WHOLE_RSC;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -96,13 +95,14 @@ public class InputPanel {
     /**
      * 单项优惠
      *
-     * @param context 上下文
-     * @param index   索引
+     * @param context
+     * @param data
+     * @param callback
      */
-    public static void showSingleDscChange(Context context, int index) {
+    public static void showSingleDscChange(Context context, DscData data, DscInputCallback callback) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new PriceDscDialog(context, DIALOG_SINGLE_RSC, index))
+                .asCustom(PriceDscDialog.singleDscInput(context, data, callback))
                 .show();
     }
 
@@ -111,10 +111,10 @@ public class InputPanel {
      *
      * @param context 上下文
      */
-    public static void showWholeDscChange(Context context) {
+    public static void showWholeDscChange(Context context, DscData data, DscInputCallback callback) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new PriceDscDialog(context, DIALOG_WHOLE_RSC))
+                .asCustom(PriceDscDialog.wholeDscInput(context, data, callback))
                 .show();
     }
 
