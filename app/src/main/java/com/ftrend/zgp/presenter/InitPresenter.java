@@ -62,7 +62,9 @@ public class InitPresenter implements Contract.InitPresenter {
                 @Override
                 public void handleProgress(int percent, boolean isFailed, String msg) {
                     if (flag) {
-                        mView.updateProgress(2, percent);
+                        if (mView != null) {
+                            mView.updateProgress(2, percent);
+                        }
                     }
                     System.out.println(String.format(Locale.getDefault(), "实时流水下载进度：%d%% %s", percent, msg));
                     if (isFailed) {

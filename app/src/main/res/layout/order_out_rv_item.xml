@@ -4,72 +4,74 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/dp_12">
 
-    <TextView
-        android:id="@+id/out_order_tv_lsno_title"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/out_order_ll_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_4"
-        android:text="@string/out_tv_lsno"
-        android:textSize="@dimen/sp_12" />
+        android:layout_marginEnd="@dimen/dp_12"
+        android:layout_toStartOf="@+id/out_order_btn_get_out"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/out_order_tv_lsno"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/out_order_tv_lsno_title"
-        android:layout_marginStart="@dimen/dp_2"
-        android:layout_marginEnd="@dimen/dp_6"
-        android:layout_toEndOf="@+id/out_order_tv_lsno_title"
-        android:text="10112345"
-        android:textSize="@dimen/sp_12" />
+        <TextView
+            android:id="@+id/out_order_tv_lsno_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/out_tv_lsno"
+            android:textSize="@dimen/sp_12" />
 
-    <TextView
-        android:id="@+id/out_order_tv_amount_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/out_order_tv_lsno_title"
-        android:layout_toEndOf="@+id/out_order_tv_lsno"
-        android:text="@string/out_tv_num"
-        android:textSize="@dimen/sp_12" />
+        <TextView
+            android:id="@+id/out_order_tv_lsno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|start"
+            android:text="10112345"
+            android:textSize="@dimen/sp_12" />
 
-    <TextView
-        android:id="@+id/out_order_tv_amount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/out_order_tv_lsno_title"
-        android:layout_marginStart="@dimen/dp_2"
-        android:layout_marginEnd="@dimen/dp_6"
-        android:layout_toEndOf="@+id/out_order_tv_amount_title"
-        android:text="15"
-        android:textSize="@dimen/sp_12" />
+        <TextView
+            android:id="@+id/out_order_tv_amount_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:gravity="center"
+            android:text="@string/out_tv_num"
+            android:textSize="@dimen/sp_12" />
 
-    <TextView
-        android:id="@+id/out_order_tv_total_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/out_order_tv_amount_title"
-        android:layout_toEndOf="@+id/out_order_tv_amount"
-        android:text="@string/out_tv_total"
-        android:textSize="@dimen/sp_12" />
+        <TextView
+            android:id="@+id/out_order_tv_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_2"
+            android:gravity="center"
+            android:text="15"
+            android:textSize="@dimen/sp_12" />
 
-    <TextView
-        android:id="@+id/out_order_tv_total"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/out_order_tv_total_title"
+        <TextView
+            android:id="@+id/out_order_tv_total_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:paddingEnd="@dimen/dp_8"
+            android:text="@string/out_tv_total"
+            android:textSize="@dimen/sp_12" />
 
-        android:layout_marginEnd="@dimen/dp_8"
-        android:layout_toEndOf="@+id/out_order_tv_total_title"
-        android:text="123"
-        android:textSize="@dimen/sp_12" />
+        <TextView
+            android:id="@+id/out_order_tv_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="123"
+            android:textSize="@dimen/sp_12" />
+    </LinearLayout>
 
 
     <TextView
         android:id="@+id/out_order_tv_prod_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/out_order_tv_lsno_title"
-        android:layout_alignStart="@+id/out_order_tv_lsno_title"
+        android:layout_below="@+id/out_order_ll_title"
+        android:layout_alignStart="@+id/out_order_ll_title"
         android:layout_marginTop="@dimen/dp_8"
         android:layout_toStartOf="@+id/out_order_tv_num_title"
         android:text="@string/out_tv_prodname_demo"
@@ -93,18 +95,18 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/out_order_tv_prod_name"
         android:layout_marginStart="@dimen/dp_2"
-        android:layout_marginEnd="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_12"
         android:layout_toStartOf="@+id/out_order_btn_get_out"
         android:text="20"
         android:textSize="@dimen/sp_12" />
 
     <Button
         android:id="@+id/out_order_btn_get_out"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/dp_70"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:text="@string/out_btn_get_out"
-
+        android:stateListAnimator="@null"
         android:textSize="@dimen/sp_13" />
 
 </RelativeLayout>

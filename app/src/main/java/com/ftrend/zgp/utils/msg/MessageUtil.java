@@ -240,6 +240,49 @@ public class MessageUtil {
     }
 
     /**
+     * @param msg 内容文本
+     */
+    public static void waitError(String msg) {
+        if (waitDialog == null) {
+            return;
+        }
+        if (waitDialog instanceof DialogBuilder) {
+            ((DialogBuilder) waitDialog).updateError(msg);
+            ((DialogBuilder) waitDialog).setOnClickListener(new DialogBuilder.OnBtnClickListener() {
+                @Override
+                public void onLeftBtnClick(BasePopupView v) {
+                    waitDialog.dismiss();
+                }
+
+                @Override
+                public void onRightBtnClick(BasePopupView v) {
+
+                }
+            });
+        }
+    }
+
+    public static void waitSuccesss(String msg) {
+        if (waitDialog == null) {
+            return;
+        }
+        if (waitDialog instanceof DialogBuilder) {
+            ((DialogBuilder) waitDialog).updateSucccess(msg);
+            ((DialogBuilder) waitDialog).setOnClickListener(new DialogBuilder.OnBtnClickListener() {
+                @Override
+                public void onLeftBtnClick(BasePopupView v) {
+                    waitDialog.dismiss();
+                }
+
+                @Override
+                public void onRightBtnClick(BasePopupView v) {
+
+                }
+            });
+        }
+    }
+
+    /**
      * 关闭等待提示框
      */
     public static void waitEnd() {
