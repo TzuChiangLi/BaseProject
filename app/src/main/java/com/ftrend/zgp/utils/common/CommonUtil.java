@@ -85,6 +85,10 @@ public class CommonUtil {
      * @return
      */
     public static String moneyToString(double amount) {
-        return String.format(Locale.CHINA, "%.2f", amount);
+        String result = String.format(Locale.CHINA, "%.2f", amount);
+        if (result.endsWith(".00")) {
+            result = result.substring(0, result.length() - 3);
+        }
+        return result;
     }
 }
