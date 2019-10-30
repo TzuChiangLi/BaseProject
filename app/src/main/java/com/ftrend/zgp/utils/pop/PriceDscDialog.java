@@ -268,7 +268,7 @@ public class PriceDscDialog extends BottomPopupView
     public void onKeyClick(View v, int key) {
         if (mRateEdt.hasFocus()) {
             String val = mRateEdt.getText().toString();
-            if (TextUtils.isEmpty(val) || Integer.parseInt(val) == 0) {
+            if (TextUtils.isEmpty(val) || val.equals("0")) {
                 val = "";
             }
             if (val.length() >= 3) {
@@ -278,7 +278,7 @@ public class PriceDscDialog extends BottomPopupView
             mRateEdt.setText(val + key);
         } else {
             String val = mDscEdt.getText().toString();
-            if (TextUtils.isEmpty(val) || Double.parseDouble(val) == 0) {
+            if (TextUtils.isEmpty(val) || val.equals("0") || val.equals("0.00")) {
                 val = "";
             }
             if (val.contains(".")) {
