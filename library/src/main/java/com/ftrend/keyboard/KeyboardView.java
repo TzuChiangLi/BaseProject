@@ -116,7 +116,7 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
                             mNumberList.add(String.valueOf(i + 1));
                             break;
                         case 3:
-                            mNumberList.add("下一个");
+                            mNumberList.add("切换");
                             break;
                         case 4:
                         case 5:

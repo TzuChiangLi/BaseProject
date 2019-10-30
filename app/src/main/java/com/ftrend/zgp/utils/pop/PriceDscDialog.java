@@ -61,7 +61,9 @@ public class PriceDscDialog extends BottomPopupView
     private KeyboardView mKeyView;
     private View mKeyViewStub, mRateDscView;
     private EditText mRateEdt, mDscEdt;
-    private TextView mPriceTv, mTotalTv, mProdNameTv, mMaxRateTv, mMaxDscTv;
+    private TextView mPriceTv, mDscTv, mTotalTv, mProdNameTv, mAmountTv, mMaxRateTv, mMaxDscTv;
+    private TextView mPriceTitle, mDscTitle, mTotalTitle, mRateMemo, mDscMemo;
+    private LinearLayout mLlRate, mLlDsc;
     //优惠计算参数
     private DscData dscData = null;
     //优惠计算回调
@@ -126,11 +128,21 @@ public class PriceDscDialog extends BottomPopupView
         //注册控件
         mDscEdt = mRateDscView.findViewById(R.id.vip_dsc_edt_dsc);
         mRateEdt = mRateDscView.findViewById(R.id.vip_dsc_edt_rate);
+        mDscMemo = mRateDscView.findViewById(R.id.vip_dsc_tv_dsc_memo);
+        mRateMemo = mRateDscView.findViewById(R.id.vip_dsc_tv_rate_memo);
         mProdNameTv = mRateDscView.findViewById(R.id.vip_dsc_tv_prodname);
+        mAmountTv = mRateDscView.findViewById(R.id.vip_dsc_tv_amount);
         mPriceTv = mRateDscView.findViewById(R.id.vip_dsc_tv_price);
+        mDscTv = mRateDscView.findViewById(R.id.vip_dsc_tv_dsc);
         mTotalTv = mRateDscView.findViewById(R.id.vip_dsc_tv_total);
+        mPriceTitle = mRateDscView.findViewById(R.id.vip_dsc_tv_price_title);
+        mDscTitle = mRateDscView.findViewById(R.id.vip_dsc_tv_dsc_title);
+        mTotalTitle = mRateDscView.findViewById(R.id.vip_dsc_tv_total_title);
         mMaxDscTv = mRateDscView.findViewById(R.id.vip_dsc_tv_dsc_range);
         mMaxRateTv = mRateDscView.findViewById(R.id.vip_dsc_tv_rate_range);
+        //
+        mLlRate = mRateDscView.findViewById(R.id.vip_dsc_ll_rate);
+        mLlDsc = mRateDscView.findViewById(R.id.vip_dsc_ll_dsc);
         //防止键盘弹出
         mRateEdt.setInputType(InputType.TYPE_NULL);
         mDscEdt.setInputType(InputType.TYPE_NULL);
@@ -145,8 +157,15 @@ public class PriceDscDialog extends BottomPopupView
         if (dscType == DIALOG_WHOLE_RSC) {
             mTitleTv.setText("整单优惠");
             mProdNameTv.setVisibility(GONE);
+            mAmountTv.setVisibility(GONE);
+            mPriceTitle.setText("总价：");
+            mDscTitle.setText("已优惠：");
+            mTotalTitle.setText("实收：");
         } else if (dscType == DIALOG_SINGLE_RSC) {
             mTitleTv.setText("单项优惠");
+            mPriceTitle.setText("原价：");
+            mDscTitle.setText("优惠价：");
+            mTotalTitle.setText("小计：");
         }
     }
 
@@ -154,17 +173,27 @@ public class PriceDscDialog extends BottomPopupView
      * 更新折扣优惠数据面板
      */
     private void updateDscData(int type) {
-        mMaxRateTv.setText(String.format(Locale.CHINA, "(0-%d%%)", dscData.getDscRateMax()));
-        mMaxDscTv.setText(String.format(Locale.CHINA, "(0-%s元)", CommonUtil.moneyToString(dscData.getDscMoneyMax())));
+//        mMaxRateTv.setText(String.format(Locale.CHINA, "(0-%d%%)", dscData.getDscRateMax()));
+//        mMaxDscTv.setText(String.format(Locale.CHINA, "(0-%s元)", CommonUtil.moneyToString(dscData.getDscMoneyMax())));
+        mMaxRateTv.setText(String.format(Locale.CHINA, "(%d%%)", dscData.getDscRateMax()));
+        mMaxDscTv.setText(String.format(Locale.CHINA, "%s元", CommonUtil.moneyToString(dscData.getDscMoneyMax())));
         if (dscType == DIALOG_SINGLE_RSC) {
             mPriceTv.setText(CommonUtil.moneyToString(dscData.getPrice()));//原价
-            mTotalTv.setText(CommonUtil.moneyToString((dscData.getTotal() - dscData.getDscMoney()) / dscData.getAmount()));//优惠价
+            double dscPrice = (dscData.getTotal() - dscData.getDscMoney()) / dscData.getAmount();
+            mDscTv.setText(String.format(Locale.CHINA, "%s(-%s)",
+                    CommonUtil.moneyToString(dscPrice),
+                    CommonUtil.moneyToString(dscData.getPrice() - dscPrice)));//优惠价
+            mTotalTv.setText(CommonUtil.moneyToString(dscData.getTotal() - dscData.getDscMoney()));//小计
+            mDscMemo.setText(String.format(Locale.CHINA, "(-%d%%)", dscData.getDscRate()));
+            mRateMemo.setText(String.format(Locale.CHINA, "(-%s元)", CommonUtil.moneyToString(dscData.getDscMoney())));
         } else if (dscType == DIALOG_WHOLE_RSC) {
             mPriceTv.setText(CommonUtil.moneyToString(dscData.getTotal()));//原价
-            mTotalTv.setText(CommonUtil.moneyToString(dscData.getTotal() - dscData.getDscMoney()));//优惠价
+            mDscTv.setText(CommonUtil.moneyToString(dscData.getDscMoney()));//优惠金额
+            mTotalTv.setText(CommonUtil.moneyToString(dscData.getTotal() - dscData.getDscMoney()));//实收
         }
 
         mProdNameTv.setText(dscData.getProdName());
+        mAmountTv.setText(String.valueOf(Math.round(dscData.getAmount())));
         if (type != UPDATE_DATA_EXCEPT_RATE) {
             mRateEdt.setText(String.valueOf(dscData.getDscRate()));
         }
@@ -341,9 +370,13 @@ public class PriceDscDialog extends BottomPopupView
     @Override
     public void onNextClick() {
         if (mRateEdt.hasFocus()) {
+            mLlRate.setVisibility(INVISIBLE);
+            mLlDsc.setVisibility(VISIBLE);
             mDscEdt.requestFocus();
 //                    mDscEdt.selectAll();
         } else {
+            mLlRate.setVisibility(VISIBLE);
+            mLlDsc.setVisibility(INVISIBLE);
             mRateEdt.requestFocus();
 //                    mRateEdt.selectAll();
         }
@@ -386,14 +419,20 @@ public class PriceDscDialog extends BottomPopupView
 
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
+//        int colorActive = getResources().getColor(R.color.white_transparent);
+//        int colorInactive = getResources().getColor(R.color.common_gray_bg);
         if (hasFocus) {
 //            mRateEdt.selectAll();
             mDscEdt.removeTextChangedListener(dscWatcher);
             mRateEdt.addTextChangedListener(rateWatcher);
+//            mLlRate.setBackgroundColor(colorActive);
+//            mLlDsc.setBackgroundColor(colorInactive);
         } else {
 //            mDscEdt.selectAll();
             mRateEdt.removeTextChangedListener(rateWatcher);
             mDscEdt.addTextChangedListener(dscWatcher);
+//            mLlRate.setBackgroundColor(colorInactive);
+//            mLlDsc.setBackgroundColor(colorActive);
         }
     }
 
