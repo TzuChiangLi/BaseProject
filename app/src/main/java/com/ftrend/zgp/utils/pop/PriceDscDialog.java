@@ -268,16 +268,19 @@ public class PriceDscDialog extends BottomPopupView
     public void onKeyClick(View v, int key) {
         if (mRateEdt.hasFocus()) {
             String val = mRateEdt.getText().toString();
+            if (TextUtils.isEmpty(val) || Integer.parseInt(val) == 0) {
+                val = "";
+            }
             if (val.length() >= 3) {
                 //折扣比例最长3位
                 return;
             }
-            if (TextUtils.isEmpty(val) || val.equals("0")) {
-                val = "";
-            }
             mRateEdt.setText(val + key);
         } else {
             String val = mDscEdt.getText().toString();
+            if (TextUtils.isEmpty(val) || Double.parseDouble(val) == 0) {
+                val = "";
+            }
             if (val.contains(".")) {
                 int position = val.indexOf(".");
                 if (val.substring(position, val.length() - 1).length() >= 2) {
@@ -289,9 +292,6 @@ public class PriceDscDialog extends BottomPopupView
                     //优惠金额小数点前最长6位
                     return;
                 }
-            }
-            if (TextUtils.isEmpty(val) || val.equals("0")) {
-                val = "";
             }
             mDscEdt.setText(val + key);
         }
