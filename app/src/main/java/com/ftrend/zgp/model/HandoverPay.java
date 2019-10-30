@@ -48,6 +48,9 @@ public class HandoverPay extends BaseModel {
     @Deprecated
     private String tradeFlag = "";
 
+    public HandoverPay() {
+    }
+
     public int getId() {
         return id;
     }

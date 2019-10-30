@@ -71,9 +71,8 @@ public class TradeProd extends BaseModel {
      */
     private transient boolean isSelect = false;
 
-
-//    public TradeProd() {
-//    }
+    public TradeProd() {
+    }
 
     public int getId() {
         return id;

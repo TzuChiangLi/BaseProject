@@ -35,8 +35,8 @@ public class UserLog extends BaseModel {
     @Column
     private String depCode;
 
-//    public UserLog() {
-//    }
+    public UserLog() {
+    }
 //
 //    public UserLog(String module, String function, String content, String userCode, String depCode) {
 //        this.module = module;

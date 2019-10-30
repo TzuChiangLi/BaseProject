@@ -82,6 +82,9 @@ public class Handover extends BaseModel {
     @Deprecated
     private double hangupTotal = 0;
 
+    public Handover() {
+    }
+
     public int getId() {
         return id;
     }

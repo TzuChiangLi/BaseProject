@@ -62,6 +62,9 @@ public class Trade extends BaseModel {
     //取单字段(非数据库字段)：该流水单的商品总件数
     private transient double amount;
 
+    public Trade() {
+    }
+
     public int getId() {
         return id;
     }

@@ -59,6 +59,9 @@ public class HandoverSum extends BaseModel {
     @NotNull
     private double hangupTotal = 0;
 
+    public HandoverSum() {
+    }
+
     public int getId() {
         return id;
     }
