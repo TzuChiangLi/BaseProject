@@ -11,6 +11,8 @@ import com.ftrend.zgp.model.HandoverPay;
 import com.ftrend.zgp.model.HandoverRecord;
 import com.ftrend.zgp.model.HandoverSum;
 import com.ftrend.zgp.model.Handover_Table;
+import com.ftrend.zgp.model.SqbPayOrder;
+import com.ftrend.zgp.model.SqbPayResult;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradePay_Table;
@@ -470,6 +472,9 @@ public class HandoverHelper {
                 SQLite.delete(Trade.class).execute(databaseWrapper);
                 SQLite.delete(TradeProd.class).execute(databaseWrapper);
                 SQLite.delete(TradePay.class).execute(databaseWrapper);
+                //同步删除收钱吧交易记录（已经和流水同步上传）
+                SQLite.delete(SqbPayOrder.class).execute(databaseWrapper);
+                SQLite.delete(SqbPayResult.class).execute(databaseWrapper);
                 return true;
             }
         });
