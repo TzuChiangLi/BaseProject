@@ -3,7 +3,12 @@ package com.ftrend.zgp.view;
 import android.content.Intent;
 import android.os.Handler;
 import android.text.InputType;
+import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
+import android.widget.TextView;
 
+import com.blankj.utilcode.util.KeyboardUtils;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
@@ -46,7 +51,44 @@ public class RegisterActivity extends BaseActivity implements Contract.RegisterV
         mPosCodeEdt.setRawInputType(InputType.TYPE_CLASS_NUMBER);
         mRegCodeEdt.setRawInputType(InputType.TYPE_CLASS_NUMBER);
         mURLEdt.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+        mURLEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode()
+                        && KeyEvent.ACTION_DOWN == event.getAction())) {
+                    mPosCodeEdt.requestFocus();
+                }
+                return true;
+            }
+        });
+        mPosCodeEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode()
+                        && KeyEvent.ACTION_DOWN == event.getAction())) {
+                    mRegCodeEdt.requestFocus();
+                }
+                return true;
+            }
+        });
+        mRegCodeEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode()
+                        && KeyEvent.ACTION_DOWN == event.getAction())) {
+                    if (TextUtils.isEmpty(mPosCodeEdt.getText().toString()) || TextUtils.isEmpty(mRegCodeEdt.getText().toString()) || TextUtils.isEmpty(mURLEdt.getText().toString())) {
+                        MessageUtil.show("请填写注册信息");
+                        KeyboardUtils.hideSoftInput(RegisterActivity.this);
+                    } else {
+                        register();
+                    }
+                }
+                return true;
+            }
+        });
+
     }
+
 
     @Override
     protected void initTitleBar() {
