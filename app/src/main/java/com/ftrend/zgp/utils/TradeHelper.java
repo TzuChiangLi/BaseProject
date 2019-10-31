@@ -611,6 +611,14 @@ public class TradeHelper {
         return total;
     }
 
+    public static double getProdTotal() {
+        double total = 0.00;
+        for (int i = 0; i < prodList.size(); i++) {
+            total += prodList.get(i).getPrice() * prodList.get(i).getAmount();
+        }
+        return total;
+    }
+
     /**
      * 该商品是否有改价权
      *

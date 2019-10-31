@@ -79,8 +79,9 @@ public class DscHelper {
         dscData.setProdName(tradeProd.getProdName());
         dscData.setPrice(tradeProd.getPrice());
         dscData.setAmount(tradeProd.getAmount());
-        dscData.setDscMoney(tradeProd.getManuDsc() + tradeProd.getVipDsc() + tradeProd.getTranDsc());
-        dscData.setDscRate((int) Math.round(dscData.getDscMoney() * 100 / dscData.getTotal()));
+        dscData.setTotal(tradeProd.getTotal());
+        dscData.setDscMoney(tradeProd.getSingleDsc());
+        dscData.setDscRate((int) Math.round(dscData.getDscMoney() * 100 / dscData.getOriTotal()));
         dscData.setDscRateMax((int) TradeHelper.getMaxSingleRate(prodIndex));
         dscData.setDscMoneyMax(TradeHelper.getMaxSingleDsc(prodIndex));
     }
@@ -188,12 +189,22 @@ public class DscHelper {
     private static void makeWholeDscData() {
         dscData = new DscData();
         dscData.setProdName("");
-        dscData.setPrice(prodTotal);
         dscData.setAmount(1);
-        dscData.setDscMoney(0);
-        dscData.setDscRate((int) Math.round(dscData.getDscMoney() * 100 / dscData.getTotal()));
+        dscData.setPrice(TradeHelper.getProdTotal());//流水商品总价
+        dscData.setTotal(TradeHelper.getTradeTotal());//流水应收
+        dscData.setDscMoney(getWholeDscMoney());
+        dscData.setDscOther(dscData.getOriTotal() - dscData.getTotal() - dscData.getDscMoney());
+        dscData.setDscRate((int) Math.round(dscData.getDscMoney() * 100 / dscData.getOriTotal()));
         dscData.setDscRateMax((int) TradeHelper.getMaxWholeRate());
         dscData.setDscMoneyMax(TradeHelper.getMaxWholeDsc());
+    }
+
+    private static double getWholeDscMoney() {
+        double dsc = 0.00;
+        for (TradeProd prod : dscList) {
+            dsc += prod.getWholeDsc();
+        }
+        return dsc;
     }
 
     /**
@@ -208,12 +219,19 @@ public class DscHelper {
 
         calcType = CALC_BY_RATE;
         double dscTotal = 0;
+        double dscOther = 0;
         for (int i = 0; i < dscList.size(); i++) {
             TradeProd prod = dscList.get(i);
             double dsc = dscByRate(prod, rate);
+            if (dsc < prod.getSingleDsc() || dsc < prod.getVipDsc() || dsc < prod.getTranDsc()) {
+                dsc = 0;//取优惠较大值
+                dscOther += prod.getSingleDsc() + prod.getVipDsc() + prod.getTranDsc();
+            }
             calcList.set(i, dsc);
             dscTotal += dsc;
         }
+        //计算整单优惠后，其他优惠相应减少
+        dscData.setDscOther(dscOther);
         return dscTotal;
     }
 
@@ -231,7 +249,8 @@ public class DscHelper {
         double remainTotal = dscTotal;
         for (int i = 0; i < dscList.size() - 1; i++) {
             TradeProd prod = dscList.get(i);
-            double dsc = dscTotal * prod.getPrice() * prod.getAmount() / prodTotal;//按金额比例分摊
+            //按减去其他优惠后的金额分摊
+            double dsc = dscTotal * totalExcludeWholeDsc(prod) / prodTotal;
             //折扣后价格不能低于最低售价（抹零与其他优惠共存）
             double dscMax = prodMaxDscByTotal(prod); //最大整单优惠金额
             if (dsc > dscMax) {
@@ -263,11 +282,19 @@ public class DscHelper {
                 remainTotal -= dscMax;
             }
         }
-        if (remainTotal > 0) {
-            //剩余金额无法再分摊，直接舍弃
-        }
-        //返回实际抹零金额
+        //返回实际抹零金额（剩余金额无法再分摊，直接舍弃）
         return dscTotal - remainTotal;
+    }
+
+    /**
+     * 计算不含整单优惠的小计金额
+     *
+     * @param prod
+     * @return
+     */
+    private static double totalExcludeWholeDsc(TradeProd prod) {
+        return prod.getPrice() * prod.getAmount()
+                - prod.getSingleDsc() - prod.getVipDsc() - prod.getTranDsc();
     }
 
     /**
@@ -306,7 +333,7 @@ public class DscHelper {
         for (int i = 0; i < dscList.size(); i++) {
             TradeProd prod = dscList.get(i);
             prod.setWholeDsc(calcList.get(i));
-            if (calcType == 1) {
+            if (prod.getWholeDsc() > 0 && calcType == CALC_BY_RATE) {
                 //打折，清除其他优惠
                 prod.setSingleDsc(0);
                 prod.setVipDsc(0);
@@ -329,37 +356,14 @@ public class DscHelper {
     }
     //endregion
 
-    /**
-     * 清除计算结果
-     */
-    private static void reset() {
-        for (int i = 0; i < calcList.size(); i++) {
-            calcList.set(i, 0D);
-        }
-    }
-
-    /**
-     * 清除计算参数和缓存
-     */
-    private static void finish() {
-        calcType = 0;
-        dscData = null;
-        dscList = null;
-        if (calcList != null) {
-            calcList.clear();
-            calcList = null;
-        }
-        prodTotal = 0;
-    }
-
     //region 会员优惠计算
     //-----------------------------------------------------------------------------------------------------------
     // 超市版：会员优惠规则-1
-    public static final int VIP_ONE = 1;
+    private static final int VIP_ONE = 1;
     // 超市版：会员优惠规则-2
-    public static final int VIP_TWO = 2;
+    private static final int VIP_TWO = 2;
     // 超市版：会员优惠规则-3
-    public static final int VIP_THREE = 3;
+    private static final int VIP_THREE = 3;
 
 
     /**
@@ -505,7 +509,7 @@ public class DscHelper {
      * @return
      */
     private static double dscByRate(TradeProd prod, double rate) {
-        double dscPrice = prod.getPrice() * (100 - rate) / 100D;//折扣后价格
+        double dscPrice = prod.getPrice() * (100 - rate) / 100.00;//折扣后价格
         //折扣后价格不能低于最低售价
         if (dscPrice < prod.getProdMinPrice()) {
             dscPrice = prod.getProdMinPrice();
@@ -514,5 +518,27 @@ public class DscHelper {
         return prod.getAmount() * (prod.getPrice() - dscPrice);
     }
 
+    /**
+     * 清除计算结果
+     */
+    private static void reset() {
+        for (int i = 0; i < calcList.size(); i++) {
+            calcList.set(i, 0D);
+        }
+    }
+
+    /**
+     * 清除计算参数和缓存
+     */
+    private static void finish() {
+        calcType = 0;
+        dscData = null;
+        dscList = null;
+        if (calcList != null) {
+            calcList.clear();
+            calcList = null;
+        }
+        prodTotal = 0;
+    }
 
 }

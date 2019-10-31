@@ -11,6 +11,26 @@
         android:textColor="@color/text_black_first"
         android:textSize="@dimen/sp_20" />
 
+    <TextView
+        android:id="@+id/vip_dsc_tv_multi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_toStartOf="@+id/vip_dsc_tv_amount"
+        android:text="X"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_20" />
+
+    <TextView
+        android:id="@+id/vip_dsc_tv_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_alignParentEnd="true"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_20" />
+
     <LinearLayout
         android:id="@+id/vip_dsc_ll_prod_info"
         android:layout_width="match_parent"
@@ -20,42 +40,80 @@
         android:paddingStart="@dimen/dp_16"
         android:paddingTop="@dimen/dp_8"
         android:paddingEnd="@dimen/dp_16"
-
         android:paddingBottom="@dimen/dp_8">
 
         <TextView
             android:id="@+id/vip_dsc_tv_price_title"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/vip_dsc_tv_prodname"
+            android:gravity="end"
             android:text="原价："
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/vip_dsc_tv_price"
-            android:layout_width="@dimen/dp_0"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/vip_dsc_tv_price_title"
-            android:layout_toEndOf="@+id/vip_dsc_tv_price_title"
             android:layout_weight="1"
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/vip_dsc_tv_total_title"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/vip_dsc_tv_prodname"
-            android:text="优惠价："
-            android:textSize="@dimen/sp_16" />
+            android:gravity="end"
+            android:text="小计："
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/vip_dsc_tv_total"
-            android:layout_width="@dimen/dp_0"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/vip_dsc_tv_price_title"
-            android:layout_toEndOf="@+id/vip_dsc_tv_price_title"
             android:layout_weight="1"
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_14" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vip_dsc_ll_prod_dsc_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_dsc_ll_prod_info"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_8">
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_price_dsc_title"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="优惠价："
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_price_dsc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_total_dsc_title"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="实收："
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_total_dsc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/sp_14" />
 
     </LinearLayout>
 
@@ -64,11 +122,11 @@
         android:id="@+id/vip_dsc_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_below="@id/vip_dsc_ll_prod_info"
+        android:layout_below="@id/vip_dsc_ll_prod_dsc_info"
         android:background="@color/divide_line" />
 
     <LinearLayout
-        android:id="@+id/vip_dsc_ll_rate"
+        android:id="@+id/vip_dsc_ll_tip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/vip_dsc_line"
@@ -77,35 +135,26 @@
         android:paddingEnd="@dimen/dp_16">
 
         <TextView
-            android:id="@+id/vip_dsc_tv_rate_title"
+            android:id="@+id/vip_dsc_tv_range_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="折扣比例："
-            android:textColor="@color/text_black_second"
-            android:textSize="@dimen/sp_16" />
-
-        <com.ftrend.cleareditview.ClearEditText
-            android:id="@+id/vip_dsc_edt_rate"
-            android:layout_width="@dimen/dp_0"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="none" />
+            android:text="优惠上限："
+            android:textColor="@color/common_blue"
+            android:textSize="@dimen/sp_10" />
 
         <TextView
-            android:id="@+id/vip_dsc_tv_rate"
+            android:id="@+id/vip_dsc_tv_dsc_range"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="%"
-            android:textColor="@color/text_black_second"
-            android:textSize="@dimen/sp_16" />
+            android:textColor="@color/common_blue"
+            android:textSize="@dimen/sp_10" />
 
         <TextView
             android:id="@+id/vip_dsc_tv_rate_range"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/text_black_second"
-            android:textSize="@dimen/sp_16" />
-
+            android:textColor="@color/common_blue"
+            android:textSize="@dimen/sp_10" />
 
     </LinearLayout>
 
@@ -113,13 +162,13 @@
         android:id="@+id/vip_dsc_ll_dsc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/vip_dsc_ll_rate"
+        android:layout_below="@+id/vip_dsc_ll_tip"
         android:orientation="horizontal"
         android:paddingStart="@dimen/dp_16"
         android:paddingEnd="@dimen/dp_16">
 
         <TextView
-            android:id="@+id/vip_dsc_tv_dsc_title"
+            android:id="@+id/vip_dsc_edt_dsc_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="优惠金额："
@@ -128,13 +177,13 @@
 
         <com.ftrend.cleareditview.ClearEditText
             android:id="@+id/vip_dsc_edt_dsc"
-            android:layout_width="@dimen/dp_0"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:gravity="center"
             android:inputType="none" />
 
         <TextView
-            android:id="@+id/vip_dsc_tv_dsc"
+            android:id="@+id/vip_dsc_tv_dsc_unit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="元"
@@ -142,11 +191,12 @@
             android:textSize="@dimen/sp_16" />
 
         <TextView
-            android:id="@+id/vip_dsc_tv_dsc_range"
+            android:id="@+id/vip_dsc_tv_dsc_memo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_16" />
+
     </LinearLayout>
 
 
