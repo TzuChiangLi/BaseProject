@@ -42,6 +42,13 @@
 
 -keep class !com.ftrend.** { *; }
 -keep interface !com.ftrend.** { *; }
+-keep class com.ftrend.zgp.utils.http.** { *; }
+-keep class com.ftrend.zgp.model.** { *; }
+-keep class com.ftrend.zgp.view.** { *; }
+-keep class com.ftrend.zgp.presenter.** { *; }
+-keep class com.ftrend.zgp.base.** { *; }
+-keep interface com.ftrend.zgp.base.** { *; }
+-keep interface com.ftrend.zgp.api.** { *; }
 -dontwarn !com.ftrend.**
 
 -keep public class * extends android.app.Activity
