@@ -425,7 +425,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
 
     @Override
     public void showSingleDscDialog(int index) {
-        DscData dscData = DscHelper.beginSingleDsc(index);
+        final DscData dscData = DscHelper.beginSingleDsc(index);
         if (dscData == null) {
             MessageUtil.showError("该商品不允许优惠");
             return;

@@ -76,14 +76,14 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
         KeyboardView.this.setAlpha(0);
         KeyboardView.this.setVisibility(GONE);
         //添加顶部隐藏按钮
-        ImageView mHideView = new ImageView(mContext);
+        /*ImageView mHideView = new ImageView(mContext);
         mHideView.setBackgroundResource(R.drawable.keyboard_selector_hide);
         mHideView.setTag("hide");
         mHideView.setImageResource(R.drawable.keyboard_hide);
         mHideView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
         mHideView.setPadding(0, 12, 0, 12);
         mHideView.setOnClickListener(this);
-        addView(mHideView, new LayoutParams(MATCH_PARENT, ConvertUtils.dp2px(32)));
+        addView(mHideView, new LayoutParams(MATCH_PARENT, ConvertUtils.dp2px(32)));*/
 //        //添加折扣优惠区域
 //        addDiscountView(style);
         //添加按钮与键盘的分割线

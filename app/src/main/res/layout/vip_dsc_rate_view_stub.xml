@@ -12,6 +12,17 @@
         android:textSize="@dimen/sp_20" />
 
     <TextView
+        android:id="@+id/vip_dsc_tv_multi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_toStartOf="@+id/vip_dsc_tv_amount"
+        android:text="X"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_20" />
+
+    <TextView
         android:id="@+id/vip_dsc_tv_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -33,42 +44,75 @@
 
         <TextView
             android:id="@+id/vip_dsc_tv_price_title"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
+            android:gravity="end"
             android:text="原价："
             android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/vip_dsc_tv_price"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/sp_14" />
-
-        <TextView
-            android:id="@+id/vip_dsc_tv_dsc_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="优惠价："
-            android:textSize="@dimen/sp_14" />
-
-        <TextView
-            android:id="@+id/vip_dsc_tv_dsc"
-            android:layout_width="@dimen/dp_0"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/vip_dsc_tv_total_title"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
+            android:gravity="end"
             android:text="小计："
             android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/vip_dsc_tv_total"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/sp_14" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/vip_dsc_ll_prod_dsc_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_dsc_ll_prod_info"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_8">
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_price_dsc_title"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="优惠价："
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_price_dsc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_total_dsc_title"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="实收："
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_tv_total_dsc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:textSize="@dimen/sp_14" />
 
     </LinearLayout>
@@ -78,7 +122,7 @@
         android:id="@+id/vip_dsc_line"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_below="@id/vip_dsc_ll_prod_info"
+        android:layout_below="@id/vip_dsc_ll_prod_dsc_info"
         android:background="@color/divide_line" />
 
     <LinearLayout
@@ -115,52 +159,11 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/vip_dsc_ll_rate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/vip_dsc_ll_tip"
-        android:orientation="horizontal"
-        android:paddingStart="@dimen/dp_16"
-        android:paddingEnd="@dimen/dp_16">
-
-        <TextView
-            android:id="@+id/vip_dsc_edt_rate_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="折扣比例："
-            android:textColor="@color/text_black_second"
-            android:textSize="@dimen/sp_16" />
-
-        <com.ftrend.cleareditview.ClearEditText
-            android:id="@+id/vip_dsc_edt_rate"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:inputType="none" />
-
-        <TextView
-            android:id="@+id/vip_dsc_tv_rate_unit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="% "
-            android:textColor="@color/text_black_second"
-            android:textSize="@dimen/sp_16" />
-
-        <TextView
-            android:id="@+id/vip_dsc_tv_rate_memo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_black_second"
-            android:textSize="@dimen/sp_16" />
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/vip_dsc_ll_dsc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/vip_dsc_ll_tip"
         android:orientation="horizontal"
-        android:visibility="invisible"
         android:paddingStart="@dimen/dp_16"
         android:paddingEnd="@dimen/dp_16">
 
@@ -174,8 +177,9 @@
 
         <com.ftrend.cleareditview.ClearEditText
             android:id="@+id/vip_dsc_edt_dsc"
-            android:layout_width="150dp"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:inputType="none" />
 
         <TextView
