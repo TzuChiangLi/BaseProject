@@ -176,6 +176,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
 
                                     @Override
                                     public void onCancel() {
+                                        //TODO 2019年10月31日17:12:35 需要判断是否交易成功
                                         MessageUtil.show("已取消支付");
                                     }
 
