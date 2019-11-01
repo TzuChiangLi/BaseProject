@@ -286,6 +286,20 @@ public class RestSubscribe {
     }
 
     /**
+     * 查询退货流水
+     *
+     * @param code     格式：yyyyMMdd+lsNo
+     * @param callback
+     */
+    public void queryRefundLs(final String code, final RestCallback callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("code", code);
+        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        request.setBody(params);
+        detachAndSubscribe(api.queryRefundLs(request), callback);
+    }
+
+    /**
      * 上传交易流水
      *
      * @param posCode  机器号
