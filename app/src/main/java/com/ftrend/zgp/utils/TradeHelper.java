@@ -375,6 +375,22 @@ public class TradeHelper {
     }
 
     /**
+     * 检查结算是否成功
+     *
+     * @param lsNo 流水单号
+     * @return 订单状态
+     */
+    public static boolean checkPayStatus(String lsNo) {
+        Trade payTrade = SQLite.select().from(Trade.class).where(Trade_Table.lsNo.eq(lsNo))
+                .querySingle();
+        if (payTrade != null) {
+            return payTrade.getStatus() == TRADE_STATUS_PAID;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * 最小流水号
      *
      * @return
