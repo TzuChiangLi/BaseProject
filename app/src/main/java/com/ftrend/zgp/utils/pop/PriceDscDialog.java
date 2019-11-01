@@ -218,16 +218,16 @@ public class PriceDscDialog extends BottomPopupView
 //        if (type != UPDATE_DATA_EXCEPT_MONEY) {
 //            mDscEdt.setText(CommonUtil.moneyToString(dscData.getDscMoney()));
 //        }
-//        if (dscData.getDscRate() > dscData.getDscRateMax()) {
-//            errorTextColor(mRateEdt);
-//        } else {
-//            restoreTextColor(mRateEdt);
-//        }
-//        if (dscData.getDscMoney() > dscData.getDscMoneyMax()) {
-//            errorTextColor(mDscEdt);
-//        } else {
-//            restoreTextColor(mDscEdt);
-//        }
+        if (dscData.getDscRate() > dscData.getDscRateMax()) {
+            errorTextColor(mDscPriceText);
+        } else {
+            restoreTextColor(mDscPriceText);
+        }
+        if (dscData.getDscMoney() > dscData.getDscMoneyMax()) {
+            errorTextColor(mDscTotalText);
+        } else {
+            restoreTextColor(mDscTotalText);
+        }
     }
 
     private void switchInputMode(DscInputMode mode) {
@@ -282,8 +282,28 @@ public class PriceDscDialog extends BottomPopupView
     private void updateEdtMemo() {
         if (isRateMode()) {
             mEdtMemo.setText(String.format(Locale.CHINA, "(-%s元)", CommonUtil.moneyToString(dscData.getDscMoney())));
+            if (dscData.getDscRate() > dscData.getDscRateMax()) {
+                errorTextColor(mEdtBox);
+            } else {
+                restoreTextColor(mEdtBox);
+            }
+            if (dscData.getDscMoney() > dscData.getDscMoneyMax()) {
+                errorTextColor(mEdtMemo);
+            } else {
+                restoreTextColor(mEdtMemo);
+            }
         } else {
             mEdtMemo.setText(String.format(Locale.CHINA, "(-%d%%)", dscData.getDscRate()));
+            if (dscData.getDscRate() > dscData.getDscRateMax()) {
+                errorTextColor(mEdtMemo);
+            } else {
+                restoreTextColor(mEdtMemo);
+            }
+            if (dscData.getDscMoney() > dscData.getDscMoneyMax()) {
+                errorTextColor(mEdtBox);
+            } else {
+                restoreTextColor(mEdtBox);
+            }
         }
     }
 
