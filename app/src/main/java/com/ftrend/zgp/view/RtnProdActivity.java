@@ -60,7 +60,6 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     protected void initData() {
-
     }
 
     @Override
@@ -102,6 +101,15 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
     @OnClick(R.id.rtn_prod_btn_search)
     public void search() {
         mPresenter.getTradeByLsNo(mEdt.getText().toString());
+    }
+
+    @OnClick(R.id.rtn_btn_enter)
+    public void enter() {
+    }
+
+    @OnClick(R.id.rtn_btn_cancel)
+    public void cancel() {
+        finish();
     }
 
     @Override

@@ -37,48 +37,152 @@
         android:scaleType="centerInside"
         android:src="@drawable/title_bar_bottom" />
 
-    <Button
-        android:id="@+id/rtn_prod_btn_no_order"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:id="@+id/rtn_prod_ll_top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_36"
         android:layout_below="@+id/rtn_prod_title_line"
-        android:layout_marginTop="@dimen/dp_4"
-        android:paddingTop="@dimen/dp_4"
-        android:paddingBottom="@dimen/dp_4"
-        android:text="@string/rtn_prod_btn_not_order" />
+        android:layout_marginTop="@dimen/dp_2"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_8">
 
-    <com.ftrend.cleareditview.ClearEditText
-        android:id="@+id/rtn_prod_edt_trade"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/rtn_prod_btn_no_order"
-        android:layout_alignBottom="@+id/rtn_prod_btn_no_order"
-        android:layout_toStartOf="@+id/rtn_prod_btn_search"
-        android:layout_toEndOf="@+id/rtn_prod_btn_no_order"
-        android:background="@null"
-        android:hint="@string/rtn_prod_tv_search"
-        android:inputType="text"
-        android:maxLines="1"
-        android:paddingTop="@dimen/dp_4"
-        android:paddingBottom="@dimen/dp_4"
-        android:textSize="@dimen/sp_13" />
+        <Button
+            android:id="@+id/rtn_prod_btn_no_order"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/rtn_btn_top_red_selector"
+            android:gravity="center"
+            android:lines="1"
+            android:paddingStart="@dimen/dp_2"
+            android:paddingEnd="@dimen/dp_2"
+            android:text="@string/rtn_prod_btn_not_order"
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/sp_11" />
 
-    <Button
-        android:id="@+id/rtn_prod_btn_search"
-        android:layout_width="wrap_content"
+        <com.ftrend.cleareditview.ClearEditText
+            android:id="@+id/rtn_prod_edt_trade"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:background="@drawable/rtn_edt_top_bottom_line"
+            android:gravity="center_vertical|start"
+            android:hint="@string/rtn_prod_tv_search"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_11" />
+
+        <Button
+            android:id="@+id/rtn_prod_btn_search"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/rtn_btn_top_blue_selector"
+            android:gravity="center"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:text="@string/rtn_prod_btn_search"
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/sp_11" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/rtn_prod_ll_mid"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/rtn_prod_edt_trade"
-        android:layout_alignBottom="@+id/rtn_prod_edt_trade"
-        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/rtn_prod_ll_top"
+        android:background="@color/common_white"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_8"
         android:paddingTop="@dimen/dp_4"
-        android:paddingBottom="@dimen/dp_4"
-        android:text="@string/rtn_prod_btn_search" />
+        android:paddingEnd="@dimen/dp_8"
+        android:paddingBottom="@dimen/dp_2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:text="@string/rtn_prod_tv_trade_time"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_10" />
+
+        <TextView
+            android:id="@+id/rtn_prod_tv_trade_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.9"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:text="@string/rtn_prod_replace_trade_time"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_10"
+            tools:text="@string/rtn_prod_replace_trade_time" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|end"
+            android:lines="1"
+            android:text="@string/rtn_prod_tv_lsno"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_10" />
+
+        <TextView
+            android:id="@+id/rtn_prod_tv_trade_lsno"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2.2"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:text="@string/rtn_prod_replace_trade_lsno"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_10"
+            tools:text="@string/rtn_prod_replace_trade_lsno" />
+
+        <TextView
+            android:id="@+id/rtn_prod_tv_cahier_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:lines="1"
+            android:text="@string/rtn_prod_tv_cashier"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_10" />
+
+        <TextView
+            android:id="@+id/rtn_prod_tv_cahier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/rtn_prod_replace_cashier"
+            android:textAlignment="textEnd"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_10"
+            tools:text="@string/rtn_prod_replace_cashier" />
+
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rtn_prod_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rtn_prod_btn_search"
+        android:layout_above="@+id/rtn_prod_vs_bottom"
+        android:layout_below="@+id/rtn_prod_ll_mid"
         tools:listitem="@layout/shop_list_rv_product_item" />
+
+    <ViewStub
+        android:id="@+id/rtn_prod_vs_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout="@layout/rtn_bottom_ll_view_stub"
+        tools:layout="@layout/rtn_bottom_ll_view_stub" />
 
 </RelativeLayout>
