@@ -178,7 +178,7 @@ public class DscHelper {
                 continue;//跳过不允许优惠商品
             }
             totalForDsc += prod.getPrice() * prod.getAmount();
-            dscTotal += prod.getTotalDsc() - prod.getSingleDsc();
+            dscTotal += prod.equals(tradeProd) ? 0 : prod.getTotalDsc() - prod.getSingleDsc();//跳过当前商品
         }
 
         //(1)商品原价 - 最低限价MinimumPrice
