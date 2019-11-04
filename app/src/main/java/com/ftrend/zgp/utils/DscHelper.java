@@ -528,7 +528,7 @@ public class DscHelper {
         double dsc = dscRate > 0
                 ? Math.max(prod.getPrice() - price, prod.getPrice() * (100 - dscRate) / 100)
                 : prod.getPrice() - price;
-        prod.setVipDsc(dsc);
+        prod.setVipDsc(dsc * prod.getAmount());
         prod.setTotal(prod.getPrice() * prod.getAmount() - prod.getTotalDsc());
         if (prod.save(databaseWrapper)) {
             return TradeHelper.recalcTotal(databaseWrapper);
@@ -585,17 +585,6 @@ public class DscHelper {
     //endregion
 
     //region 公共方法
-
-    /**
-     * @return 筛选后的交易原价
-     */
-    public static double getAfterWholePrice() {
-        double price = 0;
-        for (TradeProd prod : dscList) {
-            price += prod.getPrice() * prod.getAmount();
-        }
-        return price;
-    }
 
     /**
      * 单品计算折扣金额
