@@ -11,6 +11,7 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.ftrend.zgp.utils.TradeHelper.priceFormat;
@@ -70,7 +71,6 @@ public class DscHelper {
      */
     private static void makeSingleDscData() {
         TradeProd tradeProd = dscList.get(0);
-        int prodIndex = TradeHelper.getProdList().indexOf(tradeProd);
 
         dscData = new DscData();
         dscData.setProdName(tradeProd.getProdName());
@@ -89,8 +89,7 @@ public class DscHelper {
         dscData.setDscOtherAfter(dscData.getDscOtherBefore());
         dscData.setTotalAfter(dscData.getTotalBefore());
 
-        dscData.setDscRateMax((int) TradeHelper.getMaxSingleRate(prodIndex));
-        dscData.setDscMoneyMax(TradeHelper.getMaxSingleDsc(prodIndex));
+        dscData.setDscMoneyMax(getMaxSingleDsc(tradeProd));
     }
 
     /**
@@ -167,6 +166,39 @@ public class DscHelper {
         finish();
     }
 
+    /**
+     * 获取单项优惠金额上限
+     * 取三值的最小值
+     *
+     * @return 单项优惠上限
+     */
+    public static double getMaxSingleDsc(TradeProd tradeProd) {
+        double[] dsc = new double[3];
+
+        //汇总整单金额（可优惠商品原价）和已优惠金额（不含单项优惠）
+        double totalForDsc = 0, dscTotal = 0;
+        for (TradeProd prod : TradeHelper.getProdList()) {
+            if (prod.getProdIsLargess() != 0) {
+                continue;//跳过赠品
+            }
+            if (prod.getProdForDsc() == 0) {
+                continue;//跳过不允许优惠商品
+            }
+            totalForDsc += prod.getPrice() * prod.getAmount();
+            dscTotal += prod.getTotalDsc() - prod.getSingleDsc();
+        }
+
+        //(1)商品原价 - 最低限价MinimumPrice
+        dsc[0] = tradeProd.getPrice() - tradeProd.getProdMinPrice();
+        //(2)（整单金额 × 最大优惠折扣MaxDscRate） - 整单已优惠金额
+        dsc[1] = totalForDsc * ZgParams.getCurrentUser().getMaxDscRate() / 100 - dscTotal;
+        //(3)单笔最大优惠金额MaxDscTotal - 整单已优惠金额
+        dsc[2] = ZgParams.getCurrentUser().getMaxDscTotal() - dscTotal;
+        //取3者最小值
+        Arrays.sort(dsc);
+        return dsc[0];
+    }
+
     //endregion
 
     //region 整单优惠计算
@@ -214,10 +246,62 @@ public class DscHelper {
         dscData.setDscOtherAfter(dscData.getDscOtherBefore());
         dscData.setTotalAfter(dscData.getTotalBefore());
 
-        dscData.setDscRateMax((int) TradeHelper.getMaxWholeRate());
-        dscData.setDscMoneyMax(TradeHelper.getMaxWholeDsc());
+        dscData.setDscMoneyMax(getMaxWholeDscByRate());
     }
 
+    /**
+     * 最大抹零金额
+     *
+     * @return
+     */
+    public static double getMaxWholeDscByTotal() {
+        double maxDscTotal = ZgParams.getCurrentUser().getMaxDscTotal();
+        int maxDscRate = ZgParams.getCurrentUser().getMaxDscRate();
+
+        //汇总整单金额（可优惠商品原价）和已优惠金额（不含整单优惠）
+        double totalForDsc = 0, dscTotal = 0;
+        for (TradeProd prod : TradeHelper.getProdList()) {
+            if (prod.getProdIsLargess() != 0) {
+                continue;//跳过赠品
+            }
+            if (prod.getProdForDsc() == 0) {
+                continue;//跳过不允许优惠商品
+            }
+            totalForDsc += prod.getPrice() * prod.getAmount();
+            dscTotal += prod.getTotalDsc() - prod.getWholeDsc();
+        }
+        //按最大金额计算整单优惠
+        double dsc = wholeDscByTotal(maxDscTotal);
+        reset();
+        return Math.min(dsc + dscTotal, totalForDsc * maxDscRate / 100);
+    }
+
+    /**
+     * 最大整单折扣金额
+     *
+     * @return
+     */
+    public static double getMaxWholeDscByRate() {
+        double maxDscTotal = ZgParams.getCurrentUser().getMaxDscTotal();
+        int maxDscRate = ZgParams.getCurrentUser().getMaxDscRate();
+
+        //汇总已优惠金额（不含整单优惠）
+        double dscTotal = 0;
+        for (TradeProd prod : TradeHelper.getProdList()) {
+            dscTotal += prod.getTotalDsc() - prod.getWholeDsc();
+        }
+
+        //按最大比例计算整单优惠
+        double dsc = wholeDscByRate(maxDscRate);
+        reset();
+        return Math.min(dsc + dscTotal, maxDscTotal);
+    }
+
+    /**
+     * 整单优惠合计
+     *
+     * @return
+     */
     private static double getWholeDscTotal() {
         double dsc = 0.00;
         for (TradeProd prod : dscList) {
@@ -226,6 +310,10 @@ public class DscHelper {
         return dsc;
     }
 
+    /**
+     * 所有优惠合计
+     * @return
+     */
     private static double getDscTotal() {
         double dsc = 0.00;
         for (TradeProd prod : dscList) {
@@ -550,6 +638,7 @@ public class DscHelper {
         for (int i = 0; i < calcList.size(); i++) {
             calcList.set(i, 0D);
         }
+        dscData.reset();
     }
 
     /**

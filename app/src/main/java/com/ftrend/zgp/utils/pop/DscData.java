@@ -41,10 +41,18 @@ public class DscData {
     //优惠后小计
     private double totalAfter;
 
-    //最大允许折扣比例
-    private int dscRateMax;
     //最大允许优惠金额（单项优惠时为所有数量的总优惠）
     private double dscMoneyMax;
+
+    /**
+     * 清除计算结果，恢复到计算前的参数值
+     */
+    public void reset() {
+        priceAfter = priceBefore;
+        dscMoneyAfter = dscMoneyBefore;
+        dscOtherAfter = dscOtherBefore;
+        totalAfter = totalBefore;
+    }
 
     /**
      * 计算优惠后参数
@@ -58,16 +66,34 @@ public class DscData {
         dscOtherAfter = dscOther;
     }
 
+    /**
+     * 格式化折扣比例输出信息
+     *
+     * @param value
+     * @return
+     */
     public static String formatRate(int value) {
         return String.format(Locale.CHINA, "%d%%", value);
     }
 
+    /**
+     * 格式化单价（合计）输出信息
+     * @param price
+     * @param oriPrice
+     * @return
+     */
     public static String formatPrice(double price, double oriPrice) {
         return String.format(Locale.CHINA, "%s(-%s)",
                 CommonUtil.moneyToString(price),
                 CommonUtil.moneyToString(oriPrice - price));
     }
 
+    /**
+     * 格式化优惠金额输出信息
+     * @param money
+     * @param other
+     * @return
+     */
     public static String formatDsc(double money, double other) {
         return String.format(Locale.CHINA, "%s(+%s)",
                 CommonUtil.moneyToString(money),
@@ -98,7 +124,7 @@ public class DscData {
      * @return
      */
     public boolean isValid() {
-        return getDscRateAfter() <= dscRateMax && dscMoneyAfter <= dscMoneyMax;
+        return getDscRateAfter() <= getDscRateMax() && dscMoneyAfter <= dscMoneyMax;
     }
 
     public String getProdName() {
@@ -134,11 +160,7 @@ public class DscData {
     }
 
     public int getDscRateMax() {
-        return dscRateMax;
-    }
-
-    public void setDscRateMax(int dscRateMax) {
-        this.dscRateMax = dscRateMax;
+        return (int) Math.round(dscMoneyMax * 100 / total);
     }
 
     public double getDscMoneyMax() {

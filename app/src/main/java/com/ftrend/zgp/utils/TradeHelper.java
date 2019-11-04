@@ -881,6 +881,7 @@ public class TradeHelper {
      *
      * @return 单项优惠上限
      */
+    @Deprecated
     public static double getMaxSingleDsc(int index) {
         double firstDsc, secondDsc, thirdDsc;
         String prodCode = prodList.get(index).getProdCode();
