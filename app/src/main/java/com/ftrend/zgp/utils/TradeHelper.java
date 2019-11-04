@@ -556,11 +556,10 @@ public class TradeHelper {
         tradeProd.setVipDsc((tradeProd.getVipDsc() / oldAmount) * newAmount);
         tradeProd.setSingleDsc((tradeProd.getSingleDsc() / oldAmount) * newAmount);
         tradeProd.setWholeDsc((tradeProd.getWholeDsc() / oldAmount) * newAmount);
-        tradeProd.setManuDsc(tradeProd.getSingleDsc() + tradeProd.getWholeDsc());
         tradeProd.setTranDsc((tradeProd.getTranDsc() / oldAmount) * newAmount);
 
         tradeProd.setAmount(newAmount);
-        tradeProd.setTotal(priceFormat((newAmount * tradeProd.getPrice()) - tradeProd.getManuDsc() - tradeProd.getVipDsc() - tradeProd.getTranDsc()));
+        tradeProd.setTotal(priceFormat((newAmount * tradeProd.getPrice()) - tradeProd.getTotalDsc()));
         if (tradeProd.save(databaseWrapper)) {
             if (recalcTotal(databaseWrapper)) {
                 return 1;

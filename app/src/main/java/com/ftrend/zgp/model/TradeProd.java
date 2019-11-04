@@ -41,8 +41,6 @@ public class TradeProd extends BaseModel {
     @NotNull
     private double amount = 0;
     @Column
-    private double manuDsc;
-    @Column
     private double vipDsc = 0;
     @Column
     private double tranDsc;
@@ -147,12 +145,7 @@ public class TradeProd extends BaseModel {
     }
 
     public double getManuDsc() {
-        manuDsc = singleDsc + wholeDsc;
-        return manuDsc;
-    }
-
-    public void setManuDsc(double manuDsc) {
-        this.manuDsc = manuDsc;
+        return singleDsc + wholeDsc;
     }
 
     public double getVipDsc() {
@@ -171,8 +164,12 @@ public class TradeProd extends BaseModel {
         this.tranDsc = tranDsc;
     }
 
+    public double getTotalDsc() {
+        return singleDsc + wholeDsc + vipDsc + tranDsc;
+    }
+
     public double getTotal() {
-        total = price * amount - singleDsc - wholeDsc - vipDsc - tranDsc;
+        total = price * amount - getTotalDsc();
         return total;
     }
 

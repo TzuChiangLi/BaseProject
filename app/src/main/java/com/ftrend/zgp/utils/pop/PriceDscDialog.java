@@ -71,7 +71,15 @@ public class PriceDscDialog extends BottomPopupView
     private TextView mEdtMemo;
 
     //
-    private TextView mProdNameTv, mMultiTv, mAmountTv, mMaxRateTv, mMaxDscTv;
+    private TextView mProdNameTv, mUnitTv, mAmountTv, mMaxRateTv, mMaxDscTv;
+    //
+    private TextView mPriceHeader, mTotalHeader, mRateHeader;
+    //
+    private TextView mPriceOri, mTotalOri, mRateOri;
+    //
+    private TextView mPriceBefore, mTotalBefore, mRateBefore;
+    //
+    private TextView mPriceAfter, mTotalAfter, mRateAfter;
 
     //endregion
 
@@ -143,10 +151,27 @@ public class PriceDscDialog extends BottomPopupView
         mDscTotalText = mRateDscView.findViewById(R.id.vip_dsc_tv_total_dsc);
 
         mProdNameTv = mRateDscView.findViewById(R.id.vip_dsc_tv_prodname);
-        mMultiTv = mRateDscView.findViewById(R.id.vip_dsc_tv_multi);
+        mUnitTv = mRateDscView.findViewById(R.id.vip_dsc_tv_unit);
         mAmountTv = mRateDscView.findViewById(R.id.vip_dsc_tv_amount);
         mMaxDscTv = mRateDscView.findViewById(R.id.vip_dsc_tv_dsc_range);
         mMaxRateTv = mRateDscView.findViewById(R.id.vip_dsc_tv_rate_range);
+
+        mPriceHeader = mRateDscView.findViewById(R.id.vip_dsc_grid_price_header);
+        mTotalHeader = mRateDscView.findViewById(R.id.vip_dsc_grid_total_header);
+        mRateHeader = mRateDscView.findViewById(R.id.vip_dsc_grid_rate_header);
+
+        mPriceOri = mRateDscView.findViewById(R.id.vip_dsc_grid_price_ori);
+        mTotalOri = mRateDscView.findViewById(R.id.vip_dsc_grid_total_ori);
+        mRateOri = mRateDscView.findViewById(R.id.vip_dsc_grid_rate_ori);
+
+        mPriceBefore = mRateDscView.findViewById(R.id.vip_dsc_grid_price_before);
+        mTotalBefore = mRateDscView.findViewById(R.id.vip_dsc_grid_total_before);
+        mRateBefore = mRateDscView.findViewById(R.id.vip_dsc_grid_rate_before);
+
+        mPriceAfter = mRateDscView.findViewById(R.id.vip_dsc_grid_price_after);
+        mTotalAfter = mRateDscView.findViewById(R.id.vip_dsc_grid_total_after);
+        mRateAfter = mRateDscView.findViewById(R.id.vip_dsc_grid_rate_after);
+
 
         //输入控件（优惠金额输入）
         mEdtLabel = mRateDscView.findViewById(R.id.vip_dsc_edt_dsc_title);
@@ -172,7 +197,7 @@ public class PriceDscDialog extends BottomPopupView
         } else if (isWholeMode()) {
             mTitleTv.setText("整单优惠");
             mProdNameTv.setVisibility(GONE);
-            mMultiTv.setVisibility(GONE);
+            mUnitTv.setVisibility(GONE);
             mAmountTv.setVisibility(GONE);
             mOriPriceLabel.setText("总价：");
             mOriTotalLabel.setText("应收：");
@@ -187,43 +212,72 @@ public class PriceDscDialog extends BottomPopupView
      * 更新折扣优惠数据面板
      */
     private void updateDscData() {
-        if (isSingleMode()) {
-            mDscPriceText.setText(String.format(Locale.CHINA, "%s(-%d%%)",
-                    CommonUtil.moneyToString(dscData.getDscPrice()),
-                    dscData.getDscRate()));
-            mDscTotalText.setText(String.format(Locale.CHINA, "%s(-%s)",
-                    CommonUtil.moneyToString(dscData.getDscTotal()),
-                    CommonUtil.moneyToString(dscData.getDscMoney())));
-        } else if (isWholeMode()) {
-            mDscPriceText.setText(String.format(Locale.CHINA, "%s(-%d%%)",
-                    CommonUtil.moneyToString(dscData.getDscMoney()),
-                    dscData.getDscRate()));
-            mDscTotalText.setText(String.format(Locale.CHINA, "%s(-%s)",
-                    CommonUtil.moneyToString(dscData.getDscTotal() - dscData.getDscOther()),
-                    CommonUtil.moneyToString(dscData.getDscMoney() + dscData.getDscOther())));
-        }
-        mOriPriceText.setText(CommonUtil.moneyToString(dscData.getOriPrice()));
-        mOriTotalText.setText(String.format(Locale.CHINA, "%s(-%s)",
-                CommonUtil.moneyToString(dscData.getTotal()),
-                CommonUtil.moneyToString(dscData.getOriDscMoney())));
-        updateEdtMemo();
+//        if (isSingleMode()) {
+//            mDscPriceText.setText(String.format(Locale.CHINA, "%s(-%d%%)",
+//                    CommonUtil.moneyToString(dscData.getDscPrice()),
+//                    dscData.getDscRate()));
+//            mDscTotalText.setText(String.format(Locale.CHINA, "%s(-%s)",
+//                    CommonUtil.moneyToString(dscData.getDscTotal()),
+//                    CommonUtil.moneyToString(dscData.getDscMoney())));
+//        } else if (isWholeMode()) {
+//            mDscPriceText.setText(String.format(Locale.CHINA, "%s(-%d%%)",
+//                    CommonUtil.moneyToString(dscData.getDscMoney()),
+//                    dscData.getDscRate()));
+//            mDscTotalText.setText(String.format(Locale.CHINA, "%s(-%s)",
+//                    CommonUtil.moneyToString(dscData.getDscTotal() - dscData.getDscOther()),
+//                    CommonUtil.moneyToString(dscData.getDscMoney() + dscData.getDscOther())));
+//        }
+//        mOriPriceText.setText(CommonUtil.moneyToString(dscData.getOriPrice()));
+//        mOriTotalText.setText(String.format(Locale.CHINA, "%s(-%s)",
+//                CommonUtil.moneyToString(dscData.getTotal()),
+//                CommonUtil.moneyToString(dscData.getOriDscMoney())));
+//        updateEdtMemo();
 
         mProdNameTv.setText(dscData.getProdName());
         mAmountTv.setText(String.valueOf(Math.round(dscData.getAmount())));
         mMaxRateTv.setText(String.format(Locale.CHINA, "(%d%%)", dscData.getDscRateMax()));
         mMaxDscTv.setText(String.format(Locale.CHINA, "%s元", CommonUtil.moneyToString(dscData.getDscMoneyMax())));
+
+        mPriceHeader.setText(isSingleMode() ? "单价" : "优惠金额");
+        mTotalHeader.setText(isSingleMode() ? "小计" : "应收金额");
+        mRateHeader.setText(isSingleMode() ? "折扣" : "折扣比例");
+
+        if (isSingleMode()) {
+            mPriceOri.setText(CommonUtil.moneyToString(dscData.getPrice()));
+            mTotalOri.setText(CommonUtil.moneyToString(dscData.getTotal()));
+            mRateOri.setText("0%");
+
+            mPriceBefore.setText(DscData.formatPrice(dscData.getPriceBefore(), dscData.getPrice()));
+            mPriceAfter.setText(DscData.formatPrice(dscData.getPriceAfter(), dscData.getPrice()));
+        } else {
+            mPriceOri.setText("0");
+            mTotalOri.setText(CommonUtil.moneyToString(dscData.getTotal()));
+            mRateOri.setText("0%");
+
+            mPriceBefore.setText(DscData.formatDsc(dscData.getDscMoneyBefore(), dscData.getDscOtherBefore()));
+            mPriceAfter.setText(DscData.formatDsc(dscData.getDscMoneyAfter(), dscData.getDscOtherAfter()));
+        }
+
+//        mPriceBefore.setText(isSingleMode() ? dscData.getPriceBefore() : dscData.getDscMoneyBefore());
+        mTotalBefore.setText(DscData.formatPrice(dscData.getTotalBefore(), dscData.getTotal()));
+        mRateBefore.setText(DscData.formatRate(dscData.getDscRateBefore()));
+
+//        mPriceAfter.setText(isSingleMode() ? dscData.getPriceAfter() : dscData.getDscMoneyAfter());
+        mTotalAfter.setText(DscData.formatPrice(dscData.getTotalAfter(), dscData.getTotal()));
+        mRateAfter.setText(DscData.formatRate(dscData.getDscRateAfter()));
+
 //        if (type != UPDATE_DATA_EXCEPT_RATE) {
 //            mRateEdt.setText(String.valueOf(dscData.getDscRate()));
 //        }
 //        if (type != UPDATE_DATA_EXCEPT_MONEY) {
 //            mDscEdt.setText(CommonUtil.moneyToString(dscData.getDscMoney()));
 //        }
-        if (dscData.getDscRate() > dscData.getDscRateMax()) {
+        if (dscData.getDscRateAfter() > dscData.getDscRateMax()) {
             errorTextColor(mDscPriceText);
         } else {
             restoreTextColor(mDscPriceText);
         }
-        if (dscData.getDscMoney() > dscData.getDscMoneyMax()) {
+        if (dscData.getDscMoneyAfter() > dscData.getDscMoneyMax()) {
             errorTextColor(mDscTotalText);
         } else {
             restoreTextColor(mDscTotalText);
@@ -240,22 +294,22 @@ public class PriceDscDialog extends BottomPopupView
             case wholeByRate:
                 mEdtLabel.setText("折扣比例：");
                 //显示已优惠比例
-                mEdtBox.setText(String.valueOf(dscData.getDscRate()));
+                mEdtBox.setText(String.valueOf(dscData.getDscRateAfter()));
                 break;
             case singleByPrice:
                 mEdtLabel.setText("单价优惠：");
                 //显示单价已优惠金额
-                mEdtBox.setText(CommonUtil.moneyToString(dscData.getDscMoneyByPrice()));
+                mEdtBox.setText(CommonUtil.moneyToString(dscData.getDscMoneyAfterByPrice()));
                 break;
             case singleByTotal:
                 mEdtLabel.setText("总价优惠：");
                 //显示总价已优惠金额
-                mEdtBox.setText(CommonUtil.moneyToString(dscData.getDscMoney()));
+                mEdtBox.setText(CommonUtil.moneyToString(dscData.getDscMoneyAfter()));
                 break;
             case wholeByTotal:
                 mEdtLabel.setText("优惠金额：");
                 //显示已优惠金额
-                mEdtBox.setText(CommonUtil.moneyToString(dscData.getDscMoney()));
+                mEdtBox.setText(CommonUtil.moneyToString(dscData.getDscMoneyAfter()));
                 break;
             default:
                 break;
@@ -281,25 +335,25 @@ public class PriceDscDialog extends BottomPopupView
 
     private void updateEdtMemo() {
         if (isRateMode()) {
-            mEdtMemo.setText(String.format(Locale.CHINA, "(-%s元)", CommonUtil.moneyToString(dscData.getDscMoney())));
-            if (dscData.getDscRate() > dscData.getDscRateMax()) {
+            mEdtMemo.setText(String.format(Locale.CHINA, "(-%s元)", CommonUtil.moneyToString(dscData.getDscMoneyAfter())));
+            if (dscData.getDscRateAfter() > dscData.getDscRateMax()) {
                 errorTextColor(mEdtBox);
             } else {
                 restoreTextColor(mEdtBox);
             }
-            if (dscData.getDscMoney() > dscData.getDscMoneyMax()) {
+            if (dscData.getDscMoneyAfter() > dscData.getDscMoneyMax()) {
                 errorTextColor(mEdtMemo);
             } else {
                 restoreTextColor(mEdtMemo);
             }
         } else {
-            mEdtMemo.setText(String.format(Locale.CHINA, "(-%d%%)", dscData.getDscRate()));
-            if (dscData.getDscRate() > dscData.getDscRateMax()) {
+            mEdtMemo.setText(String.format(Locale.CHINA, "(-%d%%)", dscData.getDscRateAfter()));
+            if (dscData.getDscRateAfter() > dscData.getDscRateMax()) {
                 errorTextColor(mEdtMemo);
             } else {
                 restoreTextColor(mEdtMemo);
             }
-            if (dscData.getDscMoney() > dscData.getDscMoneyMax()) {
+            if (dscData.getDscMoneyAfter() > dscData.getDscMoneyMax()) {
                 errorTextColor(mEdtBox);
             } else {
                 restoreTextColor(mEdtBox);
@@ -367,13 +421,16 @@ public class PriceDscDialog extends BottomPopupView
                 double value = Double.valueOf(val);
                 restoreTextColor(mEdtBox);
                 if (inputMode == DscInputMode.singleByPrice) {
-                    dscData.setDscMoney(callback.onDscByTotal(value * dscData.getAmount()));
+                    callback.onDscByTotal(value * dscData.getAmount());
+//                    dscData.setDscMoney(callback.onDscByTotal(value * dscData.getAmount()));
                 } else if (isRateMode()) {
-                    dscData.setDscMoney(callback.onDscByRate(value));
+                    callback.onDscByRate(value);
+//                    dscData.setDscMoney(callback.onDscByRate(value));
                 } else {
-                    dscData.setDscMoney(callback.onDscByTotal(value));
+                    callback.onDscByTotal(value);
+//                    dscData.setDscMoney(callback.onDscByTotal(value));
                 }
-                dscData.setDscRate((int) Math.round(dscData.getDscMoney() * 100 / dscData.getOriTotal()));
+//                dscData.setDscRate((int) Math.round(dscData.getDscMoney() * 100 / dscData.getOriTotal()));
                 return true;
             } catch (Exception e) {
                 return false;
@@ -487,7 +544,7 @@ public class PriceDscDialog extends BottomPopupView
             MessageUtil.showError("超出最大可优惠范围");
             return;
         }
-        if (callback.onOk(dscData.getDscRate(), dscData.getDscMoney())) {
+        if (callback.onOk(dscData.getDscRateAfter(), dscData.getDscMoneyAfter())) {
             dismiss();
         }
     }

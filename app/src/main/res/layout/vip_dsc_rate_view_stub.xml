@@ -8,17 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_16"
-        android:textColor="@color/text_black_first"
-        android:textSize="@dimen/sp_20" />
-
-    <TextView
-        android:id="@+id/vip_dsc_tv_multi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/dp_16"
-        android:layout_marginEnd="@dimen/dp_16"
-        android:layout_toStartOf="@+id/vip_dsc_tv_amount"
-        android:text="X"
+        android:text="商品名称"
         android:textColor="@color/text_black_first"
         android:textSize="@dimen/sp_20" />
 
@@ -27,15 +17,168 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/dp_16"
-        android:layout_alignParentEnd="true"
+        android:layout_toStartOf="@+id/vip_dsc_tv_unit"
+        android:text="数量"
         android:textColor="@color/text_black_first"
         android:textSize="@dimen/sp_20" />
+
+    <TextView
+        android:id="@+id/vip_dsc_tv_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_alignParentEnd="true"
+        android:text="件"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_20" />
+
+    <GridLayout
+        android:id="@+id/vip_dsc_grid_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:columnCount="4"
+        android:rowCount="4"
+        android:orientation="horizontal"
+        android:layout_below="@+id/vip_dsc_tv_prodname"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_8">
+
+        <TextView
+            android:layout_gravity="fill"
+            android:layout_width="50dp"
+            android:gravity="center"
+            android:text=""
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_grid_price_header"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="单价"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_grid_rate_header"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="折扣"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_grid_total_header"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="小计"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:layout_gravity="fill"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_30"
+            android:gravity="center"
+            android:text="原价"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_grid_price_ori"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="480"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_grid_rate_ori"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="0%"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_grid_total_ori"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="960"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:layout_gravity="fill"
+            android:layout_height="@dimen/dp_30"
+            android:gravity="center"
+            android:text="优惠前"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_grid_price_before"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="450(-30)"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_grid_rate_before"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="6%"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_grid_total_before"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="900(-60)"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:layout_gravity="fill"
+            android:layout_height="@dimen/dp_30"
+            android:gravity="center"
+            android:text="优惠后"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_grid_price_after"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="450(-30)"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_grid_rate_after"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="6%"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/vip_dsc_grid_total_after"
+            android:layout_gravity="fill"
+            android:layout_columnWeight="1"
+            android:gravity="center"
+            android:text="900(-60)"
+            android:textSize="@dimen/sp_14" />
+
+    </GridLayout>
 
     <LinearLayout
         android:id="@+id/vip_dsc_ll_prod_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/vip_dsc_tv_prodname"
+        android:layout_below="@+id/vip_dsc_grid_result"
+        android:visibility="gone"
         android:orientation="horizontal"
         android:paddingStart="@dimen/dp_16"
         android:paddingTop="@dimen/dp_8"
@@ -79,6 +222,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/vip_dsc_ll_prod_info"
+        android:visibility="gone"
         android:orientation="horizontal"
         android:paddingStart="@dimen/dp_16"
         android:paddingTop="@dimen/dp_8"
@@ -116,7 +260,6 @@
             android:textSize="@dimen/sp_14" />
 
     </LinearLayout>
-
 
     <View
         android:id="@+id/vip_dsc_line"
@@ -198,6 +341,5 @@
             android:textSize="@dimen/sp_16" />
 
     </LinearLayout>
-
 
 </RelativeLayout>
