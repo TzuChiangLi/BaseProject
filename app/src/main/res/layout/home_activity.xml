@@ -59,7 +59,7 @@
             android:layout_marginEnd="@dimen/dp_8"
             android:layout_toStartOf="@+id/home_tv_date_title"
             android:textColor="@color/common_white"
-            android:textSize="@dimen/sp_13" />
+            android:textSize="@dimen/sp_11"/>
 
         <ImageView
             android:id="@+id/home_tv_date_title"
@@ -79,7 +79,7 @@
             android:layout_marginEnd="@dimen/dp_4"
             android:layout_toStartOf="@+id/home_img_user_title"
             android:textColor="@color/common_white"
-            android:textSize="@dimen/sp_13" />
+            android:textSize="@dimen/sp_11" />
 
 
         <ImageView
@@ -100,7 +100,7 @@
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/dp_16"
             android:textColor="@color/common_white"
-            android:textSize="@dimen/sp_13" />
+            android:textSize="@dimen/sp_11"/>
 
     </RelativeLayout>
 

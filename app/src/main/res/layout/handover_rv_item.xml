@@ -84,8 +84,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_blue_top_left_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_project"
                     android:textColor="@color/common_black"
@@ -95,8 +97,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_blue_top_mid_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_amout"
                     android:textColor="@color/common_black"
@@ -106,8 +110,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_blue_top_right_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_count"
                     android:textColor="@color/common_black"
@@ -133,8 +139,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_white_mid_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_total_replace" />
 
@@ -143,8 +151,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_white_right_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_count_replace" />
             </LinearLayout>
@@ -158,8 +168,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_white_left_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_return" />
 
@@ -168,8 +180,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_white_mid_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_total_replace" />
 
@@ -178,8 +192,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_white_right_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_count_replace" />
             </LinearLayout>
@@ -193,8 +209,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_blue_mid_left_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_trade_total"
                     android:textColor="@color/common_black"
@@ -205,8 +223,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_blue_mid_mid_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_total_replace"
                     android:textColor="@color/common_black"
@@ -217,8 +237,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_blue_mid_right_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_count_replace"
                     android:textColor="@color/common_black"
@@ -234,8 +256,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_white_left_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_money" />
 
@@ -244,8 +268,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_white_mid_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_total_replace" />
 
@@ -254,8 +280,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_white_right_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_count_replace" />
             </LinearLayout>
@@ -269,8 +297,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_white_left_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_sqb" />
 
@@ -279,8 +309,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_white_mid_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_total_replace" />
 
@@ -289,8 +321,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_white_right_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_count_replace" />
             </LinearLayout>
@@ -374,8 +408,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_white_left_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_card" />
 
@@ -384,8 +420,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_white_mid_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_total_replace" />
 
@@ -394,10 +432,11 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_white_right_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
-
                     android:text="@string/handover_count_replace" />
             </LinearLayout>
 
@@ -409,10 +448,12 @@
                 <TextView
 
                     android:layout_width="@dimen/dp_0"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_blue_bottom_left_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_pay_total"
                     android:textColor="@color/common_black"
@@ -423,8 +464,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_blue_bottom_mid_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_total_replace"
                     android:textColor="@color/common_black"
@@ -435,8 +478,10 @@
                     android:layout_width="@dimen/dp_0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
                     android:background="@drawable/view_blue_bottom_right_line"
                     android:gravity="center"
+                    android:lines="1"
                     android:padding="@dimen/dp_8"
                     android:text="@string/handover_count_replace"
                     android:textColor="@color/common_black"
