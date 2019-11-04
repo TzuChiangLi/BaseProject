@@ -229,6 +229,10 @@ public class TradeProd extends BaseModel {
         return prodForDsc;
     }
 
+    public boolean isForDsc() {
+        return prodIsLargess == 0 && prodForDsc == 1;
+    }
+
     public void setProdForDsc(int prodForDsc) {
         this.prodForDsc = prodForDsc;
     }

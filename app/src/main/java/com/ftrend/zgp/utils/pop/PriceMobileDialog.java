@@ -15,6 +15,7 @@ import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.model.VipInfo;
+import com.ftrend.zgp.utils.DscHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.event.Event;
@@ -224,7 +225,7 @@ public class PriceMobileDialog extends BottomPopupView implements View.OnClickLi
                 //保存会员信息到流水
                 TradeHelper.saveVip();
                 //刷新会员优惠
-                TradeHelper.saveVipDsc();
+                DscHelper.saveVipDsc();
                 Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_VIP_INFO, vipInfo);
                 dismiss();
             } else {

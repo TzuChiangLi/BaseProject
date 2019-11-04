@@ -1,7 +1,5 @@
 package com.ftrend.zgp.utils;
 
-import android.text.TextUtils;
-
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.TradeProd;
@@ -14,15 +12,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.ftrend.zgp.utils.TradeHelper.priceFormat;
-import static com.ftrend.zgp.utils.TradeHelper.recalcTotal;
-
 /**
  * @author liziqiang@ftrend.cn
  */
 
 public class DscHelper {
     private static final String TAG = "DscHelper";
+
     //可优惠商品列表
     private static List<TradeProd> dscList = null;
     //计算结果（避免直接修改商品的整单优惠金额）
@@ -34,6 +30,9 @@ public class DscHelper {
     private static final int CALC_BY_RATE = 1;
     //计算类型：2 - 抹零
     private static final int CALC_BY_TOTAL = 2;
+
+    // VIP强制优惠：1-强制优惠，无视商品的forDsc属性
+    public static final String VIP_DSC_FORCE = "1";
 
     //计算参数
     private static DscData dscData = null;
@@ -52,10 +51,7 @@ public class DscHelper {
             return null;
         }
         TradeProd prod = prodList.get(index);
-        if (prod.getProdIsLargess() != 0) {
-            return null;//赠品
-        }
-        if (prod.getProdForDsc() == 0) {
+        if (!prod.isForDsc()) {
             return null;//不允许优惠商品
         }
         dscList = new ArrayList<>();
@@ -178,10 +174,7 @@ public class DscHelper {
         //汇总整单金额（可优惠商品原价）和已优惠金额（不含单项优惠）
         double totalForDsc = 0, dscTotal = 0;
         for (TradeProd prod : TradeHelper.getProdList()) {
-            if (prod.getProdIsLargess() != 0) {
-                continue;//跳过赠品
-            }
-            if (prod.getProdForDsc() == 0) {
+            if (!prod.isForDsc()) {
                 continue;//跳过不允许优惠商品
             }
             totalForDsc += prod.getPrice() * prod.getAmount();
@@ -211,10 +204,7 @@ public class DscHelper {
         dscList = new ArrayList<>();
         calcList = new ArrayList<>();
         for (TradeProd prod : prodList) {
-            if (prod.getProdIsLargess() != 0) {
-                continue;//跳过赠品
-            }
-            if (prod.getProdForDsc() == 0) {
+            if (!prod.isForDsc()) {
                 continue;//跳过不允许优惠商品
             }
             dscList.add(prod);
@@ -261,10 +251,7 @@ public class DscHelper {
         //汇总整单金额（可优惠商品原价）和已优惠金额（不含整单优惠）
         double totalForDsc = 0, dscTotal = 0;
         for (TradeProd prod : TradeHelper.getProdList()) {
-            if (prod.getProdIsLargess() != 0) {
-                continue;//跳过赠品
-            }
-            if (prod.getProdForDsc() == 0) {
+            if (!prod.isForDsc()) {
                 continue;//跳过不允许优惠商品
             }
             totalForDsc += prod.getPrice() * prod.getAmount();
@@ -467,17 +454,29 @@ public class DscHelper {
     public static void cancelWholeDsc() {
         finish();
     }
+
     //endregion
 
     //region 会员优惠计算
-    //------------------------------------------
-    // 超市版：会员优惠规则-1
-    private static final int VIP_ONE = 1;
-    // 超市版：会员优惠规则-2
-    private static final int VIP_TWO = 2;
-    // 超市版：会员优惠规则-3
-    private static final int VIP_THREE = 3;
 
+    /**
+     * 保存会员优惠
+     *
+     * @return
+     */
+    public static boolean saveVipDsc() {
+        return TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                for (int i = 0; i < TradeHelper.getProdList().size(); i++) {
+                    if (!doSaveVipDsc(i, databaseWrapper)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        });
+    }
 
     /**
      * 保存会员优惠
@@ -500,108 +499,92 @@ public class DscHelper {
      * @return 是否成功
      */
     private static boolean doSaveVipDsc(int index, DatabaseWrapper databaseWrapper) {
-        double vipPriceType = TradeHelper.vip.getVipPriceType();
         TradeProd prod = TradeHelper.getProdList().get(index);
-        if (ZgParams.getProgramEdition().equals(ZgParams.PROG_EDITION_BH)) {
-            //百货版
-            double rate = TradeHelper.vip.getVipDscRate();
-            double vipDsc, rateDsc;
-            //强制打折
-            if (TradeHelper.VIP_DSC_FORCE.equalsIgnoreCase(TradeHelper.vip.getForceDsc())
-                    || TradeHelper.checkForDsc(index)) {
-                //按优惠率
-                rateDsc = prod.getPrice() * (100 - rate) / 100;
-                //按优惠价
-                vipDsc = prod.getPrice() - queryVipPrice(vipPriceType, prod);
-                //已存在手工优惠的不参与会员优惠，修改depProduct的价格
-                prod.setVipDsc(Math.max(rateDsc, vipDsc) * prod.getAmount());
-                prod.setWholeDsc(0);
-                prod.setSingleDsc(0);
-                prod.setTotal(priceFormat(prod.getPrice() * prod.getAmount() - prod.getTotalDsc()));
-            }
-        } else {
-            //超市版，尚不支持促销
-            //如果商品允许优惠
-            if (TradeHelper.checkForDsc(index)) {
-                double rateRule = TradeHelper.vip.getRateRule();
-                double vipDsc, rateDsc, vipRate;
-                //优惠率规则
-                vipRate = queryRateRule(rateRule, prod);
-                rateDsc = prod.getPrice() * (100 - vipRate) / 100;
-                //如果没有会员价，vipPrice = prod.getPrice()商品原价
-                vipDsc = prod.getPrice() - queryVipPrice(vipPriceType, prod);
-                //已存在手工优惠的不参与会员优惠
-                prod.setVipDsc(Math.max(rateDsc, vipDsc) * prod.getAmount());
-                prod.setWholeDsc(0);
-                prod.setSingleDsc(0);
-                prod.setTotal(priceFormat(prod.getPrice() * prod.getAmount() - prod.getTotalDsc()));
-            }
+        if (prod.getManuDsc() > 0) {
+            //已存在手工优惠的商品不参与会员优惠
+            return true;
         }
+
+        int vipPriceType = (int) Math.round(TradeHelper.vip.getVipPriceType());
+        //(1)会员价
+        double price = getVipPrice(prod.getProdCode(), vipPriceType);
+        //(2)优惠率
+        double dscRate;
+        if (ZgParams.isBhEdition()) {//百货版
+            dscRate = TradeHelper.vip.getVipDscRate();
+            //强制打折
+            boolean isForceDsc = VIP_DSC_FORCE.equalsIgnoreCase(TradeHelper.vip.getForceDsc());
+            if (!isForceDsc && !prod.isForDsc()) {
+                //该商品不允许优惠
+                return true;
+            }
+        } else {//超市版
+            int vipRateRule = (int) Math.round(TradeHelper.vip.getRateRule());
+            dscRate = getVipRate(prod.getProdCode(), vipRateRule);
+            //DscProdIsDsc（char）：促销商品打折。目前不支持促销，可忽略此参数
+        }
+
+        //取会员价和优惠率的较大优惠金额
+        double dsc = dscRate > 0
+                ? Math.max(prod.getPrice() - price, prod.getPrice() * (100 - dscRate) / 100)
+                : prod.getPrice() - price;
+        prod.setVipDsc(dsc);
+        prod.setTotal(prod.getPrice() * prod.getAmount() - prod.getTotalDsc());
         if (prod.save(databaseWrapper)) {
-            return recalcTotal();
+            return TradeHelper.recalcTotal(databaseWrapper);
         } else {
             return false;
         }
     }
 
     /**
-     * @param rateRule 折扣规则
-     * @param prod     商品信息
-     * @return 折扣
+     * 查询商品会员价
+     * @param prodCode
+     * @param vipPriceType
+     * @return
      */
-    private static double queryRateRule(double rateRule, TradeProd prod) {
-        double rate = 0;
-        DepProduct dep;
-        if (TextUtils.isEmpty(prod.getBarCode())) {
-            dep = SQLite.select().from(DepProduct.class)
-                    .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
-                    .querySingle();
-        } else {
-            dep = SQLite.select().from(DepProduct.class)
-                    .where(DepProduct_Table.barCode.eq(prod.getBarCode()))
-                    .querySingle();
+    private static double getVipPrice(String prodCode, int vipPriceType) {
+        DepProduct prod = SQLite.select().from(DepProduct.class)
+                .where(DepProduct_Table.prodCode.eq(prodCode))
+                .querySingle();
+        switch (vipPriceType) {
+            case 1:
+                return prod.getVipPrice1();
+            case 2:
+                return prod.getVipPrice2();
+            case 3:
+                return prod.getVipPrice3();
+            default:
+                return prod.getPrice();
         }
-        if (rateRule == VIP_ONE) {
-            rate = dep.getVipRate1();
-        } else if (rateRule == VIP_TWO) {
-            rate = dep.getVipRate2();
-        } else if (rateRule == VIP_THREE) {
-            rate = dep.getVipRate3();
-        }
-        return rate;
     }
-
 
     /**
-     * @param vipPriceType 类型
-     * @param prod         商品
-     * @return 会员价
+     * 查询商品会员优惠率
+     *
+     * @param prodCode
+     * @param vipRateRule
+     * @return
      */
-    private static double queryVipPrice(double vipPriceType, TradeProd prod) {
-        double vipPrice = 0;
-        DepProduct dep;
-        if (TextUtils.isEmpty(prod.getBarCode())) {
-            dep = SQLite.select().from(DepProduct.class)
-                    .where(DepProduct_Table.prodCode.eq(prod.getProdCode()))
-                    .querySingle();
-        } else {
-            dep = SQLite.select().from(DepProduct.class)
-                    .where(DepProduct_Table.barCode.eq(prod.getBarCode()))
-                    .querySingle();
+    private static double getVipRate(String prodCode, int vipRateRule) {
+        DepProduct prod = SQLite.select().from(DepProduct.class)
+                .where(DepProduct_Table.prodCode.eq(prodCode))
+                .querySingle();
+        switch (vipRateRule) {
+            case 1:
+                return prod.getVipRate1();
+            case 2:
+                return prod.getVipRate2();
+            case 3:
+                return prod.getVipRate3();
+            default:
+                return 0;
         }
-        if (vipPriceType == VIP_ONE) {
-            vipPrice = dep.getVipPrice1();
-        } else if (vipPriceType == VIP_TWO) {
-            vipPrice = dep.getVipPrice2();
-        } else if (vipPriceType == VIP_THREE) {
-            vipPrice = dep.getVipPrice3();
-        }
-        //如果商品的会员价为0，那还是执行商品原价
-        return vipPrice == 0 ? prod.getPrice() : vipPrice;
     }
+
     //endregion
 
-    //-----------------------------------------------------------------------------------------------------------
+    //region 公共方法
 
     /**
      * @return 筛选后的交易原价
@@ -653,5 +636,7 @@ public class DscHelper {
             calcList = null;
         }
     }
+
+    //endregion
 
 }
