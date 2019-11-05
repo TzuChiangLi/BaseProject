@@ -43,8 +43,7 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
                 }
             });
             if (!HandoverHelper.save()) {
-                MessageUtil.waitEnd();
-                mView.showError();
+                MessageUtil.waitError("交班失败！", null);
                 return;
             }
             RestSubscribe.getInstance().posEnd(ZgParams.getPosCode(), new RestCallback(new RestResultHandler() {
@@ -52,16 +51,17 @@ public class HandoverPresenter implements Contract.HandoverPresenter {
                 @Override
                 public void onSuccess(Map<String, Object> body) {
                     HandoverHelper.finish();
-                    MessageUtil.waitSuccesss("已完成");
-//                    MessageUtil.waitEnd();
-//                    mView.showSuccess();
+                    MessageUtil.waitSuccesss("交班成功！", new MessageUtil.MessageBoxOkListener() {
+                        @Override
+                        public void onOk() {
+                            mView.success();
+                        }
+                    });
                 }
 
                 @Override
                 public void onFailed(String errorCode, String errorMsg) {
-//                    MessageUtil.waitEnd();
-                    MessageUtil.waitError(String.format(Locale.CHINA, "%s - %s", errorCode, errorMsg));
-//                    MessageUtil.serverError(errorCode, "交班失败：" + errorMsg);
+                    MessageUtil.waitError(String.format(Locale.CHINA, "%s - %s", errorCode, errorMsg), null);
                 }
             }));
             // 上传APP配置参数，失败不影响交班结果

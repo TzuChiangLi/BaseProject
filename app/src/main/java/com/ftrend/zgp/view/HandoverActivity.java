@@ -83,18 +83,8 @@ public class HandoverActivity extends BaseActivity implements Contract.HandoverV
     }
 
     @Override
-    public void showSuccess() {
-        MessageUtil.info("交班成功！", new MessageUtil.MessageBoxOkListener() {
-            @Override
-            public void onOk() {
-                finish();
-            }
-        });
-    }
-
-    @Override
-    public void showError() {
-        MessageUtil.showError("交班失败！");
+    public void success() {
+        finish();
     }
 
     @Override

@@ -2,7 +2,6 @@ package com.ftrend.zgp.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -168,7 +167,12 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                                     @Override
                                     public void onOk(double value) {
                                         if (mPresenter.paySuccess(PayType.PAYTYPE_CASH, value)) {
-                                            returnHomeActivity("交易已完成");
+                                            MessageUtil.info("交易已完成", new MessageUtil.MessageBoxOkListener() {
+                                                @Override
+                                                public void onOk() {
+                                                    returnHomeActivity();
+                                                }
+                                            });
                                         } else {
                                             MessageUtil.showError("交易失败，请稍后重试");
                                         }
@@ -176,8 +180,9 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
 
                                     @Override
                                     public void onCancel() {
-                                        //TODO 2019年10月31日17:12:35 需要判断是否交易成功
-                                        if (!TradeHelper.checkPayStatus(lsNo)){MessageUtil.show("已取消支付");}
+                                        if (!TradeHelper.checkPayStatus(lsNo)) {
+                                            MessageUtil.show("已取消支付");
+                                        }
                                     }
 
                                     @Override
@@ -209,47 +214,30 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
         });
     }
 
-    public void returnHomeActivity(final String status) {
+    public void returnHomeActivity() {
         Intent intent = new Intent(PayActivity.this, HomeActivity.class);
         startActivity(intent);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                MessageUtil.showSuccess(status);
-            }
-        }, 200);
     }
 
     @Override
     public void paySuccess() {
-        MessageUtil.waitEnd();
-        returnHomeActivity("交易已完成");
+        MessageUtil.waitSuccesss("交易已完成", new MessageUtil.MessageBoxOkListener() {
+            @Override
+            public void onOk() {
+                returnHomeActivity();
+            }
+        });
     }
 
     @Override
     public void payFail(String msg) {
-        MessageUtil.waitEnd();
-        MessageUtil.error(msg);
-//        MessageUtil.showError(msg);
+        MessageUtil.waitError(msg, null);
     }
 
     @Override
     public void showError(String msg) {
         MessageUtil.showError(msg);
     }
-
-    /*@Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessage(Event event) {
-        if (event.getTarget() == Event.TARGET_PAY_WAY) {
-            if (event.getType() == Event.TYPE_PAY_CASH) {
-                if (mPresenter.paySuccess(PayType.PAYTYPE_CASH)) {
-                    returnHomeActivity("交易已完成");
-                } else {
-                    MessageUtil.showError("交易失败，请稍后重试");
-                }
-            }
-        }
-    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

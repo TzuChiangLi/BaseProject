@@ -206,8 +206,6 @@ public class MessageUtil {
                 if (listener != null) {
                     if (listener.onCancel()) {
                         waitEnd();
-                    } else {
-                        // TODO: 2019/10/17 按钮显示“正在取消”，且不可用
                     }
                 } else {
                     waitEnd();
@@ -242,7 +240,7 @@ public class MessageUtil {
     /**
      * @param msg 内容文本
      */
-    public static void waitError(String msg) {
+    public static void waitError(String msg, final MessageBoxOkListener listener) {
         if (waitDialog == null) {
             return;
         }
@@ -251,6 +249,9 @@ public class MessageUtil {
             ((DialogBuilder) waitDialog).setOnClickListener(new DialogBuilder.OnBtnClickListener() {
                 @Override
                 public void onLeftBtnClick(BasePopupView v) {
+                    if (listener != null) {
+                        listener.onOk();
+                    }
                     waitDialog.dismiss();
                 }
 
@@ -262,7 +263,7 @@ public class MessageUtil {
         }
     }
 
-    public static void waitSuccesss(String msg) {
+    public static void waitSuccesss(String msg, final MessageBoxOkListener listener) {
         if (waitDialog == null) {
             return;
         }
@@ -271,6 +272,9 @@ public class MessageUtil {
             ((DialogBuilder) waitDialog).setOnClickListener(new DialogBuilder.OnBtnClickListener() {
                 @Override
                 public void onLeftBtnClick(BasePopupView v) {
+                    if (listener != null) {
+                        listener.onOk();
+                    }
                     waitDialog.dismiss();
                 }
 

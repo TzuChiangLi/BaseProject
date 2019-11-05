@@ -16,7 +16,6 @@ import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.HomePresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
-import com.ftrend.zgp.utils.common.CommonUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
@@ -169,11 +168,9 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                             ZgParams.loadParams();
                             //重新初始化收钱吧SDK
                             mPresenter.initSqbSdk(HomeActivity.this);
-                            MessageUtil.waitEnd();
-                            MessageUtil.showSuccess("数据同步已完成");
+                            MessageUtil.waitSuccesss("数据同步已完成", null);
                         } else if (isFailed) {
-                            MessageUtil.waitEnd();
-                            MessageUtil.showError("数据同步失败：" + msg);
+                            MessageUtil.waitError("数据同步失败：" + msg, null);
                         }
                     }
                 });

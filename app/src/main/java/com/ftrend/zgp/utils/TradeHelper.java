@@ -374,7 +374,7 @@ public class TradeHelper {
         Trade payTrade = SQLite.select().from(Trade.class).where(Trade_Table.lsNo.eq(lsNo))
                 .querySingle();
         if (payTrade != null) {
-            return payTrade.getStatus() == TRADE_STATUS_PAID;
+            return TRADE_STATUS_PAID.equals(payTrade.getStatus());
         } else {
             return false;
         }
