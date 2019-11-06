@@ -787,31 +787,27 @@ public interface Contract {
          *
          * @param lsNo 流水号
          */
-        void getTradeByLsNo(String lsNo);
-
-        /**
-         * 检查行情权限
-         *
-         * @param index 索引
-         */
-        void checkDelProdRight(int index);
-
-        /**
-         * 行清商品
-         *
-         * @param index 索引
-         */
-        void delTradeProd(int index);
+        void getTradeByLsNo(String lsNo) throws CloneNotSupportedException;
 
 
         /**
-         * 查询专柜商品信息表中该商品的改价权限
-         *
-         * @param prodCode 商品编码，可能不唯一
-         * @param barCode  商品条码，可能为空
-         * @param index    商品索引
+         *更新信息
          */
-        void getProdPriceFlag(String prodCode, String barCode, int index);
+        void updateTradeInfo();
+
+        /**
+         * 退货
+         */
+        void rtnTrade();
+
+        /**
+         * 改商品价格
+         *
+         * @param index 商品索引
+         * @param price 商品退货改价
+         */
+        void changePrice(int index, double price);
+
 
         /**
          * 更改商品数量
@@ -821,12 +817,6 @@ public interface Contract {
          */
         void changeAmount(int index, double changeAmount);
 
-        /**
-         * 商品是否允许优惠,弹出相应提示
-         *
-         * @param index 索引
-         */
-        void checkProdForDsc(int index);
 
         /**
          * 销毁，防止泄露
@@ -836,11 +826,41 @@ public interface Contract {
 
     interface RtnProdView extends BaseView<Contract.RtnProdPresenter> {
         /**
+         * 加减更改
+         *
+         * @param index 索引
+         */
+        void updateTradeProd(int index);
+
+        /**
          * 存在此流水并显示
          *
          * @param data 流水内商品信息
          */
         void existTrade(List<TradeProd> data);
+
+        /**
+         * @param tradeTotal 订单金额
+         */
+        void showTradeTotal(double tradeTotal);
+
+        /**
+         * @param rtnTotal 实退金额
+         */
+        void showRtnTotal(double rtnTotal);
+
+        /**
+         * 支付方式类型
+         *
+         * @param payTypeName 名称
+         * @param img         图片
+         */
+        void showPayTypeName(String payTypeName, int img);
+
+        /**
+         * @param info 交易时间，流水号，收款员
+         */
+        void showTradeInfo(String... info);
 
         /**
          * 异常信息

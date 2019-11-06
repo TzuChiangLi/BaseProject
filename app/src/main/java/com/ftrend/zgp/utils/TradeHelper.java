@@ -19,9 +19,11 @@ import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.model.User;
+import com.ftrend.zgp.model.User_Table;
 import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.Method;
@@ -29,6 +31,7 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -49,17 +52,14 @@ import static com.raizlabs.android.dbflow.sql.language.Method.sum;
  */
 public class TradeHelper {
     private static String TAG = "TradeHelper";
-
     //行清标记：0-未删除
     public static final String DELFLAG_NO = "0";
     //行清标记：0-已删除
     public static final String DELFLAG_YES = "1";
-
     // 交易类型：T-销售
     public static final String TRADE_FLAG_SALE = "T";
     // 交易类型：R-退货
     public static final String TRADE_FLAG_REFUND = "R";
-
     // 交易状态：0-未结
     public static final String TRADE_STATUS_NOTPAY = "0";
     // 交易状态：1-挂起
@@ -78,15 +78,22 @@ public class TradeHelper {
     public static final String VIP_DSC_FORCE = "1";
     // VIP强制优惠：0-不强制
     public static final String VIP_DSC_NORMAL = "0";
-
     // 顾客类型：2-会员
     public static final String TRADE_CUST_VIP = "2";
-
+    // APP界面支付类型：现金
+    public static final String APP_PAY_TYPE_CASH = "1";
+    // APP界面支付类型：支付宝
+    public static final String APP_PAY_TYPE_ALIPAY = "2";
+    // APP界面支付类型：微信支付
+    public static final String APP_PAY_TYPE_WECHAT = "3";
+    // APP界面支付类型：储值卡
+    public static final String APP_PAY_TYPE_CARD = "4";
+    // APP界面支付类型：收钱吧
+    public static final String APP_PAY_TYPE_SQB = "5";
     // 交易流水
     private static Trade trade = null;
     // 商品列表
     private static List<TradeProd> prodList = null;
-
     // 支付信息
     private static TradePay pay = null;
     // 会员信息
@@ -95,6 +102,7 @@ public class TradeHelper {
     public static Trade getTrade() {
         return trade;
     }
+
 
     public static TradePay getPay() {
         return pay;
@@ -184,22 +192,53 @@ public class TradeHelper {
      * @param lsNo
      * @return 是否有该流水
      */
-    public static boolean initSale(String lsNo) {
-        trade = getPaidLs(lsNo);
-        if (trade == null) {
+    public static boolean initRtnSale(String lsNo) throws CloneNotSupportedException {
+        try {
+            Trade saleTrade = getPaidLs(lsNo);
+            if (saleTrade == null) {
+                LogUtil.d("----trade:false");
+                return false;
+            } else {
+                trade = new Trade();
+                trade.setDepCode(saleTrade.getDepCode());
+                trade.setLsNo(saleTrade.getLsNo());
+                trade.setTradeTime(saleTrade.getTradeTime());
+                trade.setTradeFlag(TRADE_FLAG_REFUND);
+                trade.setCashier(saleTrade.getCashier());
+                trade.setDscTotal(saleTrade.getDscTotal());
+                trade.setTotal(saleTrade.getTotal());
+                trade.setCustType(saleTrade.getCustType());
+                trade.setVipCode(saleTrade.getVipCode());
+                trade.setCardCode(saleTrade.getCardCode());
+                trade.setVipTotal(saleTrade.getVipTotal());
+                trade.setRtnLsNo(newLsNo());
+                //初始化退货流水的时间
+                trade.setCreateTime(new Date());
+                //初始化退货流水的创建IP
+                trade.setCreateIp(ZgParams.getCurrentIp());
+                //初始化退货流水为未结单
+                trade.setTradeFlag(TRADE_FLAG_REFUND);
+                //初始化销售流水
+                pay = SQLite.select().from(TradePay.class)
+                        .where(TradePay_Table.lsNo.eq(lsNo))
+                        .querySingle();
+                prodList = SQLite.select().from(TradeProd.class)
+                        .where(TradeProd_Table.lsNo.eq(lsNo))
+                        .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
+                        .queryList();
+                for (TradeProd prod : prodList) {
+                    //初始化退货单价
+                    prod.setRtnPrice(prod.getPrice() - ((prod.getManuDsc() + prod.getVipDsc() + prod.getTranDsc()) / prod.getAmount()));
+                }
+                return true;
+            }
+        } catch (
+                Exception e) {
+            LogUtil.e(e.getMessage());
             return false;
-        } else {
-            prodList = SQLite.select().from(TradeProd.class)
-                    .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
-                    .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
-                    .queryList();
-            pay = SQLite.select().from(TradePay.class)
-                    .where(TradePay_Table.lsNo.eq(trade.getLsNo()))
-                    .querySingle();
-            return true;
         }
-    }
 
+    }
 
     /**
      * 添加商品到商品列表
@@ -259,6 +298,81 @@ public class TradeHelper {
 
 
     /**
+     * @param index       索引
+     * @param changePrice 改价
+     * @return 是否成功
+     */
+    public static boolean changeRtnPrice(int index, double changePrice) {
+        if (index < 0 || index >= prodList.size()) {
+            Log.e(TAG, "改变数量: 索引无效");
+            return false;
+        }
+        TradeProd prod = prodList.get(index);
+        prod.setRtnPrice(changePrice);
+        return prod.getRtnPrice() == changePrice;
+    }
+
+
+    /**
+     * @param index        索引
+     * @param changeAmount 变化数量
+     * @return 是否成功
+     */
+    public static int doRtnChangeAmount(final int index, final double changeAmount) {
+        final int[] result = {-1};
+        TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                result[0] = rtnChangeAmount(databaseWrapper, index, changeAmount);
+                return result[0] > 0;
+            }
+        });
+        return result[0];
+    }
+
+    private static int rtnChangeAmount(DatabaseWrapper databaseWrapper, int index, double changeAmount) {
+        try {
+            if (index < 0 || index >= prodList.size()) {
+                Log.e(TAG, "改变数量: 索引无效");
+                return -1;
+            }
+            double rtnAmount = 0, rtnTotal = 0;
+            //改变数量时，只改变退货相关的非数据库字段，不对原销售流水做改动
+            TradeProd tradeProd = prodList.get(index);
+            //生成新退货数量
+            double newAmount = prodList.get(index).getRtnAmount() + changeAmount;
+            //获取退货单价
+            double rtnPrice = prodList.get(index).getRtnPrice();
+            //设置新退货数量
+            tradeProd.setRtnAmount(newAmount);
+            //设置实际退货金额
+            tradeProd.setRtnTotal(priceFormat(newAmount * rtnPrice));
+            //更新退货信息以刷新界面
+            for (TradeProd prod : prodList) {
+                rtnAmount += prod.getRtnAmount();
+                rtnTotal += prod.getRtnTotal();
+            }
+            trade.setRtnTotal(rtnTotal);
+            trade.setRtnAmount(rtnAmount);
+            if (tradeProd.save(databaseWrapper)) {
+                return 1;
+            } else {
+                return -1;
+            }
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    /**
+     * @param prod 商品
+     * @return 优惠后的单价
+     */
+    public static double getRtnPrice(TradeProd prod) {
+        return prod.getPrice() - ((prod.getManuDsc() + prod.getVipDsc() + prod.getTranDsc()) / prod.getAmount());
+    }
+
+    /**
      * 行清
      *
      * @param index 行清的商品索引
@@ -307,7 +421,8 @@ public class TradeHelper {
      * @param payCode    支付账号
      * @return 支付结果
      */
-    public static boolean pay(final String appPayType, final double amount, final double change, final String payCode) {
+    public static boolean pay(final String appPayType, final double amount,
+                              final double change, final String payCode) {
         return TransHelper.transSync(new TransHelper.TransRunner() {
             @Override
             public boolean execute(DatabaseWrapper databaseWrapper) {
@@ -409,6 +524,14 @@ public class TradeHelper {
     }
 
     /**
+     * @return 退货流水号
+     */
+    private static String newRtnLsNo() {
+        return String.format("%s%s",
+                new SimpleDateFormat("yyyyMMdd").format(new Date()), trade.getLsNo());
+    }
+
+    /**
      * 生成新的流水号
      *
      * @return
@@ -442,7 +565,6 @@ public class TradeHelper {
      * 重新汇总流水金额：优惠、合计
      */
     public static boolean recalcTotal() {
-//        FlowManager.getDatabaseForTable(Trade_Table.class).getWritableDatabase();
         return recalcTotal(FlowManager.getDatabase(ZgpDb.class).getWritableDatabase());
     }
 
@@ -458,6 +580,100 @@ public class TradeHelper {
         trade.setTotal(total);
         return trade.save(databaseWrapper);
     }
+
+
+    /**
+     * @return 是否退货
+     */
+    public static boolean rtn() {
+        return TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                return doRtn(databaseWrapper);
+            }
+        });
+
+    }
+
+    private static boolean doRtn(DatabaseWrapper databaseWrapper) {
+        //需要退货的商品
+        List<TradeProd> rtnProdList = new ArrayList<>();
+        for (TradeProd prod : prodList) {
+            if (prod.getRtnAmount() != 0) {
+                //更新商品的流水为退货流水号
+                prod.setLsNo(trade.getRtnLsNo());
+                rtnProdList.add(prod);
+            }
+        }
+        prodList.clear();
+        prodList = rtnProdList;
+        if (recalcRtnTotal() > 0) {
+            //TODO 2019年11月6日16:48:08 需要保存为pay.getTradeTime()
+            //保存交易日期
+            trade.setTradeTime(new Date());
+            //更新退货为已结状态
+            trade.setStatus(TRADE_STATUS_PAID);
+            //更新退货流水
+            trade.setLsNo(trade.getRtnLsNo());
+            return trade.save(databaseWrapper);
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 重新汇总退货流水金额：优惠、合计
+     * 保存的时候执行本方法
+     *
+     * @return 是否成功
+     */
+    public static long recalcRtnTotal() {
+        return recalcRtnTotal(FlowManager.getDatabase(ZgpDb.class).getWritableDatabase());
+    }
+
+    public static long recalcRtnTotal(DatabaseWrapper databaseWrapper) {
+        //重新计算优惠金额
+        //赋值rtnAmount\rtnTotal
+        double singleDsc, wholeDsc, vipDsc, tranDsc;
+        for (TradeProd prod : prodList) {
+            TradeProd tradeProd = new TradeProd();
+
+            tradeProd.setLsNo(prod.getLsNo());
+            tradeProd.setSortNo(prod.getSortNo());
+            tradeProd.setProdCode(prod.getProdCode());
+            tradeProd.setBarCode(prod.getBarCode());
+            tradeProd.setProdName(prod.getProdName());
+            tradeProd.setPrice(prod.getPrice());
+            tradeProd.setDelFlag(prod.getDelFlag());
+            tradeProd.setDepCode(prod.getDepCode());
+            tradeProd.setProdForDsc(prod.getProdForDsc());
+            tradeProd.setProdPriceFlag(prod.getProdPriceFlag());
+            tradeProd.setProdIsLargess(prod.getProdIsLargess());
+            tradeProd.setProdMinPrice(prod.getProdMinPrice());
+            //重新计算商品优惠
+            singleDsc = prod.getSingleDsc() / prod.getAmount() * prod.getRtnAmount();
+            wholeDsc = prod.getWholeDsc() / prod.getAmount() * prod.getRtnAmount();
+            vipDsc = prod.getVipDsc() / prod.getAmount() * prod.getRtnAmount();
+            tranDsc = prod.getTranDsc() / prod.getAmount() * prod.getRtnAmount();
+            //覆盖退货优惠信息
+            tradeProd.setTranDsc(tranDsc);
+            tradeProd.setVipDsc(vipDsc);
+            tradeProd.setWholeDsc(wholeDsc);
+            tradeProd.setSingleDsc(singleDsc);
+            tradeProd.setManuDsc(singleDsc + wholeDsc);
+            //插入原单信息
+            tradeProd.setSaleInfo(String.format("%s %s %s", trade.getLsNo(), trade.getTradeTime(), prod.getSortNo()));
+            //覆盖原销售单的实际退货金额
+            tradeProd.setTotal(prod.getRtnTotal());
+            //覆盖原销售单的实际退货数量
+            tradeProd.setAmount(prod.getRtnAmount());
+            tradeProd.insert(databaseWrapper);
+        }
+        long result = trade.insert(databaseWrapper);
+        LogUtil.d("----insert:" + result);
+        return result;
+    }
+
 
     /**
      * 更新交易状态
@@ -551,7 +767,8 @@ public class TradeHelper {
         return result[0];
     }
 
-    private static int doChangeAmount(DatabaseWrapper databaseWrapper, int index, double changeAmount) {
+    private static int doChangeAmount(DatabaseWrapper databaseWrapper, int index,
+                                      double changeAmount) {
         if (index < 0 || index >= prodList.size()) {
             Log.e(TAG, "改变数量: 索引无效");
             return -1;
@@ -1609,6 +1826,20 @@ public class TradeHelper {
     }
 
     /**
+     * @param userCode 用户编码
+     * @return 用户名
+     */
+    public static String getCashierByUserCode(String userCode) {
+        try {
+            return SQLite.select(User_Table.userName).from(User.class)
+                    .where(User_Table.userCode.eq(userCode))
+                    .querySingle().getUserName();
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    /**
      * 手机号正则表达式
      *
      * @param phone
@@ -1624,17 +1855,18 @@ public class TradeHelper {
      * @return 支付方式
      */
     public static String convertAppPayType(String payType) {
+        LogUtil.d("----payType:" + payType);
         switch (payType) {
-            case "0":
-                return "现金";
             case "1":
-                return "支付宝";
+                return "现金";
             case "2":
-                return "微信支付";
+                return "支付宝";
             case "3":
-                return "储值卡";
+                return "微信支付";
             case "4":
-                return "聚合支付";
+                return "储值卡";
+            case "5":
+                return "收钱吧";
             default:
                 return "未知方式";
         }

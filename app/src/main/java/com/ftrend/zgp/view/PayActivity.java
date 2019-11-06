@@ -23,7 +23,6 @@ import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
-import com.ftrend.zgp.utils.pay.PayType;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
 import com.ftrend.zgp.utils.pop.StringInputCallback;
@@ -167,7 +166,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                                 new MoneyInputCallback() {
                                     @Override
                                     public void onOk(double value) {
-                                        if (mPresenter.paySuccess(PayType.PAYTYPE_CASH, value)) {
+                                        if (mPresenter.paySuccess(TradeHelper.APP_PAY_TYPE_CASH, value)) {
                                             returnHomeActivity("交易已完成");
                                         } else {
                                             MessageUtil.showError("交易失败，请稍后重试");
@@ -176,7 +175,9 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
 
                                     @Override
                                     public void onCancel() {
-                                        if (!TradeHelper.checkPayStatus(lsNo)){MessageUtil.show("已取消支付");}
+                                        if (!TradeHelper.checkPayStatus(lsNo)) {
+                                            MessageUtil.show("已取消支付");
+                                        }
                                     }
 
                                     @Override

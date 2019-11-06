@@ -67,9 +67,17 @@ public class TradeProd extends BaseModel {
     @Column
     private double prodMinPrice;
     /**
-     * 该变量为了改变变量选中状态而创建，与数据库字段无关
+     * 为了改变变量选中状态而创建，与数据库字段无关
      */
     private transient boolean isSelect = false;
+    //退货字段（与数据库字段无关）：实退商品数量
+    private transient double rtnAmount = 0;
+    //退货字段（与数据库字段无关）：实退商品单价
+    private transient double rtnPrice;
+    //退货字段（与数据库字段无关）：实退小计金额
+    private transient double rtnTotal;
+    //退货字段（非数据库字段）：退货流水
+    private transient String rtnLsNo;
 
     public TradeProd() {
     }
@@ -259,4 +267,38 @@ public class TradeProd extends BaseModel {
     public void setProdMinPrice(double prodMinPrice) {
         this.prodMinPrice = prodMinPrice;
     }
+
+
+    public double getRtnAmount() {
+        return rtnAmount;
+    }
+
+    public void setRtnAmount(double rtnAmount) {
+        this.rtnAmount = rtnAmount;
+    }
+
+    public double getRtnTotal() {
+        return rtnTotal;
+    }
+
+    public void setRtnTotal(double rtnTotal) {
+        this.rtnTotal = rtnTotal;
+    }
+
+    public double getRtnPrice() {
+        return rtnPrice;
+    }
+
+    public void setRtnPrice(double rtnPrice) {
+        this.rtnPrice = rtnPrice;
+    }
+
+    public String getRtnLsNo() {
+        return rtnLsNo;
+    }
+
+    public void setRtnLsNo(String rtnLsNo) {
+        this.rtnLsNo = rtnLsNo;
+    }
+
 }

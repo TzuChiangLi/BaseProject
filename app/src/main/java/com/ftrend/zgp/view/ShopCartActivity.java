@@ -406,12 +406,9 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     public void onTitleClick(View v) {
     }
 
-    private boolean flag = true;
-
     @Override
     public void onRightClick(View v) {
     }
-
 
     @Override
     protected void onRestart() {

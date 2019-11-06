@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_gray_bg"
     tools:context=".view.RtnProdActivity">
 
     <com.hjq.bar.TitleBar
@@ -42,8 +43,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_36"
         android:layout_below="@+id/rtn_prod_title_line"
-        android:layout_marginTop="@dimen/dp_2"
+        android:paddingTop="@dimen/dp_2"
         android:orientation="horizontal"
+        android:background="@color/common_white"
         android:paddingStart="@dimen/dp_8"
         android:paddingEnd="@dimen/dp_8">
 
@@ -69,7 +71,7 @@
             android:background="@drawable/rtn_edt_top_bottom_line"
             android:gravity="center_vertical|start"
             android:hint="@string/rtn_prod_tv_search"
-            android:inputType="text"
+            android:inputType="number"
             android:maxLines="1"
             android:paddingStart="@dimen/dp_4"
             android:paddingTop="@dimen/dp_4"
@@ -117,10 +119,8 @@
             android:id="@+id/rtn_prod_tv_trade_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1.9"
+            android:layout_weight="2.5"
             android:gravity="center_vertical"
-            android:lines="1"
-            android:text="@string/rtn_prod_replace_trade_time"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10"
             tools:text="@string/rtn_prod_replace_trade_time" />
@@ -138,10 +138,9 @@
             android:id="@+id/rtn_prod_tv_trade_lsno"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2.2"
+            android:layout_weight="2.0"
             android:gravity="center_vertical"
             android:lines="1"
-            android:text="@string/rtn_prod_replace_trade_lsno"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10"
             tools:text="@string/rtn_prod_replace_trade_lsno" />
@@ -161,10 +160,10 @@
             android:id="@+id/rtn_prod_tv_cahier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/rtn_prod_replace_cashier"
             android:textAlignment="textEnd"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10"
+            android:text="@string/rtn_prod_tv_cashier_empty"
             tools:text="@string/rtn_prod_replace_cashier" />
 
     </LinearLayout>
@@ -173,16 +172,119 @@
         android:id="@+id/rtn_prod_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/rtn_prod_vs_bottom"
+        android:layout_above="@+id/rtn_prod_rl_bottom"
         android:layout_below="@+id/rtn_prod_ll_mid"
-        tools:listitem="@layout/shop_list_rv_product_item" />
+        android:layout_marginTop="@dimen/dp_4"
+        android:paddingStart="@dimen/dp_4"
+        android:paddingEnd="@dimen/dp_4"
+        tools:listitem="@layout/rtn_list_rv_product_item_bak" />
 
-    <ViewStub
-        android:id="@+id/rtn_prod_vs_bottom"
+    <RelativeLayout
+        android:id="@+id/rtn_prod_rl_bottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_48"
         android:layout_alignParentBottom="true"
-        android:layout="@layout/rtn_bottom_ll_view_stub"
-        tools:layout="@layout/rtn_bottom_ll_view_stub" />
+        android:visibility="gone"
+        android:background="@color/common_white"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_0">
 
+        <LinearLayout
+            android:id="@+id/rtn_prod_ll_pay_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingEnd="@dimen/dp_8">
+
+            <ImageView
+                android:id="@+id/rtn_prod_img_pay_type"
+                android:layout_width="@dimen/dp_22"
+                android:layout_height="@dimen/dp_22"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                tools:src="@drawable/alipay" />
+
+            <TextView
+                android:id="@+id/rtn_prod_tv_pay_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/dp_2"
+                android:textColor="@color/text_black_second"
+                android:textSize="@dimen/sp_10"
+                tools:text="@string/rtn_prod_replace_pay_type" />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/rtn_prod_tv_trade_total_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/rtn_prod_ll_pay_type"
+            android:layout_toEndOf="@+id/rtn_prod_ll_pay_type"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_0"
+            android:text="@string/rtn_prod_tv_trade_total"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/rtn_prod_tv_trade_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/rtn_prod_tv_trade_total_title"
+            android:layout_alignBottom="@+id/rtn_prod_tv_trade_total_title"
+            android:layout_toEndOf="@+id/rtn_prod_tv_trade_total_title"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_12"
+            tools:text="@string/rtn_prod_replace_total" />
+
+        <TextView
+            android:id="@+id/rtn_prod_tv_rtn_total_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/rtn_prod_ll_pay_type"
+            android:layout_toEndOf="@+id/rtn_prod_ll_pay_type"
+            android:gravity="bottom"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_0"
+            android:text="@string/rtn_prod_tv_rtn_total"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/rtn_prod_tv_rtn_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/rtn_prod_tv_rtn_total_title"
+            android:layout_alignBottom="@+id/rtn_prod_tv_rtn_total_title"
+            android:layout_toEndOf="@+id/rtn_prod_tv_rtn_total_title"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_12"
+            tools:text="@string/rtn_prod_replace_total" />
+
+
+        <Button
+            android:id="@+id/rtn_btn_cancel"
+            android:layout_width="@dimen/dp_56"
+            android:layout_height="match_parent"
+            android:layout_toStartOf="@+id/rtn_btn_enter"
+            android:background="@drawable/shop_btn_blue_selector"
+            android:text="@string/rtn_prod_btn_cancel"
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/sp_13" />
+
+        <Button
+            android:id="@+id/rtn_btn_enter"
+            android:layout_width="@dimen/dp_56"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/shop_btn_red_selector"
+            android:text="@string/rtn_prod_btn_enter"
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/sp_13" />
+
+    </RelativeLayout>
 </RelativeLayout>

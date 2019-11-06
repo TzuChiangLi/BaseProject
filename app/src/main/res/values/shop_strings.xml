@@ -22,6 +22,7 @@
     <string name="shop_tv_num">数量：</string>
     <string name="shop_tv_per_price">单价：</string>
     <string name="shop_tv_discount">优惠：</string>
+    <string name="shop_tv_amount">数量：</string>
     <string name="shop_tv_sub_total">小计：</string>
     <string name="shop_tv_num_replace">480.00</string>
     <string name="shop_tv_bar_replace">132456789123</string>

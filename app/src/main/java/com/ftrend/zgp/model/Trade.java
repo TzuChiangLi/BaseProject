@@ -18,7 +18,7 @@ import java.util.Locale;
  * @author LZQ
  */
 @Table(database = ZgpDb.class)
-public class Trade extends BaseModel {
+public class Trade extends BaseModel implements Cloneable {
     @PrimaryKey(autoincrement = true)
     @NotNull
     private int id;
@@ -61,6 +61,13 @@ public class Trade extends BaseModel {
     private transient double prodNum;
     //取单字段(非数据库字段)：该流水单的商品总件数
     private transient double amount;
+    //退货字段(非数据库字段)：实退金额
+    private transient double rtnTotal;
+    //退货字段（非数据库字段）：实退商品数量
+    private transient double rtnAmount = 0;
+    //退货字段（非数据库字段）：退货流水
+    private transient String rtnLsNo;
+
 
     public Trade() {
     }
@@ -212,5 +219,40 @@ public class Trade extends BaseModel {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public double getRtnTotal() {
+        return rtnTotal;
+    }
+
+    public void setRtnTotal(double rtnTotal) {
+        this.rtnTotal = rtnTotal;
+    }
+
+    public double getRtnAmount() {
+        return rtnAmount;
+    }
+
+    public void setRtnAmount(double rtnAmount) {
+        this.rtnAmount = rtnAmount;
+    }
+
+    public String getRtnLsNo() {
+        return rtnLsNo;
+    }
+
+    public void setRtnLsNo(String rtnLsNo) {
+        this.rtnLsNo = rtnLsNo;
+    }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        Trade trade = null;
+        try {
+            trade = (Trade) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        return trade;
     }
 }
