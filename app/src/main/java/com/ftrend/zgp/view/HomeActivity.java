@@ -16,7 +16,7 @@ import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.HomePresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
-import com.ftrend.zgp.utils.common.CommonUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
@@ -24,7 +24,9 @@ import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.ftrend.zgp.utils.printer.PrintConfig;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.gyf.immersionbar.ImmersionBar;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -298,6 +300,8 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         super.onRestart();
         mPresenter.initMenuList();
     }
+
+
 
     /**
      * 网络变化

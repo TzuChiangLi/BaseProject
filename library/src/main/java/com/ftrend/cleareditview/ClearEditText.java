@@ -18,6 +18,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.ftrend.library.R;
+import com.ftrend.log.LogUtil;
 
 
 /**
@@ -173,7 +174,11 @@ public class ClearEditText extends android.support.v7.widget.AppCompatEditText {
             Matrix matrix = new Matrix();
             matrix.postScale(scaleWidth, scaleHeight);
             // 得到新的图片
-            mClearBitmap = Bitmap.createBitmap(mClearBitmap, 0, 0, width, height, matrix, true);
+            try {
+                mClearBitmap = Bitmap.createBitmap(mClearBitmap, 0, 0, width, height, matrix, true);
+            } catch (Exception e) {
+                LogUtil.e(e.getMessage());
+            }
             hasScale = true;
         }
     }

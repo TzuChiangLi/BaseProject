@@ -83,7 +83,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     protected void initData() {
-        mEdt.setText("10200017");
+        mEdt.setText("2019110910200032");
     }
 
     @Override
@@ -241,6 +241,11 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
     @Override
     public void showError(String msg) {
         MessageUtil.showError(msg);
+    }
+
+    @Override
+    public void showSuccess(String msg) {
+        MessageUtil.showSuccess(msg);
     }
 
     @Override

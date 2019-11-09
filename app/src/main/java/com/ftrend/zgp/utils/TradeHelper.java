@@ -192,52 +192,45 @@ public class TradeHelper {
      * @param lsNo
      * @return 是否有该流水
      */
-    public static boolean initRtnSale(String lsNo) throws CloneNotSupportedException {
-        try {
-            Trade saleTrade = getPaidLs(lsNo);
-            if (saleTrade == null) {
-                LogUtil.d("----trade:false");
-                return false;
-            } else {
-                trade = new Trade();
-                trade.setDepCode(saleTrade.getDepCode());
-                trade.setLsNo(saleTrade.getLsNo());
-                trade.setTradeTime(saleTrade.getTradeTime());
-                trade.setTradeFlag(TRADE_FLAG_REFUND);
-                trade.setCashier(saleTrade.getCashier());
-                trade.setDscTotal(saleTrade.getDscTotal());
-                trade.setTotal(saleTrade.getTotal());
-                trade.setCustType(saleTrade.getCustType());
-                trade.setVipCode(saleTrade.getVipCode());
-                trade.setCardCode(saleTrade.getCardCode());
-                trade.setVipTotal(saleTrade.getVipTotal());
-                trade.setRtnLsNo(newLsNo());
-                //初始化退货流水的时间
-                trade.setCreateTime(new Date());
-                //初始化退货流水的创建IP
-                trade.setCreateIp(ZgParams.getCurrentIp());
-                //初始化退货流水为未结单
-                trade.setTradeFlag(TRADE_FLAG_REFUND);
-                //初始化销售流水
-                pay = SQLite.select().from(TradePay.class)
-                        .where(TradePay_Table.lsNo.eq(lsNo))
-                        .querySingle();
-                prodList = SQLite.select().from(TradeProd.class)
-                        .where(TradeProd_Table.lsNo.eq(lsNo))
-                        .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
-                        .queryList();
-                for (TradeProd prod : prodList) {
-                    //初始化退货单价
-                    prod.setRtnPrice(prod.getPrice() - ((prod.getManuDsc() + prod.getVipDsc() + prod.getTranDsc()) / prod.getAmount()));
-                }
-                return true;
-            }
-        } catch (
-                Exception e) {
-            LogUtil.e(e.getMessage());
+    public static boolean initRtnSale(String lsNo) {
+        LogUtil.d("----initRtnSale："+lsNo);
+        Trade saleTrade = getPaidLs(lsNo);
+        if (saleTrade == null) {
             return false;
+        } else {
+            trade = new Trade();
+            trade.setRtnLsNo(newRtnLsNo());
+            trade.setLsNo(saleTrade.getLsNo());
+            trade.setDepCode(saleTrade.getDepCode());
+            trade.setTradeTime(saleTrade.getTradeTime());
+            trade.setTradeFlag(TRADE_FLAG_REFUND);
+            trade.setCashier(saleTrade.getCashier());
+            trade.setDscTotal(saleTrade.getDscTotal());
+            trade.setTotal(saleTrade.getTotal());
+            trade.setCustType(saleTrade.getCustType());
+            trade.setVipCode(saleTrade.getVipCode());
+            trade.setCardCode(saleTrade.getCardCode());
+            trade.setVipTotal(saleTrade.getVipTotal());
+            //初始化退货流水的时间
+            trade.setCreateTime(new Date());
+            //初始化退货流水的创建IP
+            trade.setCreateIp(ZgParams.getCurrentIp());
+            //初始化退货流水为未结单
+            trade.setTradeFlag(TRADE_FLAG_REFUND);
+            //初始化销售流水
+            pay = SQLite.select().from(TradePay.class)
+                    .where(TradePay_Table.lsNo.eq(lsNo))
+                    .querySingle();
+            prodList = SQLite.select().from(TradeProd.class)
+                    .where(TradeProd_Table.lsNo.eq(lsNo))
+                    .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
+                    .queryList();
+            for (TradeProd prod : prodList) {
+                //初始化退货单价
+                prod.setRtnPrice(prod.getPrice() - ((prod.getManuDsc() + prod.getVipDsc() + prod.getTranDsc()) / prod.getAmount()));
+            }
+            return true;
         }
-
     }
 
     /**

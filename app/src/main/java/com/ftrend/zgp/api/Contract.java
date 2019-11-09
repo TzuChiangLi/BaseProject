@@ -791,7 +791,7 @@ public interface Contract {
 
 
         /**
-         *更新信息
+         * 更新信息
          */
         void updateTradeInfo();
 
@@ -868,6 +868,13 @@ public interface Contract {
          * @param msg 文本
          */
         void showError(String msg);
+
+        /**
+         * 成功信息
+         *
+         * @param msg 文本
+         */
+        void showSuccess(String msg);
     }
 
 }

@@ -6,15 +6,18 @@ import com.ftrend.zgp.App;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.Menu;
+import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.utils.HandoverHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.UserRightsHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.task.LsUploadThread;
 import com.ftrend.zgp.utils.task.ServerWatcherThread;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.wosai.upay.common.DebugConfig;
 import com.wosai.upay.common.UpayTask;
 import com.wosai.upay.http.Env;
@@ -101,7 +104,13 @@ public class HomePresenter implements Contract.HomePresenter {
         }
         menuList.add(new Menu("系统功能", childList));
         mView.setMenuList(menuList);
-
+        List<Trade> list = new ArrayList<>();
+        list = SQLite.select().from(Trade.class).queryList();
+        if (list.size() != 0) {
+            for (Trade trade : list) {
+                LogUtil.d("----流水单号：" + trade.getLsNo());
+            }
+        }
     }
 
     @Override

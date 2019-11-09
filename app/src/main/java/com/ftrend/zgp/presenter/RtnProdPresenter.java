@@ -5,18 +5,22 @@ import android.text.TextUtils;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
 import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.log.LogUtil;
+import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author liziqiang@ftrend.cn
  */
 public class RtnProdPresenter implements Contract.RtnProdPresenter {
     private Contract.RtnProdView mView;
+    private RtnLsDownloadTask task;
 
     private RtnProdPresenter(Contract.RtnProdView mView) {
         this.mView = mView;
@@ -28,40 +32,49 @@ public class RtnProdPresenter implements Contract.RtnProdPresenter {
 
 
     @Override
-    public void getTradeByLsNo(String lsNo) {
+    public void getTradeByLsNo(final String lsNo) {
         if (TextUtils.isEmpty(lsNo)) {
             mView.showError("请输入流水单号");
         } else {
-            try {
-                if (TradeHelper.initRtnSale(lsNo)) {
-                    LogUtil.d("----local");
-                    //有此流水
-                    String appPayType = TradeHelper.getPay().getAppPayType();
-                    List<TradeProd> prodList = TradeHelper.getProdList();
-                    mView.existTrade(prodList);
-                    mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType), payTypeImgRes(appPayType));
-                    mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(TradeHelper.getTrade().getTradeTime())
-                            , lsNo, TradeHelper.getCashierByUserCode(TradeHelper.getTrade().getCashier()));
-                    updateTradeInfo();
-                } else {
-                    LogUtil.d("----online");
-                    //本地无此流水，开始联网查询
-                    //TODO 联网操作
-                    if (ZgParams.isIsOnline()) {
-                        //网络有数据
-                        if (true) {
-
-                        } else {
-                            mView.showError("交易信息不存在，请输入正确的流水号");
+            if (TradeHelper.initRtnSale(lsNo)) {
+                //有此流水
+                String appPayType = TradeHelper.getPay().getAppPayType();
+                List<TradeProd> prodList = TradeHelper.getProdList();
+                mView.existTrade(prodList);
+                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType), payTypeImgRes(appPayType));
+                mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(TradeHelper.getTrade().getTradeTime())
+                        , lsNo, TradeHelper.getCashierByUserCode(TradeHelper.getTrade().getCashier()));
+                updateTradeInfo();
+            } else {
+                //本地无此流水，开始联网查询
+                if (ZgParams.isIsOnline()) {
+                    //网络有数据
+                    RtnLsDownloadTask.taskStart(lsNo, new OperateCallback() {
+                        @Override
+                        public void onSuccess(Map<String, Object> data) {
+                            if (TradeHelper.initRtnSale(String.format("%s", lsNo.substring(8)))) {
+                                //有此流水
+                                String appPayType = TradeHelper.getPay().getAppPayType();
+                                List<TradeProd> prodList = TradeHelper.getProdList();
+                                mView.existTrade(prodList);
+                                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType), payTypeImgRes(appPayType));
+                                mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(TradeHelper.getTrade().getTradeTime())
+                                        , lsNo, TradeHelper.getCashierByUserCode(TradeHelper.getTrade().getCashier()));
+                                updateTradeInfo();
+                            } else {
+                                mView.showError("无此流水信息");
+                            }
                         }
-                    } else {
-                        mView.showError("单机模式无法查询历史流水，请联机后重试");
-                    }
 
+                        @Override
+                        public void onError(String code, String msg) {
+                            mView.showError(String.format("%s(%s)", msg, code));
+                        }
+                    });
+                } else {
+                    mView.showError("单机模式无法查询历史流水，请联机后重试");
                 }
-            } catch (Exception e) {
-                LogUtil.e(e.getMessage());
-                mView.showError("初始化退货流水异常");
+
             }
         }
     }
@@ -79,7 +92,7 @@ public class RtnProdPresenter implements Contract.RtnProdPresenter {
     public void rtnTrade() {
         LogUtil.d("----退货");
         if (TradeHelper.rtn()) {
-            mView.showError("退货成功");
+            mView.showSuccess("退货成功");
             LogUtil.d("----退货成功");
         } else {
             LogUtil.d("----退货失败");
@@ -89,7 +102,8 @@ public class RtnProdPresenter implements Contract.RtnProdPresenter {
 
     @Override
     public void changePrice(int index, double price) {
-        if (price > (TradeHelper.getProdList().get(index).getTotal() / TradeHelper.getProdList().get(index).getAmount())) {
+        if (price > (TradeHelper.getProdList().get(index).getTotal()
+                / TradeHelper.getProdList().get(index).getAmount())) {
             mView.showError("价格已超过销价");
             return;
         }
@@ -144,4 +158,20 @@ public class RtnProdPresenter implements Contract.RtnProdPresenter {
                 return R.drawable.money;
         }
     }
+
 }
+//                                RestSubscribe.getInstance().queryRefundLs(lsNo, new RestCallback(
+//                                        new RestResultHandler() {
+//                                            @Override
+//                                            public void onSuccess(Map<String, Object> body) {
+//                                                Map<String, Object> trade = (Map<String, Object>) body.get("trade");
+//                                                List<Map<String, Object>> prod = (List<Map<String, Object>>) body.get("prod");
+//                                                Map<String, Object> pay = (Map<String, Object>) body.get("pay");
+//
+//                                            }
+//
+//                                            @Override
+//                                            public void onFailed(String errorCode, String errorMsg) {
+//                                                mView.showError(errorMsg);
+//                                            }
+//                                        }));
