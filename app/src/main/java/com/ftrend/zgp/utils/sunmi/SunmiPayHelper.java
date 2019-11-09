@@ -35,8 +35,6 @@ public class SunmiPayHelper {
     private ReadCardOptV2 readCardOptV2 = null;
     // 读卡器参数
     private SunmiCardConfig cardConfig = null;
-    // 会员卡参数
-    private VipCardParams vipCardParams = null;
     // 读卡回调
     private ReadCardCallback readCardCallback = null;
     // 卡片状态
@@ -121,7 +119,6 @@ public class SunmiPayHelper {
             try {
                 readCardOptV2 = kernel.mReadCardOptV2;
                 cardConfig = ZgParams.getCardConfig();
-                vipCardParams = ZgParams.getVipCardParams();
                 sdkConnected = true;
             } catch (Exception e) {
                 e.printStackTrace();
