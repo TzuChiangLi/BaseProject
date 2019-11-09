@@ -767,12 +767,7 @@ public interface Contract {
         /**
          * 交班成功并返回
          */
-        void showSuccess();
-
-        /**
-         * 提示错误
-         */
-        void showError();
+        void success();
 
         /**
          * 单机模式不允许交班

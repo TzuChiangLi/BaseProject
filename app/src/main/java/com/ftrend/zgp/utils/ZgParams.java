@@ -1,5 +1,7 @@
 package com.ftrend.zgp.utils;
 
+import android.text.TextUtils;
+
 import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
@@ -30,20 +32,10 @@ public class ZgParams {
     public static final String MSG_ONLINE = "online mode";
     //单机状态消息
     public static final String MSG_OFFLINE = "offline mode";
-    //百货版
-    public static final String PROG_EDITION_BH = "百货版";
-    //超市版
-    public static final String PROG_EDITION_CS = "超市版";
 
     //系统参数：是否使用商品类别
     private static String noClsDep = "";
-    //系统参数：会员卡类型，1-磁卡，2-IC卡
-    private static String vipCardType = "1";
-    //系统参数：支付宝收款账号
-    private static String aliPayAccount = "";
-    //系统参数：微信支付收款账号
-    private static String wxPayAccount = "";
-    //系统参数：优惠版本 null或者“超市版”时为超市版，否则为百货版
+    //系统参数：后台系统版本
     private static String programEdition = "";
     //系统参数：收钱吧参数
     private static SqbConfig sqbConfig = new SqbConfig();
@@ -87,12 +79,6 @@ public class ZgParams {
         for (SysParams param : sysParamsList) {
             if ("noClsDep".equalsIgnoreCase(param.getParamName())) {
                 noClsDep = "," + param.getParamValue() + ",";
-            } else if ("vipCardType".equalsIgnoreCase(param.getParamName())) {
-                vipCardType = param.getParamValue();
-            } else if ("aliPayAccount".equalsIgnoreCase(param.getParamName())) {
-                aliPayAccount = param.getParamValue();
-            } else if ("wxPayAccount".equalsIgnoreCase(param.getParamName())) {
-                wxPayAccount = param.getParamValue();
             } else if ("CardConfig".equalsIgnoreCase(param.getParamName())) {
                 cardConfig = SunmiCardConfig.fromJson(param.getParamValue());
             } else if ("SqbConfig".equalsIgnoreCase(param.getParamName())) {
@@ -142,6 +128,16 @@ public class ZgParams {
      */
     public static boolean isShowCls(String depCode) {
         return !noClsDep.contains("," + depCode + ",");
+    }
+
+    /**
+     * 当前后台是否百货版
+     *
+     * @return
+     */
+    public static boolean isBhEdition() {
+        //参数值为空或者“超市版”时，为超市版；否则为“百货版”。
+        return !TextUtils.isEmpty(programEdition) && !programEdition.equals("超市版");
     }
 
     /**
@@ -217,18 +213,6 @@ public class ZgParams {
         return initFlag;
     }
 
-    public static String getVipCardType() {
-        return vipCardType;
-    }
-
-    public static String getAliPayAccount() {
-        return aliPayAccount;
-    }
-
-    public static String getWxPayAccount() {
-        return wxPayAccount;
-    }
-
     public static PrintConfig getPrinterConfig() {
         return printerConfig;
     }
@@ -259,10 +243,6 @@ public class ZgParams {
 
     public static String getCurrentIp() {
         return currentIp;
-    }
-
-    public static String getProgramEdition() {
-        return programEdition;
     }
 
     public static VipCardParams getVipCardParams() {

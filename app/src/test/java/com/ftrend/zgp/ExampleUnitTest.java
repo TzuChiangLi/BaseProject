@@ -23,12 +23,7 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void pwdEncrypt() {
-        String pwd = "123abc";
-        String encrypted = EncryptUtill.pwdEncrypt(pwd);//7A>AJY;@;
-        System.out.println("加密测试: " + pwd + " => " + encrypted);
-        System.out.println("解密测试: " + encrypted + " => " + EncryptUtill.pwdDecrypt(encrypted));
-        System.out.println();
+    public void pwdDecrypt() {
         System.out.println("用户密码: 李雪勤 => " + EncryptUtill.pwdDecrypt("6=R>D<H?."));
         System.out.println("用户密码: 蒋丽 => " + EncryptUtill.pwdDecrypt("79>>H*H0Z"));
         System.out.println("用户密码: 高丽 => " + EncryptUtill.pwdDecrypt("71S><CH;."));
@@ -37,7 +32,6 @@ public class ExampleUnitTest {
         System.out.println("用户密码: 宋昆林 => " + EncryptUtill.pwdDecrypt("7C?A>7"));
         System.out.println("用户密码: 周显云 => " + EncryptUtill.pwdDecrypt("7-:>D,H;5"));
         System.out.println("用户密码: 杨莉 => " + EncryptUtill.pwdDecrypt("7AUAL;;?."));
-//        System.out.println(Charset.availableCharsets());
     }
 
     @Test

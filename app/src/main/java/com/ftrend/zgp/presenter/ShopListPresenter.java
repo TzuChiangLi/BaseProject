@@ -104,10 +104,11 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
 
     @Override
     public void checkProdForDsc(int index) {
-        if (TradeHelper.checkForDsc(index)) {
+        TradeProd prod = TradeHelper.getProdList().get(index);
+        if (prod.isForDsc()) {
             mView.showSingleDscDialog(index);
         } else {
-            mView.showNoRightDscDialog("该商品无优惠");
+            mView.showNoRightDscDialog("该商品不允许优惠");
         }
     }
 
@@ -261,9 +262,7 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
                         //保存会员信息到流水
                         TradeHelper.saveVip();
                         //刷新会员优惠
-                        for (int i = 0; i < TradeHelper.getProdList().size(); i++) {
-                            DscHelper.saveVipProdDsc(i);
-                        }
+                        DscHelper.saveVipDsc();
                         Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH_VIP_INFO, vipInfo);
                         MessageUtil.show("会员设置成功");
                     } else {

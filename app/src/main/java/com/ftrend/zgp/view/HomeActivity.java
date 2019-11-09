@@ -16,7 +16,6 @@ import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.HomePresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
@@ -24,9 +23,7 @@ import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.ftrend.zgp.utils.printer.PrintConfig;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.gyf.immersionbar.ImmersionBar;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -171,11 +168,9 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
                             ZgParams.loadParams();
                             //重新初始化收钱吧SDK
                             mPresenter.initSqbSdk(HomeActivity.this);
-                            MessageUtil.waitEnd();
-                            MessageUtil.showSuccess("数据同步已完成");
+                            MessageUtil.waitSuccesss("数据同步已完成", null);
                         } else if (isFailed) {
-                            MessageUtil.waitEnd();
-                            MessageUtil.showError("数据同步失败：" + msg);
+                            MessageUtil.waitError("数据同步失败：" + msg, null);
                         }
                     }
                 });
@@ -300,8 +295,6 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
         super.onRestart();
         mPresenter.initMenuList();
     }
-
-
 
     /**
      * 网络变化

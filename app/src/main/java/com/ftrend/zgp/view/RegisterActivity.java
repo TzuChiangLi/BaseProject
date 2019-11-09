@@ -106,7 +106,6 @@ public class RegisterActivity extends BaseActivity implements Contract.RegisterV
 
     @Override
     public void registerSuccess() {
-        MessageUtil.showSuccess("设备注册成功！");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
