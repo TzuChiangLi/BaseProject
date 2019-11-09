@@ -31,7 +31,6 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -192,7 +191,7 @@ public class TradeHelper {
             return false;
         } else {
             trade = new Trade();
-            trade.setRtnLsNo(newRtnLsNo());
+            trade.setRtnLsNo(newLsNo());
             trade.setLsNo(saleTrade.getLsNo());
             trade.setDepCode(saleTrade.getDepCode());
             trade.setTradeTime(saleTrade.getTradeTime());
@@ -632,7 +631,6 @@ public class TradeHelper {
             tradeProd.setVipDsc(vipDsc);
             tradeProd.setWholeDsc(wholeDsc);
             tradeProd.setSingleDsc(singleDsc);
-            tradeProd.setManuDsc(singleDsc + wholeDsc);
             //插入原单信息
             tradeProd.setSaleInfo(String.format("%s %s %s", trade.getLsNo(), trade.getTradeTime(), prod.getSortNo()));
             //覆盖原销售单的实际退货金额
