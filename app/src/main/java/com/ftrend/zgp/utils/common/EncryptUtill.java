@@ -67,51 +67,6 @@ public class EncryptUtill {
     }
 
     /**
-     * 用户登录密码加密
-     *
-     * @param src
-     * @return
-     */
-    public static String pwdEncrypt(String src) {
-        int i, len, len2;
-        byte midc, midb;
-
-        byte[] str = src.getBytes(Charset.forName("ISO-8859-1"));
-        byte[] mids = new byte[str.length % 2 == 0 ? str.length : str.length + 1];
-        midb = 28;
-        for (i = 0; i < str.length; i++) {
-            midc = (byte) ((str[i]) ^ midb);
-            mids[i] = midc;
-            midb = (byte) (((str[i]) + midb) % 256);
-        }
-        if (str.length % 2 != 0) mids[mids.length - 1] = midb;
-        len = mids.length;
-        len2 = len / 2;
-
-        String result = "";
-        for (i = 0; i < len2; i++) {
-            result += makeReadStr(mids[i], mids[len - 1 - i]);
-        }
-
-        return result;
-    }
-
-    private static String makeReadStr(byte c1, byte c2) {
-        int a, b, c, d;
-        a = (c1 & 0xFF) / 8;
-        b = (c1 & 0xFF) % 8;
-        c = (c2 & 0xFF) / 64;
-        d = (c2 & 0xFF) % 64;
-
-        String result;
-        result = "";
-        result = result + (char) (a + 50);
-        result = result + (char) (b * 4 + c + 45);
-        result = result + (char) (d + 40);
-        return result;
-    }
-
-    /**
      * 用户密码解密
      *
      * @param src

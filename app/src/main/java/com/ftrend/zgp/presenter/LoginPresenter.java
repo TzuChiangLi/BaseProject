@@ -72,7 +72,7 @@ public class LoginPresenter implements Contract.LoginPresenter {
             User user = SQLite.select().from(User.class).where(User_Table.userCode.eq(userCode)).querySingle();
             Dep dep = SQLite.select().from(Dep.class).where(Dep_Table.depCode.eq(depCode)).querySingle();
             if (user != null) {
-                if (user.getUserPwd().equals(EncryptUtill.pwdEncrypt(userPwd))) {
+                if (userPwd.equals(EncryptUtill.pwdDecrypt(user.getUserPwd()))) {
                     mView.loginSuccess(user, dep);
                     //保存静态变量
                     ZgParams.saveCurrentInfo(user, dep);
