@@ -7,10 +7,7 @@ import com.ftrend.zgp.model.DepPayInfo;
 import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
-import com.ftrend.zgp.model.TradePay_Table;
 import com.ftrend.zgp.model.TradeProd;
-import com.ftrend.zgp.model.TradeProd_Table;
-import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
@@ -28,15 +25,18 @@ import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static com.ftrend.zgp.utils.TradeHelper.TRADE_FLAG_REFUND;
+
 /**
- * 流水下载线程
+ * 退货下载线程
  * Copyright (C),青岛致远方象软件科技有限公司
  *
  * @author liuhongbin@ftrend.cn
- * @since 2019/9/6
+ * @since 2019/11/09
  */
 public class RtnLsDownloadTask {
     private final String TAG = "RtnLsDownloadTask";
@@ -155,13 +155,14 @@ public class RtnLsDownloadTask {
                 List<Map<String, Object>> prod = (List<Map<String, Object>>) body.get("prod");
                 Map<String, Object> pay = (Map<String, Object>) body.get("pay");
 
+                LogUtil.d("----data:" + body.get("prod"));
                 saveLs(trade, prod, pay);
             }
 
             @Override
             public void onFailed(String errorCode, String errorMsg) {
                 Log.d(TAG, "下载流水失败: " + errorCode + " - " + errorMsg);
-                retry("----下载流水失败，流水号：" + rtnLsNo);
+                retry("下载流水失败，流水号：" + rtnLsNo);
             }
         }));
     }
@@ -210,13 +211,15 @@ public class RtnLsDownloadTask {
      */
     private void saveTrade(Gson gson, Map<String, Object> values) {
         Trade trade = gson.fromJson(gson.toJson(values), Trade.class);
-        SQLite.delete(Trade.class)
-                .where(Trade_Table.lsNo.eq(trade.getLsNo()))
-                .execute();
-        trade.setStatus(TradeHelper.TRADE_STATUS_PAID);
-        trade.setCreateTime(trade.getTradeTime());
+        trade.setRtnLsNo(TradeHelper.newRtnLsNo());
+        //初始化退货流水的时间
+        trade.setCreateTime(new Date());
+        //初始化退货流水的创建IP
         trade.setCreateIp(ZgParams.getCurrentIp());
-        trade.insert();
+        //初始化退货流水为未结单
+        trade.setTradeFlag(TRADE_FLAG_REFUND);
+        //初始化
+        TradeHelper.setTrade(trade);
     }
 
     /**
@@ -231,21 +234,13 @@ public class RtnLsDownloadTask {
         List<TradeProd> prodList = new ArrayList<>();
         for (Map<String, Object> map : values) {
             TradeProd prod = gson.fromJson(gson.toJson(map), TradeProd.class);
-            prod.setDelFlag("0");
-            //手工优惠统一写入单项优惠，防止计算total出错
-            if (map.containsKey("manuDsc")) {
-                prod.setSingleDsc(Double.parseDouble(map.get("manuDsc").toString()));
-                prod.setWholeDsc(0);
-            }
+            //初始化退货单价
+            prod.setRtnPrice(prod.getPrice() - ((prod.getManuDsc() + prod.getVipDsc() + prod.getTranDsc()) / prod.getAmount()));
             prodList.add(prod);
         }
-
-        SQLite.delete(TradeProd.class)
-                .where(TradeProd_Table.lsNo.eq(prodList.get(0).getLsNo()))
-                .execute();
-        for (TradeProd prod : prodList) {
-            prod.insert();
-        }
+        //仅显示，不保存到数据库
+        //初始化
+        TradeHelper.setProdList(prodList);
     }
 
     /**
@@ -260,11 +255,8 @@ public class RtnLsDownloadTask {
                 .where(DepPayInfo_Table.payTypeCode.eq(pay.getPayTypeCode()))
                 .querySingle();
         pay.setAppPayType(payInfo == null ? "" : payInfo.getAppPayType());
-        // 先删除后添加
-        SQLite.delete(TradePay.class)
-                .where(TradePay_Table.lsNo.eq(pay.getLsNo()))
-                .execute();
-        pay.insert();
+        //初始化
+        TradeHelper.setPay(pay);
     }
 
 }

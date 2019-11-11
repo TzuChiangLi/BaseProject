@@ -68,13 +68,13 @@ public class TradeProd extends BaseModel {
      * 为了改变变量选中状态而创建，与数据库字段无关
      */
     private transient boolean isSelect = false;
-    //退货字段（与数据库字段无关）：实退商品数量
+    // 退货字段（与数据库字段无关）：实退商品数量
     private transient double rtnAmount = 0;
-    //退货字段（与数据库字段无关）：实退商品单价
+    // 退货字段（与数据库字段无关）：实退商品单价
     private transient double rtnPrice;
-    //退货字段（与数据库字段无关）：实退小计金额
+    // 退货字段（与数据库字段无关）：实退小计金额
     private transient double rtnTotal;
-    //退货字段（非数据库字段）：退货流水
+    // 退货字段（非数据库字段）：退货流水
     private transient String rtnLsNo;
 
     public TradeProd() {

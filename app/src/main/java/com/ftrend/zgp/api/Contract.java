@@ -782,7 +782,7 @@ public interface Contract {
          *
          * @param lsNo 流水号
          */
-        void getTradeByLsNo(String lsNo) throws CloneNotSupportedException;
+        void getTradeByLsNo(String lsNo);
 
 
         /**

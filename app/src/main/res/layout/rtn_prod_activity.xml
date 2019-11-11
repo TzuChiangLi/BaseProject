@@ -177,7 +177,7 @@
         android:layout_marginTop="@dimen/dp_4"
         android:paddingStart="@dimen/dp_4"
         android:paddingEnd="@dimen/dp_4"
-        tools:listitem="@layout/rtn_list_rv_product_item_bak" />
+        tools:listitem="@layout/rtn_list_rv_product_item" />
 
     <RelativeLayout
         android:id="@+id/rtn_prod_rl_bottom"

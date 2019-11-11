@@ -67,6 +67,8 @@ public class Trade extends BaseModel implements Cloneable {
     private transient double rtnAmount = 0;
     //退货字段（非数据库字段）：退货流水
     private transient String rtnLsNo;
+    //退货字段（非数据库字段）：是否退货 1-已退  0-
+    private transient String rtnFlag;
 
 
     public Trade() {

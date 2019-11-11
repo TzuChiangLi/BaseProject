@@ -31,6 +31,7 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -69,7 +70,16 @@ public class TradeHelper {
     public static final String TRADE_STATUS_PAID = "2";
     // 交易状态：3-取消
     public static final String TRADE_STATUS_CANCELLED = "3";
-
+    // 超市版：会员优惠规则-1
+    public static final int VIP_ONE = 1;
+    // 超市版：会员优惠规则-2
+    public static final int VIP_TWO = 2;
+    // 超市版：会员优惠规则-3
+    public static final int VIP_THREE = 3;
+    // VIP强制优惠：1-强制优惠，无视商品的forDsc属性
+    public static final String VIP_DSC_FORCE = "1";
+    // VIP强制优惠：0-不强制
+    public static final String VIP_DSC_NORMAL = "0";
     // 顾客类型：2-会员
     public static final String TRADE_CUST_VIP = "2";
     // APP界面支付类型：现金
@@ -84,16 +94,25 @@ public class TradeHelper {
     public static final String APP_PAY_TYPE_SQB = "5";
     // 交易流水
     private static Trade trade = null;
+    // 退货流水
+    private static Trade rtnTrade = null;
     // 商品列表
     private static List<TradeProd> prodList = null;
-
+    // 退货商品列表
+    private static List<TradeProd> rtnProdList = null;
     // 支付信息
     private static TradePay pay = null;
+    // 退货支付信息
+    private static TradePay rtnPay = null;
     // 会员信息
     public static VipInfo vip = null;
 
     public static Trade getTrade() {
         return trade;
+    }
+
+    public static Trade getRtnTrade() {
+        return rtnTrade;
     }
 
     public static TradePay getPay() {
@@ -102,6 +121,22 @@ public class TradeHelper {
 
     public static List<TradeProd> getProdList() {
         return prodList;
+    }
+
+    public static List<TradeProd> getRtnProdList() {
+        return rtnProdList;
+    }
+
+    public static void setTrade(Trade trade) {
+        TradeHelper.trade = trade;
+    }
+
+    public static void setProdList(List<TradeProd> prodList) {
+        TradeHelper.prodList = prodList;
+    }
+
+    public static void setPay(TradePay pay) {
+        TradeHelper.pay = pay;
     }
 
     /**
@@ -130,8 +165,10 @@ public class TradeHelper {
 
     /**
      * 初始化当前操作的交易流水，读取未结销售流水，不存在则创建新的流水
+     *
+     * @return 数据库内是否有次流水
      */
-    public static void initSale() {
+    public static boolean initSale() {
         trade = getCartLs();
         if (trade == null) {
             trade = new Trade();
@@ -152,6 +189,7 @@ public class TradeHelper {
 
             prodList = new ArrayList<>();
             pay = null;
+            return false;
         } else {
             prodList = SQLite.select().from(TradeProd.class)
                     .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
@@ -160,6 +198,7 @@ public class TradeHelper {
             pay = SQLite.select().from(TradePay.class)
                     .where(TradePay_Table.lsNo.eq(trade.getLsNo()))
                     .querySingle();
+            return true;
         }
     }
 
@@ -181,48 +220,108 @@ public class TradeHelper {
     /**
      * 退货----初始化根据流水号查到的流水
      *
-     * @param lsNo
      * @return 是否有该流水
      */
     public static boolean initRtnSale(String lsNo) {
-        LogUtil.d("----initRtnSale："+lsNo);
-        Trade saleTrade = getPaidLs(lsNo);
-        if (saleTrade == null) {
+        trade = getPaidLs(lsNo);
+        if (trade == null) {
             return false;
         } else {
-            trade = new Trade();
-            trade.setRtnLsNo(newLsNo());
-            trade.setLsNo(saleTrade.getLsNo());
-            trade.setDepCode(saleTrade.getDepCode());
-            trade.setTradeTime(saleTrade.getTradeTime());
-            trade.setTradeFlag(TRADE_FLAG_REFUND);
-            trade.setCashier(saleTrade.getCashier());
-            trade.setDscTotal(saleTrade.getDscTotal());
-            trade.setTotal(saleTrade.getTotal());
-            trade.setCustType(saleTrade.getCustType());
-            trade.setVipCode(saleTrade.getVipCode());
-            trade.setCardCode(saleTrade.getCardCode());
-            trade.setVipTotal(saleTrade.getVipTotal());
-            //初始化退货流水的时间
-            trade.setCreateTime(new Date());
-            //初始化退货流水的创建IP
-            trade.setCreateIp(ZgParams.getCurrentIp());
-            //初始化退货流水为未结单
-            trade.setTradeFlag(TRADE_FLAG_REFUND);
-            //初始化销售流水
-            pay = SQLite.select().from(TradePay.class)
-                    .where(TradePay_Table.lsNo.eq(lsNo))
-                    .querySingle();
+            //获取销售流水
             prodList = SQLite.select().from(TradeProd.class)
-                    .where(TradeProd_Table.lsNo.eq(lsNo))
+                    .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
                     .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
                     .queryList();
-            for (TradeProd prod : prodList) {
-                //初始化退货单价
-                prod.setRtnPrice(prod.getPrice() - ((prod.getManuDsc() + prod.getVipDsc() + prod.getTranDsc()) / prod.getAmount()));
-            }
+            pay = SQLite.select().from(TradePay.class)
+                    .where(TradePay_Table.lsNo.eq(trade.getLsNo()))
+                    .querySingle();
+            //新建退货流水
+            rtnTrade = new Trade();
+            rtnTrade.setLsNo(newLsNo());
+            rtnTrade.setDepCode(trade.getDepCode());
+            rtnTrade.setTradeTime(trade.getTradeTime());
+            rtnTrade.setTradeFlag(TRADE_FLAG_REFUND);
+            rtnTrade.setCashier(trade.getCashier());
+            rtnTrade.setDscTotal(trade.getDscTotal());
+            rtnTrade.setTotal(trade.getTotal());
+            rtnTrade.setCustType(trade.getCustType());
+            rtnTrade.setVipCode(trade.getVipCode());
+            rtnTrade.setCardCode(trade.getCardCode());
+            rtnTrade.setVipTotal(trade.getVipTotal());
+            //初始化退货流水的时间
+            rtnTrade.setCreateTime(new Date());
+            //初始化退货流水的创建IP
+            rtnTrade.setCreateIp(ZgParams.getCurrentIp());
+            //初始化退货流水为未结单
+            rtnTrade.setTradeFlag(TRADE_FLAG_REFUND);
+
+            rtnProdList = new ArrayList<>();
+            rtnPay = null;
+//            pay = SQLite.select().from(TradePay.class)
+//                    .where(TradePay_Table.lsNo.eq(lsNo))
+//                    .querySingle();
+//            prodList = SQLite.select().from(TradeProd.class)
+//                    .where(TradeProd_Table.lsNo.eq(lsNo))
+//                    .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
+//                    .queryList();
+//            for (TradeProd prod : prodList) {
+//                //初始化退货单价
+//                prod.setRtnPrice(prod.getPrice() - ((prod.getManuDsc() + prod.getVipDsc() + prod.getTranDsc()) / prod.getAmount()));
+//            }
             return true;
         }
+
+    }
+//
+
+    /**
+     * 根据流水号查询交易
+     *
+     * @param lsNo 流水号
+     * @return 流水
+     */
+    public static Trade getTradeByLsNo(String lsNo) {
+        return SQLite.select().from(Trade.class)
+                .where(Trade_Table.lsNo.eq(lsNo))
+                .querySingle();
+    }
+
+    /**
+     * @param lsNo 流水号
+     * @return 支付信息
+     */
+    public static TradePay getPayByLsNo(String lsNo) {
+        return SQLite.select().from(TradePay.class)
+                .where(TradePay_Table.lsNo.eq(lsNo))
+                .querySingle();
+    }
+
+    /**
+     * 根据当前退货流水和序号获取商品已退货数量
+     *
+     * @param sortNo 序号
+     * @return 数量
+     */
+    public static double getRtnAmountBySortNo(long sortNo) {
+        return SQLite.select().from(TradeProd.class)
+                .where(TradeProd_Table.sortNo.eq(sortNo))
+                .and(TradeProd_Table.lsNo.eq(rtnTrade.getLsNo()))
+                .querySingle().getAmount();
+    }
+
+    /**
+     * 根据流水号获取未行清商品明细
+     *
+     * @param lsNo 流水号
+     * @return 商品
+     */
+    public static List<TradeProd> getProdListByLsNo(String lsNo) {
+        List<TradeProd> prodList = new ArrayList<>();
+        prodList = SQLite.select().from(TradeProd.class)
+                .where(TradeProd_Table.lsNo.eq(lsNo))
+                .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
+                .queryList();
+        return prodList;
     }
 
     /**
@@ -298,55 +397,84 @@ public class TradeHelper {
     }
 
 
-    /**
-     * @param index        索引
-     * @param changeAmount 变化数量
-     * @return 是否成功
-     */
-    public static int doRtnChangeAmount(final int index, final double changeAmount) {
-        final int[] result = {-1};
-        TransHelper.transSync(new TransHelper.TransRunner() {
-            @Override
-            public boolean execute(DatabaseWrapper databaseWrapper) {
-                result[0] = rtnChangeAmount(databaseWrapper, index, changeAmount);
-                return result[0] > 0;
-            }
-        });
-        return result[0];
-    }
-
-    private static int rtnChangeAmount(DatabaseWrapper databaseWrapper, int index, double changeAmount) {
-        try {
-            if (index < 0 || index >= prodList.size()) {
-                Log.e(TAG, "改变数量: 索引无效");
-                return -1;
-            }
-            double rtnAmount = 0, rtnTotal = 0;
-            //改变数量时，只改变退货相关的非数据库字段，不对原销售流水做改动
-            TradeProd tradeProd = prodList.get(index);
-            //生成新退货数量
-            double newAmount = prodList.get(index).getRtnAmount() + changeAmount;
-            //获取退货单价
-            double rtnPrice = prodList.get(index).getRtnPrice();
-            //设置新退货数量
-            tradeProd.setRtnAmount(newAmount);
-            //设置实际退货金额
-            tradeProd.setRtnTotal(priceFormat(newAmount * rtnPrice));
-            //更新退货信息以刷新界面
-            for (TradeProd prod : prodList) {
-                rtnAmount += prod.getRtnAmount();
-                rtnTotal += prod.getRtnTotal();
-            }
-            trade.setRtnTotal(rtnTotal);
-            trade.setRtnAmount(rtnAmount);
-            if (tradeProd.save(databaseWrapper)) {
-                return 1;
-            } else {
-                return -1;
-            }
-        } catch (Exception e) {
-            return -1;
+    public static void rtnChangeAmount(int index, double changeAmount) {
+        if (index < 0 || index >= prodList.size()) {
+            Log.e(TAG, "改变数量: 索引无效");
+            return;
         }
+        long sortNo = prodList.get(index).getSortNo();
+        //先检查是否已添加过，如果添加过，那么只需要更新数据，否则就得插入新的商品
+        if (rtnProdList.size() != 0) {
+            boolean isAdded = false;
+            for (TradeProd rtnProd : rtnProdList) {
+                if (rtnProd.getSortNo() == sortNo) {
+                    //已经在退货列表中
+                    isAdded = true;
+                    double amount = rtnProd.getAmount();
+                    rtnProd.setAmount(amount + changeAmount);
+                }
+            }
+            if (!isAdded) {
+                //不存在，那么插入
+                TradeProd rtnProd = new TradeProd();
+                TradeProd prod = prodList.get(index);
+                rtnProd.setLsNo(rtnTrade.getLsNo());
+                rtnProd.setSortNo(prod.getSortNo());
+                rtnProd.setProdCode(prod.getProdCode());
+                rtnProd.setProdName(prod.getProdName());
+                rtnProd.setBarCode(prod.getBarCode());
+                rtnProd.setDepCode(prod.getDepCode());
+                rtnProd.setPrice(prod.getPrice());
+                rtnProd.setProdForDsc(prod.getProdForDsc());
+                rtnProd.setProdPriceFlag(prod.getProdPriceFlag());
+                rtnProd.setProdIsLargess(prod.getProdIsLargess());
+                rtnProd.setProdMinPrice(prod.getProdMinPrice());
+                //优惠
+                rtnProd.setSingleDsc(prod.getSingleDsc() / prod.getAmount() * changeAmount);
+                rtnProd.setWholeDsc(prod.getWholeDsc() / prod.getAmount() * changeAmount);
+                rtnProd.setTranDsc(prod.getTranDsc() / prod.getAmount() * changeAmount);
+                rtnProd.setVipDsc(prod.getVipDsc() / prod.getAmount() * changeAmount);
+                rtnProd.setAmount(changeAmount);
+                //插入原单信息
+                rtnProd.setSaleInfo(String.format("%s %s %s", trade.getLsNo(), trade.getTradeTime(), prod.getSortNo()));
+                rtnProd.setDelFlag(DELFLAG_NO);
+                rtnProdList.add(rtnProd);
+            }
+        } else {
+            //不存在，那么插入
+            TradeProd rtnProd = new TradeProd();
+            TradeProd prod = prodList.get(index);
+            rtnProd.setLsNo(rtnTrade.getLsNo());
+            rtnProd.setSortNo(prod.getSortNo());
+            rtnProd.setProdCode(prod.getProdCode());
+            rtnProd.setProdName(prod.getProdName());
+            rtnProd.setBarCode(prod.getBarCode());
+            rtnProd.setDepCode(prod.getDepCode());
+            rtnProd.setPrice(prod.getPrice());
+            rtnProd.setProdForDsc(prod.getProdForDsc());
+            rtnProd.setProdPriceFlag(prod.getProdPriceFlag());
+            rtnProd.setProdIsLargess(prod.getProdIsLargess());
+            rtnProd.setProdMinPrice(prod.getProdMinPrice());
+            //优惠
+            rtnProd.setSingleDsc(prod.getSingleDsc() / prod.getAmount() * changeAmount);
+            rtnProd.setWholeDsc(prod.getWholeDsc() / prod.getAmount() * changeAmount);
+            rtnProd.setTranDsc(prod.getTranDsc() / prod.getAmount() * changeAmount);
+            rtnProd.setVipDsc(prod.getVipDsc() / prod.getAmount() * changeAmount);
+            rtnProd.setAmount(changeAmount);
+            //插入原单信息
+            rtnProd.setSaleInfo(String.format("%s %s %s", trade.getLsNo(), trade.getTradeTime(), prod.getSortNo()));
+            rtnProd.setDelFlag(DELFLAG_NO);
+            rtnProdList.add(rtnProd);
+        }
+        //更新优惠信息
+        double rtnAmount = 0, rtnTotal = 0;
+        //更新退货信息以刷新界面
+        for (TradeProd prod : rtnProdList) {
+            rtnAmount += prod.getAmount();
+            rtnTotal += prod.getTotal();
+        }
+        rtnTrade.setTotal(rtnTotal);
+        rtnTrade.setAmount(rtnAmount);
     }
 
     /**
@@ -500,6 +628,23 @@ public class TradeHelper {
      */
     public static String lsNoMin() {
         return ZgParams.getPosCode() + "00001";
+    }
+
+    /**
+     * 最大流水号
+     *
+     * @return
+     */
+    public static String lsNoMax() {
+        return ZgParams.getPosCode() + "99999";
+    }
+
+    /**
+     * @return 退货流水号
+     */
+    public static String newRtnLsNo() {
+        return String.format("%s%s",
+                new SimpleDateFormat("yyyyMMdd").format(new Date()), trade.getLsNo());
     }
 
     /**
@@ -1204,30 +1349,6 @@ public class TradeHelper {
         clearAllTradeData();
     }
 
-    /**
-     * 根据流水号查询商品明细
-     *
-     * @param lsNo 流水号
-     * @return 商品明细
-     */
-    public static List<TradeProd> getProdListByLsNo(String lsNo) {
-        return SQLite.select().from(TradeProd.class)
-                .where(TradeProd_Table.lsNo.eq(lsNo))
-                .queryList();
-    }
-
-    /**
-     * 根据流水单号查询交易记录
-     *
-     * @param lsNo 流水单号
-     * @return 交易流水
-     */
-    public static Trade getTradeByLsNo(String lsNo) {
-        return SQLite.select().from(Trade.class)
-                .where(Trade_Table.lsNo.eq(lsNo))
-                .and(Trade_Table.status.eq(TRADE_STATUS_PAID))
-                .querySingle();
-    }
 
     /**
      * 价格格式化

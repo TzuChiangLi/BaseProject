@@ -83,7 +83,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     protected void initData() {
-        mEdt.setText("2019110910200032");
+        mEdt.setText("10200032");
     }
 
     @Override
@@ -148,7 +148,6 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
     }
 
     @Override
-
     public void existTrade(final List<TradeProd> data) {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         //防止点击item的子view出现画面闪烁的问题

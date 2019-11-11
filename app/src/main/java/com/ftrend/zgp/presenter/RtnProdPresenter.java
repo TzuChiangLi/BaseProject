@@ -4,16 +4,11 @@ import android.text.TextUtils;
 
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.Contract;
-import com.ftrend.zgp.model.TradeProd;
-import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.TradeHelper;
-import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -33,49 +28,57 @@ public class RtnProdPresenter implements Contract.RtnProdPresenter {
 
     @Override
     public void getTradeByLsNo(final String lsNo) {
+        LogUtil.d("----lsNo:" + lsNo);
         if (TextUtils.isEmpty(lsNo)) {
             mView.showError("请输入流水单号");
         } else {
+            //先获取本地流水单
             if (TradeHelper.initRtnSale(lsNo)) {
-                //有此流水
+                LogUtil.d("----trade is not empty");
+                LogUtil.d("----saleList.size：" + TradeHelper.getProdList().size());
+                //获取支付方式
                 String appPayType = TradeHelper.getPay().getAppPayType();
-                List<TradeProd> prodList = TradeHelper.getProdList();
-                mView.existTrade(prodList);
+                mView.existTrade(TradeHelper.getProdList());
                 mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType), payTypeImgRes(appPayType));
                 mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(TradeHelper.getTrade().getTradeTime())
                         , lsNo, TradeHelper.getCashierByUserCode(TradeHelper.getTrade().getCashier()));
                 updateTradeInfo();
             } else {
-                //本地无此流水，开始联网查询
-                if (ZgParams.isIsOnline()) {
-                    //网络有数据
-                    RtnLsDownloadTask.taskStart(lsNo, new OperateCallback() {
-                        @Override
-                        public void onSuccess(Map<String, Object> data) {
-                            if (TradeHelper.initRtnSale(String.format("%s", lsNo.substring(8)))) {
-                                //有此流水
-                                String appPayType = TradeHelper.getPay().getAppPayType();
-                                List<TradeProd> prodList = TradeHelper.getProdList();
-                                mView.existTrade(prodList);
-                                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType), payTypeImgRes(appPayType));
-                                mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(TradeHelper.getTrade().getTradeTime())
-                                        , lsNo, TradeHelper.getCashierByUserCode(TradeHelper.getTrade().getCashier()));
-                                updateTradeInfo();
-                            } else {
-                                mView.showError("无此流水信息");
-                            }
-                        }
-
-                        @Override
-                        public void onError(String code, String msg) {
-                            mView.showError(String.format("%s(%s)", msg, code));
-                        }
-                    });
-                } else {
-                    mView.showError("单机模式无法查询历史流水，请联机后重试");
-                }
-
+                LogUtil.d("----trade is null");
+                //本地没有，去网络上找
             }
+
+
+//            if (true) {
+//                //有此流水
+//            } else {
+//                //本地无此流水，开始联网查询
+//                if (ZgParams.isIsOnline()) {
+//                    //网络有数据
+//                    RtnLsDownloadTask.taskStart(lsNo, new OperateCallback() {
+//                        @Override
+//                        public void onSuccess(Map<String, Object> data) {
+//                            //有此流水
+//                            String appPayType = TradeHelper.getPay().getAppPayType();
+//                            List<TradeProd> prodList = TradeHelper.getProdList();
+//                            LogUtil.d("----prodList.size:" + prodList.size());
+//                            mView.existTrade(prodList);
+//                            mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType), payTypeImgRes(appPayType));
+//                            mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(TradeHelper.getTrade().getTradeTime())
+//                                    , lsNo, TradeHelper.getCashierByUserCode(TradeHelper.getTrade().getCashier()));
+//                            updateTradeInfo();
+//                        }
+//
+//                        @Override
+//                        public void onError(String code, String msg) {
+//                            mView.showError(String.format("%s(%s)", msg, code));
+//                        }
+//                    });
+//                } else {
+//                    mView.showError("单机模式无法查询历史流水，请联机后重试");
+//                }
+//
+//            }
         }
     }
 
@@ -85,7 +88,7 @@ public class RtnProdPresenter implements Contract.RtnProdPresenter {
         //获取销售流水金额
         mView.showTradeTotal(TradeHelper.getTrade().getTotal());
         //获取退货流水金额
-        mView.showRtnTotal(TradeHelper.getTrade().getRtnTotal());
+        mView.showRtnTotal(TradeHelper.getRtnTrade().getTotal());
     }
 
     @Override
@@ -118,21 +121,12 @@ public class RtnProdPresenter implements Contract.RtnProdPresenter {
 
     @Override
     public void changeAmount(int index, double changeAmount) {
-        double maxAmount = TradeHelper.getProdList().get(index).getAmount();
-        double rtnAmount = TradeHelper.getProdList().get(index).getRtnAmount();
-        LogUtil.d("----rtn/max:" + rtnAmount + "/" + maxAmount);
-        if (rtnAmount + changeAmount < 0 || rtnAmount + changeAmount > maxAmount) {
-            return;
-        }
         //仅修改临时数据，不修改数据库内数据
-        if (TradeHelper.doRtnChangeAmount(index, changeAmount) > 0) {
-            //更新列表界面
-            mView.updateTradeProd(index);
-            //更新底部信息
-            updateTradeInfo();
-        } else {
-            mView.showError("数据修改出现异常");
-        }
+        TradeHelper.rtnChangeAmount(index, changeAmount);
+        //更新列表界面
+        mView.updateTradeProd(index);
+        //更新底部信息
+        updateTradeInfo();
     }
 
     @Override
