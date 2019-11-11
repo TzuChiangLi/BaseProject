@@ -9,6 +9,7 @@ import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.OperateCallback;
+import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.db.ZgpDb;
@@ -211,7 +212,7 @@ public class RtnLsDownloadTask {
      */
     private void saveTrade(Gson gson, Map<String, Object> values) {
         Trade trade = gson.fromJson(gson.toJson(values), Trade.class);
-        trade.setRtnLsNo(TradeHelper.newRtnLsNo());
+        trade.setRtnLsNo(RtnHelper.newRtnLsNo());
         //初始化退货流水的时间
         trade.setCreateTime(new Date());
         //初始化退货流水的创建IP

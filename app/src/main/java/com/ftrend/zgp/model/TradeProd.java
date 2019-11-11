@@ -74,8 +74,6 @@ public class TradeProd extends BaseModel {
     private transient double rtnPrice;
     // 退货字段（与数据库字段无关）：实退小计金额
     private transient double rtnTotal;
-    // 退货字段（非数据库字段）：退货流水
-    private transient String rtnLsNo;
 
     public TradeProd() {
     }
@@ -294,12 +292,5 @@ public class TradeProd extends BaseModel {
         this.rtnPrice = rtnPrice;
     }
 
-    public String getRtnLsNo() {
-        return rtnLsNo;
-    }
-
-    public void setRtnLsNo(String rtnLsNo) {
-        this.rtnLsNo = rtnLsNo;
-    }
 
 }
