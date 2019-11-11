@@ -306,6 +306,95 @@ public class RestSubscribe {
     }
 
     /**
+     * 会员卡信息查询请求
+     *
+     * @param cardCode 卡号
+     * @param cardType 卡类型：1-IC卡，2-磁卡
+     * @param callback
+     */
+    public void payCardInfoRequest(final String cardCode, final String cardType, final RestCallback callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("cardCode", cardCode);
+        params.put("cardType", cardType);
+        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        request.setBody(params);
+        detachAndSubscribe(api.payCardInfoRequest(request), callback);
+    }
+
+    /**
+     * 会员卡信息查询结果
+     * 注意保存返回参数中的卡号，此卡号与数据库中的卡号一致
+     *
+     * @param dataSign 请求标识，由payCardInfoRequest返回
+     * @param callback
+     */
+    public void payCardInfo(final String dataSign, final RestCallback callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("dataSign", dataSign);
+        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        request.setBody(params);
+        detachAndSubscribe(api.payCardInfo(request), callback);
+    }
+
+    /**
+     * 会员卡支付请求（只支持磁卡）
+     * 使用完全相同的参数，多次发起支付请求，不会重复扣款
+     *
+     * @param posCode  机器号
+     * @param lsNo     流水号
+     * @param date     日期
+     * @param cashier  收款员姓名
+     * @param cardCode 卡号（读卡器读到的卡号）
+     * @param money    支付金额
+     * @param callback
+     */
+    public void payCardRequest(final String posCode, final String lsNo, final String date,
+                               final String cashier, final String cardCode, final double money,
+                               final RestCallback callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("posCode", posCode);
+        params.put("lsNo", lsNo);
+        params.put("date", date);
+        params.put("cashier", cashier);
+        params.put("cardCode", cardCode);
+        params.put("money", money);
+        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        request.setBody(params);
+        detachAndSubscribe(api.payCardRequest(request), callback);
+    }
+
+    /**
+     * 会员卡支付结果
+     * 注意保存返回参数中的卡号，此卡号与数据库中的卡号一致
+     *
+     * @param dataSign
+     * @param callback
+     */
+    public void payCard(final String dataSign, final RestCallback callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("dataSign", dataSign);
+        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        request.setBody(params);
+        detachAndSubscribe(api.payCard(request), callback);
+    }
+
+    /**
+     * 会员卡支付密码验证
+     *
+     * @param cardCode 卡号（这里的卡号是payCardInfo返回的卡号）
+     * @param pwd      密码（用户输入的密码）
+     * @param callback
+     */
+    public void vipCardPwdValidate(final String cardCode, final String pwd, final RestCallback callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("cardCode", cardCode);
+        params.put("pwd", pwd);
+        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        request.setBody(params);
+        detachAndSubscribe(api.vipCardPwdValidate(request), callback);
+    }
+
+    /**
      * 上传交易流水
      *
      * @param posCode  机器号
