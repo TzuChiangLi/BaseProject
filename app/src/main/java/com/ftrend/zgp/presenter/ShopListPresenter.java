@@ -18,6 +18,7 @@ import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
+import com.sunmi.pay.hardware.aidl.AidlConstants;
 
 import java.util.Map;
 
@@ -198,9 +199,9 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
         SunmiPayHelper.getInstance().readCard(new SunmiPayHelper.ReadCardCallback() {
             //在这里显示或隐藏消息框会出错（Animators may only be run on Looper threads），改为事件通知
             @Override
-            public void onSuccess(String cardNo) {
+            public void onSuccess(String cardNo, AidlConstants.CardType cardType) {
                 Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_VIPCARD_SUCCESS);
-                queryVipInfo(cardNo);
+                queryVipInfo(cardNo, cardType);
             }
 
             @Override
@@ -219,7 +220,7 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
         InputPanel.showVipMobile(context, new StringInputCallback() {
             @Override
             public void onOk(String value) {
-                queryVipInfo(value);
+                queryVipInfo(value, null);
             }
 
             @Override
@@ -242,10 +243,16 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
      *
      * @param code 手机号或会员卡号
      */
-    private void queryVipInfo(String code) {
+    private void queryVipInfo(String code, AidlConstants.CardType cardType) {
         if (ZgParams.isIsOnline()) {
+            String type = "";
+            if (cardType == AidlConstants.CardType.MIFARE) {
+                type = "1";
+            } else if (cardType == AidlConstants.CardType.MAGNETIC) {
+                type = "2";
+            }
             //在线查询会员信息
-            RestSubscribe.getInstance().queryVipInfo(code, new RestCallback(new RestResultHandler() {
+            RestSubscribe.getInstance().queryVipInfo(code, type, new RestCallback(new RestResultHandler() {
                 @Override
                 public void onSuccess(Map<String, Object> body) {
                     if (body != null) {

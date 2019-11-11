@@ -1,11 +1,6 @@
 package com.ftrend.zgp;
 
-import android.util.Base64;
-
-import com.blankj.utilcode.util.GsonUtils;
-import com.ftrend.zgp.utils.common.CardDecryptor;
 import com.ftrend.zgp.utils.common.EncryptUtill;
-import com.ftrend.zgp.utils.sunmi.VipCardParams;
 
 import org.junit.Test;
 
@@ -34,42 +29,4 @@ public class ExampleUnitTest {
         System.out.println("用户密码: 杨莉 => " + EncryptUtill.pwdDecrypt("7AUAL;;?."));
     }
 
-    @Test
-    public void test() {
-        VipCardParams vipCardParams = new VipCardParams();
-//        vipCardParams.setVipAndCardFixLen(false);
-        vipCardParams.setCardPreCode("FN");
-//        vipCardParams.setVipCodeMaxLen(5);
-        System.out.println(GsonUtils.toJson(vipCardParams));
-        String code = "12345678";
-        String cardCode = code;
-        if (code.length() > vipCardParams.getVipCodeMaxLen()) {
-            cardCode = code.substring(code.length() - vipCardParams.getVipCodeMaxLen());
-        } else if (vipCardParams.isVipAndCardFixLen()) {
-            String preCode = vipCardParams.getCardPreCode() + "00000000000000000000";
-            cardCode = preCode.substring(0, vipCardParams.getVipCodeMaxLen() - code.length()) + code;
-        }
-        System.out.println(cardCode);
-    }
-
-    @Test
-    public void test2() {
-        System.out.println("1234567890".getBytes().length);
-        byte b = (byte) 'a';
-        byte[] data = new byte[]{b, b, b, b, b, 0, 0, 0};
-        String s = new String(data).trim();
-        System.out.println(s);
-        System.out.println(s.length());
-    }
-
-    @Test
-    public void testDes() {
-        byte[] bytes = CardDecryptor.encode("12345678".getBytes(), "123456789012345".getBytes());
-        System.out.println(Base64.encodeToString(bytes, Base64.DEFAULT));
-        bytes = CardDecryptor.decode("12345678".getBytes(), "142234007043130132191006".getBytes());
-        System.out.println(Base64.encodeToString(bytes, Base64.DEFAULT));
-
-        String cardCode = CardDecryptor.cardDecryStr("142234007043130132191006", "12345678");
-        System.out.println(cardCode);
-    }
 }

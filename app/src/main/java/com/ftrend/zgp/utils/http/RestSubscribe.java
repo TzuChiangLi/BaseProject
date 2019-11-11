@@ -275,14 +275,20 @@ public class RestSubscribe {
      * 查询会员信息
      *
      * @param code     查询参数：会员卡号、会员编号、手机号，3项任传其一
+     * @param type     卡片类型：1-IC卡，2-磁卡。用于服务端进行卡号处理。code不是卡号时传空字符串
      * @param callback
      */
-    public void queryVipInfo(final String code, final RestCallback callback) {
+    public void queryVipInfo(final String code, final String type, final RestCallback callback) {
         Map<String, Object> params = new HashMap<>();
         params.put("code", code);
+        params.put("type", type);
         RestRequest<Map<String, Object>> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.queryVipInfo(request), callback);
+    }
+
+    public void queryVipInfo(final String code, final RestCallback callback) {
+        queryVipInfo(code, "", callback);
     }
 
     /**

@@ -1182,7 +1182,7 @@ public class TradeHelper {
      * @return 成功失败
      */
     public static boolean saveVipCodeOffline(String vipCode) {
-        trade.setVipCode(vipCode);
+        trade.setCardCode(vipCode);
         return trade.save();
     }
 
