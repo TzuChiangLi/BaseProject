@@ -244,13 +244,13 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
      * @param code 手机号或会员卡号
      */
     private void queryVipInfo(String code, AidlConstants.CardType cardType) {
+        String type = "";
+        if (cardType == AidlConstants.CardType.MIFARE) {
+            type = "1";
+        } else if (cardType == AidlConstants.CardType.MAGNETIC) {
+            type = "2";
+        }
         if (ZgParams.isIsOnline()) {
-            String type = "";
-            if (cardType == AidlConstants.CardType.MIFARE) {
-                type = "1";
-            } else if (cardType == AidlConstants.CardType.MAGNETIC) {
-                type = "2";
-            }
             //在线查询会员信息
             RestSubscribe.getInstance().queryVipInfo(code, type, new RestCallback(new RestResultHandler() {
                 @Override
@@ -284,8 +284,8 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
             }));
         } else {
             MessageUtil.showWarning("当前为单机模式，无法查询会员信息");
-            //保存vipCode
-            TradeHelper.saveVipCodeOffline(code);
+            //保存vipCode（@后加卡类型，用于后台解析卡号并查询会员信息）
+            TradeHelper.saveVipCodeOffline(code + (TextUtils.isEmpty(type) ? "" : "@" + type));
         }
     }
 
