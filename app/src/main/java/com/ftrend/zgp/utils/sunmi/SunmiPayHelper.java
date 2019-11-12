@@ -85,6 +85,15 @@ public class SunmiPayHelper {
     }
 
     /**
+     * 服务是否可用
+     *
+     * @return
+     */
+    public boolean serviceAvailable() {
+        return sdkConnected;
+    }
+
+    /**
      * 读取卡片信息：检卡、认证、读卡
      *
      * @param callback 读卡回调
