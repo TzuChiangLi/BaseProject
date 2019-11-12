@@ -83,7 +83,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     protected void initData() {
-        mEdt.setText("10200035");
+        mEdt.setText("2019111210200045");
     }
 
     @Override
@@ -133,11 +133,12 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @OnClick(R.id.rtn_btn_enter)
     public void enter() {
-        MessageUtil.question(String.format("%s%s%s%s", "退货金额￥", mTradeTotalTv.getText().toString().trim(),
+        MessageUtil.question(String.format("%s%s%s%s", "退货金额￥", mRtnTotalTv.getText().toString().trim(),
                 "将原路退回至", mPayTypeTv.getText().toString().trim()), "确认", "返回",
                 new MessageUtil.MessageBoxYesNoListener() {
                     @Override
                     public void onYes() {
+                        //先退货，再写入数据库
                         mPresenter.rtnTrade();
                     }
 

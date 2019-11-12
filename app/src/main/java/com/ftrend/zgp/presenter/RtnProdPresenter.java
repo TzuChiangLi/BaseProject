@@ -9,7 +9,6 @@ import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
 
 import java.text.SimpleDateFormat;
@@ -34,13 +33,14 @@ public class RtnProdPresenter implements Contract.RtnProdPresenter {
 
     @Override
     public void getTradeByLsNo(final String lsNo) {
-        LogUtil.d("----lsNo:" + lsNo);
+        String lsNoLite = "";
         if (TextUtils.isEmpty(lsNo)) {
             mView.showError("请输入流水单号");
         } else {
+            //输入的小票流水，需要取出实际流水号
+            lsNoLite = lsNo.length() > 8 ? lsNo.substring(8) : lsNo;
             //先获取本地流水单
-            if (RtnHelper.initRtnSale(lsNo)) {
-                LogUtil.d("----trade is not empty");
+            if (RtnHelper.initRtnLocal(lsNoLite)) {
                 //获取支付方式
                 String appPayType = RtnHelper.getPay().getAppPayType();
                 mView.existTrade(RtnHelper.getProdList());
@@ -49,39 +49,33 @@ public class RtnProdPresenter implements Contract.RtnProdPresenter {
                         , lsNo, TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
                 updateTradeInfo();
             } else {
-                LogUtil.d("----trade is null");
-                if (true) {
-                    //有此流水
-                } else {
-                    //本地无此流水，开始联网查询
-                    if (ZgParams.isIsOnline()) {
-                        //网络有数据
-                        RtnLsDownloadTask.taskStart(lsNo, new OperateCallback() {
-                            @Override
-                            public void onSuccess(Map<String, Object> data) {
-                                //有此流水
-                                String appPayType = TradeHelper.getPay().getAppPayType();
-                                List<TradeProd> prodList = TradeHelper.getProdList();
-                                LogUtil.d("----prodList.size:" + prodList.size());
+                //本地无此流水，开始联网查询
+                if (ZgParams.isIsOnline()) {
+                    //网络有数据
+                    RtnLsDownloadTask.taskStart(lsNo, new OperateCallback() {
+                        @Override
+                        public void onSuccess(Map<String, Object> data) {
+                            //有此流水
+                            if (RtnHelper.initRtnOnline()) {
+                                String appPayType = RtnHelper.getPay().getAppPayType();
+                                List<TradeProd> prodList = RtnHelper.getProdList();
                                 mView.existTrade(prodList);
                                 mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType), payTypeImgRes(appPayType));
-                                mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(TradeHelper.getTrade().getTradeTime())
-                                        , lsNo, TradeHelper.getCashierByUserCode(TradeHelper.getTrade().getCashier()));
+                                mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(RtnHelper.getTrade().getTradeTime())
+                                        , lsNo, TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
                                 updateTradeInfo();
                             }
+                        }
 
-                            @Override
-                            public void onError(String code, String msg) {
-                                mView.showError(String.format("%s(%s)", msg, code));
-                            }
-                        });
-                    } else {
-                        mView.showError("单机模式无法查询历史流水，请联机后重试");
-                    }
-
+                        @Override
+                        public void onError(String code, String msg) {
+                            mView.showError(TextUtils.isEmpty(code) ? String.format("%s=", msg) : String.format("%s(%s)", msg, code));
+                        }
+                    });
+                } else {
+                    mView.showError("单机模式无法查询历史流水，请联机后重试");
                 }
             }
-
         }
     }
 
@@ -96,13 +90,33 @@ public class RtnProdPresenter implements Contract.RtnProdPresenter {
 
     @Override
     public void rtnTrade() {
-        LogUtil.d("----退货");
-        if (RtnHelper.rtn()) {
-            mView.showSuccess("退货成功");
-            LogUtil.d("----退货成功");
-        } else {
-            LogUtil.d("----退货失败");
-            mView.showError("退货失败");
+        //判断支付方式
+        switch (RtnHelper.getPay().getAppPayType()) {
+            case "0":
+            case "1":
+                //现金
+                if (RtnHelper.pay("1", 0)) {
+                    if (RtnHelper.rtn()) {
+                        mView.showSuccess("退货成功");
+                    } else {
+                        mView.showError("退货失败");
+                    }
+                }
+                break;
+            case "2":
+                //支付宝
+                break;
+            case "3":
+                //微信
+                break;
+            case "4":
+                //储值卡
+                break;
+            case "5":
+                //收钱吧
+                break;
+            default:
+                break;
         }
     }
 
@@ -140,6 +154,7 @@ public class RtnProdPresenter implements Contract.RtnProdPresenter {
         if (mView != null) {
             mView = null;
         }
+        RtnHelper.clearAllData();
     }
 
     private int payTypeImgRes(String appPayType) {

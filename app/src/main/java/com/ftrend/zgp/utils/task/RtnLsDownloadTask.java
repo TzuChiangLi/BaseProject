@@ -10,7 +10,6 @@ import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
-import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.db.ZgpDb;
 import com.ftrend.zgp.utils.http.RestCallback;
@@ -53,6 +52,8 @@ public class RtnLsDownloadTask {
     private int retryCount = 0;
     // 最大重试次数
     private final int MAX_RETRY = 3;
+    //错误
+    private final String errCode = "";
     // 退货单号
     private static String rtnLsNo;
     // 线程唯一实例，避免重复运行
@@ -137,6 +138,7 @@ public class RtnLsDownloadTask {
      */
     private void postFailed(String msg) {
         running = false;
+        taskCallback.onError(errCode, msg);
     }
 
 
@@ -149,6 +151,9 @@ public class RtnLsDownloadTask {
         RestSubscribe.getInstance().queryRefundLs(rtnLsNo, new RestCallback(new RestResultHandler() {
             @Override
             public void onSuccess(Map<String, Object> body) {
+                if (body != null) {
+                    LogUtil.d("----pay:" + body.get("pay"));
+                }
                 if (!body.containsKey("trade") || !body.containsKey("prod") || !body.containsKey("pay")) {
                     return;
                 }
@@ -156,7 +161,6 @@ public class RtnLsDownloadTask {
                 List<Map<String, Object>> prod = (List<Map<String, Object>>) body.get("prod");
                 Map<String, Object> pay = (Map<String, Object>) body.get("pay");
 
-                LogUtil.d("----data:" + body.get("prod"));
                 saveLs(trade, prod, pay);
             }
 
@@ -190,6 +194,7 @@ public class RtnLsDownloadTask {
             @Override
             public void onSuccess(@NonNull Transaction transaction) {
                 if (taskCallback == null) {
+                    LogUtil.d("----taskCallback is null");
                     return;
                 }
                 taskCallback.onSuccess(null);
@@ -212,7 +217,6 @@ public class RtnLsDownloadTask {
      */
     private void saveTrade(Gson gson, Map<String, Object> values) {
         Trade trade = gson.fromJson(gson.toJson(values), Trade.class);
-        trade.setRtnLsNo(RtnHelper.newRtnLsNo());
         //初始化退货流水的时间
         trade.setCreateTime(new Date());
         //初始化退货流水的创建IP
@@ -220,7 +224,7 @@ public class RtnLsDownloadTask {
         //初始化退货流水为未结单
         trade.setTradeFlag(TRADE_FLAG_REFUND);
         //初始化
-        TradeHelper.setTrade(trade);
+        RtnHelper.setTrade(trade);
     }
 
     /**
@@ -239,9 +243,8 @@ public class RtnLsDownloadTask {
             prod.setRtnPrice(prod.getPrice() - ((prod.getManuDsc() + prod.getVipDsc() + prod.getTranDsc()) / prod.getAmount()));
             prodList.add(prod);
         }
-        //仅显示，不保存到数据库
         //初始化
-        TradeHelper.setProdList(prodList);
+        RtnHelper.setProdList(prodList);
     }
 
     /**
@@ -250,14 +253,16 @@ public class RtnLsDownloadTask {
      * @param values
      */
     private void savePay(Gson gson, Map<String, Object> values) {
+        LogUtil.d("----values:" + values);
         TradePay pay = gson.fromJson(gson.toJson(values), TradePay.class);
         // 查找对应的appPayType（后台不保存此字段）
         DepPayInfo payInfo = SQLite.select().from(DepPayInfo.class)
                 .where(DepPayInfo_Table.payTypeCode.eq(pay.getPayTypeCode()))
+                .and(DepPayInfo_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
                 .querySingle();
         pay.setAppPayType(payInfo == null ? "" : payInfo.getAppPayType());
         //初始化
-        TradeHelper.setPay(pay);
+        RtnHelper.setPay(pay);
     }
 
 }
