@@ -11,6 +11,7 @@ import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 
 import java.util.List;
@@ -111,11 +112,11 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                             String.format("(-%d", Math.round(100 * ((((TradeProd) item).getManuDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getTranDsc()) / ((TradeProd) item).getAmount()) / ((TradeProd) item).getPrice())), "%)"));
 
                     //退货数量
-                    helper.setText(R.id.rtn_list_rv_rtn_tv_amount, String.valueOf(((TradeProd) item).getRtnAmount()).replace(".0", ""));
+                    helper.setText(R.id.rtn_list_rv_rtn_tv_amount, String.valueOf(RtnHelper.getRtnAmountBySortNo(((TradeProd) item).getSortNo())).replace(".0", "")                    );
                     //实退小计
-                    helper.setText(R.id.rtn_list_rv_rtn_tv_total, String.format("%.2f", ((TradeProd) item).getTotal()));
+                    helper.setText(R.id.rtn_list_rv_rtn_tv_total, String.format("%.2f", (RtnHelper.getRtnTotalBySortNo(((TradeProd) item).getSortNo()))));
                     //实退单价
-                    helper.setText(R.id.rtn_list_rv_rtn_tv_price, String.format("%.2f", ((TradeProd) item).getPrice()));
+                    helper.setText(R.id.rtn_list_rv_rtn_tv_price, String.format("%.2f", ((TradeProd) item).getRtnPrice()));
                     //实退单位
                     helper.setText(R.id.rtn_list_rv_rtn_tv_unit, TradeHelper.getProdUnit(((TradeProd) item).getProdCode(), ((TradeProd) item).getBarCode()));
 

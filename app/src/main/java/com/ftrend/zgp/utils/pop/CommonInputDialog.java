@@ -118,7 +118,7 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
     public void submit() {
         switch (mValueType) {
             case MONEY:
-                if (mMoneyCallback != null) {
+                if (mMoneyCallback != null&&!TextUtils.isEmpty(mEdt.getText().toString())) {
                     double d = Double.parseDouble(mEdt.getText().toString());
                     String msg = mMoneyCallback.validate(d);
                     if (TextUtils.isEmpty(msg)) {
