@@ -17,6 +17,7 @@ import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.pay.PayType;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.printer.PrintFormat;
 import com.ftrend.zgp.utils.printer.PrinterHelper;
@@ -343,7 +344,7 @@ public class PayPresenter implements PayContract.Presenter {
         RestSubscribe.getInstance().payCard(payDataSign[0], new RestCallback(new RestResultHandler() {
             @Override
             public void onSuccess(Map<String, Object> body) {
-                TradeHelper.pay(TradeHelper.APP_PAY_TYPE_CARD, payCardCode[0]);
+                paySuccess(PayType.PAYTYPE_PREPAID, TradeHelper.getTradeTotal(), payCardCode[0]);
                 mView.cardPaySuccess("支付成功！");
             }
 
