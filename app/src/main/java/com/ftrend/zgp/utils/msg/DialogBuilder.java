@@ -191,6 +191,44 @@ public class DialogBuilder extends CenterPopupView {
         mLeftBtn.setText("返回");
     }
 
+    /**
+     * 更新按钮监听
+     *
+     * @param listener
+     */
+    public void updateListener(final MessageUtil.MessageBoxOkListener listener) {
+        setOnClickListener(new DialogBuilder.OnBtnClickListener() {
+            @Override
+            public void onLeftBtnClick(BasePopupView v) {
+                if (listener != null) {
+                    listener.onOk();
+                }
+                dismiss();
+            }
+
+            @Override
+            public void onRightBtnClick(BasePopupView v) {
+
+            }
+        });
+    }
+
+    public void updateListener(final MessageUtil.MessageBoxCancelListener listener) {
+        setOnClickListener(new DialogBuilder.OnBtnClickListener() {
+            @Override
+            public void onLeftBtnClick(BasePopupView v) {
+                if (listener != null) {
+                    listener.onCancel();
+                }
+                dismiss();
+            }
+
+            @Override
+            public void onRightBtnClick(BasePopupView v) {
+
+            }
+        });
+    }
 
     @Override
     protected void onShow() {
