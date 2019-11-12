@@ -31,7 +31,6 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -70,28 +69,8 @@ public class TradeHelper {
     public static final String TRADE_STATUS_PAID = "2";
     // 交易状态：3-取消
     public static final String TRADE_STATUS_CANCELLED = "3";
-    // 超市版：会员优惠规则-1
-    public static final int VIP_ONE = 1;
-    // 超市版：会员优惠规则-2
-    public static final int VIP_TWO = 2;
-    // 超市版：会员优惠规则-3
-    public static final int VIP_THREE = 3;
-    // VIP强制优惠：1-强制优惠，无视商品的forDsc属性
-    public static final String VIP_DSC_FORCE = "1";
-    // VIP强制优惠：0-不强制
-    public static final String VIP_DSC_NORMAL = "0";
     // 顾客类型：2-会员
     public static final String TRADE_CUST_VIP = "2";
-    // APP界面支付类型：现金
-    public static final String APP_PAY_TYPE_CASH = "1";
-    // APP界面支付类型：支付宝
-    public static final String APP_PAY_TYPE_ALIPAY = "2";
-    // APP界面支付类型：微信支付
-    public static final String APP_PAY_TYPE_WECHAT = "3";
-    // APP界面支付类型：储值卡
-    public static final String APP_PAY_TYPE_CARD = "4";
-    // APP界面支付类型：收钱吧
-    public static final String APP_PAY_TYPE_SQB = "5";
     // 交易流水
     private static Trade trade = null;
     // 商品列表
