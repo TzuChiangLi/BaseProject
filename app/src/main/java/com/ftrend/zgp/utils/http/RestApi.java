@@ -186,7 +186,7 @@ public interface RestApi {
      * @param request
      * @return
      */
-    @POST("trade/card/pay")
+    @POST("trade/card/pay/result")
     Observable<RestResponse<Map<String, Object>>> payCard(@Body RestRequest<Map<String, Object>> request);
 
     /**

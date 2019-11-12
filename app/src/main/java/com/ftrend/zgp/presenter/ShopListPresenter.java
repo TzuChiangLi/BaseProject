@@ -279,7 +279,7 @@ public class ShopListPresenter implements Contract.ShopListPresenter {
 
                 @Override
                 public void onFailed(String errorCode, String errorMsg) {
-                    MessageUtil.serverError(errorCode, errorMsg);
+                    MessageUtil.error(errorCode, errorMsg);
                 }
             }));
         } else {

@@ -7,13 +7,12 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.ShopAdapter;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.PayContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.PayPresenter;
@@ -44,14 +43,14 @@ import butterknife.BindView;
  *
  * @author liziqiang@ftrend.cn
  */
-public class PayActivity extends BaseActivity implements Contract.PayView, OnTitleBarListener {
+public class PayActivity extends BaseActivity implements PayContract.View, OnTitleBarListener {
     @BindView(R.id.pay_top_bar)
     TitleBar mTitleBar;
     @BindView(R.id.pay_tv_total)
     TextView mTotalTv;
     @BindView(R.id.pay_rv_pay_way)
     RecyclerView mRecyclerView;
-    private Contract.PayPresenter mPresenter;
+    private PayContract.Presenter mPresenter;
     private static int START_SCAN = 002;
     private String lsNo;
 
@@ -81,16 +80,16 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     }
 
     @Override
-    public void onLeftClick(View v) {
+    public void onLeftClick(android.view.View v) {
         finish();
     }
 
     @Override
-    public void onTitleClick(View v) {
+    public void onTitleClick(android.view.View v) {
     }
 
     @Override
-    public void onRightClick(View v) {
+    public void onRightClick(android.view.View v) {
     }
 
     /**
@@ -107,10 +106,81 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     }
 
     @Override
-    public void setPresenter(Contract.PayPresenter presenter) {
+    public void setPresenter(PayContract.Presenter presenter) {
         if (presenter != null) {
             mPresenter = presenter;
         }
+    }
+
+    @Override
+    public void cardPayWait(final String msg) {
+        if (MessageUtil.isWaiting()) {
+            MessageUtil.waitUpdate(msg);
+        } else {
+            MessageUtil.waitBegin(msg, new MessageUtil.MessageBoxCancelListener() {
+                @Override
+                public boolean onCancel() {
+                    return mPresenter.cardPayCancel();
+                }
+            });
+        }
+    }
+
+    @Override
+    public void cardPaySuccess(String msg) {
+        MessageUtil.waitSuccesss(msg, new MessageUtil.MessageBoxOkListener() {
+            @Override
+            public void onOk() {
+                returnHomeActivity();
+            }
+        });
+    }
+
+    @Override
+    public void cardPayFail(String msg) {
+        MessageUtil.waitError(msg, null);
+    }
+
+    @Override
+    public void cardPayFail(String code, String msg) {
+        MessageUtil.waitError(code, msg, null);
+    }
+
+    @Override
+    public void cardPayTimeout(String msg) {
+        MessageUtil.waitEnd();
+        MessageUtil.question(msg, "重试", "取消", new MessageUtil.MessageBoxYesNoListener() {
+            @Override
+            public void onYes() {
+                mPresenter.cardPayRetry();
+            }
+
+            @Override
+            public void onNo() {
+
+            }
+        });
+    }
+
+    @Override
+    public void cardPayPassword() {
+        MessageUtil.waitEnd();
+        InputPanel.showInput(this, "请输入支付密码：", new StringInputCallback() {
+            @Override
+            public void onOk(String value) {
+                mPresenter.cardPayPass(value);
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public String validate(String value) {
+                return null;
+            }
+        });
     }
 
     @Override
@@ -121,7 +191,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mPayWayAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(BaseQuickAdapter adapter, android.view.View view, int position) {
                 if (ClickUtil.onceClick()) {
                     return;
                 }
@@ -137,7 +207,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                             intent.setPackage("com.sunmi.sunmiqrcodescanner");
                             startActivityForResult(intent, START_SCAN);
                         } catch (Exception e) {
-                            String msg = "本设备不支持刷卡，请输入顾客支付码：";
+                            String msg = "本设备不支持扫码，请输入顾客支付码：";
                             InputPanel.showInput(PayActivity.this, msg, new StringInputCallback() {
                                 @Override
                                 public void onOk(String value) {
@@ -156,8 +226,9 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                             });
                         }
                         break;
-                    case 1:
-                        //储值卡
+                    case 1://储值卡
+                        //显示刷卡等待提示
+                        mPresenter.cardPay();
                         break;
                     case 2:
                         //现金
@@ -166,7 +237,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
                                 new MoneyInputCallback() {
                                     @Override
                                     public void onOk(double value) {
-                                        if (mPresenter.paySuccess(PayType.PAYTYPE_CASH, value)) {
+                                        if (mPresenter.paySuccess(PayType.PAYTYPE_CASH, value, "")) {
                                             MessageUtil.info("交易已完成", new MessageUtil.MessageBoxOkListener() {
                                                 @Override
                                                 public void onOk() {
