@@ -498,7 +498,6 @@ public class TradeHelper {
     public static boolean recalcTotal(DatabaseWrapper databaseWrapper) {
         double dscTotal = 0;
         double total = 0;
-
         for (TradeProd prod : prodList) {
             dscTotal += prod.getManuDsc() + prod.getTranDsc() + prod.getVipDsc();
             total += prod.getTotal();
