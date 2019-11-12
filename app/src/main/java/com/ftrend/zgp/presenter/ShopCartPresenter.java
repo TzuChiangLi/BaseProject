@@ -2,7 +2,7 @@ package com.ftrend.zgp.presenter;
 
 import android.text.TextUtils;
 
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.ShopCartContract;
 import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepCls_Table;
 import com.ftrend.zgp.model.DepProduct;
@@ -28,15 +28,15 @@ import java.util.Map;
  *
  * @author liziqiang@ftrend.cn
  */
-public class ShopCartPresenter implements Contract.ShopCartPresenter {
-    private Contract.ShopCartView mView;
+public class ShopCartPresenter implements ShopCartContract.ShopCartPresenter {
+    private ShopCartContract.ShopCartView mView;
     private List<DepProduct> mProdList = new ArrayList<>();
 
-    private ShopCartPresenter(Contract.ShopCartView mView) {
+    private ShopCartPresenter(ShopCartContract.ShopCartView mView) {
         this.mView = mView;
     }
 
-    public static ShopCartPresenter createPresenter(Contract.ShopCartView mView) {
+    public static ShopCartPresenter createPresenter(ShopCartContract.ShopCartView mView) {
         return new ShopCartPresenter(mView);
     }
 

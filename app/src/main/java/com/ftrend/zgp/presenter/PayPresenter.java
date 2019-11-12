@@ -4,7 +4,7 @@ import android.os.RemoteException;
 
 import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.R;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.PayContract;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.msg.MessageUtil;
@@ -22,14 +22,14 @@ import java.util.List;
  *
  * @author liziqiang@ftrend.cn
  */
-public class PayPresenter implements Contract.PayPresenter {
-    private Contract.PayView mView;
+public class PayPresenter implements PayContract.PayPresenter {
+    private PayContract.PayView mView;
 
-    private PayPresenter(Contract.PayView mView) {
+    private PayPresenter(PayContract.PayView mView) {
         this.mView = mView;
     }
 
-    public static PayPresenter createPresenter(Contract.PayView mView) {
+    public static PayPresenter createPresenter(PayContract.PayView mView) {
         return new PayPresenter(mView);
     }
 

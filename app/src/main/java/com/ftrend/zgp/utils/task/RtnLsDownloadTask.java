@@ -113,7 +113,7 @@ public class RtnLsDownloadTask {
     private void retry(String err) {
         retryCount++;
         if (retryCount > MAX_RETRY) {
-            postFailed(err + "达到最大重试次数");
+            postFailed(err);
         } else {
             exec();
         }
@@ -152,7 +152,7 @@ public class RtnLsDownloadTask {
             @Override
             public void onSuccess(Map<String, Object> body) {
                 if (body != null) {
-                    LogUtil.d("----pay:" + body.get("pay"));
+                    LogUtil.d("----trade:" + body.get("trade"));
                 }
                 if (!body.containsKey("trade") || !body.containsKey("prod") || !body.containsKey("pay")) {
                     return;
@@ -217,13 +217,8 @@ public class RtnLsDownloadTask {
      */
     private void saveTrade(Gson gson, Map<String, Object> values) {
         Trade trade = gson.fromJson(gson.toJson(values), Trade.class);
-        //初始化退货流水的时间
-        trade.setCreateTime(new Date());
-        //初始化退货流水的创建IP
-        trade.setCreateIp(ZgParams.getCurrentIp());
-        //初始化退货流水为未结单
-        trade.setTradeFlag(TRADE_FLAG_REFUND);
         //初始化
+        LogUtil.d("----rtnFlag:"+trade.getRtnFlag());
         RtnHelper.setTrade(trade);
     }
 
@@ -253,12 +248,10 @@ public class RtnLsDownloadTask {
      * @param values
      */
     private void savePay(Gson gson, Map<String, Object> values) {
-        LogUtil.d("----values:" + values);
         TradePay pay = gson.fromJson(gson.toJson(values), TradePay.class);
         // 查找对应的appPayType（后台不保存此字段）
         DepPayInfo payInfo = SQLite.select().from(DepPayInfo.class)
                 .where(DepPayInfo_Table.payTypeCode.eq(pay.getPayTypeCode()))
-                .and(DepPayInfo_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
                 .querySingle();
         pay.setAppPayType(payInfo == null ? "" : payInfo.getAppPayType());
         //初始化

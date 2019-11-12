@@ -10,7 +10,7 @@ import com.blankj.utilcode.util.ClickUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.ftrend.progressview.ProgressView;
 import com.ftrend.zgp.R;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.InitContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.presenter.InitPresenter;
 import com.ftrend.zgp.utils.common.ClickUtil;
@@ -24,7 +24,7 @@ import butterknife.BindView;
  *
  * @author liziqiang@ftrend.cn
  */
-public class InitActivity extends BaseActivity implements Contract.InitView {
+public class InitActivity extends BaseActivity implements InitContract.InitView {
     @BindView(R.id.init_progress_view)
     ProgressView mLoadView;
     @BindView(R.id.init_tv_warning)
@@ -41,7 +41,7 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
     TextView mDepTv;
     @BindView(R.id.init_result_posCode)
     TextView mPosCodeTv;
-    private Contract.InitPresenter mPresenter;
+    private InitContract.InitPresenter mPresenter;
 
     @Override
     protected int getLayoutID() {
@@ -144,7 +144,7 @@ public class InitActivity extends BaseActivity implements Contract.InitView {
     }
 
     @Override
-    public void setPresenter(Contract.InitPresenter presenter) {
+    public void setPresenter(InitContract.InitPresenter presenter) {
         if (presenter == null) {
             mPresenter = presenter;
         }

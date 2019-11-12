@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.MenuAdapter;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.HomeContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.Trade;
@@ -34,7 +34,7 @@ import butterknife.BindView;
  *
  * @author liziqiang@ftrend.cn
  */
-public class HomeActivity extends BaseActivity implements Contract.HomeView, MenuAdapter.OnMenuClickListener {
+public class HomeActivity extends BaseActivity implements HomeContract.HomeView, MenuAdapter.OnMenuClickListener {
     @BindView(R.id.home_rv_menu)
     RecyclerView mRecyclerView;
     @BindView(R.id.home_tv_date)
@@ -47,7 +47,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     TextView mPosCodeTv;
     @BindView(R.id.home_img_online_status)
     ImageView mNetImg;
-    private Contract.HomePresenter mPresenter;
+    private HomeContract.HomePresenter mPresenter;
     private MenuAdapter mMenuAdapter;
 
 
@@ -84,7 +84,7 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
     }
 
     @Override
-    public void setPresenter(Contract.HomePresenter presenter) {
+    public void setPresenter(HomeContract.HomePresenter presenter) {
         if (presenter == null) {
             mPresenter = HomePresenter.createPresenter(this);
         }

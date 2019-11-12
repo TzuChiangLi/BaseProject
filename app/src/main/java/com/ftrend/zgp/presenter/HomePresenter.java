@@ -2,9 +2,8 @@ package com.ftrend.zgp.presenter;
 
 import android.content.Context;
 
-import com.ftrend.zgp.App;
 import com.ftrend.zgp.R;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.HomeContract;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.utils.HandoverHelper;
@@ -33,15 +32,15 @@ import java.util.List;
  *
  * @author liziqiang@ftrend.cn
  */
-public class HomePresenter implements Contract.HomePresenter {
-    private Contract.HomeView mView;
+public class HomePresenter implements HomeContract.HomePresenter {
+    private HomeContract.HomeView mView;
 
 
-    private HomePresenter(Contract.HomeView mView) {
+    private HomePresenter(HomeContract.HomeView mView) {
         this.mView = mView;
     }
 
-    public static HomePresenter createPresenter(Contract.HomeView mView) {
+    public static HomePresenter createPresenter(HomeContract.HomeView mView) {
         return new HomePresenter(mView);
     }
 

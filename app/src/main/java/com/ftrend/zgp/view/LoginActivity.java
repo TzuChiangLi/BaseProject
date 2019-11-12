@@ -7,11 +7,10 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Spinner;
 
-import com.blankj.utilcode.util.ConvertUtils;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.LoginAdapter;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.LoginContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
@@ -30,7 +29,7 @@ import butterknife.OnClick;
  *
  * @author liziqiang@ftrend.cn
  */
-public class LoginActivity extends BaseActivity implements Contract.LoginView {
+public class LoginActivity extends BaseActivity implements LoginContract.LoginView {
     @BindView(R.id.login_sp_dep)
     Spinner mDepSp;
     @BindView(R.id.login_sp_user)
@@ -39,7 +38,7 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
     ClearEditText mPwdEdt;
     @BindView(R.id.login_btn)
     Button mLoginBtn;
-    private Contract.LoginPresenter mPresenter;
+    private LoginContract.LoginPresenter mPresenter;
     private LoginAdapter<Dep> mDepAdapter;
     private LoginAdapter<User> mUserAdapter;
     private String depCode, userCode;
@@ -126,7 +125,7 @@ public class LoginActivity extends BaseActivity implements Contract.LoginView {
     }
 
     @Override
-    public void setPresenter(Contract.LoginPresenter presenter) {
+    public void setPresenter(LoginContract.LoginPresenter presenter) {
         if (presenter != null) {
             mPresenter = presenter;
         }

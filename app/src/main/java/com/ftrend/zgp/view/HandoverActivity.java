@@ -7,7 +7,7 @@ import android.widget.Button;
 
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.HandoverAdapter;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.HandoverContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.HandoverRecord;
 import com.ftrend.zgp.presenter.HandoverPresenter;
@@ -25,7 +25,7 @@ import butterknife.OnClick;
 /**
  * @author liziqiang@ftrend.cn
  */
-public class HandoverActivity extends BaseActivity implements Contract.HandoverView, OnTitleBarListener {
+public class HandoverActivity extends BaseActivity implements HandoverContract.HandoverView, OnTitleBarListener {
     @BindView(R.id.handover_rv)
     RecyclerView mRecyclerView;
     @BindView(R.id.handover_btn_handover)
@@ -33,7 +33,7 @@ public class HandoverActivity extends BaseActivity implements Contract.HandoverV
     @BindView(R.id.handover_top_bar)
     TitleBar mTitleBar;
     private HandoverAdapter mAdapter = null;
-    private Contract.HandoverPresenter mPresenter;
+    private HandoverContract.HandoverPresenter mPresenter;
 
     @Override
     protected int getLayoutID() {
@@ -93,7 +93,7 @@ public class HandoverActivity extends BaseActivity implements Contract.HandoverV
     }
 
     @Override
-    public void setPresenter(Contract.HandoverPresenter presenter) {
+    public void setPresenter(HandoverContract.HandoverPresenter presenter) {
         if (presenter != null) {
             mPresenter = presenter;
         }

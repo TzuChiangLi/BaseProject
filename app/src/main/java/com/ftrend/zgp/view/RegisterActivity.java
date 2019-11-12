@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.zgp.R;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.RegisterContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.presenter.RegisterPresenter;
 import com.ftrend.zgp.utils.common.ClickUtil;
@@ -24,14 +24,14 @@ import butterknife.OnClick;
 /**
  * @author liziqiang@ftrend.cn
  */
-public class RegisterActivity extends BaseActivity implements Contract.RegisterView {
+public class RegisterActivity extends BaseActivity implements RegisterContract.RegisterView {
     @BindView(R.id.reg_edt_posCode)
     ClearEditText mPosCodeEdt;
     @BindView(R.id.reg_edt_regCode)
     ClearEditText mRegCodeEdt;
     @BindView(R.id.reg_edt_url)
     ClearEditText mURLEdt;
-    private Contract.RegisterPresenter mPresenter;
+    private RegisterContract.RegisterPresenter mPresenter;
 
     @Override
     protected int getLayoutID() {
@@ -132,7 +132,7 @@ public class RegisterActivity extends BaseActivity implements Contract.RegisterV
     }
 
     @Override
-    public void setPresenter(Contract.RegisterPresenter presenter) {
+    public void setPresenter(RegisterContract.RegisterPresenter presenter) {
         if (presenter == null) {
             mPresenter = presenter;
         }

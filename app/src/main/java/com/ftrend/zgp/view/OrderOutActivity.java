@@ -9,7 +9,7 @@ import android.view.View;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.ShopAdapter;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.OrderOutContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.OrderOutPresenter;
@@ -27,12 +27,12 @@ import butterknife.OnClick;
 /**
  * @author liziqiang@ftrend.cn
  */
-public class OrderOutActivity extends BaseActivity implements Contract.OrderOutView, OnTitleBarListener {
+public class OrderOutActivity extends BaseActivity implements OrderOutContract.OrderOutView, OnTitleBarListener {
     @BindView(R.id.out_order_top_bar)
     TitleBar mTitleBar;
     @BindView(R.id.out_order_rv)
     RecyclerView mRecyclerView;
-    private Contract.OrderOutPresenter mPresenter;
+    private OrderOutContract.OrderOutPresenter mPresenter;
     private ShopAdapter<Trade> mAdapter;
 
     @Override
@@ -84,7 +84,7 @@ public class OrderOutActivity extends BaseActivity implements Contract.OrderOutV
     }
 
     @Override
-    public void setPresenter(Contract.OrderOutPresenter presenter) {
+    public void setPresenter(OrderOutContract.OrderOutPresenter presenter) {
         if (presenter != null) {
             mPresenter = presenter;
         }

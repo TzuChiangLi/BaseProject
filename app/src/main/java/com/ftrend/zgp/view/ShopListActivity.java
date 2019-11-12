@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.ShopAdapter;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.ShopListContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.ShopListPresenter;
@@ -46,7 +46,7 @@ import butterknife.OnClick;
  *
  * @author liziqiang@ftrend.cn
  */
-public class ShopListActivity extends BaseActivity implements Contract.ShopListView, OnTitleBarListener {
+public class ShopListActivity extends BaseActivity implements ShopListContract.ShopListView, OnTitleBarListener {
     @BindView(R.id.shop_list_top_bar)
     TitleBar mTitleBar;
     @BindView(R.id.shop_list_btn_pay)
@@ -70,7 +70,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     @BindColor(R.color.common_white)
     int rv_item_normal;
     private ShopAdapter<TradeProd> mProdAdapter;
-    private Contract.ShopListPresenter mPresenter;
+    private ShopListContract.ShopListPresenter mPresenter;
     private int oldPosition = -1;
 
     /**
@@ -150,7 +150,7 @@ public class ShopListActivity extends BaseActivity implements Contract.ShopListV
     }
 
     @Override
-    public void setPresenter(Contract.ShopListPresenter presenter) {
+    public void setPresenter(ShopListContract.ShopListPresenter presenter) {
         if (presenter != null) {
             mPresenter = presenter;
         }

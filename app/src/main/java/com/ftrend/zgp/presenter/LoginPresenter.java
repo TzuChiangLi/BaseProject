@@ -3,7 +3,7 @@ package com.ftrend.zgp.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.LoginContract;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.Dep_Table;
 import com.ftrend.zgp.model.User;
@@ -20,15 +20,15 @@ import java.util.List;
  *
  * @author liziqiang@ftrend.cn
  */
-public class LoginPresenter implements Contract.LoginPresenter {
-    private Contract.LoginView mView;
+public class LoginPresenter implements LoginContract.LoginPresenter {
+    private LoginContract.LoginView mView;
 
 
-    private LoginPresenter(Contract.LoginView mView) {
+    private LoginPresenter(LoginContract.LoginView mView) {
         this.mView = mView;
     }
 
-    public static LoginPresenter createPresenter(Contract.LoginView mView) {
+    public static LoginPresenter createPresenter(LoginContract.LoginView mView) {
         return new LoginPresenter(mView);
     }
 

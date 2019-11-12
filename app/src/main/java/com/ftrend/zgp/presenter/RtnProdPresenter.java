@@ -2,9 +2,9 @@ package com.ftrend.zgp.presenter;
 
 import android.text.TextUtils;
 
+import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.R;
-import com.ftrend.zgp.api.Contract;
-import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.api.RtnContract;
 import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
@@ -12,28 +12,27 @@ import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Map;
 
 /**
  * @author liziqiang@ftrend.cn
  */
-public class RtnProdPresenter implements Contract.RtnProdPresenter {
-    private Contract.RtnProdView mView;
+public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
+    private RtnContract.RtnProdView mView;
     private RtnLsDownloadTask task;
 
-    private RtnProdPresenter(Contract.RtnProdView mView) {
+    private RtnProdPresenter(RtnContract.RtnProdView mView) {
         this.mView = mView;
     }
 
-    public static RtnProdPresenter createPresenter(Contract.RtnProdView mView) {
+    public static RtnProdPresenter createPresenter(RtnContract.RtnProdView mView) {
         return new RtnProdPresenter(mView);
     }
 
 
     @Override
     public void getTradeByLsNo(final String lsNo) {
-        String lsNoLite = "";
+        String lsNoLite;
         if (TextUtils.isEmpty(lsNo)) {
             mView.showError("请输入流水单号");
         } else {
@@ -41,7 +40,12 @@ public class RtnProdPresenter implements Contract.RtnProdPresenter {
             lsNoLite = lsNo.length() > 8 ? lsNo.substring(8) : lsNo;
             //先获取本地流水单
             if (RtnHelper.initRtnLocal(lsNoLite)) {
+                LogUtil.d("----查本地");
                 //获取支付方式
+                if (RtnHelper.getProdList().isEmpty()) {
+                    mView.showError("该笔交易内无商品");
+                    return;
+                }
                 String appPayType = RtnHelper.getPay().getAppPayType();
                 mView.existTrade(RtnHelper.getProdList());
                 mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType), payTypeImgRes(appPayType));
@@ -52,14 +56,23 @@ public class RtnProdPresenter implements Contract.RtnProdPresenter {
                 //本地无此流水，开始联网查询
                 if (ZgParams.isIsOnline()) {
                     //网络有数据
+                    LogUtil.d("----查后台");
+                    if (lsNo.length() < 16) {
+                        mView.showError("本地无数据\n请输入完整流水号获取后台数据");
+                        return;
+                    }
                     RtnLsDownloadTask.taskStart(lsNo, new OperateCallback() {
                         @Override
                         public void onSuccess(Map<String, Object> data) {
+                            if (RtnHelper.getProdList().isEmpty()) {
+                                mView.showError("该笔交易内无商品");
+                                return;
+                            }
                             //有此流水
                             if (RtnHelper.initRtnOnline()) {
                                 String appPayType = RtnHelper.getPay().getAppPayType();
-                                List<TradeProd> prodList = RtnHelper.getProdList();
-                                mView.existTrade(prodList);
+                                mView.showTradeFlag(RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN));
+                                mView.existTrade(RtnHelper.getProdList());
                                 mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType), payTypeImgRes(appPayType));
                                 mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(RtnHelper.getTrade().getTradeTime())
                                         , lsNo, TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));

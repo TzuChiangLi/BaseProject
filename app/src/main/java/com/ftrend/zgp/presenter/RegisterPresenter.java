@@ -4,7 +4,7 @@ import android.Manifest;
 
 import com.blankj.utilcode.util.DeviceUtils;
 import com.blankj.utilcode.util.PhoneUtils;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.RegisterContract;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.http.HttpUtil;
@@ -21,16 +21,16 @@ import java.util.Map;
  *
  * @author liziqiang@ftrend.cn
  */
-public class RegisterPresenter implements Contract.RegisterPresenter {
-    private Contract.RegisterView mView;
+public class RegisterPresenter implements RegisterContract.RegisterPresenter {
+    private RegisterContract.RegisterView mView;
     private static String devSn = "";
     private String regCode = "", posCode = "";
 
-    private RegisterPresenter(Contract.RegisterView mView) {
+    private RegisterPresenter(RegisterContract.RegisterView mView) {
         this.mView = mView;
     }
 
-    public static RegisterPresenter createPresenter(Contract.RegisterView mView) {
+    public static RegisterPresenter createPresenter(RegisterContract.RegisterView mView) {
         return new RegisterPresenter(mView);
     }
 

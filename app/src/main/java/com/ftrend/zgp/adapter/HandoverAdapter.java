@@ -29,7 +29,7 @@ public class HandoverAdapter extends BaseQuickAdapter<HandoverRecord, BaseViewHo
 
         helper.setText(R.id.handover_cash_total, String.format("%.2f", item.getSaleTotal()));
         helper.setText(R.id.handover_cash_count, String.valueOf(item.getSaleCount()));
-        helper.setText(R.id.handover_th_total, String.format("%.2f", item.getRtnCount()));
+        helper.setText(R.id.handover_th_total, String.format("%.2f", item.getRtnTotal()));
         helper.setText(R.id.handover_th_count, String.valueOf(item.getRtnCount()));
         helper.setText(R.id.handover_trade_total, String.format("%.2f", item.getTotal()));
         helper.setText(R.id.handover_trade_count, String.valueOf(item.getCount()));

@@ -33,18 +33,16 @@ public class App extends Application {
         //加载全局参数
         ZgParams.loadParams();
 
-
-        //设置日志输出为打印日志，出现error时保存到log.txt文件中
-        LogUtil.setShowLog(true);
-        LogUtil.setSaveError(true);
-
-
         //权限申请初始化
         SoulPermission.init(this);
         //是否打印日志
         SoulPermission.setDebug(true);
         //老的系统默认权限直接授予
         SoulPermission.skipOldRom(true);
+
+        //设置日志输出为打印日志，出现error时保存到log.txt文件中
+        LogUtil.setShowLog(true);
+        LogUtil.setSaveError(true);
     }
 
     public static Context getContext() {

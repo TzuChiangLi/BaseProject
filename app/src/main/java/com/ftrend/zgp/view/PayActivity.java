@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.ShopAdapter;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.PayContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.PayPresenter;
@@ -44,14 +44,14 @@ import butterknife.BindView;
  *
  * @author liziqiang@ftrend.cn
  */
-public class PayActivity extends BaseActivity implements Contract.PayView, OnTitleBarListener {
+public class PayActivity extends BaseActivity implements PayContract.PayView, OnTitleBarListener {
     @BindView(R.id.pay_top_bar)
     TitleBar mTitleBar;
     @BindView(R.id.pay_tv_total)
     TextView mTotalTv;
     @BindView(R.id.pay_rv_pay_way)
     RecyclerView mRecyclerView;
-    private Contract.PayPresenter mPresenter;
+    private PayContract.PayPresenter mPresenter;
     private static int START_SCAN = 002;
     private String lsNo;
 
@@ -107,7 +107,7 @@ public class PayActivity extends BaseActivity implements Contract.PayView, OnTit
     }
 
     @Override
-    public void setPresenter(Contract.PayPresenter presenter) {
+    public void setPresenter(PayContract.PayPresenter presenter) {
         if (presenter != null) {
             mPresenter = presenter;
         }

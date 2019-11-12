@@ -14,7 +14,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.ShopAdapter;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.RtnContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.RtnProdPresenter;
@@ -39,9 +39,11 @@ import butterknife.OnClick;
  *
  * @author liziqiang@ftrend.cn
  */
-public class RtnProdActivity extends BaseActivity implements OnTitleBarListener, Contract.RtnProdView {
+public class RtnProdActivity extends BaseActivity implements OnTitleBarListener, RtnContract.RtnProdView {
     @BindView(R.id.rtn_prod_top_bar)
     TitleBar mTitleBar;
+    @BindView(R.id.rtn_top_bar_title)
+    TextView mTitleTv;
     @BindView(R.id.rtn_prod_rv)
     RecyclerView mRecyclerView;
     @BindView(R.id.rtn_prod_edt_trade)
@@ -65,7 +67,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
     @BindView(R.id.rtn_prod_tv_rtn_total)
     TextView mRtnTotalTv;
     private int oldPosition = -1;
-    private Contract.RtnProdPresenter mPresenter;
+    private RtnContract.RtnProdPresenter mPresenter;
     private ShopAdapter<TradeProd> mProdAdapter;
 
     @Override
@@ -115,7 +117,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
     }
 
     @Override
-    public void setPresenter(Contract.RtnProdPresenter presenter) {
+    public void setPresenter(RtnContract.RtnProdPresenter presenter) {
         if (presenter != null) {
             mPresenter = presenter;
         }
@@ -123,16 +125,19 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @OnClick(R.id.rtn_prod_btn_search)
     public void search() {
-        try {
-            mPresenter.getTradeByLsNo(mEdt.getText().toString());
-        } catch (Exception e) {
-            LogUtil.e(e.getMessage());
+        if (ClickUtil.onceClick()) {
+            return;
         }
+        LogUtil.d("----点击了");
+        mPresenter.getTradeByLsNo(mEdt.getText().toString());
         KeyboardUtils.hideSoftInput(this);
     }
 
     @OnClick(R.id.rtn_btn_enter)
     public void enter() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
         MessageUtil.question(String.format("%s%s%s%s", "退货金额￥", mRtnTotalTv.getText().toString().trim(),
                 "将原路退回至", mPayTypeTv.getText().toString().trim()), "确认", "返回",
                 new MessageUtil.MessageBoxYesNoListener() {
@@ -152,7 +157,15 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @OnClick(R.id.rtn_btn_cancel)
     public void cancel() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
         finish();
+    }
+
+    @Override
+    public void showTradeFlag(boolean hasRtned) {
+        mTitleTv.setText(String.format("%s%s", "按单退货·", hasRtned ? "已退流水" : "销售流水"));
     }
 
     @Override
@@ -225,7 +238,6 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
     public void showTradeTotal(double tradeTotal) {
         mBottomLayout.setVisibility(View.VISIBLE);
         mTradeTotalTv.setText(String.format("%.2f", tradeTotal));
-
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.ftrend.zgp.presenter;
 
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.HandoverContract;
 import com.ftrend.zgp.utils.HandoverHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.RestCallback;
@@ -15,14 +15,14 @@ import java.util.Map;
  * @author liziqiang@ftrend.cn
  */
 
-public class HandoverPresenter implements Contract.HandoverPresenter {
-    private Contract.HandoverView mView;
+public class HandoverPresenter implements HandoverContract.HandoverPresenter {
+    private HandoverContract.HandoverView mView;
 
-    private HandoverPresenter(Contract.HandoverView mView) {
+    private HandoverPresenter(HandoverContract.HandoverView mView) {
         this.mView = mView;
     }
 
-    public static HandoverPresenter createPresenter(Contract.HandoverView mView) {
+    public static HandoverPresenter createPresenter(HandoverContract.HandoverView mView) {
         return new HandoverPresenter(mView);
     }
 

@@ -1,7 +1,7 @@
 package com.ftrend.zgp.presenter;
 
 import com.ftrend.zgp.App;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.InitContract;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.utils.TradeHelper;
@@ -23,15 +23,15 @@ import java.util.Map;
 /**
  * @author liziqiang@ftrend.cn
  */
-public class InitPresenter implements Contract.InitPresenter {
-    private Contract.InitView mView;
+public class InitPresenter implements InitContract.InitPresenter {
+    private InitContract.InitView mView;
     private boolean flag = true;
 
-    private InitPresenter(Contract.InitView mView) {
+    private InitPresenter(InitContract.InitView mView) {
         this.mView = mView;
     }
 
-    public static InitPresenter createPresenter(Contract.InitView mView) {
+    public static InitPresenter createPresenter(InitContract.InitView mView) {
         return new InitPresenter(mView);
     }
 

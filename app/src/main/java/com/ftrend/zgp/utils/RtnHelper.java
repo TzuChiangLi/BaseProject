@@ -45,6 +45,10 @@ public class RtnHelper {
     private static List<TradeProd> prodList = null;
     // 支付信息
     private static TradePay pay = null;
+    // 已退流水
+    public static final String TRADE_FLAG_RTN = "1";
+    // 未退流水
+    public static final String TRADE_FLAG_SALE = "0";
 
     public static Trade getRtnTrade() {
         return rtnTrade;
@@ -140,15 +144,6 @@ public class RtnHelper {
      * @return 是否初始化完成
      */
     public static boolean initRtnOnline() {
-        if (trade == null) {
-            LogUtil.d("----online trade is null");
-        }
-        if (prodList == null) {
-            LogUtil.d("----online prodList is null");
-        }
-        if (pay == null) {
-            LogUtil.d("----online pay is null");
-        }
         if (trade != null && (prodList != null && !prodList.isEmpty()) && pay != null) {
             //设置退货单价
             for (TradeProd prod : prodList) {
@@ -173,13 +168,11 @@ public class RtnHelper {
             rtnTrade.setCreateTime(new Date());
             //初始化退货流水的创建IP
             rtnTrade.setCreateIp(ZgParams.getCurrentIp());
-            //初始化退货流水为未结单
-            rtnTrade.setTradeFlag(TRADE_FLAG_REFUND);
 
             rtnProdList = new ArrayList<>();
             rtnPay = null;
         }
-        return rtnTrade != null;
+        return (trade != null) && (rtnTrade != null);
     }
 
     /**
@@ -272,7 +265,8 @@ public class RtnHelper {
                 //小计
                 rtnProd.setTotal(prod.getRtnPrice() * rtnProd.getAmount());
                 //插入原单信息
-                rtnProd.setSaleInfo(String.format("%s %s %s", trade.getLsNo(), trade.getTradeTime(), prod.getSortNo()));
+                rtnProd.setSaleInfo(String.format("%s %s %s", trade.getLsNo(), new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(trade.getTradeTime())
+                        , prod.getSortNo()));
                 rtnProd.setDelFlag(DELFLAG_NO);
                 rtnProdList.add(rtnProd);
             }
@@ -302,7 +296,8 @@ public class RtnHelper {
                 //小计
                 rtnProd.setTotal(prod.getRtnPrice() * rtnProd.getAmount());
                 //插入原单信息
-                rtnProd.setSaleInfo(String.format("%s %s %s", trade.getLsNo(), trade.getTradeTime(), prod.getSortNo()));
+                rtnProd.setSaleInfo(String.format("%s %s %s", trade.getLsNo(), new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(trade.getTradeTime())
+                        , prod.getSortNo()));
                 rtnProd.setDelFlag(DELFLAG_NO);
                 rtnProdList.add(rtnProd);
                 LogUtil.d("----插入RtnPrice:" + prod.getRtnPrice());

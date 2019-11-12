@@ -21,7 +21,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.ShopAdapter;
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.ShopCartContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepProduct;
@@ -55,7 +55,7 @@ import butterknife.OnClick;
  *
  * @author liziqiang@ftrend.cn
  */
-public class ShopCartActivity extends BaseActivity implements Contract.ShopCartView, OnTitleBarListener {
+public class ShopCartActivity extends BaseActivity implements ShopCartContract.ShopCartView, OnTitleBarListener {
     @BindView(R.id.shop_cart_top_ll_edt_search)
     ClearEditText mSearchEdt;
     @BindView(R.id.shop_cart_rv_classes)
@@ -80,7 +80,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     int rv_item_selected;
     @BindColor(R.color.common_white)
     int rv_item_normal;
-    private Contract.ShopCartPresenter mPresenter;
+    private ShopCartContract.ShopCartPresenter mPresenter;
     private ShopAdapter<DepProduct> mProdAdapter;
     private ShopAdapter<DepCls> mClsAdapter = null;
     private int oldProdIndex = -1, oldClsIndex = -1;
@@ -391,7 +391,7 @@ public class ShopCartActivity extends BaseActivity implements Contract.ShopCartV
     }
 
     @Override
-    public void setPresenter(Contract.ShopCartPresenter presenter) {
+    public void setPresenter(ShopCartContract.ShopCartPresenter presenter) {
         if (presenter != null) {
             mPresenter = presenter;
         }

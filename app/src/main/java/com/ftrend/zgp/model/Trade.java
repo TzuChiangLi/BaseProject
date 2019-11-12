@@ -65,8 +65,8 @@ public class Trade extends BaseModel implements Cloneable {
     private transient double rtnTotal;
     //退货字段（非数据库字段）：实退商品数量
     private transient double rtnAmount = 0;
-    //退货字段（非数据库字段）：是否退货 1-已退  0-
-    private transient String rtnFlag;
+    //退货字段（非数据库字段）：是否退货 1-已退  0-未退
+    private transient String rtnFlag = "0";
 
 
     public Trade() {
@@ -237,6 +237,13 @@ public class Trade extends BaseModel implements Cloneable {
         this.rtnAmount = rtnAmount;
     }
 
+    public String getRtnFlag() {
+        return rtnFlag;
+    }
+
+    public void setRtnFlag(String rtnFlag) {
+        this.rtnFlag = rtnFlag;
+    }
 
     @Override
     public Object clone() throws CloneNotSupportedException {
@@ -248,4 +255,5 @@ public class Trade extends BaseModel implements Cloneable {
         }
         return trade;
     }
+
 }

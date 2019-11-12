@@ -17,6 +17,7 @@
         app:rightIcon="@drawable/online">
 
         <TextView
+            android:id="@+id/rtn_top_bar_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -175,8 +176,8 @@
         android:layout_above="@+id/rtn_prod_rl_bottom"
         android:layout_below="@+id/rtn_prod_ll_mid"
         android:layout_marginTop="@dimen/dp_4"
-        android:paddingStart="@dimen/dp_4"
-        android:paddingEnd="@dimen/dp_4"
+        android:layout_marginStart="@dimen/dp_4"
+        android:layout_marginEnd="@dimen/dp_4"
         tools:listitem="@layout/rtn_list_rv_product_item" />
 
     <RelativeLayout

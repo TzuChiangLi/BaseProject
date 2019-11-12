@@ -3,7 +3,7 @@ package com.ftrend.zgp.presenter;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.ftrend.zgp.api.Contract;
+import com.ftrend.zgp.api.ShopListContract;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.utils.DscHelper;
@@ -27,14 +27,14 @@ import java.util.Map;
  *
  * @author liziqiang@ftrend.cn
  */
-public class ShopListPresenter implements Contract.ShopListPresenter {
-    private Contract.ShopListView mView;
+public class ShopListPresenter implements ShopListContract.ShopListPresenter {
+    private ShopListContract.ShopListView mView;
 
-    private ShopListPresenter(Contract.ShopListView mView) {
+    private ShopListPresenter(ShopListContract.ShopListView mView) {
         this.mView = mView;
     }
 
-    public static ShopListPresenter createPresenter(Contract.ShopListView mView) {
+    public static ShopListPresenter createPresenter(ShopListContract.ShopListView mView) {
         return new ShopListPresenter(mView);
     }
 
