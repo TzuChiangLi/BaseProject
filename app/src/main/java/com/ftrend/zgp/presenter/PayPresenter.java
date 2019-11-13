@@ -94,8 +94,13 @@ public class PayPresenter implements PayContract.Presenter {
         //付款成功
         //更新交易流水表
         try {
+            //计算找零
+            double change = 0;
+            if (appPayType.equals(PayType.PAYTYPE_CASH)) {
+                change = value - TradeHelper.getTradeTotal();
+            }
             //完成支付
-            if (TradeHelper.pay(appPayType, value, 0, payCode)) {
+            if (TradeHelper.pay(appPayType, value, change, payCode)) {
                 //插入交易流水队列
                 TradeHelper.uploadTradeQueue();
                 TradeHelper.clearVip();
