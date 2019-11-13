@@ -95,6 +95,8 @@ public class CalendarSelectorDialog extends BottomPopupView implements OnRangeSe
         super.onCreate();
         ButterKnife.bind(this);
 
+        mCalendarView.setOnDateChangedListener(this);
+        mCalendarView.setOnRangeSelectedListener(this);
         mCalendarView.setSelectionMode(isRangeSelector
                 ? MaterialCalendarView.SELECTION_MODE_RANGE
                 : MaterialCalendarView.SELECTION_MODE_SINGLE);
@@ -105,8 +107,6 @@ public class CalendarSelectorDialog extends BottomPopupView implements OnRangeSe
             mCalendarView.selectRange(firstDay, lastDay);
             mCalendarView.setCurrentDate(firstDay);
         }
-        mCalendarView.setOnDateChangedListener(this);
-        mCalendarView.setOnRangeSelectedListener(this);
         mCurrentDateLabel.setText("当前日期：" + calendarDay2String(CalendarDay.today()));
     }
 
