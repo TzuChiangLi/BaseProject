@@ -275,7 +275,6 @@ public class TradeHelper {
     public static Trade getPaidLs(String lsNo) {
         return SQLite.select().from(Trade.class)
                 .where(Trade_Table.status.eq(TRADE_STATUS_PAID))
-                .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
                 .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
                 .and(Trade_Table.lsNo.eq(lsNo))
                 .querySingle();
@@ -1109,7 +1108,6 @@ public class TradeHelper {
      * @return 支付方式
      */
     public static String convertAppPayType(String appPayType, String depCode) {
-        LogUtil.d("----payType:" + appPayType);
         String payTypeName = "";
         payTypeName = SQLite.select().from(DepPayInfo.class).where(DepPayInfo_Table.depCode.eq(depCode))
                 .and(DepPayInfo_Table.appPayType.eq(appPayType)).querySingle().getPayTypeName();

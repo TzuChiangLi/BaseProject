@@ -103,9 +103,9 @@
         android:background="@color/common_white"
         android:orientation="horizontal"
         android:paddingStart="@dimen/dp_8"
-        android:paddingTop="@dimen/dp_4"
+        android:paddingTop="@dimen/dp_6"
         android:paddingEnd="@dimen/dp_8"
-        android:paddingBottom="@dimen/dp_2">
+        android:paddingBottom="@dimen/dp_4">
 
         <TextView
             android:layout_width="wrap_content"
@@ -174,11 +174,9 @@
         android:id="@+id/rtn_prod_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_4"
         android:layout_above="@+id/rtn_prod_rl_bottom"
         android:layout_below="@+id/rtn_prod_ll_mid"
-        android:layout_marginStart="@dimen/dp_4"
-        android:layout_marginTop="@dimen/dp_4"
-        android:layout_marginEnd="@dimen/dp_4"
         tools:listitem="@layout/rtn_list_rv_product_item" />
 
     <RelativeLayout

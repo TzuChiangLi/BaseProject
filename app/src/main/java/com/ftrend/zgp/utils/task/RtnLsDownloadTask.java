@@ -10,7 +10,6 @@ import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
-import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.db.ZgpDb;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
@@ -25,11 +24,8 @@ import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
-import static com.ftrend.zgp.utils.TradeHelper.TRADE_FLAG_REFUND;
 
 /**
  * 退货下载线程
@@ -189,6 +185,7 @@ public class RtnLsDownloadTask {
                 saveTrade(gson, trade);
                 saveProd(gson, prod);
                 savePay(gson, pay);
+                LogUtil.d("----prod:" + prod);
             }
         }).success(new Transaction.Success() {
             @Override
@@ -218,7 +215,7 @@ public class RtnLsDownloadTask {
     private void saveTrade(Gson gson, Map<String, Object> values) {
         Trade trade = gson.fromJson(gson.toJson(values), Trade.class);
         //初始化
-        LogUtil.d("----rtnFlag:"+trade.getRtnFlag());
+        LogUtil.d("----rtnFlag:" + trade.getRtnFlag());
         RtnHelper.setTrade(trade);
     }
 

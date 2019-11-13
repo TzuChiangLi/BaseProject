@@ -8,6 +8,7 @@ import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
 
 import java.text.SimpleDateFormat;
@@ -18,7 +19,6 @@ import java.util.Map;
  */
 public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
     private RtnContract.RtnProdView mView;
-    private RtnLsDownloadTask task;
 
     private RtnProdPresenter(RtnContract.RtnProdView mView) {
         this.mView = mView;
@@ -28,6 +28,19 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
         return new RtnProdPresenter(mView);
     }
 
+
+    @Override
+    public void confirmRtnDialog(double rtnTotal, String payTypeName) {
+        if (RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ||
+                (RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND))) {
+            return;
+        }
+        if (rtnTotal == 0) {
+            mView.showError("没有需要退货的商品");
+            return;
+        }
+        mView.showRtnInfo(rtnTotal, payTypeName);
+    }
 
     @Override
     public void getTradeByLsNo(final String lsNo) {
@@ -46,6 +59,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 }
                 String appPayType = RtnHelper.getPay().getAppPayType();
                 mView.existTrade(RtnHelper.getProdList());
+                mView.showTradeFlag(RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND));
                 mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()), payTypeImgRes(appPayType));
                 mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(RtnHelper.getTrade().getTradeTime())
                         , lsNo.length() > 8 ? lsNo : String.format("%s%s", new SimpleDateFormat("yyyyMMdd").format(RtnHelper.getTrade().getTradeTime()), lsNo),
@@ -101,10 +115,13 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
 
     @Override
     public void rtnTrade() {
+        if (RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ||
+                (RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND))) {
+            return;
+        }
         //判断支付方式
         switch (RtnHelper.getPay().getAppPayType()) {
             case "0":
-            case "1":
                 //现金
                 if (RtnHelper.pay("1", 0)) {
                     if (RtnHelper.rtn()) {
@@ -113,6 +130,8 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                         mView.showError("退货失败");
                     }
                 }
+                break;
+            case "1":
                 break;
             case "2":
                 //支付宝
@@ -125,6 +144,23 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 break;
             case "5":
                 //收钱吧
+                SqbPayHelper.refundBySn(RtnHelper.getRtnTrade(), RtnHelper.getRtnSn(), new SqbPayHelper.PayResultCallback() {
+                    @Override
+                    public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
+                        if (isSuccess) {
+                            // TODO: 2019/10/26 微信支付账号长度超过后台数据库对应字段长度，暂时先不记录支付账号
+                            if (RtnHelper.pay(payType, "")) {
+                                if (RtnHelper.rtn()) {
+                                    mView.showSuccess("退货成功");
+                                } else {
+                                    mView.showError("保存退货失败");
+                                }
+                            }
+                        } else {
+                            mView.showError(errMsg);
+                        }
+                    }
+                });
                 break;
             default:
                 break;
@@ -133,6 +169,10 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
 
     @Override
     public void changePrice(int index, double price) {
+        if (RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ||
+                (RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND))) {
+            return;
+        }
         if (price > (RtnHelper.getProdList().get(index).getTotal()
                 / RtnHelper.getProdList().get(index).getAmount())) {
             mView.showError("价格已超过销价");
@@ -152,6 +192,10 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
 
     @Override
     public void changeAmount(int index, double changeAmount) {
+        if (RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ||
+                (RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND))) {
+            return;
+        }
         //仅修改临时数据，不修改数据库内数据
         RtnHelper.rtnChangeAmount(index, changeAmount);
         //更新列表界面
@@ -168,6 +212,10 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
         RtnHelper.clearAllData();
     }
 
+    /**
+     * @param appPayType 支付方式代码
+     * @return 图片资源
+     */
     private int payTypeImgRes(String appPayType) {
         switch (appPayType) {
             case "1":

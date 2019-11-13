@@ -18,9 +18,10 @@ import com.ftrend.zgp.api.RtnContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.RtnProdPresenter;
+import com.ftrend.zgp.utils.RtnHelper;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
@@ -137,8 +138,22 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
         if (ClickUtil.onceClick()) {
             return;
         }
-        MessageUtil.question(String.format("%s%s%s%s", "退货金额￥", mRtnTotalTv.getText().toString().trim(),
-                "将原路退回至", mPayTypeTv.getText().toString().trim()), "确认", "返回",
+        mPresenter.confirmRtnDialog(Double.parseDouble(mRtnTotalTv.getText().toString().trim()),
+                mPayTypeTv.getText().toString().trim());
+    }
+
+    @OnClick(R.id.rtn_btn_cancel)
+    public void cancel() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
+        finish();
+    }
+
+    @Override
+    public void showRtnInfo(double rtnTotal, String payTypeName) {
+        MessageUtil.question(String.format("%s%s%s%s", "退货金额￥", String.format("%.2f", rtnTotal),
+                "将原路退回至", payTypeName), "确认", "返回",
                 new MessageUtil.MessageBoxYesNoListener() {
                     @Override
                     public void onYes() {
@@ -152,14 +167,6 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
                     }
                 });
 
-    }
-
-    @OnClick(R.id.rtn_btn_cancel)
-    public void cancel() {
-        if (ClickUtil.onceClick()) {
-            return;
-        }
-        finish();
     }
 
     @Override
@@ -183,6 +190,10 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
         mProdAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, final int position) {
+                if (RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ||
+                        (RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND))) {
+                    return;
+                }
                 if (ClickUtil.onceClick()) {
                     return;
                 }

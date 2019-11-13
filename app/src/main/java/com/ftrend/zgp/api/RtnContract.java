@@ -12,6 +12,11 @@ import java.util.List;
 public interface RtnContract {
     interface RtnProdPresenter {
         /**
+         * 显示退货来源及金额弹窗
+         */
+        void confirmRtnDialog(double rtnTotal,String payTypeName);
+
+        /**
          * 获取流水
          *
          * @param lsNo 流水号
@@ -54,6 +59,12 @@ public interface RtnContract {
     }
 
     interface RtnProdView extends BaseView<RtnContract.RtnProdPresenter> {
+        /**
+         * @param rtnTotal    退货金额
+         * @param payTypeName 退货来源
+         */
+        void showRtnInfo(double rtnTotal, String payTypeName);
+
         /**
          * @param hasRtned 是否已退
          */

@@ -111,10 +111,11 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                     helper.setText(R.id.rtn_list_rv_ls_tv_discount, String.format("%.2f%s%s", (((TradeProd) item).getManuDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getTranDsc()) / ((TradeProd) item).getAmount(),
                             String.format("(-%d", Math.round(100 * ((((TradeProd) item).getManuDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getTranDsc()) / ((TradeProd) item).getAmount()) / ((TradeProd) item).getPrice())), "%)"));
 
-                    //退货数量
-                    helper.setText(R.id.rtn_list_rv_rtn_tv_amount, String.valueOf(RtnHelper.getRtnAmountBySortNo(((TradeProd) item).getSortNo())).replace(".0", "")                    );
-                    //实退小计
-                    helper.setText(R.id.rtn_list_rv_rtn_tv_total, String.format("%.2f", (RtnHelper.getRtnTotalBySortNo(((TradeProd) item).getSortNo()))));
+
+                    //退货数量(如果是退货流水，显示已退数量)
+                    helper.setText(R.id.rtn_list_rv_rtn_tv_amount, String.valueOf(RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ? ((TradeProd) item).getRtnAmount() : RtnHelper.getRtnAmountBySortNo(((TradeProd) item).getSortNo())).replace(".0", ""));
+                    //实退小计(如果是退货流水，显示已退金额)
+                    helper.setText(R.id.rtn_list_rv_rtn_tv_total, String.format("%.2f", RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ? ((TradeProd) item).getRtnTotal() : (RtnHelper.getRtnTotalBySortNo(((TradeProd) item).getSortNo()))));
                     //实退单价
                     helper.setText(R.id.rtn_list_rv_rtn_tv_price, String.format("%.2f", ((TradeProd) item).getRtnPrice()));
                     //实退单位

@@ -2,11 +2,14 @@ package com.ftrend.zgp.utils;
 
 import android.util.Log;
 
+import com.ftrend.zgp.model.SqbPayOrder;
+import com.ftrend.zgp.model.SqbPayOrder_Table;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradePay_Table;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
+import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
 import com.ftrend.zgp.utils.pay.PayType;
@@ -145,12 +148,14 @@ public class RtnHelper {
      */
     public static boolean initRtnOnline() {
         if (trade != null && (prodList != null && !prodList.isEmpty()) && pay != null) {
+            //新建退货流水
+            rtnPay = null;
+            rtnTrade = new Trade();
+            rtnProdList = new ArrayList<>();
             //设置退货单价
             for (TradeProd prod : prodList) {
                 prod.setRtnPrice(prod.getTotal() / prod.getAmount());
             }
-            //新建退货流水
-            rtnTrade = new Trade();
             rtnTrade.setLsNo(newLsNo());
             rtnTrade.setDepCode(trade.getDepCode());
             rtnTrade.setTradeTime(trade.getTradeTime());
@@ -168,9 +173,6 @@ public class RtnHelper {
             rtnTrade.setCreateTime(new Date());
             //初始化退货流水的创建IP
             rtnTrade.setCreateIp(ZgParams.getCurrentIp());
-
-            rtnProdList = new ArrayList<>();
-            rtnPay = null;
         }
         return (trade != null) && (rtnTrade != null);
     }
@@ -441,6 +443,19 @@ public class RtnHelper {
     }
 
     /**
+     * 完成支付（适用于微信、支付宝、储值卡等支付方式）
+     *
+     * @param appPayType APP支付类型
+     * @param payCode    支付账号
+     * @return
+     */
+    public static boolean pay(String appPayType, String payCode) {
+        return pay(appPayType, rtnTrade.getTotal(), 0, payCode);
+    }
+
+    //endregion
+
+    /**
      * 完成支付
      *
      * @param appPayType APP支付类型
@@ -480,6 +495,35 @@ public class RtnHelper {
             return false;
         }
     }
+
+    /**
+     * 检查结算是否成功
+     *
+     * @param lsNo 流水单号
+     * @return 订单状态
+     */
+    public static boolean checkPayStatus(String lsNo) {
+        Trade payTrade = SQLite.select().from(Trade.class).where(Trade_Table.lsNo.eq(lsNo))
+                .querySingle();
+        if (payTrade != null) {
+            return TRADE_STATUS_PAID.equals(payTrade.getStatus());
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @return 获取订单号
+     */
+    public static String getRtnSn() {
+        String sn = "";
+        sn = SQLite.select().from(SqbPayOrder.class)
+                .where(SqbPayOrder_Table.lsNo.eq(trade.getLsNo()))
+                .and(SqbPayOrder_Table.depCode.eq(trade.getDepCode()))
+                .querySingle().getSn();
+        return sn;
+    }
+
 
     /**
      * 清空所有临时数据
