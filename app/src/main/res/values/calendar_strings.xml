@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="calendar_single_title">日期选择</string>
+    <string name="calendar_multi_title">日期范围选择</string>
+
+    <string name="calendar_close_button">X</string>
+    <string name="calendar_ok_button">确认选择</string>
+    <string name="calendar_cancel_button">取消选择</string>
+</resources>

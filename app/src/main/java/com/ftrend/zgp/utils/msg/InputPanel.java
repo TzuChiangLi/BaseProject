@@ -1,8 +1,12 @@
 package com.ftrend.zgp.utils.msg;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
+import com.ftrend.zgp.utils.pop.CalendarSelectorDialog;
 import com.ftrend.zgp.utils.pop.CommonInputDialog;
+import com.ftrend.zgp.utils.pop.DateRangeInputCallback;
 import com.ftrend.zgp.utils.pop.DscData;
 import com.ftrend.zgp.utils.pop.DscInputCallback;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
@@ -12,6 +16,8 @@ import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.ftrend.zgp.utils.pop.VipCardDialog;
 import com.ftrend.zgp.utils.pop.VipMoreBtnDialog;
 import com.lxj.xpopup.XPopup;
+
+import java.util.Date;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -130,5 +136,46 @@ public class InputPanel {
                 .dismissOnTouchOutside(false)
                 .asCustom(new CommonInputDialog(context, title, "确定", "", 50, true, callback))
                 .show();
+    }
+
+    /**
+     * 日期选择对话框
+     *
+     * @param context
+     * @param initDate 默认选中日期，可为null
+     * @param callback
+     */
+    public static void showSingleCalendarSelector(@NonNull Context context,
+                                                  @Nullable Date initDate,
+                                                  @NonNull DateRangeInputCallback callback) {
+        new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
+                .asCustom(CalendarSelectorDialog.singleSelector(context, initDate, callback))
+                .show();
+    }
+
+    public static void showSingleCalendarSelector(Context context, DateRangeInputCallback callback) {
+        showSingleCalendarSelector(context, null, callback);
+    }
+
+    /**
+     * 日期范围选择对话框
+     *
+     * @param context
+     * @param from     默认选中开始日期，可为null
+     * @param to       默认选中结束日期，可为null
+     * @param callback
+     */
+    public static void showMultiCalendarSelector(@NonNull Context context,
+                                                 @Nullable Date from, @Nullable Date to,
+                                                 @NonNull DateRangeInputCallback callback) {
+        new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
+                .asCustom(CalendarSelectorDialog.multiSelector(context, from, to, callback))
+                .show();
+    }
+
+    public static void showMultiCalendarSelector(Context context, DateRangeInputCallback callback) {
+        showMultiCalendarSelector(context, null, null, callback);
     }
 }
