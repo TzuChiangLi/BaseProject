@@ -44,10 +44,10 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_36"
         android:layout_below="@+id/rtn_prod_title_line"
-        android:paddingTop="@dimen/dp_2"
-        android:orientation="horizontal"
         android:background="@color/common_white"
+        android:orientation="horizontal"
         android:paddingStart="@dimen/dp_8"
+        android:paddingTop="@dimen/dp_2"
         android:paddingEnd="@dimen/dp_8">
 
         <Button
@@ -161,10 +161,11 @@
             android:id="@+id/rtn_prod_tv_cahier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="@dimen/dp_24"
+            android:text="@string/rtn_prod_tv_cashier_empty"
             android:textAlignment="textEnd"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10"
-            android:text="@string/rtn_prod_tv_cashier_empty"
             tools:text="@string/rtn_prod_replace_cashier" />
 
     </LinearLayout>
@@ -175,8 +176,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/rtn_prod_rl_bottom"
         android:layout_below="@+id/rtn_prod_ll_mid"
-        android:layout_marginTop="@dimen/dp_4"
         android:layout_marginStart="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_4"
         android:layout_marginEnd="@dimen/dp_4"
         tools:listitem="@layout/rtn_list_rv_product_item" />
 
@@ -185,32 +186,31 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"
         android:background="@color/common_white"
         android:paddingStart="@dimen/dp_8"
-        android:paddingEnd="@dimen/dp_0">
+        android:paddingEnd="@dimen/dp_0"
+        android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/rtn_prod_ll_pay_type"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp_32"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:gravity="center"
-            android:orientation="vertical"
-            android:paddingEnd="@dimen/dp_8">
+            android:orientation="vertical">
 
             <ImageView
                 android:id="@+id/rtn_prod_img_pay_type"
-                android:layout_width="@dimen/dp_22"
-                android:layout_height="@dimen/dp_22"
-                android:layout_gravity="center"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
                 android:scaleType="centerInside"
                 tools:src="@drawable/alipay" />
 
             <TextView
                 android:id="@+id/rtn_prod_tv_pay_type"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:paddingTop="@dimen/dp_2"
                 android:textColor="@color/text_black_second"
                 android:textSize="@dimen/sp_10"
@@ -223,6 +223,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/rtn_prod_ll_pay_type"
+            android:layout_marginStart="@dimen/dp_8"
             android:layout_toEndOf="@+id/rtn_prod_ll_pay_type"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/dp_4"
@@ -247,6 +248,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/rtn_prod_ll_pay_type"
+            android:layout_marginStart="@dimen/dp_8"
             android:layout_toEndOf="@+id/rtn_prod_ll_pay_type"
             android:gravity="bottom"
             android:paddingStart="@dimen/dp_4"

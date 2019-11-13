@@ -8,6 +8,7 @@ import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepPayInfo;
+import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.SysParams;
@@ -31,7 +32,6 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -284,8 +284,6 @@ public class TradeHelper {
             return -1;
         }
     }
-
-
 
 
     /**
@@ -1127,24 +1125,18 @@ public class TradeHelper {
     }
 
     /**
-     * @param payType 支付方式
+     * @param appPayType
      * @return 支付方式
      */
-    public static String convertAppPayType(String payType) {
-        LogUtil.d("----payType:" + payType);
-        switch (payType) {
-            case "1":
-                return "现金";
-            case "2":
-                return "支付宝";
-            case "3":
-                return "微信支付";
-            case "4":
-                return "储值卡";
-            case "5":
-                return "收钱吧";
-            default:
-                return "未知方式";
+    public static String convertAppPayType(String appPayType, String depCode) {
+        LogUtil.d("----payType:" + appPayType);
+        String payTypeName = "";
+        payTypeName = SQLite.select().from(DepPayInfo.class).where(DepPayInfo_Table.depCode.eq(depCode))
+                .and(DepPayInfo_Table.appPayType.eq(appPayType)).querySingle().getPayTypeName();
+        if (TextUtils.isEmpty(payTypeName)) {
+            return "未知方式";
+        } else {
+            return payTypeName;
         }
     }
 }

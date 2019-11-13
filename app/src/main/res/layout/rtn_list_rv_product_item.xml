@@ -138,11 +138,21 @@
             android:layout_marginTop="@dimen/dp_4"
             android:textSize="@dimen/sp_16">
 
+            <ImageView
+                android:id="@+id/rtn_list_rv_img_original"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/rtn_list_rv_ls_tv_price_title"
+                android:layout_alignBottom="@+id/rtn_list_rv_ls_tv_price_title"
+                android:layout_alignParentStart="true"
+                android:scaleType="centerInside"
+                android:src="@drawable/rtn_rv_item_img_original" />
+
             <TextView
                 android:id="@+id/rtn_list_rv_ls_tv_price_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
+                android:layout_toEndOf="@+id/rtn_list_rv_img_original"
                 android:text="@string/shop_tv_per_price"
                 android:textColor="@color/text_black_first"
                 android:textSize="@dimen/sp_14" />
@@ -208,12 +218,23 @@
                 android:layout_marginBottom="@dimen/dp_4"
                 android:background="@color/divide_line" />
 
+            <ImageView
+                android:id="@+id/rtn_list_rv_img_rtn"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rtn_list_line"
+                android:layout_alignTop="@+id/rtn_list_rv_rtn_tv_price_title"
+                android:layout_alignBottom="@+id/rtn_list_rv_rtn_tv_price_title"
+                android:scaleType="centerInside"
+                android:src="@drawable/rtn_rv_item_img_rtn" />
+
+
             <TextView
                 android:id="@+id/rtn_list_rv_rtn_tv_price_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rtn_list_line"
-                android:layout_alignParentStart="true"
+                android:layout_toEndOf="@+id/rtn_list_rv_img_rtn"
                 android:text="@string/shop_tv_per_price"
                 android:textColor="@color/text_black_first"
                 android:textSize="@dimen/sp_14" />
@@ -223,6 +244,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rtn_list_line"
+                android:layout_alignTop="@+id/rtn_list_rv_rtn_tv_price_title"
+                android:layout_alignBottom="@+id/rtn_list_rv_rtn_tv_price_title"
                 android:layout_toEndOf="@+id/rtn_list_rv_rtn_tv_price_title"
                 android:textColor="@color/text_black_first"
                 tools:text="@string/shop_tv_num_replace" />
@@ -233,6 +256,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rtn_list_line"
                 android:layout_alignStart="@+id/rtn_list_rv_ls_ll_dsc"
+                android:layout_alignTop="@+id/rtn_list_rv_rtn_tv_price_title"
+                android:layout_alignBottom="@+id/rtn_list_rv_rtn_tv_price_title"
                 android:orientation="horizontal">
 
                 <TextView
@@ -268,6 +293,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rtn_list_line"
                 android:layout_alignStart="@+id/rtn_list_rv_ls_tv_total_title"
+                android:layout_alignTop="@+id/rtn_list_rv_rtn_tv_price_title"
+                android:layout_alignBottom="@+id/rtn_list_rv_rtn_tv_price_title"
                 android:text="@string/shop_tv_sub_total"
                 android:textColor="@color/text_black_first"
                 android:textSize="@dimen/sp_14" />
@@ -277,6 +304,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rtn_list_line"
+                android:layout_alignTop="@+id/rtn_list_rv_rtn_tv_price_title"
+                android:layout_alignBottom="@+id/rtn_list_rv_rtn_tv_price_title"
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="1dp"
                 android:textColor="@color/text_black_first"

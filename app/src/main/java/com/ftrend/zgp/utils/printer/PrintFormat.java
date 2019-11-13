@@ -101,7 +101,7 @@ public class PrintFormat {
         //支付方式
         printData = new PrintData();
         printData.setAlign(ALIGN_LEFT);
-        printData.setPrintData(mergeString("支付方式：", TradeHelper.convertAppPayType(TradeHelper.getPay().getAppPayType()), 32));
+        printData.setPrintData(mergeString("支付方式：", TradeHelper.convertAppPayType(TradeHelper.getPay().getAppPayType(),TradeHelper.getTrade().getDepCode()), 32));
         printDataList.add(printData);
         //商品原价
         printData = new PrintData();

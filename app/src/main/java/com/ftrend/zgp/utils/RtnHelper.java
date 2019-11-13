@@ -2,7 +2,6 @@ package com.ftrend.zgp.utils;
 
 import android.util.Log;
 
-import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradePay_Table;
@@ -134,6 +133,7 @@ public class RtnHelper {
             rtnProdList = new ArrayList<>();
 
             rtnPay = null;
+
             return rtnTrade != null;
         }
     }
@@ -300,7 +300,6 @@ public class RtnHelper {
                         , prod.getSortNo()));
                 rtnProd.setDelFlag(DELFLAG_NO);
                 rtnProdList.add(rtnProd);
-                LogUtil.d("----插入RtnPrice:" + prod.getRtnPrice());
             }
         }
         //统一更新交易流水

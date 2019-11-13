@@ -128,7 +128,6 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
         if (ClickUtil.onceClick()) {
             return;
         }
-        LogUtil.d("----点击了");
         mPresenter.getTradeByLsNo(mEdt.getText().toString());
         KeyboardUtils.hideSoftInput(this);
     }

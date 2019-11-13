@@ -2,7 +2,6 @@ package com.ftrend.zgp.presenter;
 
 import android.text.TextUtils;
 
-import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.RtnContract;
 import com.ftrend.zgp.utils.OperateCallback;
@@ -40,7 +39,6 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
             lsNoLite = lsNo.length() > 8 ? lsNo.substring(8) : lsNo;
             //先获取本地流水单
             if (RtnHelper.initRtnLocal(lsNoLite)) {
-                LogUtil.d("----查本地");
                 //获取支付方式
                 if (RtnHelper.getProdList().isEmpty()) {
                     mView.showError("该笔交易内无商品");
@@ -48,15 +46,15 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 }
                 String appPayType = RtnHelper.getPay().getAppPayType();
                 mView.existTrade(RtnHelper.getProdList());
-                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType), payTypeImgRes(appPayType));
+                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()), payTypeImgRes(appPayType));
                 mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(RtnHelper.getTrade().getTradeTime())
-                        , lsNo, TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
+                        , lsNo.length() > 8 ? lsNo : String.format("%s%s", new SimpleDateFormat("yyyyMMdd").format(RtnHelper.getTrade().getTradeTime()), lsNo),
+                        TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
                 updateTradeInfo();
             } else {
                 //本地无此流水，开始联网查询
                 if (ZgParams.isIsOnline()) {
                     //网络有数据
-                    LogUtil.d("----查后台");
                     if (lsNo.length() < 16) {
                         mView.showError("本地无数据\n请输入完整流水号获取后台数据");
                         return;
@@ -73,7 +71,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                                 String appPayType = RtnHelper.getPay().getAppPayType();
                                 mView.showTradeFlag(RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN));
                                 mView.existTrade(RtnHelper.getProdList());
-                                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType), payTypeImgRes(appPayType));
+                                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()).trim(), payTypeImgRes(appPayType));
                                 mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(RtnHelper.getTrade().getTradeTime())
                                         , lsNo, TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
                                 updateTradeInfo();
