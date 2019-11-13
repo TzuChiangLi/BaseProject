@@ -154,6 +154,51 @@ public interface RestApi {
     Observable<RestResponse<Map<String, Object>>> queryRefundLs(@Body RestRequest<Map<String, Object>> request);
 
     /**
+     * 会员卡信息查询请求
+     *
+     * @param request
+     * @return
+     */
+    @POST("trade/card/info/request")
+    Observable<RestResponse<Map<String, Object>>> payCardInfoRequest(@Body RestRequest<Map<String, Object>> request);
+
+    /**
+     * 会员卡信息查询结果
+     *
+     * @param request
+     * @return
+     */
+    @POST("trade/card/info")
+    Observable<RestResponse<Map<String, Object>>> payCardInfo(@Body RestRequest<Map<String, Object>> request);
+
+    /**
+     * 会员卡支付请求（只支持磁卡）
+     *
+     * @param request
+     * @return
+     */
+    @POST("trade/card/pay/request")
+    Observable<RestResponse<Map<String, Object>>> payCardRequest(@Body RestRequest<Map<String, Object>> request);
+
+    /**
+     * 会员卡支付结果
+     *
+     * @param request
+     * @return
+     */
+    @POST("trade/card/pay/result")
+    Observable<RestResponse<Map<String, Object>>> payCard(@Body RestRequest<Map<String, Object>> request);
+
+    /**
+     * 会员卡支付密码验证
+     *
+     * @param request
+     * @return
+     */
+    @POST("trade/card/pay/pwd")
+    Observable<RestResponse<Map<String, Object>>> vipCardPwdValidate(@Body RestRequest<Map<String, Object>> request);
+
+    /**
      * 上传交易流水
      *
      * @param request

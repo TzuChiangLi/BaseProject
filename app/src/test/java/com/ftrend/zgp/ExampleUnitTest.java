@@ -27,6 +27,8 @@ public class ExampleUnitTest {
         System.out.println("用户密码: 宋昆林 => " + EncryptUtill.pwdDecrypt("7C?A>7"));
         System.out.println("用户密码: 周显云 => " + EncryptUtill.pwdDecrypt("7-:>D,H;5"));
         System.out.println("用户密码: 杨莉 => " + EncryptUtill.pwdDecrypt("7AUAL;;?."));
+        System.out.println("刷卡密码 => " + EncryptUtill.pwdDecrypt("7AUAL;;?."));
+        System.out.println("卡号密码 => " + EncryptUtill.pwdDecrypt("6A>><7I@_"));
     }
 
 }

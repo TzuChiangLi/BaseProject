@@ -57,7 +57,7 @@ public class RegisterPresenter implements RegisterContract.RegisterPresenter {
         @Override
         public void onFailed(String errorCode, String errorMsg) {
             MessageUtil.waitEnd();
-            MessageUtil.serverError(errorCode, errorMsg);
+            MessageUtil.error(errorCode, errorMsg);
         }
     };
 

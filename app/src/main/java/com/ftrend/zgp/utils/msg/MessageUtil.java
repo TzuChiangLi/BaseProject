@@ -132,14 +132,12 @@ public class MessageUtil {
         oneBtnDialog(message, DialogBuilder.DialogType.error, listener);
     }
 
-    public static void serverError(String errCode, String errMsg) {
-        String msg = String.format(Locale.CHINA, "%s - %s", errCode, errMsg);
-        error(msg);
+    public static void error(String errCode, String errMsg) {
+        error(formatErrorMsg(errCode, errMsg));
     }
 
-    public static void serverError(String errCode, String errMsg, MessageBoxOkListener listener) {
-        String msg = String.format(Locale.CHINA, "%s - %s", errCode, errMsg);
-        error(msg, listener);
+    public static void error(String errCode, String errMsg, MessageBoxOkListener listener) {
+        error(formatErrorMsg(errCode, errMsg), listener);
     }
 
     /**
@@ -185,6 +183,10 @@ public class MessageUtil {
      */
     private static BasePopupView waitDialog = null;
 
+    public static boolean isWaiting() {
+        return waitDialog != null && waitDialog.isShow();
+    }
+
     /**
      * 显示等待提示框
      *
@@ -194,6 +196,12 @@ public class MessageUtil {
     public static void waitBegin(String message, final MessageBoxCancelListener listener) {
         if (waitDialog != null) {
             waitEnd();
+            /*if (waitDialog.isDismiss()) {
+                waitEnd();
+            } else {
+                waitUpdate(message, listener);
+                return;
+            }*/
         }
         Context context = ActivityUtils.getTopActivity();
         DialogBuilder builder = new DialogBuilder(context, 1);
@@ -237,6 +245,26 @@ public class MessageUtil {
         }
     }
 
+    public static void waitUpdate(String msg, final MessageBoxOkListener listener) {
+        if (waitDialog == null) {
+            return;
+        }
+        if (waitDialog instanceof DialogBuilder) {
+            ((DialogBuilder) waitDialog).updateMsg(msg);
+            ((DialogBuilder) waitDialog).updateListener(listener);
+        }
+    }
+
+    public static void waitUpdate(String msg, final MessageBoxCancelListener listener) {
+        if (waitDialog == null) {
+            return;
+        }
+        if (waitDialog instanceof DialogBuilder) {
+            ((DialogBuilder) waitDialog).updateMsg(msg);
+            ((DialogBuilder) waitDialog).updateListener(listener);
+        }
+    }
+
     /**
      * @param msg 内容文本
      */
@@ -246,21 +274,12 @@ public class MessageUtil {
         }
         if (waitDialog instanceof DialogBuilder) {
             ((DialogBuilder) waitDialog).updateError(msg);
-            ((DialogBuilder) waitDialog).setOnClickListener(new DialogBuilder.OnBtnClickListener() {
-                @Override
-                public void onLeftBtnClick(BasePopupView v) {
-                    if (listener != null) {
-                        listener.onOk();
-                    }
-                    waitDialog.dismiss();
-                }
-
-                @Override
-                public void onRightBtnClick(BasePopupView v) {
-
-                }
-            });
+            ((DialogBuilder) waitDialog).updateListener(listener);
         }
+    }
+
+    public static void waitError(String errCode, String errMsg, final MessageBoxOkListener listener) {
+        waitError(formatErrorMsg(errCode, errMsg), listener);
     }
 
     public static void waitSuccesss(String msg, final MessageBoxOkListener listener) {
@@ -269,20 +288,7 @@ public class MessageUtil {
         }
         if (waitDialog instanceof DialogBuilder) {
             ((DialogBuilder) waitDialog).updateSucccess(msg);
-            ((DialogBuilder) waitDialog).setOnClickListener(new DialogBuilder.OnBtnClickListener() {
-                @Override
-                public void onLeftBtnClick(BasePopupView v) {
-                    if (listener != null) {
-                        listener.onOk();
-                    }
-                    waitDialog.dismiss();
-                }
-
-                @Override
-                public void onRightBtnClick(BasePopupView v) {
-
-                }
-            });
+            ((DialogBuilder) waitDialog).updateListener(listener);
         }
     }
 
@@ -317,14 +323,6 @@ public class MessageUtil {
                 .show();
     }
 
-
-    /**
-     * 成功
-     */
-    public static void showSuccess() {
-        showSuccess("成功");
-    }
-
     /**
      * 成功自定义文字
      *
@@ -337,13 +335,6 @@ public class MessageUtil {
                 .setImageDrawable(android.R.id.icon, R.drawable.toast_success)
                 .setText(android.R.id.message, text)
                 .show();
-    }
-
-    /**
-     * 错误
-     */
-    public static void showError() {
-        showError("出现错误");
     }
 
     /**
@@ -366,9 +357,8 @@ public class MessageUtil {
      * @param errCode 错误码
      * @param errMsg  错误信息
      */
-    public static void showServerError(String errCode, String errMsg) {
-        String msg = String.format(Locale.CHINA, "%s - %s", errCode, errMsg);
-        showError(msg);
+    public static void showError(String errCode, String errMsg) {
+        showError(formatErrorMsg(errCode, errMsg));
     }
 
     /**
@@ -400,4 +390,12 @@ public class MessageUtil {
 
 
     //endregion
+
+    private static String formatErrorMsg(String code, String msg) {
+        if (code.length() == 3) {
+            //http错误码
+            msg = "网络通讯异常";
+        }
+        return String.format(Locale.CHINA, "%s - %s", code, msg);
+    }
 }

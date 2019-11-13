@@ -26,6 +26,10 @@ public class Event {
      * 目标界面：弹窗进度
      */
     public static final int TARGET_DIALOG_PROGRESS = 3;
+    /**
+     * 目标界面：支付模块
+     */
+    public static final int TARGET_PAY = 4;
     //-----------------------------------操作命令-----------------------------------------//
 
     /**
