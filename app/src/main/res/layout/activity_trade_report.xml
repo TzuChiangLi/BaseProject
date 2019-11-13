@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ftrend.zgp.view.TradeReportActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="1dp">
+
+        <TextView
+            android:id="@+id/textView_dep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginBottom="@dimen/dp_3"
+            android:text="专柜：乐知味" />
+
+        <TextView
+            android:id="@+id/textView_date_range"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginBottom="@dimen/dp_3"
+            android:text="日期：2019-11-13 ~ 2019-11-14" />
+
+        <GridLayout
+            android:id="@+id/grid_report"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:columnCount="3">
+
+            <TextView
+                android:id="@+id/cell_item_header"
+                android:layout_gravity="fill"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14"
+                android:text="项目" />
+
+            <TextView
+                android:id="@+id/cell_total_header"
+                android:layout_gravity="fill"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14"
+                android:text="金额" />
+
+            <TextView
+                android:id="@+id/cell_count_header"
+                android:layout_gravity="fill"
+                android:layout_columnWeight="1"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14"
+                android:text="次数" />
+
+            <TextView
+                android:id="@+id/cell_sale_item"
+                android:layout_gravity="fill"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14"
+                android:text="销售" />
+
+            <TextView
+                android:id="@+id/cell_sale_total"
+                android:layout_gravity="fill"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/cell_sale_count"
+                android:layout_gravity="fill"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/cell_rtn_item"
+                android:layout_gravity="fill"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14"
+                android:text="退货" />
+
+            <TextView
+                android:id="@+id/cell_rtn_total"
+                android:layout_gravity="fill"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/cell_rtn_count"
+                android:layout_gravity="fill"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/cell_sum_item"
+                android:layout_gravity="fill"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14"
+                android:text="合计" />
+
+            <TextView
+                android:id="@+id/cell_sum_total"
+                android:layout_gravity="fill"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14"
+                android:text="0" />
+
+            <TextView
+                android:id="@+id/cell_sum_count"
+                android:layout_gravity="fill"
+                android:gravity="center"
+                android:textSize="@dimen/sp_14"
+                android:text="0" />
+
+
+        </GridLayout>
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

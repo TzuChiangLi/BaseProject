@@ -469,4 +469,21 @@ public class RestSubscribe {
         detachAndSubscribe(api.uploadSqb(request), callback);
     }
 
+    /**
+     * 查询总交易报表
+     *
+     * @param depCode   专柜编号
+     * @param beginDate 开始日期
+     * @param endDate   结束日期
+     * @param callback
+     */
+    public void queryTradeReport(String depCode, String beginDate, String endDate, final RestCallback callback) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("depCode", depCode);
+        params.put("beginDate", beginDate);
+        params.put("endDate", endDate);
+        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        request.setBody(params);
+        detachAndSubscribe(api.queryTradeReport(request), callback);
+    }
 }

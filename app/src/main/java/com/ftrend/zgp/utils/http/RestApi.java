@@ -234,4 +234,13 @@ public interface RestApi {
     @POST("upload/sqb")
     Observable<RestResponse<Map<String, Object>>> uploadSqb(@Body RestRequest<Map<String, Object>> request);
 
+    /**
+     * 查询总交易报表
+     *
+     * @param request
+     * @return
+     */
+    @POST("report/trade")
+    Observable<RestResponse<Map<String, Object>>> queryTradeReport(@Body RestRequest<Map<String, Object>> request);
+
 }

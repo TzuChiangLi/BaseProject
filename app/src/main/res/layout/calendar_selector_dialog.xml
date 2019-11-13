@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/vip_mobile_card_shape"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/calendar_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/calendar_close"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_24"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:text="@string/calendar_multi_title"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/calendar_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/dp_24"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:scaleType="centerCrop"
+        android:src="@drawable/close"
+        android:contentDescription="@string/calendar_close_button" />
+
+    <LinearLayout
+        android:id="@+id/calendar_selector"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/calendar_title"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView_selection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginBottom="@dimen/dp_3"
+            android:textAlignment="center" />
+
+        <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+            android:id="@+id/calendarView_period"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_30"
+            android:layout_marginRight="@dimen/dp_30"
+            app:mcv_selectionMode="range"
+            app:mcv_showOtherDates="other_months"
+            app:mcv_allowClickDaysOutsideCurrentMonth="true"
+            app:mcv_selectionColor="@color/common_red"
+            app:mcv_firstDayOfWeek="monday"
+            android:background="@color/common_gray_bg" />
+
+        <TextView
+            android:id="@+id/textView_current_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginBottom="@dimen/dp_3"
+            android:layout_marginLeft="@dimen/dp_30" />
+
+        <LinearLayout
+            android:id="@+id/calendar_buttons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/common_white"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/calendar_btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shop_btn_gray_selector"
+                android:text="@string/calendar_cancel_button" />
+
+            <Button
+                android:id="@+id/calendar_btn_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shop_btn_red_selector"
+                android:text="@string/calendar_ok_button"
+                android:textColor="@color/shop_white_text" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

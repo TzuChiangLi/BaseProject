@@ -46,7 +46,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/NoActionBar">
-        <activity android:name=".view.RtnProdActivity"></activity>
+        <activity android:name=".view.TradeReportActivity" />
+        <activity android:name=".view.RtnProdActivity" />
         <activity android:name=".view.OrderOutActivity" />
         <activity android:name=".view.HandoverActivity" />
         <activity android:name=".view.RegisterActivity" />
@@ -79,13 +80,13 @@
         <!-- 收钱吧集成 -->
         <activity
             android:name="com.wosai.upay.ui.MainActivity"
-            android:theme="@style/AppBaseTheme"
             android:configChanges="keyboardHidden|orientation|screenSize"
-            android:windowSoftInputMode="stateHidden|adjustResize"></activity>
+            android:theme="@style/AppBaseTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name="com.wosai.upay.zbar.activity.CaptureActivity"
             android:theme="@style/AppBaseTheme"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
 
         <receiver
             android:name="com.wosai.upay.common.UpayTask$MyBroadcastReceiver"
@@ -94,13 +95,15 @@
                 <action android:name="com.wosai.upay" />
             </intent-filter>
         </receiver>
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="jb5QfTeGACZiPIUBx9ZwIC82" />
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"></service>
+            android:process=":remote" />
     </application>
 
 </manifest>

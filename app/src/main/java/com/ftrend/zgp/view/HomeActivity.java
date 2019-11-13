@@ -222,8 +222,11 @@ public class HomeActivity extends BaseActivity implements Contract.HomeView, Men
             case "退货":
                 mPresenter.goRtnProd();
                 break;
-            case "交班报表":
             case "交易统计":
+                Intent intent = new Intent(HomeActivity.this, TradeReportActivity.class);
+                startActivity(intent);
+                break;
+            case "交班报表":
             case "流水查询":
             case "操作指南":
             case "修改密码":
