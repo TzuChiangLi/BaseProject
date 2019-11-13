@@ -1,9 +1,11 @@
 package com.ftrend.zgp.view;
 
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.HandoverAdapter;
@@ -30,10 +32,16 @@ public class HandoverActivity extends BaseActivity implements HandoverContract.H
     RecyclerView mRecyclerView;
     @BindView(R.id.handover_btn_handover)
     Button mHandoverBtn;
+    @BindView(R.id.handover_btn_cancel)
+    Button mCancelBtn;
     @BindView(R.id.handover_top_bar)
     TitleBar mTitleBar;
+    @BindView(R.id.handover_tv_title)
+    TextView mTitleLabel;
     private HandoverAdapter mAdapter = null;
     private HandoverContract.HandoverPresenter mPresenter;
+    // 是否查看交班报表模式
+    private boolean isReport = false;
 
     @Override
     protected int getLayoutID() {
@@ -42,7 +50,7 @@ public class HandoverActivity extends BaseActivity implements HandoverContract.H
 
     @Override
     protected void initData() {
-        mPresenter.initView();
+        mPresenter.initView(isReport);
     }
 
     @Override
@@ -51,6 +59,14 @@ public class HandoverActivity extends BaseActivity implements HandoverContract.H
             mPresenter = HandoverPresenter.createPresenter(this);
         }
         mTitleBar.setOnTitleBarListener(this);
+        Intent intent = getIntent();
+        isReport = intent.getBooleanExtra("isReport", false);
+        if (isReport) {
+            // 交班报表查询模式
+            mTitleLabel.setText("交班报表");
+            mHandoverBtn.setVisibility(View.GONE);
+            mCancelBtn.setText("返回");
+        }
     }
 
     @Override

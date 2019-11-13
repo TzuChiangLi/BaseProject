@@ -145,8 +145,14 @@ public class HandoverHelper {
      *
      * @return
      */
-    public static boolean handoverSum() {
-        List<String> userList = getUserList();
+    public static boolean handoverSum(boolean isReport) {
+        List<String> userList;
+        if (isReport) {
+            userList = new ArrayList<>();
+            userList.add(ZgParams.getCurrentUser().getUserCode());
+        } else {
+            userList = getUserList();
+        }
         sumList.clear();
         payList.clear();
         for (String userCode : userList) {

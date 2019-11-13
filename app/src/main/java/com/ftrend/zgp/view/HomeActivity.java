@@ -134,6 +134,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
         if (ClickUtil.onceClick()) {
             return;
         }
+        Intent intent;
         switch ((String) view.getTag()) {
             case "收银":
                 mPresenter.goShopCart();
@@ -223,10 +224,14 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
                 mPresenter.goRtnProd();
                 break;
             case "交易统计":
-                Intent intent = new Intent(HomeActivity.this, TradeReportActivity.class);
+                intent = new Intent(HomeActivity.this, TradeReportActivity.class);
                 startActivity(intent);
                 break;
             case "交班报表":
+                intent = new Intent(HomeActivity.this, HandoverActivity.class);
+                intent.putExtra("isReport", true);
+                startActivity(intent);
+                break;
             case "流水查询":
             case "操作指南":
             case "修改密码":

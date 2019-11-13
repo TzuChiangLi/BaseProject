@@ -27,9 +27,9 @@ public class HandoverPresenter implements HandoverContract.HandoverPresenter {
     }
 
     @Override
-    public void initView() {
+    public void initView(boolean isReport) {
         HandoverHelper.initHandover();
-        HandoverHelper.handoverSum();
+        HandoverHelper.handoverSum(isReport);
         mView.showHandoverRecord(HandoverHelper.getRecordList());
     }
 

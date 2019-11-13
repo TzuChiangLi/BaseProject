@@ -14,7 +14,7 @@ public interface HandoverContract {
         /**
          * 初始化界面
          */
-        void initView();
+        void initView(boolean isReport);
 
         /**
          * 交班
