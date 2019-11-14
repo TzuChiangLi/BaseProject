@@ -10,10 +10,6 @@ import com.blankj.utilcode.util.GsonUtils;
  * @since 2019/10/22
  */
 public class SqbConfig {
-    /**
-     * 当前是否演示模式。演示模式下，付款和退款金额都为100（1元）
-     */
-    private boolean demoMode = true;
 
     /** 收钱吧接入域名 */
 //    public static final String apiDomain = "https://api.shouqianba.com";
@@ -66,14 +62,6 @@ public class SqbConfig {
         } catch (Exception e) {
             return new SqbConfig();
         }
-    }
-
-    public boolean isDemoMode() {
-        return demoMode;
-    }
-
-    public void setDemoMode(boolean demoMode) {
-        this.demoMode = demoMode;
     }
 
     public String getVendorId() {

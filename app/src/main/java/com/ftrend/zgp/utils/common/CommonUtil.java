@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.support.annotation.Nullable;
 
 import com.ftrend.zgp.utils.log.LogUtil;
@@ -46,7 +47,7 @@ public class CommonUtil {
     }
 
     @Nullable
-    public static Activity findActivity(Context context) {
+    private static Activity findActivity(Context context) {
         if (context instanceof Activity) {
             return (Activity) context;
         }
@@ -58,6 +59,17 @@ public class CommonUtil {
         }
     }
 
+    /**
+     * 判断当前应用是否是debug状态
+     */
+    public static boolean debugMode(Context context) {
+        try {
+            ApplicationInfo info = context.getApplicationInfo();
+            return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 
     /**
      * 生成新的UUID

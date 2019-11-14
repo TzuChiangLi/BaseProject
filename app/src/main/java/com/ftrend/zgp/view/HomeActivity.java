@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ftrend.zgp.App;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.MenuAdapter;
 import com.ftrend.zgp.api.HomeContract;
@@ -16,6 +17,7 @@ import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.HomePresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.common.CommonUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
@@ -178,7 +180,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
                 break;
             case "测试退款":
                 // 此功能仅用于测试
-                if (!ZgParams.getSqbConfig().isDemoMode()) {
+                if (!CommonUtil.debugMode(App.getContext())) {
                     return;
                 }
                 String msg = "请输入支付记录中的商家订单号：";

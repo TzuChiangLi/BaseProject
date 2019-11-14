@@ -1,5 +1,8 @@
 package com.ftrend.zgp.utils.pay;
 
+import android.text.TextUtils;
+
+import com.ftrend.zgp.App;
 import com.ftrend.zgp.model.SqbPayOrder;
 import com.ftrend.zgp.model.SqbPayResult;
 import com.ftrend.zgp.model.Trade;
@@ -28,6 +31,7 @@ public class SqbPayHelper {
     //1-付款，2-退款，3-查询，4-撤单，5-预下单
     private static String REQUEST_PAY = "1";
     private static String REQUEST_REFUND = "2";
+    private static String REQUEST_QUERY = "3";
     private static String REQUEST_CANCEL = "4";
 
     /**
@@ -111,8 +115,8 @@ public class SqbPayHelper {
         final String requestNo = CommonUtil.newUuid();
         UpayOrder order = new UpayOrder();
         order.setClient_sn(clientSn);//商户订单号
-        order.setTotal_amount(ZgParams.getSqbConfig().isDemoMode()
-                ? "100" : CommonUtil.moneyToString(trade.getTotal()));//交易总金额
+        order.setTotal_amount(CommonUtil.debugMode(App.getContext())
+                ? "1" : CommonUtil.moneyToString(trade.getTotal()));//交易总金额
         // order.setPayway("1");//支付方式--无需指定
         order.setDynamic_id(scanCode);//付款码内容
         order.setSubject(ZgParams.getCurrentDep().getDepName() + "-购物消费");//交易简介
@@ -123,7 +127,7 @@ public class SqbPayHelper {
 
         // 记录支付请求信息
         final SqbPayOrder sqbPayOrder = new SqbPayOrder(order, requestNo, REQUEST_PAY, trade.getLsNo());
-        sqbPayOrder.insert();//1-付款，2-退款，3-查询，4-撤单，5-预下单
+        sqbPayOrder.insert();
 
         UpayTask.getInstance().pay(order, new UpayCallBack() {
             @Override
@@ -175,15 +179,15 @@ public class SqbPayHelper {
         // 而当通信质量不佳，终端不确认退款请求是否成功，自动或手动发起的退款请求重试，则务必要保持序列号不变
         order.setRefund_request_no(requestNo);//退款序列号
         order.setOperator(ZgParams.getCurrentUser().getUserCode());//操作员
-        order.setRefund_amount(ZgParams.getSqbConfig().isDemoMode()
-                ? "100" : CommonUtil.moneyToString(trade.getTotal()));//退款金额
+        order.setRefund_amount(CommonUtil.debugMode(App.getContext())
+                ? "1" : CommonUtil.moneyToString(trade.getTotal()));//退款金额
         order.setReflect(requestNo);//反射参数
         order.setRefundModel(UpayOrder.RefundModel.CLIENT_SN);//指定退款模式为商户订单号退款
         order.setPayModel(UpayOrder.PayModel.NO_UI);//指定 SDK 启动模式为无界面模式
 
         // 记录退款请求信息
         final SqbPayOrder sqbPayOrder = new SqbPayOrder(order, requestNo, REQUEST_REFUND, trade.getLsNo());
-        sqbPayOrder.insert();//1-付款，2-退款，3-查询，4-撤单，5-预下单
+        sqbPayOrder.insert();
 
         UpayTask.getInstance().refund(order, new UpayCallBack() {
             @Override
@@ -193,29 +197,39 @@ public class SqbPayHelper {
         });
     }
 
-    /*private static void query(String sn, String clientSn, final PayResultCallback callback) {
+    /**
+     * 查询交易状态（暂不可用）
+     *
+     * @param sn
+     * @param clientSn
+     * @param lsNo
+     * @param callback
+     */
+    @Deprecated
+    public static void query(String sn, String clientSn, String lsNo, final PayResultCallback callback) {
         UpayOrder order = new UpayOrder();
         order.setSn(sn);//收钱吧订单号
         order.setClient_sn(clientSn);//商户订单号
 
         final String requestNo = CommonUtil.newUuid();
         // 记录查询请求信息
-        new SqbPayOrder(order, requestNo, "3", "").insert();//1-付款，2-退款，3-查询，4-撤单，5-预下单
+        final SqbPayOrder sqbPayOrder = new SqbPayOrder(order, requestNo, REQUEST_QUERY, lsNo);
+        sqbPayOrder.insert();
 
         UpayTask.getInstance().query(order, new UpayCallBack() {
             @Override
             public void onExecuteResult(UpayResult result) {
-                dealWithResult(requestNo, result, callback);
+//                dealWithResult(sqbPayOrder, result, callback);
             }
         });
-    }*/
+    }
 
     /**
      * 按商户订单号撤单
      *
      * @param trade    交易流水
      * @param clientSn 商户订单号
-     * @param callback 退款结果回调
+     * @param callback 撤单结果回调
      */
     public static void cancelByClientSn(final Trade trade, String clientSn, final PayResultCallback callback) {
         cancel(trade, "", clientSn, callback);
@@ -226,7 +240,7 @@ public class SqbPayHelper {
      *
      * @param trade    交易流水
      * @param sn       收钱吧订单号
-     * @param callback 退款结果回调
+     * @param callback 撤单结果回调
      */
     public static void cancelBySn(final Trade trade, String sn, final PayResultCallback callback) {
         cancel(trade, sn, "", callback);
@@ -238,7 +252,7 @@ public class SqbPayHelper {
      * @param trade    交易流水
      * @param sn       收钱吧订单号
      * @param clientSn 商户订单号
-     * @param callback 退款结果回调
+     * @param callback 撤单结果回调
      */
     private static void cancel(final Trade trade, String sn, String clientSn, final PayResultCallback callback) {
         final String requestNo = CommonUtil.newUuid();
@@ -281,11 +295,16 @@ public class SqbPayHelper {
         if (StringUtil.isNotEmpty(result.getError_code()) || StringUtil.isEmpty(orderStatus)) {
             //SDK返回了错误信息，表明交易已失败
             isSuccess = false;
-            errMsg = "交易失败。请根据以下提示信息拨打客服电话或排查故障！\n"
-                    + "\n错误码：" + result.getError_code()
-                    + "\n错误消息：" + result.getError_message();
-            //（1）微信支付：微信弹出支付密码输入界面，直接关闭。返回错误：UNEXPECTED_PROVIDER_ERROR，该笔交易异常，请稍后重试[EP99]（官方文档为：不认识的支付通道）
-            //（2）支付宝：
+            //result_code: http错误码
+            if (!TextUtils.isEmpty(result.getResult_code())) {
+                errMsg = "网络通讯异常，请稍后重试！";
+            } else {
+                errMsg = "交易失败。请根据以下提示信息拨打客服电话或排查故障！\n"
+                        + "\n错误码：" + result.getError_code()
+                        + "\n错误消息：" + result.getError_message();
+                //（1）微信支付：微信弹出支付密码输入界面，直接关闭。返回错误：UNEXPECTED_PROVIDER_ERROR，该笔交易异常，请稍后重试[EP99]（官方文档为：不认识的支付通道）
+                //（2）支付宝：
+            }
         } else if (REQUEST_PAY.equals(request.getRequestType())
                 && UpayResult.ORDER_PAID.equals(orderStatus)) {
             isSuccess = true;
