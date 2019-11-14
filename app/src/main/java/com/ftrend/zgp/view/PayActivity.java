@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -19,6 +20,7 @@ import com.ftrend.zgp.presenter.PayPresenter;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.event.Event;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.PayType;
@@ -30,6 +32,8 @@ import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,6 +70,8 @@ public class PayActivity extends BaseActivity implements PayContract.View, OnTit
 
     @Override
     protected void initView() {
+        EventBus.getDefault().register(this);
+
         if (mPresenter == null) {
             mPresenter = PayPresenter.createPresenter(this);
         }
@@ -325,6 +331,42 @@ public class PayActivity extends BaseActivity implements PayContract.View, OnTit
                 Log.i("----sunmi", String.valueOf(hashMap.get("VALUE")));//这个是扫码的结果
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
+    public void onMessage(Event event) {
+        if (event.getTarget() != Event.TARGET_PAY) {
+            return;
+        }
+        switch (event.getType()) {
+            case PayContract.MSG_CARD_CODE_INPUT:
+                cardInput();
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * 手工输入储值卡卡号
+     */
+    private void cardInput() {
+        InputPanel.showInput(this, "请输入储值卡卡号（仅支持磁卡）：", new StringInputCallback() {
+            @Override
+            public void onOk(String value) {
+                mPresenter.cardPay(value);
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public String validate(String value) {
+                return TextUtils.isEmpty(value) ? "请输入卡号" : "";
+            }
+        });
     }
 
     @Override
