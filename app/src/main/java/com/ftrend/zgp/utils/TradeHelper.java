@@ -355,14 +355,27 @@ public class TradeHelper {
             if (!pay.save(databaseWrapper)) {
                 return false;
             }
-            trade.setTradeTime(pay.getPayTime());
-            trade.setCashier(ZgParams.getCurrentUser().getUserCode());
-            trade.setStatus(TRADE_STATUS_PAID);
-            return trade.save(databaseWrapper);
+            if (amount - change >= trade.getTotal()) {
+                trade.setTradeTime(pay.getPayTime());
+                trade.setCashier(ZgParams.getCurrentUser().getUserCode());
+                trade.setStatus(TRADE_STATUS_PAID);
+                if (!trade.save(databaseWrapper)) {
+                    return false;
+                }
+                //添加到上传队列
+                new TradeUploadQueue(trade.getDepCode(), trade.getLsNo()).insert(databaseWrapper);
+            }
+            return true;
         } catch (Exception e) {
             Log.e(TAG, "支付异常: " + pay.getLsNo() + " - " + appPayType, e);
             return false;
         }
+    }
+
+    /**
+     * 上传交易流水
+     */
+    public static void uploadTradeQueue() {
     }
 
     /**
@@ -506,14 +519,6 @@ public class TradeHelper {
                     .async()
                     .execute(); // non-UI blocking
         }
-    }
-
-    /**
-     * 上传交易流水
-     */
-    public static void uploadTradeQueue() {
-        TradeUploadQueue queue = new TradeUploadQueue(trade.getDepCode(), trade.getLsNo());
-        queue.insert();
     }
 
     /**

@@ -101,8 +101,6 @@ public class PayPresenter implements PayContract.Presenter {
             }
             //完成支付
             if (TradeHelper.pay(appPayType, value, change, payCode)) {
-                //插入交易流水队列
-                TradeHelper.uploadTradeQueue();
                 TradeHelper.clearVip();
                 PrinterHelper.initPrinter(PayActivity.mContext, new PrinterHelper.PrintInitCallBack() {
                     @Override
