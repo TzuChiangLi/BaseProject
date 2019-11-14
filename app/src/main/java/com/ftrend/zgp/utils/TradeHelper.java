@@ -6,12 +6,10 @@ import android.util.Log;
 import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
-import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepPayInfo;
 import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.DepProduct_Table;
-import com.ftrend.zgp.model.SysParams;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradePay_Table;
@@ -24,7 +22,6 @@ import com.ftrend.zgp.model.User_Table;
 import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.Method;
@@ -517,15 +514,6 @@ public class TradeHelper {
     public static void uploadTradeQueue() {
         TradeUploadQueue queue = new TradeUploadQueue(trade.getDepCode(), trade.getLsNo());
         queue.insert();
-    }
-
-    /**
-     * 清空数据库
-     */
-    public static void clearAllTradeData() {
-        SQLite.delete(Trade.class).execute();
-        SQLite.delete(TradePay.class).execute();
-        SQLite.delete(TradeProd.class).execute();
     }
 
     /**
@@ -1029,20 +1017,6 @@ public class TradeHelper {
     public static boolean cartIsEmpty() {
         return getCartLs() == null;
     }
-
-    /**
-     * 初始化数据时点击取消此时清空数据
-     */
-    public static void rollbackInitTask() {
-        SQLite.delete(User.class).execute();
-        SQLite.delete(Dep.class).execute();
-        SQLite.delete(DepCls.class).execute();
-        SQLite.delete(DepProduct.class).execute();
-        SQLite.delete(DepPayInfo.class).execute();
-        SQLite.delete(SysParams.class).execute();
-        clearAllTradeData();
-    }
-
 
     /**
      * 价格格式化

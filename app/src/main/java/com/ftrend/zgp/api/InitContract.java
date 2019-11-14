@@ -21,11 +21,6 @@ public interface InitContract {
         void startInitData(int step);
 
         /**
-         * 停止同步
-         */
-        void stopInitData();
-
-        /**
          * 完成同步
          */
         void finishInitData();
