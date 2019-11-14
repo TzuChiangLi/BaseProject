@@ -113,29 +113,31 @@ public class CalendarSelectorDialog extends BottomPopupView implements OnRangeSe
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
         if (selected) {
-            showSelection(date, date);
+            updateSelection(date, date);
         } else {
-            showSelection(null, null);
+            updateSelection(null, null);
         }
     }
 
     @Override
     public void onRangeSelected(@NonNull MaterialCalendarView widget, @NonNull List<CalendarDay> dates) {
-        showSelection(dates.get(0), dates.get(dates.size() - 1));
+        updateSelection(dates.get(0), dates.get(dates.size() - 1));
     }
 
     /**
-     * 显示当前选中的日期范围
+     * 更新当前选中的日期范围
      *
      * @param from
      * @param to
      */
-    private void showSelection(CalendarDay from, CalendarDay to) {
-        if (from == null || to == null) {
+    private void updateSelection(CalendarDay from, CalendarDay to) {
+        firstDay = from;
+        lastDay = to;
+        if (firstDay == null || lastDay == null) {
             mSelectionLabel.setText("");
         } else {
             String selection = String.format(Locale.CHINA, "开始日期：%s    结束日期：%s",
-                    calendarDay2String(from), calendarDay2String(to));
+                    calendarDay2String(firstDay), calendarDay2String(lastDay));
             mSelectionLabel.setText(selection);
         }
     }
@@ -157,12 +159,10 @@ public class CalendarSelectorDialog extends BottomPopupView implements OnRangeSe
 
     @OnClick(R.id.calendar_btn_ok)
     public void submit() {
-        List<CalendarDay> dates = mCalendarView.getSelectedDates();
-        if (dates.size() == 0) {
+        if (firstDay == null || lastDay == null) {
             return;
         }
-        firstDay = dates.get(0);
-        lastDay = dates.get(dates.size() - 1);
+
         if (callback != null) {
             callback.onOk(firstDay.getDate(), lastDay.getDate());
         }
