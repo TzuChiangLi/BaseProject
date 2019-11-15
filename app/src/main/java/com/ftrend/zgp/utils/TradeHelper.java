@@ -3,6 +3,7 @@ package com.ftrend.zgp.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.ftrend.zgp.R;
 import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
@@ -167,8 +168,16 @@ public class TradeHelper {
         }
     }
 
-
-//
+    /**
+     * @param lsNo 流水号
+     * @return 初始化完成
+     */
+    public static boolean queryTradeByLsNo(String lsNo) {
+        trade = getTradeByLsNo(lsNo);
+        prodList = getProdListByLsNo(lsNo);
+        pay = getPayByLsNo(lsNo);
+        return trade != null && !prodList.isEmpty() && pay != null;
+    }
 
     /**
      * 根据流水号查询交易
@@ -503,7 +512,8 @@ public class TradeHelper {
                     .set(Trade_Table.vipCode.eq(TradeHelper.vip.getVipCode()),
                             Trade_Table.vipTotal.eq(TradeHelper.trade.getVipTotal()),
                             Trade_Table.custType.eq(TRADE_CUST_VIP),
-                            Trade_Table.cardCode.eq(TradeHelper.vip.getCardCode()))
+                            Trade_Table.cardCode.eq(TradeHelper.vip.getCardCode()),
+                            Trade_Table.vipGrade.eq(TradeHelper.vip.getVipGrade()))
                     .where(Trade_Table.lsNo.is(trade.getLsNo()))
                     .async()
                     .execute(); // non-UI blocking
@@ -864,6 +874,7 @@ public class TradeHelper {
             trade.setVipCode(vip.getVipCode());
             trade.setCustType("2");
             trade.setCardCode(vip.getCardCode());
+            trade.setVipGrade(vip.getVipGrade());
         }
         return trade.save();
     }
@@ -1123,5 +1134,44 @@ public class TradeHelper {
     public static List<Trade> getTradeList() {
         return SQLite.select().from(Trade.class)
                 .queryList();
+    }
+
+    /**
+     * @param appPayType 支付方式代码
+     * @return 图片资源
+     */
+    public static int payTypeImgRes(String appPayType) {
+        switch (appPayType) {
+            case "0":
+                //现金
+                return R.drawable.money;
+            case "2":
+                //微信
+                return R.drawable.alipay;
+            case "3":
+                //支付宝
+                return R.drawable.wechat;
+            case "5":
+                //代金券
+            case "6":
+                //购物券
+                return R.drawable.money;
+            case "1":
+                //外卡
+            case "4":
+                //内卡
+            case "7":
+                //IC卡
+            case "8":
+                //储值卡
+            case "9":
+                //长款
+                return R.drawable.card;
+            default:
+                if (appPayType.contains("SQB")) {
+                    return R.drawable.shouqianba;
+                }
+                return R.drawable.money;
+        }
     }
 }

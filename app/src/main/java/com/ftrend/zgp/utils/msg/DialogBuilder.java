@@ -13,39 +13,22 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.lxj.xpopup.core.BasePopupView;
 import com.lxj.xpopup.core.CenterPopupView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 /**
  * 模态弹窗构建工具
  *
  * @author liziqiang@ftrend.cn
  */
-public class DialogBuilder extends CenterPopupView {
-    @BindView(R.id.dialog_img_state)
-    ImageView mStateImg;
-    @BindView(R.id.dialog_tv_title)
-    TextView mTitleTv;
-    @BindView(R.id.dialog_tv_msg)
-    TextView mMsgTv;
-    @BindView(R.id.dialog_ll_btn_left)
-    Button mLeftBtn;
-    @BindView(R.id.dialog_ll_btn_right)
-    Button mRightBtn;
-    @BindView(R.id.dialog_ll_btn)
-    LinearLayout mBtnLayout;
-    @BindView(R.id.dialog_divide_line)
-    View mHorizontalLineView;
-    @BindView(R.id.dialog_ll_btn_line)
-    View mVerticalLineView;
+public class DialogBuilder extends CenterPopupView implements View.OnClickListener {
+    private ImageView mStateImg;
+    private TextView mTitleTv, mMsgTv, mCircleTv;
+    private Button mLeftBtn, mRightBtn;
+    private LinearLayout mBtnLayout;
+    private View mHorizontalLineView, mVerticalLineView;
     private Context context;
     private String title, content, leftBtn, rightBtn;
     private OnBtnClickListener mOnClickListener;
-
-
     /**
-     * 0:提示，1：警告，2：错误，3：询问
+     * 0:提示，1：警告，2：错误，3：询问，4：等待
      */
     private DialogType dialogType = DialogType.info;
     /**
@@ -80,18 +63,39 @@ public class DialogBuilder extends CenterPopupView {
 
     @Override
     protected int getImplLayoutId() {
+        if (dialogType == DialogType.wait_circle) {
+            return R.layout.toast_circle_progress;
+        }
         return R.layout.dialog_view;
     }
 
     @Override
     protected void onCreate() {
         super.onCreate();
-        ButterKnife.bind(this);
+        if (dialogType != DialogType.wait_circle) {
+            mStateImg = findViewById(R.id.dialog_img_state);
+            mTitleTv = findViewById(R.id.dialog_tv_title);
+            mMsgTv = findViewById(R.id.dialog_tv_msg);
+            mLeftBtn = findViewById(R.id.dialog_ll_btn_left);
+            mRightBtn = findViewById(R.id.dialog_ll_btn_right);
+            mBtnLayout = findViewById(R.id.dialog_ll_btn);
+            mHorizontalLineView = findViewById(R.id.dialog_divide_line);
+            mVerticalLineView = findViewById(R.id.dialog_ll_btn_line);
+            mLeftBtn.setOnClickListener(this);
+            mRightBtn.setOnClickListener(this);
+        }
+        if (dialogType == DialogType.wait_circle) {
+            mCircleTv = findViewById(R.id.tv_show);
+        }
         if (!TextUtils.isEmpty(title)) {
             mTitleTv.setText(title);
         }
         if (!TextUtils.isEmpty(content)) {
-            mMsgTv.setText(content);
+            if (mMsgTv == null) {
+                mCircleTv.setText(content);
+            } else {
+                mMsgTv.setText(content);
+            }
         }
         if (btnNum != 0) {
             if (!TextUtils.isEmpty(leftBtn)) {
@@ -134,18 +138,20 @@ public class DialogBuilder extends CenterPopupView {
     }
 
     private void initBtnNum(int btnNum) {
-        switch (btnNum) {
-            case 0:
-                mBtnLayout.setVisibility(GONE);
-                mHorizontalLineView.setVisibility(GONE);
-                break;
-            case 1:
-                mRightBtn.setVisibility(GONE);
-                mVerticalLineView.setVisibility(GONE);
-                break;
-            case 2:
-            default:
-                break;
+        if (dialogType != DialogType.wait_circle) {
+            switch (btnNum) {
+                case 0:
+                    mBtnLayout.setVisibility(GONE);
+                    mHorizontalLineView.setVisibility(GONE);
+                    break;
+                case 1:
+                    mRightBtn.setVisibility(GONE);
+                    mVerticalLineView.setVisibility(GONE);
+                    break;
+                case 2:
+                default:
+                    break;
+            }
         }
     }
 
@@ -240,17 +246,29 @@ public class DialogBuilder extends CenterPopupView {
         super.onDismiss();
     }
 
-    @OnClick(R.id.dialog_ll_btn_left)
-    public void onLeftBtnClick() {
+    private void onLeftBtnClick() {
         if (mOnClickListener != null) {
             mOnClickListener.onLeftBtnClick(this);
         }
     }
 
-    @OnClick(R.id.dialog_ll_btn_right)
-    public void onRightBtnClick() {
+    private void onRightBtnClick() {
         if (mOnClickListener != null) {
             mOnClickListener.onRightBtnClick(this);
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.dialog_ll_btn_left:
+                onLeftBtnClick();
+                break;
+            case R.id.dialog_ll_btn_right:
+                onRightBtnClick();
+                break;
+            default:
+                break;
         }
     }
 
@@ -327,7 +345,11 @@ public class DialogBuilder extends CenterPopupView {
         /**
          * 等待提示框
          */
-        wait
+        wait,
+        /**
+         * 圆形等待
+         */
+        wait_circle
     }
 
 }

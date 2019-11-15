@@ -73,7 +73,11 @@ public class ShopListPresenter implements ShopListContract.ShopListPresenter {
             if (ZgParams.isIsOnline()) {
                 RestSubscribe.getInstance().queryVipInfo(TradeHelper.getTrade().getVipCode(), new RestCallback(regHandler));
             } else {
-                mView.showVipInfoOffline();
+                VipInfo vipInfo = TradeHelper.vip();
+                vipInfo.setCardCode(TradeHelper.getTrade().getCardCode());
+                vipInfo.setVipCode(TradeHelper.getTrade().getVipCode());
+                vipInfo.setVipGrade(TradeHelper.getTrade().getVipGrade());
+                mView.showVipInfoOffline(vipInfo);
             }
         }
     }

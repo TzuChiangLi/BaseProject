@@ -1,6 +1,7 @@
 package com.ftrend.zgp.view;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -90,16 +91,25 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+            public void onItemClick(BaseQuickAdapter adapter, View view, final int position) {
+                MessageUtil.waitCircleProgress("加载中");
                 mPresenter.queryTradeProd(position);
+
             }
         });
     }
 
     @Override
     public void goTradeProdActivity(String lsNo) {
-        Intent intent = new Intent(TradeQueryActivity.this,TradeProdActivity.class);
-        startActivity(intent);
+        MessageUtil.waitEnd();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(TradeQueryActivity.this, TradeProdActivity.class);
+                startActivity(intent);
+            }
+        }, 300);
+
     }
 
     @Override

@@ -45,6 +45,8 @@ public class Trade extends BaseModel implements Cloneable {
     @Column
     private String vipCode;
     @Column
+    private String vipGrade;
+    @Column
     private String cardCode;
     @Column
     private double vipTotal = 0;
@@ -166,6 +168,14 @@ public class Trade extends BaseModel implements Cloneable {
 
     public void setVipTotal(double vipTotal) {
         this.vipTotal = vipTotal;
+    }
+
+    public String getVipGrade() {
+        return vipGrade;
+    }
+
+    public void setVipGrade(String vipGrade) {
+        this.vipGrade = vipGrade;
     }
 
     public String getStatus() {

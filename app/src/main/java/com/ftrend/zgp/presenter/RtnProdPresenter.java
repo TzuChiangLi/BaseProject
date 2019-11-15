@@ -3,7 +3,6 @@ package com.ftrend.zgp.presenter;
 import android.os.Handler;
 import android.text.TextUtils;
 
-import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.RtnContract;
 import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
@@ -13,6 +12,8 @@ import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
 
 import java.text.SimpleDateFormat;
 import java.util.Map;
+
+import static com.ftrend.zgp.utils.TradeHelper.payTypeImgRes;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -70,8 +71,8 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 mView.existTrade(RtnHelper.getProdList());
                 mView.showTradeFlag(RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND));
                 mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()), payTypeImgRes(appPayType));
-                mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(RtnHelper.getTrade().getTradeTime())
-                        , lsNo.length() > 8 ? lsNo : String.format("%s%s", new SimpleDateFormat("yyyyMMdd").format(RtnHelper.getTrade().getTradeTime()), lsNo),
+                mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(RtnHelper.getTrade().getTradeTime()),
+                        lsNo.length() > 8 ? lsNo : String.format("%s%s", new SimpleDateFormat("yyyyMMdd").format(RtnHelper.getTrade().getTradeTime()), lsNo),
                         TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
                 updateTradeInfo();
             } else {
@@ -257,44 +258,6 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
         RtnHelper.clearAllData();
     }
 
-    /**
-     * @param appPayType 支付方式代码
-     * @return 图片资源
-     */
-    private int payTypeImgRes(String appPayType) {
-        switch (appPayType) {
-            case "0":
-                //现金
-                return R.drawable.money;
-            case "2":
-                //微信
-                return R.drawable.alipay;
-            case "3":
-                //支付宝
-                return R.drawable.wechat;
-            case "5":
-                //代金券
-            case "6":
-                //购物券
-                return R.drawable.money;
-            case "1":
-                //外卡
-            case "4":
-                //内卡
-            case "7":
-                //IC卡
-            case "8":
-                //储值卡
-            case "9":
-                //长款
-                return R.drawable.card;
-            default:
-                if (appPayType.contains("SQB")) {
-                    return R.drawable.shouqianba;
-                }
-                return R.drawable.money;
-        }
-    }
 
 }
 //                                RestSubscribe.getInstance().queryRefundLs(lsNo, new RestCallback(
