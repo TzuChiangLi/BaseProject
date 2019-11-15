@@ -292,9 +292,10 @@ public class TradeHelper {
                 .querySingle();
         if (trade != null) {
             //查询收钱吧支付ClientSn
-            SqbPayOrder order = SQLite.select().from(SqbPayOrder.class)
+            SqbPayOrder order = SQLite.select(SqbPayOrder_Table.clientSn.withTable())
+                    .from(SqbPayOrder.class)
                     .join(SqbPayResult.class, Join.JoinType.INNER)
-                    .on(SqbPayOrder_Table.requestNo.eq(SqbPayResult_Table.requestNo))
+                    .on(SqbPayOrder_Table.requestNo.withTable().eq(SqbPayResult_Table.requestNo.withTable()))
                     .where(SqbPayOrder_Table.lsNo.eq(trade.getLsNo()))
                     .and(SqbPayResult_Table.status.eq("SUCCESS"))
                     .querySingle();
