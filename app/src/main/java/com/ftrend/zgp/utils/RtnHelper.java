@@ -340,13 +340,12 @@ public class RtnHelper {
                 sortNo);
     }
 
-
     /**
-     * @return 退货流水号
+     * 当前流水是否现金支付
+     * @return
      */
-    public static String newRtnLsNo() {
-        return String.format("%s%s",
-                new SimpleDateFormat("yyyyMMdd").format(new Date()), trade.getLsNo());
+    public static boolean isPayCash() {
+        return (pay != null) && PayType.PAYTYPE_CASH.equals(pay.getPayTypeCode());
     }
 
     /**

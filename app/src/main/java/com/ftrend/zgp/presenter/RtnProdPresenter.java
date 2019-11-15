@@ -28,29 +28,6 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
         return new RtnProdPresenter(mView);
     }
 
-
-    @Override
-    public void showInputPanel(int position) {
-        if (RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ||
-                (RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND))) {
-            return;
-        }
-        mView.showInputPanel(position);
-    }
-
-    @Override
-    public void confirmRtnDialog(double rtnTotal, String payTypeName) {
-        if (RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ||
-                (RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND))) {
-            return;
-        }
-        if (rtnTotal == 0) {
-            mView.showError("没有需要退货的商品");
-            return;
-        }
-        mView.showRtnInfo(rtnTotal, payTypeName);
-    }
-
     @Override
     public void getTradeByLsNo(final String lsNo) {
         String lsNoLite;
