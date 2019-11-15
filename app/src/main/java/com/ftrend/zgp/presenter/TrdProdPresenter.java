@@ -2,6 +2,7 @@ package com.ftrend.zgp.presenter;
 
 import android.text.TextUtils;
 
+import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.api.TrdProdContract;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.VipInfo;
@@ -39,7 +40,7 @@ public class TrdProdPresenter implements TrdProdContract.TrdProdPresenter {
             //未结、未挂起的单据有会员优惠的信息，但是vip是null
             if (ZgParams.isIsOnline()) {
                 //查询会员信息
-                RestSubscribe.getInstance().queryVipInfo(TradeHelper.getTrade().getVipCode(), new RestCallback(regHandler));
+                RestSubscribe.getInstance().queryVipInfo(trade.getVipCode(), new RestCallback(regHandler));
             } else {
                 //
                 VipInfo vipInfo = TradeHelper.vip();
@@ -80,6 +81,7 @@ public class TrdProdPresenter implements TrdProdContract.TrdProdPresenter {
 
         @Override
         public void onFailed(String errorCode, String errorMsg) {
+            LogUtil.d("----vipCode err:"+errorCode+errorMsg);
         }
     };
 }

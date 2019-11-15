@@ -14,6 +14,7 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.presenter.TrdProdPresenter;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.gyf.immersionbar.ImmersionBar;
@@ -42,6 +43,10 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
     TextView mCashierTv;
     @BindView(R.id.trd_qry_prod_tv_trade_total)
     TextView mTotalTv;
+    @BindView(R.id.trd_qry_prod_tv_vip_name)
+    TextView mVipNameTv;
+    @BindView(R.id.trd_qry_prod_tv_vip_grade)
+    TextView mCardGradeTv;
     @BindView(R.id.trd_qry_prod_rv)
     RecyclerView mRecyclerView;
     @BindView(R.id.trd_qry_prod_rl_bottom)
@@ -105,7 +110,8 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
 
     @Override
     public void showVipInfo(VipInfo vip) {
-
+        mVipNameTv.setText(vip.getVipName());
+        mCardGradeTv.setText(String.format("%s/%s", vip.getCardCode(), vip.getVipGrade()));
     }
 
     @Override
