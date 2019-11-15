@@ -24,7 +24,6 @@ import com.ftrend.zgp.model.User_Table;
 import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.Method;
@@ -1116,5 +1115,13 @@ public class TradeHelper {
         } else {
             return payTypeName;
         }
+    }
+
+    /**
+     * @return 获取本地所有交易流水
+     */
+    public static List<Trade> getTradeList() {
+        return SQLite.select().from(Trade.class)
+                .queryList();
     }
 }

@@ -18,8 +18,6 @@ import com.ftrend.zgp.api.RtnContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.RtnProdPresenter;
-import com.ftrend.zgp.utils.RtnHelper;
-import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
@@ -86,7 +84,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     protected void initData() {
-        mEdt.setText("2019111210200045");
+
     }
 
     @Override
@@ -151,6 +149,26 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
     }
 
     @Override
+    public void showInputPanel(final int position) {
+        //先检查商品是否允许改价
+        InputPanel.showPriceChange(RtnProdActivity.this, new MoneyInputCallback() {
+            @Override
+            public void onOk(double value) {
+                mPresenter.changePrice(position, value);
+            }
+
+            @Override
+            public void onCancel() {
+            }
+
+            @Override
+            public String validate(double value) {
+                return null;
+            }
+        });
+    }
+
+    @Override
     public void showRtnInfo(double rtnTotal, String payTypeName) {
         MessageUtil.question(String.format("%s%s%s%s", "退货金额￥", String.format("%.2f", rtnTotal),
                 "将原路退回至", payTypeName), "确认", "返回",
@@ -190,10 +208,6 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
         mProdAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, final int position) {
-                if (RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ||
-                        (RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND))) {
-                    return;
-                }
                 if (ClickUtil.onceClick()) {
                     return;
                 }
@@ -207,22 +221,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
                         mPresenter.changeAmount(position, -1);
                         break;
                     case R.id.rtn_list_rv_btn_change_price:
-                        //先检查商品是否允许改价
-                        InputPanel.showPriceChange(RtnProdActivity.this, new MoneyInputCallback() {
-                            @Override
-                            public void onOk(double value) {
-                                mPresenter.changePrice(position, value);
-                            }
-
-                            @Override
-                            public void onCancel() {
-                            }
-
-                            @Override
-                            public String validate(double value) {
-                                return null;
-                            }
-                        });
+                        mPresenter.showInputPanel(position);
                         break;
                     default:
                         break;

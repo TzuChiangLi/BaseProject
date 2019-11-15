@@ -12,9 +12,16 @@ import java.util.List;
 public interface RtnContract {
     interface RtnProdPresenter {
         /**
+         * 显示改价弹窗
+         *
+         * @param position 位置
+         */
+        void showInputPanel(int position);
+
+        /**
          * 显示退货来源及金额弹窗
          */
-        void confirmRtnDialog(double rtnTotal,String payTypeName);
+        void confirmRtnDialog(double rtnTotal, String payTypeName);
 
         /**
          * 获取流水
@@ -59,6 +66,18 @@ public interface RtnContract {
     }
 
     interface RtnProdView extends BaseView<RtnContract.RtnProdPresenter> {
+        /**
+         * 结束当前界面
+         */
+        void finish();
+
+        /**
+         * 显示改价弹窗
+         *
+         * @param position 位置索引
+         */
+        void showInputPanel(int position);
+
         /**
          * @param rtnTotal    退货金额
          * @param payTypeName 退货来源

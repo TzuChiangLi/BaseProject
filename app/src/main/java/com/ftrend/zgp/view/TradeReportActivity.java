@@ -60,7 +60,7 @@ public class TradeReportActivity extends BaseActivity {
 
     @Override
     protected int getLayoutID() {
-        return R.layout.activity_trade_report;
+        return R.layout.trade_report_activity;
     }
 
     @Override
