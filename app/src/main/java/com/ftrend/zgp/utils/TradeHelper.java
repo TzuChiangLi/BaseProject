@@ -272,6 +272,7 @@ public class TradeHelper {
     public static Trade getPaidLs(String lsNo) {
         return SQLite.select().from(Trade.class)
                 .where(Trade_Table.status.eq(TRADE_STATUS_PAID))
+                .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
                 .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
                 .and(Trade_Table.lsNo.eq(lsNo))
                 .querySingle();
@@ -363,7 +364,8 @@ public class TradeHelper {
                     return false;
                 }
                 //添加到上传队列
-                new TradeUploadQueue(trade.getDepCode(), trade.getLsNo()).insert(databaseWrapper);
+                TradeUploadQueue queue = new TradeUploadQueue(trade.getDepCode(), trade.getLsNo());
+                return queue.insert(databaseWrapper) > 0;
             }
             return true;
         } catch (Exception e) {
