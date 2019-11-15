@@ -229,7 +229,7 @@ public class RtnLsDownloadTask {
         for (Map<String, Object> map : values) {
             TradeProd prod = gson.fromJson(gson.toJson(map), TradeProd.class);
             //初始化退货单价
-            prod.setRtnPrice(prod.getPrice() - ((prod.getManuDsc() + prod.getVipDsc() + prod.getTranDsc()) / prod.getAmount()));
+            prod.setRtnPrice(prod.getTotal() / prod.getAmount());
             prodList.add(prod);
         }
         //初始化
