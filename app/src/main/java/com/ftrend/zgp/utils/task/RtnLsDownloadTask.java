@@ -228,6 +228,10 @@ public class RtnLsDownloadTask {
         List<TradeProd> prodList = new ArrayList<>();
         for (Map<String, Object> map : values) {
             TradeProd prod = gson.fromJson(gson.toJson(map), TradeProd.class);
+            //已退货数量
+            prod.setLastRtnAmount(Double.parseDouble(map.get("rtnAmount").toString()));
+            //已退货金额
+            prod.setLastRtnTotal(Double.parseDouble(map.get("rtnTotal").toString()));
             //初始化退货单价
             prod.setRtnPrice(prod.getTotal() / prod.getAmount());
             prodList.add(prod);

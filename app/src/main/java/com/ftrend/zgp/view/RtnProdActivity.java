@@ -150,7 +150,6 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     public void showInputPanel(final int position) {
-        //先检查商品是否允许改价
         InputPanel.showPriceChange(RtnProdActivity.this, new MoneyInputCallback() {
             @Override
             public void onOk(double value) {

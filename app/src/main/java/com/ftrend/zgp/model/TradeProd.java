@@ -74,6 +74,10 @@ public class TradeProd extends BaseModel {
     private transient double rtnPrice;
     // 退货字段（与数据库字段无关）：实退小计金额
     private transient double rtnTotal;
+    // 已退货数量（负数）
+    private transient double lastRtnAmount = 0;
+    // 已退货金额（负数）
+    private transient double lastRtnTotal = 0;
 
     public TradeProd() {
     }
@@ -292,5 +296,19 @@ public class TradeProd extends BaseModel {
         this.rtnPrice = rtnPrice;
     }
 
+    public double getLastRtnAmount() {
+        return lastRtnAmount;
+    }
 
+    public void setLastRtnAmount(double lastRtnAmount) {
+        this.lastRtnAmount = lastRtnAmount;
+    }
+
+    public double getLastRtnTotal() {
+        return lastRtnTotal;
+    }
+
+    public void setLastRtnTotal(double lastRtnTotal) {
+        this.lastRtnTotal = lastRtnTotal;
+    }
 }

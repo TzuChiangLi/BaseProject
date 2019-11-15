@@ -1,6 +1,5 @@
 package com.ftrend.zgp.presenter;
 
-import android.os.Handler;
 import android.text.TextUtils;
 
 import com.ftrend.zgp.R;
@@ -9,6 +8,7 @@ import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
 
 import java.text.SimpleDateFormat;
@@ -135,40 +135,27 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
         switch (appPayType) {
             case "0":
                 //现金
-            case "1":
-                //外卡
-            case "2":
-                //微信
-            case "3":
-                //支付宝
-            case "4":
-                //内卡
-            case "5":
-                //代金券
-            case "6":
-                //购物券
-            case "7":
-                //IC卡
-            case "8":
-                //储值卡
-            case "9":
-                //长款
                 if (RtnHelper.pay(appPayType, 0)) {
                     if (RtnHelper.rtn()) {
-                        mView.showSuccess("退货成功");
-                        new Handler().postDelayed(new Runnable() {
+                        MessageUtil.info("退货成功", new MessageUtil.MessageBoxOkListener() {
                             @Override
-                            public void run() {
+                            public void onOk() {
                                 mView.finish();
                             }
-                        }, 1500);
+                        });
                     } else {
-                        mView.showError("退货失败");
+                        MessageUtil.error("退货失败");
                     }
                 }
                 break;
+            case "8":
+                //储值卡
+                MessageUtil.showError("储值卡退款功能未实现");
+                break;
             default:
-                //判断收钱吧
+                //默认按收钱吧处理
+                MessageUtil.showError("收钱吧退款功能未实现");
+/*                //判断收钱吧
                 //TODO 2019年11月14日10:28:02 收钱吧退款流程暂时注释
                 if (appPayType.contains("SQB")) {
                     if (RtnHelper.pay(appPayType, "")) {
@@ -207,7 +194,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
 //                            }
 //                        }
 //                    });
-                }
+                }*/
                 break;
         }
     }
@@ -266,27 +253,8 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
             case "0":
                 //现金
                 return R.drawable.money;
-            case "2":
-                //微信
-                return R.drawable.alipay;
-            case "3":
-                //支付宝
-                return R.drawable.wechat;
-            case "5":
-                //代金券
-            case "6":
-                //购物券
-                return R.drawable.money;
-            case "1":
-                //外卡
-            case "4":
-                //内卡
-            case "7":
-                //IC卡
             case "8":
                 //储值卡
-            case "9":
-                //长款
                 return R.drawable.card;
             default:
                 if (appPayType.contains("SQB")) {

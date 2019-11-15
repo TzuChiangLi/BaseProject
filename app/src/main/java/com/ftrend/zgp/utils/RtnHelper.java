@@ -15,13 +15,16 @@ import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
+import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.ftrend.zgp.utils.TradeHelper.DELFLAG_NO;
 import static com.ftrend.zgp.utils.TradeHelper.TRADE_FLAG_REFUND;
@@ -108,6 +111,19 @@ public class RtnHelper {
             pay = SQLite.select().from(TradePay.class)
                     .where(TradePay_Table.lsNo.eq(trade.getLsNo()))
                     .querySingle();
+            //更新已退货数量和金额
+            for (TradeProd prod : prodList) {
+                String saleInfo = makeSaleInfo(trade.getLsNo(), trade.getTradeTime(), prod.getSortNo());
+                FlowCursor cursor = SQLite.select(Method.sum(TradeProd_Table.amount), Method.sum(TradeProd_Table.total))
+                        .from(TradeProd.class)
+                        .where(TradeProd_Table.saleInfo.eq(saleInfo))
+                        .query();
+                if (cursor.moveToNext()) {
+                    prod.setLastRtnAmount(cursor.getDoubleOrDefault(0));
+                    prod.setLastRtnTotal(cursor.getDoubleOrDefault(1));
+                }
+            }
+
             //设置退货单价
             for (TradeProd prod : prodList) {
                 prod.setRtnPrice(prod.getTotal() / prod.getAmount());
@@ -226,6 +242,8 @@ public class RtnHelper {
         //根据sortNo来做查询条件，此时退货商品列表里的商品的sortNo还是原销售单里的sortNo
         //更新为新的sortNo在最后提交的时候完成
         TradeProd prod = prodList.get(index);
+        //最大允许可退货数量
+        double rtnMax = prod.getAmount() + prod.getLastRtnAmount();
         //先检查是否已添加过，如果添加过，那么只需要更新数据，否则就得插入新的商品
         if (!rtnProdList.isEmpty()) {
             boolean isAdded = false;
@@ -233,17 +251,17 @@ public class RtnHelper {
                 if (rtnProd.getSortNo().equals(prod.getSortNo())) {
                     //已经在退货列表中
                     isAdded = true;
-                    double amount = rtnProd.getAmount();
+                    double amount = rtnProd.getAmount() + changeAmount;
                     //不能超过可退货数量
-                    if (amount + changeAmount < 0 || amount + changeAmount > prod.getAmount()) {
+                    if (amount < 0 || amount > rtnMax) {
                         return;
                     } else {
-                        rtnProd.setAmount(amount + changeAmount);
-                        rtnProd.setTotal((amount + changeAmount) * prod.getRtnPrice());
+                        rtnProd.setAmount(amount);
+                        rtnProd.setTotal(amount * prod.getRtnPrice());
                     }
                 }
             }
-            if (!isAdded && changeAmount > 0) {
+            if (!isAdded && changeAmount > 0 && changeAmount <= rtnMax) {
                 //不存在，那么插入
                 TradeProd rtnProd = new TradeProd();
                 rtnProd.setLsNo(rtnTrade.getLsNo());
@@ -268,13 +286,12 @@ public class RtnHelper {
                 //小计
                 rtnProd.setTotal(prod.getRtnPrice() * rtnProd.getAmount());
                 //插入原单信息
-                rtnProd.setSaleInfo(String.format("%s %s %s", trade.getLsNo(), new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(trade.getTradeTime())
-                        , prod.getSortNo()));
+                rtnProd.setSaleInfo(makeSaleInfo(trade.getLsNo(), trade.getTradeTime(), prod.getSortNo()));
                 rtnProd.setDelFlag(DELFLAG_NO);
                 rtnProdList.add(rtnProd);
             }
         } else {
-            if (changeAmount > 0) {
+            if (changeAmount > 0 && changeAmount <= rtnMax) {
                 //不存在，那么插入
                 TradeProd rtnProd = new TradeProd();
                 rtnProd.setLsNo(rtnTrade.getLsNo());
@@ -299,14 +316,28 @@ public class RtnHelper {
                 //小计
                 rtnProd.setTotal(prod.getRtnPrice() * rtnProd.getAmount());
                 //插入原单信息
-                rtnProd.setSaleInfo(String.format("%s %s %s", trade.getLsNo(), new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(trade.getTradeTime())
-                        , prod.getSortNo()));
+                rtnProd.setSaleInfo(makeSaleInfo(trade.getLsNo(), trade.getTradeTime(), prod.getSortNo()));
                 rtnProd.setDelFlag(DELFLAG_NO);
                 rtnProdList.add(rtnProd);
             }
         }
         //统一更新交易流水
         recalcRtnTrade();
+    }
+
+    /**
+     * 生成退货原单信息
+     *
+     * @param lsNo
+     * @param tradeTime
+     * @param sortNo
+     * @return
+     */
+    private static String makeSaleInfo(String lsNo, Date tradeTime, Long sortNo) {
+        return String.format(Locale.CHINA, "%s %s %d",
+                lsNo,
+                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(trade.getTradeTime()),
+                sortNo);
     }
 
 

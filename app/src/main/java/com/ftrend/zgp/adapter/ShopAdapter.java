@@ -15,6 +15,7 @@ import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindColor;
 import butterknife.ButterKnife;
@@ -99,31 +100,44 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 break;
             case 5:
                 //退货商品列表
-                if (((TradeProd) item).getDelFlag().equals(TradeHelper.DELFLAG_NO)) {
+                TradeProd prod = (TradeProd) item;
+                if (prod.getDelFlag().equals(TradeHelper.DELFLAG_NO)) {
                     //销售单区域
-                    helper.setText(R.id.rtn_list_rv_product_tv_prodcode, ((TradeProd) item).getProdCode());
-                    helper.setText(R.id.rtn_list_rv_product_tv_prodname, ((TradeProd) item).getProdName());
-                    helper.setText(R.id.rtn_list_rv_product_tv_num, String.valueOf(((TradeProd) item).getAmount()).replace(".0", ""));
-                    helper.setText(R.id.rtn_list_rv_product_tv_num_unit, TradeHelper.getProdUnit(((TradeProd) item).getProdCode(), ((TradeProd) item).getBarCode()));
-                    helper.setText(R.id.rtn_list_rv_ls_tv_price, String.format("%.2f", ((TradeProd) item).getPrice()));
-                    helper.setText(R.id.rtn_list_rv_ls_tv_total, String.format("%.2f", ((TradeProd) item).getTotal()));
-                    helper.setText(R.id.rtn_list_rv_product_tv_barcode, ((TradeProd) item).getBarCode());
-                    helper.setText(R.id.rtn_list_rv_ls_tv_discount, String.format("%.2f%s%s", (((TradeProd) item).getManuDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getTranDsc()) / ((TradeProd) item).getAmount(),
-                            String.format("(-%d", Math.round(100 * ((((TradeProd) item).getManuDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getTranDsc()) / ((TradeProd) item).getAmount()) / ((TradeProd) item).getPrice())), "%)"));
+                    helper.setText(R.id.rtn_list_rv_product_tv_prodcode, prod.getProdCode());
+                    helper.setText(R.id.rtn_list_rv_product_tv_prodname, prod.getProdName());
+                    helper.setText(R.id.rtn_list_rv_product_tv_num, String.valueOf(prod.getAmount()).replace(".0", ""));
+                    helper.setText(R.id.rtn_list_rv_product_tv_num_unit,
+                            prod.getLastRtnAmount() < 0
+                                    ? String.format(Locale.CHINA, "(%d)", Math.round(prod.getLastRtnAmount()))
+                                    : "");
+//                    helper.setText(R.id.rtn_list_rv_product_tv_num_unit, TradeHelper.getProdUnit(prod.getProdCode(), prod.getBarCode()));
+                    helper.setText(R.id.rtn_list_rv_ls_tv_price, String.format("%.2f", prod.getPrice()));
+                    helper.setText(R.id.rtn_list_rv_ls_tv_total, String.format("%.2f", prod.getTotal()));
+                    helper.setText(R.id.rtn_list_rv_product_tv_barcode, prod.getBarCode());
+                    helper.setText(R.id.rtn_list_rv_ls_tv_discount,
+                            String.format("%.2f(-%d%%)",
+                                    prod.getTotalDsc() / prod.getAmount(),
+                                    Math.round(100 * prod.getTotalDsc() / prod.getTotal())));
 
 
                     //退货数量(如果是退货流水，显示已退数量)
-                    helper.setText(R.id.rtn_list_rv_rtn_tv_amount, String.valueOf(RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ? ((TradeProd) item).getRtnAmount() : RtnHelper.getRtnAmountBySortNo(((TradeProd) item).getSortNo())).replace(".0", ""));
+                    helper.setText(R.id.rtn_list_rv_rtn_tv_amount,
+                            String.valueOf(RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN)
+                                    ? prod.getRtnAmount()
+                                    : RtnHelper.getRtnAmountBySortNo(prod.getSortNo())).replace(".0", ""));
                     //实退小计(如果是退货流水，显示已退金额)
-                    helper.setText(R.id.rtn_list_rv_rtn_tv_total, String.format("%.2f", RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ? ((TradeProd) item).getRtnTotal() : (RtnHelper.getRtnTotalBySortNo(((TradeProd) item).getSortNo()))));
+                    helper.setText(R.id.rtn_list_rv_rtn_tv_total,
+                            String.format("%.2f", RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN)
+                                    ? prod.getRtnTotal()
+                                    : (RtnHelper.getRtnTotalBySortNo(prod.getSortNo()))));
                     //实退单价
-                    helper.setText(R.id.rtn_list_rv_rtn_tv_price, String.format("%.2f", ((TradeProd) item).getRtnPrice()));
+                    helper.setText(R.id.rtn_list_rv_rtn_tv_price, String.format("%.2f", prod.getRtnPrice()));
                     //实退单位
-                    helper.setText(R.id.rtn_list_rv_rtn_tv_unit, TradeHelper.getProdUnit(((TradeProd) item).getProdCode(), ((TradeProd) item).getBarCode()));
+                    helper.setText(R.id.rtn_list_rv_rtn_tv_unit, TradeHelper.getProdUnit(prod.getProdCode(), prod.getBarCode()));
 
                     //样式变更
-                    helper.setBackgroundColor(R.id.rtn_list_rv_product_rl, ((TradeProd) item).isSelect() ? rv_item_selected : rv_item_normal);
-                    helper.setGone(R.id.rtn_list_rv_ll_btn, ((TradeProd) item).isSelect() ? true : false);
+                    helper.setBackgroundColor(R.id.rtn_list_rv_product_rl, prod.isSelect() ? rv_item_selected : rv_item_normal);
+                    helper.setGone(R.id.rtn_list_rv_ll_btn, prod.isSelect() ? true : false);
                     helper.addOnClickListener(R.id.rtn_list_rv_img_add);
                     helper.addOnClickListener(R.id.rtn_list_rv_img_minus);
                     helper.addOnClickListener(R.id.rtn_list_rv_btn_change_price);
