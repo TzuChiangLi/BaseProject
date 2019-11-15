@@ -9,6 +9,7 @@ import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradePay_Table;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
+import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
@@ -489,7 +490,12 @@ public class RtnHelper {
             rtnPay.setChange(change);
             rtnPay.setPayCode(payCode);
             rtnPay.setPayTime(new Date());
-            return rtnPay.save(databaseWrapper);
+            if (!rtnPay.save(databaseWrapper)) {
+                return false;
+            }
+            //添加到上传队列
+            TradeUploadQueue queue = new TradeUploadQueue(rtnTrade.getDepCode(), rtnTrade.getLsNo());
+            return queue.insert(databaseWrapper) > 0;
         } catch (Exception e) {
             Log.e(TAG, "支付异常: " + rtnPay.getLsNo() + " - " + appPayType, e);
             return false;
