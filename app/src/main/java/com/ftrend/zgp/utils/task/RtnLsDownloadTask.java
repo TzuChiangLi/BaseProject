@@ -1,6 +1,5 @@
 package com.ftrend.zgp.utils.task;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.ftrend.zgp.model.DepPayInfo;
@@ -10,18 +9,13 @@ import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
-import com.ftrend.zgp.utils.db.ZgpDb;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
-import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
-import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
-import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,7 +65,7 @@ public class RtnLsDownloadTask {
         taskCallback = callback;
         LogUtil.d("----online rtn lsNo search:" + rtnLsNo);
         task = new RtnLsDownloadTask();
-        task.start(callback);
+        task.start();
         return true;
     }
 
@@ -88,9 +82,9 @@ public class RtnLsDownloadTask {
     /**
      * 开始执行数据下载任务
      */
-    private void start(OperateCallback callback) {
+    private void start() {
         running = true;
-        downloadLs(callback);
+        downloadLs();
     }
 
     /**
@@ -123,7 +117,7 @@ public class RtnLsDownloadTask {
             //线程中断，停止执行
             return;
         }
-        start(taskCallback);
+        start();
     }
 
 
@@ -137,13 +131,15 @@ public class RtnLsDownloadTask {
         taskCallback.onError(errCode, msg);
     }
 
+    private void postSuccess() {
+        running = false;
+        taskCallback.onSuccess(null);
+    }
 
     /**
      * 下载退货流水
-     *
-     * @param callback
      */
-    private void downloadLs(final OperateCallback callback) {
+    private void downloadLs() {
         RestSubscribe.getInstance().queryRefundLs(rtnLsNo, new RestCallback(new RestResultHandler() {
             @Override
             public void onSuccess(Map<String, Object> body) {
@@ -176,16 +172,17 @@ public class RtnLsDownloadTask {
      * @param pay   支付信息
      */
     private void saveLs(final Map<String, Object> trade, final List<Map<String, Object>> prod, final Map<String, Object> pay) {
-        Transaction transaction = FlowManager.getDatabase(ZgpDb.class).beginTransactionAsync(new ITransaction() {
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .create();
+        saveTrade(gson, trade);
+        saveProd(gson, prod);
+        savePay(gson, pay);
+        postSuccess();
+//        LogUtil.d("----prod:" + prod);
+        /*Transaction transaction = FlowManager.getDatabase(ZgpDb.class).beginTransactionAsync(new ITransaction() {
             @Override
             public void execute(DatabaseWrapper databaseWrapper) {
-                Gson gson = new GsonBuilder()
-                        .setDateFormat("yyyy-MM-dd HH:mm:ss")
-                        .create();
-                saveTrade(gson, trade);
-                saveProd(gson, prod);
-                savePay(gson, pay);
-                LogUtil.d("----prod:" + prod);
             }
         }).success(new Transaction.Success() {
             @Override
@@ -204,7 +201,7 @@ public class RtnLsDownloadTask {
                 retry("流水保存失败");
             }
         }).build();
-        transaction.execute();
+        transaction.execute();*/
     }
 
     /**
