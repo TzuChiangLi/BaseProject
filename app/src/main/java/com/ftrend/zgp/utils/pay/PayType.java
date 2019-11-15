@@ -12,7 +12,6 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
  * @since 2019/10/17
  */
 public class PayType {
-
     //0	现金
     public static String PAYTYPE_CASH = "0";
     //6	购物券

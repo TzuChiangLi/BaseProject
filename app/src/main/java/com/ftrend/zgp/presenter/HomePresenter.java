@@ -186,6 +186,11 @@ public class HomePresenter implements HomeContract.HomePresenter {
     }
 
     @Override
+    public void goTradeQuery() {
+        mView.goTradeQueryActivity();
+    }
+
+    @Override
     public void logout() {
         //清除登录信息
         ZgParams.clearCurrentInfo();

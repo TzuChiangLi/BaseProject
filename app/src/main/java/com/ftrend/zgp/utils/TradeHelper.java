@@ -1096,4 +1096,12 @@ public class TradeHelper {
             return payTypeName;
         }
     }
+
+    /**
+     * @return 获取本地所有交易流水
+     */
+    public static List<Trade> getTradeList() {
+        return SQLite.select().from(Trade.class)
+                .queryList();
+    }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/dp_8"
+    android:paddingTop="@dimen/dp_12"
+    android:paddingEnd="@dimen/dp_8"
+    android:paddingBottom="@dimen/dp_12">
+
+    <TextView
+        android:id="@+id/trade_qry_rv_item_lsno"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:gravity="center"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_14"
+        tools:text="@string/trade_qry_replace_lsno" />
+
+    <TextView
+        android:id="@+id/trade_qry_rv_item_total"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.7"
+        android:gravity="center"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_14"
+        tools:text="@string/trade_qry_replace_total" />
+
+    <TextView
+        android:id="@+id/trade_qry_rv_item_trade_time"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.7"
+        android:gravity="center"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_14"
+        tools:text="@string/trade_qry_replace_trade_time" />
+
+</LinearLayout>

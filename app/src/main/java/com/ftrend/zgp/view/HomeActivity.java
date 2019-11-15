@@ -235,6 +235,8 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
                 startActivity(intent);
                 break;
             case "流水查询":
+                mPresenter.goTradeQuery();
+                break;
             case "操作指南":
             case "修改密码":
             default:
@@ -264,6 +266,12 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
     @Override
     public void goRtnProdActivity() {
         Intent intent = new Intent(HomeActivity.this, RtnProdActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void goTradeQueryActivity() {
+        Intent intent = new Intent(HomeActivity.this, TradeQueryActivity.class);
         startActivity(intent);
     }
 

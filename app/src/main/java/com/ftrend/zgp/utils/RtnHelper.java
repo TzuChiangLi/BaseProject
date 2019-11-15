@@ -517,10 +517,13 @@ public class RtnHelper {
      */
     public static String getRtnSn() {
         String sn = "";
-        sn = SQLite.select().from(SqbPayOrder.class)
+        SqbPayOrder sqbPayOrder = SQLite.select().from(SqbPayOrder.class)
                 .where(SqbPayOrder_Table.lsNo.eq(trade.getLsNo()))
                 .and(SqbPayOrder_Table.depCode.eq(trade.getDepCode()))
-                .querySingle().getSn();
+                .querySingle();
+        if (sqbPayOrder != null) {
+            return sqbPayOrder.getSn();
+        }
         return sn;
     }
 

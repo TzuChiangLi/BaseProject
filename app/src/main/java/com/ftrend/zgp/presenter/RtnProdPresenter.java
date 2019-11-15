@@ -1,5 +1,6 @@
 package com.ftrend.zgp.presenter;
 
+import android.os.Handler;
 import android.text.TextUtils;
 
 import com.ftrend.zgp.R;
@@ -8,7 +9,6 @@ import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
-import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
 
 import java.text.SimpleDateFormat;
@@ -28,6 +28,15 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
         return new RtnProdPresenter(mView);
     }
 
+
+    @Override
+    public void showInputPanel(int position) {
+        if (RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ||
+                (RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND))) {
+            return;
+        }
+        mView.showInputPanel(position);
+    }
 
     @Override
     public void confirmRtnDialog(double rtnTotal, String payTypeName) {
@@ -89,6 +98,8 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                                 mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(RtnHelper.getTrade().getTradeTime())
                                         , lsNo, TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
                                 updateTradeInfo();
+                            } else {
+                                mView.showError("退货流水初始化失败");
                             }
                         }
 
@@ -120,49 +131,83 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
             return;
         }
         //判断支付方式
-        switch (RtnHelper.getPay().getAppPayType()) {
+        String appPayType = RtnHelper.getPay().getAppPayType();
+        switch (appPayType) {
             case "0":
                 //现金
-                if (RtnHelper.pay("1", 0)) {
+            case "1":
+                //外卡
+            case "2":
+                //微信
+            case "3":
+                //支付宝
+            case "4":
+                //内卡
+            case "5":
+                //代金券
+            case "6":
+                //购物券
+            case "7":
+                //IC卡
+            case "8":
+                //储值卡
+            case "9":
+                //长款
+                if (RtnHelper.pay(appPayType, 0)) {
                     if (RtnHelper.rtn()) {
                         mView.showSuccess("退货成功");
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                mView.finish();
+                            }
+                        }, 1500);
                     } else {
                         mView.showError("退货失败");
                     }
                 }
                 break;
-            case "1":
-                break;
-            case "2":
-                //支付宝
-                break;
-            case "3":
-                //微信
-                break;
-            case "4":
-                //储值卡
-                break;
-            case "5":
-                //收钱吧
-                SqbPayHelper.refundBySn(RtnHelper.getRtnTrade(), RtnHelper.getRtnSn(), new SqbPayHelper.PayResultCallback() {
-                    @Override
-                    public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
-                        if (isSuccess) {
-                            // TODO: 2019/10/26 微信支付账号长度超过后台数据库对应字段长度，暂时先不记录支付账号
-                            if (RtnHelper.pay(payType, "")) {
-                                if (RtnHelper.rtn()) {
-                                    mView.showSuccess("退货成功");
-                                } else {
-                                    mView.showError("保存退货失败");
+            default:
+                //判断收钱吧
+                //TODO 2019年11月14日10:28:02 收钱吧退款流程暂时注释
+                if (appPayType.contains("SQB")) {
+                    if (RtnHelper.pay(appPayType, "")) {
+                        if (RtnHelper.rtn()) {
+                            mView.showSuccess("退货成功");
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mView.finish();
                                 }
-                            }
+                            }, 1500);
                         } else {
-                            mView.showError(errMsg);
+                            mView.showError("保存退货失败");
                         }
                     }
-                });
-                break;
-            default:
+//                    SqbPayHelper.refundBySn(RtnHelper.getRtnTrade(), RtnHelper.getRtnSn(), new SqbPayHelper.PayResultCallback() {
+//                        @Override
+//                        public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
+//                            if (isSuccess) {
+//                                // TODO: 2019/10/26 微信支付账号长度超过后台数据库对应字段长度，暂时先不记录支付账号
+//                                if (RtnHelper.pay(payType, "")) {
+//                                    if (RtnHelper.rtn()) {
+//                                        mView.showSuccess("退货成功");
+//                                        new Handler().postDelayed(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                mView.finish();
+//                                            }
+//                                        }, 1500);
+//                                    } else {
+//                                        mView.showError("保存退货失败");
+//                                    }
+//                                }
+//                            } else {
+//                                mView.showError(errMsg);
+//                            }
+//                        }
+//                    });
+                }
                 break;
         }
     }
@@ -218,17 +263,35 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
      */
     private int payTypeImgRes(String appPayType) {
         switch (appPayType) {
-            case "1":
+            case "0":
+                //现金
                 return R.drawable.money;
             case "2":
+                //微信
                 return R.drawable.alipay;
             case "3":
+                //支付宝
                 return R.drawable.wechat;
-            case "4":
-                return R.drawable.card;
             case "5":
-                return R.drawable.shouqianba;
+                //代金券
+            case "6":
+                //购物券
+                return R.drawable.money;
+            case "1":
+                //外卡
+            case "4":
+                //内卡
+            case "7":
+                //IC卡
+            case "8":
+                //储值卡
+            case "9":
+                //长款
+                return R.drawable.card;
             default:
+                if (appPayType.contains("SQB")) {
+                    return R.drawable.shouqianba;
+                }
                 return R.drawable.money;
         }
     }

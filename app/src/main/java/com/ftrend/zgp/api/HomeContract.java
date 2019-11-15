@@ -69,6 +69,11 @@ public interface HomeContract {
         void goAsyncTask();
 
         /**
+         * 跳转到流水查询界面
+         */
+        void goTradeQuery();
+
+        /**
          * 注销登录
          */
         void logout();
@@ -131,6 +136,11 @@ public interface HomeContract {
          * 跳转到退货界面
          */
         void goRtnProdActivity();
+
+        /**
+         * 跳转到流水查询界面
+         */
+        void goTradeQueryActivity();
 
         /**
          * 无挂单流水
