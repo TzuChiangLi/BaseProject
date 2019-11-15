@@ -16,6 +16,7 @@ import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.PayType;
+import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
 
 import java.text.SimpleDateFormat;
@@ -145,47 +146,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 break;
             default:
                 //默认按收钱吧处理
-                MessageUtil.showError("收钱吧退款功能未实现");
-/*                //判断收钱吧
-                //TODO 2019年11月14日10:28:02 收钱吧退款流程暂时注释
-                if (appPayType.contains("SQB")) {
-                    if (RtnHelper.pay(appPayType, "")) {
-                        if (RtnHelper.rtn()) {
-                            mView.showSuccess("退货成功");
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mView.finish();
-                                }
-                            }, 1500);
-                        } else {
-                            mView.showError("保存退货失败");
-                        }
-                    }
-//                    SqbPayHelper.refundBySn(RtnHelper.getRtnTrade(), RtnHelper.getRtnSn(), new SqbPayHelper.PayResultCallback() {
-//                        @Override
-//                        public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
-//                            if (isSuccess) {
-//                                // TODO: 2019/10/26 微信支付账号长度超过后台数据库对应字段长度，暂时先不记录支付账号
-//                                if (RtnHelper.pay(payType, "")) {
-//                                    if (RtnHelper.rtn()) {
-//                                        mView.showSuccess("退货成功");
-//                                        new Handler().postDelayed(new Runnable() {
-//                                            @Override
-//                                            public void run() {
-//                                                mView.finish();
-//                                            }
-//                                        }, 1500);
-//                                    } else {
-//                                        mView.showError("保存退货失败");
-//                                    }
-//                                }
-//                            } else {
-//                                mView.showError(errMsg);
-//                            }
-//                        }
-//                    });
-                }*/
+                doSqbPay();
                 break;
         }
     }
@@ -347,6 +308,32 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
     }
     //endregion
 
+    //region 收钱吧退款
+    private void doSqbPay() {
+        String clientSn = RtnHelper.getTrade().getSqbPayClientSn();
+        SqbPayHelper.refundByClientSn(RtnHelper.getRtnTrade(), clientSn, new SqbPayHelper.PayResultCallback() {
+            @Override
+            public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
+                if (isSuccess) {
+                    if (RtnHelper.pay(payType, "")) {
+                        if (RtnHelper.rtn()) {
+                            MessageUtil.waitSuccesss("退款成功", new MessageUtil.MessageBoxOkListener() {
+                                @Override
+                                public void onOk() {
+                                    mView.finish();
+                                }
+                            });
+                        } else {
+                            MessageUtil.waitError("退款失败", null);
+                        }
+                    }
+                } else {
+                    MessageUtil.error(errMsg);
+                }
+            }
+        });
+    }
+    //endregion
 }
 //                                RestSubscribe.getInstance().queryRefundLs(lsNo, new RestCallback(
 //                                        new RestResultHandler() {

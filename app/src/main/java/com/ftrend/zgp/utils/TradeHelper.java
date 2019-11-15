@@ -10,6 +10,10 @@ import com.ftrend.zgp.model.DepPayInfo;
 import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.DepProduct_Table;
+import com.ftrend.zgp.model.SqbPayOrder;
+import com.ftrend.zgp.model.SqbPayOrder_Table;
+import com.ftrend.zgp.model.SqbPayResult;
+import com.ftrend.zgp.model.SqbPayResult_Table;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradePay_Table;
@@ -24,6 +28,7 @@ import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.sql.language.Join;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
@@ -270,12 +275,25 @@ public class TradeHelper {
      * @return 流水信息
      */
     public static Trade getPaidLs(String lsNo) {
-        return SQLite.select().from(Trade.class)
+        Trade trade = SQLite.select().from(Trade.class)
                 .where(Trade_Table.status.eq(TRADE_STATUS_PAID))
                 .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
                 .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
                 .and(Trade_Table.lsNo.eq(lsNo))
                 .querySingle();
+        if (trade != null) {
+            //查询收钱吧支付ClientSn
+            SqbPayOrder order = SQLite.select().from(SqbPayOrder.class)
+                    .join(SqbPayResult.class, Join.JoinType.INNER)
+                    .on(SqbPayOrder_Table.requestNo.eq(SqbPayResult_Table.requestNo))
+                    .where(SqbPayOrder_Table.lsNo.eq(trade.getLsNo()))
+                    .and(SqbPayResult_Table.status.eq("SUCCESS"))
+                    .querySingle();
+            if (order != null) {
+                trade.setSqbPayClientSn(order.getClientSn());
+            }
+        }
+        return trade;
     }
 
     /**

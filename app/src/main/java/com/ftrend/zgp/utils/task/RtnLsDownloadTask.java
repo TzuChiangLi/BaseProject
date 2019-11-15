@@ -141,6 +141,8 @@ public class RtnLsDownloadTask {
      */
     private void saveTrade(Gson gson, Map<String, Object> values) {
         Trade trade = gson.fromJson(gson.toJson(values), Trade.class);
+        //收钱吧支付clientSn
+        trade.setSqbPayClientSn(values.get("sqbPayClientSn").toString());
         //初始化
         LogUtil.d("----rtnFlag:" + trade.getRtnFlag());
         RtnHelper.setTrade(trade);
