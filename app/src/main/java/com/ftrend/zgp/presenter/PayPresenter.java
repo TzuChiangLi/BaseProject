@@ -167,21 +167,9 @@ public class PayPresenter implements PayContract.Presenter {
         payRequestTime[0] = 0;
 
         if (!SunmiPayHelper.getInstance().serviceAvailable()) {
-//            MessageUtil.showError("刷卡服务不可用！");
-
-
-            // TODO: 2019/11/12 这里是测试代码
-            mView.cardPayWait("付款中...（测试卡）");
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    payCardCode[0] = "9156";
-                    payCardType[0] = "2";
-                    Event.sendEvent(Event.TARGET_PAY, PayContract.MSG_CARD_QUERY_REQUEST);
-                }
-            }, 200);
-
-
+            MessageUtil.showError("刷卡服务不可用！");
+            //手工输入卡号
+            postMessage(PayContract.MSG_CARD_CODE_INPUT);
             return;
         }
 
@@ -199,7 +187,7 @@ public class PayPresenter implements PayContract.Presenter {
                     return;
                 }
                 //读卡成功，查询卡信息
-                Event.sendEvent(Event.TARGET_PAY, PayContract.MSG_CARD_QUERY_REQUEST);
+                postMessage(PayContract.MSG_CARD_QUERY_REQUEST);
             }
 
             @Override
@@ -207,6 +195,13 @@ public class PayPresenter implements PayContract.Presenter {
                 mView.cardPayFail(msg);
             }
         });
+    }
+
+    @Override
+    public void cardPay(String cardCode) {
+        payCardCode[0] = cardCode;
+        payCardType[0] = "2";
+        postMessage(PayContract.MSG_CARD_QUERY_REQUEST);
     }
 
     /**
@@ -219,7 +214,7 @@ public class PayPresenter implements PayContract.Presenter {
             public void onSuccess(Map<String, Object> body) {
                 payDataSign[0] = body.get("dataSign").toString();
                 payRequestTime[0] = System.currentTimeMillis();
-                Event.sendEvent(Event.TARGET_PAY, PayContract.MSG_CARD_QUERY_RESULT);
+                postMessage(PayContract.MSG_CARD_QUERY_RESULT);
             }
 
             @Override
@@ -258,17 +253,17 @@ public class PayPresenter implements PayContract.Presenter {
                 boolean needPass = Boolean.parseBoolean(body.get("needPass").toString());
                 if (needPass) {
                     //需要支付密码
-                    Event.sendEvent(Event.TARGET_PAY, PayContract.MSG_CARD_PASSWORD);
+                    postMessage(PayContract.MSG_CARD_PASSWORD);
                 } else {
                     //无需支付密码
-                    Event.sendEvent(Event.TARGET_PAY, PayContract.MSG_CARD_PAY_REQUEST);
+                    postMessage(PayContract.MSG_CARD_PAY_REQUEST);
                 }
             }
 
             @Override
             public void onFailed(String errorCode, String errorMsg) {
                 if (errorCode.endsWith("50")) {//50-查询中
-                    Event.sendEvent(Event.TARGET_PAY, PayContract.MSG_CARD_QUERY_RESULT);
+                    postMessage(PayContract.MSG_CARD_QUERY_RESULT);
                 } else {
                     mView.cardPayFail(errorCode, errorMsg);
                 }
@@ -283,7 +278,7 @@ public class PayPresenter implements PayContract.Presenter {
             @Override
             public void onSuccess(Map<String, Object> body) {
 //                cardPay();
-                Event.sendEvent(Event.TARGET_PAY, PayContract.MSG_CARD_PAY_REQUEST);
+                postMessage(PayContract.MSG_CARD_PAY_REQUEST);
             }
 
             @Override
@@ -319,7 +314,7 @@ public class PayPresenter implements PayContract.Presenter {
                     public void onSuccess(Map<String, Object> body) {
                         payDataSign[0] = body.get("dataSign").toString();
                         payRequestTime[0] = System.currentTimeMillis();
-                        Event.sendEvent(Event.TARGET_PAY, PayContract.MSG_CARD_PAY_RESULT);
+                        postMessage(PayContract.MSG_CARD_PAY_RESULT);
                     }
 
                     @Override
@@ -356,7 +351,7 @@ public class PayPresenter implements PayContract.Presenter {
             @Override
             public void onFailed(String errorCode, String errorMsg) {
                 if (errorCode.endsWith("70")) {//70-处理中
-                    Event.sendEvent(Event.TARGET_PAY, PayContract.MSG_CARD_PAY_RESULT);
+                    postMessage(PayContract.MSG_CARD_PAY_RESULT);
                 } else {
                     mView.cardPayFail(errorCode, errorMsg);
                 }
@@ -368,9 +363,9 @@ public class PayPresenter implements PayContract.Presenter {
     public void cardPayRetry() {
         if (payCardBalance[0] > 0) {
             //余额>0，说明已经查过卡信息
-            Event.sendEvent(Event.TARGET_PAY, PayContract.MSG_CARD_PAY_REQUEST);
+            postMessage(PayContract.MSG_CARD_PAY_REQUEST);
         } else {
-            Event.sendEvent(Event.TARGET_PAY, PayContract.MSG_CARD_QUERY_REQUEST);
+            postMessage(PayContract.MSG_CARD_QUERY_REQUEST);
         }
     }
 
@@ -384,6 +379,20 @@ public class PayPresenter implements PayContract.Presenter {
             //支付过程暂不支持取消
             return false;
         }
+    }
+
+    /**
+     * 延迟发送事件消息
+     *
+     * @param msgId
+     */
+    private void postMessage(final int msgId) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Event.sendEvent(Event.TARGET_PAY, msgId);
+            }
+        }, 200);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)

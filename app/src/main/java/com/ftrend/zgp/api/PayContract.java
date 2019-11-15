@@ -35,6 +35,10 @@ public interface PayContract {
      * 卡支付结果
      */
     int MSG_CARD_PAY_RESULT = 5;
+    /**
+     * 手工输入卡号
+     */
+    int MSG_CARD_CODE_INPUT = 6;
 
     interface Presenter {
         //TODO 测试打印
@@ -70,6 +74,13 @@ public interface PayContract {
          * 储值卡支付
          */
         void cardPay();
+
+        /**
+         * 储值卡支付（只支持磁卡）
+         *
+         * @param cardCode 磁卡卡号
+         */
+        void cardPay(String cardCode);
 
         /**
          * 校验卡支付密码
