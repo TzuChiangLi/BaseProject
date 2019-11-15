@@ -336,7 +336,7 @@ public class RtnHelper {
     private static String makeSaleInfo(String lsNo, Date tradeTime, Long sortNo) {
         return String.format(Locale.CHINA, "%s %s %d",
                 lsNo,
-                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(trade.getTradeTime()),
+                new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(tradeTime),
                 sortNo);
     }
 

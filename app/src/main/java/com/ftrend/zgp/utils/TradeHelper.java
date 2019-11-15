@@ -1089,9 +1089,11 @@ public class TradeHelper {
      * @return 支付方式
      */
     public static String convertAppPayType(String appPayType, String depCode) {
-        String payTypeName = "";
-        payTypeName = SQLite.select().from(DepPayInfo.class).where(DepPayInfo_Table.depCode.eq(depCode))
-                .and(DepPayInfo_Table.appPayType.eq(appPayType)).querySingle().getPayTypeName();
+        DepPayInfo payInfo = SQLite.select().from(DepPayInfo.class)
+                .where(DepPayInfo_Table.depCode.eq(depCode))
+                .and(DepPayInfo_Table.appPayType.eq(appPayType))
+                .querySingle();
+        String payTypeName = (payInfo == null) ? "" : payInfo.getPayTypeName();
         if (TextUtils.isEmpty(payTypeName)) {
             return "未知方式";
         } else {

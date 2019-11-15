@@ -1,6 +1,7 @@
 package com.ftrend.zgp.model;
 
 
+import com.ftrend.zgp.utils.common.CommonUtil;
 import com.ftrend.zgp.utils.db.ZgpDb;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
@@ -90,6 +91,15 @@ public class Trade extends BaseModel implements Cloneable {
 
     public String getLsNo() {
         return lsNo;
+    }
+
+    /**
+     * 获取完整流水号：日期+lsNo格式
+     *
+     * @return
+     */
+    public String getFullLsNo() {
+        return CommonUtil.dateToYyyyMmDd(tradeTime) + lsNo;
     }
 
     public void setLsNo(String lsNo) {
