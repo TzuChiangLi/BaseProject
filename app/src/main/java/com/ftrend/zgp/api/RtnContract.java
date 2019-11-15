@@ -85,11 +85,6 @@ public interface RtnContract {
         void showRtnInfo(double rtnTotal, String payTypeName);
 
         /**
-         * @param hasRtned 是否已退
-         */
-        void showTradeFlag(boolean hasRtned);
-
-        /**
          * 加减更改
          *
          * @param index 索引

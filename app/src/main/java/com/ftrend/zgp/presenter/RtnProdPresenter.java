@@ -68,7 +68,6 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 }
                 String appPayType = RtnHelper.getPay().getAppPayType();
                 mView.existTrade(RtnHelper.getProdList());
-                mView.showTradeFlag(RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND));
                 mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()), payTypeImgRes(appPayType));
                 mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(RtnHelper.getTrade().getTradeTime())
                         , lsNo.length() > 8 ? lsNo : String.format("%s%s", new SimpleDateFormat("yyyyMMdd").format(RtnHelper.getTrade().getTradeTime()), lsNo),
@@ -92,7 +91,6 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                             //有此流水
                             if (RtnHelper.initRtnOnline()) {
                                 String appPayType = RtnHelper.getPay().getAppPayType();
-                                mView.showTradeFlag(RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN));
                                 mView.existTrade(RtnHelper.getProdList());
                                 mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()).trim(), payTypeImgRes(appPayType));
                                 mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(RtnHelper.getTrade().getTradeTime())
@@ -105,7 +103,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
 
                         @Override
                         public void onError(String code, String msg) {
-                            mView.showError(TextUtils.isEmpty(code) ? String.format("%s=", msg) : String.format("%s(%s)", msg, code));
+                            mView.showError(TextUtils.isEmpty(code) ? String.format("%s", msg) : String.format("%s(%s)", msg, code));
                         }
                     });
                 } else {
@@ -257,7 +255,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 //储值卡
                 return R.drawable.card;
             default:
-                if (appPayType.contains("SQB")) {
+                if (appPayType.startsWith("SQB_")) {
                     return R.drawable.shouqianba;
                 }
                 return R.drawable.money;

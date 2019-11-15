@@ -9,6 +9,7 @@ import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
@@ -31,17 +32,8 @@ import java.util.Map;
 public class RtnLsDownloadTask {
     private final String TAG = "RtnLsDownloadTask";
 
-    // 进度消息处理器
-    private DataDownloadTask.ProgressHandler handler;
-
     // 线程是否正在运行
     private volatile boolean running = false;
-    // 是否已强制终止执行
-    private volatile boolean interrupted = false;
-    // 当前步骤已重试次数
-    private int retryCount = 0;
-    // 最大重试次数
-    private final int MAX_RETRY = 3;
     //错误
     private final String errCode = "";
     // 退货单号
@@ -70,56 +62,12 @@ public class RtnLsDownloadTask {
     }
 
     /**
-     * 停止线程
-     */
-    public static void cancel() {
-        if (task != null) {
-            task.interrupt();
-        }
-    }
-
-
-    /**
      * 开始执行数据下载任务
      */
     private void start() {
         running = true;
         downloadLs();
     }
-
-    /**
-     * 终止数据下载
-     */
-    private void interrupt() {
-        this.interrupted = true;
-    }
-
-
-    /**
-     * 重试当前更新，超过重试次数时，任务执行失败
-     *
-     * @param err
-     */
-    private void retry(String err) {
-        retryCount++;
-        if (retryCount > MAX_RETRY) {
-            postFailed(err);
-        } else {
-            exec();
-        }
-    }
-
-    /**
-     * 执行当前更新任务
-     */
-    private void exec() {
-        if (interrupted) {
-            //线程中断，停止执行
-            return;
-        }
-        start();
-    }
-
 
     /**
      * 推送下载失败消息
@@ -152,6 +100,11 @@ public class RtnLsDownloadTask {
                 Map<String, Object> trade = (Map<String, Object>) body.get("trade");
                 List<Map<String, Object>> prod = (List<Map<String, Object>>) body.get("prod");
                 Map<String, Object> pay = (Map<String, Object>) body.get("pay");
+                //不是当前专柜的销售流水不允许退货
+                if (!ZgParams.getCurrentDep().getDepCode().equals(trade.get("depCode"))) {
+                    postFailed("指定流水不存在");
+                    return;
+                }
 
                 saveLs(trade, prod, pay);
             }
@@ -159,7 +112,7 @@ public class RtnLsDownloadTask {
             @Override
             public void onFailed(String errorCode, String errorMsg) {
                 Log.d(TAG, "下载流水失败: " + errorCode + " - " + errorMsg);
-                retry("下载流水失败，流水号：" + rtnLsNo);
+                postFailed(errorMsg);
             }
         }));
     }
@@ -179,29 +132,6 @@ public class RtnLsDownloadTask {
         saveProd(gson, prod);
         savePay(gson, pay);
         postSuccess();
-//        LogUtil.d("----prod:" + prod);
-        /*Transaction transaction = FlowManager.getDatabase(ZgpDb.class).beginTransactionAsync(new ITransaction() {
-            @Override
-            public void execute(DatabaseWrapper databaseWrapper) {
-            }
-        }).success(new Transaction.Success() {
-            @Override
-            public void onSuccess(@NonNull Transaction transaction) {
-                if (taskCallback == null) {
-                    LogUtil.d("----taskCallback is null");
-                    return;
-                }
-                taskCallback.onSuccess(null);
-            }
-        }).error(new Transaction.Error() {
-            @Override
-            public void onError(@NonNull Transaction transaction, @NonNull Throwable error) {
-                Log.d(TAG, "流水保存失败：" + error.getLocalizedMessage());
-                //流水保存失败，重新下载
-                retry("流水保存失败");
-            }
-        }).build();
-        transaction.execute();*/
     }
 
     /**

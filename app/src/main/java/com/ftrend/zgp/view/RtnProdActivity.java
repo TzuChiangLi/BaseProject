@@ -187,11 +187,6 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
     }
 
     @Override
-    public void showTradeFlag(boolean hasRtned) {
-        mTitleTv.setText(String.format("%s%s", "按单退货·", hasRtned ? "已退流水" : "销售流水"));
-    }
-
-    @Override
     public void updateTradeProd(int index) {
         mProdAdapter.notifyItemChanged(index);
         mPresenter.updateTradeInfo();
