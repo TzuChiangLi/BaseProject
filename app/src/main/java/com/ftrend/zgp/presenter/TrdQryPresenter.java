@@ -1,5 +1,7 @@
 package com.ftrend.zgp.presenter;
 
+import android.os.Handler;
+
 import com.ftrend.zgp.api.TrdQryContract;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.utils.TradeHelper;
@@ -31,11 +33,20 @@ public class TrdQryPresenter implements TrdQryContract.TrdQryPresenter {
     }
 
     @Override
-    public void queryTradeProd(int index) {
+    public void queryTradeProd(final int index) {
         if (tradeList.isEmpty()) {
             return;
         }
-        mView.goTradeProdActivity(tradeList.get(index).getLsNo());
+        //此处初始化数据
+        if (TradeHelper.queryTradeByLsNo(tradeList.get(index).getLsNo())) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mView.goTradeProdActivity(tradeList.get(index).getLsNo());
+                }
+            }, 800);
+
+        }
     }
 
     @Override
@@ -43,6 +54,8 @@ public class TrdQryPresenter implements TrdQryContract.TrdQryPresenter {
         if (mView != null) {
             mView = null;
             tradeList = null;
+            TradeHelper.clear();
+            TradeHelper.clearVip();
         }
     }
 }

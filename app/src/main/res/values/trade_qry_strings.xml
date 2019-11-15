@@ -7,5 +7,8 @@
     <string name="trade_qry_replace_lsno">2019111410200072</string>
     <string name="trade_qry_replace_total">15.00</string>
     <string name="trade_qry_replace_trade_time">2019/11/14 13:43</string>
+    <string name="trade_qry_prod_tv_search">请输入商品码、条码或者商品名称</string>
 
+    <string name="trade_prod_title">流水详情</string>
+    <string name="trade_prod_trade_title">￥</string>
 </resources>

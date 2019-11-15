@@ -1,6 +1,7 @@
 package com.ftrend.zgp.utils.msg;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.toast.XToast;
@@ -306,6 +307,19 @@ public class MessageUtil {
     //endregion
 
 
+    public static void waitCircleProgress(String message) {
+        Context context = ActivityUtils.getTopActivity();
+        DialogBuilder builder = new DialogBuilder(context, 0);
+        builder.setContent(TextUtils.isEmpty(message) ? "加载中" : message);
+        builder.setDialogType(DialogBuilder.DialogType.wait_circle);
+        waitDialog = new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
+                .hasShadowBg(false)
+                .asCustom(builder)
+                .show();
+    }
+
+
 //-------------------------------------吐司工具-----------------------------------------//
 
     //region 吐司
@@ -372,6 +386,16 @@ public class MessageUtil {
                 .setDuration(Duration)
                 .setImageDrawable(android.R.id.icon, R.drawable.toast_warning)
                 .setText(android.R.id.message, text)
+                .show();
+    }
+
+    /**
+     * 进度
+     */
+    public static void showProgress() {
+        new XToast(ActivityUtils.getTopActivity())
+                .setView(R.layout.toast_circle_progress)
+                .setDuration(Duration)
                 .show();
     }
 

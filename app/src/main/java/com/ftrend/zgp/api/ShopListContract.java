@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.ftrend.zgp.base.BaseView;
 import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.model.VipInfo;
 
 import java.util.List;
 
@@ -113,7 +114,7 @@ public interface ShopListContract {
         /**
          * 检测到交易已有会员优惠，但是此时离线
          */
-        void showVipInfoOffline();
+        void showVipInfoOffline(VipInfo vip);
 
         /**
          * 弹窗显示错误信息文本

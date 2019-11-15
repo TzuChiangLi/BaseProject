@@ -24,6 +24,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
+import static com.ftrend.zgp.utils.TradeHelper.payTypeImgRes;
+
 /**
  * @author liziqiang@ftrend.cn
  */

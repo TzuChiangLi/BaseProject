@@ -14,4 +14,15 @@
     <color name="progress_load_blue">#95cefd</color>
     <color name="progress_load_orange">#FFA25A</color>
     <color name="dialog_button_ok">#DA5858</color>
+
+    <color name="colorDialogWindowBg">#00000000</color>
+    <color name="colorDialogTrans">#00000000</color>
+    <color name="colorDialogViewBg">#b2000000</color>
+    <color name="colorDialogTextColor">#ffffff</color>
+    <color name="colorDialogProgressBarColor">#ffffff</color>
+    <color name="colorDialogImageTintColor">#ffffff</color>
+    <!--进度条相关的颜色-->
+    <color name="colorDialogProgressBarBgColor">#b4b4b4</color>
+    <color name="colorDialogProgressBarProgressColor">#FFFFFF</color>
+    <color name="colorDialogProgressBarSecondProgressColor">#ff9c9c</color>
 </resources>

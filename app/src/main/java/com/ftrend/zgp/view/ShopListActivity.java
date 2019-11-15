@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import com.ftrend.zgp.adapter.ShopAdapter;
 import com.ftrend.zgp.api.ShopListContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.presenter.ShopListPresenter;
 import com.ftrend.zgp.utils.DscHelper;
 import com.ftrend.zgp.utils.TradeHelper;
@@ -274,10 +276,14 @@ public class ShopListActivity extends BaseActivity implements ShopListContract.S
     }
 
     @Override
-    public void showVipInfoOffline() {
+    public void showVipInfoOffline(VipInfo vip) {
         mNotVipTv.setVisibility(View.GONE);
         mVipNameTv.setVisibility(View.GONE);
-        mCardGradeTv.setVisibility(View.GONE);
+        if (TextUtils.isEmpty(vip.getVipCode())) {
+            mCardGradeTv.setVisibility(View.GONE);
+        } else {
+            mCardGradeTv.setText(String.format("%s/%s", vip.getCardCode(), vip.getVipGrade()));
+        }
     }
 
     @Override
