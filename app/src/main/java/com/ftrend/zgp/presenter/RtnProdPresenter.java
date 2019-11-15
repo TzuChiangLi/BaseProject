@@ -4,15 +4,22 @@ import android.text.TextUtils;
 
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.RtnContract;
+import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.common.CommonUtil;
+import com.ftrend.zgp.utils.http.RestCallback;
+import com.ftrend.zgp.utils.http.RestResultHandler;
+import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.pay.PayType;
 import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
@@ -128,9 +135,13 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                     }
                 }
                 break;
+            case "7":
+                //IC卡
+                MessageUtil.showError("IC卡退款功能未实现");
+                break;
             case "8":
                 //储值卡
-                MessageUtil.showError("储值卡退款功能未实现");
+                doMagCardPay();
                 break;
             default:
                 //默认按收钱吧处理
@@ -222,13 +233,12 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
      */
     private int payTypeImgRes(String appPayType) {
         switch (appPayType) {
-            case "0":
-                //现金
+            case PayType.PAYTYPE_CASH: //现金
                 return R.drawable.money;
-            case "8":
-                //储值卡
+            case PayType.PAYTYPE_ICCARD: //IC卡
+            case PayType.PAYTYPE_PREPAID://储值卡
                 return R.drawable.card;
-            default:
+            default:// 其他都认为是收钱吧
                 if (appPayType.startsWith("SQB_")) {
                     return R.drawable.shouqianba;
                 }
@@ -245,6 +255,97 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
         return new SimpleDateFormat("yyyy年MM月dd日HH:mm", Locale.CHINA)
                 .format(RtnHelper.getTrade().getTradeTime());
     }
+
+    //region 储值卡退款
+
+    /**
+     * 请求数据标识，用于轮询请求结果
+     */
+    private final String[] payDataSign = {""};
+
+    /**
+     * 请求发起时间
+     */
+    private final long[] payRequestTime = {0};
+
+    /**
+     * 磁卡支付，调用后台服务完成支付
+     */
+    private void doMagCardPay() {
+        MessageUtil.waitBegin("储值卡退款处理中...", new MessageUtil.MessageBoxCancelListener() {
+            @Override
+            public boolean onCancel() {
+                return false;//支付过程无法取消
+            }
+        });
+        Trade trade = RtnHelper.getRtnTrade();
+        RestSubscribe.getInstance().payCardRequest(
+                ZgParams.getPosCode(),
+                trade.getLsNo(),
+                CommonUtil.dateToYyyyMmDd(new Date()),
+                ZgParams.getCurrentUser().getUserCode(),
+                RtnHelper.getPay().getPayCode(),
+                trade.getTotal() * -1,
+                new RestCallback(new RestResultHandler() {
+                    @Override
+                    public void onSuccess(Map<String, Object> body) {
+                        payDataSign[0] = body.get("dataSign").toString();
+                        payRequestTime[0] = System.currentTimeMillis();
+                        requestCardPayResult();
+                    }
+
+                    @Override
+                    public void onFailed(String errorCode, String errorMsg) {
+                        MessageUtil.waitError(errorCode, errorMsg, null);
+                    }
+                }));
+    }
+
+    /**
+     * 轮询支付结果
+     */
+    private void requestCardPayResult() {
+        // 30秒超时
+        if (System.currentTimeMillis() - payRequestTime[0] > 30 * 1000) {
+            MessageUtil.waitError("通讯超时，请稍后重试", null);
+            return;
+        }
+
+        //延迟500毫秒再查询
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        RestSubscribe.getInstance().payCard(payDataSign[0], new RestCallback(new RestResultHandler() {
+            @Override
+            public void onSuccess(Map<String, Object> body) {
+                if (RtnHelper.pay(PayType.PAYTYPE_PREPAID, RtnHelper.getPay().getPayCode())) {
+                    if (RtnHelper.rtn()) {
+                        MessageUtil.waitSuccesss("储值卡退款成功", new MessageUtil.MessageBoxOkListener() {
+                            @Override
+                            public void onOk() {
+                                mView.finish();
+                            }
+                        });
+                    } else {
+                        MessageUtil.waitError("储值卡退款失败", null);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailed(String errorCode, String errorMsg) {
+                if (errorCode.endsWith("70")) {//70-处理中
+                    requestCardPayResult();
+                } else {
+                    MessageUtil.waitError("储值卡退款失败", null);
+                }
+            }
+        }));
+    }
+    //endregion
 
 }
 //                                RestSubscribe.getInstance().queryRefundLs(lsNo, new RestCallback(
