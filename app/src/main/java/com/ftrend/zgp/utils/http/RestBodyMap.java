@@ -1,7 +1,9 @@
 package com.ftrend.zgp.utils.http;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * RestBodyMap
@@ -11,6 +13,13 @@ import java.util.List;
  * @since 2019/11/18
  */
 public class RestBodyMap extends HashMap<String, Object> {
+
+    public RestBodyMap() {
+    }
+
+    public RestBodyMap(Map<String, Object> src) {
+        putAll(src);
+    }
 
     public String getString(final String key, final String def) {
         if (containsKey(key)) {
@@ -62,7 +71,7 @@ public class RestBodyMap extends HashMap<String, Object> {
 
     public RestBodyMap getMap(final String key) {
         try {
-            return containsKey(key) ? (RestBodyMap) get(key) : null;
+            return containsKey(key) ? new RestBodyMap((Map<String, Object>) get(key)) : null;
         } catch (Exception e) {
             return null;
         }
@@ -70,7 +79,15 @@ public class RestBodyMap extends HashMap<String, Object> {
 
     public List<RestBodyMap> getMapList(final String key) {
         try {
-            return containsKey(key) ? (List<RestBodyMap>) get(key) : null;
+            List<Map<String, Object>> src = (List<Map<String, Object>>) get(key);
+            if (src == null) {
+                return null;
+            }
+            List<RestBodyMap> list = new ArrayList<>();
+            for (Map<String, Object> map : src) {
+                list.add(new RestBodyMap(map));
+            }
+            return list;
         } catch (Exception e) {
             return null;
         }
