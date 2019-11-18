@@ -20,7 +20,6 @@ public class TrdQryPresenter implements TrdQryContract.TrdQryPresenter {
     private List<Trade> tradeList;
     private long totalCount = 0, currentCount = 0;
 
-
     private TrdQryPresenter(TrdQryContract.TrdQryView mView) {
         this.mView = mView;
         tradeList = null;
