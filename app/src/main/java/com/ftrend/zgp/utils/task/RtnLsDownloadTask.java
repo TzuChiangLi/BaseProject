@@ -21,7 +21,6 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 退货下载线程
@@ -144,7 +143,7 @@ public class RtnLsDownloadTask {
     private void saveTrade(Gson gson, RestBodyMap values) {
         Trade trade = gson.fromJson(gson.toJson(values), Trade.class);
         //收钱吧支付clientSn
-        trade.setSqbPayClientSn(values.get("sqbPayClientSn").toString());
+        trade.setSqbPayClientSn(values.getString("sqbPayClientSn"));
         //初始化
         LogUtil.d("----rtnFlag:" + trade.getRtnFlag());
         RtnHelper.setTrade(trade);
@@ -160,12 +159,12 @@ public class RtnLsDownloadTask {
             return;
         }
         List<TradeProd> prodList = new ArrayList<>();
-        for (Map<String, Object> map : values) {
+        for (RestBodyMap map : values) {
             TradeProd prod = gson.fromJson(gson.toJson(map), TradeProd.class);
             //已退货数量
-            prod.setLastRtnAmount(Double.parseDouble(map.get("rtnAmount").toString()));
+            prod.setLastRtnAmount(map.getDouble("rtnAmount"));
             //已退货金额
-            prod.setLastRtnTotal(Double.parseDouble(map.get("rtnTotal").toString()));
+            prod.setLastRtnTotal(map.getDouble("rtnTotal"));
             //初始化退货单价
             prod.setRtnPrice(prod.getTotal() / prod.getAmount());
             prodList.add(prod);
