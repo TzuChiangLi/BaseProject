@@ -1147,6 +1147,8 @@ public class TradeHelper {
     public static List<Trade> getTradeListPage(int page) {
         List<Trade> tradeList = SQLite.select()
                 .from(Trade.class)
+                .where(Trade_Table.status.eq(TRADE_STATUS_PAID))
+                .orderBy(Trade_Table.lsNo.desc())
                 .limit(PAGE_COUNT)//条数-》3
                 .offset(page * PAGE_COUNT)//当前页数
                 .queryList();
