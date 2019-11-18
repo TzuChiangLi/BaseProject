@@ -105,11 +105,6 @@ public class HomePresenter implements HomeContract.HomePresenter {
         mView.setMenuList(menuList);
         List<Trade> list = new ArrayList<>();
         list = SQLite.select().from(Trade.class).queryList();
-        if (list.size() != 0) {
-            for (Trade trade : list) {
-                LogUtil.d("----流水单号：" + trade.getLsNo());
-            }
-        }
     }
 
     @Override

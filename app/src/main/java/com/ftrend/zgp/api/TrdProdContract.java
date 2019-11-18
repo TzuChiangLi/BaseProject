@@ -16,6 +16,11 @@ public interface TrdProdContract {
          * 初始化显示的流水信息
          */
         void initTradeInfo();
+
+        /**
+         * 重打小票
+         */
+        void print();
     }
 
     interface TrdProdView extends BaseView<TrdProdContract.TrdProdPresenter> {
@@ -39,5 +44,10 @@ public interface TrdProdContract {
          * @param img         图片资源
          */
         void showPayInfo(String payTypeName, int img);
+
+        /**
+         * 打印成功回调
+         */
+        void printResult();
     }
 }

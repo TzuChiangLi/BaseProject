@@ -38,69 +38,12 @@
         android:scaleType="centerInside"
         android:src="@drawable/title_bar_bottom" />
 
-    <LinearLayout
-        android:id="@+id/trd_qry_prod_ll_top"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_36"
-        android:layout_below="@+id/trd_qry_prod_title_line"
-        android:background="@color/common_white"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:orientation="horizontal"
-        android:paddingStart="@dimen/dp_8"
-        android:paddingTop="@dimen/dp_2"
-        android:paddingEnd="@dimen/dp_8">
-
-        <!--<Button-->
-        <!--android:id="@+id/trd_qry_prod_btn_no_order"-->
-        <!--android:layout_width="@dimen/dp_0"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_weight="1"-->
-        <!--android:background="@drawable/rtn_btn_top_red_selector"-->
-        <!--android:gravity="center"-->
-        <!--android:lines="1"-->
-        <!--android:paddingStart="@dimen/dp_2"-->
-        <!--android:paddingEnd="@dimen/dp_2"-->
-        <!--android:text="@string/rtn_prod_btn_not_order"-->
-        <!--android:textColor="@color/common_white"-->
-        <!--android:textSize="@dimen/sp_11" />-->
-
-        <com.ftrend.cleareditview.ClearEditText
-            android:id="@+id/trd_qry_prod_edt_trade"
-            android:layout_width="@dimen/dp_0"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:background="@drawable/qry_prod_edt_top_bottom_line"
-            android:gravity="center_vertical|start"
-            android:hint="@string/trade_qry_prod_tv_search"
-            android:inputType="number"
-            android:maxLines="1"
-            android:paddingStart="@dimen/dp_12"
-            android:paddingTop="@dimen/dp_4"
-            android:paddingBottom="@dimen/dp_4"
-            android:textColor="@color/text_black_second"
-            android:textSize="@dimen/sp_11" />
-
-        <Button
-            android:id="@+id/trd_qry_prod_btn_search"
-            android:layout_width="@dimen/dp_0"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/rtn_btn_top_blue_selector"
-            android:gravity="center"
-            android:paddingTop="@dimen/dp_4"
-            android:paddingBottom="@dimen/dp_4"
-            android:text="@string/rtn_prod_btn_search"
-            android:textColor="@color/common_white"
-            android:textSize="@dimen/sp_11" />
-
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/trd_qry_prod_ll_mid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/trd_qry_prod_ll_top"
+        android:layout_below="@+id/trd_qry_prod_title_line"
         android:background="@color/common_white"
         android:orientation="horizontal"
         android:paddingStart="@dimen/dp_8"
@@ -184,6 +127,41 @@
 
 
     <RelativeLayout
+        android:id="@+id/trd_qry_prod_rl_vip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/trd_qry_prod_rl_bottom"
+        android:background="@color/common_white"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingEnd="@dimen/dp_8"
+        android:paddingBottom="@dimen/dp_4"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/trd_qry_prod_tv_vip_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/dp_4"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_14"
+            tools:text="黄慧" />
+
+        <TextView
+            android:id="@+id/trd_qry_prod_tv_vip_grade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_14"
+            tools:text="000000000001/金卡" />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/trd_qry_prod_rl_bottom"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
@@ -221,35 +199,12 @@
 
 
         <TextView
-            android:id="@+id/trd_qry_prod_tv_vip_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/trd_qry_prod_ll_pay_type"
-            android:layout_marginStart="@dimen/dp_4"
-            android:layout_toEndOf="@+id/trd_qry_prod_ll_pay_type"
-            android:textColor="@color/text_black_first"
-            android:textSize="@dimen/sp_14"
-            tools:text="黄慧" />
-
-        <TextView
-            android:id="@+id/trd_qry_prod_tv_vip_grade"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/trd_qry_prod_tv_vip_name"
-            android:layout_alignBottom="@+id/trd_qry_prod_ll_pay_type"
-            android:layout_toEndOf="@+id/trd_qry_prod_ll_pay_type"
-            android:textColor="@color/text_black_first"
-            android:textSize="@dimen/sp_14"
-            tools:text="000000000001/金卡" />
-
-
-        <TextView
             android:id="@+id/trd_qry_prod_tv_trade_total_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="@dimen/dp_8"
-            android:layout_toStartOf="@+id/trd_qry_prod_tv_trade_total"
+            android:layout_toEndOf="@+id/trd_qry_prod_ll_pay_type"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_0"
@@ -263,29 +218,29 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginEnd="@dimen/dp_6"
-            android:layout_toStartOf="@+id/rtn_btn_cancel"
+            android:layout_toEndOf="@+id/trd_qry_prod_tv_trade_total_title"
             android:textColor="@color/pay_tv_red"
             android:textSize="@dimen/sp_16"
             tools:text="@string/rtn_prod_replace_total" />
 
 
         <Button
-            android:id="@+id/rtn_btn_cancel"
+            android:id="@+id/trd_btn_back"
             android:layout_width="@dimen/dp_56"
             android:layout_height="match_parent"
-            android:layout_toStartOf="@+id/rtn_btn_enter"
+            android:layout_toStartOf="@+id/trd_btn_print_again"
             android:background="@drawable/shop_btn_blue_selector"
-            android:text="@string/rtn_prod_btn_cancel"
+            android:text="@string/trade_prod_back"
             android:textColor="@color/common_white"
             android:textSize="@dimen/sp_13" />
 
         <Button
-            android:id="@+id/rtn_btn_enter"
+            android:id="@+id/trd_btn_print_again"
             android:layout_width="@dimen/dp_56"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:background="@drawable/shop_btn_red_selector"
-            android:text="@string/rtn_prod_btn_enter"
+            android:text="@string/trade_prod_print_again"
             android:textColor="@color/common_white"
             android:textSize="@dimen/sp_13" />
 
