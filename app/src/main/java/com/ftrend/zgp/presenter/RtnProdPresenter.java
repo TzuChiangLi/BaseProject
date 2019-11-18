@@ -17,14 +17,15 @@ import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
+import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
+import com.ftrend.zgp.utils.sunmi.VipCardData;
 import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
+import com.sunmi.pay.hardware.aidl.AidlConstants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
-
-import static com.ftrend.zgp.utils.TradeHelper.payTypeImgRes;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -140,7 +141,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 break;
             case "7":
                 //IC卡
-                MessageUtil.showError("IC卡退款功能未实现");
+                doIcCardPay();
                 break;
             case "8":
                 //储值卡
@@ -308,6 +309,45 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
             }
         }));
     }
+
+    /**
+     * IC卡支付，直接更新卡内余额
+     */
+    private void doIcCardPay() {
+        MessageUtil.waitBegin("请刷卡...", new MessageUtil.MessageBoxCancelListener() {
+            @Override
+            public boolean onCancel() {
+                SunmiPayHelper.getInstance().cancelWriteCard();
+                return true;
+            }
+        });
+        VipCardData updateData = new VipCardData(AidlConstants.CardType.MIFARE);
+        updateData.setCardCode("");//不限制卡号。原卡号：RtnHelper.getPay().getPayCode()
+        updateData.setMoney(RtnHelper.getRtnTrade().getTotal());//回充余额（此时流水金额还是正数）
+        SunmiPayHelper.getInstance().writeCard(updateData, new SunmiPayHelper.WriteCardCallback() {
+            @Override
+            public void onSuccess(VipCardData data) {
+                if (RtnHelper.pay(PayType.PAYTYPE_ICCARD, data.getCardCode())) {//保存实际写入的卡号
+                    if (RtnHelper.rtn()) {
+                        MessageUtil.waitSuccesss("储值卡退款成功", new MessageUtil.MessageBoxOkListener() {
+                            @Override
+                            public void onOk() {
+                                mView.finish();
+                            }
+                        });
+                    } else {
+                        MessageUtil.waitError("储值卡退款失败", null);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+                MessageUtil.waitError(msg, null);
+            }
+        });
+    }
+
     //endregion
 
     //region 收钱吧退款

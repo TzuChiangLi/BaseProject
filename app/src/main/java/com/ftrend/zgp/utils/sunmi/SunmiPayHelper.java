@@ -337,7 +337,7 @@ public class SunmiPayHelper {
             if (cardData.getCardCode().equals(initData.getCardCode())
                     && cardData.getMoney().compareTo(initData.getMoney()) == 0
                     && cardData.getVipPwd().equals(initData.getVipPwd())) {
-                writeCardSuccess();
+                writeCardSuccess(cardData);
             } else {
                 writeCardFail("写卡失败");
             }
@@ -362,10 +362,12 @@ public class SunmiPayHelper {
                 //卡号不一致，不允许写卡
                 writeCardFail("卡号不一致");
             }
-            if (!TextUtils.isEmpty(cardData.getVipPwd())
-                    && !cardData.getVipPwd().equals(updateData.getVipPwd())) {
-                //密码不一致，不允许写卡
-                writeCardFail("密码不一致");
+            if (updateData.getMoney() < 0) {//仅支付时校验密码，退款和充值不校验
+                if (!TextUtils.isEmpty(cardData.getVipPwd())
+                        && !cardData.getVipPwd().equals(updateData.getVipPwd())) {
+                    //密码不一致，不允许写卡
+                    writeCardFail("密码不一致");
+                }
             }
             Double money = cardData.getMoney() + updateData.getMoney();
             if (money < 0) {
@@ -381,7 +383,7 @@ public class SunmiPayHelper {
             cardData = m1ReadSector(cardConfig.getM1MSector());
             if (money.compareTo(cardData.getMoney()) == 0) {
                 //写卡成功
-                writeCardSuccess();
+                writeCardSuccess(cardData);
             } else {
                 //写卡失败
                 writeCardFail("写卡失败");
@@ -587,10 +589,10 @@ public class SunmiPayHelper {
     /**
      * 写卡成功
      */
-    private void writeCardSuccess() {
+    private void writeCardSuccess(final VipCardData data) {
         opType = OpType.None;
         if (writeCardCallback != null) {
-            writeCardCallback.onSuccess();
+            writeCardCallback.onSuccess(data);
         }
     }
 
@@ -627,7 +629,7 @@ public class SunmiPayHelper {
      * 写卡回调
      */
     public interface WriteCardCallback {
-        void onSuccess();
+        void onSuccess(final VipCardData data);
 
         void onError(final String msg);
     }

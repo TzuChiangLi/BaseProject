@@ -306,8 +306,8 @@ public class PayPresenter implements PayContract.Presenter {
         updateData.setMoney(TradeHelper.getTrade().getTotal() * -1);//扣减余额
         SunmiPayHelper.getInstance().writeCard(updateData, new SunmiPayHelper.WriteCardCallback() {
             @Override
-            public void onSuccess() {
-                paySuccess(PayType.PAYTYPE_ICCARD, TradeHelper.getTradeTotal(), payCardCode[0]);
+            public void onSuccess(VipCardData data) {
+                paySuccess(PayType.PAYTYPE_ICCARD, TradeHelper.getTradeTotal(), data.getCardCode());
                 mView.cardPaySuccess("支付成功！");
             }
 
