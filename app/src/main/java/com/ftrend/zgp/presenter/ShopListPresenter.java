@@ -18,6 +18,7 @@ import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
+import com.ftrend.zgp.utils.sunmi.VipCardData;
 import com.sunmi.pay.hardware.aidl.AidlConstants;
 
 import java.util.Map;
@@ -201,11 +202,10 @@ public class ShopListPresenter implements ShopListContract.ShopListPresenter {
             }
         });
         SunmiPayHelper.getInstance().readCard(new SunmiPayHelper.ReadCardCallback() {
-            //在这里显示或隐藏消息框会出错（Animators may only be run on Looper threads），改为事件通知
             @Override
-            public void onSuccess(String cardNo, AidlConstants.CardType cardType) {
+            public void onSuccess(VipCardData data) {
                 Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_VIPCARD_SUCCESS);
-                queryVipInfo(cardNo, cardType);
+                queryVipInfo(data.getCardCode(), data.getCardType());
             }
 
             @Override

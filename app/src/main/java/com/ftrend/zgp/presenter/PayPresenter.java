@@ -22,6 +22,7 @@ import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.printer.PrintFormat;
 import com.ftrend.zgp.utils.printer.PrinterHelper;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
+import com.ftrend.zgp.utils.sunmi.VipCardData;
 import com.ftrend.zgp.view.PayActivity;
 import com.sunmi.pay.hardware.aidl.AidlConstants;
 import com.sunmi.peripheral.printer.SunmiPrinterService;
@@ -134,25 +135,17 @@ public class PayPresenter implements PayContract.Presenter {
 
     //region 储值卡支付
 
-    /**
-     * 储值卡号
-     */
+    // 储值卡号
     private final String[] payCardCode = {""};
-    /**
-     * 储值卡类型：1-IC卡，2-磁卡
-     */
+    // IC卡信息：用于IC卡支付
+    private final VipCardData cardData = new VipCardData(AidlConstants.CardType.MIFARE);
+    // 储值卡类型：1-IC卡，2-磁卡
     private final String[] payCardType = {""};
-    /**
-     * 请求数据标识，用于轮询请求结果
-     */
+    // 请求数据标识，用于轮询请求结果
     private final String[] payDataSign = {""};
-    /**
-     * 卡余额
-     */
+    // 卡余额
     private final double[] payCardBalance = {0.00};
-    /**
-     * 请求发起时间
-     */
+    // 请求发起时间
     private final long[] payRequestTime = {0};
 
     @Override
@@ -174,11 +167,12 @@ public class PayPresenter implements PayContract.Presenter {
         mView.cardPayWait("请刷卡...");
         SunmiPayHelper.getInstance().readCard(new SunmiPayHelper.ReadCardCallback() {
             @Override
-            public void onSuccess(String cardNo, AidlConstants.CardType cardType) {
-                payCardCode[0] = cardNo;
-                if (cardType == AidlConstants.CardType.MIFARE) {
+            public void onSuccess(VipCardData data) {
+                payCardCode[0] = data.getCardCode();
+                if (data.getCardType() == AidlConstants.CardType.MIFARE) {
                     payCardType[0] = "1";
-                } else if (cardType == AidlConstants.CardType.MAGNETIC) {
+                    cardData.copy(data);//记录卡信息，用于IC卡支付
+                } else if (data.getCardType() == AidlConstants.CardType.MAGNETIC) {
                     payCardType[0] = "2";
                 } else {
                     mView.cardPayFail("无效卡");
@@ -243,12 +237,19 @@ public class PayPresenter implements PayContract.Presenter {
             @Override
             public void onSuccess(Map<String, Object> body) {
                 payCardCode[0] = body.get("cardCode").toString();
-                payCardBalance[0] = Double.parseDouble(body.get("balance").toString());
+                boolean needPass;
+                if (payCardType[0].equals("1")) {//IC卡，以卡内信息为准
+                    payCardBalance[0] = cardData.getMoney();
+                    needPass = !TextUtils.isEmpty(cardData.getVipPwd());
+                } else {
+                    payCardBalance[0] = Double.parseDouble(body.get("balance").toString());
+                    needPass = Boolean.parseBoolean(body.get("needPass").toString());
+                }
+
                 if (payCardBalance[0] < TradeHelper.getTradeTotal()) {
                     mView.cardPayFail("卡余额不足！");
                     return;
                 }
-                boolean needPass = Boolean.parseBoolean(body.get("needPass").toString());
                 if (needPass) {
                     //需要支付密码
                     postMessage(PayContract.MSG_CARD_PASSWORD);
@@ -271,27 +272,50 @@ public class PayPresenter implements PayContract.Presenter {
 
     @Override
     public void cardPayPass(String pwd) {
-        mView.cardPayWait("正在校验支付密码...");
-        RestSubscribe.getInstance().vipCardPwdValidate(payCardCode[0], pwd, new RestCallback(new RestResultHandler() {
-            @Override
-            public void onSuccess(Map<String, Object> body) {
-//                cardPay();
+        if (payCardType[0].equals("1")) {//IC卡，以卡内信息为准
+            if (cardData.getVipPwd().equals(pwd)) {
                 postMessage(PayContract.MSG_CARD_PAY_REQUEST);
-            }
-
-            @Override
-            public void onFailed(String errorCode, String errorMsg) {
+            } else {
                 MessageUtil.showError("支付密码校验失败，请重新输入！");
                 mView.cardPayPassword();
             }
-        }));
+        } else {
+            mView.cardPayWait("正在校验支付密码...");
+            RestSubscribe.getInstance().vipCardPwdValidate(payCardCode[0], pwd,
+                    new RestCallback(new RestResultHandler() {
+                        @Override
+                        public void onSuccess(Map<String, Object> body) {
+                            postMessage(PayContract.MSG_CARD_PAY_REQUEST);
+                        }
+
+                        @Override
+                        public void onFailed(String errorCode, String errorMsg) {
+                            MessageUtil.showError("支付密码校验失败，请重新输入！");
+                            mView.cardPayPassword();
+                        }
+                    }));
+        }
     }
 
     /**
      * IC卡支付，直接更新卡内余额
      */
     private void doIcCardPay() {
-        // TODO: 2019/11/12 实现IC卡支付，直接写卡
+        mView.cardPayWait("请再次刷卡...");
+        VipCardData updateData = new VipCardData(cardData);
+        updateData.setMoney(TradeHelper.getTrade().getTotal() * -1);//扣减余额
+        SunmiPayHelper.getInstance().writeCard(updateData, new SunmiPayHelper.WriteCardCallback() {
+            @Override
+            public void onSuccess() {
+                paySuccess(PayType.PAYTYPE_ICCARD, TradeHelper.getTradeTotal(), payCardCode[0]);
+                mView.cardPaySuccess("支付成功！");
+            }
+
+            @Override
+            public void onError(String msg) {
+                mView.cardPayFail(msg);
+            }
+        });
     }
 
     /**
@@ -369,9 +393,13 @@ public class PayPresenter implements PayContract.Presenter {
 
     @Override
     public boolean cardPayCancel() {
-        if (TextUtils.isEmpty(payCardCode[0])) {
-            // 取消刷卡
+        if (SunmiPayHelper.getInstance().isReading()) {
+            //取消读卡
             SunmiPayHelper.getInstance().cancelReadCard();
+            return true;
+        } else if (SunmiPayHelper.getInstance().isWriting()) {
+            //取消写卡
+            SunmiPayHelper.getInstance().isWriting();
             return true;
         } else {
             //支付过程暂不支持取消

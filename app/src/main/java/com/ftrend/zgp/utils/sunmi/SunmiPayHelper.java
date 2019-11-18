@@ -8,12 +8,11 @@ import android.util.Log;
 import com.ftrend.zgp.App;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ByteUtil;
+import com.ftrend.zgp.utils.common.EncryptUtill;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.sunmi.pay.hardware.aidl.AidlConstants;
 import com.sunmi.pay.hardware.aidlv2.readcard.CheckCardCallbackV2;
 import com.sunmi.pay.hardware.aidlv2.readcard.ReadCardOptV2;
-
-import java.util.Arrays;
 
 import sunmi.paylib.SunmiPayKernel;
 
@@ -37,8 +36,14 @@ public class SunmiPayHelper {
     private SunmiCardConfig cardConfig = null;
     // 读卡回调
     private ReadCardCallback readCardCallback = null;
+    // 写卡回调
+    private WriteCardCallback writeCardCallback = null;
+    // 写卡数据
+    private VipCardData writeCardData = null;
     // 卡片状态
     private CardState cardState = CardState.None;
+    // 操作类型
+    private OpType opType = OpType.None;
     // 失败次数
     private int failCount = 0;
 
@@ -94,6 +99,24 @@ public class SunmiPayHelper {
     }
 
     /**
+     * 当前是否正在读卡
+     *
+     * @return
+     */
+    public boolean isReading() {
+        return opType == OpType.Read;
+    }
+
+    /**
+     * 当前是否正在写卡
+     *
+     * @return
+     */
+    public boolean isWriting() {
+        return opType == OpType.Init || opType == OpType.Update;
+    }
+
+    /**
      * 读取卡片信息：检卡、认证、读卡
      *
      * @param callback 读卡回调
@@ -104,6 +127,7 @@ public class SunmiPayHelper {
             return;
         }
         this.readCardCallback = callback;
+        this.opType = OpType.Read;
         checkCard(false);
     }
 
@@ -115,6 +139,50 @@ public class SunmiPayHelper {
             return;
         }
         cancelCheckCard();
+    }
+
+    /**
+     * 写卡：更新卡余额
+     *
+     * @param data
+     * @param callback
+     */
+    public void writeCard(VipCardData data, WriteCardCallback callback) {
+        if (!sdkConnected) {
+            callback.onError("刷卡服务不可用");
+            return;
+        }
+        this.writeCardData = data;
+        this.writeCardCallback = callback;
+        this.opType = OpType.Update;
+        checkCard(false);
+    }
+
+    /**
+     * 取消写卡（只能在找到卡之前取消）
+     */
+    public void cancelWriteCard() {
+        if (!sdkConnected) {
+            return;
+        }
+        cancelCheckCard();
+    }
+
+    /**
+     * 卡片初始化：写入全部内容
+     *
+     * @param data
+     * @param callback
+     */
+    public void initCard(VipCardData data, WriteCardCallback callback) {
+        if (!sdkConnected) {
+            callback.onError("刷卡服务不可用");
+            return;
+        }
+        this.writeCardData = data;
+        this.writeCardCallback = callback;
+        this.opType = OpType.Init;
+        checkCard(false);
     }
 
     /**
@@ -156,9 +224,7 @@ public class SunmiPayHelper {
             cardState = CardState.Error;
             e.printStackTrace();
             //回调
-            if (readCardCallback != null) {
-                readCardCallback.onError("检卡异常");
-            }
+            readCardFail("检卡异常");
         }
     }
 
@@ -181,7 +247,10 @@ public class SunmiPayHelper {
 
         @Override
         public void findMagCard(Bundle bundle) throws RemoteException {
-            handleMagneticData(bundle);
+            cardState = CardState.Found;
+            if (opType == OpType.Read) {
+                handleMagneticData(bundle);
+            }//磁卡只能读，不能写
         }
 
         @Override
@@ -193,21 +262,27 @@ public class SunmiPayHelper {
         public void findRFCard(String uuid) throws RemoteException {
             Log.e(TAG, "findRFCard:" + uuid);
             cardState = CardState.Found;
-            readSector();
+            switch (opType) {
+                case Read:
+                default:
+                    m1ReadCard();
+                    break;
+                case Update:
+                    m1UpdateMoney(writeCardData);
+                    break;
+                case Init:
+                    m1InitCard(writeCardData);
+                    break;
+            }
         }
 
         @Override
         public void onError(int code, String message) throws RemoteException {
             failCount++;
-            Log.e(TAG, "checkCard: retry...");
             if (failCount > cardConfig.getRetryCount()) {
                 //超过失败重试限制
                 cardState = CardState.Error;
-                Log.e(TAG, "checkCard: max retry");
-                //回调
-                if (readCardCallback != null) {
-                    readCardCallback.onError("检卡超时");
-                }
+                readCardFail("检卡超时");
                 return;
             }
             checkCard(true);
@@ -216,34 +291,173 @@ public class SunmiPayHelper {
     };
 
     /**
-     * M1卡读取指定扇区数据
+     * 读取M1卡数据
      */
-    private void readSector() {
-        int startBlockNo = cardConfig.getM1Sector() * 4 + cardConfig.getM1Block();
+    private void m1ReadCard() {
+        int startBlockNo = cardConfig.getM1Sector() * 4;
         boolean result = m1Auth(cardConfig.getM1KeyType(), startBlockNo, cardConfig.getM1KeyBytes());
         if (result) {
-            byte[] outData = new byte[128];
-            int res = m1ReadBlock(startBlockNo, outData);
-            if (res >= 0 && res <= 16) {
-                String hexStr = ByteUtil.bytes2HexStr(Arrays.copyOf(outData, res));
-                Log.e(TAG, "read block:" + hexStr);
-                //回调
-                String code = new String(outData, 0, 16).trim();
-                if (readCardCallback != null && cardConfig.getM1Block() == 0) {
-                    readCardCallback.onSuccess(code, AidlConstants.CardType.MIFARE);
-                }
+            VipCardData data = m1ReadSector(cardConfig.getM1MSector());
+            if (data.isValid()) {
+                readCardSuccess(data);
             } else {
-                Log.e(TAG, "read block: FAILED");
-                //回调
-                if (readCardCallback != null) {
-                    readCardCallback.onError("读取卡片数据失败");
-                }
+                readCardFail("读取卡片数据失败");
             }
         } else {
-            if (readCardCallback != null) {
-                readCardCallback.onError("卡片认证失败");
+            readCardFail("卡片认证失败");
+        }
+    }
+
+    /**
+     * M1卡初始化（测试用方法）
+     *
+     * @param initData
+     */
+    private void m1InitCard(VipCardData initData) {
+        if (initData == null) {
+            writeCardFail("写卡信息无效");
+        }
+        int startBlockNo = cardConfig.getM1Sector() * 4;
+        boolean result = m1Auth(cardConfig.getM1KeyType(), startBlockNo, cardConfig.getM1KeyBytes());
+        if (result) {
+            int res = m1WriteBlock(startBlockNo, initData.getCardCode());
+            if (res < 0) {
+                writeCardFail("写卡失败");
+            }
+            res = m1WriteBlock(startBlockNo + 1, encryptIcCardMoney(initData.getMoney()));
+            if (res < 0) {
+                writeCardFail("写卡失败");
+            }
+            res = m1WriteBlock(startBlockNo + 2, initData.getVipPwd());
+            if (res < 0) {
+                writeCardFail("写卡失败");
+            }
+            //校验
+            VipCardData cardData = m1ReadSector(cardConfig.getM1MSector());
+            if (cardData.getCardCode().equals(initData.getCardCode())
+                    && cardData.getMoney().compareTo(initData.getMoney()) == 0
+                    && cardData.getVipPwd().equals(initData.getVipPwd())) {
+                writeCardSuccess();
+            } else {
+                writeCardFail("写卡失败");
             }
         }
+    }
+
+    /**
+     * M1卡更新卡余额
+     *
+     * @param updateData
+     */
+    private void m1UpdateMoney(VipCardData updateData) {
+        if (updateData == null) {
+            writeCardFail("写卡信息无效");
+        }
+        int startBlockNo = cardConfig.getM1Sector() * 4;
+        boolean result = m1Auth(cardConfig.getM1KeyType(), startBlockNo, cardConfig.getM1KeyBytes());
+        if (result) {
+            VipCardData cardData = m1ReadSector(cardConfig.getM1MSector());
+            if (!TextUtils.isEmpty(updateData.getCardCode())
+                    && !updateData.getCardCode().equals(cardData.getCardCode())) {
+                //卡号不一致，不允许写卡
+                writeCardFail("卡号不一致");
+            }
+            if (!TextUtils.isEmpty(cardData.getVipPwd())
+                    && !cardData.getVipPwd().equals(updateData.getVipPwd())) {
+                //密码不一致，不允许写卡
+                writeCardFail("密码不一致");
+            }
+            Double money = cardData.getMoney() + updateData.getMoney();
+            if (money < 0) {
+                //余额不足，不允许写卡
+                writeCardFail("卡余额不足");
+            }
+            int res = m1WriteBlock(startBlockNo + 1, encryptIcCardMoney(money));
+            if (res < 0) {
+                //写卡失败
+                writeCardFail("写卡失败");
+            }
+            //再次读卡，校验余额是否写成功
+            cardData = m1ReadSector(cardConfig.getM1MSector());
+            if (money.compareTo(cardData.getMoney()) == 0) {
+                //写卡成功
+                writeCardSuccess();
+            } else {
+                //写卡失败
+                writeCardFail("写卡失败");
+            }
+        }
+    }
+
+    /**
+     * 读取M1卡片数据。
+     * 此方法不进行卡片认证，必须先调用m1Auth方法认证成功后才可读取数据。
+     *
+     * @param sectorNo 扇区号，读取该扇区0~2块的数据
+     * @return
+     */
+    private VipCardData m1ReadSector(int sectorNo) {
+        int startBlockNo = sectorNo * 4;
+        VipCardData data = new VipCardData(AidlConstants.CardType.MIFARE);
+        byte[] outData = new byte[128];
+        //卡号
+        int res = m1ReadBlock(startBlockNo, outData);
+        if (res >= 0 && res <= 16) {
+            String code = new String(outData, 0, 16).trim();
+            data.setCardCode(code);
+        }
+        //余额
+        res = m1ReadBlock(startBlockNo + 1, outData);
+        if (res >= 0 && res <= 16) {
+            String str = new String(outData, 0, 16).trim();
+            data.setMoney(decryptIcCardMoney(str));
+        }
+        //密码
+        res = m1ReadBlock(startBlockNo + 2, outData);
+        if (res >= 0 && res <= 16) {
+            String pwd = new String(outData, 0, 16).trim();
+            data.setVipPwd(EncryptUtill.pwdDecrypt(pwd).trim());
+        }
+        return data;
+    }
+
+    /**
+     * IC卡余额解密
+     *
+     * @param str
+     * @return
+     */
+    private Double decryptIcCardMoney(String str) {
+        byte[] bytes = str.getBytes();
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = (byte) (bytes[i] ^ (byte) 77);
+        }
+        String decStr = new String(bytes);
+        if (decStr.startsWith("<>")) {
+            //余额有校验，去除校验参数（兼容5000新版本）
+            decStr = decStr.substring(2, 12);
+        }
+        return Double.valueOf(decStr) / 100;//卡内余额单位为分
+    }
+
+    /**
+     * IC卡余额加密
+     *
+     * @param money
+     * @return
+     */
+    private String encryptIcCardMoney(Double money) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(Math.round(money * 100));//卡内余额单位为分
+        while (sb.length() < 16) {
+            sb.append(" ");
+        }
+        //余额不做校验位计算（兼容5000旧版本）
+        byte[] bytes = sb.toString().getBytes();
+        for (int i = 0; i < bytes.length; i++) {
+            bytes[i] = (byte) (bytes[i] ^ (byte) 77);
+        }
+        return new String(bytes);
     }
 
     /**
@@ -274,10 +488,27 @@ public class SunmiPayHelper {
     /**
      * M1卡读取指定块数据
      */
-    private int m1ReadBlock(int block, byte[] blockData) {
+    private int m1ReadBlock(final int block, byte[] blockData) {
         try {
             int result = readCardOptV2.mifareReadBlock(block, blockData);
             Log.e(TAG, "m1ReadBlock result:" + result);
+            return result;
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return -123;
+    }
+
+    /**
+     * M1卡写指定块数据
+     *
+     * @param block
+     * @param blockData
+     * @return
+     */
+    private int m1WriteBlock(final int block, final String blockData) {
+        try {
+            int result = readCardOptV2.mifareWriteBlock(block, blockData.getBytes());
             return result;
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -297,31 +528,69 @@ public class SunmiPayHelper {
         boolean isEmpty = TextUtils.isEmpty(track1) && TextUtils.isEmpty(track2) && TextUtils.isEmpty(track3);
         if (isEmpty) {
             Log.e(TAG, "handleMagneticData result: isEmpty");
-            //回调
-            if (readCardCallback != null) {
-                readCardCallback.onError("读卡失败：卡号为空");
-            }
+            readCardFail("读卡失败：卡号为空");
         } else {
-            //回调
-            if (readCardCallback != null) {
-                // 根据配置参数返回卡号
-                switch (cardConfig.getMagTrackNo()) {
-                    case 1:
-                        readCardCallback.onSuccess(track1, AidlConstants.CardType.MAGNETIC);
-                        break;
-                    case 2:
-                        readCardCallback.onSuccess(track2, AidlConstants.CardType.MAGNETIC);
-                        break;
-                    case 3:
-                        readCardCallback.onSuccess(track3, AidlConstants.CardType.MAGNETIC);
-                        break;
-                    default:
-                        break;
-                }
+            // 根据配置参数返回卡号
+            VipCardData data = new VipCardData(AidlConstants.CardType.MAGNETIC);
+            switch (cardConfig.getMagTrackNo()) {
+                case 1:
+                default:
+                    data.setCardCode(track1);
+                    break;
+                case 2:
+                    data.setCardCode(track2);
+                    break;
+                case 3:
+                    data.setCardCode(track3);
+                    break;
             }
-            Log.e(TAG, "handleMagneticData result 1: " + track1);
-            Log.e(TAG, "handleMagneticData result 2: " + track2);
-            Log.e(TAG, "handleMagneticData result 3: " + track3);
+            readCardSuccess(data);
+        }
+    }
+
+    /**
+     * 读卡失败
+     *
+     * @param msg
+     */
+    private void readCardFail(final String msg) {
+        opType = OpType.None;
+        if (readCardCallback != null) {
+            readCardCallback.onError(msg);
+        }
+    }
+
+    /**
+     * 读卡成功
+     *
+     * @param data
+     */
+    private void readCardSuccess(final VipCardData data) {
+        opType = OpType.None;
+        if (readCardCallback != null) {
+            readCardCallback.onSuccess(data);
+        }
+    }
+
+    /**
+     * 写卡失败
+     *
+     * @param msg
+     */
+    private void writeCardFail(final String msg) {
+        opType = OpType.None;
+        if (writeCardCallback != null) {
+            writeCardCallback.onError(msg);
+        }
+    }
+
+    /**
+     * 写卡成功
+     */
+    private void writeCardSuccess() {
+        opType = OpType.None;
+        if (writeCardCallback != null) {
+            writeCardCallback.onSuccess();
         }
     }
 
@@ -336,10 +605,29 @@ public class SunmiPayHelper {
     }
 
     /**
+     * 卡片操作类型
+     */
+    enum OpType {
+        None,   //无操作
+        Read,   //读卡
+        Init,   //初始化卡
+        Update  //更新卡余额
+    }
+
+    /**
      * 读卡回调
      */
     public interface ReadCardCallback {
-        void onSuccess(final String cardNo, final AidlConstants.CardType cardType);
+        void onSuccess(final VipCardData data);
+
+        void onError(final String msg);
+    }
+
+    /**
+     * 写卡回调
+     */
+    public interface WriteCardCallback {
+        void onSuccess();
 
         void onError(final String msg);
     }
