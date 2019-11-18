@@ -75,6 +75,8 @@ public class TradeHelper {
     public static final String TRADE_STATUS_CANCELLED = "3";
     // 顾客类型：2-会员
     public static final String TRADE_CUST_VIP = "2";
+    // 分页查询，一页查询条数
+    public static final int PAGE_COUNT = 30;
     // 交易流水
     private static Trade trade = null;
     // 商品列表
@@ -1134,9 +1136,21 @@ public class TradeHelper {
     /**
      * @return 获取本地所有交易流水
      */
-    public static List<Trade> getTradeList() {
-        return SQLite.select().from(Trade.class)
+    public static long getTradeSize() {
+        return SQLite.select(count()).from(Trade.class).count();
+    }
+
+    /**
+     * @param page 页数
+     * @return 分页查询交易流水
+     */
+    public static List<Trade> getTradeListPage(int page) {
+        List<Trade> tradeList = SQLite.select()
+                .from(Trade.class)
+                .limit(PAGE_COUNT)//条数-》3
+                .offset(page * PAGE_COUNT)//当前页数
                 .queryList();
+        return tradeList;
     }
 
     /**

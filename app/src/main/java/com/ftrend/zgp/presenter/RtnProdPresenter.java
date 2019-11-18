@@ -24,8 +24,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.ftrend.zgp.utils.TradeHelper.payTypeImgRes;
-
 /**
  * @author liziqiang@ftrend.cn
  */
@@ -196,7 +194,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
      */
     private int payTypeImgRes(String appPayType) {
         switch (appPayType) {
-            case PayType.PAYTYPE_CASH: //现金
+            case PayType.PAYTYPE_CASH://现金
                 return R.drawable.money;
             case PayType.PAYTYPE_ICCARD: //IC卡
             case PayType.PAYTYPE_PREPAID://储值卡

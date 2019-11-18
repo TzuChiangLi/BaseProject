@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.KeyboardUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.zgp.R;
@@ -40,6 +39,7 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
     RecyclerView mRecyclerView;
     private TrdQryContract.TrdQryPresenter mPresenter;
     private TrdQryAdapter mAdapter;
+    private int page = 0;
 
     @Override
     public void onNetWorkChange(boolean isOnline) {
@@ -56,7 +56,7 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
 
     @Override
     protected void initData() {
-        mPresenter.initTradeList();
+        mPresenter.loadTradeList(page);
     }
 
     @Override
@@ -118,10 +118,36 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
             public void onItemClick(BaseQuickAdapter adapter, View view, final int position) {
                 MessageUtil.waitCircleProgress("加载中");
                 mPresenter.queryTradeProd(position);
-
             }
         });
+        //设置分页，上拉加载更多
+        mAdapter.setOnLoadMoreListener(loadMoreListener, mRecyclerView);
     }
+
+    @Override
+    public void loadMoreTrade(List<Trade> trdList) {
+        mAdapter.addData(trdList);
+        mAdapter.loadMoreComplete();
+    }
+
+    @Override
+    public void loadMoreEnd() {
+        mAdapter.loadMoreEnd();
+    }
+
+
+    BaseQuickAdapter.RequestLoadMoreListener loadMoreListener = new BaseQuickAdapter.RequestLoadMoreListener() {
+        @Override
+        public void onLoadMoreRequested() {
+            mRecyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mPresenter.addTradeData(++page);
+                }
+            }, 1000);
+        }
+    };
+
 
     @Override
     public void updateFilterTrade(List<Trade> trdList) {
@@ -147,6 +173,18 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
                 startActivity(intent);
             }
         }, 300);
+
+    }
+
+    @Override
+    public void showError(final String msg) {
+        MessageUtil.waitEnd();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                MessageUtil.show(msg);
+            }
+        }, 500);
 
     }
 

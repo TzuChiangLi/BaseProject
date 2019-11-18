@@ -13,8 +13,17 @@ public interface TrdQryContract {
     interface TrdQryPresenter {
         /**
          * 初始化流水列表
+         *
+         * @param page 第一页
          */
-        void initTradeList();
+        void loadTradeList(int page);
+
+        /**
+         * 加载更多
+         *
+         * @param page 分页页数
+         */
+        void addTradeData(int page);
 
         /**
          * 查询单据详情
@@ -44,6 +53,16 @@ public interface TrdQryContract {
         void showTradeList(List<Trade> trdList);
 
         /**
+         * @param trdList 分页加载更多
+         */
+        void loadMoreTrade(List<Trade> trdList);
+
+        /**
+         * 加载结束
+         */
+        void loadMoreEnd();
+
+        /**
          * @param trdList 过滤后的交易流水
          */
         void updateFilterTrade(List<Trade> trdList);
@@ -52,5 +71,10 @@ public interface TrdQryContract {
          * @param lsNo 流水号
          */
         void goTradeProdActivity(String lsNo);
+
+        /**
+         * @param msg 文本
+         */
+        void showError(String msg);
     }
 }
