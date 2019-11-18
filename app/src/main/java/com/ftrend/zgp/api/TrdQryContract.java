@@ -68,6 +68,11 @@ public interface TrdQryContract {
         void updateFilterTrade(List<Trade> trdList);
 
         /**
+         * @param canLoadMore 是否可以加载更多
+         */
+        void setEnableLoadMore(boolean canLoadMore);
+
+        /**
          * @param lsNo 流水号
          */
         void goTradeProdActivity(String lsNo);

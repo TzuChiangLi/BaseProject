@@ -30,6 +30,9 @@ import java.util.List;
 
 import butterknife.BindView;
 
+/**
+ * @author liziqiang@ftrend.cn
+ */
 public class TradeQueryActivity extends BaseActivity implements TrdQryContract.TrdQryView, OnTitleBarListener {
     @BindView(R.id.trade_qry_top_bar)
     TitleBar mTitleBar;
@@ -122,6 +125,7 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
         });
         //设置分页，上拉加载更多
         mAdapter.setOnLoadMoreListener(loadMoreListener, mRecyclerView);
+        mAdapter.disableLoadMoreIfNotFullPage();
     }
 
     @Override
@@ -161,6 +165,11 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
             TextView mEmptyTv = mAdapter.getEmptyView().findViewById(R.id.rv_item_tv_empty);
             mEmptyTv.setText("无满足条件的流水");
         }
+    }
+
+    @Override
+    public void setEnableLoadMore(boolean canLoadMore) {
+        mAdapter.setEnableLoadMore(canLoadMore);
     }
 
     @Override

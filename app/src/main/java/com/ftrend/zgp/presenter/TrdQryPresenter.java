@@ -40,7 +40,7 @@ public class TrdQryPresenter implements TrdQryContract.TrdQryPresenter {
         currentCount = tradeList.size();
         //显示第一次加载的交易记录
         mView.showTradeList(tradeList);
-        if (currentCount>=totalCount){
+        if (currentCount >= totalCount) {
             mView.loadMoreEnd();
         }
     }
@@ -87,6 +87,7 @@ public class TrdQryPresenter implements TrdQryContract.TrdQryPresenter {
         }
         if (TextUtils.isEmpty(lsNo)) {
             mView.updateFilterTrade(tradeList);
+            mView.setEnableLoadMore(true);
         } else {
             List<Trade> filterList = new ArrayList<>();
             for (Trade trade : tradeList) {
@@ -96,6 +97,7 @@ public class TrdQryPresenter implements TrdQryContract.TrdQryPresenter {
                 }
             }
             mView.updateFilterTrade(filterList);
+            mView.setEnableLoadMore(false);
         }
     }
 

@@ -15,6 +15,7 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.HomePresenter;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.common.CommonUtil;
@@ -26,6 +27,7 @@ import com.ftrend.zgp.utils.printer.PrintConfig;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.gyf.immersionbar.ImmersionBar;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -105,6 +107,24 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
         mMenuAdapter = new MenuAdapter(this, R.layout.home_rv_menu_item, menuList);
         mRecyclerView.setAdapter(mMenuAdapter);
         mMenuAdapter.setOnMenuClickListener(this);
+//        for (int i = 0; i < 150; i++) {
+//            Trade trade = new Trade();
+//            trade.setDepCode(ZgParams.getCurrentDep().getDepCode());
+//            trade.setLsNo(TradeHelper.newLsNo());
+//            trade.setTradeTime(new Date());
+//            trade.setTradeFlag(TradeHelper.TRADE_FLAG_SALE);
+//            trade.setCashier(ZgParams.getCurrentUser().getUserCode());
+//            trade.setDscTotal(0);
+//            trade.setTotal(0);
+//            trade.setCustType("0");
+//            trade.setVipCode("");
+//            trade.setCardCode("");
+//            trade.setVipTotal(0);
+//            trade.setCreateTime(new Date());
+//            trade.setCreateIp(ZgParams.getCurrentIp());
+//            trade.setStatus(TradeHelper.TRADE_STATUS_NOTPAY);
+//            trade.insert();
+//        }
     }
 
     /**
