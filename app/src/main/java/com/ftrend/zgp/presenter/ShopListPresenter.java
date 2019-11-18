@@ -11,6 +11,7 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.UserRightsHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
@@ -20,8 +21,6 @@ import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.sunmi.VipCardData;
 import com.sunmi.pay.hardware.aidl.AidlConstants;
-
-import java.util.Map;
 
 /**
  * 收银-选择商品P层
@@ -85,17 +84,17 @@ public class ShopListPresenter implements ShopListContract.ShopListPresenter {
 
     private RestResultHandler regHandler = new RestResultHandler() {
         @Override
-        public void onSuccess(Map<String, Object> body) {
+        public void onSuccess(RestBodyMap body) {
             VipInfo vipInfo = TradeHelper.vip();
-            vipInfo.setVipName(body.get("vipName").toString());
-            vipInfo.setVipCode(body.get("vipCode").toString());
-            vipInfo.setVipDscRate(Double.parseDouble(body.get("vipDscRate").toString()));
-            vipInfo.setVipGrade(body.get("vipGrade").toString());
-            vipInfo.setVipPriceType(Double.parseDouble(body.get("vipPriceType").toString()));
-            vipInfo.setRateRule(Double.parseDouble(body.get("rateRule").toString()));
-            vipInfo.setForceDsc(body.get("forceDsc").toString());
-            vipInfo.setCardCode(body.get("cardCode").toString());
-            vipInfo.setDscProdIsDsc(body.get("dscProdIsDsc").toString());
+            vipInfo.setVipName(body.getString("vipName"));
+            vipInfo.setVipCode(body.getString("vipCode"));
+            vipInfo.setVipDscRate(body.getDouble("vipDscRate"));
+            vipInfo.setVipGrade(body.getString("vipGrade"));
+            vipInfo.setVipPriceType(body.getDouble("vipPriceType"));
+            vipInfo.setRateRule(body.getDouble("rateRule"));
+            vipInfo.setForceDsc(body.getString("forceDsc"));
+            vipInfo.setCardCode(body.getString("cardCode"));
+            vipInfo.setDscProdIsDsc(body.getString("dscProdIsDsc"));
             //保存会员信息
             TradeHelper.saveVip();
             //刷新界面
@@ -258,18 +257,18 @@ public class ShopListPresenter implements ShopListContract.ShopListPresenter {
             //在线查询会员信息
             RestSubscribe.getInstance().queryVipInfo(code, type, new RestCallback(new RestResultHandler() {
                 @Override
-                public void onSuccess(Map<String, Object> body) {
+                public void onSuccess(RestBodyMap body) {
                     if (body != null) {
                         VipInfo vipInfo = TradeHelper.vip();
-                        vipInfo.setVipName(body.get("vipName").toString());
-                        vipInfo.setVipCode(body.get("vipCode").toString());
-                        vipInfo.setVipDscRate(Double.parseDouble(body.get("vipDscRate").toString()));
-                        vipInfo.setVipGrade(body.get("vipGrade").toString());
-                        vipInfo.setVipPriceType(Double.parseDouble(body.get("vipPriceType").toString()));
-                        vipInfo.setRateRule(Double.parseDouble(body.get("rateRule").toString()));
-                        vipInfo.setForceDsc(body.get("forceDsc").toString());
-                        vipInfo.setCardCode(body.get("cardCode").toString());
-                        vipInfo.setDscProdIsDsc(body.get("dscProdIsDsc").toString());
+                        vipInfo.setVipName(body.getString("vipName"));
+                        vipInfo.setVipCode(body.getString("vipCode"));
+                        vipInfo.setVipDscRate(body.getDouble("vipDscRate"));
+                        vipInfo.setVipGrade(body.getString("vipGrade"));
+                        vipInfo.setVipPriceType(body.getDouble("vipPriceType"));
+                        vipInfo.setRateRule(body.getDouble("rateRule"));
+                        vipInfo.setForceDsc(body.getString("forceDsc"));
+                        vipInfo.setCardCode(body.getString("cardCode"));
+                        vipInfo.setDscProdIsDsc(body.getString("dscProdIsDsc"));
                         //保存会员信息到流水
                         TradeHelper.saveVip();
                         //刷新会员优惠

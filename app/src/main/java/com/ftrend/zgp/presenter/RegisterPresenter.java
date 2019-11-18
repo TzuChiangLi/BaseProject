@@ -8,13 +8,12 @@ import com.ftrend.zgp.api.RegisterContract;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.HttpCallBack;
 import com.ftrend.zgp.utils.http.HttpUtil;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.qw.soul.permission.SoulPermission;
-
-import java.util.Map;
 
 /**
  * 设备注册界面P层
@@ -36,7 +35,7 @@ public class RegisterPresenter implements RegisterContract.RegisterPresenter {
 
     private RestResultHandler regHandler = new RestResultHandler() {
         @Override
-        public void onSuccess(Map<String, Object> body) {
+        public void onSuccess(RestBodyMap body) {
             //注册成功，设备注册参数写入数据库
             ZgParams.saveAppParams("serverUrl", ZgParams.getServerUrl());
             ZgParams.saveAppParams("posCode", posCode);

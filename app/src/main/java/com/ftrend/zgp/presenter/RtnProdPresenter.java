@@ -11,6 +11,7 @@ import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.CommonUtil;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
@@ -252,8 +253,8 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 trade.getTotal() * -1,
                 new RestCallback(new RestResultHandler() {
                     @Override
-                    public void onSuccess(Map<String, Object> body) {
-                        payDataSign[0] = body.get("dataSign").toString();
+                    public void onSuccess(RestBodyMap body) {
+                        payDataSign[0] = body.getString("dataSign");
                         payRequestTime[0] = System.currentTimeMillis();
                         requestCardPayResult();
                     }
@@ -284,7 +285,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
 
         RestSubscribe.getInstance().payCard(payDataSign[0], new RestCallback(new RestResultHandler() {
             @Override
-            public void onSuccess(Map<String, Object> body) {
+            public void onSuccess(RestBodyMap body) {
                 if (RtnHelper.pay(PayType.PAYTYPE_PREPAID, RtnHelper.getPay().getPayCode())) {
                     if (RtnHelper.rtn()) {
                         MessageUtil.waitSuccesss("储值卡退款成功", new MessageUtil.MessageBoxOkListener() {

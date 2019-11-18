@@ -1,7 +1,5 @@
 package com.ftrend.zgp.utils.http;
 
-import java.util.Map;
-
 /**
  * 后台服务接口请求回调
  * Copyright (C),青岛致远方象软件科技有限公司
@@ -9,7 +7,7 @@ import java.util.Map;
  * @author liuhongbin@ftrend.cn
  * @since 2019/9/2
  */
-public class RestCallback implements HttpCallBack<Map<String, Object>> {
+public class RestCallback implements HttpCallBack<RestBodyMap> {
 
     private RestResultHandler resultHandler = null;
 
@@ -25,7 +23,7 @@ public class RestCallback implements HttpCallBack<Map<String, Object>> {
     }
 
     @Override
-    public void onSuccess(Map<String, Object> body) {
+    public void onSuccess(RestBodyMap body) {
         if (resultHandler != null) {
             resultHandler.onSuccess(body);
         }

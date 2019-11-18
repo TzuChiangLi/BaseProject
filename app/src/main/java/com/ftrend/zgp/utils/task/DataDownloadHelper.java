@@ -15,6 +15,7 @@ import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.SysParams;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.utils.db.ZgpDb;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.raizlabs.android.dbflow.config.FlowManager;
@@ -24,7 +25,6 @@ import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 数据下载工具类
@@ -108,13 +108,13 @@ public class DataDownloadHelper {
     public static RestCallback makeCallback(final String dataType, final String code, final DownloadResultHandler handler) {
         return new RestCallback(new RestResultHandler() {
             @Override
-            public void onSuccess(Map<String, Object> body) {
+            public void onSuccess(RestBodyMap body) {
                 if (!body.containsKey("list") || !body.containsKey("sign")) {
                     handler.onError("后台服务返回结果异常");
                     return;
                 }
-                final List<Map<String, Object>> dataList = (List<Map<String, Object>>) body.get("list");
-                final String dataSign = body.get("sign").toString();
+                final List<RestBodyMap> dataList = body.getMapList("list");
+                final String dataSign = body.getString("sign");
                 //保存数据
                 Transaction transaction = FlowManager.getDatabase(ZgpDb.class).beginTransactionAsync(new ITransaction() {
                     @Override
@@ -180,14 +180,14 @@ public class DataDownloadHelper {
      *
      * @param depList
      */
-    private static void savePosDep(final List<Map<String, Object>> depList) {
+    private static void savePosDep(final List<RestBodyMap> depList) {
         //清空数据表
         SQLite.delete(Dep.class).execute();
         //写入数据
-        for (Map<String, Object> map : depList) {
+        for (RestBodyMap map : depList) {
             Dep dep = new Dep();
-            dep.setDepCode(String.valueOf(map.get("depCode")));
-            dep.setDepName(String.valueOf(map.get("depName")));
+            dep.setDepCode(map.getString("depCode"));
+            dep.setDepName(map.getString("depName"));
             dep.insert();
         }
     }
@@ -197,19 +197,19 @@ public class DataDownloadHelper {
      *
      * @param userList
      */
-    private static void savePosUser(final List<Map<String, Object>> userList) {
+    private static void savePosUser(final List<RestBodyMap> userList) {
         //清空数据表
         SQLite.delete(User.class).execute();
         //写入数据
-        for (Map<String, Object> map : userList) {
+        for (RestBodyMap map : userList) {
             User user = new User();
-            user.setUserCode(String.valueOf(map.get("userCode")));
-            user.setUserName(String.valueOf(map.get("userName")));
-            user.setUserPwd(String.valueOf(map.get("userPwd")));
-            user.setUserRights(String.valueOf(map.get("userRights")));
-            user.setMaxDscRate(Float.valueOf(String.valueOf(map.get("maxDscRate"))).intValue());
-            user.setMaxDscTotal(Float.valueOf(String.valueOf(map.get("maxDscTotal"))));
-            user.setMaxTHTotal(Float.valueOf(String.valueOf(map.get("maxThTotal"))));
+            user.setUserCode(map.getString("userCode"));
+            user.setUserName(map.getString("userName"));
+            user.setUserPwd(map.getString("userPwd"));
+            user.setUserRights(map.getString("userRights"));
+            user.setMaxDscRate(map.getDouble("maxDscRate"));
+            user.setMaxDscTotal(map.getDouble("maxDscTotal"));
+            user.setMaxTHTotal(map.getDouble("maxThTotal"));
             user.insert();
         }
     }
@@ -219,14 +219,14 @@ public class DataDownloadHelper {
      *
      * @param paramsList
      */
-    private static void savePosSysParams(final List<Map<String, Object>> paramsList) {
+    private static void savePosSysParams(final List<RestBodyMap> paramsList) {
         //清空数据表
         SQLite.delete(SysParams.class).execute();
         //写入数据
-        for (Map<String, Object> map : paramsList) {
+        for (RestBodyMap map : paramsList) {
             SysParams param = new SysParams();
-            param.setParamName(String.valueOf(map.get("paramName")));
-            param.setParamValue(String.valueOf(map.get("paramValue")));
+            param.setParamName(map.getString("paramName"));
+            param.setParamValue(map.getString("paramValue"));
             param.insert();
         }
     }
@@ -237,15 +237,15 @@ public class DataDownloadHelper {
      * @param depCode
      * @param clsList
      */
-    private static void saveDepCls(final String depCode, final List<Map<String, Object>> clsList) {
+    private static void saveDepCls(final String depCode, final List<RestBodyMap> clsList) {
         //清空数据表
         SQLite.delete(DepCls.class).where(DepCls_Table.depCode.eq(depCode)).execute();
         //写入数据
-        for (Map<String, Object> map : clsList) {
+        for (RestBodyMap map : clsList) {
             DepCls cls = new DepCls();
             cls.setDepCode(depCode);
-            cls.setClsCode(String.valueOf(map.get("clsCode")));
-            cls.setClsName(String.valueOf(map.get("clsName")));
+            cls.setClsCode(map.getString("clsCode"));
+            cls.setClsName(map.getString("clsName"));
             cls.insert();
         }
     }
@@ -256,38 +256,37 @@ public class DataDownloadHelper {
      * @param depCode
      * @param productList
      */
-    private static void saveDepProduct(final String depCode, final List<Map<String, Object>> productList) {
+    private static void saveDepProduct(final String depCode, final List<RestBodyMap> productList) {
         //清空数据表
         SQLite.delete(DepProduct.class).where(DepProduct_Table.depCode.eq(depCode)).execute();
         //写入数据
-        for (Map<String, Object> map : productList) {
+        for (RestBodyMap map : productList) {
             DepProduct product = new DepProduct();
-            product.setProdCode(String.valueOf(map.get("prodCode")));
-            product.setBarCode(String.valueOf(map.get("barCode")));
-            product.setProdName(String.valueOf(map.get("prodName")));
-            product.setDepCode(String.valueOf(map.get("depCode")));
-            product.setClsCode(String.valueOf(map.get("clsCode")));
-            product.setCargoNo(String.valueOf(map.get("cargoNo")));
-            product.setSpec(String.valueOf(map.get("spec")));
-            product.setUnit(String.valueOf(map.get("unit")));
-            product.setPrice(Float.valueOf(String.valueOf(map.get("price"))));
-            product.setBrand(String.valueOf(map.get("brand")));
-            product.setPriceFlag(Integer.valueOf(String.valueOf(map.get("priceFlag"))));
-//            product.set(String.valueOf(map.get("total")));
-            product.setIsLargess(Integer.valueOf(String.valueOf(map.get("isLargess"))));
-            product.setForSaleRet(Integer.valueOf(String.valueOf(map.get("forSaleRet"))));
-            product.setForDsc(Integer.valueOf(String.valueOf(map.get("forDsc"))));
-            product.setForLargess(Integer.valueOf(String.valueOf(map.get("forLargess"))));
-            product.setScoreSet(Float.valueOf(String.valueOf(map.get("scoreSet"))));
-            product.setVipPrice1(Float.valueOf(String.valueOf(map.get("vipPrice1"))));
-            product.setVipPrice2(Float.valueOf(String.valueOf(map.get("vipPrice2"))));
-            product.setVipPrice3(Float.valueOf(String.valueOf(map.get("vipPrice3"))));
-            product.setVipRate1(Float.valueOf(String.valueOf(map.get("vipRate1"))));
-            product.setVipRate2(Float.valueOf(String.valueOf(map.get("vipRate2"))));
-            product.setVipRate3(Float.valueOf(String.valueOf(map.get("vipRate3"))));
-            product.setMinimumPrice(Float.valueOf(String.valueOf(map.get("minimumPrice"))));
-            product.setProdStatus(String.valueOf(map.get("prodStatus")));
-            product.setSeason(String.valueOf(map.get("season")));
+            product.setProdCode(map.getString("prodCode"));
+            product.setBarCode(map.getString("barCode"));
+            product.setProdName(map.getString("prodName"));
+            product.setDepCode(map.getString("depCode"));
+            product.setClsCode(map.getString("clsCode"));
+            product.setCargoNo(map.getString("cargoNo"));
+            product.setSpec(map.getString("spec"));
+            product.setUnit(map.getString("unit"));
+            product.setPrice(map.getDouble("price"));
+            product.setBrand(map.getString("brand"));
+            product.setPriceFlag(map.getInt("priceFlag"));
+            product.setIsLargess(map.getInt("isLargess"));
+            product.setForSaleRet(map.getInt("forSaleRet"));
+            product.setForDsc(map.getInt("forDsc"));
+            product.setForLargess(map.getInt("forLargess"));
+            product.setScoreSet(map.getDouble("scoreSet"));
+            product.setVipPrice1(map.getDouble("vipPrice1"));
+            product.setVipPrice2(map.getDouble("vipPrice2"));
+            product.setVipPrice3(map.getDouble("vipPrice3"));
+            product.setVipRate1(map.getDouble("vipRate1"));
+            product.setVipRate2(map.getDouble("vipRate2"));
+            product.setVipRate3(map.getDouble("vipRate3"));
+            product.setMinimumPrice(map.getDouble("minimumPrice"));
+            product.setProdStatus(map.getString("prodStatus"));
+            product.setSeason(map.getString("season"));
             product.insert();
         }
     }
@@ -298,17 +297,17 @@ public class DataDownloadHelper {
      * @param depCode
      * @param payInfoList
      */
-    private static void saveDepPayInfo(final String depCode, final List<Map<String, Object>> payInfoList) {
+    private static void saveDepPayInfo(final String depCode, final List<RestBodyMap> payInfoList) {
         //清空数据表
         SQLite.delete(DepPayInfo.class).where(DepPayInfo_Table.depCode.eq(depCode)).execute();
         //写入数据
-        for (Map<String, Object> map : payInfoList) {
+        for (RestBodyMap map : payInfoList) {
             DepPayInfo payInfo = new DepPayInfo();
             payInfo.setDepCode(depCode);
-            payInfo.setPayTypeCode(String.valueOf(map.get("payTypeCode")));
-            payInfo.setPayTypeName(String.valueOf(map.get("payTypeName")));
-            payInfo.setAppPayType(String.valueOf(map.get("appPayType")));
-            payInfo.setIsScore(String.valueOf(map.get("isScore")));
+            payInfo.setPayTypeCode(map.getString("payTypeCode"));
+            payInfo.setPayTypeName(map.getString("payTypeName"));
+            payInfo.setAppPayType(map.getString("appPayType"));
+            payInfo.setIsScore(map.getString("isScore"));
             payInfo.insert();
         }
     }

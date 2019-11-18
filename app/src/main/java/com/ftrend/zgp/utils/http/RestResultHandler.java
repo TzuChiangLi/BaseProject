@@ -1,7 +1,5 @@
 package com.ftrend.zgp.utils.http;
 
-import java.util.Map;
-
 /**
  * 用于简化后台服务请求回调
  * Copyright (C),青岛致远方象软件科技有限公司
@@ -15,7 +13,7 @@ public interface RestResultHandler {
      *
      * @param body 后台服务返回的数据
      */
-    void onSuccess(Map<String, Object> body);
+    void onSuccess(RestBodyMap body);
 
     /**
      * 请求失败

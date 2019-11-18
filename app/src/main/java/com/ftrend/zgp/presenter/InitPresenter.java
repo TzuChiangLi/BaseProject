@@ -6,6 +6,7 @@ import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.CommonUtil;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
@@ -16,7 +17,6 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 
 /**
@@ -76,9 +76,9 @@ public class InitPresenter implements InitContract.InitPresenter {
             RestSubscribe.getInstance().queryAppParams(ZgParams.getPosCode(),
                     new RestCallback(new RestResultHandler() {
                         @Override
-                        public void onSuccess(Map<String, Object> body) {
+                        public void onSuccess(RestBodyMap body) {
                             for (String key : body.keySet()) {
-                                ZgParams.saveAppParams(key, String.valueOf(body.get(key)));
+                                ZgParams.saveAppParams(key, body.getString(key));
                             }
                             ZgParams.loadParams();
                             mView.updateProgress(3, 100);

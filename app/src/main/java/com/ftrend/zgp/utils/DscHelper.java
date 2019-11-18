@@ -246,7 +246,7 @@ public class DscHelper {
      */
     public static double getMaxWholeDscByTotal() {
         double maxDscTotal = ZgParams.getCurrentUser().getMaxDscTotal();
-        int maxDscRate = ZgParams.getCurrentUser().getMaxDscRate();
+        double maxDscRate = ZgParams.getCurrentUser().getMaxDscRate();
 
         //汇总整单金额（可优惠商品原价）和已优惠金额（不含整单优惠）
         double totalForDsc = 0, dscTotal = 0;
@@ -270,7 +270,7 @@ public class DscHelper {
      */
     public static double getMaxWholeDscByRate() {
         double maxDscTotal = ZgParams.getCurrentUser().getMaxDscTotal();
-        int maxDscRate = ZgParams.getCurrentUser().getMaxDscRate();
+        double maxDscRate = ZgParams.getCurrentUser().getMaxDscRate();
 
         //汇总已优惠金额（不含整单优惠）
         double dscTotal = 0;

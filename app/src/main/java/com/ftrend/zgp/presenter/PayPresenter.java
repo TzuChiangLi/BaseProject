@@ -13,6 +13,7 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.CommonUtil;
 import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
@@ -34,7 +35,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 支付P层
@@ -203,8 +203,8 @@ public class PayPresenter implements PayContract.Presenter {
         mView.cardPayWait("卡信息校验中...");
         RestSubscribe.getInstance().payCardInfoRequest(payCardCode[0], payCardType[0], new RestCallback(new RestResultHandler() {
             @Override
-            public void onSuccess(Map<String, Object> body) {
-                payDataSign[0] = body.get("dataSign").toString();
+            public void onSuccess(RestBodyMap body) {
+                payDataSign[0] = body.getString("dataSign");
                 payRequestTime[0] = System.currentTimeMillis();
                 postMessage(PayContract.MSG_CARD_QUERY_RESULT);
             }
@@ -235,15 +235,15 @@ public class PayPresenter implements PayContract.Presenter {
 
         RestSubscribe.getInstance().payCardInfo(payDataSign[0], new RestCallback(new RestResultHandler() {
             @Override
-            public void onSuccess(Map<String, Object> body) {
-                payCardCode[0] = body.get("cardCode").toString();
+            public void onSuccess(RestBodyMap body) {
+                payCardCode[0] = body.getString("cardCode");
                 boolean needPass;
                 if (payCardType[0].equals("1")) {//IC卡，以卡内信息为准
                     payCardBalance[0] = cardData.getMoney();
                     needPass = !TextUtils.isEmpty(cardData.getVipPwd());
                 } else {
-                    payCardBalance[0] = Double.parseDouble(body.get("balance").toString());
-                    needPass = Boolean.parseBoolean(body.get("needPass").toString());
+                    payCardBalance[0] = body.getDouble("balance");
+                    needPass = body.getBool("needPass");
                 }
 
                 if (payCardBalance[0] < TradeHelper.getTradeTotal()) {
@@ -284,7 +284,7 @@ public class PayPresenter implements PayContract.Presenter {
             RestSubscribe.getInstance().vipCardPwdValidate(payCardCode[0], pwd,
                     new RestCallback(new RestResultHandler() {
                         @Override
-                        public void onSuccess(Map<String, Object> body) {
+                        public void onSuccess(RestBodyMap body) {
                             postMessage(PayContract.MSG_CARD_PAY_REQUEST);
                         }
 
@@ -333,8 +333,8 @@ public class PayPresenter implements PayContract.Presenter {
                 trade.getTotal(),
                 new RestCallback(new RestResultHandler() {
                     @Override
-                    public void onSuccess(Map<String, Object> body) {
-                        payDataSign[0] = body.get("dataSign").toString();
+                    public void onSuccess(RestBodyMap body) {
+                        payDataSign[0] = body.getString("dataSign");
                         payRequestTime[0] = System.currentTimeMillis();
                         postMessage(PayContract.MSG_CARD_PAY_RESULT);
                     }
@@ -365,7 +365,7 @@ public class PayPresenter implements PayContract.Presenter {
 
         RestSubscribe.getInstance().payCard(payDataSign[0], new RestCallback(new RestResultHandler() {
             @Override
-            public void onSuccess(Map<String, Object> body) {
+            public void onSuccess(RestBodyMap body) {
                 paySuccess(PayType.PAYTYPE_PREPAID, TradeHelper.getTradeTotal(), payCardCode[0]);
                 mView.cardPaySuccess("支付成功！");
             }

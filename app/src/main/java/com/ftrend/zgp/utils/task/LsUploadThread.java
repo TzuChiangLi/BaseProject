@@ -15,6 +15,7 @@ import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.TradeUploadQueue_Table;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
@@ -22,7 +23,6 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 流水上传线程
@@ -83,7 +83,7 @@ public class LsUploadThread extends Thread {
                 RestSubscribe.getInstance().uploadTrade(posCode, trade, prodList, pay,
                         new RestCallback(new RestResultHandler() {
                             @Override
-                            public void onSuccess(Map<String, Object> body) {
+                            public void onSuccess(RestBodyMap body) {
                                 //上传收钱吧交易记录
                                 uploadSqb(queue);
                             }
@@ -143,7 +143,7 @@ public class LsUploadThread extends Thread {
             RestSubscribe.getInstance().uploadSqb(order, result,
                     new RestCallback(new RestResultHandler() {
                         @Override
-                        public void onSuccess(Map<String, Object> body) {
+                        public void onSuccess(RestBodyMap body) {
                             uploadCount[0]++;
                             if (uploadCount[0] >= total) {
                                 //流水上传完毕
