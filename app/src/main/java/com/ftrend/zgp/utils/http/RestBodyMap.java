@@ -62,7 +62,7 @@ public class RestBodyMap extends HashMap<String, Object> {
 
     public RestBodyMap getMap(final String key) {
         try {
-            return (RestBodyMap) get(key);
+            return containsKey(key) ? (RestBodyMap) get(key) : null;
         } catch (Exception e) {
             return null;
         }
@@ -70,7 +70,7 @@ public class RestBodyMap extends HashMap<String, Object> {
 
     public List<RestBodyMap> getMapList(final String key) {
         try {
-            return (List<RestBodyMap>) get(key);
+            return containsKey(key) ? (List<RestBodyMap>) get(key) : null;
         } catch (Exception e) {
             return null;
         }
@@ -78,7 +78,7 @@ public class RestBodyMap extends HashMap<String, Object> {
 
     public List<String> getStringList(final String key) {
         try {
-            return (List<String>) get(key);
+            return containsKey(key) ? (List<String>) get(key) : null;
         } catch (Exception e) {
             return null;
         }

@@ -208,10 +208,12 @@ public class DataDownloadTask {
             public void onSuccess(RestBodyMap body) {
                 updateInfoList.clear();
                 List<RestBodyMap> list = body.getMapList("list");
-                for (RestBodyMap map : list) {
-                    String key = map.getString("paramName");
-                    String sign = map.getString("paramValue");
-                    updateInfoList.add(new UpdateInfo(key, sign));
+                if (list != null) {
+                    for (RestBodyMap map : list) {
+                        String key = map.getString("paramName");
+                        String sign = map.getString("paramValue");
+                        updateInfoList.add(new UpdateInfo(key, sign));
+                    }
                 }
                 next();
             }

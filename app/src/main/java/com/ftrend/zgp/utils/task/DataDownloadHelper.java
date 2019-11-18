@@ -1,6 +1,7 @@
 package com.ftrend.zgp.utils.task;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.ftrend.zgp.model.AppParams;
@@ -109,12 +110,12 @@ public class DataDownloadHelper {
         return new RestCallback(new RestResultHandler() {
             @Override
             public void onSuccess(RestBodyMap body) {
-                if (!body.containsKey("list") || !body.containsKey("sign")) {
+                final List<RestBodyMap> dataList = body.getMapList("list");
+                final String dataSign = body.getString("sign");
+                if (dataList == null || TextUtils.isEmpty(dataSign)) {
                     handler.onError("后台服务返回结果异常");
                     return;
                 }
-                final List<RestBodyMap> dataList = body.getMapList("list");
-                final String dataSign = body.getString("sign");
                 //保存数据
                 Transaction transaction = FlowManager.getDatabase(ZgpDb.class).beginTransactionAsync(new ITransaction() {
                     @Override

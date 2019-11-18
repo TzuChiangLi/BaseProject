@@ -209,15 +209,14 @@ public class LsDownloadTask {
         RestSubscribe.getInstance().downloadPosLs(ZgParams.getPosCode(), lsNo, new RestCallback(new RestResultHandler() {
             @Override
             public void onSuccess(RestBodyMap body) {
-                if (!body.containsKey("trade") || !body.containsKey("prod") || !body.containsKey("pay")) {
+                RestBodyMap trade = body.getMap("trade");
+                List<RestBodyMap> prodList = body.getMapList("prod");
+                RestBodyMap pay = body.getMap("pay");
+                if (trade == null || prodList == null || pay == null) {
                     next();//后台服务返回的数据无效，跳过
                     return;
                 }
-
-                RestBodyMap trade = body.getMap("trade");
-                List<RestBodyMap> prod = body.getMapList("prod");
-                RestBodyMap pay = body.getMap("pay");
-                saveLs(trade, prod, pay);
+                saveLs(trade, prodList, pay);
             }
 
             @Override

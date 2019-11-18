@@ -95,19 +95,20 @@ public class RtnLsDownloadTask {
                 if (body != null) {
                     LogUtil.d("----trade:" + body.get("trade"));
                 }
-                if (!body.containsKey("trade") || !body.containsKey("prod") || !body.containsKey("pay")) {
+                RestBodyMap trade = body.getMap("trade");
+                List<RestBodyMap> prodList = body.getMapList("prod");
+                RestBodyMap pay = body.getMap("pay");
+                if (trade == null || prodList == null || pay == null) {
+                    postFailed("流水数据异常");
                     return;
                 }
-                RestBodyMap trade = body.getMap("trade");
-                List<RestBodyMap> prod = body.getMapList("prod");
-                RestBodyMap pay = body.getMap("pay");
                 //不是当前专柜的销售流水不允许退货
                 if (!ZgParams.getCurrentDep().getDepCode().equals(trade.get("depCode"))) {
                     postFailed("指定流水不存在");
                     return;
                 }
 
-                saveLs(trade, prod, pay);
+                saveLs(trade, prodList, pay);
             }
 
             @Override

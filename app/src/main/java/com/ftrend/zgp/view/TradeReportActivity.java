@@ -145,6 +145,10 @@ public class TradeReportActivity extends BaseActivity {
      * @param dataList
      */
     private void updateReport(List<RestBodyMap> dataList) {
+        if (dataList == null) {
+            return;
+        }
+
         Integer sumCount = 0;
         Double sumTotal = 0.0;
         List<ReportData> payList = new ArrayList<>();
