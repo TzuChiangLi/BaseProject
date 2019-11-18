@@ -14,9 +14,9 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.presenter.TrdProdPresenter;
-import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
@@ -24,6 +24,7 @@ import com.hjq.bar.TitleBar;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -51,6 +52,8 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
     RecyclerView mRecyclerView;
     @BindView(R.id.trd_qry_prod_rl_bottom)
     RelativeLayout mBottomLayout;
+    @BindView(R.id.trd_qry_prod_rl_vip)
+    RelativeLayout mVipLayout;
     private TrdProdContract.TrdProdPresenter mPresenter;
     private ShopAdapter<TradeProd> mAdapter;
 
@@ -110,6 +113,7 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
 
     @Override
     public void showVipInfo(VipInfo vip) {
+        mVipLayout.setVisibility(View.VISIBLE);
         mVipNameTv.setText(vip.getVipName());
         mCardGradeTv.setText(String.format("%s/%s", vip.getCardCode(), vip.getVipGrade()));
     }
@@ -132,6 +136,24 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
         mPayTypeImg.setImageResource(img);
     }
 
+    @Override
+    public void printResult() {
+        if (MessageUtil.isWaiting()) {
+            MessageUtil.waitEnd();
+        }
+    }
+
+    @OnClick(R.id.trd_btn_print_again)
+    public void print() {
+        //打印小票
+        MessageUtil.waitCircleProgress("请稍后");
+        mPresenter.print();
+    }
+
+    @OnClick(R.id.trd_btn_back)
+    public void back() {
+        finish();
+    }
 
     @Override
     public void setPresenter(TrdProdContract.TrdProdPresenter presenter) {

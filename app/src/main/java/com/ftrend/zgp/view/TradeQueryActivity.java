@@ -5,9 +5,15 @@ import android.os.Handler;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.blankj.utilcode.util.KeyboardUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.TrdQryAdapter;
 import com.ftrend.zgp.api.TrdQryContract;
@@ -28,6 +34,8 @@ import butterknife.BindView;
 public class TradeQueryActivity extends BaseActivity implements TrdQryContract.TrdQryView, OnTitleBarListener {
     @BindView(R.id.trade_qry_top_bar)
     TitleBar mTitleBar;
+    @BindView(R.id.trd_qry_prod_edt_trade)
+    ClearEditText mEdt;
     @BindView(R.id.trade_qry_rv_list)
     RecyclerView mRecyclerView;
     private TrdQryContract.TrdQryPresenter mPresenter;
@@ -56,6 +64,22 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
         if (mPresenter == null) {
             mPresenter = TrdQryPresenter.createPresenter(this);
         }
+        mEdt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mPresenter.search(mEdt.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
     @Override
@@ -100,6 +124,20 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
     }
 
     @Override
+    public void updateFilterTrade(List<Trade> trdList) {
+        //过滤筛选
+        if (!trdList.isEmpty()) {
+            mAdapter.setNewData(trdList);
+            mAdapter.notifyDataSetChanged();
+        } else {
+            mAdapter.setNewData(null);
+            mAdapter.setEmptyView(getLayoutInflater().inflate(R.layout.rv_item_empty, (ViewGroup) mRecyclerView.getParent(), false));
+            TextView mEmptyTv = mAdapter.getEmptyView().findViewById(R.id.rv_item_tv_empty);
+            mEmptyTv.setText("无满足条件的流水");
+        }
+    }
+
+    @Override
     public void goTradeProdActivity(String lsNo) {
         MessageUtil.waitEnd();
         new Handler().postDelayed(new Runnable() {
@@ -111,6 +149,7 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
         }, 300);
 
     }
+
 
     @Override
     public void setPresenter(TrdQryContract.TrdQryPresenter presenter) {

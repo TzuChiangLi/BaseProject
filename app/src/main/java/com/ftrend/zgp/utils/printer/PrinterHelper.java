@@ -43,6 +43,7 @@ public class PrinterHelper {
                                     //打印机工作正常
                                     PrinterHelper.service = service;
                                     callBack.onSuccess(service);
+                                    LogUtil.d("----init printer success");
                                     break;
                                 default:
                                     //TODO 还有其他错误代码
@@ -50,7 +51,7 @@ public class PrinterHelper {
                                     break;
                             }
                         } catch (Exception e) {
-                            LogUtil.e("----printError:" + e.getMessage());
+                            LogUtil.e("printError:" + e.getMessage());
                         }
                     }
 
@@ -124,7 +125,7 @@ public class PrinterHelper {
             result = true;
             return result;
         } catch (Exception e) {
-            e.printStackTrace();
+            LogUtil.e(e.getMessage());
             return result;
         }
     }

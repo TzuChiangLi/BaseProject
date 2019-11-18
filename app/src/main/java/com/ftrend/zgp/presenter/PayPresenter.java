@@ -106,7 +106,7 @@ public class PayPresenter implements PayContract.Presenter {
                 TradeHelper.clearVip();
                 PrinterHelper.initPrinter(PayActivity.mContext, new PrinterHelper.PrintInitCallBack() {
                     @Override
-                    public void onSuccess(SunmiPrinterService service) throws RemoteException {
+                    public void onSuccess(SunmiPrinterService service) {
                         getPrintData(service);
                     }
 

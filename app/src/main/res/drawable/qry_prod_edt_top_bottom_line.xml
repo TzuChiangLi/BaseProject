@@ -4,8 +4,7 @@
     <solid android:color="@color/common_white" />
     <!--<corners android:radius="@dimen/dp_2" />-->
     <corners
-        android:bottomLeftRadius="@dimen/dp_4"
-        android:topLeftRadius="@dimen/dp_4" />
+     android:radius="@dimen/dp_4" />
     <stroke
         android:width="@dimen/dp_1"
         android:color="@color/common_gray_bg" />

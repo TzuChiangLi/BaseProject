@@ -1,5 +1,6 @@
 package com.ftrend.zgp.utils.printer;
 
+import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 
@@ -55,6 +56,7 @@ public class PrintFormat {
     public static List<PrintData> printFormat() {
         List<PrintData> printDataList = new ArrayList<>();
         PrintData printData;
+        Trade trade = TradeHelper.getTrade();
         //分割线
         printDataList.add(newLine());
         //柜台名
@@ -68,14 +70,14 @@ public class PrintFormat {
         printData = new PrintData();
         printData.setInitStyle(true);
         printData.setAlign(ALIGN_LEFT);
-        printData.setPrintData(String.format("%s%s", "流水号：",
-                TradeHelper.getTrade().getLsNo()));
+        printData.setPrintData(mergeString("流水号:",
+                trade.getLsNo().length() > 8 ? trade.getLsNo() : String.format("%s%s", new SimpleDateFormat("yyyyMMdd").format(trade.getTradeTime()), trade.getLsNo()), 32));
         printDataList.add(printData);
         //交易时间
         printData = new PrintData();
         printData.setInitStyle(true);
         printData.setAlign(ALIGN_LEFT);
-        printData.setPrintData(mergeString("交易时间:", new SimpleDateFormat("yyyy/MM/dd/HH:mm:ss").format(TradeHelper.getTrade().getTradeTime()), 32));
+        printData.setPrintData(mergeString("交易时间:", new SimpleDateFormat("yyyy/MM/dd/HH:mm:ss").format(trade.getTradeTime()), 32));
         printDataList.add(printData);
         //分割线
         printDataList.add(newLine());
@@ -101,7 +103,7 @@ public class PrintFormat {
         //支付方式
         printData = new PrintData();
         printData.setAlign(ALIGN_LEFT);
-        printData.setPrintData(mergeString("支付方式：", TradeHelper.convertAppPayType(TradeHelper.getPay().getAppPayType(),TradeHelper.getTrade().getDepCode()), 32));
+        printData.setPrintData(mergeString("支付方式：", TradeHelper.convertAppPayType(TradeHelper.getPay().getAppPayType(), trade.getDepCode()), 32));
         printDataList.add(printData);
         //商品原价
         printData = new PrintData();
@@ -111,12 +113,12 @@ public class PrintFormat {
         //优惠总计
         printData = new PrintData();
         printData.setAlign(ALIGN_LEFT);
-        printData.setPrintData(mergeString("优惠总计：", String.format("￥-%.2f", TradeHelper.getTrade().getDscTotal()), 32));
+        printData.setPrintData(mergeString("优惠总计：", String.format("￥-%.2f", trade.getDscTotal()), 32));
         printDataList.add(printData);
         //合计金额
         printData = new PrintData();
         printData.setAlign(ALIGN_LEFT);
-        printData.setPrintData(mergeString("合计金额：", String.format("￥%.2f", TradeHelper.getTrade().getTotal()), 32));
+        printData.setPrintData(mergeString("合计金额：", String.format("￥%.2f", trade.getTotal()), 32));
         printDataList.add(printData);
         //分割线
         printDataList.add(newLine());

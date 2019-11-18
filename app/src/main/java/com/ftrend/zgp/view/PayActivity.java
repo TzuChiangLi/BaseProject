@@ -27,9 +27,11 @@ import com.ftrend.zgp.utils.pay.PayType;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
 import com.ftrend.zgp.utils.pop.StringInputCallback;
+import com.ftrend.zgp.utils.printer.PrinterHelper;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
+import com.sunmi.peripheral.printer.SunmiPrinterService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

@@ -1,11 +1,13 @@
 package com.ftrend.zgp.presenter;
 
 import android.os.Handler;
+import android.text.TextUtils;
 
 import com.ftrend.zgp.api.TrdQryContract;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.utils.TradeHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,6 +48,25 @@ public class TrdQryPresenter implements TrdQryContract.TrdQryPresenter {
                 }
             }, 800);
 
+        }
+    }
+
+    @Override
+    public void search(String lsNo) {
+        if (tradeList.isEmpty()) {
+            return;
+        }
+        if (TextUtils.isEmpty(lsNo)) {
+            mView.updateFilterTrade(tradeList);
+        } else {
+            List<Trade> filterList = new ArrayList<>();
+            for (Trade trade : tradeList) {
+                if (trade.getLsNo().equals(lsNo) || trade.getLsNo().contains(lsNo)
+                        || lsNo.contains(trade.getLsNo())) {
+                    filterList.add(trade);
+                }
+            }
+            mView.updateFilterTrade(filterList);
         }
     }
 

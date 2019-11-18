@@ -24,6 +24,13 @@ public interface TrdQryContract {
         void queryTradeProd(int index);
 
         /**
+         * 筛选
+         *
+         * @param lsNo 流水号
+         */
+        void search(String lsNo);
+
+        /**
          * 解耦销毁防止内存泄漏
          */
         void onDestory();
@@ -35,6 +42,11 @@ public interface TrdQryContract {
          * @param trdList 交易列表数据
          */
         void showTradeList(List<Trade> trdList);
+
+        /**
+         * @param trdList 过滤后的交易流水
+         */
+        void updateFilterTrade(List<Trade> trdList);
 
         /**
          * @param lsNo 流水号
