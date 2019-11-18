@@ -13,17 +13,17 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
  */
 public class PayType {
     //0	现金
-    public static String PAYTYPE_CASH = "0";
+    public static final String PAYTYPE_CASH = "0";
     //6	购物券
-    public static String PAYTYPE_COUPON = "6";
+    public static final String PAYTYPE_COUPON = "6";
     //7	IC卡
-    public static String PAYTYPE_ICCARD = "7";
+    public static final String PAYTYPE_ICCARD = "7";
     //8	储值卡
-    public static String PAYTYPE_PREPAID = "8";
+    public static final String PAYTYPE_PREPAID = "8";
     //9	长款
-    public static String PAYTYPE_TREASURE = "9";
+    public static final String PAYTYPE_TREASURE = "9";
     //A	银联卡
-    public static String PAYTYPE_UNIONPAY = "A";
+    public static final String PAYTYPE_UNIONPAY = "A";
     //支付方式一共有‘1’..'5' ,'B'..'K'是可以自定义
 
     /**
