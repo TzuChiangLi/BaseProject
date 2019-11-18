@@ -47,7 +47,7 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
     @Override
     public void onNetWorkChange(boolean isOnline) {
         if (mTitleBar == null) {
-            mTitleBar = findViewById(R.id.rtn_prod_top_bar);
+            mTitleBar = findViewById(R.id.trade_qry_top_bar);
         }
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
     }
