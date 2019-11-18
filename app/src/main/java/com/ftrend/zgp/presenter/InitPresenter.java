@@ -4,7 +4,6 @@ import com.ftrend.zgp.App;
 import com.ftrend.zgp.api.InitContract;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
-import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.CommonUtil;
 import com.ftrend.zgp.utils.http.RestCallback;
@@ -105,15 +104,6 @@ public class InitPresenter implements InitContract.InitPresenter {
                         CommonUtil.rebootApp(App.getContext());
                     }
                 });
-    }
-
-    @Override
-    public void stopInitData() {
-        DataDownloadTask.taskCancel();
-        LsDownloadTask.taskCancel();
-        TradeHelper.rollbackInitTask();
-        flag = false;
-        mView.stopUpdate();
     }
 
     @Override

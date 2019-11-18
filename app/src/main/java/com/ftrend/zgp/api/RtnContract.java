@@ -12,18 +12,6 @@ import java.util.List;
 public interface RtnContract {
     interface RtnProdPresenter {
         /**
-         * 显示改价弹窗
-         *
-         * @param position 位置
-         */
-        void showInputPanel(int position);
-
-        /**
-         * 显示退货来源及金额弹窗
-         */
-        void confirmRtnDialog(double rtnTotal, String payTypeName);
-
-        /**
          * 获取流水
          *
          * @param lsNo 流水号
@@ -83,11 +71,6 @@ public interface RtnContract {
          * @param payTypeName 退货来源
          */
         void showRtnInfo(double rtnTotal, String payTypeName);
-
-        /**
-         * @param hasRtned 是否已退
-         */
-        void showTradeFlag(boolean hasRtned);
 
         /**
          * 加减更改

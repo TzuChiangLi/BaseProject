@@ -1,6 +1,5 @@
 package com.ftrend.zgp.utils.task;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.ftrend.zgp.model.DepPayInfo;
@@ -10,18 +9,14 @@ import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
-import com.ftrend.zgp.utils.db.ZgpDb;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
-import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
-import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
-import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,17 +32,8 @@ import java.util.Map;
 public class RtnLsDownloadTask {
     private final String TAG = "RtnLsDownloadTask";
 
-    // 进度消息处理器
-    private DataDownloadTask.ProgressHandler handler;
-
     // 线程是否正在运行
     private volatile boolean running = false;
-    // 是否已强制终止执行
-    private volatile boolean interrupted = false;
-    // 当前步骤已重试次数
-    private int retryCount = 0;
-    // 最大重试次数
-    private final int MAX_RETRY = 3;
     //错误
     private final String errCode = "";
     // 退货单号
@@ -71,61 +57,17 @@ public class RtnLsDownloadTask {
         taskCallback = callback;
         LogUtil.d("----online rtn lsNo search:" + rtnLsNo);
         task = new RtnLsDownloadTask();
-        task.start(callback);
+        task.start();
         return true;
     }
 
     /**
-     * 停止线程
-     */
-    public static void cancel() {
-        if (task != null) {
-            task.interrupt();
-        }
-    }
-
-
-    /**
      * 开始执行数据下载任务
      */
-    private void start(OperateCallback callback) {
+    private void start() {
         running = true;
-        downloadLs(callback);
+        downloadLs();
     }
-
-    /**
-     * 终止数据下载
-     */
-    private void interrupt() {
-        this.interrupted = true;
-    }
-
-
-    /**
-     * 重试当前更新，超过重试次数时，任务执行失败
-     *
-     * @param err
-     */
-    private void retry(String err) {
-        retryCount++;
-        if (retryCount > MAX_RETRY) {
-            postFailed(err);
-        } else {
-            exec();
-        }
-    }
-
-    /**
-     * 执行当前更新任务
-     */
-    private void exec() {
-        if (interrupted) {
-            //线程中断，停止执行
-            return;
-        }
-        start(taskCallback);
-    }
-
 
     /**
      * 推送下载失败消息
@@ -137,13 +79,15 @@ public class RtnLsDownloadTask {
         taskCallback.onError(errCode, msg);
     }
 
+    private void postSuccess() {
+        running = false;
+        taskCallback.onSuccess(null);
+    }
 
     /**
      * 下载退货流水
-     *
-     * @param callback
      */
-    private void downloadLs(final OperateCallback callback) {
+    private void downloadLs() {
         RestSubscribe.getInstance().queryRefundLs(rtnLsNo, new RestCallback(new RestResultHandler() {
             @Override
             public void onSuccess(Map<String, Object> body) {
@@ -156,6 +100,11 @@ public class RtnLsDownloadTask {
                 Map<String, Object> trade = (Map<String, Object>) body.get("trade");
                 List<Map<String, Object>> prod = (List<Map<String, Object>>) body.get("prod");
                 Map<String, Object> pay = (Map<String, Object>) body.get("pay");
+                //不是当前专柜的销售流水不允许退货
+                if (!ZgParams.getCurrentDep().getDepCode().equals(trade.get("depCode"))) {
+                    postFailed("指定流水不存在");
+                    return;
+                }
 
                 saveLs(trade, prod, pay);
             }
@@ -163,7 +112,7 @@ public class RtnLsDownloadTask {
             @Override
             public void onFailed(String errorCode, String errorMsg) {
                 Log.d(TAG, "下载流水失败: " + errorCode + " - " + errorMsg);
-                retry("下载流水失败，流水号：" + rtnLsNo);
+                postFailed(errorMsg);
             }
         }));
     }
@@ -176,35 +125,13 @@ public class RtnLsDownloadTask {
      * @param pay   支付信息
      */
     private void saveLs(final Map<String, Object> trade, final List<Map<String, Object>> prod, final Map<String, Object> pay) {
-        Transaction transaction = FlowManager.getDatabase(ZgpDb.class).beginTransactionAsync(new ITransaction() {
-            @Override
-            public void execute(DatabaseWrapper databaseWrapper) {
-                Gson gson = new GsonBuilder()
-                        .setDateFormat("yyyy-MM-dd HH:mm:ss")
-                        .create();
-                saveTrade(gson, trade);
-                saveProd(gson, prod);
-                savePay(gson, pay);
-                LogUtil.d("----prod:" + prod);
-            }
-        }).success(new Transaction.Success() {
-            @Override
-            public void onSuccess(@NonNull Transaction transaction) {
-                if (taskCallback == null) {
-                    LogUtil.d("----taskCallback is null");
-                    return;
-                }
-                taskCallback.onSuccess(null);
-            }
-        }).error(new Transaction.Error() {
-            @Override
-            public void onError(@NonNull Transaction transaction, @NonNull Throwable error) {
-                Log.d(TAG, "流水保存失败：" + error.getLocalizedMessage());
-                //流水保存失败，重新下载
-                retry("流水保存失败");
-            }
-        }).build();
-        transaction.execute();
+        Gson gson = new GsonBuilder()
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
+                .create();
+        saveTrade(gson, trade);
+        saveProd(gson, prod);
+        savePay(gson, pay);
+        postSuccess();
     }
 
     /**
@@ -214,6 +141,8 @@ public class RtnLsDownloadTask {
      */
     private void saveTrade(Gson gson, Map<String, Object> values) {
         Trade trade = gson.fromJson(gson.toJson(values), Trade.class);
+        //收钱吧支付clientSn
+        trade.setSqbPayClientSn(values.get("sqbPayClientSn").toString());
         //初始化
         LogUtil.d("----rtnFlag:" + trade.getRtnFlag());
         RtnHelper.setTrade(trade);
@@ -231,8 +160,12 @@ public class RtnLsDownloadTask {
         List<TradeProd> prodList = new ArrayList<>();
         for (Map<String, Object> map : values) {
             TradeProd prod = gson.fromJson(gson.toJson(map), TradeProd.class);
+            //已退货数量
+            prod.setLastRtnAmount(Double.parseDouble(map.get("rtnAmount").toString()));
+            //已退货金额
+            prod.setLastRtnTotal(Double.parseDouble(map.get("rtnTotal").toString()));
             //初始化退货单价
-            prod.setRtnPrice(prod.getPrice() - ((prod.getManuDsc() + prod.getVipDsc() + prod.getTranDsc()) / prod.getAmount()));
+            prod.setRtnPrice(prod.getTotal() / prod.getAmount());
             prodList.add(prod);
         }
         //初始化

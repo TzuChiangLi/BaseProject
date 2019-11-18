@@ -7,12 +7,14 @@ import com.ftrend.zgp.R;
 import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
-import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepPayInfo;
 import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.DepProduct_Table;
-import com.ftrend.zgp.model.SysParams;
+import com.ftrend.zgp.model.SqbPayOrder;
+import com.ftrend.zgp.model.SqbPayOrder_Table;
+import com.ftrend.zgp.model.SqbPayResult;
+import com.ftrend.zgp.model.SqbPayResult_Table;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradePay_Table;
@@ -27,6 +29,7 @@ import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.sql.language.Join;
 import com.raizlabs.android.dbflow.sql.language.Method;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
@@ -281,11 +284,26 @@ public class TradeHelper {
      * @return 流水信息
      */
     public static Trade getPaidLs(String lsNo) {
-        return SQLite.select().from(Trade.class)
+        Trade trade = SQLite.select().from(Trade.class)
                 .where(Trade_Table.status.eq(TRADE_STATUS_PAID))
+                .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
                 .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
                 .and(Trade_Table.lsNo.eq(lsNo))
                 .querySingle();
+        if (trade != null) {
+            //查询收钱吧支付ClientSn
+            SqbPayOrder order = SQLite.select(SqbPayOrder_Table.clientSn.withTable())
+                    .from(SqbPayOrder.class)
+                    .join(SqbPayResult.class, Join.JoinType.INNER)
+                    .on(SqbPayOrder_Table.requestNo.withTable().eq(SqbPayResult_Table.requestNo.withTable()))
+                    .where(SqbPayOrder_Table.lsNo.eq(trade.getLsNo()))
+                    .and(SqbPayResult_Table.status.eq("SUCCESS"))
+                    .querySingle();
+            if (order != null) {
+                trade.setSqbPayClientSn(order.getClientSn());
+            }
+        }
+        return trade;
     }
 
     /**
@@ -366,14 +384,28 @@ public class TradeHelper {
             if (!pay.save(databaseWrapper)) {
                 return false;
             }
-            trade.setTradeTime(pay.getPayTime());
-            trade.setCashier(ZgParams.getCurrentUser().getUserCode());
-            trade.setStatus(TRADE_STATUS_PAID);
-            return trade.save(databaseWrapper);
+            if (amount - change >= trade.getTotal()) {
+                trade.setTradeTime(pay.getPayTime());
+                trade.setCashier(ZgParams.getCurrentUser().getUserCode());
+                trade.setStatus(TRADE_STATUS_PAID);
+                if (!trade.save(databaseWrapper)) {
+                    return false;
+                }
+                //添加到上传队列
+                TradeUploadQueue queue = new TradeUploadQueue(trade.getDepCode(), trade.getLsNo());
+                return queue.insert(databaseWrapper) > 0;
+            }
+            return true;
         } catch (Exception e) {
             Log.e(TAG, "支付异常: " + pay.getLsNo() + " - " + appPayType, e);
             return false;
         }
+    }
+
+    /**
+     * 上传交易流水
+     */
+    public static void uploadTradeQueue() {
     }
 
     /**
@@ -518,23 +550,6 @@ public class TradeHelper {
                     .async()
                     .execute(); // non-UI blocking
         }
-    }
-
-    /**
-     * 上传交易流水
-     */
-    public static void uploadTradeQueue() {
-        TradeUploadQueue queue = new TradeUploadQueue(trade.getDepCode(), trade.getLsNo());
-        queue.insert();
-    }
-
-    /**
-     * 清空数据库
-     */
-    public static void clearAllTradeData() {
-        SQLite.delete(Trade.class).execute();
-        SQLite.delete(TradePay.class).execute();
-        SQLite.delete(TradeProd.class).execute();
     }
 
     /**
@@ -1041,20 +1056,6 @@ public class TradeHelper {
     }
 
     /**
-     * 初始化数据时点击取消此时清空数据
-     */
-    public static void rollbackInitTask() {
-        SQLite.delete(User.class).execute();
-        SQLite.delete(Dep.class).execute();
-        SQLite.delete(DepCls.class).execute();
-        SQLite.delete(DepProduct.class).execute();
-        SQLite.delete(DepPayInfo.class).execute();
-        SQLite.delete(SysParams.class).execute();
-        clearAllTradeData();
-    }
-
-
-    /**
      * 价格格式化
      *
      * @param before 格式化前的价格
@@ -1118,9 +1119,11 @@ public class TradeHelper {
      * @return 支付方式
      */
     public static String convertAppPayType(String appPayType, String depCode) {
-        String payTypeName = "";
-        payTypeName = SQLite.select().from(DepPayInfo.class).where(DepPayInfo_Table.depCode.eq(depCode))
-                .and(DepPayInfo_Table.appPayType.eq(appPayType)).querySingle().getPayTypeName();
+        DepPayInfo payInfo = SQLite.select().from(DepPayInfo.class)
+                .where(DepPayInfo_Table.depCode.eq(depCode))
+                .and(DepPayInfo_Table.appPayType.eq(appPayType))
+                .querySingle();
+        String payTypeName = (payInfo == null) ? "" : payInfo.getPayTypeName();
         if (TextUtils.isEmpty(payTypeName)) {
             return "未知方式";
         } else {

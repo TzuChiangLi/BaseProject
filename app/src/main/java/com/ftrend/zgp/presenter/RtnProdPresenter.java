@@ -1,16 +1,27 @@
 package com.ftrend.zgp.presenter;
 
-import android.os.Handler;
 import android.text.TextUtils;
 
+import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.RtnContract;
+import com.ftrend.zgp.model.Trade;
+import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.common.CommonUtil;
+import com.ftrend.zgp.utils.http.RestCallback;
+import com.ftrend.zgp.utils.http.RestResultHandler;
+import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.pay.PayType;
+import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.ftrend.zgp.utils.TradeHelper.payTypeImgRes;
@@ -29,34 +40,13 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
         return new RtnProdPresenter(mView);
     }
 
-
-    @Override
-    public void showInputPanel(int position) {
-        if (RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ||
-                (RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND))) {
-            return;
-        }
-        mView.showInputPanel(position);
-    }
-
-    @Override
-    public void confirmRtnDialog(double rtnTotal, String payTypeName) {
-        if (RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ||
-                (RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND))) {
-            return;
-        }
-        if (rtnTotal == 0) {
-            mView.showError("没有需要退货的商品");
-            return;
-        }
-        mView.showRtnInfo(rtnTotal, payTypeName);
-    }
-
     @Override
     public void getTradeByLsNo(final String lsNo) {
         String lsNoLite;
         if (TextUtils.isEmpty(lsNo)) {
-            mView.showError("请输入流水单号");
+            mView.showError("请输入流水号");
+        } else if (lsNo.length() != 8 && lsNo.length() != 16) {
+            mView.showError("流水号长度不正确");
         } else {
             //输入的小票流水，需要取出实际流水号
             lsNoLite = lsNo.length() > 8 ? lsNo.substring(8) : lsNo;
@@ -69,10 +59,9 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 }
                 String appPayType = RtnHelper.getPay().getAppPayType();
                 mView.existTrade(RtnHelper.getProdList());
-                mView.showTradeFlag(RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND));
-                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()), payTypeImgRes(appPayType));
-                mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(RtnHelper.getTrade().getTradeTime()),
-                        lsNo.length() > 8 ? lsNo : String.format("%s%s", new SimpleDateFormat("yyyyMMdd").format(RtnHelper.getTrade().getTradeTime()), lsNo),
+                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()),
+                        payTypeImgRes(appPayType));
+                mView.showTradeInfo(formatTradeTime(), RtnHelper.getTrade().getFullLsNo(),
                         TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
                 updateTradeInfo();
             } else {
@@ -80,7 +69,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 if (ZgParams.isIsOnline()) {
                     //网络有数据
                     if (lsNo.length() < 16) {
-                        mView.showError("本地无数据\n请输入完整流水号获取后台数据");
+                        mView.showError("未找到对应的实时流水\n请输入完整流水号查询历史流水");
                         return;
                     }
                     RtnLsDownloadTask.taskStart(lsNo, new OperateCallback() {
@@ -93,11 +82,11 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                             //有此流水
                             if (RtnHelper.initRtnOnline()) {
                                 String appPayType = RtnHelper.getPay().getAppPayType();
-                                mView.showTradeFlag(RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN));
                                 mView.existTrade(RtnHelper.getProdList());
-                                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()).trim(), payTypeImgRes(appPayType));
-                                mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(RtnHelper.getTrade().getTradeTime())
-                                        , lsNo, TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
+                                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()),
+                                        payTypeImgRes(appPayType));
+                                mView.showTradeInfo(formatTradeTime(), lsNo,
+                                        TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
                                 updateTradeInfo();
                             } else {
                                 mView.showError("退货流水初始化失败");
@@ -106,7 +95,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
 
                         @Override
                         public void onError(String code, String msg) {
-                            mView.showError(TextUtils.isEmpty(code) ? String.format("%s=", msg) : String.format("%s(%s)", msg, code));
+                            mView.showError(TextUtils.isEmpty(code) ? String.format("%s", msg) : String.format("%s(%s)", msg, code));
                         }
                     });
                 } else {
@@ -136,112 +125,55 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
         switch (appPayType) {
             case "0":
                 //现金
-            case "1":
-                //外卡
-            case "2":
-                //微信
-            case "3":
-                //支付宝
-            case "4":
-                //内卡
-            case "5":
-                //代金券
-            case "6":
-                //购物券
-            case "7":
-                //IC卡
-            case "8":
-                //储值卡
-            case "9":
-                //长款
                 if (RtnHelper.pay(appPayType, 0)) {
                     if (RtnHelper.rtn()) {
-                        mView.showSuccess("退货成功");
-                        new Handler().postDelayed(new Runnable() {
+                        MessageUtil.info("退货成功", new MessageUtil.MessageBoxOkListener() {
                             @Override
-                            public void run() {
+                            public void onOk() {
                                 mView.finish();
                             }
-                        }, 1500);
+                        });
                     } else {
-                        mView.showError("退货失败");
+                        MessageUtil.error("退货失败");
                     }
                 }
                 break;
+            case "7":
+                //IC卡
+                MessageUtil.showError("IC卡退款功能未实现");
+                break;
+            case "8":
+                //储值卡
+                doMagCardPay();
+                break;
             default:
-                //判断收钱吧
-                //TODO 2019年11月14日10:28:02 收钱吧退款流程暂时注释
-                if (appPayType.contains("SQB")) {
-                    if (RtnHelper.pay(appPayType, "")) {
-                        if (RtnHelper.rtn()) {
-                            mView.showSuccess("退货成功");
-                            new Handler().postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    mView.finish();
-                                }
-                            }, 1500);
-                        } else {
-                            mView.showError("保存退货失败");
-                        }
-                    }
-//                    SqbPayHelper.refundBySn(RtnHelper.getRtnTrade(), RtnHelper.getRtnSn(), new SqbPayHelper.PayResultCallback() {
-//                        @Override
-//                        public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
-//                            if (isSuccess) {
-//                                // TODO: 2019/10/26 微信支付账号长度超过后台数据库对应字段长度，暂时先不记录支付账号
-//                                if (RtnHelper.pay(payType, "")) {
-//                                    if (RtnHelper.rtn()) {
-//                                        mView.showSuccess("退货成功");
-//                                        new Handler().postDelayed(new Runnable() {
-//                                            @Override
-//                                            public void run() {
-//                                                mView.finish();
-//                                            }
-//                                        }, 1500);
-//                                    } else {
-//                                        mView.showError("保存退货失败");
-//                                    }
-//                                }
-//                            } else {
-//                                mView.showError(errMsg);
-//                            }
-//                        }
-//                    });
-                }
+                //默认按收钱吧处理
+                doSqbPay();
                 break;
         }
     }
 
     @Override
     public void changePrice(int index, double price) {
-        if (RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ||
-                (RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND))) {
-            return;
-        }
-        if (price > (RtnHelper.getProdList().get(index).getTotal()
-                / RtnHelper.getProdList().get(index).getAmount())) {
-            mView.showError("价格已超过销价");
+        TradeProd prod = RtnHelper.getProdList().get(index);
+        if (price > (prod.getTotal() / prod.getAmount())) {
+            mView.showError("退货单价不能大于原销售单价");
             return;
         }
         if (price == 0) {
-            mView.showError("输入价格为0");
+            mView.showError("退货单价应大于0");
             return;
         }
         if (RtnHelper.changeRtnPrice(index, price)) {
             mView.updateTradeProd(index);
             updateTradeInfo();
         } else {
-            mView.showError("改价未成功");
+            mView.showError("退货单价修改失败");
         }
     }
 
     @Override
     public void changeAmount(int index, double changeAmount) {
-        if (RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN) ||
-                (RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND))) {
-            return;
-        }
         //仅修改临时数据，不修改数据库内数据
         RtnHelper.rtnChangeAmount(index, changeAmount);
         //更新列表界面
@@ -258,7 +190,152 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
         RtnHelper.clearAllData();
     }
 
+    /**
+     * @param appPayType 支付方式代码
+     * @return 图片资源
+     */
+    private int payTypeImgRes(String appPayType) {
+        switch (appPayType) {
+            case PayType.PAYTYPE_CASH: //现金
+                return R.drawable.money;
+            case PayType.PAYTYPE_ICCARD: //IC卡
+            case PayType.PAYTYPE_PREPAID://储值卡
+                return R.drawable.card;
+            default:// 其他都认为是收钱吧
+                if (appPayType.startsWith("SQB_")) {
+                    return R.drawable.shouqianba;
+                }
+                return R.drawable.money;
+        }
+    }
 
+    /**
+     * 格式化交易时间
+     *
+     * @return
+     */
+    private String formatTradeTime() {
+        return new SimpleDateFormat("yyyy年MM月dd日HH:mm", Locale.CHINA)
+                .format(RtnHelper.getTrade().getTradeTime());
+    }
+
+    //region 储值卡退款
+
+    /**
+     * 请求数据标识，用于轮询请求结果
+     */
+    private final String[] payDataSign = {""};
+
+    /**
+     * 请求发起时间
+     */
+    private final long[] payRequestTime = {0};
+
+    /**
+     * 磁卡支付，调用后台服务完成支付
+     */
+    private void doMagCardPay() {
+        MessageUtil.waitBegin("储值卡退款处理中...", new MessageUtil.MessageBoxCancelListener() {
+            @Override
+            public boolean onCancel() {
+                return false;//支付过程无法取消
+            }
+        });
+        Trade trade = RtnHelper.getRtnTrade();
+        RestSubscribe.getInstance().payCardRequest(
+                ZgParams.getPosCode(),
+                trade.getLsNo(),
+                CommonUtil.dateToYyyyMmDd(new Date()),
+                ZgParams.getCurrentUser().getUserCode(),
+                RtnHelper.getPay().getPayCode(),
+                trade.getTotal() * -1,
+                new RestCallback(new RestResultHandler() {
+                    @Override
+                    public void onSuccess(Map<String, Object> body) {
+                        payDataSign[0] = body.get("dataSign").toString();
+                        payRequestTime[0] = System.currentTimeMillis();
+                        requestCardPayResult();
+                    }
+
+                    @Override
+                    public void onFailed(String errorCode, String errorMsg) {
+                        MessageUtil.waitError(errorCode, errorMsg, null);
+                    }
+                }));
+    }
+
+    /**
+     * 轮询支付结果
+     */
+    private void requestCardPayResult() {
+        // 30秒超时
+        if (System.currentTimeMillis() - payRequestTime[0] > 30 * 1000) {
+            MessageUtil.waitError("通讯超时，请稍后重试", null);
+            return;
+        }
+
+        //延迟500毫秒再查询
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        RestSubscribe.getInstance().payCard(payDataSign[0], new RestCallback(new RestResultHandler() {
+            @Override
+            public void onSuccess(Map<String, Object> body) {
+                if (RtnHelper.pay(PayType.PAYTYPE_PREPAID, RtnHelper.getPay().getPayCode())) {
+                    if (RtnHelper.rtn()) {
+                        MessageUtil.waitSuccesss("储值卡退款成功", new MessageUtil.MessageBoxOkListener() {
+                            @Override
+                            public void onOk() {
+                                mView.finish();
+                            }
+                        });
+                    } else {
+                        MessageUtil.waitError("储值卡退款失败", null);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailed(String errorCode, String errorMsg) {
+                if (errorCode.endsWith("70")) {//70-处理中
+                    requestCardPayResult();
+                } else {
+                    MessageUtil.waitError("储值卡退款失败", null);
+                }
+            }
+        }));
+    }
+    //endregion
+
+    //region 收钱吧退款
+    private void doSqbPay() {
+        String clientSn = RtnHelper.getTrade().getSqbPayClientSn();
+        SqbPayHelper.refundByClientSn(RtnHelper.getRtnTrade(), clientSn, new SqbPayHelper.PayResultCallback() {
+            @Override
+            public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
+                if (isSuccess) {
+                    if (RtnHelper.pay(payType, "")) {
+                        if (RtnHelper.rtn()) {
+                            MessageUtil.waitSuccesss("退款成功", new MessageUtil.MessageBoxOkListener() {
+                                @Override
+                                public void onOk() {
+                                    mView.finish();
+                                }
+                            });
+                        } else {
+                            MessageUtil.waitError("退款失败", null);
+                        }
+                    }
+                } else {
+                    MessageUtil.error(errMsg);
+                }
+            }
+        });
+    }
+    //endregion
 }
 //                                RestSubscribe.getInstance().queryRefundLs(lsNo, new RestCallback(
 //                                        new RestResultHandler() {

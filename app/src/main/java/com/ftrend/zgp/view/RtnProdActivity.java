@@ -3,6 +3,7 @@ package com.ftrend.zgp.view;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import com.ftrend.zgp.api.RtnContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.RtnProdPresenter;
+import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
@@ -28,6 +30,7 @@ import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -136,8 +139,12 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
         if (ClickUtil.onceClick()) {
             return;
         }
-        mPresenter.confirmRtnDialog(Double.parseDouble(mRtnTotalTv.getText().toString().trim()),
-                mPayTypeTv.getText().toString().trim());
+        double rtnTotal = Double.parseDouble(mRtnTotalTv.getText().toString().trim());
+        if (rtnTotal == 0) {
+            showError("未选择退货商品");
+            return;
+        }
+        showRtnInfo(rtnTotal, RtnHelper.isPayCash() ? "" : mPayTypeTv.getText().toString().trim());
     }
 
     @OnClick(R.id.rtn_btn_cancel)
@@ -150,7 +157,6 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     public void showInputPanel(final int position) {
-        //先检查商品是否允许改价
         InputPanel.showPriceChange(RtnProdActivity.this, new MoneyInputCallback() {
             @Override
             public void onOk(double value) {
@@ -170,8 +176,14 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     public void showRtnInfo(double rtnTotal, String payTypeName) {
-        MessageUtil.question(String.format("%s%s%s%s", "退货金额￥", String.format("%.2f", rtnTotal),
-                "将原路退回至", payTypeName), "确认", "返回",
+        String msg;
+        if (TextUtils.isEmpty(payTypeName)) {
+            msg = String.format(Locale.CHINA, "现金退款：￥%.2f", rtnTotal);
+        } else {
+            msg = String.format(Locale.CHINA, "退款金额￥%.2f，将自动返还至[%s]付款原账户", rtnTotal, payTypeName);
+        }
+
+        MessageUtil.question(msg, "确认", "返回",
                 new MessageUtil.MessageBoxYesNoListener() {
                     @Override
                     public void onYes() {
@@ -184,12 +196,6 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
                     }
                 });
-
-    }
-
-    @Override
-    public void showTradeFlag(boolean hasRtned) {
-        mTitleTv.setText(String.format("%s%s", "按单退货·", hasRtned ? "已退流水" : "销售流水"));
     }
 
     @Override
@@ -221,7 +227,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
                         mPresenter.changeAmount(position, -1);
                         break;
                     case R.id.rtn_list_rv_btn_change_price:
-                        mPresenter.showInputPanel(position);
+                        showInputPanel(position);
                         break;
                     default:
                         break;

@@ -505,57 +505,57 @@ public class FakeUpayNoUIDispose {
 
     }
 
-    private void e(HttpResult var1) {
-        UpayResult var2;
-        if (var1.getResult_code() == 200) {
-            if (StringUtil.isNotEmpty(var1.getBiz_response())) {
-                var2 = UpayResult.parse(var1.getBiz_response());
-                if (StringUtil.isNotEmpty(var2.getOrder_status())) {
-                    String var3 = var2.getOrder_status();
+    private void dealWithQueryResult(HttpResult httpResult) {
+        UpayResult upayResult;
+        if (httpResult.getResult_code() == 200) {
+            if (StringUtil.isNotEmpty(httpResult.getBiz_response())) {
+                upayResult = UpayResult.parse(httpResult.getBiz_response());
+                if (StringUtil.isNotEmpty(upayResult.getOrder_status())) {
+                    String orderStatus = upayResult.getOrder_status();
                     byte var4 = -1;
-                    switch (var3.hashCode()) {
+                    switch (orderStatus.hashCode()) {
                         case -1079448719:
-                            if (var3.equals("PAY_ERROR")) {
+                            if (orderStatus.equals("PAY_ERROR")) {
                                 var4 = 3;
                             }
                             break;
                         case -114583967:
-                            if (var3.equals("REFUND_ERROR")) {
+                            if (orderStatus.equals("REFUND_ERROR")) {
                                 var4 = 6;
                             }
                             break;
                         case 2448076:
-                            if (var3.equals("PAID")) {
+                            if (orderStatus.equals("PAID")) {
                                 var4 = 1;
                             }
                             break;
                         case 74702359:
-                            if (var3.equals("REFUNDED")) {
+                            if (orderStatus.equals("REFUNDED")) {
                                 var4 = 4;
                             }
                             break;
                         case 659453081:
-                            if (var3.equals("CANCELED")) {
+                            if (orderStatus.equals("CANCELED")) {
                                 var4 = 7;
                             }
                             break;
                         case 1339099760:
-                            if (var3.equals("PAY_CANCELED")) {
+                            if (orderStatus.equals("PAY_CANCELED")) {
                                 var4 = 2;
                             }
                             break;
                         case 1743985635:
-                            if (var3.equals("CANCEL_ERROR")) {
+                            if (orderStatus.equals("CANCEL_ERROR")) {
                                 var4 = 8;
                             }
                             break;
                         case 1746537160:
-                            if (var3.equals("CREATED")) {
+                            if (orderStatus.equals("CREATED")) {
                                 var4 = 0;
                             }
                             break;
                         case 2041853749:
-                            if (var3.equals("PARTIAL_REFUNDED")) {
+                            if (orderStatus.equals("PARTIAL_REFUNDED")) {
                                 var4 = 5;
                             }
                     }
@@ -571,17 +571,17 @@ public class FakeUpayNoUIDispose {
                                     } else {
                                         if (this.h == 2) {
                                             this.upayOrder.setExecuteType(ExecuteType.CANCEL);
-                                            this.upayOrder.setSn(var2.getSn());
+                                            this.upayOrder.setSn(upayResult.getSn());
                                             (new TaskCancel()).execute(new Integer[]{35});
                                             this.h = 0;
                                         } else {
-                                            if (StringUtil.isEmpty(var2.getError_code())) {
-                                                var2.setError_code(com.wosai.upay.enumerate.a.PAY_FAIL.code());
-                                                var2.setError_message(com.wosai.upay.enumerate.a.PAY_FAIL.msg());
+                                            if (StringUtil.isEmpty(upayResult.getError_code())) {
+                                                upayResult.setError_code(com.wosai.upay.enumerate.a.PAY_FAIL.code());
+                                                upayResult.setError_message(com.wosai.upay.enumerate.a.PAY_FAIL.msg());
                                             }
 
-                                            this.upayCallBack.onExecuteResult(var2);
-                                            LogUtil.saveLog(var2);
+                                            this.upayCallBack.onExecuteResult(upayResult);
+                                            LogUtil.saveLog(upayResult);
                                         }
 
                                         return;
@@ -592,80 +592,80 @@ public class FakeUpayNoUIDispose {
                                 default:
                                     return;
                                 case QUERY:
-                                    this.upayCallBack.onExecuteResult(var2);
-                                    LogUtil.saveLog(var2);
+                                    this.upayCallBack.onExecuteResult(upayResult);
+                                    LogUtil.saveLog(upayResult);
                                     return;
                                 case PRECREATE:
                                     if (System.currentTimeMillis() - this.l < 95000L) {
-                                        this.a(var2, 5, 20);
+                                        this.a(upayResult, 5, 20);
                                     } else {
-                                        this.upayCallBack.onExecuteResult(var2);
-                                        LogUtil.saveLog(var2);
+                                        this.upayCallBack.onExecuteResult(upayResult);
+                                        LogUtil.saveLog(upayResult);
                                     }
 
                                     return;
                             }
                         case 1:
                             if (this.upayOrder.getExecuteType() == ExecuteType.PRECREATE || this.upayOrder.getExecuteType() == ExecuteType.PAY) {
-                                var2.setResult_code("PAY_SUCCESS");
+                                upayResult.setResult_code("PAY_SUCCESS");
                             }
                         case 2:
                         case 3:
                         case 4:
-                            this.upayCallBack.onExecuteResult(var2);
-                            LogUtil.saveLog(var2);
+                            this.upayCallBack.onExecuteResult(upayResult);
+                            LogUtil.saveLog(upayResult);
                             break;
                         case 5:
-                            String var5 = var2.getRefund_request_no();
+                            String var5 = upayResult.getRefund_request_no();
                             if (this.upayOrder.getExecuteType().equals(ExecuteType.REFUND) && (StringUtil.isEmpty(var5) || !var5.equals(this.upayOrder.getRefund_request_no()))) {
-                                var2 = this.makeErrorResult(com.wosai.upay.enumerate.a.NETWORK_ERROR.code(), com.wosai.upay.enumerate.a.NETWORK_ERROR.msg());
-                                var2.setResult_code("REFUND_ERROR");
+                                upayResult = this.makeErrorResult(com.wosai.upay.enumerate.a.NETWORK_ERROR.code(), com.wosai.upay.enumerate.a.NETWORK_ERROR.msg());
+                                upayResult.setResult_code("REFUND_ERROR");
                             }
 
-                            this.upayCallBack.onExecuteResult(var2);
-                            LogUtil.saveLog(var2);
+                            this.upayCallBack.onExecuteResult(upayResult);
+                            LogUtil.saveLog(upayResult);
                             break;
                         case 6:
-                            if (StringUtil.isEmpty(var2.getError_code())) {
-                                var2.setError_code(com.wosai.upay.enumerate.a.REFUND_FAIL.code());
+                            if (StringUtil.isEmpty(upayResult.getError_code())) {
+                                upayResult.setError_code(com.wosai.upay.enumerate.a.REFUND_FAIL.code());
                             }
 
-                            if (StringUtil.isEmpty(var2.getError_message())) {
-                                var2.setError_message(com.wosai.upay.enumerate.a.REFUND_FAIL.msg());
+                            if (StringUtil.isEmpty(upayResult.getError_message())) {
+                                upayResult.setError_message(com.wosai.upay.enumerate.a.REFUND_FAIL.msg());
                             }
 
-                            this.upayCallBack.onExecuteResult(var2);
-                            LogUtil.saveLog(var2);
+                            this.upayCallBack.onExecuteResult(upayResult);
+                            LogUtil.saveLog(upayResult);
                             break;
                         case 7:
-                            this.upayCallBack.onExecuteResult(var2);
-                            LogUtil.saveLog(var2);
+                            this.upayCallBack.onExecuteResult(upayResult);
+                            LogUtil.saveLog(upayResult);
                             break;
                         case 8:
-                            if (StringUtil.isEmpty(var2.getError_code())) {
-                                var2.setError_code(com.wosai.upay.enumerate.a.CANCEL_FAIL.code());
+                            if (StringUtil.isEmpty(upayResult.getError_code())) {
+                                upayResult.setError_code(com.wosai.upay.enumerate.a.CANCEL_FAIL.code());
                             }
 
-                            if (StringUtil.isEmpty(var2.getError_message())) {
-                                var2.setError_message(com.wosai.upay.enumerate.a.CANCEL_FAIL.msg());
+                            if (StringUtil.isEmpty(upayResult.getError_message())) {
+                                upayResult.setError_message(com.wosai.upay.enumerate.a.CANCEL_FAIL.msg());
                             }
 
-                            this.upayCallBack.onExecuteResult(var2);
-                            LogUtil.saveLog(var2);
+                            this.upayCallBack.onExecuteResult(upayResult);
+                            LogUtil.saveLog(upayResult);
                     }
-                } else {
-                    this.upayCallBack.onExecuteResult(var2);
-                    LogUtil.saveLog(var2);
+                } else {//if (StringUtil.isNotEmpty(upayResult.getOrder_status())) {
+                    this.upayCallBack.onExecuteResult(upayResult);
+                    LogUtil.saveLog(upayResult);
                 }
-            } else {
-                var2 = this.makeErrorResult(com.wosai.upay.enumerate.a.SERVER_ERROR.code(), com.wosai.upay.enumerate.a.SERVER_ERROR.msg());
-                this.upayCallBack.onExecuteResult(var2);
-                LogUtil.saveLog(var2);
+            } else {//if (StringUtil.isNotEmpty(httpResult.getBiz_response())) {
+                upayResult = this.makeErrorResult(com.wosai.upay.enumerate.a.SERVER_ERROR.code(), com.wosai.upay.enumerate.a.SERVER_ERROR.msg());
+                this.upayCallBack.onExecuteResult(upayResult);
+                LogUtil.saveLog(upayResult);
             }
-        } else {
-            var2 = this.makeErrorResult(var1.getResult_code(), var1.getError_code(), var1.getError_message());
-            this.upayCallBack.onExecuteResult(var2);
-            LogUtil.saveLog(var2);
+        } else {//if (httpResult.getResult_code() == 200) {
+            upayResult = this.makeErrorResult(httpResult.getResult_code(), httpResult.getError_code(), httpResult.getError_message());
+            this.upayCallBack.onExecuteResult(upayResult);
+            LogUtil.saveLog(upayResult);
         }
 
     }
@@ -707,65 +707,65 @@ public class FakeUpayNoUIDispose {
     }
 
     class TaskQuery extends AsyncTask<Integer, Void, HttpResult> {
-        UpayResult a = null;
+        UpayResult upayResult = null;
 
         public TaskQuery() {
         }
 
         public TaskQuery(UpayResult var2) {
-            this.a = var2;
+            this.upayResult = var2;
         }
 
         @Override
-        protected HttpResult doInBackground(Integer... var1) {
-            HttpResult var2 = null;
+        protected HttpResult doInBackground(Integer... timeout) {
+            HttpResult httpResult = null;
 
             try {
-                com.wosai.upay.http.c.timeout = var1[0];
-                var2 = com.wosai.upay.http.d.query(FakeUpayNoUIDispose.this.upayOrder);
+                com.wosai.upay.http.c.timeout = timeout[0];
+                httpResult = com.wosai.upay.http.d.query(FakeUpayNoUIDispose.this.upayOrder);
             } catch (Exception var4) {
-                this.a = FakeUpayNoUIDispose.this.makeErrorResult(this.a, var4);
+                this.upayResult = FakeUpayNoUIDispose.this.makeErrorResult(this.upayResult, var4);
             }
 
-            return var2;
+            return httpResult;
         }
 
-        protected void onPostExecute(HttpResult var1) {
-            if (var1 != null) {
-                FakeUpayNoUIDispose.this.e(var1);
-            } else if (this.a != null) {
-                FakeUpayNoUIDispose.this.upayCallBack.onExecuteResult(this.a);
-                LogUtil.saveLog(this.a);
+        protected void onPostExecute(HttpResult httpResult) {
+            if (httpResult != null) {
+                FakeUpayNoUIDispose.this.dealWithQueryResult(httpResult);
+            } else if (this.upayResult != null) {
+                FakeUpayNoUIDispose.this.upayCallBack.onExecuteResult(this.upayResult);
+                LogUtil.saveLog(this.upayResult);
             }
 
         }
     }
 
     class TaskQuery2 extends AsyncTask<Integer, Void, HttpResult> {
-        UpayResult a = null;
+        UpayResult upayResult = null;
 
         TaskQuery2() {
         }
 
-        protected HttpResult doInBackground(Integer... var1) {
-            HttpResult var2 = null;
+        protected HttpResult doInBackground(Integer... timeout) {
+            HttpResult httpResult = null;
 
             try {
-                com.wosai.upay.http.c.timeout = var1[0];
-                var2 = com.wosai.upay.http.d.query(FakeUpayNoUIDispose.this.upayOrder);
+                com.wosai.upay.http.c.timeout = timeout[0];
+                httpResult = com.wosai.upay.http.d.query(FakeUpayNoUIDispose.this.upayOrder);
             } catch (Exception var4) {
-                this.a = FakeUpayNoUIDispose.this.parseException(var4);
+                this.upayResult = FakeUpayNoUIDispose.this.parseException(var4);
             }
 
-            return var2;
+            return httpResult;
         }
 
-        protected void onPostExecute(HttpResult var1) {
-            if (var1 != null) {
-                FakeUpayNoUIDispose.this.e(var1);
-            } else if (this.a != null) {
-                FakeUpayNoUIDispose.this.upayCallBack.onExecuteResult(this.a);
-                LogUtil.saveLog(this.a);
+        protected void onPostExecute(HttpResult httpResult) {
+            if (httpResult != null) {
+                FakeUpayNoUIDispose.this.dealWithQueryResult(httpResult);
+            } else if (this.upayResult != null) {
+                FakeUpayNoUIDispose.this.upayCallBack.onExecuteResult(this.upayResult);
+                LogUtil.saveLog(this.upayResult);
             }
 
         }

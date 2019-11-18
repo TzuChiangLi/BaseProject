@@ -1,6 +1,7 @@
 package com.ftrend.zgp.model;
 
 
+import com.ftrend.zgp.utils.common.CommonUtil;
 import com.ftrend.zgp.utils.db.ZgpDb;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
@@ -69,7 +70,8 @@ public class Trade extends BaseModel implements Cloneable {
     private transient double rtnAmount = 0;
     //退货字段（非数据库字段）：是否退货 1-已退  0-未退
     private transient String rtnFlag = "0";
-
+    //退货字段（非数据库字段）：收钱吧支付ClientSn
+    private transient String sqbPayClientSn;
 
     public Trade() {
     }
@@ -92,6 +94,15 @@ public class Trade extends BaseModel implements Cloneable {
 
     public String getLsNo() {
         return lsNo;
+    }
+
+    /**
+     * 获取完整流水号：日期+lsNo格式
+     *
+     * @return
+     */
+    public String getFullLsNo() {
+        return CommonUtil.dateToYyyyMmDd(tradeTime) + lsNo;
     }
 
     public void setLsNo(String lsNo) {
@@ -253,6 +264,14 @@ public class Trade extends BaseModel implements Cloneable {
 
     public void setRtnFlag(String rtnFlag) {
         this.rtnFlag = rtnFlag;
+    }
+
+    public String getSqbPayClientSn() {
+        return sqbPayClientSn;
+    }
+
+    public void setSqbPayClientSn(String sqbPayClientSn) {
+        this.sqbPayClientSn = sqbPayClientSn;
     }
 
     @Override
