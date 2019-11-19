@@ -1148,6 +1148,7 @@ public class TradeHelper {
         List<Trade> tradeList = SQLite.select()
                 .from(Trade.class)
                 .where(Trade_Table.status.eq(TRADE_STATUS_PAID))
+                .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
                 .orderBy(Trade_Table.lsNo.desc())
                 .limit(PAGE_COUNT)//条数-》3
                 .offset(page * PAGE_COUNT)//当前页数
