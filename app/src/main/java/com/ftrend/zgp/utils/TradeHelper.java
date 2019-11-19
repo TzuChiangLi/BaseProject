@@ -4,9 +4,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.ftrend.zgp.R;
-import com.ftrend.zgp.model.AppParams;
-import com.ftrend.zgp.model.AppParams_Table;
-import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.DepPayInfo;
 import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.DepProduct;
@@ -996,31 +993,6 @@ public class TradeHelper {
                 .and(Trade_Table.status.eq(TRADE_STATUS_HANGUP))
                 .count();
         return count != 0;
-    }
-
-    /**
-     * @return 可登录专柜
-     */
-    public static List<Dep> getDepList() {
-        return SQLite.select().from(Dep.class).queryList();
-    }
-
-    /**
-     * @return 可登录用户
-     */
-    public static List<User> getUserList() {
-        return SQLite.select().from(User.class).queryList();
-    }
-
-    /**
-     * 获取参数字段
-     *
-     * @param paramName 字段名
-     * @return 字段值
-     */
-    public static String getAppParamValue(String paramName) {
-        return SQLite.select().from(AppParams.class).where(AppParams_Table.paramName.eq(paramName))
-                .querySingle().getParamValue();
     }
 
     /**
