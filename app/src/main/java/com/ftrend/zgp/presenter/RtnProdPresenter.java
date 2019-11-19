@@ -2,7 +2,6 @@ package com.ftrend.zgp.presenter;
 
 import android.text.TextUtils;
 
-import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.RtnContract;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradeProd;
@@ -62,7 +61,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 String appPayType = RtnHelper.getPay().getAppPayType();
                 mView.existTrade(RtnHelper.getProdList());
                 mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()),
-                        payTypeImgRes(appPayType));
+                        TradeHelper.payTypeImgRes(appPayType));
                 mView.showTradeInfo(formatTradeTime(), RtnHelper.getTrade().getFullLsNo(),
                         TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
                 updateTradeInfo();
@@ -86,7 +85,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                                 String appPayType = RtnHelper.getPay().getAppPayType();
                                 mView.existTrade(RtnHelper.getProdList());
                                 mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()),
-                                        payTypeImgRes(appPayType));
+                                        TradeHelper.payTypeImgRes(appPayType));
                                 mView.showTradeInfo(formatTradeTime(), lsNo,
                                         TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
                                 updateTradeInfo();
@@ -190,25 +189,6 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
             mView = null;
         }
         RtnHelper.clearAllData();
-    }
-
-    /**
-     * @param appPayType 支付方式代码
-     * @return 图片资源
-     */
-    private int payTypeImgRes(String appPayType) {
-        switch (appPayType) {
-            case PayType.PAYTYPE_CASH://现金
-                return R.drawable.money;
-            case PayType.PAYTYPE_ICCARD: //IC卡
-            case PayType.PAYTYPE_PREPAID://储值卡
-                return R.drawable.card;
-            default:// 其他都认为是收钱吧
-                if (appPayType.startsWith("SQB_")) {
-                    return R.drawable.shouqianba;
-                }
-                return R.drawable.money;
-        }
     }
 
     /**

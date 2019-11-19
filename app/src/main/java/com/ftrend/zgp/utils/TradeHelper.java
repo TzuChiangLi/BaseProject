@@ -1165,33 +1165,13 @@ public class TradeHelper {
             case "0":
                 //现金
                 return R.drawable.money;
-            case "2":
-                //微信
-                return R.drawable.alipay;
-            case "3":
-                //支付宝
-                return R.drawable.wechat;
-            case "5":
-                //代金券
-            case "6":
-                //购物券
-                return R.drawable.money;
-            case "1":
-                //外卡
-            case "4":
-                //内卡
             case "7":
                 //IC卡
             case "8":
                 //储值卡
-            case "9":
-                //长款
                 return R.drawable.card;
             default:
-                if (appPayType.contains("SQB")) {
-                    return R.drawable.shouqianba;
-                }
-                return R.drawable.money;
+                return R.drawable.shouqianba;
         }
     }
 }
