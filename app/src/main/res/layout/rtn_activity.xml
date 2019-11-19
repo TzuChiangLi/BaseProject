@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/common_gray_bg"
-    tools:context=".view.RtnProdActivity">
+    tools:context=".view.RtnActivity">
 
     <com.hjq.bar.TitleBar
-        android:id="@+id/rtn_prod_top_bar"
+        android:id="@+id/rtn_top_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_45"
         app:leftIcon="@drawable/back"
@@ -23,7 +23,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:letterSpacing="0.05"
-            android:text="@string/rtn_prod_title_order"
+            android:text="@string/rtn_title_trade"
             android:textColor="@color/common_blue"
             android:textSize="@dimen/sp_16"
             android:textStyle="bold" />
@@ -31,27 +31,28 @@
     </com.hjq.bar.TitleBar>
 
     <ImageView
-        android:id="@+id/rtn_prod_title_line"
+        android:id="@+id/rtn_title_line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rtn_prod_top_bar"
+        android:layout_below="@+id/rtn_top_bar"
         android:background="@color/common_white"
         android:scaleType="centerInside"
         android:src="@drawable/title_bar_bottom" />
 
     <LinearLayout
-        android:id="@+id/rtn_prod_ll_top"
+        android:id="@+id/rtn_ll_top"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_36"
-        android:layout_below="@+id/rtn_prod_title_line"
+        android:layout_below="@+id/rtn_title_line"
         android:background="@color/common_white"
         android:orientation="horizontal"
         android:paddingStart="@dimen/dp_8"
         android:paddingTop="@dimen/dp_2"
-        android:paddingEnd="@dimen/dp_8">
+        android:paddingEnd="@dimen/dp_8"
+        android:paddingBottom="@dimen/dp_6">
 
         <Button
-            android:id="@+id/rtn_prod_btn_no_order"
+            android:id="@+id/rtn_btn_chg_mode"
             android:layout_width="@dimen/dp_0"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -60,28 +61,29 @@
             android:lines="1"
             android:paddingStart="@dimen/dp_2"
             android:paddingEnd="@dimen/dp_2"
-            android:text="@string/rtn_prod_btn_not_order"
+            android:text="@string/rtn_btn_chg_prod"
             android:textColor="@color/common_white"
             android:textSize="@dimen/sp_11" />
 
         <com.ftrend.cleareditview.ClearEditText
-            android:id="@+id/rtn_prod_edt_trade"
+            android:id="@+id/rtn_edt_trade"
             android:layout_width="@dimen/dp_0"
             android:layout_height="match_parent"
             android:layout_weight="3"
             android:background="@drawable/rtn_edt_top_bottom_line"
             android:gravity="center_vertical|start"
-            android:hint="@string/rtn_prod_tv_search"
+            android:hint="@string/rtn_trade_tv_search"
             android:inputType="number"
             android:maxLines="1"
             android:paddingStart="@dimen/dp_4"
             android:paddingTop="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_0"
             android:paddingBottom="@dimen/dp_4"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_11" />
 
         <Button
-            android:id="@+id/rtn_prod_btn_search"
+            android:id="@+id/rtn_btn_search"
             android:layout_width="@dimen/dp_0"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -89,21 +91,20 @@
             android:gravity="center"
             android:paddingTop="@dimen/dp_4"
             android:paddingBottom="@dimen/dp_4"
-            android:text="@string/rtn_prod_btn_search"
+            android:text="@string/rtn_trade_btn_search"
             android:textColor="@color/common_white"
             android:textSize="@dimen/sp_11" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/rtn_prod_ll_mid"
+        android:id="@+id/rtn_ll_mid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rtn_prod_ll_top"
+        android:layout_below="@+id/rtn_ll_top"
         android:background="@color/common_white"
         android:orientation="horizontal"
         android:paddingStart="@dimen/dp_8"
-        android:paddingTop="@dimen/dp_6"
         android:paddingEnd="@dimen/dp_8"
         android:paddingBottom="@dimen/dp_4">
 
@@ -112,31 +113,31 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:lines="1"
-            android:text="@string/rtn_prod_tv_trade_time"
+            android:text="@string/rtn_trade_tv_trade_time"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10" />
 
         <TextView
-            android:id="@+id/rtn_prod_tv_trade_time"
+            android:id="@+id/rtn_tv_trade_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2.5"
             android:gravity="center_vertical"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10"
-            tools:text="@string/rtn_prod_replace_trade_time" />
+            tools:text="@string/rtn_trade_replace_trade_time" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical|end"
             android:lines="1"
-            android:text="@string/rtn_prod_tv_lsno"
+            android:text="@string/rtn_trade_tv_lsno"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10" />
 
         <TextView
-            android:id="@+id/rtn_prod_tv_trade_lsno"
+            android:id="@+id/rtn_tv_trade_lsno"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="2.0"
@@ -144,53 +145,53 @@
             android:lines="1"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10"
-            tools:text="@string/rtn_prod_replace_trade_lsno" />
+            tools:text="@string/rtn_trade_replace_trade_lsno" />
 
         <TextView
-            android:id="@+id/rtn_prod_tv_cahier_title"
+            android:id="@+id/rtn_tv_cahier_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:lines="1"
-            android:text="@string/rtn_prod_tv_cashier"
+            android:text="@string/rtn_trade_tv_cashier"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10" />
 
         <TextView
-            android:id="@+id/rtn_prod_tv_cahier"
+            android:id="@+id/rtn_tv_cahier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="@dimen/dp_24"
-            android:text="@string/rtn_prod_tv_cashier_empty"
+            android:text="@string/rtn_trade_tv_cashier_empty"
             android:textAlignment="textEnd"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10"
-            tools:text="@string/rtn_prod_replace_cashier" />
+            tools:text="@string/rtn_trade_replace_cashier" />
 
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/rtn_prod_rv"
+        android:id="@+id/rtn_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/rtn_prod_rl_bottom"
-        android:layout_below="@+id/rtn_prod_ll_mid"
+        android:layout_below="@+id/rtn_ll_mid"
         android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginBottom="@dimen/dp_48"
         tools:listitem="@layout/rtn_list_rv_product_item" />
 
     <RelativeLayout
-        android:id="@+id/rtn_prod_rl_bottom"
+        android:id="@+id/rtn_rl_bottom_trade"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
         android:layout_alignParentBottom="true"
+        android:visibility="gone"
         android:background="@color/common_white"
         android:paddingStart="@dimen/dp_8"
-        android:paddingEnd="@dimen/dp_0"
-        android:visibility="gone">
+        android:paddingEnd="@dimen/dp_0">
 
         <LinearLayout
-            android:id="@+id/rtn_prod_ll_pay_type"
+            android:id="@+id/rtn_ll_pay_type"
             android:layout_width="@dimen/dp_32"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -198,73 +199,73 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/rtn_prod_img_pay_type"
+                android:id="@+id/rtn_img_pay_type"
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
                 android:scaleType="centerInside"
                 tools:src="@drawable/alipay" />
 
             <TextView
-                android:id="@+id/rtn_prod_tv_pay_type"
+                android:id="@+id/rtn_tv_pay_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingTop="@dimen/dp_2"
                 android:textColor="@color/text_black_second"
                 android:textSize="@dimen/sp_10"
-                tools:text="@string/rtn_prod_replace_pay_type" />
+                tools:text="@string/rtn_trade_replace_pay_type" />
         </LinearLayout>
 
 
         <TextView
-            android:id="@+id/rtn_prod_tv_trade_total_title"
+            android:id="@+id/rtn_tv_trade_total_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/rtn_prod_ll_pay_type"
+            android:layout_alignTop="@+id/rtn_ll_pay_type"
             android:layout_marginStart="@dimen/dp_8"
-            android:layout_toEndOf="@+id/rtn_prod_ll_pay_type"
+            android:layout_toEndOf="@+id/rtn_ll_pay_type"
             android:gravity="center_vertical"
             android:paddingStart="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_0"
-            android:text="@string/rtn_prod_tv_trade_total"
+            android:text="@string/rtn_trade_tv_trade_total"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_12" />
 
         <TextView
-            android:id="@+id/rtn_prod_tv_trade_total"
+            android:id="@+id/rtn_tv_trade_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/rtn_prod_tv_trade_total_title"
-            android:layout_alignBottom="@+id/rtn_prod_tv_trade_total_title"
-            android:layout_toEndOf="@+id/rtn_prod_tv_trade_total_title"
+            android:layout_alignTop="@+id/rtn_tv_trade_total_title"
+            android:layout_alignBottom="@+id/rtn_tv_trade_total_title"
+            android:layout_toEndOf="@+id/rtn_tv_trade_total_title"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_12"
-            tools:text="@string/rtn_prod_replace_total" />
+            tools:text="@string/rtn_trade_replace_total" />
 
         <TextView
-            android:id="@+id/rtn_prod_tv_rtn_total_title"
+            android:id="@+id/rtn_tv_rtn_total_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/rtn_prod_ll_pay_type"
+            android:layout_alignBottom="@+id/rtn_ll_pay_type"
             android:layout_marginStart="@dimen/dp_8"
-            android:layout_toEndOf="@+id/rtn_prod_ll_pay_type"
+            android:layout_toEndOf="@+id/rtn_ll_pay_type"
             android:gravity="bottom"
             android:paddingStart="@dimen/dp_4"
             android:paddingEnd="@dimen/dp_0"
-            android:text="@string/rtn_prod_tv_rtn_total"
+            android:text="@string/rtn_trade_tv_rtn_total"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_12" />
 
         <TextView
-            android:id="@+id/rtn_prod_tv_rtn_total"
+            android:id="@+id/rtn_tv_rtn_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/rtn_prod_tv_rtn_total_title"
-            android:layout_alignBottom="@+id/rtn_prod_tv_rtn_total_title"
-            android:layout_toEndOf="@+id/rtn_prod_tv_rtn_total_title"
+            android:layout_alignTop="@+id/rtn_tv_rtn_total_title"
+            android:layout_alignBottom="@+id/rtn_tv_rtn_total_title"
+            android:layout_toEndOf="@+id/rtn_tv_rtn_total_title"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_12"
-            tools:text="@string/rtn_prod_replace_total" />
+            tools:text="@string/rtn_trade_replace_total" />
 
 
         <Button
@@ -273,7 +274,7 @@
             android:layout_height="match_parent"
             android:layout_toStartOf="@+id/rtn_btn_enter"
             android:background="@drawable/shop_btn_blue_selector"
-            android:text="@string/rtn_prod_btn_cancel"
+            android:text="@string/rtn_trade_btn_cancel"
             android:textColor="@color/common_white"
             android:textSize="@dimen/sp_13" />
 
@@ -283,7 +284,39 @@
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:background="@drawable/shop_btn_red_selector"
-            android:text="@string/rtn_prod_btn_enter"
+            android:text="@string/rtn_btn_enter"
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/sp_13" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rtn_rl_bottom_prod"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_white"
+        android:paddingEnd="@dimen/dp_0"
+        android:visibility="visible">
+
+        <Button
+            android:id="@+id/rtn_btn_prod_add"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@drawable/shop_btn_blue_selector"
+            android:stateListAnimator="@null"
+            android:text="@string/rtn_prod_btn_add"
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/sp_13" />
+
+        <Button
+            android:id="@+id/rtn_btn_prod_rtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/shop_btn_red_selector"
+            android:stateListAnimator="@null"
+            android:text="@string/rtn_btn_enter"
             android:textColor="@color/common_white"
             android:textSize="@dimen/sp_13" />
 

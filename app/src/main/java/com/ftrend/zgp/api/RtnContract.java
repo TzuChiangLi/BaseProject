@@ -46,6 +46,12 @@ public interface RtnContract {
          */
         void changeAmount(int index, double changeAmount);
 
+        /**
+         * 切换退货模式，如果当前模式有数据，那么切换时清除
+         *
+         * @param crrMode 退货模式
+         */
+        void changeRtnMode(boolean crrMode);
 
         /**
          * 销毁，防止泄露
@@ -122,5 +128,15 @@ public interface RtnContract {
          * @param msg 文本
          */
         void showSuccess(String msg);
+
+        /**
+         * 切换到不按单退货
+         */
+        void changeToProd();
+
+        /**
+         * 切换到按单退货
+         */
+        void changeToTrade();
     }
 }
