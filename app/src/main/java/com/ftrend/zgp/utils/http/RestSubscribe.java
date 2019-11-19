@@ -84,11 +84,11 @@ public class RestSubscribe {
      */
     public void userChangePwd(final String userCode, final String oldPwd, final String newPwd,
                               final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("userCode", userCode);
         params.put("oldPwd", oldPwd);
         params.put("newPwd", newPwd);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.userChangePwd(request), callback);
     }
@@ -104,12 +104,12 @@ public class RestSubscribe {
      */
     public void devReg(final String posCode, final String regCode, final String devSn,
                        final String devStyle, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("posCode", posCode);
         params.put("regCode", regCode);
         params.put("devSn", devSn);
         params.put("devStyle", devStyle);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.devReg(request), callback);
     }
@@ -121,10 +121,10 @@ public class RestSubscribe {
      * @param callback
      */
     public void clientLogin(final String posCode, final String regCode, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("account", posCode);
         params.put("password", regCode);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.clientLogin(request), callback);
     }
@@ -136,9 +136,9 @@ public class RestSubscribe {
      * @param callback
      */
     public void checkPosUpdate(final String posCode, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("posCode", posCode);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.checkPosUpdate(request), callback);
     }
@@ -150,9 +150,9 @@ public class RestSubscribe {
      * @param callback
      */
     public void updatePosDep(final String posCode, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("posCode", posCode);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.updatePosDep(request), callback);
     }
@@ -164,9 +164,9 @@ public class RestSubscribe {
      * @param callback
      */
     public void updatePosUser(final String posCode, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("posCode", posCode);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.updatePosUser(request), callback);
     }
@@ -178,9 +178,9 @@ public class RestSubscribe {
      * @param callback
      */
     public void updatePosSysParams(final String posCode, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("posCode", posCode);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.updatePosSysParams(request), callback);
     }
@@ -192,9 +192,9 @@ public class RestSubscribe {
      * @param callback
      */
     public void updateDepCls(final String depCode, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("depCode", depCode);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.updateDepCls(request), callback);
     }
@@ -206,9 +206,9 @@ public class RestSubscribe {
      * @param callback
      */
     public void updateDepProduct(final String depCode, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("depCode", depCode);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.updateDepProduct(request), callback);
     }
@@ -220,9 +220,9 @@ public class RestSubscribe {
      * @param callback
      */
     public void updateDepPayInfo(final String depCode, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("depCode", depCode);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.updateDepPayInfo(request), callback);
     }
@@ -234,9 +234,9 @@ public class RestSubscribe {
      * @param callback
      */
     public void queryPosLsList(final String posCode, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("posCode", posCode);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.queryPosLsList(request), callback);
     }
@@ -249,10 +249,10 @@ public class RestSubscribe {
      * @param callback
      */
     public void downloadPosLs(final String posCode, final String lsNo, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("posCode", posCode);
         params.put("lsNo", lsNo);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.downloadPosLs(request), callback);
     }
@@ -264,9 +264,9 @@ public class RestSubscribe {
      * @param callback
      */
     public void posEnd(final String posCode, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("posCode", posCode);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.posEnd(request), callback);
     }
@@ -279,10 +279,10 @@ public class RestSubscribe {
      * @param callback
      */
     public void queryVipInfo(final String code, final String type, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("code", code);
         params.put("type", type);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.queryVipInfo(request), callback);
     }
@@ -298,9 +298,9 @@ public class RestSubscribe {
      * @param callback
      */
     public void queryRefundLs(final String code, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("code", code);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.queryRefundLs(request), callback);
     }
@@ -313,10 +313,10 @@ public class RestSubscribe {
      * @param callback
      */
     public void payCardInfoRequest(final String cardCode, final String cardType, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("cardCode", cardCode);
         params.put("cardType", cardType);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.payCardInfoRequest(request), callback);
     }
@@ -329,9 +329,9 @@ public class RestSubscribe {
      * @param callback
      */
     public void payCardInfo(final String dataSign, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("dataSign", dataSign);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.payCardInfo(request), callback);
     }
@@ -351,14 +351,14 @@ public class RestSubscribe {
     public void payCardRequest(final String posCode, final String lsNo, final String date,
                                final String cashier, final String cardCode, final double money,
                                final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("posCode", posCode);
         params.put("lsNo", lsNo);
         params.put("date", date);
         params.put("cashier", cashier);
         params.put("cardCode", cardCode);
         params.put("money", money);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.payCardRequest(request), callback);
     }
@@ -371,9 +371,9 @@ public class RestSubscribe {
      * @param callback
      */
     public void payCard(final String dataSign, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("dataSign", dataSign);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.payCard(request), callback);
     }
@@ -386,10 +386,10 @@ public class RestSubscribe {
      * @param callback
      */
     public void vipCardPwdValidate(final String cardCode, final String pwd, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("cardCode", cardCode);
         params.put("pwd", pwd);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.vipCardPwdValidate(request), callback);
     }
@@ -406,13 +406,13 @@ public class RestSubscribe {
     public void uploadTrade(final String posCode,
                             Trade trade, List<TradeProd> prodList, TradePay pay,
                             final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("posCode", posCode);
         params.put("trade", trade);
         params.put("prod", prodList);
         params.put("pay", pay);
 
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.uploadTrade(request), callback);
     }
@@ -426,7 +426,7 @@ public class RestSubscribe {
      */
     public void uploadAppParams(final String posCode, List<AppParams> list,
                                 final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("posCode", posCode);
         Map<String, String> appParams = new HashMap<>();
         for (AppParams p : list) {
@@ -434,7 +434,7 @@ public class RestSubscribe {
         }
         params.put("params", appParams);
 
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.uploadAppParams(request), callback);
     }
@@ -446,9 +446,9 @@ public class RestSubscribe {
      * @param callback
      */
     public void queryAppParams(final String posCode, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("posCode", posCode);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.queryAppParams(request), callback);
     }
@@ -461,10 +461,10 @@ public class RestSubscribe {
      * @param callback
      */
     public void uploadSqb(SqbPayOrder order, SqbPayResult result, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("order", order);
         params.put("result", result);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.uploadSqb(request), callback);
     }
@@ -478,11 +478,11 @@ public class RestSubscribe {
      * @param callback
      */
     public void queryTradeReport(String depCode, String beginDate, String endDate, final RestCallback callback) {
-        Map<String, Object> params = new HashMap<>();
+        RestBodyMap params = new RestBodyMap();
         params.put("depCode", depCode);
         params.put("beginDate", beginDate);
         params.put("endDate", endDate);
-        RestRequest<Map<String, Object>> request = new RestRequest<>();
+        RestRequest<RestBodyMap> request = new RestRequest<>();
         request.setBody(params);
         detachAndSubscribe(api.queryTradeReport(request), callback);
     }

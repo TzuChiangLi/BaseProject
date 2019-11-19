@@ -5,6 +5,7 @@ import android.util.Log;
 import com.ftrend.zgp.model.AppParams;
 import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
@@ -13,7 +14,6 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * 数据下载线程
@@ -205,13 +205,15 @@ public class DataDownloadTask {
     private void checkUpdateSign() {
         RestSubscribe.getInstance().checkPosUpdate(ZgParams.getPosCode(), new RestCallback(new RestResultHandler() {
             @Override
-            public void onSuccess(Map<String, Object> body) {
+            public void onSuccess(RestBodyMap body) {
                 updateInfoList.clear();
-                List<Map<String, Object>> list = (List<Map<String, Object>>) body.get("list");
-                for (Map<String, Object> map : list) {
-                    String key = String.valueOf(map.get("paramName"));
-                    String sign = String.valueOf(map.get("paramValue"));
-                    updateInfoList.add(new UpdateInfo(key, sign));
+                List<RestBodyMap> list = body.getMapList("list");
+                if (list != null) {
+                    for (RestBodyMap map : list) {
+                        String key = map.getString("paramName");
+                        String sign = map.getString("paramValue");
+                        updateInfoList.add(new UpdateInfo(key, sign));
+                    }
                 }
                 next();
             }

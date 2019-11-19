@@ -2,7 +2,6 @@ package com.ftrend.zgp.presenter;
 
 import android.text.TextUtils;
 
-import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.RtnContract;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradeProd;
@@ -11,13 +10,17 @@ import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.CommonUtil;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
+import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
+import com.ftrend.zgp.utils.sunmi.VipCardData;
 import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
+import com.sunmi.pay.hardware.aidl.AidlConstants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,7 +61,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 String appPayType = RtnHelper.getPay().getAppPayType();
                 mView.existTrade(RtnHelper.getProdList());
                 mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()),
-                        payTypeImgRes(appPayType));
+                        TradeHelper.payTypeImgRes(appPayType));
                 mView.showTradeInfo(formatTradeTime(), RtnHelper.getTrade().getFullLsNo(),
                         TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
                 updateTradeInfo();
@@ -82,7 +85,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                                 String appPayType = RtnHelper.getPay().getAppPayType();
                                 mView.existTrade(RtnHelper.getProdList());
                                 mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()),
-                                        payTypeImgRes(appPayType));
+                                        TradeHelper.payTypeImgRes(appPayType));
                                 mView.showTradeInfo(formatTradeTime(), lsNo,
                                         TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
                                 updateTradeInfo();
@@ -138,7 +141,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 break;
             case "7":
                 //IC卡
-                MessageUtil.showError("IC卡退款功能未实现");
+                doIcCardPay();
                 break;
             case "8":
                 //储值卡
@@ -189,25 +192,6 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
     }
 
     /**
-     * @param appPayType 支付方式代码
-     * @return 图片资源
-     */
-    private int payTypeImgRes(String appPayType) {
-        switch (appPayType) {
-            case PayType.PAYTYPE_CASH://现金
-                return R.drawable.money;
-            case PayType.PAYTYPE_ICCARD: //IC卡
-            case PayType.PAYTYPE_PREPAID://储值卡
-                return R.drawable.card;
-            default:// 其他都认为是收钱吧
-                if (appPayType.startsWith("SQB_")) {
-                    return R.drawable.shouqianba;
-                }
-                return R.drawable.money;
-        }
-    }
-
-    /**
      * 格式化交易时间
      *
      * @return
@@ -249,8 +233,8 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
                 trade.getTotal() * -1,
                 new RestCallback(new RestResultHandler() {
                     @Override
-                    public void onSuccess(Map<String, Object> body) {
-                        payDataSign[0] = body.get("dataSign").toString();
+                    public void onSuccess(RestBodyMap body) {
+                        payDataSign[0] = body.getString("dataSign");
                         payRequestTime[0] = System.currentTimeMillis();
                         requestCardPayResult();
                     }
@@ -281,7 +265,7 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
 
         RestSubscribe.getInstance().payCard(payDataSign[0], new RestCallback(new RestResultHandler() {
             @Override
-            public void onSuccess(Map<String, Object> body) {
+            public void onSuccess(RestBodyMap body) {
                 if (RtnHelper.pay(PayType.PAYTYPE_PREPAID, RtnHelper.getPay().getPayCode())) {
                     if (RtnHelper.rtn()) {
                         MessageUtil.waitSuccesss("储值卡退款成功", new MessageUtil.MessageBoxOkListener() {
@@ -306,6 +290,45 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
             }
         }));
     }
+
+    /**
+     * IC卡支付，直接更新卡内余额
+     */
+    private void doIcCardPay() {
+        MessageUtil.waitBegin("请刷卡...", new MessageUtil.MessageBoxCancelListener() {
+            @Override
+            public boolean onCancel() {
+                SunmiPayHelper.getInstance().cancelWriteCard();
+                return true;
+            }
+        });
+        VipCardData updateData = new VipCardData(AidlConstants.CardType.MIFARE);
+        updateData.setCardCode("");//不限制卡号。原卡号：RtnHelper.getPay().getPayCode()
+        updateData.setMoney(RtnHelper.getRtnTrade().getTotal());//回充余额（此时流水金额还是正数）
+        SunmiPayHelper.getInstance().writeCard(updateData, new SunmiPayHelper.WriteCardCallback() {
+            @Override
+            public void onSuccess(VipCardData data) {
+                if (RtnHelper.pay(PayType.PAYTYPE_ICCARD, data.getCardCode())) {//保存实际写入的卡号
+                    if (RtnHelper.rtn()) {
+                        MessageUtil.waitSuccesss("储值卡退款成功", new MessageUtil.MessageBoxOkListener() {
+                            @Override
+                            public void onOk() {
+                                mView.finish();
+                            }
+                        });
+                    } else {
+                        MessageUtil.waitError("储值卡退款失败", null);
+                    }
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+                MessageUtil.waitError(msg, null);
+            }
+        });
+    }
+
     //endregion
 
     //region 收钱吧退款

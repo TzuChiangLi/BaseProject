@@ -23,6 +23,7 @@ import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.model.User_Table;
 import com.ftrend.zgp.utils.db.TransHelper;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
@@ -38,7 +39,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import static com.raizlabs.android.dbflow.sql.language.Method.count;
 import static com.raizlabs.android.dbflow.sql.language.Method.min;
@@ -499,7 +499,7 @@ public class HandoverHelper {
         RestSubscribe.getInstance().uploadAppParams(ZgParams.getPosCode(), appParamsList,
                 new RestCallback(new RestResultHandler() {
                     @Override
-                    public void onSuccess(Map<String, Object> body) {
+                    public void onSuccess(RestBodyMap body) {
                         // 无需处理上传结果
                     }
 

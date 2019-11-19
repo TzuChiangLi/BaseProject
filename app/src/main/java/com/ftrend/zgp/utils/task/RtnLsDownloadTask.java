@@ -10,6 +10,7 @@ import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
@@ -20,7 +21,6 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 退货下载线程
@@ -90,23 +90,24 @@ public class RtnLsDownloadTask {
     private void downloadLs() {
         RestSubscribe.getInstance().queryRefundLs(rtnLsNo, new RestCallback(new RestResultHandler() {
             @Override
-            public void onSuccess(Map<String, Object> body) {
+            public void onSuccess(RestBodyMap body) {
                 if (body != null) {
                     LogUtil.d("----trade:" + body.get("trade"));
                 }
-                if (!body.containsKey("trade") || !body.containsKey("prod") || !body.containsKey("pay")) {
+                RestBodyMap trade = body.getMap("trade");
+                List<RestBodyMap> prodList = body.getMapList("prod");
+                RestBodyMap pay = body.getMap("pay");
+                if (trade == null || prodList == null || pay == null) {
+                    postFailed("流水数据异常");
                     return;
                 }
-                Map<String, Object> trade = (Map<String, Object>) body.get("trade");
-                List<Map<String, Object>> prod = (List<Map<String, Object>>) body.get("prod");
-                Map<String, Object> pay = (Map<String, Object>) body.get("pay");
                 //不是当前专柜的销售流水不允许退货
                 if (!ZgParams.getCurrentDep().getDepCode().equals(trade.get("depCode"))) {
                     postFailed("指定流水不存在");
                     return;
                 }
 
-                saveLs(trade, prod, pay);
+                saveLs(trade, prodList, pay);
             }
 
             @Override
@@ -124,7 +125,7 @@ public class RtnLsDownloadTask {
      * @param prod  商品列表
      * @param pay   支付信息
      */
-    private void saveLs(final Map<String, Object> trade, final List<Map<String, Object>> prod, final Map<String, Object> pay) {
+    private void saveLs(final RestBodyMap trade, final List<RestBodyMap> prod, final RestBodyMap pay) {
         Gson gson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .create();
@@ -139,10 +140,10 @@ public class RtnLsDownloadTask {
      *
      * @param values
      */
-    private void saveTrade(Gson gson, Map<String, Object> values) {
+    private void saveTrade(Gson gson, RestBodyMap values) {
         Trade trade = gson.fromJson(gson.toJson(values), Trade.class);
         //收钱吧支付clientSn
-        trade.setSqbPayClientSn(values.get("sqbPayClientSn").toString());
+        trade.setSqbPayClientSn(values.getString("sqbPayClientSn"));
         //初始化
         LogUtil.d("----rtnFlag:" + trade.getRtnFlag());
         RtnHelper.setTrade(trade);
@@ -153,17 +154,17 @@ public class RtnLsDownloadTask {
      *
      * @param values
      */
-    private void saveProd(Gson gson, List<Map<String, Object>> values) {
+    private void saveProd(Gson gson, List<RestBodyMap> values) {
         if (values.size() == 0) {
             return;
         }
         List<TradeProd> prodList = new ArrayList<>();
-        for (Map<String, Object> map : values) {
+        for (RestBodyMap map : values) {
             TradeProd prod = gson.fromJson(gson.toJson(map), TradeProd.class);
             //已退货数量
-            prod.setLastRtnAmount(Double.parseDouble(map.get("rtnAmount").toString()));
+            prod.setLastRtnAmount(map.getDouble("rtnAmount"));
             //已退货金额
-            prod.setLastRtnTotal(Double.parseDouble(map.get("rtnTotal").toString()));
+            prod.setLastRtnTotal(map.getDouble("rtnTotal"));
             //初始化退货单价
             prod.setRtnPrice(prod.getTotal() / prod.getAmount());
             prodList.add(prod);
@@ -177,7 +178,7 @@ public class RtnLsDownloadTask {
      *
      * @param values
      */
-    private void savePay(Gson gson, Map<String, Object> values) {
+    private void savePay(Gson gson, RestBodyMap values) {
         TradePay pay = gson.fromJson(gson.toJson(values), TradePay.class);
         // 查找对应的appPayType（后台不保存此字段）
         DepPayInfo payInfo = SQLite.select().from(DepPayInfo.class)

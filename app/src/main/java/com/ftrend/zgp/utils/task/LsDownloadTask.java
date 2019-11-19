@@ -14,6 +14,7 @@ import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.db.ZgpDb;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
@@ -27,7 +28,6 @@ import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 流水下载线程
@@ -181,9 +181,9 @@ public class LsDownloadTask {
     private void queryLsList() {
         RestSubscribe.getInstance().queryPosLsList(ZgParams.getPosCode(), new RestCallback(new RestResultHandler() {
             @Override
-            public void onSuccess(Map<String, Object> body) {
+            public void onSuccess(RestBodyMap body) {
                 lsList.clear();
-                List<String> list = (List<String>) body.get("list");
+                List<String> list = body.getStringList("list");
                 if (list != null && list.size() > 0) {
                     lsList.addAll(list);
                     next();
@@ -208,16 +208,15 @@ public class LsDownloadTask {
     private void downloadLs(final String lsNo) {
         RestSubscribe.getInstance().downloadPosLs(ZgParams.getPosCode(), lsNo, new RestCallback(new RestResultHandler() {
             @Override
-            public void onSuccess(Map<String, Object> body) {
-                if (!body.containsKey("trade") || !body.containsKey("prod") || !body.containsKey("pay")) {
+            public void onSuccess(RestBodyMap body) {
+                RestBodyMap trade = body.getMap("trade");
+                List<RestBodyMap> prodList = body.getMapList("prod");
+                RestBodyMap pay = body.getMap("pay");
+                if (trade == null || prodList == null || pay == null) {
                     next();//后台服务返回的数据无效，跳过
                     return;
                 }
-
-                Map<String, Object> trade = (Map<String, Object>) body.get("trade");
-                List<Map<String, Object>> prod = (List<Map<String, Object>>) body.get("prod");
-                Map<String, Object> pay = (Map<String, Object>) body.get("pay");
-                saveLs(trade, prod, pay);
+                saveLs(trade, prodList, pay);
             }
 
             @Override
@@ -235,7 +234,7 @@ public class LsDownloadTask {
      * @param prod  商品列表
      * @param pay   支付信息
      */
-    private void saveLs(final Map<String, Object> trade, final List<Map<String, Object>> prod, final Map<String, Object> pay) {
+    private void saveLs(final RestBodyMap trade, final List<RestBodyMap> prod, final RestBodyMap pay) {
         Transaction transaction = FlowManager.getDatabase(ZgpDb.class).beginTransactionAsync(new ITransaction() {
             @Override
             public void execute(DatabaseWrapper databaseWrapper) {
@@ -266,7 +265,7 @@ public class LsDownloadTask {
      *
      * @param values
      */
-    private long saveTrade(Gson gson, Map<String, Object> values) {
+    private long saveTrade(Gson gson, RestBodyMap values) {
         Trade trade = gson.fromJson(gson.toJson(values), Trade.class);
         SQLite.delete(Trade.class)
                 .where(Trade_Table.lsNo.eq(trade.getLsNo()))
@@ -283,12 +282,12 @@ public class LsDownloadTask {
      *
      * @param values
      */
-    private boolean saveProd(Gson gson, List<Map<String, Object>> values) {
+    private boolean saveProd(Gson gson, List<RestBodyMap> values) {
         if (values.size() == 0) {
             return false;
         }
         List<TradeProd> prodList = new ArrayList<>();
-        for (Map<String, Object> map : values) {
+        for (RestBodyMap map : values) {
             TradeProd prod = gson.fromJson(gson.toJson(map), TradeProd.class);
             prod.setDelFlag("0");
             //手工优惠统一写入单项优惠，防止计算total出错
@@ -318,7 +317,7 @@ public class LsDownloadTask {
      *
      * @param values
      */
-    private long savePay(Gson gson, Map<String, Object> values) {
+    private long savePay(Gson gson, RestBodyMap values) {
         TradePay pay = gson.fromJson(gson.toJson(values), TradePay.class);
         // 查找对应的appPayType（后台不保存此字段）
         DepPayInfo payInfo = SQLite.select().from(DepPayInfo.class)

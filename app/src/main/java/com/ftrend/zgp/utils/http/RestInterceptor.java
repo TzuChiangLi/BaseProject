@@ -9,7 +9,6 @@ import com.ftrend.zgp.utils.common.EncryptUtill;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Map;
 
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -136,10 +135,10 @@ public class RestInterceptor implements Interceptor {
         RestSubscribe.getInstance().clientLogin(ZgParams.getPosCode(), EncryptUtill.md5(ZgParams.getDevSn()),
                 new RestCallback(new RestResultHandler() {
                     @Override
-                    public void onSuccess(Map<String, Object> body) {
+                    public void onSuccess(RestBodyMap body) {
                         if (body.containsKey("token") && body.containsKey("expiration")) {
-                            RestInterceptor.setToken(body.get("token").toString(),
-                                    body.get("expiration").toString());
+                            RestInterceptor.setToken(body.getString("token"),
+                                    body.getString("expiration"));
                         }
                     }
 

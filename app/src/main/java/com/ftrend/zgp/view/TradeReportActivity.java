@@ -11,6 +11,7 @@ import com.blankj.utilcode.util.ConvertUtils;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
@@ -25,7 +26,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import butterknife.BindColor;
 import butterknife.BindDrawable;
@@ -136,8 +136,8 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
                 beginDate, endDate,
                 new RestCallback(new RestResultHandler() {
                     @Override
-                    public void onSuccess(Map<String, Object> body) {
-                        updateReport((List<Map<String, Object>>) body.get("list"));
+                    public void onSuccess(RestBodyMap body) {
+                        updateReport(body.getMapList("list"));
                     }
 
                     @Override
@@ -165,11 +165,15 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
      *
      * @param dataList
      */
-    private void updateReport(List<Map<String, Object>> dataList) {
+    private void updateReport(List<RestBodyMap> dataList) {
+        if (dataList == null) {
+            return;
+        }
+
         Integer sumCount = 0;
         Double sumTotal = 0.0;
         List<ReportData> payList = new ArrayList<>();
-        for (Map<String, Object> data : dataList) {
+        for (RestBodyMap data : dataList) {
             ReportData reportData = new ReportData(data);
             if (reportData.itemName.equals("T")) {
                 mSaleCount.setText(reportData.tradeCount.toString());
@@ -288,15 +292,15 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
         private Integer tradeCount;
         private Double tradeTotal;
 
-        ReportData(Map<String, Object> map) {
+        ReportData(RestBodyMap map) {
             if (map.containsKey("itemName")) {
-                itemName = map.get("itemName").toString();
+                itemName = map.getString("itemName");
             }
             if (map.containsKey("tradeCount")) {
-                tradeCount = Math.round(Float.parseFloat(map.get("tradeCount").toString()));
+                tradeCount = (int) Math.round(map.getDouble("tradeCount"));
             }
             if (map.containsKey("tradeTotal")) {
-                tradeTotal = Double.parseDouble(map.get("tradeTotal").toString());
+                tradeTotal = map.getDouble("tradeTotal");
             }
         }
     }

@@ -27,7 +27,7 @@ public class RestCallback implements HttpCallBack<Map<String, Object>> {
     @Override
     public void onSuccess(Map<String, Object> body) {
         if (resultHandler != null) {
-            resultHandler.onSuccess(body);
+            resultHandler.onSuccess(new RestBodyMap(body));
         }
     }
 

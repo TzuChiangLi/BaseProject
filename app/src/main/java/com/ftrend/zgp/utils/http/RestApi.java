@@ -1,7 +1,5 @@
 package com.ftrend.zgp.utils.http;
 
-import java.util.Map;
-
 import io.reactivex.Observable;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -25,7 +23,7 @@ public interface RestApi {
      * @return
      */
     @POST("auth/login")
-    Observable<RestResponse<Map<String, Object>>> clientLogin(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> clientLogin(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 修改用户登录密码
@@ -34,7 +32,7 @@ public interface RestApi {
      * @return
      */
     @POST("auth/changePwd")
-    Observable<RestResponse<Map<String, Object>>> userChangePwd(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> userChangePwd(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 设备注册
@@ -43,7 +41,7 @@ public interface RestApi {
      * @return
      */
     @POST("auth/devReg")
-    Observable<RestResponse<Map<String, Object>>> devReg(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> devReg(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 1 获取指定机器号的数据更新标志
@@ -52,7 +50,7 @@ public interface RestApi {
      * @return
      */
     @POST("update/check/pos")
-    Observable<RestResponse<Map<String, Object>>> checkPosUpdate(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> checkPosUpdate(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 2 获取指定机器号可登录专柜列表
@@ -61,7 +59,7 @@ public interface RestApi {
      * @return
      */
     @POST("update/pos/dep")
-    Observable<RestResponse<Map<String, Object>>> updatePosDep(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> updatePosDep(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 3 获取指定机器号可登录用户列表
@@ -70,7 +68,7 @@ public interface RestApi {
      * @return
      */
     @POST("update/pos/user")
-    Observable<RestResponse<Map<String, Object>>> updatePosUser(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> updatePosUser(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 4 获取指定机器号系统参数列表
@@ -79,7 +77,7 @@ public interface RestApi {
      * @return
      */
     @POST("update/pos/sysparams")
-    Observable<RestResponse<Map<String, Object>>> updatePosSysParams(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> updatePosSysParams(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 5 获取指定专柜的商品类别列表
@@ -88,7 +86,7 @@ public interface RestApi {
      * @return
      */
     @POST("update/dep/cls")
-    Observable<RestResponse<Map<String, Object>>> updateDepCls(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> updateDepCls(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 6 获取指定专柜的商品列表
@@ -97,7 +95,7 @@ public interface RestApi {
      * @return
      */
     @POST("update/dep/product")
-    Observable<RestResponse<Map<String, Object>>> updateDepProduct(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> updateDepProduct(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 7 获取指定专柜的支付方式列表
@@ -106,7 +104,7 @@ public interface RestApi {
      * @return
      */
     @POST("update/dep/payinfo")
-    Observable<RestResponse<Map<String, Object>>> updateDepPayInfo(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> updateDepPayInfo(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 8 按机器号查询已上传实时流水（所有未交班流水号列表）
@@ -115,7 +113,7 @@ public interface RestApi {
      * @return
      */
     @POST("update/ls/list")
-    Observable<RestResponse<Map<String, Object>>> queryPosLsList(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> queryPosLsList(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 9 按机器号查询指定流水（未交班流水）
@@ -124,7 +122,7 @@ public interface RestApi {
      * @return
      */
     @POST("update/ls/download")
-    Observable<RestResponse<Map<String, Object>>> downloadPosLs(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> downloadPosLs(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 交班
@@ -133,7 +131,7 @@ public interface RestApi {
      * @return
      */
     @POST("trade/end")
-    Observable<RestResponse<Map<String, Object>>> posEnd(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> posEnd(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 查询会员信息
@@ -142,7 +140,7 @@ public interface RestApi {
      * @return
      */
     @POST("trade/vip/info")
-    Observable<RestResponse<Map<String, Object>>> queryVipInfo(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> queryVipInfo(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 查询退货流水
@@ -151,7 +149,7 @@ public interface RestApi {
      * @return
      */
     @POST("trade/refund/ls")
-    Observable<RestResponse<Map<String, Object>>> queryRefundLs(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> queryRefundLs(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 会员卡信息查询请求
@@ -160,7 +158,7 @@ public interface RestApi {
      * @return
      */
     @POST("trade/card/info/request")
-    Observable<RestResponse<Map<String, Object>>> payCardInfoRequest(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> payCardInfoRequest(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 会员卡信息查询结果
@@ -169,7 +167,7 @@ public interface RestApi {
      * @return
      */
     @POST("trade/card/info")
-    Observable<RestResponse<Map<String, Object>>> payCardInfo(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> payCardInfo(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 会员卡支付请求（只支持磁卡）
@@ -178,7 +176,7 @@ public interface RestApi {
      * @return
      */
     @POST("trade/card/pay/request")
-    Observable<RestResponse<Map<String, Object>>> payCardRequest(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> payCardRequest(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 会员卡支付结果
@@ -187,7 +185,7 @@ public interface RestApi {
      * @return
      */
     @POST("trade/card/pay/result")
-    Observable<RestResponse<Map<String, Object>>> payCard(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> payCard(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 会员卡支付密码验证
@@ -196,7 +194,7 @@ public interface RestApi {
      * @return
      */
     @POST("trade/card/pay/pwd")
-    Observable<RestResponse<Map<String, Object>>> vipCardPwdValidate(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> vipCardPwdValidate(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 上传交易流水
@@ -205,7 +203,7 @@ public interface RestApi {
      * @return
      */
     @POST("upload/trade")
-    Observable<RestResponse<Map<String, Object>>> uploadTrade(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> uploadTrade(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 上传APP配置参数
@@ -214,7 +212,7 @@ public interface RestApi {
      * @return
      */
     @POST("upload/params")
-    Observable<RestResponse<Map<String, Object>>> uploadAppParams(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> uploadAppParams(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 查询APP配置参数
@@ -223,7 +221,7 @@ public interface RestApi {
      * @return
      */
     @POST("update/params")
-    Observable<RestResponse<Map<String, Object>>> queryAppParams(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> queryAppParams(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 上传收钱吧交易记录
@@ -232,7 +230,7 @@ public interface RestApi {
      * @return
      */
     @POST("upload/sqb")
-    Observable<RestResponse<Map<String, Object>>> uploadSqb(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> uploadSqb(@Body RestRequest<RestBodyMap> request);
 
     /**
      * 查询总交易报表
@@ -241,6 +239,6 @@ public interface RestApi {
      * @return
      */
     @POST("report/trade")
-    Observable<RestResponse<Map<String, Object>>> queryTradeReport(@Body RestRequest<Map<String, Object>> request);
+    Observable<RestResponse<RestBodyMap>> queryTradeReport(@Body RestRequest<RestBodyMap> request);
 
 }

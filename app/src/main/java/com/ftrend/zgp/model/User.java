@@ -32,7 +32,7 @@ public class User extends BaseModel {
     private String userRights;
     @Column
     @NotNull
-    private int maxDscRate = 0;
+    private double maxDscRate = 0;
     @Column
     @NotNull
     private double maxDscTotal = 0;
@@ -93,11 +93,11 @@ public class User extends BaseModel {
         this.userRights = userRights;
     }
 
-    public int getMaxDscRate() {
+    public double getMaxDscRate() {
         return maxDscRate;
     }
 
-    public void setMaxDscRate(int maxDscRate) {
+    public void setMaxDscRate(double maxDscRate) {
         this.maxDscRate = maxDscRate;
     }
 

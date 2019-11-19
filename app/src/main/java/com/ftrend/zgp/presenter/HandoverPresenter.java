@@ -3,13 +3,13 @@ package com.ftrend.zgp.presenter;
 import com.ftrend.zgp.api.HandoverContract;
 import com.ftrend.zgp.utils.HandoverHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 
 import java.util.Locale;
-import java.util.Map;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -49,7 +49,7 @@ public class HandoverPresenter implements HandoverContract.HandoverPresenter {
             RestSubscribe.getInstance().posEnd(ZgParams.getPosCode(), new RestCallback(new RestResultHandler() {
 
                 @Override
-                public void onSuccess(Map<String, Object> body) {
+                public void onSuccess(RestBodyMap body) {
                     HandoverHelper.finish();
                     MessageUtil.waitSuccesss("交班成功！", new MessageUtil.MessageBoxOkListener() {
                         @Override
