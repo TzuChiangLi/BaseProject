@@ -107,24 +107,6 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
         mMenuAdapter = new MenuAdapter(this, R.layout.home_rv_menu_item, menuList);
         mRecyclerView.setAdapter(mMenuAdapter);
         mMenuAdapter.setOnMenuClickListener(this);
-//        for (int i = 0; i < 150; i++) {
-//            Trade trade = new Trade();
-//            trade.setDepCode(ZgParams.getCurrentDep().getDepCode());
-//            trade.setLsNo(TradeHelper.newLsNo());
-//            trade.setTradeTime(new Date());
-//            trade.setTradeFlag(TradeHelper.TRADE_FLAG_SALE);
-//            trade.setCashier(ZgParams.getCurrentUser().getUserCode());
-//            trade.setDscTotal(0);
-//            trade.setTotal(0);
-//            trade.setCustType("0");
-//            trade.setVipCode("");
-//            trade.setCardCode("");
-//            trade.setVipTotal(0);
-//            trade.setCreateTime(new Date());
-//            trade.setCreateIp(ZgParams.getCurrentIp());
-//            trade.setStatus(TradeHelper.TRADE_STATUS_NOTPAY);
-//            trade.insert();
-//        }
     }
 
     /**

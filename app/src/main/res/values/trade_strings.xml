@@ -13,4 +13,6 @@
     <string name="trade_prod_trade_title">￥</string>
     <string name="trade_prod_print_again">重打小票</string>
     <string name="trade_prod_back">返回</string>
+
+    <string name="trade_report_title">交易统计</string>
 </resources>

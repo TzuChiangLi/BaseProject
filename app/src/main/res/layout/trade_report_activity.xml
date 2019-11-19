@@ -1,129 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_white"
     tools:context="com.ftrend.zgp.view.TradeReportActivity">
 
-    <LinearLayout
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/trade_report_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        app:leftIcon="@drawable/back"
+        app:lineColor="@color/common_blue"
+        app:lineSize="1px"
+        app:rightIcon="@drawable/online">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:letterSpacing="0.05"
+            android:text="@string/trade_report_title"
+            android:textColor="@color/common_blue"
+            android:textSize="@dimen/sp_16"
+            android:textStyle="bold" />
+    </com.hjq.bar.TitleBar>
+
+    <ImageView
+        android:id="@+id/trade_report_title_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/trade_report_top_bar"
+        android:scaleType="centerInside"
+        android:src="@drawable/title_bar_bottom" />
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="1dp"
-        tools:layout_editor_absoluteY="1dp">
+        android:layout_below="@+id/trade_report_title_line">
 
-        <TextView
-            android:id="@+id/textView_dep"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_5"
-            android:layout_marginBottom="@dimen/dp_3"
-            android:text="专柜：乐知味" />
+            android:layout_height="match_parent"
 
-        <TextView
-            android:id="@+id/textView_date_range"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_5"
-            android:layout_marginBottom="@dimen/dp_3"
-            android:text="日期：2019-11-13 ~ 2019-11-14" />
-
-        <GridLayout
-            android:id="@+id/grid_report"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:columnCount="3">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/cell_item_header"
-                android:layout_gravity="fill"
-                android:layout_columnWeight="1"
-                android:gravity="center"
-                android:textSize="@dimen/sp_14"
-                android:text="项目" />
+                android:id="@+id/textView_dep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:paddingStart="@dimen/dp_8"
+                android:paddingEnd="@dimen/dp_8"
+                android:textColor="@color/common_blue"
+                android:textSize="@dimen/sp_20"
+                android:textStyle="bold"
+                tools:text="专柜：乐知味" />
 
             <TextView
-                android:id="@+id/cell_total_header"
-                android:layout_gravity="fill"
-                android:layout_columnWeight="1"
-                android:gravity="center"
+                android:id="@+id/textView_date_range"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginBottom="@dimen/dp_4"
+                android:background="@color/common_blue"
+                android:paddingStart="@dimen/dp_8"
+                android:paddingEnd="@dimen/dp_8"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
+                android:textColor="@color/common_white"
                 android:textSize="@dimen/sp_14"
-                android:text="金额" />
+                tools:text="选择日期：2019-11-13 ~ 2019-11-14" />
 
-            <TextView
-                android:id="@+id/cell_count_header"
-                android:layout_gravity="fill"
-                android:layout_columnWeight="1"
-                android:gravity="center"
-                android:textSize="@dimen/sp_14"
-                android:text="次数" />
+            <GridLayout
+                android:id="@+id/grid_report"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="3"
+                android:orientation="horizontal"
+                android:paddingStart="@dimen/dp_8"
+                android:paddingEnd="@dimen/dp_8">
 
-            <TextView
-                android:id="@+id/cell_sale_item"
-                android:layout_gravity="fill"
-                android:gravity="center"
-                android:textSize="@dimen/sp_14"
-                android:text="销售" />
+                <TextView
+                    android:id="@+id/cell_item_header"
+                    android:layout_columnWeight="1"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/view_blue_top_left_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="项目"
+                    android:textColor="@color/text_black_first"
+                    android:textSize="@dimen/sp_14"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/cell_sale_total"
-                android:layout_gravity="fill"
-                android:gravity="center"
-                android:textSize="@dimen/sp_14"
-                android:text="0" />
+                <TextView
+                    android:id="@+id/cell_total_header"
+                    android:layout_columnWeight="1"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/view_blue_top_mid_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="金额"
+                    android:textColor="@color/text_black_first"
+                    android:textSize="@dimen/sp_14"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/cell_sale_count"
-                android:layout_gravity="fill"
-                android:gravity="center"
-                android:textSize="@dimen/sp_14"
-                android:text="0" />
+                <TextView
+                    android:id="@+id/cell_count_header"
+                    android:layout_columnWeight="1"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/view_blue_top_right_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="次数"
+                    android:textColor="@color/text_black_first"
+                    android:textSize="@dimen/sp_14"
+                    android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/cell_rtn_item"
-                android:layout_gravity="fill"
-                android:gravity="center"
-                android:textSize="@dimen/sp_14"
-                android:text="退货" />
+                <TextView
+                    android:id="@+id/cell_sale_item"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/view_white_left_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="销售"
+                    android:textColor="@color/text_black_first"
+                    android:textSize="@dimen/sp_14" />
 
-            <TextView
-                android:id="@+id/cell_rtn_total"
-                android:layout_gravity="fill"
-                android:gravity="center"
-                android:textSize="@dimen/sp_14"
-                android:text="0" />
+                <TextView
+                    android:id="@+id/cell_sale_total"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/view_white_mid_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="0"
+                    android:textColor="@color/text_black_first"
+                    android:textSize="@dimen/sp_14" />
 
-            <TextView
-                android:id="@+id/cell_rtn_count"
-                android:layout_gravity="fill"
-                android:gravity="center"
-                android:textSize="@dimen/sp_14"
-                android:text="0" />
+                <TextView
+                    android:id="@+id/cell_sale_count"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/view_white_right_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="0"
+                    android:textColor="@color/text_black_first"
+                    android:textSize="@dimen/sp_14" />
 
-            <TextView
-                android:id="@+id/cell_sum_item"
-                android:layout_gravity="fill"
-                android:gravity="center"
-                android:textSize="@dimen/sp_14"
-                android:text="合计" />
+                <TextView
+                    android:id="@+id/cell_rtn_item"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/view_white_left_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="退货"
+                    android:textColor="@color/text_black_first"
+                    android:textSize="@dimen/sp_14" />
 
-            <TextView
-                android:id="@+id/cell_sum_total"
-                android:layout_gravity="fill"
-                android:gravity="center"
-                android:textSize="@dimen/sp_14"
-                android:text="0" />
+                <TextView
+                    android:id="@+id/cell_rtn_total"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/view_white_mid_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="0"
+                    android:textColor="@color/text_black_first"
+                    android:textSize="@dimen/sp_14" />
 
-            <TextView
-                android:id="@+id/cell_sum_count"
-                android:layout_gravity="fill"
-                android:gravity="center"
-                android:textSize="@dimen/sp_14"
-                android:text="0" />
+                <TextView
+                    android:id="@+id/cell_rtn_count"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/view_white_right_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="0"
+                    android:textColor="@color/text_black_first"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:id="@+id/cell_sum_item"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/view_blue_bottom_left_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="合计"
+                    android:textColor="@color/text_black_first"
+                    android:textSize="@dimen/sp_14"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/cell_sum_total"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/view_blue_bottom_mid_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="0"
+                    android:textColor="@color/text_black_first"
+                    android:textSize="@dimen/sp_14"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/cell_sum_count"
+                    android:layout_gravity="fill"
+                    android:background="@drawable/view_blue_bottom_right_line"
+                    android:gravity="center"
+                    android:text="0"
+                    android:textColor="@color/text_black_first"
+                    android:textSize="@dimen/sp_14"
+                    android:textStyle="bold" />
 
 
-        </GridLayout>
-    </LinearLayout>
-
-</android.support.constraint.ConstraintLayout>
+            </GridLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>

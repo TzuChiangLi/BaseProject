@@ -1,10 +1,13 @@
 package com.ftrend.zgp.view;
 
+import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.GridLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ConvertUtils;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.utils.ZgParams;
@@ -13,6 +16,9 @@ import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.pop.DateRangeInputCallback;
+import com.gyf.immersionbar.ImmersionBar;
+import com.hjq.bar.OnTitleBarListener;
+import com.hjq.bar.TitleBar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,10 +27,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import butterknife.BindColor;
+import butterknife.BindDrawable;
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class TradeReportActivity extends BaseActivity {
+public class TradeReportActivity extends BaseActivity implements OnTitleBarListener {
+    @BindView(R.id.trade_report_top_bar)
+    TitleBar mTitleBar;
     @BindView(R.id.textView_dep)
     TextView mDep;
     @BindView(R.id.textView_date_range)
@@ -43,6 +53,15 @@ public class TradeReportActivity extends BaseActivity {
     TextView mSumCount;
     @BindView(R.id.grid_report)
     GridLayout mGridReport;
+    @BindColor(R.color.text_black_first)
+    int textBlack;
+    @BindDrawable(R.drawable.view_white_bottom_left_line)
+    Drawable bgLeft;
+    @BindDrawable(R.drawable.view_white_bottom_mid_line)
+    Drawable bgMid;
+    @BindDrawable(R.drawable.view_white_bottom_right_line)
+    Drawable bgRight;
+
 
     /**
      * 起始日期
@@ -76,7 +95,9 @@ public class TradeReportActivity extends BaseActivity {
 
     @Override
     protected void initTitleBar() {
-
+        mTitleBar.setOnTitleBarListener(this);
+        ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white).autoDarkModeEnable(true).init();
+        mTitleBar.setRightIcon(ZgParams.isIsOnline() ? R.drawable.online : R.drawable.offline);
     }
 
     @OnClick(R.id.textView_date_range)
@@ -109,7 +130,7 @@ public class TradeReportActivity extends BaseActivity {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
         String beginDate = sdf.format(begin);
         String endDate = sdf.format(end);
-        String msg = String.format(Locale.CHINA, "日期：%s ~ %s", beginDate, endDate);
+        String msg = String.format(Locale.CHINA, "选择日期：%s ~ %s", beginDate, endDate);
         mDateRange.setText(msg);
         RestSubscribe.getInstance().queryTradeReport(ZgParams.getCurrentDep().getDepCode(),
                 beginDate, endDate,
@@ -152,12 +173,12 @@ public class TradeReportActivity extends BaseActivity {
             ReportData reportData = new ReportData(data);
             if (reportData.itemName.equals("T")) {
                 mSaleCount.setText(reportData.tradeCount.toString());
-                mSaleTotal.setText(reportData.tradeTotal.toString());
+                mSaleTotal.setText(String.format("%.2f", reportData.tradeTotal));
                 sumCount += reportData.tradeCount;
                 sumTotal += reportData.tradeTotal;
             } else if (reportData.itemName.equals("R")) {
                 mRtnCount.setText(reportData.tradeCount.toString());
-                mRtnTotal.setText(reportData.tradeTotal.toString());
+                mRtnTotal.setText(String.format("%.2f", reportData.tradeTotal));
                 sumCount += reportData.tradeCount;
                 sumTotal += reportData.tradeTotal;
             } else {
@@ -165,7 +186,7 @@ public class TradeReportActivity extends BaseActivity {
             }
         }
         mSumCount.setText(sumCount.toString());
-        mSumTotal.setText(sumTotal.toString());
+        mSumTotal.setText(String.format("%.2f", sumTotal));
         // 显示支付方式列表
         addPayRows(payList);
     }
@@ -176,28 +197,61 @@ public class TradeReportActivity extends BaseActivity {
      * @param payList
      */
     private void addPayRows(List<ReportData> payList) {
+        int i = 0;
         for (ReportData reportData : payList) {
-            addGridCell(reportData.itemName);
-            addGridCell(reportData.tradeTotal.toString());
-            addGridCell(reportData.tradeCount.toString());
+            if (i != payList.size() - 1) {
+                addLeftCell(reportData.itemName);
+                addMidCell(String.format("%.2f", reportData.tradeTotal));
+                addRightCell(String.format("%d", reportData.tradeCount));
+            } else {
+                addLeftCell(reportData.itemName);
+                addMidCell(String.format("%.2f", reportData.tradeTotal));
+                addRightCell(String.format("%d", reportData.tradeCount));
+            }
+            i++;
         }
     }
 
+
+    private void addLeftCell(String text) {
+         /*单元格样式
+            android:layout_gravity="fill"
+            android:gravity="center"
+            android:textSize="@dimen/sp_14"
+             */
+        TextView textView = new TextView(this);
+        textView.setText(text);
+        textView.setBackground(bgLeft);
+        //添加
+        addGridCell(textView);
+    }
+
+    private void addMidCell(String text) {
+        TextView textView = new TextView(this);
+        textView.setText(text);
+        textView.setBackground(bgMid);
+        //添加
+        addGridCell(textView);
+    }
+
+    private void addRightCell(String text) {
+        TextView textView = new TextView(this);
+        textView.setBackground(bgRight);
+        textView.setText(text);
+        //添加
+        addGridCell(textView);
+    }
+
+
     /**
      * 向表格中添加一个单元格
-     *
-     * @param text 单元格内容
      */
-    private void addGridCell(String text) {
-        TextView textView = new TextView(this);
-        /*单元格样式
-        android:layout_gravity="fill"
-        android:gravity="center"
-        android:textSize="@dimen/sp_14"
-         */
+    private void addGridCell(TextView textView) {
+        int padding = ConvertUtils.dp2px(8);
         textView.setGravity(Gravity.CENTER);
+        textView.setTextColor(textBlack);
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
-        textView.setText(text);
+        textView.setPadding(padding, padding, padding, padding);
         GridLayout.LayoutParams layoutParams = new GridLayout.LayoutParams();
         layoutParams.setGravity(Gravity.FILL);
         mGridReport.addView(textView, layoutParams);
@@ -209,6 +263,21 @@ public class TradeReportActivity extends BaseActivity {
     private void clearPayRows() {
         //保留前面4行3列
         mGridReport.removeViewsInLayout(12, mGridReport.getChildCount() - 12);
+    }
+
+    @Override
+    public void onLeftClick(View v) {
+        finish();
+    }
+
+    @Override
+    public void onTitleClick(View v) {
+
+    }
+
+    @Override
+    public void onRightClick(View v) {
+
     }
 
     /**
