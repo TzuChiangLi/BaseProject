@@ -10,7 +10,7 @@ import java.security.MessageDigest;
  * @author liuhongbin@ftrend.cn
  * @since 2019/9/3
  */
-public class EncryptUtill {
+public class EncryptUtil {
 
     /**
      * 字符串MD5加密
@@ -51,19 +51,6 @@ public class EncryptUtill {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    /**
-     * 磁卡卡号界面
-     *
-     * @param code
-     * @param pwd
-     * @return
-     */
-    public static String cardCodeDecrypt(String code, String pwd) {
-        String realPwd = pwdDecrypt(pwd);//密码是经过加密的
-        // TODO: 2019/10/25 return CardDecryptor.cardDecryStr(code, realPwd);
-        return code;
     }
 
     /**

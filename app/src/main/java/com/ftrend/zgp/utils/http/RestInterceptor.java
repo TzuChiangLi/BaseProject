@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.blankj.utilcode.util.StringUtils;
 import com.ftrend.zgp.utils.ZgParams;
-import com.ftrend.zgp.utils.common.EncryptUtill;
+import com.ftrend.zgp.utils.common.EncryptUtil;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -132,7 +132,7 @@ public class RestInterceptor implements Interceptor {
             return true;
         }
         final boolean[] failed = {false};
-        RestSubscribe.getInstance().clientLogin(ZgParams.getPosCode(), EncryptUtill.md5(ZgParams.getDevSn()),
+        RestSubscribe.getInstance().clientLogin(ZgParams.getPosCode(), EncryptUtil.md5(ZgParams.getDevSn()),
                 new RestCallback(new RestResultHandler() {
                     @Override
                     public void onSuccess(RestBodyMap body) {

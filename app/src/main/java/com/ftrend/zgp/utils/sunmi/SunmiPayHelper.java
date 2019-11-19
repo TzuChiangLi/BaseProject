@@ -8,7 +8,7 @@ import android.util.Log;
 import com.ftrend.zgp.App;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ByteUtil;
-import com.ftrend.zgp.utils.common.EncryptUtill;
+import com.ftrend.zgp.utils.common.EncryptUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.sunmi.pay.hardware.aidl.AidlConstants;
 import com.sunmi.pay.hardware.aidlv2.readcard.CheckCardCallbackV2;
@@ -418,7 +418,7 @@ public class SunmiPayHelper {
         res = m1ReadBlock(startBlockNo + 2, outData);
         if (res >= 0 && res <= 16) {
             String pwd = new String(outData, 0, 16).trim();
-            data.setVipPwd(EncryptUtill.pwdDecrypt(pwd).trim());
+            data.setVipPwd(EncryptUtil.pwdDecrypt(pwd).trim());
         }
         return data;
     }

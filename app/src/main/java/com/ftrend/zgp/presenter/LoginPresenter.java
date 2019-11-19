@@ -9,7 +9,7 @@ import com.ftrend.zgp.model.Dep_Table;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.model.User_Table;
 import com.ftrend.zgp.utils.ZgParams;
-import com.ftrend.zgp.utils.common.EncryptUtill;
+import com.ftrend.zgp.utils.common.EncryptUtil;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.List;
@@ -71,7 +71,7 @@ public class LoginPresenter implements LoginContract.LoginPresenter {
             User user = SQLite.select().from(User.class).where(User_Table.userCode.eq(userCode)).querySingle();
             Dep dep = SQLite.select().from(Dep.class).where(Dep_Table.depCode.eq(depCode)).querySingle();
             if (user != null) {
-                if (userPwd.equals(EncryptUtill.pwdDecrypt(user.getUserPwd()))) {
+                if (userPwd.equals(EncryptUtil.pwdDecrypt(user.getUserPwd()))) {
                     mView.loginSuccess(user, dep);
                     //保存静态变量
                     ZgParams.saveCurrentInfo(user, dep);
