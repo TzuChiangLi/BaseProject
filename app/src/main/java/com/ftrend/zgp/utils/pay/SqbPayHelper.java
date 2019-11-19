@@ -322,7 +322,7 @@ public class SqbPayHelper {
         } else {
             //其他状态码，当前版本SDK理论上不可能出现。这里生成提示信息，防止意外。
             isSuccess = false;
-            errMsg = "交易失败。请根据以下提示信息拨打客服电话:！\n"
+            errMsg = "交易失败。请根据以下提示信息拨打客服电话！\n"
                     + "\n状态码：" + orderStatus
                     + "\n错误码：" + result.getError_code()
                     + "\n错误消息：" + result.getError_message();
