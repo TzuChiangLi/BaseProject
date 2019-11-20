@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:lines="1"
-            android:text="@string/rtn_prod_tv_trade_time"
+            android:text="@string/rtn_trade_tv_trade_time"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10" />
 
@@ -68,14 +68,14 @@
             android:gravity="center_vertical"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10"
-            tools:text="@string/rtn_prod_replace_trade_time" />
+            tools:text="@string/rtn_trade_replace_trade_time" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center_vertical|end"
             android:lines="1"
-            android:text="@string/rtn_prod_tv_lsno"
+            android:text="@string/rtn_trade_tv_lsno"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10" />
 
@@ -88,7 +88,7 @@
             android:lines="1"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10"
-            tools:text="@string/rtn_prod_replace_trade_lsno" />
+            tools:text="@string/rtn_trade_replace_trade_lsno" />
 
         <TextView
             android:id="@+id/trd_qry_prod_tv_cahier_title"
@@ -97,7 +97,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:lines="1"
-            android:text="@string/rtn_prod_tv_cashier"
+            android:text="@string/rtn_trade_tv_cashier"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10" />
 
@@ -106,11 +106,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="@dimen/dp_24"
-            android:text="@string/rtn_prod_tv_cashier_empty"
+            android:text="@string/rtn_trade_tv_cashier_empty"
             android:textAlignment="textEnd"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10"
-            tools:text="@string/rtn_prod_replace_cashier" />
+            tools:text="@string/rtn_trade_replace_cashier" />
 
     </LinearLayout>
 
@@ -194,7 +194,7 @@
                 android:paddingTop="@dimen/dp_2"
                 android:textColor="@color/text_black_second"
                 android:textSize="@dimen/sp_10"
-                tools:text="@string/rtn_prod_replace_pay_type" />
+                tools:text="@string/rtn_trade_replace_pay_type" />
         </LinearLayout>
 
 
@@ -221,7 +221,7 @@
             android:layout_toEndOf="@+id/trd_qry_prod_tv_trade_total_title"
             android:textColor="@color/pay_tv_red"
             android:textSize="@dimen/sp_16"
-            tools:text="@string/rtn_prod_replace_total" />
+            tools:text="@string/rtn_trade_replace_total" />
 
 
         <Button

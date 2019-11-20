@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rtn_dialog_rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/vip_mobile_card_shape">
+
+    <TextView
+        android:id="@+id/rtn_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_16"
+        android:text="@string/rtn_prod_tv_add"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/rtn_dialog_img_hide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/rtn_dialog_title"
+        android:layout_alignBottom="@+id/rtn_dialog_title"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:scaleType="centerInside"
+        android:src="@drawable/close" />
+
+    <LinearLayout
+        android:id="@+id/rtn_dialog_ll_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rtn_dialog_title"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginEnd="@dimen/dp_8"
+        android:background="@drawable/shop_cart_edt_bg"
+        android:minHeight="@dimen/dp_28"
+        android:orientation="horizontal">
+
+        <com.ftrend.cleareditview.ClearEditText
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="@string/rtn_prod_tv_search"
+            android:paddingStart="@dimen/dp_12"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_12" />
+
+    </LinearLayout>
+
+</RelativeLayout>

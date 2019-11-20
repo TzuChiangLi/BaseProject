@@ -15,7 +15,6 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.HomePresenter;
-import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.common.CommonUtil;
@@ -27,7 +26,6 @@ import com.ftrend.zgp.utils.printer.PrintConfig;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.gyf.immersionbar.ImmersionBar;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -267,7 +265,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
 
     @Override
     public void goRtnProdActivity() {
-        Intent intent = new Intent(HomeActivity.this, RtnProdActivity.class);
+        Intent intent = new Intent(HomeActivity.this, RtnActivity.class);
         startActivity(intent);
     }
 

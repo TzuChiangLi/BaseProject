@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -33,56 +34,73 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.OnClick;
 
 /**
- * 退货
+ * 退货----包含按单退货和不按单退货
  *
  * @author liziqiang@ftrend.cn
  */
-public class RtnProdActivity extends BaseActivity implements OnTitleBarListener, RtnContract.RtnProdView {
-    @BindView(R.id.rtn_prod_top_bar)
+public class RtnActivity extends BaseActivity implements OnTitleBarListener, RtnContract.RtnProdView {
+    @BindView(R.id.rtn_top_bar)
     TitleBar mTitleBar;
     @BindView(R.id.rtn_top_bar_title)
     TextView mTitleTv;
-    @BindView(R.id.rtn_prod_rv)
+    @BindView(R.id.rtn_rv)
     RecyclerView mRecyclerView;
-    @BindView(R.id.rtn_prod_edt_trade)
+    @BindView(R.id.rtn_edt_trade)
     ClearEditText mEdt;
-    @BindView(R.id.rtn_prod_btn_search)
+    @BindView(R.id.rtn_btn_chg_mode)
+    Button mChgBtn;
+    @BindView(R.id.rtn_btn_search)
     Button mSearchBtn;
-    @BindView(R.id.rtn_prod_img_pay_type)
+    @BindView(R.id.rtn_img_pay_type)
     ImageView mPayTypeImg;
-    @BindView(R.id.rtn_prod_tv_pay_type)
+    @BindView(R.id.rtn_tv_pay_type)
     TextView mPayTypeTv;
-    @BindView(R.id.rtn_prod_rl_bottom)
-    RelativeLayout mBottomLayout;
-    @BindView(R.id.rtn_prod_tv_trade_time)
+    @BindView(R.id.rtn_rl_bottom_trade)
+    RelativeLayout mTradeLayout;
+    @BindView(R.id.rtn_rl_bottom_prod)
+    RelativeLayout mProdLayout;
+    @BindView(R.id.rtn_ll_mid)
+    LinearLayout mVipLayout;
+    @BindView(R.id.rtn_tv_trade_time)
     TextView mTradeTimeTv;
-    @BindView(R.id.rtn_prod_tv_trade_lsno)
+    @BindView(R.id.rtn_tv_trade_lsno)
     TextView mLsNoTv;
-    @BindView(R.id.rtn_prod_tv_cahier)
+    @BindView(R.id.rtn_tv_cahier)
     TextView mCashierTv;
-    @BindView(R.id.rtn_prod_tv_trade_total)
+    @BindView(R.id.rtn_tv_trade_total)
     TextView mTradeTotalTv;
-    @BindView(R.id.rtn_prod_tv_rtn_total)
+    @BindView(R.id.rtn_tv_rtn_total)
     TextView mRtnTotalTv;
+    @BindString(R.string.rtn_title_trade)
+    String tradeTitle;
+    @BindString(R.string.rtn_title_prod)
+    String prodTitle;
+    @BindString(R.string.rtn_trade_tv_search)
+    String tradeSearch;
+    @BindString(R.string.rtn_prod_tv_search)
+    String prodSearch;
     private int oldPosition = -1;
     private RtnContract.RtnProdPresenter mPresenter;
     private ShopAdapter<TradeProd> mProdAdapter;
+    //退货模式：true----按单退货  false----不按单退货
+    private boolean currentMode = true;
 
     @Override
     public void onNetWorkChange(boolean isOnline) {
         if (mTitleBar == null) {
-            mTitleBar = findViewById(R.id.rtn_prod_top_bar);
+            mTitleBar = findViewById(R.id.rtn_top_bar);
         }
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
     }
 
     @Override
     protected int getLayoutID() {
-        return R.layout.rtn_prod_activity;
+        return R.layout.rtn_activity;
     }
 
     @Override
@@ -125,7 +143,20 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
         }
     }
 
-    @OnClick(R.id.rtn_prod_btn_search)
+    @OnClick(R.id.rtn_btn_prod_add)
+    public void add() {
+        //TODO 2019年11月19日15:11:56 显示弹窗
+        MessageUtil.rtnProd();
+    }
+
+    @OnClick(R.id.rtn_btn_chg_mode)
+    public void changeRtnMode() {
+        KeyboardUtils.hideSoftInput(this);
+        currentMode = !currentMode;
+        mPresenter.changeRtnMode(currentMode);
+    }
+
+    @OnClick(R.id.rtn_btn_search)
     public void search() {
         if (ClickUtil.onceClick()) {
             return;
@@ -157,7 +188,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     public void showInputPanel(final int position) {
-        InputPanel.showPriceChange(RtnProdActivity.this, new MoneyInputCallback() {
+        InputPanel.showPriceChange(RtnActivity.this, new MoneyInputCallback() {
             @Override
             public void onOk(double value) {
                 mPresenter.changePrice(position, value);
@@ -251,19 +282,19 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     public void showTradeTotal(double tradeTotal) {
-        mBottomLayout.setVisibility(View.VISIBLE);
+        mTradeLayout.setVisibility(View.VISIBLE);
         mTradeTotalTv.setText(String.format("%.2f", tradeTotal));
     }
 
     @Override
     public void showRtnTotal(double rtnTotal) {
-        mBottomLayout.setVisibility(View.VISIBLE);
+        mTradeLayout.setVisibility(View.VISIBLE);
         mRtnTotalTv.setText(String.format("%.2f", rtnTotal));
     }
 
     @Override
     public void showPayTypeName(String payTypeName, int img) {
-        mBottomLayout.setVisibility(View.VISIBLE);
+        mTradeLayout.setVisibility(View.VISIBLE);
         mPayTypeTv.setText(payTypeName);
         mPayTypeImg.setImageResource(img);
     }
@@ -286,6 +317,27 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
     @Override
     public void showSuccess(String msg) {
         MessageUtil.showSuccess(msg);
+    }
+
+    @Override
+    public void changeToProd() {
+        //不按单退货
+        mChgBtn.setText("按单退货");
+        mTitleTv.setText(prodTitle);
+        mEdt.setHint(prodSearch);
+        mVipLayout.setVisibility(View.GONE);
+        mProdLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void changeToTrade() {
+        //按单退货
+        mChgBtn.setText("不按单退货");
+        mTitleTv.setText(tradeTitle);
+        mEdt.setHint(tradeSearch);
+        mVipLayout.setVisibility(View.VISIBLE);
+        mProdLayout.setVisibility(View.GONE);
+        KeyboardUtils.showSoftInput(this);
     }
 
     @Override

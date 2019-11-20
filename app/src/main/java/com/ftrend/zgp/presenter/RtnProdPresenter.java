@@ -184,6 +184,20 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
     }
 
     @Override
+    public void changeRtnMode(boolean crrMode) {
+        //清理信息残留
+        RtnHelper.clearAllData();
+        //切换
+        if (crrMode) {
+            //按单退货
+            mView.changeToTrade();
+        } else {
+            //不按单退货
+            mView.changeToProd();
+        }
+    }
+
+    @Override
     public void onDestory() {
         if (mView != null) {
             mView = null;

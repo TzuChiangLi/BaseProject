@@ -38,7 +38,6 @@ public class PriceDscDialog extends BottomPopupView
         implements View.OnClickListener, KeyboardView.OnItemClickListener, View.OnFocusChangeListener {
 
     //region 变量定义
-
     @BindView(R.id.vip_way_ll_info)
     LinearLayout mInfoLayout;
     @BindView(R.id.vip_way_edt)

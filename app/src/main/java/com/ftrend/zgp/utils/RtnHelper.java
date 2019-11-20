@@ -342,6 +342,7 @@ public class RtnHelper {
 
     /**
      * 当前流水是否现金支付
+     *
      * @return
      */
     public static boolean isPayCash() {

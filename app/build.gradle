@@ -107,7 +107,7 @@ dependencies {
     implementation 'com.qw:soulpermission:1.2.1'
     //弹窗库
     //https://github.com/li-xiaojun/XPopup
-    implementation 'com.lxj:xpopup:1.8.8'
+    implementation 'com.lxj:xpopup:1.8.10'
     //titleBar状态栏https://github.com/getActivity/TitleBar
     implementation 'com.hjq:titlebar:6.0'
     //BRVAH万能适配器

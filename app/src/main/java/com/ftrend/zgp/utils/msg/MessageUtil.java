@@ -4,8 +4,11 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.ConvertUtils;
+import com.blankj.utilcode.util.ScreenUtils;
 import com.ftrend.toast.XToast;
 import com.ftrend.zgp.R;
+import com.ftrend.zgp.utils.pop.RtnProdDialog;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
 
@@ -15,7 +18,6 @@ import java.util.Locale;
  * @author liziqiang@ftrend.cn
  */
 public class MessageUtil {
-
 
 //-------------------------------------模态弹窗-----------------------------------------//
 
@@ -304,9 +306,11 @@ public class MessageUtil {
         waitDialog = null;
     }
 
-    //endregion
-
-
+    /**
+     * 加载中圆圈对话框
+     *
+     * @param message 文本
+     */
     public static void waitCircleProgress(String message) {
         Context context = ActivityUtils.getTopActivity();
         DialogBuilder builder = new DialogBuilder(context, 0);
@@ -318,6 +322,21 @@ public class MessageUtil {
                 .asCustom(builder)
                 .show();
     }
+
+    /**
+     * 退货选择
+     */
+    public static void rtnProd() {
+        Context context = ActivityUtils.getTopActivity();
+        new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
+                .hasShadowBg(true)
+                .asCustom(new RtnProdDialog(context))
+                .show();
+    }
+
+
+    //endregion
 
 
 //-------------------------------------吐司工具-----------------------------------------//
@@ -422,4 +441,6 @@ public class MessageUtil {
         }
         return String.format(Locale.CHINA, "%s - %s", code, msg);
     }
+
+
 }
