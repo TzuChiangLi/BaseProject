@@ -3,6 +3,8 @@ package com.ftrend.zgp.presenter;
 import android.text.TextUtils;
 
 import com.ftrend.zgp.api.RtnContract;
+import com.ftrend.zgp.model.DepProduct;
+import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.OperateCallback;
@@ -14,16 +16,21 @@ import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.sunmi.VipCardData;
 import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
+import com.raizlabs.android.dbflow.sql.language.OperatorGroup;
+import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.sunmi.pay.hardware.aidl.AidlConstants;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -39,6 +46,86 @@ public class RtnProdPresenter implements RtnContract.RtnProdPresenter {
 
     public static RtnProdPresenter createPresenter(RtnContract.RtnProdView mView) {
         return new RtnProdPresenter(mView);
+    }
+
+    @Override
+    public void showRtnProdDialog() {
+        RtnHelper.initSale();
+        List<DepProduct> mProdList = SQLite.select().from(DepProduct.class)
+                .where(DepProduct_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
+                //3-注销；2-暂停销售
+                .and(DepProduct_Table.prodStatus.notIn("2", "3"))
+                //季节销售商品
+                .and(OperatorGroup.clause(DepProduct_Table.season.eq("0000"))
+                        .or(DepProduct_Table.season.like(ShopCartPresenter.makeSeanFilter())))
+                .queryList();
+        for (DepProduct product : mProdList) {
+            product.setSelect(false);
+        }
+        mView.showRtnProdDialog(mProdList);
+    }
+
+    @Override
+    public void initProdList() {
+        mView.initProdList(RtnHelper.getRtnProdList());
+    }
+
+    @Override
+    public void updateProdList() {
+        mView.updateProdList(RtnHelper.getRtnProdList());
+    }
+
+    @Override
+    public void searchProdList(String key) {
+        List<TradeProd> prodList = RtnHelper.getRtnProdList();
+        if (!TextUtils.isEmpty(key)) {
+            List<TradeProd> filterList = new ArrayList<>();
+            if (!prodList.isEmpty()) {
+                //筛选ProdCode、BarCode以及ProdName
+                for (TradeProd prod : prodList) {
+                    if (!TextUtils.isEmpty(prod.getProdCode())) {
+                        if (prod.getProdCode().contains(key)) {
+                            filterList.add(prod);
+                            continue;
+                        }
+                    }
+                    if (!TextUtils.isEmpty(prod.getProdName())) {
+                        if (prod.getProdName().contains(key)) {
+                            filterList.add(prod);
+                            continue;
+                        }
+                    }
+                    if (!TextUtils.isEmpty(prod.getBarCode())) {
+                        if (prod.getBarCode().contains(key)) {
+                            filterList.add(prod);
+                        }
+                    }
+                }
+                mView.searchProdList(filterList);
+            }
+        } else {
+            mView.searchProdList(prodList);
+        }
+    }
+
+    @Override
+    public boolean addRtnProd(DepProduct depProduct) {
+        if (RtnHelper.addProduct(depProduct) == -1) {
+            LogUtil.e("向数据库添加商品失败");
+            return false;
+        } else {
+            return true;
+//            updateTradeInfo();
+        }
+    }
+
+    @Override
+    public String getRtnProdAmount() {
+        if (RtnHelper.getRtnProdAmount() == 0) {
+            return String.format("选好了");
+        } else {
+            return String.format("选好了(%.1f)", RtnHelper.getRtnProdAmount()).replace(".0", "");
+        }
     }
 
     @Override

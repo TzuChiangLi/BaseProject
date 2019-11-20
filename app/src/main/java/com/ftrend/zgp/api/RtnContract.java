@@ -1,6 +1,7 @@
 package com.ftrend.zgp.api;
 
 import com.ftrend.zgp.base.BaseView;
+import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.TradeProd;
 
 import java.util.List;
@@ -12,12 +13,43 @@ import java.util.List;
 public interface RtnContract {
     interface RtnProdPresenter {
         /**
+         * 初始化退货信息，显示不按单退货弹窗
+         */
+        void showRtnProdDialog();
+
+        /**
+         * 不按单退货初始化列表
+         */
+        void initProdList();
+
+        /**
+         * 不按单退货刷新界面列表
+         */
+        void updateProdList();
+
+        /**
+         * 筛选商品
+         */
+        void searchProdList(String key);
+
+        /**
+         * 不按单退货添加退货商品
+         *
+         * @param prod 商品
+         */
+        boolean addRtnProd(DepProduct prod);
+
+        /**
+         * @return 退货总件数
+         */
+        String getRtnProdAmount();
+
+        /**
          * 获取流水
          *
          * @param lsNo 流水号
          */
         void getTradeByLsNo(String lsNo);
-
 
         /**
          * 更新信息
@@ -60,6 +92,29 @@ public interface RtnContract {
     }
 
     interface RtnProdView extends BaseView<RtnContract.RtnProdPresenter> {
+        /**
+         * 显示弹窗
+         */
+        void showRtnProdDialog(List<DepProduct> mProdList);
+
+        /**
+         * 不按单退货
+         *
+         * @param prodList 刷新商品列表
+         */
+        void updateProdList(List<TradeProd> prodList);
+
+        /**
+         * 不按单退货
+         *
+         * @param prodList 初始化商品列表
+         */
+        void initProdList(List<TradeProd> prodList);
+
+        /**
+         * @param prodList 筛选后的商品
+         */
+        void searchProdList(List<TradeProd> prodList);
         /**
          * 结束当前界面
          */
