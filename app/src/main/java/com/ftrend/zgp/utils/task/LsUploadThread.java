@@ -14,6 +14,7 @@ import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.TradeUploadQueue_Table;
 import com.ftrend.zgp.model.Trade_Table;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
@@ -72,9 +73,10 @@ public class LsUploadThread extends Thread {
                 TradePay pay = SQLite.select().from(TradePay.class)
                         .where(TradePay_Table.lsNo.eq(lsNo))
                         .querySingle();
-                // 如果流水号无效（流水信息不存在），直接从队列删除
-                if (trade == null || prodList.size() == 0 || pay == null) {
-                    Log.e(TAG, "流水号无效（流水信息不存在），直接从队列删除：" + lsNo);
+                // 如果流水号无效（流水数据不存在或不完整），直接从队列删除
+                if (trade == null || !trade.getStatus().equals(TradeHelper.TRADE_STATUS_PAID)
+                        || prodList.size() == 0 || pay == null) {
+                    Log.e(TAG, "流水号无效（流水数据不存在或不完整），直接从队列删除：" + lsNo);
                     queue.delete();
                     continue;
                 }
