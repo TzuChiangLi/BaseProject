@@ -1,7 +1,6 @@
 package com.ftrend.zgp.view;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -107,14 +106,9 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.R
 
     @Override
     public void registerSuccess() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(RegisterActivity.this, InitActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        }, 1500);
+        Intent intent = new Intent(RegisterActivity.this, InitActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     /**
