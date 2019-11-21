@@ -46,7 +46,8 @@
         <activity android:name=".view.TradeProdActivity" />
         <activity android:name=".view.TradeQueryActivity" />
         <activity android:name=".view.TradeReportActivity" />
-        <activity android:name=".view.RtnActivity" />
+        <activity android:name=".view.RtnTradeActivity" />
+        <activity android:name=".view.RtnProdActivity" />
         <activity android:name=".view.OrderOutActivity" />
         <activity android:name=".view.HandoverActivity" />
         <activity android:name=".view.RegisterActivity" />

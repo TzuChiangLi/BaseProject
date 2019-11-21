@@ -2,7 +2,7 @@ package com.ftrend.zgp.presenter;
 
 import android.text.TextUtils;
 
-import com.ftrend.zgp.api.RtnProdContract;
+import com.ftrend.zgp.api.RtnTradeContract;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.Trade;
@@ -36,74 +36,18 @@ import java.util.Map;
 /**
  * @author liziqiang@ftrend.cn
  */
-public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
-    private RtnProdContract.RtnProdView mView;
+public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
+    private RtnTradeContract.RtnTradeView mView;
 
-    private RtnProdPresenter(RtnProdContract.RtnProdView mView) {
+    private RtnTradePresenter(RtnTradeContract.RtnTradeView mView) {
         this.mView = mView;
     }
 
-    public static RtnProdPresenter createPresenter(RtnProdContract.RtnProdView mView) {
-        return new RtnProdPresenter(mView);
-    }
-
-    @Override
-    public void showRtnProdDialog() {
-        RtnHelper.initSale();
-        List<DepProduct> mProdList = SQLite.select().from(DepProduct.class)
-                .where(DepProduct_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
-                //3-注销；2-暂停销售
-                .and(DepProduct_Table.prodStatus.notIn("2", "3"))
-                //季节销售商品
-                .and(OperatorGroup.clause(DepProduct_Table.season.eq("0000"))
-                        .or(DepProduct_Table.season.like(ShopCartPresenter.makeSeanFilter())))
-                .queryList();
-        for (DepProduct product : mProdList) {
-            product.setSelect(false);
-        }
-        mView.showRtnProdDialog(mProdList);
-    }
-
-    @Override
-    public void initProdList() {
-        mView.initProdList(RtnHelper.getRtnProdList());
-    }
-
-    @Override
-    public void delRtnProd(int index) {
-        RtnHelper.delProduct(index);
-        mView.delTradeProd(index);
-        updateTradeInfo();
+    public static RtnTradePresenter createPresenter(RtnTradeContract.RtnTradeView mView) {
+        return new RtnTradePresenter(mView);
     }
 
 
-    @Override
-    public List<DepProduct> searchDepProdList(String key, List<DepProduct> depProdList) {
-        if (!depProdList.isEmpty()) {
-            return RtnHelper.searchDepProdList(key, depProdList);
-        }
-        return null;
-    }
-
-    @Override
-    public boolean addRtnProd(DepProduct depProduct) {
-        if (RtnHelper.addProduct(depProduct) == -1) {
-            LogUtil.e("向数据库添加商品失败");
-            return false;
-        } else {
-            return true;
-//            updateTradeInfo();
-        }
-    }
-
-    @Override
-    public String getRtnProdAmount() {
-        if (RtnHelper.getRtnProdAmount() == 0) {
-            return String.format("选好了");
-        } else {
-            return String.format("选好了(%.1f)", RtnHelper.getRtnProdAmount()).replace(".0", "");
-        }
-    }
 
     @Override
     public void getTradeByLsNo(final String lsNo) {
@@ -123,6 +67,11 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
                     return;
                 }
                 String appPayType = RtnHelper.getPay().getAppPayType();
+                mView.existTrade(RtnHelper.getProdList());
+                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()),
+                        TradeHelper.payTypeImgRes(appPayType));
+                mView.showTradeInfo(formatTradeTime(), RtnHelper.getTrade().getFullLsNo(),
+                        TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
                 updateTradeInfo();
             } else {
                 //本地无此流水，开始联网查询
@@ -142,6 +91,11 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
                             //有此流水
                             if (RtnHelper.initRtnOnline()) {
                                 String appPayType = RtnHelper.getPay().getAppPayType();
+                                mView.existTrade(RtnHelper.getProdList());
+                                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()),
+                                        TradeHelper.payTypeImgRes(appPayType));
+                                mView.showTradeInfo(formatTradeTime(), lsNo,
+                                        TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
                                 updateTradeInfo();
                             } else {
                                 mView.showError("退货流水初始化失败");
@@ -163,6 +117,8 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
 
     @Override
     public void updateTradeInfo() {
+        //获取销售流水金额
+        mView.showTradeTotal(RtnHelper.getTrade().getTotal());
         //获取退货流水金额
         mView.showRtnTotal(RtnHelper.getRtnTrade().getTotal());
     }
@@ -208,7 +164,7 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
 
     @Override
     public void changePrice(int index, double price) {
-        TradeProd prod = RtnHelper.getRtnProdList().get(index);
+        TradeProd prod = RtnHelper.getProdList().get(index);
         if (price > (prod.getTotal() / prod.getAmount())) {
             mView.showError("退货单价不能大于原销售单价");
             return;
@@ -217,7 +173,7 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
             mView.showError("退货单价应大于0");
             return;
         }
-        if (RtnHelper.changeRtnProdPrice(index, price)) {
+        if (RtnHelper.changeRtnTradePrice(index, price)) {
             mView.updateTradeProd(index);
             updateTradeInfo();
         } else {
@@ -228,12 +184,11 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
     @Override
     public void changeAmount(int index, double changeAmount) {
         //仅修改临时数据，不修改数据库内数据
-        if (RtnHelper.changeRtnProdAmount(index, changeAmount)) {
-            //更新列表界面
-            mView.updateTradeProd(index);
-            //更新底部信息
-            updateTradeInfo();
-        }
+        RtnHelper.changeRtnTradeAmount(index, changeAmount);
+        //更新列表界面
+        mView.updateTradeProd(index);
+        //更新底部信息
+        updateTradeInfo();
     }
 
 

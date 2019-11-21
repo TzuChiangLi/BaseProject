@@ -3,15 +3,11 @@ package com.ftrend.zgp.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -22,19 +18,16 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.ShopAdapter;
-import com.ftrend.zgp.api.RtnContract;
+import com.ftrend.zgp.api.RtnTradeContract;
 import com.ftrend.zgp.base.BaseActivity;
-import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.TradeProd;
-import com.ftrend.zgp.presenter.RtnProdPresenter;
+import com.ftrend.zgp.presenter.RtnTradePresenter;
 import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
-import com.ftrend.zgp.utils.pop.RtnProdDialog;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
@@ -55,7 +48,7 @@ import butterknife.OnClick;
  *
  * @author liziqiang@ftrend.cn
  */
-public class RtnActivity extends BaseActivity implements OnTitleBarListener, RtnContract.RtnProdView {
+public class RtnTradeActivity extends BaseActivity implements OnTitleBarListener, RtnTradeContract.RtnTradeView {
     @BindView(R.id.rtn_top_bar)
     TitleBar mTitleBar;
     @BindView(R.id.rtn_top_bar_title)
@@ -97,7 +90,7 @@ public class RtnActivity extends BaseActivity implements OnTitleBarListener, Rtn
     @BindString(R.string.rtn_prod_tv_search)
     String prodSearch;
     private int oldPosition = -1;
-    private RtnContract.RtnProdPresenter mPresenter;
+    private RtnTradeContract.RtnTradePresenter mPresenter;
     private ShopAdapter<TradeProd> mProdAdapter;
     //退货模式：true----按单退货  false----不按单退货
     private boolean currentMode = true;
@@ -113,7 +106,7 @@ public class RtnActivity extends BaseActivity implements OnTitleBarListener, Rtn
 
     @Override
     protected int getLayoutID() {
-        return R.layout.rtn_activity;
+        return R.layout.rtn_trade_activity;
     }
 
     @Override
@@ -124,7 +117,7 @@ public class RtnActivity extends BaseActivity implements OnTitleBarListener, Rtn
     @Override
     protected void initView() {
         if (mPresenter == null) {
-            mPresenter = RtnProdPresenter.createPresenter(this);
+            mPresenter = RtnTradePresenter.createPresenter(this);
         }
     }
 
@@ -149,7 +142,7 @@ public class RtnActivity extends BaseActivity implements OnTitleBarListener, Rtn
     }
 
     @Override
-    public void setPresenter(RtnContract.RtnProdPresenter presenter) {
+    public void setPresenter(RtnTradeContract.RtnTradePresenter presenter) {
         if (presenter != null) {
             mPresenter = presenter;
         }
@@ -166,8 +159,6 @@ public class RtnActivity extends BaseActivity implements OnTitleBarListener, Rtn
                 HashMap hashMap = (HashMap) it.next();
                 //此处传入扫码结果
                 scanResult(String.valueOf(hashMap.get("VALUE")));
-//                Log.i("----sunmi", String.valueOf(hashMap.get("TYPE")));//这个是扫码的类型
-//                Log.i("----sunmi", String.valueOf(hashMap.get("VALUE")));//这个是扫码的结果
             }
         }
     }
@@ -178,31 +169,29 @@ public class RtnActivity extends BaseActivity implements OnTitleBarListener, Rtn
         }
     }
 
-    @OnClick(R.id.rtn_btn_prod_add)
-    public void add() {
-        mPresenter.showRtnProdDialog();
-    }
-
     @OnClick(R.id.rtn_btn_chg_mode)
     public void changeRtnMode() {
         KeyboardUtils.hideSoftInput(this);
-        if (mRecyclerView.getAdapter() != null && mRecyclerView.getAdapter().getItemCount() != 0) {
-            MessageUtil.question("切换退货方式将失去当前数据，是否切换？", new MessageUtil.MessageBoxYesNoListener() {
-                @Override
-                public void onYes() {
-                    currentMode = !currentMode;
-                    mPresenter.changeRtnMode(currentMode);
-                }
-
-                @Override
-                public void onNo() {
-
-                }
-            });
-        } else {
-            currentMode = !currentMode;
-            mPresenter.changeRtnMode(currentMode);
-        }
+        Intent intent = new Intent(RtnTradeActivity.this, RtnProdActivity.class);
+        startActivity(intent);
+        finish();
+//        if (mRecyclerView.getAdapter() != null && mRecyclerView.getAdapter().getItemCount() != 0) {
+//            MessageUtil.question("切换退货方式将失去当前数据，是否切换？", new MessageUtil.MessageBoxYesNoListener() {
+//                @Override
+//                public void onYes() {
+//                    currentMode = !currentMode;
+//                    mPresenter.changeRtnMode(currentMode);
+//                }
+//
+//                @Override
+//                public void onNo() {
+//
+//                }
+//            });
+//        } else {
+//            currentMode = !currentMode;
+//            mPresenter.changeRtnMode(currentMode);
+//        }
     }
 
     @OnClick(R.id.rtn_btn_search)
@@ -235,88 +224,10 @@ public class RtnActivity extends BaseActivity implements OnTitleBarListener, Rtn
         finish();
     }
 
-    @Override
-    public void showRtnProdDialog(final List<DepProduct> mProdList) {
-        MessageUtil.rtnProd(new RtnProdDialog.onDialogCallBack() {
-            @Override
-            public void onStart(Button btn) {
-                btn.setText(mPresenter.getRtnProdAmount());
-            }
-
-            @Override
-            public void onLoadProd(RecyclerView recyclerView, ShopAdapter<DepProduct> adapter, final Button btn) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(RtnActivity.this));
-                adapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item_normal, mProdList, 7);
-                recyclerView.addItemDecoration(new DividerItemDecoration(RtnActivity.this, DividerItemDecoration.VERTICAL));
-                recyclerView.setAdapter(adapter);
-                adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                        //添加到购物车中
-                        if (mPresenter.addRtnProd(mProdList.get(position))) {
-                            adapter.notifyItemChanged(position);
-                            btn.setText(mPresenter.getRtnProdAmount());
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onScanClick() {
-                try {
-                    Intent intent = new Intent("com.summi.scan");
-                    intent.setPackage("com.sunmi.sunmiqrcodescanner");
-                    startActivityForResult(intent, START_SCAN);
-                } catch (Exception e) {
-                    MessageUtil.showError("本设备不支持扫码");
-                }
-            }
-
-            @Override
-            public void onClose() {
-                //已经自带关闭弹窗，这里只需要加入除关闭之外的操作
-                LogUtil.d("----hide");
-                //需要刷新界面
-                if (mProdAdapter != null) {
-                    mPresenter.initProdList();
-                } else {
-                    mPresenter.updateProdList();
-                }
-            }
-
-            @Override
-            public void onSearch(ShopAdapter<DepProduct> mAdapter) {
-                LogUtil.d("----Search");
-                //需要过滤商品
-            }
-        });
-    }
-
-    @Override
-    public void updateProdList(List<TradeProd> prodList) {
-        //刷新不按单退货的界面
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(RtnActivity.this));
-        mProdAdapter = new ShopAdapter<>(R.layout.shop_list_rv_product_item, prodList, 6);
-        mRecyclerView.setAdapter(mProdAdapter);
-    }
-
-    @Override
-    public void initProdList(List<TradeProd> prodList) {
-        mProdAdapter.setNewData(prodList);
-        mProdAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void searchProdList(List<TradeProd> prodList) {
-        if (mProdAdapter != null) {
-            mProdAdapter.setNewData(prodList);
-            mProdAdapter.notifyDataSetChanged();
-        }
-    }
 
     @Override
     public void showInputPanel(final int position) {
-        InputPanel.showPriceChange(RtnActivity.this, new MoneyInputCallback() {
+        InputPanel.showPriceChange(RtnTradeActivity.this, new MoneyInputCallback() {
             @Override
             public void onOk(double value) {
                 mPresenter.changePrice(position, value);
@@ -446,55 +357,6 @@ public class RtnActivity extends BaseActivity implements OnTitleBarListener, Rtn
         MessageUtil.showSuccess(msg);
     }
 
-    @Override
-    public void changeToProd() {
-        //不按单退货
-        mChgBtn.setText("按单退货");
-        mTitleTv.setText(prodTitle);
-        mEdt.setHint(prodSearch);
-        mEdt.setText("");
-        mVipLayout.setVisibility(View.GONE);
-        mProdLayout.setVisibility(View.VISIBLE);
-        mEdt.addTextChangedListener(watcher);
-        mSearchBtn.setVisibility(View.GONE);
-        if (mProdAdapter != null) {
-            mProdAdapter.setNewData(null);
-        }
-    }
-
-    @Override
-    public void changeToTrade() {
-        //按单退货
-        mChgBtn.setText("不按单退货");
-        mTitleTv.setText(tradeTitle);
-        mEdt.setHint(tradeSearch);
-        mEdt.setText("");
-        mVipLayout.setVisibility(View.VISIBLE);
-        mProdLayout.setVisibility(View.GONE);
-        KeyboardUtils.showSoftInput(this);
-        mEdt.removeTextChangedListener(watcher);
-        mSearchBtn.setVisibility(View.VISIBLE);
-        if (mProdAdapter != null) {
-            mProdAdapter.setNewData(null);
-        }
-    }
-
-    TextWatcher watcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            mPresenter.searchProdList(mEdt.getText().toString());
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) {
-
-        }
-    };
 
     @Override
     protected void onDestroy() {

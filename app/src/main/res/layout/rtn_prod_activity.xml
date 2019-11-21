@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_gray_bg"
+    tools:context=".view.RtnTradeActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/rtn_prod_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        app:leftIcon="@drawable/back"
+        app:lineColor="@color/common_blue"
+        app:lineSize="1px"
+        app:rightIcon="@drawable/online">
+
+        <TextView
+            android:id="@+id/rtn_prod_top_bar_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:letterSpacing="0.05"
+            android:text="@string/rtn_title_prod"
+            android:textColor="@color/common_blue"
+            android:textSize="@dimen/sp_16"
+            android:textStyle="bold" />
+
+    </com.hjq.bar.TitleBar>
+
+    <ImageView
+        android:id="@+id/rtn_prod_title_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rtn_prod_top_bar"
+        android:background="@color/common_white"
+        android:scaleType="centerInside"
+        android:src="@drawable/title_bar_bottom" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rtn_prod_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rtn_prod_title_line"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginBottom="@dimen/dp_48"
+        tools:listitem="@layout/rtn_list_rv_product_item" />
+
+
+    <RelativeLayout
+        android:id="@+id/rtn_prod_rl_bottom_prod"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_48"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_white"
+        android:paddingEnd="@dimen/dp_0"
+        android:visibility="visible">
+
+        <Button
+            android:id="@+id/rtn_prod_btn_prod_add"
+            android:layout_width="@dimen/dp_80"
+            android:layout_height="match_parent"
+            android:background="@drawable/shop_btn_blue_selector"
+            android:stateListAnimator="@null"
+            android:text="@string/rtn_prod_btn_add"
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/sp_13" />
+
+        <Button
+            android:id="@+id/rtn_prod_btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@+id/rtn_prod_btn_prod_rtn"
+            android:background="@drawable/shop_btn_gray_selector"
+            android:text="@string/rtn_prod_btn_back" />
+
+        <Button
+            android:id="@+id/rtn_prod_btn_prod_rtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/shop_btn_red_selector"
+            android:stateListAnimator="@null"
+            android:text="@string/rtn_btn_enter"
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/sp_13" />
+
+    </RelativeLayout>
+</RelativeLayout>

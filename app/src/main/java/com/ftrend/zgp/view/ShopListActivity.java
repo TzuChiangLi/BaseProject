@@ -367,7 +367,6 @@ public class ShopListActivity extends BaseActivity implements ShopListContract.S
     @Override
     public void updateTradeProd(int index) {
         mProdAdapter.notifyItemChanged(index);
-        mPresenter.updateTradeInfo();
     }
 
     @Override

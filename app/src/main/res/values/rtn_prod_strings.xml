@@ -24,8 +24,10 @@
     <string name="rtn_trade_replace_trade_time">2019/11/1/ 15:47</string>
     <string name="rtn_trade_replace_trade_lsno">20191031901123456</string>
 
+    <string name="rtn_prod_btn_back">返回</string>
     <string name="rtn_prod_btn_add">添加商品</string>
     <string name="rtn_prod_tv_add">选择退货商品</string>
     <string name="rtn_prod_tv_search">请输入商品码、条码或者商品名称</string>
     <string name="rtn_prod_tv_add_finish">选好了</string>
+
 </resources>

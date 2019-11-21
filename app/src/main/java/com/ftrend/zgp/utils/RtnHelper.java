@@ -237,6 +237,20 @@ public class RtnHelper {
         return (trade != null) && (rtnTrade != null);
     }
 
+
+    /**
+     * 行清
+     *
+     * @param index 行清的商品索引
+     * @return 是否成功
+     */
+    public static boolean delProduct(final int index) {
+        int size = rtnProdList.size();
+        rtnProdList.remove(index);
+        return size > rtnProdList.size();
+    }
+
+
     /**
      * 添加商品到商品列表
      *
@@ -310,13 +324,32 @@ public class RtnHelper {
     }
 
     /**
+     * 不按单退货改价
+     *
+     * @param index       索引
+     * @param changePrice 价格
+     * @return 是否成功
+     */
+    public static boolean changeRtnProdPrice(int index, double changePrice) {
+        if (index < 0 || index >= rtnProdList.size()) {
+            Log.e(TAG, "改变价格: 索引无效");
+            return false;
+        }
+        TradeProd prod = rtnProdList.get(index);
+        prod.setPrice(changePrice);
+        return prod.getPrice() == changePrice;
+    }
+
+    /**
+     * 按单退货改价
+     *
      * @param index       索引
      * @param changePrice 改价
      * @return 是否成功
      */
-    public static boolean changeRtnPrice(int index, double changePrice) {
+    public static boolean changeRtnTradePrice(int index, double changePrice) {
         if (index < 0 || index >= prodList.size()) {
-            Log.e(TAG, "改变数量: 索引无效");
+            Log.e(TAG, "改变价格: 索引无效");
             return false;
         }
         TradeProd prod = prodList.get(index);
@@ -346,10 +379,12 @@ public class RtnHelper {
     }
 
     /**
+     * 按单退货改数量
+     *
      * @param index        索引
      * @param changeAmount 改变数量
      */
-    public static void rtnChangeAmount(int index, double changeAmount) {
+    public static void changeRtnTradeAmount(int index, double changeAmount) {
         if (index < 0 || index >= prodList.size()) {
             Log.e(TAG, "改变数量: 索引无效");
             return;
@@ -438,6 +473,26 @@ public class RtnHelper {
         }
         //统一更新交易流水
         recalcRtnTrade();
+    }
+
+    /**
+     * 不按单退货改数量
+     *
+     * @param index        索引
+     * @param changeAmount 改变数量
+     */
+    public static boolean changeRtnProdAmount(int index, double changeAmount) {
+        if (index < 0 || index >= rtnProdList.size()) {
+            Log.e(TAG, "改变数量: 索引无效");
+            return false;
+        }
+        TradeProd prod = rtnProdList.get(index);
+        double amount = prod.getAmount();
+        if (amount + changeAmount < 0) {
+            return false;
+        }
+        prod.setAmount(amount + changeAmount);
+        return true;
     }
 
     /**
@@ -745,6 +800,78 @@ public class RtnHelper {
                     .count();
         }
     }
+
+    /**
+     * @param key 关键词
+     * @return 筛选商品
+     */
+    public static List<TradeProd> searchRtnProdList(String key) {
+        if (!TextUtils.isEmpty(key)) {
+            List<TradeProd> filterList = new ArrayList<>();
+            if (!rtnProdList.isEmpty()) {
+                //筛选ProdCode、BarCode以及ProdName
+                for (TradeProd prod : rtnProdList) {
+                    if (!TextUtils.isEmpty(prod.getProdCode())) {
+                        if (prod.getProdCode().contains(key)) {
+                            filterList.add(prod);
+                            continue;
+                        }
+                    }
+                    if (!TextUtils.isEmpty(prod.getProdName())) {
+                        if (prod.getProdName().contains(key)) {
+                            filterList.add(prod);
+                            continue;
+                        }
+                    }
+                    if (!TextUtils.isEmpty(prod.getBarCode())) {
+                        if (prod.getBarCode().contains(key)) {
+                            filterList.add(prod);
+                        }
+                    }
+                }
+            }
+            return filterList;
+        } else {
+            return rtnProdList;
+        }
+    }
+
+    /**
+     * @param key          关键词
+     * @param depProdtList 当前商城商品名单
+     * @return 筛选商品
+     */
+    public static List<DepProduct> searchDepProdList(String key, List<DepProduct> depProdtList) {
+        if (!TextUtils.isEmpty(key)) {
+            List<DepProduct> filterList = new ArrayList<>();
+            if (!depProdtList.isEmpty()) {
+                //筛选ProdCode、BarCode以及ProdName
+                for (DepProduct prod : depProdtList) {
+                    if (!TextUtils.isEmpty(prod.getProdCode())) {
+                        if (prod.getProdCode().contains(key)) {
+                            filterList.add(prod);
+                            continue;
+                        }
+                    }
+                    if (!TextUtils.isEmpty(prod.getProdName())) {
+                        if (prod.getProdName().contains(key)) {
+                            filterList.add(prod);
+                            continue;
+                        }
+                    }
+                    if (!TextUtils.isEmpty(prod.getBarCode())) {
+                        if (prod.getBarCode().contains(key)) {
+                            filterList.add(prod);
+                        }
+                    }
+                }
+            }
+            return filterList;
+        } else {
+            return depProdtList;
+        }
+    }
+
 
     /**
      * 清空所有临时数据

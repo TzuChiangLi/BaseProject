@@ -157,15 +157,14 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                             String.format("(-%d", Math.round(100 * ((((TradeProd) item).getManuDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getTranDsc()) / ((TradeProd) item).getAmount()) / ((TradeProd) item).getPrice())), "%)"));
                     helper.setBackgroundColor(R.id.shop_list_rv_product_rl, ((TradeProd) item).isSelect() ? rv_item_selected : rv_item_normal);
                     helper.setGone(R.id.shop_list_rv_ll_btn, ((TradeProd) item).isSelect() ? true : false);
+                    helper.setGone(R.id.shop_list_rv_btn_discount, false);
                     helper.addOnClickListener(R.id.shop_list_rv_img_add);
                     helper.addOnClickListener(R.id.shop_list_rv_img_minus);
                     helper.addOnClickListener(R.id.shop_list_rv_btn_change_price);
-                    helper.addOnClickListener(R.id.shop_list_rv_btn_discount);
                     helper.addOnClickListener(R.id.shop_list_rv_btn_del);
                 }
                 break;
             case 7:
-                //选择商品界面右部商品分栏
                 helper.setText(R.id.shop_rv_product_tv_prodcode, ((DepProduct) item).getProdCode());
                 helper.setText(R.id.shop_rv_product_tv_prodname, ((DepProduct) item).getProdName());
                 helper.setText(R.id.shop_rv_product_price, String.format("%.2f", ((DepProduct) item).getPrice()));
