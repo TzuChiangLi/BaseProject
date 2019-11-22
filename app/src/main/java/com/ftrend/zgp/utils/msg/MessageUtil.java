@@ -4,8 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.blankj.utilcode.util.ActivityUtils;
-import com.blankj.utilcode.util.ConvertUtils;
-import com.blankj.utilcode.util.ScreenUtils;
 import com.ftrend.toast.XToast;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.utils.pop.RtnProdDialog;
@@ -326,12 +324,13 @@ public class MessageUtil {
     /**
      * 退货选择
      */
-    public static void rtnProd() {
+    public static void rtnProd(RtnProdDialog.onDialogCallBack callBack) {
         Context context = ActivityUtils.getTopActivity();
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
                 .hasShadowBg(true)
-                .asCustom(new RtnProdDialog(context))
+                .moveUpToKeyboard(false)
+                .asCustom(new RtnProdDialog(context, callBack))
                 .show();
     }
 

@@ -197,7 +197,7 @@ public class ShopCartActivity extends BaseActivity implements ShopCartContract.S
             mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item_normal, prodList, 1);
             mProdRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         } else {
-            mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item_round, prodList, 1);
+                mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item_round, prodList, 1);
         }
         mProdRecyclerView.setAdapter(mProdAdapter);
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -285,6 +285,7 @@ public class ShopCartActivity extends BaseActivity implements ShopCartContract.S
         oldProdIndex = index;
         mProdAdapter.getData().get(index).setSelect(true);
         mProdAdapter.notifyItemChanged(index);
+        MessageUtil.show("添加成功");
     }
 
     @Override

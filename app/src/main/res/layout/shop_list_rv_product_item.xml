@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/dp_2"
-    android:layout_marginEnd="@dimen/dp_2"
+    android:layout_marginStart="@dimen/dp_6"
+    android:layout_marginEnd="@dimen/dp_6"
     android:layout_marginBottom="@dimen/dp_6"
     app:cardCornerRadius="@dimen/dp_4"
     app:cardElevation="@dimen/dp_0">
@@ -243,7 +243,8 @@
             android:layout_marginTop="@dimen/dp_8"
             android:layout_marginEnd="@dimen/dp_8"
             android:layout_marginBottom="@dimen/dp_4"
-            android:visibility="gone">
+            android:visibility="gone"
+            tools:visibility="visible">
 
             <TextView
                 android:id="@+id/shop_list_rv_btn_change_price"

@@ -1,6 +1,7 @@
 package com.ftrend.zgp.utils.printer;
 
 import com.ftrend.zgp.model.Trade;
+import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 
@@ -51,9 +52,9 @@ public class PrintFormat {
     private static String ChinaRegEx = "[\u4e00-\u9fa5]";
 
     /**
-     * @return 生成打印数据
+     * @return 生成销售流水打印数据
      */
-    public static List<PrintData> printFormat() {
+    public static List<PrintData> printSale() {
         List<PrintData> printDataList = new ArrayList<>();
         PrintData printData;
         Trade trade = TradeHelper.getTrade();
@@ -109,6 +110,80 @@ public class PrintFormat {
         printData = new PrintData();
         printData.setAlign(ALIGN_LEFT);
         printData.setPrintData(mergeString("原价总计：", String.format("￥%.2f", TradeHelper.getTradePrice()), 32));
+        printDataList.add(printData);
+        //优惠总计
+        printData = new PrintData();
+        printData.setAlign(ALIGN_LEFT);
+        printData.setPrintData(mergeString("优惠总计：", String.format("￥-%.2f", trade.getDscTotal()), 32));
+        printDataList.add(printData);
+        //合计金额
+        printData = new PrintData();
+        printData.setAlign(ALIGN_LEFT);
+        printData.setPrintData(mergeString("合计金额：", String.format("￥%.2f", trade.getTotal()), 32));
+        printDataList.add(printData);
+        //分割线
+        printDataList.add(newLine());
+        return printDataList;
+    }
+    /**
+     * @return 不按单退货生成退货流水打印数据
+     */
+    public static List<PrintData> printRtn() {
+        List<PrintData> printDataList = new ArrayList<>();
+        PrintData printData;
+        Trade trade = RtnHelper.getRtnTrade();
+        //分割线
+        printDataList.add(newLine());
+        //柜台名
+        printData = new PrintData();
+        printData.setBold(true);
+        printData.setFontSize(36);
+        printData.setAlign(ALIGN_LEFT);
+        printData.setPrintData(ZgParams.getCurrentDep().getDepName());
+        printDataList.add(printData);
+        //流水号
+        printData = new PrintData();
+        printData.setInitStyle(true);
+        printData.setAlign(ALIGN_LEFT);
+        printData.setPrintData(mergeString("流水号:",
+                trade.getLsNo().length() > 8 ? trade.getLsNo() : String.format("%s%s", new SimpleDateFormat("yyyyMMdd").format(trade.getTradeTime()), trade.getLsNo()), 32));
+        printDataList.add(printData);
+        //交易时间
+        printData = new PrintData();
+        printData.setInitStyle(true);
+        printData.setAlign(ALIGN_LEFT);
+        printData.setPrintData(mergeString("交易时间:", new SimpleDateFormat("yyyy/MM/dd/HH:mm:ss").format(trade.getTradeTime()), 32));
+        printDataList.add(printData);
+        //分割线
+        printDataList.add(newLine());
+        //商品明细标题
+        //商品        数量    小计
+        printData = new PrintData();
+        printData.setInitStyle(true);
+        printData.setPrintData(mergeTitle("商品", "数量", "小计", 32));
+//        printData.setPrintData("商品--------------数量------小计");
+        printDataList.add(printData);
+        //分割线
+        printDataList.add(newLine());
+        //商品明细列表
+        //商品名      数量     小计
+        //健力宝      ×10   100.00
+        printData = new PrintData();
+        printData.setInitStyle(true);
+        printData.setTypeList(true);
+        printData.setProdList(RtnHelper.getRtnProdList());
+        printDataList.add(printData);
+        //分割线
+        printDataList.add(newLine());
+        //支付方式
+        printData = new PrintData();
+        printData.setAlign(ALIGN_LEFT);
+        printData.setPrintData(mergeString("支付方式：", TradeHelper.convertAppPayType(RtnHelper.getRtnPay().getAppPayType(), trade.getDepCode()), 32));
+        printDataList.add(printData);
+        //商品原价
+        printData = new PrintData();
+        printData.setAlign(ALIGN_LEFT);
+        printData.setPrintData(mergeString("原价总计：", String.format("￥%.2f", RtnHelper.getRtnTradePrice()), 32));
         printDataList.add(printData);
         //优惠总计
         printData = new PrintData();

@@ -1,7 +1,9 @@
 package com.ftrend.zgp.utils;
 
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.SqbPayOrder;
 import com.ftrend.zgp.model.SqbPayOrder_Table;
 import com.ftrend.zgp.model.Trade;
@@ -13,6 +15,7 @@ import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.Method;
@@ -90,6 +93,37 @@ public class RtnHelper {
 
     public static void setPay(TradePay pay) {
         RtnHelper.pay = pay;
+    }
+
+    /**
+     * 初始化当前操作的交易流水，读取未结销售流水，不存在则创建新的流水
+     *
+     * @return 数据库内是否有次流水
+     */
+    public static boolean initSale() {
+        if (rtnTrade == null) {
+            rtnTrade = new Trade();
+            rtnTrade.setDepCode(ZgParams.getCurrentDep().getDepCode());
+            rtnTrade.setLsNo(newLsNo());
+            rtnTrade.setTradeTime(null);
+            rtnTrade.setTradeFlag(TRADE_FLAG_REFUND);
+            rtnTrade.setCashier(ZgParams.getCurrentUser().getUserCode());
+            rtnTrade.setDscTotal(0);
+            rtnTrade.setTotal(0);
+            rtnTrade.setCustType("0");
+            rtnTrade.setVipCode("");
+            rtnTrade.setCardCode("");
+            rtnTrade.setVipTotal(0);
+            rtnTrade.setCreateTime(new Date());
+            rtnTrade.setCreateIp(ZgParams.getCurrentIp());
+            rtnTrade.setStatus(TradeHelper.TRADE_STATUS_NOTPAY);
+
+            rtnProdList = new ArrayList<>();
+            rtnPay = null;
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -194,14 +228,93 @@ public class RtnHelper {
         return (trade != null) && (rtnTrade != null);
     }
 
+
     /**
+     * 行清
+     *
+     * @param index 行清的商品索引
+     * @return 是否成功
+     */
+    public static boolean delProduct(final int index) {
+        int size = rtnProdList.size();
+        rtnProdList.remove(index);
+        return size > rtnProdList.size();
+    }
+
+
+    /**
+     * @param product 商品
+     * @return 是否成功
+     */
+    public static boolean addProduct(DepProduct product) {
+        long index = rtnProdList.size();
+        TradeProd prod = new TradeProd();
+        prod.setLsNo(rtnTrade.getLsNo());
+        prod.setSortNo(index + 1);//商品序号从1开始
+        prod.setProdCode(product.getProdCode());
+        prod.setProdName(product.getProdName());
+        prod.setBarCode(product.getBarCode());
+        prod.setDepCode(product.getDepCode());
+        prod.setPrice(product.getPrice());
+        prod.setProdForDsc(product.getForDsc());
+        prod.setProdPriceFlag(product.getPriceFlag());
+        prod.setProdIsLargess(product.getIsLargess());
+        prod.setProdMinPrice(product.getMinimumPrice());
+        prod.setAmount(1);
+        prod.setSingleDsc(0);
+        prod.setWholeDsc(0);
+        prod.setVipDsc(0);
+        prod.setTranDsc(0);
+        prod.setVipDsc(0);
+        prod.setSaleInfo("");
+        prod.setDelFlag("0");
+        rtnProdList.add(prod);
+        if (recalcTotal()) {
+            return index < rtnProdList.size();
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * 重新汇总流水金额：优惠、合计
+     */
+    public static boolean recalcTotal() {
+        double total = 0;
+        for (TradeProd prod : rtnProdList) {
+            total += prod.getTotal();
+        }
+        rtnTrade.setTotal(total);
+        return total == rtnTrade.getTotal();
+    }
+
+    /**
+     * 不按单退货改价
+     *
+     * @param index       索引
+     * @param changePrice 价格
+     * @return 是否成功
+     */
+    public static boolean changeRtnProdPrice(int index, double changePrice) {
+        if (index < 0 || index >= rtnProdList.size()) {
+            Log.e(TAG, "改变价格: 索引无效");
+            return false;
+        }
+        TradeProd prod = rtnProdList.get(index);
+        prod.setPrice(changePrice);
+        return prod.getPrice() == changePrice;
+    }
+
+    /**
+     * 按单退货改价
+     *
      * @param index       索引
      * @param changePrice 改价
      * @return 是否成功
      */
-    public static boolean changeRtnPrice(int index, double changePrice) {
+    public static boolean changeRtnTradePrice(int index, double changePrice) {
         if (index < 0 || index >= prodList.size()) {
-            Log.e(TAG, "改变数量: 索引无效");
+            Log.e(TAG, "改变价格: 索引无效");
             return false;
         }
         TradeProd prod = prodList.get(index);
@@ -231,10 +344,12 @@ public class RtnHelper {
     }
 
     /**
+     * 按单退货改数量
+     *
      * @param index        索引
      * @param changeAmount 改变数量
      */
-    public static void rtnChangeAmount(int index, double changeAmount) {
+    public static void changeRtnTradeAmount(int index, double changeAmount) {
         if (index < 0 || index >= prodList.size()) {
             Log.e(TAG, "改变数量: 索引无效");
             return;
@@ -323,6 +438,26 @@ public class RtnHelper {
         }
         //统一更新交易流水
         recalcRtnTrade();
+    }
+
+    /**
+     * 不按单退货改数量
+     *
+     * @param index        索引
+     * @param changeAmount 改变数量
+     */
+    public static boolean changeRtnProdAmount(int index, double changeAmount) {
+        if (index < 0 || index >= rtnProdList.size()) {
+            Log.e(TAG, "改变数量: 索引无效");
+            return false;
+        }
+        TradeProd prod = rtnProdList.get(index);
+        double amount = prod.getAmount();
+        if (amount + changeAmount < 0) {
+            return false;
+        }
+        prod.setAmount(amount + changeAmount);
+        return true;
     }
 
     /**
@@ -456,6 +591,20 @@ public class RtnHelper {
     }
 
     /**
+     * @return 退货商品金额
+     */
+    public static double getRtnTotal() {
+        if (rtnProdList == null || rtnProdList.isEmpty()) {
+            return 0;
+        }
+        double total = 0;
+        for (TradeProd prod : rtnProdList) {
+            total += prod.getPrice() * prod.getAmount();
+        }
+        return total;
+    }
+
+    /**
      * 完成支付（仅适用于现金支付）
      *
      * @param appPayType APP支付类型
@@ -463,10 +612,12 @@ public class RtnHelper {
      * @return
      */
     public static boolean pay(String appPayType, double value) {
+        LogUtil.d("----实付金额：" + value + "/订单金额：" + rtnTrade.getTotal());
         if (value > 0) {
             if (value < rtnTrade.getTotal()) {
                 return false;
             } else {
+                //自动找零
                 return pay(appPayType, value, value - rtnTrade.getTotal(), "(无)");
             }
         } else {
@@ -564,6 +715,127 @@ public class RtnHelper {
         return sn;
     }
 
+
+    /**
+     * @return 不按单退货商品件数
+     */
+    public static double getRtnProdAmount() {
+        double amount = 0;
+        if (rtnProdList == null) {
+            return amount;
+        }
+        for (TradeProd prod : rtnProdList) {
+            amount += prod.getAmount();
+        }
+        return amount;
+    }
+
+    /**
+     * 选择商品界面：获取每个商品的件数
+     *
+     * @param prodCode 商品码
+     * @param barCode  条码（可能为null）
+     * @return 数量
+     */
+    public static long getProdCount(String prodCode, String barCode) {
+        long count = 0;
+        if (TextUtils.isEmpty(barCode)) {
+            for (TradeProd prod : rtnProdList) {
+                if (prod.getProdCode().equals(prodCode)) {
+                    count++;
+                }
+            }
+        } else {
+            for (TradeProd prod : rtnProdList) {
+                if (prod.getBarCode().equals(barCode)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    /**
+     * @param key 关键词
+     * @return 筛选商品
+     */
+    public static List<TradeProd> searchRtnProdList(String key) {
+        if (!TextUtils.isEmpty(key)) {
+            List<TradeProd> filterList = new ArrayList<>();
+            if (!rtnProdList.isEmpty()) {
+                //筛选ProdCode、BarCode以及ProdName
+                for (TradeProd prod : rtnProdList) {
+                    if (!TextUtils.isEmpty(prod.getProdCode())) {
+                        if (prod.getProdCode().contains(key)) {
+                            filterList.add(prod);
+                            continue;
+                        }
+                    }
+                    if (!TextUtils.isEmpty(prod.getProdName())) {
+                        if (prod.getProdName().contains(key)) {
+                            filterList.add(prod);
+                            continue;
+                        }
+                    }
+                    if (!TextUtils.isEmpty(prod.getBarCode())) {
+                        if (prod.getBarCode().contains(key)) {
+                            filterList.add(prod);
+                        }
+                    }
+                }
+            }
+            return filterList;
+        } else {
+            return rtnProdList;
+        }
+    }
+
+    /**
+     * @param key          关键词
+     * @param depProdtList 当前商城商品名单
+     * @return 筛选商品
+     */
+    public static List<DepProduct> searchDepProdList(String key, List<DepProduct> depProdtList) {
+        if (!TextUtils.isEmpty(key)) {
+            List<DepProduct> filterList = new ArrayList<>();
+            if (!depProdtList.isEmpty()) {
+                //筛选ProdCode、BarCode以及ProdName
+                for (DepProduct prod : depProdtList) {
+                    if (!TextUtils.isEmpty(prod.getProdCode())) {
+                        if (prod.getProdCode().contains(key)) {
+                            filterList.add(prod);
+                            continue;
+                        }
+                    }
+                    if (!TextUtils.isEmpty(prod.getProdName())) {
+                        if (prod.getProdName().contains(key)) {
+                            filterList.add(prod);
+                            continue;
+                        }
+                    }
+                    if (!TextUtils.isEmpty(prod.getBarCode())) {
+                        if (prod.getBarCode().contains(key)) {
+                            filterList.add(prod);
+                        }
+                    }
+                }
+            }
+            return filterList;
+        } else {
+            return depProdtList;
+        }
+    }
+
+    /**
+     * @return 获取商品原价
+     */
+    public static double getRtnTradePrice() {
+        double price = 0;
+        for (TradeProd prod : rtnProdList) {
+            price += prod.getPrice() * prod.getAmount();
+        }
+        return price;
+    }
 
     /**
      * 清空所有临时数据

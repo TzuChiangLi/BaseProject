@@ -179,13 +179,9 @@ public class ShopListPresenter implements ShopListContract.ShopListPresenter {
      */
     @Override
     public void delTradeProd(int index) {
-        if (UserRightsHelper.hasRights(UserRightsHelper.CANCEL_PROD)) {
-            TradeHelper.delProduct(index);
-            mView.delTradeProd(index);
-            updateTradeInfo();
-        } else {
-            mView.showError("无行清权限");
-        }
+        TradeHelper.delProduct(index);
+        mView.delTradeProd(index);
+        updateTradeInfo();
     }
 
     @Override

@@ -51,7 +51,7 @@ public class ShopCartPresenter implements ShopCartContract.ShopCartPresenter {
      *
      * @return
      */
-    private String makeSeanFilter() {
+    public static String makeSeanFilter() {
         int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
         if (month <= 3) {
             return "1___";

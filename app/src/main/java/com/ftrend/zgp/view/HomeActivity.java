@@ -265,7 +265,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
 
     @Override
     public void goRtnProdActivity() {
-        Intent intent = new Intent(HomeActivity.this, RtnActivity.class);
+        Intent intent = new Intent(HomeActivity.this, RtnTradeActivity.class);
         startActivity(intent);
     }
 

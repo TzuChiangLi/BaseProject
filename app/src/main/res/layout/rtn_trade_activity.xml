@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/common_gray_bg"
-    tools:context=".view.RtnActivity">
+    tools:context=".view.RtnTradeActivity">
 
     <com.hjq.bar.TitleBar
         android:id="@+id/rtn_top_bar"
@@ -39,10 +39,10 @@
         android:scaleType="centerInside"
         android:src="@drawable/title_bar_bottom" />
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/rtn_ll_top"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_36"
+        android:layout_height="@dimen/dp_42"
         android:layout_below="@+id/rtn_title_line"
         android:background="@color/common_white"
         android:orientation="horizontal"
@@ -51,51 +51,60 @@
         android:paddingEnd="@dimen/dp_8"
         android:paddingBottom="@dimen/dp_6">
 
-        <Button
-            android:id="@+id/rtn_btn_chg_mode"
-            android:layout_width="@dimen/dp_0"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/rtn_btn_top_red_selector"
-            android:gravity="center"
-            android:lines="1"
-            android:paddingStart="@dimen/dp_2"
-            android:paddingEnd="@dimen/dp_2"
-            android:text="@string/rtn_btn_chg_prod"
-            android:textColor="@color/common_white"
-            android:textSize="@dimen/sp_11" />
+            android:background="@drawable/shop_cart_edt_bg"
+            android:orientation="horizontal">
 
-        <com.ftrend.cleareditview.ClearEditText
-            android:id="@+id/rtn_edt_trade"
-            android:layout_width="@dimen/dp_0"
-            android:layout_height="match_parent"
-            android:layout_weight="3"
-            android:background="@drawable/rtn_edt_top_bottom_line"
-            android:gravity="center_vertical|start"
-            android:hint="@string/rtn_trade_tv_search"
-            android:inputType="number"
-            android:maxLines="1"
-            android:paddingStart="@dimen/dp_4"
-            android:paddingTop="@dimen/dp_4"
-            android:paddingEnd="@dimen/dp_0"
-            android:paddingBottom="@dimen/dp_4"
-            android:textColor="@color/text_black_second"
-            android:textSize="@dimen/sp_11" />
+            <TextView
+                android:id="@+id/rtn_btn_chg_mode"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/rtn_btn_top_red_selector"
+                android:gravity="center"
+                android:lines="1"
+                android:maxWidth="@dimen/dp_40"
+                android:paddingStart="@dimen/dp_2"
+                android:paddingEnd="@dimen/dp_2"
+                android:text="@string/rtn_btn_chg_prod"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/sp_11" />
 
-        <Button
-            android:id="@+id/rtn_btn_search"
-            android:layout_width="@dimen/dp_0"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/rtn_btn_top_blue_selector"
-            android:gravity="center"
-            android:paddingTop="@dimen/dp_4"
-            android:paddingBottom="@dimen/dp_4"
-            android:text="@string/rtn_trade_btn_search"
-            android:textColor="@color/common_white"
-            android:textSize="@dimen/sp_11" />
+            <com.ftrend.cleareditview.ClearEditText
+                android:id="@+id/rtn_edt_trade"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="4"
+                android:background="@android:color/transparent"
+                android:gravity="center_vertical|start"
+                android:hint="@string/rtn_trade_tv_search"
+                android:inputType="number"
+                android:maxLines="1"
+                android:paddingStart="@dimen/dp_12"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingEnd="@dimen/dp_0"
+                android:paddingBottom="@dimen/dp_4"
+                android:textColor="@color/text_black_second"
+                android:textSize="@dimen/sp_11" />
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/rtn_btn_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/rtn_btn_top_blue_selector"
+                android:gravity="center"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
+                android:text="@string/rtn_trade_btn_search"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/sp_11" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/rtn_ll_mid"
@@ -185,10 +194,11 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_48"
         android:layout_alignParentBottom="true"
-        android:visibility="gone"
         android:background="@color/common_white"
         android:paddingStart="@dimen/dp_8"
-        android:paddingEnd="@dimen/dp_0">
+        android:paddingEnd="@dimen/dp_0"
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <LinearLayout
             android:id="@+id/rtn_ll_pay_type"
@@ -290,35 +300,4 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/rtn_rl_bottom_prod"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_48"
-        android:layout_alignParentBottom="true"
-        android:background="@color/common_white"
-        android:paddingEnd="@dimen/dp_0"
-        android:visibility="visible">
-
-        <Button
-            android:id="@+id/rtn_btn_prod_add"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@drawable/shop_btn_blue_selector"
-            android:stateListAnimator="@null"
-            android:text="@string/rtn_prod_btn_add"
-            android:textColor="@color/common_white"
-            android:textSize="@dimen/sp_13" />
-
-        <Button
-            android:id="@+id/rtn_btn_prod_rtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/shop_btn_red_selector"
-            android:stateListAnimator="@null"
-            android:text="@string/rtn_btn_enter"
-            android:textColor="@color/common_white"
-            android:textSize="@dimen/sp_13" />
-
-    </RelativeLayout>
 </RelativeLayout>

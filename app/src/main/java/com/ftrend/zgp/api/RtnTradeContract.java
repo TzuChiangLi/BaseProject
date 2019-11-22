@@ -1,6 +1,7 @@
 package com.ftrend.zgp.api;
 
 import com.ftrend.zgp.base.BaseView;
+import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.TradeProd;
 
 import java.util.List;
@@ -9,15 +10,15 @@ import java.util.List;
  * @author liziqiang@ftrend.cn
  */
 
-public interface RtnContract {
-    interface RtnProdPresenter {
+public interface RtnTradeContract {
+    interface RtnTradePresenter {
+
         /**
          * 获取流水
          *
          * @param lsNo 流水号
          */
         void getTradeByLsNo(String lsNo);
-
 
         /**
          * 更新信息
@@ -46,12 +47,6 @@ public interface RtnContract {
          */
         void changeAmount(int index, double changeAmount);
 
-        /**
-         * 切换退货模式，如果当前模式有数据，那么切换时清除
-         *
-         * @param crrMode 退货模式
-         */
-        void changeRtnMode(boolean crrMode);
 
         /**
          * 销毁，防止泄露
@@ -59,7 +54,7 @@ public interface RtnContract {
         void onDestory();
     }
 
-    interface RtnProdView extends BaseView<RtnContract.RtnProdPresenter> {
+    interface RtnTradeView extends BaseView<RtnTradeContract.RtnTradePresenter> {
         /**
          * 结束当前界面
          */
@@ -129,14 +124,5 @@ public interface RtnContract {
          */
         void showSuccess(String msg);
 
-        /**
-         * 切换到不按单退货
-         */
-        void changeToProd();
-
-        /**
-         * 切换到按单退货
-         */
-        void changeToTrade();
     }
 }
