@@ -24,6 +24,7 @@ import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.RtnProdPresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
@@ -52,6 +53,8 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
     TitleBar mTitleBar;
     @BindView(R.id.rtn_prod_top_bar_title)
     TextView mTitleTv;
+    @BindView(R.id.rtn_prod_tv_total)
+    TextView mTotalTv;
     @BindView(R.id.rtn_prod_rv)
     RecyclerView mRecyclerView;
     @BindView(R.id.rtn_prod_rl_bottom_prod)
@@ -76,14 +79,17 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     protected void initData() {
+        mPresenter.updateTradeInfo();
         if (mProdAdapter == null) {
             //刷新不按单退货的界面
             mProdAdapter = new ShopAdapter<>(R.layout.shop_list_rv_product_item, null, 6);
-            ((SimpleItemAnimator) (Objects.requireNonNull(mRecyclerView.getItemAnimator()))).setSupportsChangeAnimations(false);
+            ((SimpleItemAnimator) (Objects.requireNonNull(mRecyclerView.getItemAnimator())))
+                    .setSupportsChangeAnimations(false);
         }
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mProdAdapter);
-        mProdAdapter.setEmptyView(getLayoutInflater().inflate(R.layout.rv_item_empty, (ViewGroup) mRecyclerView.getParent(), false));
+        mProdAdapter.setEmptyView(getLayoutInflater().inflate(R.layout.rv_item_empty,
+                (ViewGroup) mRecyclerView.getParent(), false));
     }
 
     @Override
@@ -95,7 +101,8 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     protected void initTitleBar() {
-        ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white).autoDarkModeEnable(true).init();
+        ImmersionBar.with(this).fitsSystemWindows(true).statusBarColor(R.color.common_white)
+                .autoDarkModeEnable(true).init();
         mTitleBar.setRightIcon(ZgParams.isIsOnline() ? R.drawable.online : R.drawable.offline);
         mTitleBar.setOnTitleBarListener(this);
     }
@@ -141,6 +148,21 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
         }
     }
 
+    @OnClick(R.id.rtn_prod_btn_prod_rtn)
+    public void pay() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
+        if (!mProdAdapter.getData().isEmpty()) {
+            Intent intent = new Intent(RtnProdActivity.this, PayActivity.class);
+            intent.putExtra("isSale", false);
+            startActivity(intent);
+        } else {
+            MessageUtil.showError("当前无退货商品");
+        }
+
+    }
+
     @OnClick(R.id.rtn_prod_btn_prod_add)
     public void add() {
         if (ClickUtil.onceClick()) {
@@ -159,6 +181,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     public void showRtnProdDialog(final List<DepProduct> mProdList) {
+        LogUtil.d("----depList.size:" + mProdList.size());
         //不按单退货添加退货商品
         MessageUtil.rtnProd(new RtnProdDialog.onDialogCallBack() {
             @Override
@@ -167,17 +190,17 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
             }
 
             @Override
-            public void onLoadProd(RecyclerView recyclerView, ShopAdapter<DepProduct> adapter, final Button btn) {
+            public void onLoad(RecyclerView recyclerView, final ShopAdapter<DepProduct> mAdapter, final Button btn) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(RtnProdActivity.this));
-                adapter.setNewData(mProdList);
+                mAdapter.setNewData(mProdList);
                 recyclerView.addItemDecoration(new DividerItemDecoration(RtnProdActivity.this, DividerItemDecoration.VERTICAL));
-                recyclerView.setAdapter(adapter);
-                adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                recyclerView.setAdapter(mAdapter);
+                mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                         //添加到购物车中
                         if (mPresenter.addRtnProd(mProdList.get(position))) {
-                            adapter.notifyItemChanged(position);
+                            mAdapter.notifyItemChanged(position);
                             btn.setText(mPresenter.getRtnProdAmount());
                         }
                     }
@@ -185,7 +208,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
             }
 
             @Override
-            public void onScanClick() {
+            public void onScan() {
                 try {
                     Intent intent = new Intent("com.summi.scan");
                     intent.setPackage("com.sunmi.sunmiqrcodescanner");
@@ -199,7 +222,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
             public void onClose() {
                 //需要刷新界面，已经自带关闭弹窗，这里只需要加入除关闭之外的操作
                 if (mProdAdapter != null) {
-                    mPresenter.initProdList();
+                    mPresenter.updateRtnProdList();
                 }
             }
 
@@ -227,11 +250,9 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
                 }
                 switch (view.getId()) {
                     case R.id.shop_list_rv_img_add:
-                        //商品数量+1
                         mPresenter.changeAmount(position, 1);
                         break;
                     case R.id.shop_list_rv_img_minus:
-                        //改变数量-1
                         mPresenter.changeAmount(position, -1);
                         break;
                     case R.id.shop_list_rv_btn_change_price:
@@ -248,7 +269,6 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
                             public void onNo() {
                             }
                         });
-
                         break;
                     default:
                         break;
@@ -271,7 +291,6 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
                 mRecyclerView.smoothScrollToPosition(position);
             }
         });
-        mProdAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -336,6 +355,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     public void showRtnTotal(double rtnTotal) {
+        mTotalTv.setText(String.format(Locale.CHINA, "%.2f", rtnTotal).replace("-", ""));
     }
 
 

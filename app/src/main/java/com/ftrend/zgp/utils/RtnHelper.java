@@ -15,6 +15,7 @@ import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.Method;
@@ -25,16 +26,13 @@ import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import static com.ftrend.zgp.utils.TradeHelper.DELFLAG_NO;
 import static com.ftrend.zgp.utils.TradeHelper.TRADE_FLAG_REFUND;
 import static com.ftrend.zgp.utils.TradeHelper.TRADE_STATUS_PAID;
 import static com.ftrend.zgp.utils.TradeHelper.newLsNo;
-import static com.raizlabs.android.dbflow.sql.language.Method.count;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -108,7 +106,7 @@ public class RtnHelper {
             rtnTrade.setDepCode(ZgParams.getCurrentDep().getDepCode());
             rtnTrade.setLsNo(newLsNo());
             rtnTrade.setTradeTime(null);
-            rtnTrade.setTradeFlag(TRADE_FLAG_SALE);
+            rtnTrade.setTradeFlag(TRADE_FLAG_REFUND);
             rtnTrade.setCashier(ZgParams.getCurrentUser().getUserCode());
             rtnTrade.setDscTotal(0);
             rtnTrade.setTotal(0);
@@ -124,13 +122,6 @@ public class RtnHelper {
             rtnPay = null;
             return false;
         } else {
-            rtnProdList = SQLite.select().from(TradeProd.class)
-                    .where(TradeProd_Table.lsNo.eq(rtnTrade.getLsNo()))
-                    .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
-                    .queryList();
-            rtnPay = SQLite.select().from(TradePay.class)
-                    .where(TradePay_Table.lsNo.eq(rtnTrade.getLsNo()))
-                    .querySingle();
             return true;
         }
     }
@@ -252,26 +243,12 @@ public class RtnHelper {
 
 
     /**
-     * 添加商品到商品列表
-     *
-     * @param product 商品信息
-     * @return
+     * @param product 商品
+     * @return 是否成功
      */
-    public static long addProduct(final DepProduct product) {
-        final long[] index = {-1};
-        TransHelper.transSync(new TransHelper.TransRunner() {
-            @Override
-            public boolean execute(DatabaseWrapper databaseWrapper) {
-                index[0] = doAddProduct(databaseWrapper, product);
-                return index[0] >= 0;
-            }
-        });
-        return index[0];
-    }
-
-    private static long doAddProduct(DatabaseWrapper databaseWrapper, DepProduct product) {
+    public static boolean addProduct(DepProduct product) {
         long index = rtnProdList.size();
-        final TradeProd prod = new TradeProd();
+        TradeProd prod = new TradeProd();
         prod.setLsNo(rtnTrade.getLsNo());
         prod.setSortNo(index + 1);//商品序号从1开始
         prod.setProdCode(product.getProdCode());
@@ -291,19 +268,11 @@ public class RtnHelper {
         prod.setVipDsc(0);
         prod.setSaleInfo("");
         prod.setDelFlag("0");
-        //保存商品记录并重新汇总流水金额（此时会保存交易流水）
-        if (prod.insert(databaseWrapper) > 0) {
-            rtnProdList.add(prod);
-            if (recalcTotal(databaseWrapper)) {
-                return index;
-            } else {
-                //流水保存失败，删除新添加的商品
-                rtnProdList.remove(prod);
-                recalcTotal(databaseWrapper);
-                return -1;
-            }
+        rtnProdList.add(prod);
+        if (recalcTotal()) {
+            return index < rtnProdList.size();
         } else {
-            return -1;
+            return false;
         }
     }
 
@@ -311,16 +280,12 @@ public class RtnHelper {
      * 重新汇总流水金额：优惠、合计
      */
     public static boolean recalcTotal() {
-        return recalcTotal(FlowManager.getDatabase(ZgpDb.class).getWritableDatabase());
-    }
-
-    public static boolean recalcTotal(DatabaseWrapper databaseWrapper) {
         double total = 0;
         for (TradeProd prod : rtnProdList) {
             total += prod.getTotal();
         }
         rtnTrade.setTotal(total);
-        return rtnTrade.save(databaseWrapper);
+        return total == rtnTrade.getTotal();
     }
 
     /**
@@ -626,6 +591,20 @@ public class RtnHelper {
     }
 
     /**
+     * @return 退货商品金额
+     */
+    public static double getRtnTotal() {
+        if (rtnProdList == null || rtnProdList.isEmpty()) {
+            return 0;
+        }
+        double total = 0;
+        for (TradeProd prod : rtnProdList) {
+            total += prod.getPrice() * prod.getAmount();
+        }
+        return total;
+    }
+
+    /**
      * 完成支付（仅适用于现金支付）
      *
      * @param appPayType APP支付类型
@@ -633,10 +612,12 @@ public class RtnHelper {
      * @return
      */
     public static boolean pay(String appPayType, double value) {
+        LogUtil.d("----实付金额：" + value + "/订单金额：" + rtnTrade.getTotal());
         if (value > 0) {
             if (value < rtnTrade.getTotal()) {
                 return false;
             } else {
+                //自动找零
                 return pay(appPayType, value, value - rtnTrade.getTotal(), "(无)");
             }
         } else {
@@ -734,35 +715,6 @@ public class RtnHelper {
         return sn;
     }
 
-    /**
-     * 获取购物车中未行清的所有商品列表
-     *
-     * @return
-     */
-    public static List<Map<String, Long>> getProdCountList() {
-        List<Map<String, Long>> prodCountList = new ArrayList<>();
-        Map<String, Long> map = new HashMap<>();
-        long count;
-        for (TradeProd prod : rtnProdList) {
-            if (TextUtils.isEmpty(prod.getBarCode())) {
-                count = SQLite.select(count()).from(TradeProd.class)
-                        .where(TradeProd_Table.lsNo.eq(rtnTrade.getLsNo()))
-                        .and(TradeProd_Table.prodCode.eq(prod.getProdCode()))
-                        .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
-                        .count();
-            } else {
-                count = SQLite.select(count()).from(TradeProd.class)
-                        .where(TradeProd_Table.lsNo.eq(rtnTrade.getLsNo()))
-                        .and(TradeProd_Table.barCode.eq(prod.getBarCode()))
-                        .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
-                        .count();
-            }
-            map.put(prod.getProdCode(), count);
-        }
-        prodCountList.add(map);
-        return prodCountList;
-    }
-
 
     /**
      * @return 不按单退货商品件数
@@ -786,19 +738,21 @@ public class RtnHelper {
      * @return 数量
      */
     public static long getProdCount(String prodCode, String barCode) {
+        long count = 0;
         if (TextUtils.isEmpty(barCode)) {
-            return SQLite.select(count()).from(TradeProd.class)
-                    .where(TradeProd_Table.lsNo.eq(rtnTrade.getLsNo()))
-                    .and(TradeProd_Table.prodCode.eq(prodCode))
-                    .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
-                    .count();
+            for (TradeProd prod : rtnProdList) {
+                if (prod.getProdCode().equals(prodCode)) {
+                    count++;
+                }
+            }
         } else {
-            return SQLite.select(count()).from(TradeProd.class)
-                    .where(TradeProd_Table.lsNo.eq(rtnTrade.getLsNo()))
-                    .and(TradeProd_Table.barCode.eq(barCode))
-                    .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
-                    .count();
+            for (TradeProd prod : rtnProdList) {
+                if (prod.getBarCode().equals(barCode)) {
+                    count++;
+                }
+            }
         }
+        return count;
     }
 
     /**

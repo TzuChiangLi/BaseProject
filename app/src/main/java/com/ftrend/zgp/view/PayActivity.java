@@ -17,6 +17,7 @@ import com.ftrend.zgp.api.PayContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.PayPresenter;
+import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
@@ -27,11 +28,9 @@ import com.ftrend.zgp.utils.pay.PayType;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
 import com.ftrend.zgp.utils.pop.StringInputCallback;
-import com.ftrend.zgp.utils.printer.PrinterHelper;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
-import com.sunmi.peripheral.printer.SunmiPrinterService;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -59,6 +58,7 @@ public class PayActivity extends BaseActivity implements PayContract.View, OnTit
     private PayContract.Presenter mPresenter;
     private static int START_SCAN = 002;
     private String lsNo;
+    private boolean isSale = true;
 
     @Override
     protected int getLayoutID() {
@@ -73,11 +73,15 @@ public class PayActivity extends BaseActivity implements PayContract.View, OnTit
     @Override
     protected void initView() {
         EventBus.getDefault().register(this);
-
         if (mPresenter == null) {
             mPresenter = PayPresenter.createPresenter(this);
         }
-        lsNo = TradeHelper.getTrade().getLsNo();
+        //接收交易类型
+        isSale = getIntent().getBooleanExtra("isSale", true);
+        //设置交易类型
+        mPresenter.setTradeType(isSale);
+        //销售、退货分开处理
+        lsNo = isSale ? TradeHelper.getTrade().getLsNo() : RtnHelper.getRtnTrade().getLsNo();
     }
 
     @Override
@@ -240,7 +244,7 @@ public class PayActivity extends BaseActivity implements PayContract.View, OnTit
                         break;
                     case 2:
                         //现金
-                        final double total = TradeHelper.getTradeTotal();
+                        final double total = isSale ? TradeHelper.getTradeTotal() : RtnHelper.getRtnTotal();
                         InputPanel.showChargeDialog(PayActivity.this, total,
                                 new MoneyInputCallback() {
                                     @Override
@@ -334,6 +338,7 @@ public class PayActivity extends BaseActivity implements PayContract.View, OnTit
             }
         }
     }
+
 
     @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     public void onMessage(Event event) {

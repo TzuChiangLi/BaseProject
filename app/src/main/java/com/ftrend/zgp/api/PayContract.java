@@ -41,6 +41,12 @@ public interface PayContract {
     int MSG_CARD_CODE_INPUT = 6;
 
     interface Presenter {
+
+        /**
+         * @param isSale 是销售流水还是退货流水
+         */
+        void setTradeType(boolean isSale);
+
         //TODO 测试打印
         void getPrintData(SunmiPrinterService service);
 
@@ -57,7 +63,7 @@ public interface PayContract {
         void payByShouQian(String value);
 
         /**
-         * 交易完成
+         * 销售交易完成
          *
          * @param appPayType APP支付方式
          * @param value      实际支付金额

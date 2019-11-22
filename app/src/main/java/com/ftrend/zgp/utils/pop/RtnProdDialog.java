@@ -59,7 +59,7 @@ public class RtnProdDialog extends BottomPopupView {
         mDialog.setLayoutParams(layoutParams);
         mEdt.addTextChangedListener(watcher);
         callBack.onStart(mBtn);
-        callBack.onLoadProd(mRecyclerView, mAdapter, mBtn);
+        callBack.onLoad(mRecyclerView, mAdapter, mBtn);
     }
 
     private TextWatcher watcher = new TextWatcher() {
@@ -106,7 +106,7 @@ public class RtnProdDialog extends BottomPopupView {
         if (ClickUtil.onceClick()) {
             return;
         }
-        callBack.onScanClick();
+        callBack.onScan();
     }
 
 
@@ -131,12 +131,12 @@ public class RtnProdDialog extends BottomPopupView {
          * @param view
          * @param adapter
          */
-        void onLoadProd(RecyclerView view, ShopAdapter<DepProduct> adapter, Button btn);
+        void onLoad(RecyclerView view, ShopAdapter<DepProduct> adapter, Button btn);
 
         /**
          * 点击摄像头扫描按钮
          */
-        void onScanClick();
+        void onScan();
 
         /**
          * 关闭

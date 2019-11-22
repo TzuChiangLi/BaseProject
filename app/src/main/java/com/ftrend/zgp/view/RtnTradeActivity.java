@@ -67,8 +67,6 @@ public class RtnTradeActivity extends BaseActivity implements OnTitleBarListener
     TextView mPayTypeTv;
     @BindView(R.id.rtn_rl_bottom_trade)
     RelativeLayout mTradeLayout;
-    @BindView(R.id.rtn_rl_bottom_prod)
-    RelativeLayout mProdLayout;
     @BindView(R.id.rtn_ll_mid)
     LinearLayout mVipLayout;
     @BindView(R.id.rtn_tv_trade_time)

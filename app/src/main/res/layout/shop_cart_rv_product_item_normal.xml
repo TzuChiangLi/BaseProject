@@ -91,7 +91,6 @@
         android:autoSizeTextType="uniform"
         android:background="@drawable/shop_tip_num"
         android:gravity="center"
-
         android:textColor="@color/shop_white_text"
         android:textSize="@dimen/sp_12"
         android:visibility="visible" />

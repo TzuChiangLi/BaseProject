@@ -20,7 +20,7 @@ public interface RtnProdContract {
         /**
          * 不按单退货初始化列表
          */
-        void initProdList();
+        void updateRtnProdList();
 
         /**
          * @param index 商品索引
@@ -45,12 +45,6 @@ public interface RtnProdContract {
          */
         String getRtnProdAmount();
 
-        /**
-         * 获取流水
-         *
-         * @param lsNo 流水号
-         */
-        void getTradeByLsNo(String lsNo);
 
         /**
          * 更新信息

@@ -123,6 +123,7 @@ public class ShopListActivity extends BaseActivity implements ShopListContract.S
         mPresenter.refreshTrade();
         if (mProdAdapter.getData().size() > 0) {
             Intent intent = new Intent(ShopListActivity.this, PayActivity.class);
+            intent.putExtra("isSale",true);
             startActivity(intent);
         } else {
             MessageUtil.showWarning("购物车为空");

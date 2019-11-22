@@ -69,9 +69,34 @@
             android:textColor="@color/common_white"
             android:textSize="@dimen/sp_13" />
 
+        <TextView
+            android:id="@+id/rtn_prod_tv_total_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_toEndOf="@+id/rtn_prod_btn_prod_add"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_0"
+            android:text="@string/trade_prod_trade_title"
+            android:textColor="@color/pay_tv_red"
+            android:textSize="@dimen/sp_16" />
+
+        <TextView
+            android:id="@+id/rtn_prod_tv_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_6"
+            android:layout_toEndOf="@+id/rtn_prod_tv_total_title"
+            android:textColor="@color/pay_tv_red"
+            android:textSize="@dimen/sp_16"
+            tools:text="@string/rtn_trade_replace_total" />
+
         <Button
             android:id="@+id/rtn_prod_btn_back"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp_56"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_toStartOf="@+id/rtn_prod_btn_prod_rtn"
@@ -80,7 +105,7 @@
 
         <Button
             android:id="@+id/rtn_prod_btn_prod_rtn"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp_56"
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:background="@drawable/shop_btn_red_selector"

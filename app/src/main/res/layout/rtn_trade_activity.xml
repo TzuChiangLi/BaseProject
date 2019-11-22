@@ -197,7 +197,8 @@
         android:background="@color/common_white"
         android:paddingStart="@dimen/dp_8"
         android:paddingEnd="@dimen/dp_0"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <LinearLayout
             android:id="@+id/rtn_ll_pay_type"
@@ -299,35 +300,4 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/rtn_rl_bottom_prod"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_48"
-        android:layout_alignParentBottom="true"
-        android:background="@color/common_white"
-        android:paddingEnd="@dimen/dp_0"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/rtn_btn_prod_add"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="@drawable/shop_btn_blue_selector"
-            android:stateListAnimator="@null"
-            android:text="@string/rtn_prod_btn_add"
-            android:textColor="@color/common_white"
-            android:textSize="@dimen/sp_13" />
-
-        <Button
-            android:id="@+id/rtn_btn_prod_rtn"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/shop_btn_red_selector"
-            android:stateListAnimator="@null"
-            android:text="@string/rtn_btn_enter"
-            android:textColor="@color/common_white"
-            android:textSize="@dimen/sp_13" />
-
-    </RelativeLayout>
 </RelativeLayout>
