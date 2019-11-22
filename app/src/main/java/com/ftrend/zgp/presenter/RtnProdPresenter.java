@@ -73,6 +73,23 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
         updateTradeInfo();
     }
 
+    @Override
+    public void searchProdByScan(String code, List<DepProduct> depProducts) {
+        boolean hasFlag = false;
+        for (int i = 0; i < depProducts.size(); i++) {
+            if (code.equals(depProducts.get(i).getProdCode()) ||
+                    code.equals(depProducts.get(i).getBarCode())) {
+                hasFlag = true;
+                mView.setScanProdPosition(i);
+                addRtnProd(depProducts.get(i));
+                break;
+            }
+            if (i == depProducts.size() && hasFlag == false) {
+                mView.showError("无此商品");
+            }
+        }
+    }
+
 
     @Override
     public List<DepProduct> searchDepProdList(String key, List<DepProduct> depProdList) {

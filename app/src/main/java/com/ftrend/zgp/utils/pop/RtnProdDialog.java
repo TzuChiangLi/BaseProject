@@ -65,7 +65,6 @@ public class RtnProdDialog extends BottomPopupView {
     private TextWatcher watcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
         }
 
         @Override
@@ -136,7 +135,7 @@ public class RtnProdDialog extends BottomPopupView {
         /**
          * 点击摄像头扫描按钮
          */
-        void onScan();
+        void onScan( );
 
         /**
          * 关闭

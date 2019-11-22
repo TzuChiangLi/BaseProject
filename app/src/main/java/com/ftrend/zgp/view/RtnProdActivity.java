@@ -24,7 +24,6 @@ import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.RtnProdPresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
@@ -59,9 +58,12 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
     RecyclerView mRecyclerView;
     @BindView(R.id.rtn_prod_rl_bottom_prod)
     RelativeLayout mProdLayout;
-    private int oldPosition = -1;
+    private int oldPosition = -1, oldDepIndex = -1;
+    private RecyclerView mDepRecyclerView;
     private RtnProdContract.RtnProdPresenter mPresenter;
     private ShopAdapter<TradeProd> mProdAdapter;
+    private ShopAdapter<DepProduct> mDepAdapter;
+    private List<DepProduct> prodList;
     private static int START_SCAN = 003;
 
     @Override
@@ -146,6 +148,11 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
         if (TextUtils.isEmpty(value)) {
             return;
         }
+        if (prodList != null) {
+            mPresenter.searchProdByScan(value, prodList);
+        } else {
+            MessageUtil.show("商品列表为空");
+        }
     }
 
     @OnClick(R.id.rtn_prod_btn_prod_rtn)
@@ -181,7 +188,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
     @Override
     public void showRtnProdDialog(final List<DepProduct> mProdList) {
-        LogUtil.d("----depList.size:" + mProdList.size());
+        prodList = mProdList;
         //不按单退货添加退货商品
         MessageUtil.rtnProd(new RtnProdDialog.onDialogCallBack() {
             @Override
@@ -191,16 +198,25 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
 
             @Override
             public void onLoad(RecyclerView recyclerView, final ShopAdapter<DepProduct> mAdapter, final Button btn) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(RtnProdActivity.this));
-                mAdapter.setNewData(mProdList);
-                recyclerView.addItemDecoration(new DividerItemDecoration(RtnProdActivity.this, DividerItemDecoration.VERTICAL));
-                recyclerView.setAdapter(mAdapter);
-                mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+                mDepAdapter = mAdapter;
+                mDepRecyclerView = recyclerView;
+                mDepRecyclerView.setLayoutManager(new LinearLayoutManager(RtnProdActivity.this));
+                mDepAdapter.setNewData(mProdList);
+                mDepRecyclerView.addItemDecoration(new DividerItemDecoration(RtnProdActivity.this, DividerItemDecoration.VERTICAL));
+                mDepRecyclerView.setAdapter(mDepAdapter);
+                mDepAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                        if (oldDepIndex != -1 && oldDepIndex < mDepAdapter.getItemCount()) {
+                            mProdList.get(oldDepIndex).setSelect(false);
+                            mDepAdapter.notifyItemChanged(oldDepIndex);
+                        }
+                        oldDepIndex = position;
+                        mDepAdapter.getData().get(position).setSelect(true);
+                        mDepAdapter.notifyItemChanged(position);
                         //添加到购物车中
                         if (mPresenter.addRtnProd(mProdList.get(position))) {
-                            mAdapter.notifyItemChanged(position);
+                            mDepAdapter.notifyItemChanged(position);
                             btn.setText(mPresenter.getRtnProdAmount());
                         }
                     }
@@ -296,6 +312,21 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
     @Override
     public void delTradeProd(int index) {
         mProdAdapter.notifyItemRemoved(index);
+    }
+
+    @Override
+    public void setScanProdPosition(int index) {
+        if (mDepRecyclerView != null) {
+            mDepRecyclerView.smoothScrollToPosition(index);
+            if (oldDepIndex != -1 && oldDepIndex < mDepAdapter.getItemCount()) {
+                mDepAdapter.getData().get(oldDepIndex).setSelect(false);
+                mDepAdapter.notifyItemChanged(oldDepIndex);
+            }
+            oldDepIndex = index;
+            mDepAdapter.getData().get(index).setSelect(true);
+            mDepAdapter.notifyItemChanged(index);
+            MessageUtil.show("添加成功");
+        }
     }
 
     @Override

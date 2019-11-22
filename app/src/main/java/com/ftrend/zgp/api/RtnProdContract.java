@@ -28,6 +28,12 @@ public interface RtnProdContract {
         void delRtnProd(int index);
 
         /**
+         * @param code        扫描码
+         * @param depProducts 商品列表
+         */
+        void searchProdByScan(String code, List<DepProduct> depProducts);
+
+        /**
          * @param key 关键词
          * @return 过滤商品列表
          */
@@ -99,6 +105,11 @@ public interface RtnProdContract {
          * @param index 商品索引
          */
         void delTradeProd(int index);
+
+        /**
+         * @param index 商品索引
+         */
+        void setScanProdPosition(int index);
 
         /**
          * @param prodList 筛选后的商品

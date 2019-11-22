@@ -826,6 +826,16 @@ public class RtnHelper {
         }
     }
 
+    /**
+     * @return 获取商品原价
+     */
+    public static double getRtnTradePrice() {
+        double price = 0;
+        for (TradeProd prod : rtnProdList) {
+            price += prod.getPrice() * prod.getAmount();
+        }
+        return price;
+    }
 
     /**
      * 清空所有临时数据

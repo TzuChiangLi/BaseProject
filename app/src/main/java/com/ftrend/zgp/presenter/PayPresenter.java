@@ -66,7 +66,7 @@ public class PayPresenter implements PayContract.Presenter {
             return;
         }
         //生成数据，执行打印命令
-        PrinterHelper.print(PrintFormat.printFormat());
+        PrinterHelper.print(isSale ? PrintFormat.printSale() : PrintFormat.printRtn());
     }
 
     @Override

@@ -285,6 +285,7 @@ public class ShopCartActivity extends BaseActivity implements ShopCartContract.S
         oldProdIndex = index;
         mProdAdapter.getData().get(index).setSelect(true);
         mProdAdapter.notifyItemChanged(index);
+        MessageUtil.show("添加成功");
     }
 
     @Override

@@ -85,8 +85,7 @@ public class TrdProdPresenter implements TrdProdContract.TrdProdPresenter {
             return;
         }
         //生成数据，执行打印命令
-        LogUtil.d("----printList:"+PrintFormat.printFormat().toString());
-        PrinterHelper.print(PrintFormat.printFormat());
+        PrinterHelper.print(PrintFormat.printSale());
     }
 
     private RestResultHandler regHandler = new RestResultHandler() {
