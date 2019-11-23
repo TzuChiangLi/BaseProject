@@ -82,19 +82,33 @@ public class PayPresenter implements PayContract.Presenter {
     @Override
     public void payByShouQian(String value) {
         mView.waitPayResult();
-        SqbPayHelper.pay(isSale ? TradeHelper.getTrade() : RtnHelper.getRtnTrade(),
-                value, new SqbPayHelper.PayResultCallback() {
-                    @Override
-                    public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
-                        if (isSuccess) {
-                            // TODO: 2019/10/26 微信支付账号长度超过后台数据库对应字段长度，暂时先不记录支付账号
-                            paySuccess(payType, TradeHelper.getTrade().getTotal(), "");
-                            mView.paySuccess();
-                        } else {
-                            mView.payFail(errMsg);
-                        }
+        if (isSale) {
+            SqbPayHelper.pay(TradeHelper.getTrade(), value, new SqbPayHelper.PayResultCallback() {
+                @Override
+                public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
+                    if (isSuccess) {
+                        // TODO: 2019/10/26 微信支付账号长度超过后台数据库对应字段长度，暂时先不记录支付账号
+                        paySuccess(payType, TradeHelper.getTrade().getTotal(), "");
+                        mView.paySuccess();
+                    } else {
+                        mView.payFail(errMsg);
                     }
-                });
+                }
+            });
+        } else {
+            //TODO 2019年11月23日15:41:39 退款的具体使用哪个方法待确认
+            SqbPayHelper.refundBySn(RtnHelper.getRtnTrade(), value, new SqbPayHelper.PayResultCallback() {
+                @Override
+                public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
+                    if (isSuccess) {
+                        paySuccess(payType, RtnHelper.getRtnTrade().getTotal(), "");
+                        mView.paySuccess();
+                    } else {
+                        mView.payFail(errMsg);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -186,6 +200,11 @@ public class PayPresenter implements PayContract.Presenter {
         payDataSign[0] = "";
         payCardBalance[0] = 0.00;
         payRequestTime[0] = 0;
+        if (true) {
+            //手工输入卡号
+            postMessage(PayContract.MSG_CARD_CODE_INPUT);
+            return;
+        }
         if (!SunmiPayHelper.getInstance().serviceAvailable()) {
             MessageUtil.showError("刷卡服务不可用！");
             //手工输入卡号
@@ -264,26 +283,50 @@ public class PayPresenter implements PayContract.Presenter {
         RestSubscribe.getInstance().payCardInfo(payDataSign[0], new RestCallback(new RestResultHandler() {
             @Override
             public void onSuccess(RestBodyMap body) {
-                payCardCode[0] = body.getString("cardCode");
-                boolean needPass;
-                if (payCardType[0].equals("1")) {//IC卡，以卡内信息为准
-                    payCardBalance[0] = cardData.getMoney();
-                    needPass = !TextUtils.isEmpty(cardData.getVipPwd());
-                } else {
-                    payCardBalance[0] = body.getDouble("balance");
-                    needPass = body.getBool("needPass");
-                }
+                if (isSale) {
+                    payCardCode[0] = body.getString("cardCode");
+                    boolean needPass;
+                    if (payCardType[0].equals("1")) {//IC卡，以卡内信息为准
+                        payCardBalance[0] = cardData.getMoney();
+                        needPass = !TextUtils.isEmpty(cardData.getVipPwd());
+                    } else {
+                        payCardBalance[0] = body.getDouble("balance");
+                        needPass = body.getBool("needPass");
+                    }
 
-                if (payCardBalance[0] < TradeHelper.getTradeTotal()) {
-                    mView.cardPayFail("卡余额不足！");
-                    return;
-                }
-                if (needPass) {
-                    //需要支付密码
-                    postMessage(PayContract.MSG_CARD_PASSWORD);
+                    if (payCardBalance[0] < TradeHelper.getTradeTotal()) {
+                        mView.cardPayFail("卡余额不足！");
+                        return;
+                    }
+                    if (needPass) {
+                        //需要支付密码
+                        postMessage(PayContract.MSG_CARD_PASSWORD);
+                    } else {
+                        //无需支付密码
+                        postMessage(PayContract.MSG_CARD_PAY_REQUEST);
+                    }
                 } else {
-                    //无需支付密码
-                    postMessage(PayContract.MSG_CARD_PAY_REQUEST);
+                    payCardCode[0] = body.getString("cardCode");
+                    boolean needPass;
+                    if (payCardType[0].equals("1")) {//IC卡，以卡内信息为准
+                        payCardBalance[0] = cardData.getMoney();
+                        needPass = !TextUtils.isEmpty(cardData.getVipPwd());
+                    } else {
+                        payCardBalance[0] = body.getDouble("balance");
+                        needPass = body.getBool("needPass");
+                    }
+
+                    if (payCardBalance[0] < RtnHelper.getRtnTotal()) {
+                        mView.cardPayFail("卡余额不足！");
+                        return;
+                    }
+                    if (needPass) {
+                        //需要支付密码
+                        postMessage(PayContract.MSG_CARD_PASSWORD);
+                    } else {
+                        //无需支付密码
+                        postMessage(PayContract.MSG_CARD_PAY_REQUEST);
+                    }
                 }
             }
 
@@ -335,7 +378,11 @@ public class PayPresenter implements PayContract.Presenter {
         SunmiPayHelper.getInstance().writeCard(updateData, new SunmiPayHelper.WriteCardCallback() {
             @Override
             public void onSuccess(VipCardData data) {
-                paySuccess(PayType.PAYTYPE_ICCARD, TradeHelper.getTradeTotal(), data.getCardCode());
+                if (isSale) {
+                    paySuccess(PayType.PAYTYPE_ICCARD, TradeHelper.getTradeTotal(), data.getCardCode());
+                } else {
+                    paySuccess(PayType.PAYTYPE_ICCARD, RtnHelper.getRtnTotal(), data.getCardCode());
+                }
                 mView.cardPaySuccess("支付成功！");
             }
 
@@ -351,7 +398,7 @@ public class PayPresenter implements PayContract.Presenter {
      */
     private void doMagCardPay() {
         mView.cardPayWait("卡支付处理中...");
-        Trade trade = TradeHelper.getTrade();
+        Trade trade = isSale ? TradeHelper.getTrade() : RtnHelper.getRtnTrade();
         RestSubscribe.getInstance().payCardRequest(
                 ZgParams.getPosCode(),
                 trade.getLsNo(),
@@ -394,7 +441,11 @@ public class PayPresenter implements PayContract.Presenter {
         RestSubscribe.getInstance().payCard(payDataSign[0], new RestCallback(new RestResultHandler() {
             @Override
             public void onSuccess(RestBodyMap body) {
-                paySuccess(PayType.PAYTYPE_PREPAID, TradeHelper.getTradeTotal(), payCardCode[0]);
+                if (isSale) {
+                    paySuccess(PayType.PAYTYPE_PREPAID, TradeHelper.getTradeTotal(), payCardCode[0]);
+                } else {
+                    paySuccess(PayType.PAYTYPE_PREPAID, RtnHelper.getRtnTotal(), payCardCode[0]);
+                }
                 mView.cardPaySuccess("支付成功！");
             }
 
