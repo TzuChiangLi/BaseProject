@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 
@@ -53,6 +54,10 @@ public class PayActivity extends BaseActivity implements PayContract.View, OnTit
     TitleBar mTitleBar;
     @BindView(R.id.pay_tv_total)
     TextView mTotalTv;
+    @BindView(R.id.pay_tv_total_title)
+    TextView mTypeTv;
+    @BindView(R.id.pay_tv_title)
+    TextView mTitleTv;
     @BindView(R.id.pay_rv_pay_way)
     RecyclerView mRecyclerView;
     private PayContract.Presenter mPresenter;
@@ -82,6 +87,8 @@ public class PayActivity extends BaseActivity implements PayContract.View, OnTit
         mPresenter.setTradeType(isSale);
         //销售、退货分开处理
         lsNo = isSale ? TradeHelper.getTrade().getLsNo() : RtnHelper.getRtnTrade().getLsNo();
+        mTypeTv.setText(isSale ? "应收款：" : "退款金额：");
+        mTitleTv.setText(isSale ? "收银-结算" : "退货-结算");
     }
 
     @Override
@@ -245,34 +252,60 @@ public class PayActivity extends BaseActivity implements PayContract.View, OnTit
                     case 2:
                         //现金
                         final double total = isSale ? TradeHelper.getTradeTotal() : RtnHelper.getRtnTotal();
-                        InputPanel.showChargeDialog(PayActivity.this, total,
-                                new MoneyInputCallback() {
-                                    @Override
-                                    public void onOk(double value) {
-                                        if (mPresenter.paySuccess(PayType.PAYTYPE_CASH, value, "")) {
-                                            MessageUtil.info("交易已完成", new MessageUtil.MessageBoxOkListener() {
-                                                @Override
-                                                public void onOk() {
-                                                    returnHomeActivity();
-                                                }
-                                            });
-                                        } else {
-                                            MessageUtil.showError("交易失败，请稍后重试");
+                        if (isSale) {
+                            InputPanel.showChargeDialog(PayActivity.this, total,
+                                    new MoneyInputCallback() {
+                                        @Override
+                                        public void onOk(double value) {
+                                            if (mPresenter.paySuccess(PayType.PAYTYPE_CASH, value, "")) {
+                                                MessageUtil.info("交易已完成", new MessageUtil.MessageBoxOkListener() {
+                                                    @Override
+                                                    public void onOk() {
+                                                        returnHomeActivity();
+                                                    }
+                                                });
+                                            } else {
+                                                MessageUtil.showError("交易失败，请稍后重试");
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public void onCancel() {
-                                        if (!TradeHelper.checkPayStatus(lsNo)) {
-                                            MessageUtil.show("已取消支付");
+                                        @Override
+                                        public void onCancel() {
+                                            if (!TradeHelper.checkPayStatus(lsNo)) {
+                                                MessageUtil.show("已取消支付");
+                                            }
                                         }
-                                    }
 
-                                    @Override
-                                    public String validate(double value) {
-                                        return (value >= total) ? "" : "支付金额不足！";
-                                    }
-                                });
+                                        @Override
+                                        public String validate(double value) {
+                                            return (value >= total) ? "" : "支付金额不足！";
+                                        }
+                                    });
+                        } else {
+                            String msg;
+                            msg = String.format(Locale.CHINA, "现金退款：￥%.2f", total);
+                            MessageUtil.question(msg, "确认", "返回",
+                                    new MessageUtil.MessageBoxYesNoListener() {
+                                        @Override
+                                        public void onYes() {
+                                            if (mPresenter.paySuccess(PayType.PAYTYPE_CASH, total, "")) {
+                                                MessageUtil.info("交易已完成", new MessageUtil.MessageBoxOkListener() {
+                                                    @Override
+                                                    public void onOk() {
+                                                        returnHomeActivity();
+                                                    }
+                                                });
+                                            } else {
+                                                MessageUtil.showError("交易失败，请稍后重试");
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onNo() {
+
+                                        }
+                                    });
+                        }
                         break;
                     default:
                         break;

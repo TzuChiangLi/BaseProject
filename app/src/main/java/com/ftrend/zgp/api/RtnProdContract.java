@@ -46,11 +46,6 @@ public interface RtnProdContract {
          */
         boolean addRtnProd(DepProduct prod);
 
-        /**
-         * @return 退货总件数
-         */
-        String getRtnProdAmount();
-
 
         /**
          * 更新信息
@@ -110,11 +105,6 @@ public interface RtnProdContract {
          * @param index 商品索引
          */
         void setScanProdPosition(int index);
-
-        /**
-         * @param prodList 筛选后的商品
-         */
-        void searchRtnProdList(List<TradeProd> prodList);
 
         /**
          * 结束当前界面

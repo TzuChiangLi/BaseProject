@@ -30,6 +30,7 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
@@ -197,7 +198,7 @@ public class ShopCartActivity extends BaseActivity implements ShopCartContract.S
             mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item_normal, prodList, 1);
             mProdRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         } else {
-                mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item_round, prodList, 1);
+            mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item_round, prodList, 1);
         }
         mProdRecyclerView.setAdapter(mProdAdapter);
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
@@ -212,7 +213,6 @@ public class ShopCartActivity extends BaseActivity implements ShopCartContract.S
                 }
                 oldProdIndex = position;
                 mProdAdapter.getData().get(position).setSelect(true);
-                mProdAdapter.notifyItemChanged(position);
 
                 final DepProduct prod = (DepProduct) adapter.getItem(position);
                 if (prod.getPrice() == 0 && prod.getPriceFlag() == 1) {

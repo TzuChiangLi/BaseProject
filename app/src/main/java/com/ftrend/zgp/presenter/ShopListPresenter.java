@@ -285,6 +285,7 @@ public class ShopListPresenter implements ShopListContract.ShopListPresenter {
             MessageUtil.showWarning("当前为单机模式，无法查询会员信息");
             //保存vipCode（@后加卡类型，用于后台解析卡号并查询会员信息）
             TradeHelper.saveVipCodeOffline(code + (TextUtils.isEmpty(type) ? "" : "@" + type));
+            mView.showVipInfoOffline(code);
         }
     }
 

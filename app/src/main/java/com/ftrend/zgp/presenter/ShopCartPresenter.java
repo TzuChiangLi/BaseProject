@@ -113,12 +113,12 @@ public class ShopCartPresenter implements ShopCartContract.ShopCartPresenter {
     public void searchProdList(String... key) {
         //key[0]==clsCode
         //key[1]==输入关键字
+        List<DepProduct> fliterList = new ArrayList<>();
         if (!TextUtils.isEmpty(key[0])) {
             if ("all".equals(key[0]) && TextUtils.isEmpty(key[1])) {
                 mView.updateProdList(mProdList);
                 return;
             }
-            List<DepProduct> fliterList = new ArrayList<>();
             if (mProdList.size() != 0 || mProdList != null) {
                 for (DepProduct depProduct : mProdList) {
                     if (!"all".equals(key[0])) {
@@ -170,7 +170,33 @@ public class ShopCartPresenter implements ShopCartContract.ShopCartPresenter {
             mView.updateProdList(fliterList);
         } else {
             //防止意外情况
-            mView.updateProdList(mProdList);
+            if (TextUtils.isEmpty(key[1])) {
+                //如果关键词为空
+                mView.updateProdList(mProdList);
+            } else {
+                //关键词不为空
+                for (DepProduct depProduct : mProdList) {
+                    if (!TextUtils.isEmpty(depProduct.getProdCode())) {
+                        if (depProduct.getProdCode().contains(key[1])) {
+                            fliterList.add(depProduct);
+                            continue;
+                        }
+                    }
+                    if (!TextUtils.isEmpty(depProduct.getProdName())) {
+                        if (depProduct.getProdName().contains(key[1])) {
+                            fliterList.add(depProduct);
+                            continue;
+                        }
+                    }
+                    if (!TextUtils.isEmpty(depProduct.getBarCode())) {
+                        if (depProduct.getBarCode().contains(key[1])) {
+                            fliterList.add(depProduct);
+                        }
+                    }
+                }
+                mView.updateProdList(fliterList);
+            }
+
         }
     }
 

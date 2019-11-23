@@ -3,8 +3,6 @@ package com.ftrend.zgp.presenter;
 import android.text.TextUtils;
 
 import com.ftrend.zgp.api.RtnTradeContract;
-import com.ftrend.zgp.model.DepProduct;
-import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.OperateCallback;
@@ -16,20 +14,16 @@ import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.sunmi.VipCardData;
 import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
-import com.raizlabs.android.dbflow.sql.language.OperatorGroup;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.sunmi.pay.hardware.aidl.AidlConstants;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -48,9 +42,10 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
     }
 
 
-
     @Override
     public void getTradeByLsNo(final String lsNo) {
+        //先清理掉所有信息
+        RtnHelper.clearAllData();
         String lsNoLite;
         if (TextUtils.isEmpty(lsNo)) {
             mView.showError("请输入流水号");

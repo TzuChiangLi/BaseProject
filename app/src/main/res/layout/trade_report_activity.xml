@@ -40,6 +40,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/trade_report_rl_bottom"
         android:layout_below="@+id/trade_report_title_line">
 
         <LinearLayout
@@ -68,8 +69,8 @@
                 android:layout_marginBottom="@dimen/dp_4"
                 android:background="@color/common_blue"
                 android:paddingStart="@dimen/dp_8"
-                android:paddingEnd="@dimen/dp_8"
                 android:paddingTop="@dimen/dp_4"
+                android:paddingEnd="@dimen/dp_8"
                 android:paddingBottom="@dimen/dp_4"
                 android:textColor="@color/common_white"
                 android:textSize="@dimen/sp_14"
@@ -216,4 +217,20 @@
             </GridLayout>
         </LinearLayout>
     </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/trade_report_rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/trade_report_btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/shop_btn_gray_selector"
+            android:text="@string/out_btn_close"
+            android:textColor="@color/text_black_first" />
+    </RelativeLayout>
 </RelativeLayout>

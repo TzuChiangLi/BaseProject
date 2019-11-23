@@ -101,7 +101,7 @@
         <TextView
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
+            android:layout_weight="1.3"
             android:gravity="center"
             android:text="@string/trade_qry_lsno"
             android:textColor="@color/text_black_second"
@@ -111,7 +111,7 @@
         <TextView
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
-            android:layout_weight="0.7"
+            android:layout_weight="0.8"
             android:gravity="center"
             android:text="@string/trade_qry_amount"
             android:textColor="@color/text_black_second"
@@ -121,17 +121,41 @@
         <TextView
             android:layout_width="@dimen/dp_0"
             android:layout_height="wrap_content"
-            android:layout_weight="1.7"
+            android:layout_weight="1.6"
             android:gravity="center"
             android:text="@string/trade_qry_trade_time"
+            android:paddingStart="@dimen/dp_0"
+            android:paddingEnd="@dimen/dp_8"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/trade_qry_rv_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/trade_qry_rl_bottom"
         android:layout_below="@+id/trade_qry_ll_title"
         tools:listitem="@layout/trade_qry_rv_item" />
+
+    <RelativeLayout
+        android:id="@+id/trade_qry_rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/trade_qry_btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/shop_btn_gray_selector"
+            android:text="@string/out_btn_close"
+            android:textColor="@color/text_black_first" />
+    </RelativeLayout>
 </RelativeLayout>

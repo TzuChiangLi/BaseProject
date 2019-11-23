@@ -80,23 +80,22 @@
         android:id="@+id/rtn_dialog_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/rtn_dialog_btn_finish"
         android:layout_below="@+id/rtn_dialog_ll_top"
         android:layout_marginTop="@dimen/dp_4"
         android:background="@color/common_gray_bg"
         tools:listitem="@layout/shop_cart_rv_product_item_normal" />
 
-    <Button
-        android:id="@+id/rtn_dialog_btn_finish"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/shop_btn_blue_selector"
-        android:maxHeight="@dimen/dp_36"
-        android:stateListAnimator="@null"
-        android:text="@string/rtn_prod_tv_add_finish"
-        android:textColor="@color/common_white"
-        android:textSize="@dimen/sp_16"
-        tools:text="选好了" />
+    <!--<Button-->
+        <!--android:id="@+id/rtn_dialog_btn_finish"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@drawable/shop_btn_blue_selector"-->
+        <!--android:maxHeight="@dimen/dp_36"-->
+        <!--android:stateListAnimator="@null"-->
+        <!--android:text="@string/rtn_prod_tv_add_finish"-->
+        <!--android:textColor="@color/common_white"-->
+        <!--android:textSize="@dimen/sp_16"-->
+        <!--tools:text="选好了" />-->
 
 </RelativeLayout>

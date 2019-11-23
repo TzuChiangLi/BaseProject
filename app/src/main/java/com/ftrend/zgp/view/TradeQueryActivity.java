@@ -29,6 +29,7 @@ import com.hjq.bar.TitleBar;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.OnClick;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -116,11 +117,13 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
         mAdapter = new TrdQryAdapter(R.layout.trade_qry_rv_item, trdList);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+        mAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, final int position) {
-                MessageUtil.waitCircleProgress("加载中");
-                mPresenter.queryTradeProd(position);
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (view.getId() == R.id.trade_qry_rv_item_btn_enter) {
+                    MessageUtil.waitCircleProgress("加载中");
+                    mPresenter.queryTradeProd(position);
+                }
             }
         });
         //设置分页，上拉加载更多
@@ -197,6 +200,10 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
 
     }
 
+    @OnClick(R.id.trade_qry_btn_back)
+    public void back() {
+        finish();
+    }
 
     @Override
     public void setPresenter(TrdQryContract.TrdQryPresenter presenter) {

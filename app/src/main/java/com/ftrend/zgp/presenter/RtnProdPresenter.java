@@ -110,15 +110,6 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
         }
     }
 
-    @Override
-    public String getRtnProdAmount() {
-        if (RtnHelper.getRtnProdAmount() == 0) {
-            return String.format("选好了");
-        } else {
-            return String.format("选好了(%.1f)", RtnHelper.getRtnProdAmount()).replace(".0", "")
-                    .replace("-", "");
-        }
-    }
 
 
     @Override

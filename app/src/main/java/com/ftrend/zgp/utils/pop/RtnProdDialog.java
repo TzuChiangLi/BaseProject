@@ -1,15 +1,17 @@
 package com.ftrend.zgp.utils.pop;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.widget.Button;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.blankj.utilcode.util.ScreenUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.ShopAdapter;
@@ -25,13 +27,11 @@ import butterknife.OnClick;
  * @author liziqiang@ftrend.cn
  */
 
-public class RtnProdDialog extends BottomPopupView {
+public class RtnProdDialog extends BottomPopupView implements BaseQuickAdapter.OnItemClickListener {
     @BindView(R.id.rtn_dialog_rl)
     RelativeLayout mDialog;
     @BindView(R.id.rtn_dialog_rv)
     RecyclerView mRecyclerView;
-    @BindView(R.id.rtn_dialog_btn_finish)
-    Button mBtn;
     @BindView(R.id.rtn_dialog_edt)
     ClearEditText mEdt;
     private Context mContext;
@@ -58,8 +58,8 @@ public class RtnProdDialog extends BottomPopupView {
         layoutParams.height = ScreenUtils.getAppScreenHeight() / 20 * 17;
         mDialog.setLayoutParams(layoutParams);
         mEdt.addTextChangedListener(watcher);
-        callBack.onStart(mBtn);
-        callBack.onLoad(mRecyclerView, mAdapter, mBtn);
+        mAdapter.setOnItemClickListener(this);
+        callBack.onLoad(mRecyclerView, mAdapter);
     }
 
     private TextWatcher watcher = new TextWatcher() {
@@ -78,13 +78,6 @@ public class RtnProdDialog extends BottomPopupView {
         }
     };
 
-    @OnClick(R.id.rtn_dialog_btn_finish)
-    public void onFinish() {
-        if (ClickUtil.onceClick()) {
-            return;
-        }
-        dismiss();
-    }
 
     @OnClick(R.id.rtn_dialog_img_hide)
     public void onHide() {
@@ -106,6 +99,12 @@ public class RtnProdDialog extends BottomPopupView {
             return;
         }
         callBack.onScan();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dismiss();
+            }
+        },300);
     }
 
 
@@ -116,26 +115,42 @@ public class RtnProdDialog extends BottomPopupView {
         this.callBack = callBack;
     }
 
+    @Override
+    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
+        callBack.onItemClick(mRecyclerView, mAdapter, position);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dismiss();
+            }
+        },300);
+    }
+
     /**
      * 弹窗回调
      */
     public interface onDialogCallBack {
 
         /**
-         * @param btn 底部按钮
-         */
-        void onStart(Button btn);
-
-        /**
          * @param view
          * @param adapter
          */
-        void onLoad(RecyclerView view, ShopAdapter<DepProduct> adapter, Button btn);
+        void onLoad(RecyclerView view, ShopAdapter<DepProduct> adapter);
+
+        /**
+         * @param view     列表
+         * @param adapter  适配器
+         * @param position 索引
+         */
+        void onItemClick(RecyclerView view, ShopAdapter<DepProduct> adapter, int position);
 
         /**
          * 点击摄像头扫描按钮
          */
-        void onScan( );
+        void onScan();
 
         /**
          * 关闭
