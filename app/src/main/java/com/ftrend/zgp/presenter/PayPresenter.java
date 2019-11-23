@@ -200,11 +200,12 @@ public class PayPresenter implements PayContract.Presenter {
         payDataSign[0] = "";
         payCardBalance[0] = 0.00;
         payRequestTime[0] = 0;
-        if (true) {
-            //手工输入卡号
-            postMessage(PayContract.MSG_CARD_CODE_INPUT);
-            return;
-        }
+        //TODO 2019年11月23日16:18:50 测试用代码
+//        if (true) {
+//            //手工输入卡号
+//            postMessage(PayContract.MSG_CARD_CODE_INPUT);
+//            return;
+//        }
         if (!SunmiPayHelper.getInstance().serviceAvailable()) {
             MessageUtil.showError("刷卡服务不可用！");
             //手工输入卡号
