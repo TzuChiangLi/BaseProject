@@ -2,7 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/pay_submit_red" />
     <corners
-        android:bottomLeftRadius="@dimen/dp_4"
-        android:topLeftRadius="@dimen/dp_4" />
+        android:radius="@dimen/dp_4" />
 
 </shape>

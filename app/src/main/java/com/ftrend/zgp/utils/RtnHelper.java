@@ -796,6 +796,9 @@ public class RtnHelper {
      * @return 筛选商品
      */
     public static List<DepProduct> searchDepProdList(String key, List<DepProduct> depProdtList) {
+        for (DepProduct prod : depProdtList) {
+            prod.setSelect(false);
+        }
         if (!TextUtils.isEmpty(key)) {
             List<DepProduct> filterList = new ArrayList<>();
             if (!depProdtList.isEmpty()) {

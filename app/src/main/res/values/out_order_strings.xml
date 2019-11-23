@@ -13,7 +13,7 @@
 
 
     <string name="out_btn_get_out">取单</string>
-    <string name="out_btn_close">关闭</string>
+    <string name="out_btn_close">返回</string>
 
 
 </resources>

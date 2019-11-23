@@ -5,15 +5,15 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:paddingStart="@dimen/dp_8"
-    android:paddingTop="@dimen/dp_12"
-    android:paddingEnd="@dimen/dp_8"
-    android:paddingBottom="@dimen/dp_12">
+    android:paddingEnd="@dimen/dp_8">
 
     <TextView
         android:id="@+id/trade_qry_rv_item_lsno"
         android:layout_width="@dimen/dp_0"
         android:layout_height="wrap_content"
-        android:layout_weight="1.5"
+        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginBottom="@dimen/dp_12"
+        android:layout_weight="1.3"
         android:gravity="center"
         android:textColor="@color/text_black_first"
         android:textSize="@dimen/sp_14"
@@ -23,6 +23,8 @@
         android:id="@+id/trade_qry_rv_item_total"
         android:layout_width="@dimen/dp_0"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginBottom="@dimen/dp_12"
         android:layout_weight="0.7"
         android:gravity="center"
         android:textColor="@color/text_black_first"
@@ -33,10 +35,21 @@
         android:id="@+id/trade_qry_rv_item_trade_time"
         android:layout_width="@dimen/dp_0"
         android:layout_height="wrap_content"
-        android:layout_weight="1.7"
+        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginBottom="@dimen/dp_12"
+        android:layout_weight="1.6"
         android:gravity="center"
         android:textColor="@color/text_black_first"
         android:textSize="@dimen/sp_14"
         tools:text="@string/trade_qry_replace_trade_time" />
 
+    <TextView
+        android:id="@+id/trade_qry_rv_item_btn_enter"
+        android:layout_width="@dimen/dp_0"
+        android:layout_height="match_parent"
+        android:layout_weight="0.5"
+        android:background="@android:color/transparent"
+        android:gravity="center"
+        android:text="@string/trade_qry_prod_tv_qry"
+        android:textColor="@color/home_title_tv_blue" />
 </LinearLayout>

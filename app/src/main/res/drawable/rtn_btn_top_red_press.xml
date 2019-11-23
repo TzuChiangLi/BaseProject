@@ -2,6 +2,6 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/shop_btn_red_end" />
     <corners
-        android:bottomLeftRadius="@dimen/dp_4"
-        android:topLeftRadius="@dimen/dp_4" />
+        android:radius="@dimen/dp_4"
+    />
 </shape>

@@ -117,6 +117,11 @@ public interface ShopListContract {
         void showVipInfoOffline(VipInfo vip);
 
         /**
+         * @param code 显示输入的会员卡号或者手机号
+         */
+        void showVipInfoOffline(String code);
+
+        /**
          * 弹窗显示错误信息文本
          *
          * @param error 错误信息文本

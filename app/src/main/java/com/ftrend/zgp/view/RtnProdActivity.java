@@ -10,7 +10,6 @@ import android.support.v7.widget.SimpleItemAnimator;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -192,35 +191,29 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
         //不按单退货添加退货商品
         MessageUtil.rtnProd(new RtnProdDialog.onDialogCallBack() {
             @Override
-            public void onStart(Button btn) {
-                btn.setText(mPresenter.getRtnProdAmount());
-            }
-
-            @Override
-            public void onLoad(RecyclerView recyclerView, final ShopAdapter<DepProduct> mAdapter, final Button btn) {
+            public void onLoad(RecyclerView recyclerView, final ShopAdapter<DepProduct> mAdapter) {
                 mDepAdapter = mAdapter;
                 mDepRecyclerView = recyclerView;
                 mDepRecyclerView.setLayoutManager(new LinearLayoutManager(RtnProdActivity.this));
                 mDepAdapter.setNewData(mProdList);
                 mDepRecyclerView.addItemDecoration(new DividerItemDecoration(RtnProdActivity.this, DividerItemDecoration.VERTICAL));
                 mDepRecyclerView.setAdapter(mDepAdapter);
-                mDepAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                        if (oldDepIndex != -1 && oldDepIndex < mDepAdapter.getItemCount()) {
-                            mProdList.get(oldDepIndex).setSelect(false);
-                            mDepAdapter.notifyItemChanged(oldDepIndex);
-                        }
-                        oldDepIndex = position;
-                        mDepAdapter.getData().get(position).setSelect(true);
-                        mDepAdapter.notifyItemChanged(position);
-                        //添加到购物车中
-                        if (mPresenter.addRtnProd(mProdList.get(position))) {
-                            mDepAdapter.notifyItemChanged(position);
-                            btn.setText(mPresenter.getRtnProdAmount());
-                        }
-                    }
-                });
+            }
+
+            @Override
+            public void onItemClick(RecyclerView view, ShopAdapter<DepProduct> adapter, int position) {
+                if (ClickUtil.onceClick()) {
+                    return;
+                }
+                if (oldDepIndex != -1 && oldDepIndex < mDepAdapter.getItemCount()) {
+                    mProdList.get(oldDepIndex).setSelect(false);
+                    mDepAdapter.notifyItemChanged(oldDepIndex);
+                }
+                oldDepIndex = position;
+                mDepAdapter.getData().get(position).setSelect(true);
+                mDepAdapter.notifyItemChanged(position);
+                //添加到购物车中
+                mPresenter.addRtnProd(mDepAdapter.getItem(position));
             }
 
             @Override
@@ -329,13 +322,6 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
         }
     }
 
-    @Override
-    public void searchRtnProdList(List<TradeProd> prodList) {
-        if (mProdAdapter != null) {
-            mProdAdapter.setNewData(prodList);
-            mProdAdapter.notifyDataSetChanged();
-        }
-    }
 
     @Override
     public void showInputPanel(final int position) {

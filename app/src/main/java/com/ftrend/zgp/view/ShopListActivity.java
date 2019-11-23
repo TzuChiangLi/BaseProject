@@ -288,6 +288,14 @@ public class ShopListActivity extends BaseActivity implements ShopListContract.S
     }
 
     @Override
+    public void showVipInfoOffline(String code) {
+        mNotVipTv.setVisibility(View.VISIBLE);
+        mNotVipTv.setText(code);
+        mVipNameTv.setVisibility(View.GONE);
+        mCardGradeTv.setVisibility(View.GONE);
+    }
+
+    @Override
     public void showError(String error) {
         MessageUtil.showError(error);
     }

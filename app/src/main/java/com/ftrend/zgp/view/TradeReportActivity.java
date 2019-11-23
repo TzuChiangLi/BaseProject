@@ -276,12 +276,15 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
 
     @Override
     public void onTitleClick(View v) {
-
     }
 
     @Override
     public void onRightClick(View v) {
+    }
 
+    @OnClick(R.id.trade_report_btn_back)
+    public void back() {
+        finish();
     }
 
     /**
