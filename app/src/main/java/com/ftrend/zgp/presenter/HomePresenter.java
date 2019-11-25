@@ -5,18 +5,16 @@ import android.content.Context;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.HomeContract;
 import com.ftrend.zgp.model.Menu;
-import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.utils.HandoverHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.UserRightsHelper;
 import com.ftrend.zgp.utils.ZgParams;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
+import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.ftrend.zgp.utils.task.LsUploadThread;
 import com.ftrend.zgp.utils.task.ServerWatcherThread;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.wosai.upay.common.DebugConfig;
 import com.wosai.upay.common.UpayTask;
 import com.wosai.upay.http.Env;
@@ -26,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 主界面P层----所有业务逻辑在此
@@ -103,8 +102,6 @@ public class HomePresenter implements HomeContract.HomePresenter {
         }
         menuList.add(new Menu("系统功能", childList));
         mView.setMenuList(menuList);
-        List<Trade> list = new ArrayList<>();
-        list = SQLite.select().from(Trade.class).queryList();
     }
 
     @Override
@@ -119,8 +116,8 @@ public class HomePresenter implements HomeContract.HomePresenter {
     @Override
     public void checkHandover() {
         int handoverDay = HandoverHelper.mustHandover();
-        if (handoverDay != -1) {
-            mView.tipHandover();
+        if (handoverDay >= 0) {
+            mView.tipHandover(handoverDay);
         }
     }
 
@@ -159,7 +156,15 @@ public class HomePresenter implements HomeContract.HomePresenter {
 
     @Override
     public void goRtnProd() {
-        mView.goRtnProdActivity();
+        if (HandoverHelper.mustHandover() == 0) {
+            mView.mustHandover();
+            return;
+        }
+        if (UserRightsHelper.hasRights(UserRightsHelper.REFUND)) {
+            mView.goRtnProdActivity();
+        } else {
+            mView.showError("无此权限");
+        }
     }
 
     @Override
@@ -176,8 +181,46 @@ public class HomePresenter implements HomeContract.HomePresenter {
     }
 
     @Override
-    public void goAsyncTask() {
+    public void doDataTrans(final Context context) {
+        final String waitMsg = "正在同步数据，请稍候...";
+        MessageUtil.waitBegin(waitMsg, new MessageUtil.MessageBoxCancelListener() {
+            @Override
+            public boolean onCancel() {
+                DataDownloadTask.taskCancel();
+                return false;
+            }
+        });
+        DataDownloadTask.taskStart(true, new DataDownloadTask.ProgressHandler() {
+            @Override
+            public void handleProgress(int percent, boolean isFailed, String msg) {
+                System.out.println(String.format(Locale.getDefault(), "数据下载进度：%d%% %s", percent, msg));
+                String custMsg = String.format(Locale.getDefault(), waitMsg + "(%d%%)", percent);
+                MessageUtil.waitUpdate(custMsg);
+                if (percent >= 100) {
+                    //重新读取配置参数
+                    ZgParams.loadParams();
+                    //重新初始化收钱吧SDK
+                    initSqbSdk(context);
+                    MessageUtil.waitSuccesss("数据同步已完成", null);
+                } else if (isFailed) {
+                    MessageUtil.waitError("数据同步失败：" + msg, null);
+                }
+            }
+        });
+    }
 
+    @Override
+    public void goHandoverReport() {
+        mView.goHandoverReportActivity();
+    }
+
+    @Override
+    public void goTradeReport() {
+        if (UserRightsHelper.hasRights(UserRightsHelper.HISTORY_REPORT)) {
+            mView.goTradeReportActivity();
+        } else {
+            mView.showError("无此权限");
+        }
     }
 
     @Override

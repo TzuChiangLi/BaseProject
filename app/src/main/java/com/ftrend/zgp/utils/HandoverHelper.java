@@ -35,7 +35,6 @@ import com.raizlabs.android.dbflow.sql.language.property.Property;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -415,15 +414,19 @@ public class HandoverHelper {
         } else {
             cursor.moveToNext();
             try {
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                Date minDate = format.parse(cursor.getString(0));
-                long days = (System.currentTimeMillis() - minDate.getTime()) / (1000 * 60 * 60 * 24);
-                if (days < TIP_HANDOVER_DAYS) {
+                long time = cursor.getLongOrDefault(0);
+                if (time == 0) {
                     result = -1;
-                } else if (days >= MUST_HANDOVER_DAYS) {
-                    return 0;
                 } else {
-                    return (int) days;
+//                    Date minDate = new Date(time);
+                    long days = (System.currentTimeMillis() - time) / (1000 * 60 * 60 * 24);
+                    if (days < TIP_HANDOVER_DAYS) {
+                        result = -1;
+                    } else if (days >= MUST_HANDOVER_DAYS) {
+                        result = 0;
+                    } else {
+                        result = (int) days;
+                    }
                 }
             } catch (Exception e) {
                 result = -1;

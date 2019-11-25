@@ -23,8 +23,10 @@ import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.ftrend.zgp.utils.printer.PrintConfig;
-import com.ftrend.zgp.utils.task.DataDownloadTask;
+import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
+import com.ftrend.zgp.utils.sunmi.VipCardData;
 import com.gyf.immersionbar.ImmersionBar;
+import com.sunmi.pay.hardware.aidl.AidlConstants;
 
 import java.util.List;
 import java.util.Locale;
@@ -122,21 +124,26 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
 
     @Override
     public void mustHandover() {
-        MessageUtil.showWarning("您已经长时间未交班，功能使用受限。请先交班。");
+        MessageUtil.error("您已经长时间未交班，功能使用受限。请先交班。",
+                new MessageUtil.MessageBoxOkListener() {
+                    @Override
+                    public void onOk() {
+                        mPresenter.goHandover();
+                    }
+                });
     }
-
 
     @Override
-    public void tipHandover() {
+    public void tipHandover(int days) {
+        MessageUtil.showWarning(String.format(Locale.CHINA,
+                "您已经%d天未交班，请及时交班，避免功能使用受限。", days));
     }
-
 
     @Override
     public void onMenuClick(View view, int position) {
         if (ClickUtil.onceClick()) {
             return;
         }
-        Intent intent;
         switch ((String) view.getTag()) {
             case "收银":
                 mPresenter.goShopCart();
@@ -151,30 +158,56 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
                 mPresenter.getOutOrder();
                 break;
             case "数据同步":
-                // TODO: 2019/10/12 重构：移动到presenter类
-                final String waitMsg = "正在同步数据，请稍候...";
-                MessageUtil.waitBegin(waitMsg, new MessageUtil.MessageBoxCancelListener() {
+                mPresenter.doDataTrans(HomeActivity.this);
+                break;
+            case "参数设置":
+                PrintConfig printConfig = ZgParams.getPrinterConfig();
+                if (printConfig.isPrintTrade()) {
+                    printConfig.setPrintTrade(false);
+                    MessageUtil.show("已禁用小票打印");
+                } else {
+                    printConfig.setPrintTrade(true);
+                    MessageUtil.show("已启用小票打印");
+                }
+                break;
+            case "退货":
+                mPresenter.goRtnProd();
+                break;
+            case "交易统计":
+                mPresenter.goTradeReport();
+                break;
+            case "交班报表":
+                mPresenter.goHandoverReport();
+                break;
+            case "流水查询":
+                mPresenter.goTradeQuery();
+                break;
+            case "操作指南":
+                //测试：初始化IC卡
+                if (!SunmiPayHelper.getInstance().serviceAvailable()) {
+                    MessageUtil.showError("刷卡服务不可用");
+                    return;
+                }
+                VipCardData data = new VipCardData(AidlConstants.CardType.MIFARE);
+                data.setCardCode("2");
+                data.setMoney(10000.0);
+                data.setVipPwd("");//7AUAL;;?. //123456
+                MessageUtil.waitBegin("测试功能：初始化IC卡\n请刷卡...", new MessageUtil.MessageBoxCancelListener() {
                     @Override
                     public boolean onCancel() {
-                        DataDownloadTask.taskCancel();
-                        return false;
+                        SunmiPayHelper.getInstance().cancelWriteCard();
+                        return true;
                     }
                 });
-                DataDownloadTask.taskStart(true, new DataDownloadTask.ProgressHandler() {
+                SunmiPayHelper.getInstance().initCard(data, new SunmiPayHelper.WriteCardCallback() {
                     @Override
-                    public void handleProgress(int percent, boolean isFailed, String msg) {
-                        System.out.println(String.format(Locale.getDefault(), "数据下载进度：%d%% %s", percent, msg));
-                        String custMsg = String.format(Locale.getDefault(), waitMsg + "(%d%%)", percent);
-                        MessageUtil.waitUpdate(custMsg);
-                        if (percent >= 100) {
-                            //重新读取配置参数
-                            ZgParams.loadParams();
-                            //重新初始化收钱吧SDK
-                            mPresenter.initSqbSdk(HomeActivity.this);
-                            MessageUtil.waitSuccesss("数据同步已完成", null);
-                        } else if (isFailed) {
-                            MessageUtil.waitError("数据同步失败：" + msg, null);
-                        }
+                    public void onSuccess(VipCardData data1) {
+                        MessageUtil.waitSuccesss("写卡成功", null);
+                    }
+
+                    @Override
+                    public void onError(String msg) {
+                        MessageUtil.waitError("写卡失败", null);
                     }
                 });
                 break;
@@ -212,32 +245,6 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
                     }
                 });
                 break;
-            case "参数设置":
-                PrintConfig printConfig = ZgParams.getPrinterConfig();
-                if (printConfig.isPrintTrade()) {
-                    printConfig.setPrintTrade(false);
-                    MessageUtil.show("已禁用小票打印");
-                } else {
-                    printConfig.setPrintTrade(true);
-                    MessageUtil.show("已启用小票打印");
-                }
-                break;
-            case "退货":
-                mPresenter.goRtnProd();
-                break;
-            case "交易统计":
-                intent = new Intent(HomeActivity.this, TradeReportActivity.class);
-                startActivity(intent);
-                break;
-            case "交班报表":
-                intent = new Intent(HomeActivity.this, HandoverActivity.class);
-                intent.putExtra("isReport", true);
-                startActivity(intent);
-                break;
-            case "流水查询":
-                mPresenter.goTradeQuery();
-                break;
-            case "操作指南":
             case "修改密码":
             default:
                 MessageUtil.showError("此功能暂不可用");
@@ -270,6 +277,19 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
     }
 
     @Override
+    public void goHandoverReportActivity() {
+        Intent intent = new Intent(HomeActivity.this, HandoverActivity.class);
+        intent.putExtra("isReport", true);
+        startActivity(intent);
+    }
+
+    @Override
+    public void goTradeReportActivity() {
+        Intent intent = new Intent(HomeActivity.this, TradeReportActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
     public void goTradeQueryActivity() {
         Intent intent = new Intent(HomeActivity.this, TradeQueryActivity.class);
         startActivity(intent);
@@ -288,11 +308,6 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
     @Override
     public void showOfflineTip() {
         MessageUtil.showWarning("单机模式不能交班");
-    }
-
-    @Override
-    public void doAsyncTask() {
-
     }
 
     @Override

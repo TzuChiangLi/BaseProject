@@ -66,7 +66,17 @@ public interface HomeContract {
         /**
          * 执行数据同步
          */
-        void goAsyncTask();
+        void doDataTrans(final Context context);
+
+        /**
+         * 跳转到交班报表界面
+         */
+        void goHandoverReport();
+
+        /**
+         * 跳转到交易统计界面
+         */
+        void goTradeReport();
 
         /**
          * 跳转到流水查询界面
@@ -114,8 +124,7 @@ public interface HomeContract {
         /**
          * 提示交班
          */
-        void tipHandover();
-
+        void tipHandover(int days);
 
         /**
          * 跳转到收银选择商品界面
@@ -138,6 +147,16 @@ public interface HomeContract {
         void goRtnProdActivity();
 
         /**
+         * 跳转到交班报表界面
+         */
+        void goHandoverReportActivity();
+
+        /**
+         * 跳转到交易统计界面
+         */
+        void goTradeReportActivity();
+
+        /**
          * 跳转到流水查询界面
          */
         void goTradeQueryActivity();
@@ -156,11 +175,6 @@ public interface HomeContract {
          * 单机运行
          */
         void showOfflineTip();
-
-        /**
-         * 执行数据同步
-         */
-        void doAsyncTask();
 
         /**
          * 注销登录
