@@ -118,8 +118,6 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                             String.format("%.2f(-%d%%)",
                                     prod.getTotalDsc() / prod.getAmount(),
                                     Math.round(100 * prod.getTotalDsc() / prod.getTotal())));
-
-
                     //退货数量(如果是退货流水，显示已退数量)
                     helper.setText(R.id.rtn_list_rv_rtn_tv_amount,
                             String.valueOf(RtnHelper.getTrade().getRtnFlag().equals(RtnHelper.TRADE_FLAG_RTN)
@@ -134,7 +132,6 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                     helper.setText(R.id.rtn_list_rv_rtn_tv_price, String.format("%.2f", prod.getRtnPrice()));
                     //实退单位
                     helper.setText(R.id.rtn_list_rv_rtn_tv_unit, TradeHelper.getProdUnit(prod.getProdCode(), prod.getBarCode()));
-
                     //样式变更
                     helper.setBackgroundColor(R.id.rtn_list_rv_product_rl, prod.isSelect() ? rv_item_selected : rv_item_normal);
                     helper.setGone(R.id.rtn_list_rv_ll_btn, prod.isSelect() ? true : false);
@@ -145,17 +142,19 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 break;
             case 6:
                 //购物车商品列表
+                boolean tradeType = TradeHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND);
                 if (((TradeProd) item).getDelFlag().equals(TradeHelper.DELFLAG_NO)) {
                     helper.setText(R.id.shop_list_rv_product_tv_prodcode, ((TradeProd) item).getProdCode());
                     helper.setText(R.id.shop_list_rv_product_tv_prodname, ((TradeProd) item).getProdName());
-                    helper.setText(R.id.shop_list_rv_product_tv_num, String.valueOf(((TradeProd) item).getAmount()).replace(".0", "").replace("-",""));
+                    helper.setText(R.id.shop_list_rv_product_tv_num, String.valueOf(((TradeProd) item).getAmount()).replace(".0", "").replace("-", ""));
                     helper.setText(R.id.shop_list_rv_product_tv_num_unit, TradeHelper.getProdUnit(((TradeProd) item).getProdCode(), ((TradeProd) item).getBarCode()));
                     helper.setText(R.id.shop_list_rv_product_tv_per_price, String.format("%.2f", ((TradeProd) item).getPrice()));
-                    helper.setText(R.id.shop_list_rv_product_tv_total, String.format("%.2f", ((TradeProd) item).getTotal()).replace("-",""));
+                    helper.setText(R.id.shop_list_rv_product_tv_total, String.format("%.2f", ((TradeProd) item).getTotal()).replace("-", ""));
                     helper.setText(R.id.shop_list_rv_product_tv_barcode, ((TradeProd) item).getBarCode());
                     helper.setText(R.id.shop_list_rv_product_tv_discount, String.format("%.2f%s%s", ((TradeProd) item).getManuDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getTranDsc(),
                             String.format("(-%d", Math.round(100 * ((((TradeProd) item).getManuDsc() + ((TradeProd) item).getVipDsc() + ((TradeProd) item).getTranDsc()) / ((TradeProd) item).getAmount()) / ((TradeProd) item).getPrice())), "%)"));
                     helper.setBackgroundColor(R.id.shop_list_rv_product_rl, ((TradeProd) item).isSelect() ? rv_item_selected : rv_item_normal);
+                    helper.setGone(R.id.shop_list_rv_product_ll_dsc, tradeType ? false : true);
                     helper.setGone(R.id.shop_list_rv_ll_btn, ((TradeProd) item).isSelect() ? true : false);
                     helper.setGone(R.id.shop_list_rv_btn_discount, false);
                     helper.addOnClickListener(R.id.shop_list_rv_img_add);

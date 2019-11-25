@@ -164,7 +164,8 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
             mAdapter.notifyDataSetChanged();
         } else {
             mAdapter.setNewData(null);
-            mAdapter.setEmptyView(getLayoutInflater().inflate(R.layout.rv_item_empty, (ViewGroup) mRecyclerView.getParent(), false));
+            mAdapter.setEmptyView(getLayoutInflater().inflate(R.layout.rv_item_empty,
+                    (ViewGroup) mRecyclerView.getParent(), false));
             TextView mEmptyTv = mAdapter.getEmptyView().findViewById(R.id.rv_item_tv_empty);
             mEmptyTv.setText("无满足条件的流水");
         }

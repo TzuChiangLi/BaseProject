@@ -10,7 +10,6 @@ import com.ftrend.zgp.utils.HandoverHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.UserRightsHelper;
 import com.ftrend.zgp.utils.ZgParams;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
@@ -183,6 +182,16 @@ public class HomePresenter implements HomeContract.HomePresenter {
     @Override
     public void goTradeQuery() {
         mView.goTradeQueryActivity();
+    }
+
+    @Override
+    public void goConfigSetting() {
+        mView.goConfigActivity();
+    }
+
+    @Override
+    public void goPwdChange() {
+        mView.goPwdChangeActivity();
     }
 
     @Override
