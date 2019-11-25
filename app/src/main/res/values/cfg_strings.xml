@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cfg_tv_title">参数设置</string>
+    <string name="cfg_tv_print">打印小票</string>
+</resources>

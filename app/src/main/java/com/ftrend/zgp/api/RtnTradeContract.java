@@ -1,7 +1,6 @@
 package com.ftrend.zgp.api;
 
 import com.ftrend.zgp.base.BaseView;
-import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.TradeProd;
 
 import java.util.List;
@@ -29,6 +28,12 @@ public interface RtnTradeContract {
          * 退货
          */
         void rtnTrade();
+
+        /**
+         * 检查当前流水类型并确定是否显示改价键盘
+         * @param index 商品索引
+         */
+        void showInputPanel(int index);
 
         /**
          * 改商品价格

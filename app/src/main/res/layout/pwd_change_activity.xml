@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ftrend.zgp.view.ConfigActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/pwd_chg_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        app:leftIcon="@drawable/back"
+        app:lineColor="@color/common_blue"
+        app:lineSize="1px"
+        app:rightIcon="@drawable/online">
+
+        <TextView
+            android:id="@+id/pwd_chg_tv_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:letterSpacing="0.05"
+            android:text="@string/pwd_chg_tv_title"
+            android:textColor="@color/common_blue"
+            android:textSize="@dimen/sp_16"
+            android:textStyle="bold" />
+
+    </com.hjq.bar.TitleBar>
+
+    <ImageView
+        android:id="@+id/pwd_chg_title_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pwd_chg_top_bar"
+        android:background="@color/common_white"
+        android:scaleType="centerInside"
+        android:src="@drawable/title_bar_bottom" />
+
+    <LinearLayout
+        android:id="@+id/pwd_chg_ll_mid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pwd_chg_title_line"
+        android:layout_marginTop="@dimen/dp_4"
+        android:background="@color/common_white"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_8">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="@string/pwd_chg_tv_old"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_16" />
+
+        <com.ftrend.cleareditview.ClearEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="@string/pwd_chg_tv_new"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_16" />
+
+        <com.ftrend.cleareditview.ClearEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="@string/pwd_chg_tv_new_confirm"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_16" />
+
+        <com.ftrend.cleareditview.ClearEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/shop_btn_blue_selector"
+        android:text="@string/pwd_chg_btn_submit"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_13" />
+
+
+</RelativeLayout>

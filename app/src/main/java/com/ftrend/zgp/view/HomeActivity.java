@@ -22,7 +22,6 @@ import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.pop.StringInputCallback;
-import com.ftrend.zgp.utils.printer.PrintConfig;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.sunmi.VipCardData;
 import com.gyf.immersionbar.ImmersionBar;
@@ -161,14 +160,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
                 mPresenter.doDataTrans(HomeActivity.this);
                 break;
             case "参数设置":
-                PrintConfig printConfig = ZgParams.getPrinterConfig();
-                if (printConfig.isPrintTrade()) {
-                    printConfig.setPrintTrade(false);
-                    MessageUtil.show("已禁用小票打印");
-                } else {
-                    printConfig.setPrintTrade(true);
-                    MessageUtil.show("已启用小票打印");
-                }
+                mPresenter.goConfigSetting();
                 break;
             case "退货":
                 mPresenter.goRtnProd();
@@ -246,6 +238,8 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
                 });
                 break;
             case "修改密码":
+                mPresenter.goPwdChange();
+                break;
             default:
                 MessageUtil.showError("此功能暂不可用");
                 break;
@@ -294,6 +288,19 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
         Intent intent = new Intent(HomeActivity.this, TradeQueryActivity.class);
         startActivity(intent);
     }
+
+    @Override
+    public void goConfigActivity() {
+        Intent intent = new Intent(HomeActivity.this, ConfigActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void goPwdChangeActivity() {
+        Intent intent = new Intent(HomeActivity.this, PwdChangeActivity.class);
+        startActivity(intent);
+    }
+
 
     @Override
     public void hasNoHangUpTrade() {

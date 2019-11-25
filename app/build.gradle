@@ -144,4 +144,7 @@ dependencies {
 //    //UI测试
 //    androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.6.3'
 //    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    //SwitchButtonUI控件
+    //https://github.com/zcweng/SwitchButton
+    implementation 'com.github.zcweng:switch-button:0.0.3@aar'
 }

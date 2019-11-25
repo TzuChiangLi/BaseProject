@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -23,8 +24,10 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.RtnTradePresenter;
 import com.ftrend.zgp.utils.RtnHelper;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
@@ -117,6 +120,10 @@ public class RtnTradeActivity extends BaseActivity implements OnTitleBarListener
         if (mPresenter == null) {
             mPresenter = RtnTradePresenter.createPresenter(this);
         }
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mProdAdapter = new ShopAdapter<>(R.layout.rtn_list_rv_product_item, null, 5);
+        ((SimpleItemAnimator) (Objects.requireNonNull(mRecyclerView.getItemAnimator()))).setSupportsChangeAnimations(false);
+        mRecyclerView.setAdapter(mProdAdapter);
     }
 
     @Override
@@ -197,6 +204,7 @@ public class RtnTradeActivity extends BaseActivity implements OnTitleBarListener
         if (ClickUtil.onceClick()) {
             return;
         }
+        mProdAdapter.setNewData(null);
         mPresenter.getTradeByLsNo(mEdt.getText().toString());
         KeyboardUtils.hideSoftInput(this);
     }
@@ -273,11 +281,13 @@ public class RtnTradeActivity extends BaseActivity implements OnTitleBarListener
 
     @Override
     public void existTrade(final List<TradeProd> data) {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        if (data.isEmpty() || data == null) {
+            mProdAdapter.setNewData(null);
+            mProdAdapter.setEmptyView(getLayoutInflater().inflate(R.layout.rv_item_empty, (ViewGroup) mRecyclerView.getParent(), false));
+            return;
+        }
         //防止点击item的子view出现画面闪烁的问题
-        ((SimpleItemAnimator) (Objects.requireNonNull(mRecyclerView.getItemAnimator()))).setSupportsChangeAnimations(false);
-        mProdAdapter = new ShopAdapter<>(R.layout.rtn_list_rv_product_item, data, 5);
-        mRecyclerView.setAdapter(mProdAdapter);
+        mProdAdapter.setNewData(data);
         mProdAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
             @Override
             public void onItemChildClick(BaseQuickAdapter adapter, View view, final int position) {
@@ -294,7 +304,7 @@ public class RtnTradeActivity extends BaseActivity implements OnTitleBarListener
                         mPresenter.changeAmount(position, -1);
                         break;
                     case R.id.rtn_list_rv_btn_change_price:
-                        showInputPanel(position);
+                        mPresenter.showInputPanel(position);
                         break;
                     default:
                         break;
@@ -304,6 +314,9 @@ public class RtnTradeActivity extends BaseActivity implements OnTitleBarListener
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (ClickUtil.onceClick() || RtnHelper.getRtnTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND)) {
+                    return;
+                }
                 if (oldPosition != -1 && oldPosition < adapter.getItemCount()) {
                     mProdAdapter.getData().get(oldPosition).setSelect(false);
                     mProdAdapter.notifyItemChanged(oldPosition);

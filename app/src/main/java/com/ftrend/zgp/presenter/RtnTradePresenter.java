@@ -158,6 +158,13 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
     }
 
     @Override
+    public void showInputPanel(int index) {
+        if (!RtnHelper.getRtnTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND)) {
+            mView.showInputPanel(index);
+        }
+    }
+
+    @Override
     public void changePrice(int index, double price) {
         TradeProd prod = RtnHelper.getProdList().get(index);
         if (price > (prod.getTotal() / prod.getAmount())) {
@@ -178,6 +185,7 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
 
     @Override
     public void changeAmount(int index, double changeAmount) {
+
         //仅修改临时数据，不修改数据库内数据
         RtnHelper.changeRtnTradeAmount(index, changeAmount);
         //更新列表界面

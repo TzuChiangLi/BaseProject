@@ -84,6 +84,15 @@ public interface HomeContract {
         void goTradeQuery();
 
         /**
+         * 跳转到参数设置界面
+         */
+        void goConfigSetting();
+
+        /**
+         * 修改密码
+         */
+        void goPwdChange();
+        /**
          * 注销登录
          */
         void logout();
@@ -127,6 +136,12 @@ public interface HomeContract {
         void tipHandover(int days);
 
         /**
+         * 修改密码
+         */
+        void goPwdChangeActivity();
+
+
+        /**
          * 跳转到收银选择商品界面
          */
         void goShopChartActivity();
@@ -161,6 +176,10 @@ public interface HomeContract {
          */
         void goTradeQueryActivity();
 
+        /**
+         * 跳转到参数设置界面
+         */
+        void goConfigActivity();
         /**
          * 无挂单流水
          */

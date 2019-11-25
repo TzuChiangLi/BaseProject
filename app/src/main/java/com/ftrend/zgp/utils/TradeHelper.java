@@ -283,7 +283,6 @@ public class TradeHelper {
     public static Trade getPaidLs(String lsNo) {
         Trade trade = SQLite.select().from(Trade.class)
                 .where(Trade_Table.status.eq(TRADE_STATUS_PAID))
-                .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
                 .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
                 .and(Trade_Table.lsNo.eq(lsNo))
                 .querySingle();
