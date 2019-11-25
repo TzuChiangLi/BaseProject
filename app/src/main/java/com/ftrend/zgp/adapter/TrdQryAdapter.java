@@ -2,7 +2,6 @@ package com.ftrend.zgp.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -24,7 +23,7 @@ public class TrdQryAdapter extends BaseQuickAdapter<Trade, BaseViewHolder> {
 
     @Override
     protected void convert(@NonNull BaseViewHolder helper, Trade item) {
-        helper.setText(R.id.trade_qry_rv_item_lsno, item.getLsNo());
+        helper.setText(R.id.trade_qry_rv_item_lsno, item.getFullLsNo());
         helper.setText(R.id.trade_qry_rv_item_total, String.format("%.2f", item.getTotal()));
         helper.setText(R.id.trade_qry_rv_item_trade_time, item.getTradeTime()==null?"":new SimpleDateFormat("yyyy/MM/dd HH:mm").format(item.getTradeTime()));
         helper.addOnClickListener(R.id.trade_qry_rv_item_btn_enter);
