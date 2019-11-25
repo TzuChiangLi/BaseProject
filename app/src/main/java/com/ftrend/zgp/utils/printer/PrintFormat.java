@@ -109,7 +109,7 @@ public class PrintFormat {
         //商品原价
         printData = new PrintData();
         printData.setAlign(ALIGN_LEFT);
-        printData.setPrintData(mergeString("原价总计：", String.format("￥%.2f", TradeHelper.getTradePrice()), 32));
+        printData.setPrintData(mergeString("原价总计：", String.format("￥%.2f", TradeHelper.getProdTotal()), 32));
         printDataList.add(printData);
         //优惠总计
         printData = new PrintData();
