@@ -4,9 +4,6 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.ftrend.zgp.R;
-import com.ftrend.zgp.model.AppParams;
-import com.ftrend.zgp.model.AppParams_Table;
-import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.DepPayInfo;
 import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.DepProduct;
@@ -206,7 +203,6 @@ public class TradeHelper {
                 .querySingle();
     }
 
-
     /**
      * 根据流水号获取未行清商品明细
      *
@@ -214,8 +210,7 @@ public class TradeHelper {
      * @return 商品
      */
     public static List<TradeProd> getProdListByLsNo(String lsNo) {
-        List<TradeProd> prodList = new ArrayList<>();
-        prodList = SQLite.select().from(TradeProd.class)
+        List<TradeProd> prodList = SQLite.select().from(TradeProd.class)
                 .where(TradeProd_Table.lsNo.eq(lsNo))
                 .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
                 .queryList();
@@ -404,12 +399,6 @@ public class TradeHelper {
     }
 
     /**
-     * 上传交易流水
-     */
-    public static void uploadTradeQueue() {
-    }
-
-    /**
      * 完成支付（仅适用于现金支付）
      *
      * @param appPayType APP支付类型
@@ -458,25 +447,6 @@ public class TradeHelper {
     }
 
     /**
-     * 最小流水号
-     *
-     * @return
-     */
-    public static String lsNoMin() {
-        return ZgParams.getPosCode() + "00001";
-    }
-
-    /**
-     * 最大流水号
-     *
-     * @return
-     */
-    public static String lsNoMax() {
-        return ZgParams.getPosCode() + "99999";
-    }
-
-
-    /**
      * 生成新的流水号
      *
      * @return
@@ -495,11 +465,13 @@ public class TradeHelper {
             lastNo = ZgParams.getLastLsNo();
         }
 
-        String lsNo = lsNoMin();
+        String lsNo;
         if (!TextUtils.isEmpty(lastNo)) {
             int max = Integer.valueOf(lastNo.substring(3));
             int current = (max == 99999) ? 1 : max + 1;
             lsNo = ZgParams.getPosCode() + String.format(Locale.CHINA, "%05d", current);
+        } else {
+            lsNo = ZgParams.getPosCode() + "00001";
         }
         ZgParams.saveAppParams("lastLsNo", lsNo);
         ZgParams.setLastLsNo(lsNo);
@@ -607,17 +579,19 @@ public class TradeHelper {
             Log.e(TAG, "改变数量: 索引无效");
             return -1;
         }
-        double dsc = 0;
-        for (int i = 0; i < prodList.size(); i++) {
-            dsc += prodList.get(i).getManuDsc() + prodList.get(i).getVipDsc() + prodList.get(i).getTranDsc();
-        }
+
+        // 手工优惠金额不能超过收款员单笔优惠上限
         TradeProd tradeProd = prodList.get(index);
-        // TODO 2019年10月24日13:50:44 员工权限仅限手工优惠
-        if (tradeProd.getManuDsc() + tradeProd.getTranDsc() > 0) {
-            if ((dsc + changeAmount * ((tradeProd.getManuDsc() + tradeProd.getTranDsc()) / tradeProd.getAmount()) > ZgParams.getCurrentUser().getMaxDscTotal())) {
+        if (tradeProd.getManuDsc() > 0) {
+            double dsc = 0;
+            for (int i = 0; i < prodList.size(); i++) {
+                dsc += prodList.get(i).getManuDsc();
+            }
+            if ((dsc + changeAmount * (tradeProd.getManuDsc() / tradeProd.getAmount()) > ZgParams.getCurrentUser().getMaxDscTotal())) {
                 return 0;
             }
         }
+
         double oldAmount = tradeProd.getAmount();
         double newAmount = oldAmount + changeAmount;
         tradeProd.setVipDsc((tradeProd.getVipDsc() / oldAmount) * newAmount);
@@ -627,12 +601,8 @@ public class TradeHelper {
 
         tradeProd.setAmount(newAmount);
         tradeProd.setTotal(priceFormat((newAmount * tradeProd.getPrice()) - tradeProd.getTotalDsc()));
-        if (tradeProd.save(databaseWrapper)) {
-            if (recalcTotal(databaseWrapper)) {
-                return 1;
-            } else {
-                return -1;
-            }
+        if (tradeProd.save(databaseWrapper) && recalcTotal(databaseWrapper)) {
+            return 1;
         } else {
             return -1;
         }
@@ -651,18 +621,6 @@ public class TradeHelper {
         return count;
     }
 
-
-    /**
-     * @return 获取商品原价
-     */
-    public static double getTradePrice() {
-        double price = 0;
-        for (TradeProd prod : prodList) {
-            price += prod.getPrice() * prod.getAmount();
-        }
-        return price;
-    }
-
     /**
      * 购物车 - 当前购物车内商品总金额
      * 优惠后的价钱
@@ -677,6 +635,9 @@ public class TradeHelper {
         return total;
     }
 
+    /**
+     * @return 获取商品原价
+     */
     public static double getProdTotal() {
         double total = 0.00;
         for (int i = 0; i < prodList.size(); i++) {
@@ -710,15 +671,10 @@ public class TradeHelper {
      * @return 是或否
      */
     public static boolean getPriceFlagByProdCode(String prodCode) {
-        int result = 0;
-        FlowCursor csr = SQLite.select(DepProduct_Table.priceFlag).from(DepProduct.class)
-                .where(DepProduct_Table.prodCode.eq(prodCode)).query();
-        if (csr.moveToFirst()) {
-            do {
-                result = csr.getIntOrDefault(0);
-            } while (csr.moveToNext());
-        }
-        return result != 0;
+        DepProduct product = SQLite.select(DepProduct_Table.priceFlag).from(DepProduct.class)
+                .where(DepProduct_Table.prodCode.eq(prodCode))
+                .querySingle();
+        return (product != null) && (product.getPriceFlag() != 0);
     }
 
     /**
@@ -744,15 +700,16 @@ public class TradeHelper {
             return false;
         }
 
-        TradeProd tradeProd = prodList.get(index);
-        if (tradeProd != null) {
-            tradeProd.setPrice(priceFormat(price));
-            //改价把手动优惠+会员优惠清掉
-            tradeProd.setSingleDsc(0);
-            tradeProd.setWholeDsc(0);
-            tradeProd.setVipDsc(0);
-            tradeProd.setTotal(priceFormat(tradeProd.getAmount() * price));
+        if (index < 0 || index >= prodList.size()) {
+            return false;
         }
+        TradeProd tradeProd = prodList.get(index);
+        tradeProd.setPrice(priceFormat(price));
+        //改价把手动优惠+会员优惠清掉
+        tradeProd.setSingleDsc(0);
+        tradeProd.setWholeDsc(0);
+        tradeProd.setVipDsc(0);
+        tradeProd.setTotal(priceFormat(tradeProd.getAmount() * price));
         if (tradeProd.save(databaseWrapper)) {
             return recalcTotal(databaseWrapper);
         } else {
@@ -780,11 +737,12 @@ public class TradeHelper {
             Log.e(TAG, "改价: 价格无效");
             return false;
         }
-        TradeProd tradeProd = prodList.get(prodList.size() - 1);
-        if (tradeProd != null) {
-            tradeProd.setPrice(priceFormat(price));
-            tradeProd.setTotal(priceFormat(tradeProd.getAmount() * price));
+        if (prodList == null || prodList.size() == 0) {
+            return false;
         }
+        TradeProd tradeProd = prodList.get(prodList.size() - 1);
+        tradeProd.setPrice(priceFormat(price));
+        tradeProd.setTotal(priceFormat(tradeProd.getAmount() * price));
         if (tradeProd.save(databaseWrapper)) {
             return recalcTotal(databaseWrapper);
         } else {
@@ -806,13 +764,14 @@ public class TradeHelper {
     }
 
     private static boolean doRollackPriceChangeInShopCart(DatabaseWrapper databaseWrapper) {
+        if (prodList == null || prodList.size() == 0) {
+            return false;
+        }
         TradeProd tradeProd = prodList.get(prodList.size() - 1);
-        if (tradeProd != null) {
-            if (tradeProd.delete(databaseWrapper)) {
-                prodList.remove(tradeProd);
-            } else {
-                return false;
-            }
+        if (tradeProd.delete(databaseWrapper)) {
+            prodList.remove(tradeProd);
+        } else {
+            return false;
         }
         return recalcTotal(databaseWrapper);
     }
@@ -891,8 +850,9 @@ public class TradeHelper {
             trade.setCustType("2");
             trade.setCardCode(vip.getCardCode());
             trade.setVipGrade(vip.getVipGrade());
+            return trade.save();
         }
-        return trade.save();
+        return true;
     }
 
     /**
@@ -910,12 +870,10 @@ public class TradeHelper {
      * @return 挂单交易总数
      */
     public static long getHangUpCount() {
-        long count = 0;
-        count = SQLite.select(count()).from(Trade.class)
+        return SQLite.select(count()).from(Trade.class)
                 .where(Trade_Table.status.eq(TRADE_STATUS_HANGUP))
                 .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
                 .count();
-        return count;
     }
 
     /**
@@ -924,7 +882,7 @@ public class TradeHelper {
      * @return
      */
     public static List<Trade> getOutOrder() {
-        List<Trade> tradeList = SQLite.select().distinct().from(Trade.class)
+        List<Trade> tradeList = SQLite.select().from(Trade.class)
                 .where(Trade_Table.status.eq(TRADE_STATUS_HANGUP))
                 .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
                 .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode())).queryList();
@@ -943,10 +901,11 @@ public class TradeHelper {
             FlowCursor csr = SQLite.select(sum(TradeProd_Table.amount)).from(TradeProd.class)
                     .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
                     .query();
-            if (csr.moveToFirst()) {
-                do {
+            if (csr != null) {
+                if (csr.moveToNext()) {
                     trade.setAmount(csr.getDoubleOrDefault(0));
-                } while (csr.moveToNext());
+                }
+                csr.close();
             }
         }
         return tradeList;
@@ -998,31 +957,6 @@ public class TradeHelper {
     }
 
     /**
-     * @return 可登录专柜
-     */
-    public static List<Dep> getDepList() {
-        return SQLite.select().from(Dep.class).queryList();
-    }
-
-    /**
-     * @return 可登录用户
-     */
-    public static List<User> getUserList() {
-        return SQLite.select().from(User.class).queryList();
-    }
-
-    /**
-     * 获取参数字段
-     *
-     * @param paramName 字段名
-     * @return 字段值
-     */
-    public static String getAppParamValue(String paramName) {
-        return SQLite.select().from(AppParams.class).where(AppParams_Table.paramName.eq(paramName))
-                .querySingle().getParamValue();
-    }
-
-    /**
      * 根据编码条码获取商品的单位
      *
      * @param prodCode 商品码
@@ -1030,21 +964,19 @@ public class TradeHelper {
      * @return 单位
      */
     public static String getProdUnit(String prodCode, String barCode) {
-        String unit = "";
+        DepProduct product;
         if (TextUtils.isEmpty(barCode)) {
-            unit = SQLite.select(DepProduct_Table.unit)
+            product = SQLite.select(DepProduct_Table.unit)
                     .from(DepProduct.class)
                     .where(DepProduct_Table.prodCode.eq(prodCode))
-                    .querySingle()
-                    .getUnit();
+                    .querySingle();
         } else {
-            unit = SQLite.select(DepProduct_Table.unit)
+            product = SQLite.select(DepProduct_Table.unit)
                     .from(DepProduct.class)
                     .where(DepProduct_Table.barCode.eq(barCode))
-                    .querySingle()
-                    .getUnit();
+                    .querySingle();
         }
-        return unit;
+        return product == null ? "" : product.getUnit();
     }
 
     /**
@@ -1144,7 +1076,7 @@ public class TradeHelper {
      * @return 分页查询交易流水
      */
     public static List<Trade> getTradeListPage(int page) {
-        List<Trade> tradeList = SQLite.select()
+        return SQLite.select()
                 .from(Trade.class)
                 .where(Trade_Table.status.eq(TRADE_STATUS_PAID))
                 .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
@@ -1152,7 +1084,6 @@ public class TradeHelper {
                 .limit(PAGE_COUNT)//条数-》3
                 .offset(page * PAGE_COUNT)//当前页数
                 .queryList();
-        return tradeList;
     }
 
     /**
