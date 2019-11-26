@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.zgp.App;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.MenuAdapter;

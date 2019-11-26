@@ -24,10 +24,8 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.RtnTradePresenter;
 import com.ftrend.zgp.utils.RtnHelper;
-import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
@@ -314,7 +312,7 @@ public class RtnTradeActivity extends BaseActivity implements OnTitleBarListener
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (ClickUtil.onceClick() || RtnHelper.getRtnTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND)) {
+                if (ClickUtil.onceClick()) {
                     return;
                 }
                 if (oldPosition != -1 && oldPosition < adapter.getItemCount()) {

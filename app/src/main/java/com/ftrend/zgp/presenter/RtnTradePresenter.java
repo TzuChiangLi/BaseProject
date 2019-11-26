@@ -185,7 +185,6 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
 
     @Override
     public void changeAmount(int index, double changeAmount) {
-
         //仅修改临时数据，不修改数据库内数据
         RtnHelper.changeRtnTradeAmount(index, changeAmount);
         //更新列表界面

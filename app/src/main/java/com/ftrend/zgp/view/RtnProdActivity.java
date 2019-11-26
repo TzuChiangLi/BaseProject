@@ -83,7 +83,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
         mPresenter.updateTradeInfo();
         if (mProdAdapter == null) {
             //刷新不按单退货的界面
-            mProdAdapter = new ShopAdapter<>(R.layout.shop_list_rv_product_item, null, 6);
+            mProdAdapter = new ShopAdapter<>(R.layout.shop_list_rv_product_item, null, 8);
             ((SimpleItemAnimator) (Objects.requireNonNull(mRecyclerView.getItemAnimator())))
                     .setSupportsChangeAnimations(false);
         }

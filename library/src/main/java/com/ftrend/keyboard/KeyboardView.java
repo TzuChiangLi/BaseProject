@@ -393,6 +393,12 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
         private final Rect mBounds = new Rect();
         private final int[] ATTRS = new int[]{16843284};
 
+        /**
+         * @param context     上下文
+         * @param mColor      颜色
+         * @param mSpace      粗细
+         * @param orientation 横竖还是全部
+         */
         public GridItemDecoration(Context context, int mColor, int mSpace, int orientation) {
             TypedArray a = context.obtainStyledAttributes(ATTRS);
             this.mDivider = a.getDrawable(0);

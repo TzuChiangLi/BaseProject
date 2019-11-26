@@ -613,7 +613,6 @@ public class RtnHelper {
      * @return
      */
     public static boolean pay(String appPayType, double value) {
-        LogUtil.d("----实付金额：" + value + "/订单金额：" + rtnTrade.getTotal());
         if (value > 0) {
             if (value < rtnTrade.getTotal()) {
                 return false;

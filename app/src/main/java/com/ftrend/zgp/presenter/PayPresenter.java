@@ -209,6 +209,7 @@ public class PayPresenter implements PayContract.Presenter {
             @Override
             public void onSuccess(VipCardData data) {
                 payCardCode[0] = data.getCardCode();
+                LogUtil.d("----卡片号码："+payCardCode[0]);
                 if (data.getCardType() == AidlConstants.CardType.MIFARE) {
                     payCardType[0] = "1";
                     cardData.copy(data);//记录卡信息，用于IC卡支付
