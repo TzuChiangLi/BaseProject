@@ -44,7 +44,7 @@ public class SunmiCardConfig {
         SunmiCardConfig config = new SunmiCardConfig();
         config.cardTypes = AidlConstantsV2.CardType.MIFARE.getValue()
                 | AidlConstantsV2.CardType.MAGNETIC.getValue();
-        config.magTrackNo = 1;
+        config.magTrackNo = 2;
         config.m1Sector = 1;
         config.m1Block = 0;
         config.m1Key = "FFFFFFFFFFFF";
@@ -71,7 +71,8 @@ public class SunmiCardConfig {
     }
 
     public int getCardTypes() {
-        return cardTypes;
+//        return cardTypes;
+        return def().cardTypes;
     }
 
     public void setCardTypes(int cardTypes) {
