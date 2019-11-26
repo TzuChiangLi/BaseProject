@@ -2,6 +2,7 @@ package com.ftrend.zgp.utils.sunmi;
 
 import android.text.TextUtils;
 
+import com.ftrend.zgp.utils.common.EncryptUtil;
 import com.sunmi.pay.hardware.aidlv2.AidlConstantsV2;
 
 /**
@@ -84,6 +85,10 @@ public class VipCardData {
 
     public String getVipPwd() {
         return vipPwd;
+    }
+
+    public String getVipPwdDecrypted() {
+        return EncryptUtil.pwdDecrypt(vipPwd).trim();
     }
 
     public void setVipPwd(String vipPwd) {

@@ -324,7 +324,7 @@ public class PayPresenter implements PayContract.Presenter {
     @Override
     public void cardPayPass(String pwd) {
         if (payCardType[0].equals("1")) {//IC卡，以卡内信息为准
-            if (cardData.getVipPwd().equals(pwd)) {
+            if (cardData.getVipPwdDecrypted().equals(pwd)) {
                 postMessage(PayContract.MSG_CARD_PAY_REQUEST);
             } else {
                 MessageUtil.showError("支付密码校验失败，请重新输入！");

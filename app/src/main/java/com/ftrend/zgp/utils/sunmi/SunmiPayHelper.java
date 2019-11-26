@@ -8,7 +8,6 @@ import android.util.Log;
 import com.ftrend.zgp.App;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ByteUtil;
-import com.ftrend.zgp.utils.common.EncryptUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.sunmi.pay.hardware.aidl.AidlConstants;
 import com.sunmi.pay.hardware.aidlv2.readcard.CheckCardCallbackV2;
@@ -196,7 +195,7 @@ public class SunmiPayHelper {
             public void onSuccess(VipCardData data) {
                 if (cardData.getCardCode().equals(data.getCardCode())
                         && cardData.getMoney().compareTo(data.getMoney()) == 0
-                    /*&& cardData.getVipPwd().equals(data.getVipPwd())*/) {//暂不校验刷卡密码
+                        && cardData.getVipPwd().equals(data.getVipPwd())) {
                     writeCardSuccess(cardData);
                 } else {
                     writeCardFail("写卡失败");
@@ -353,9 +352,6 @@ public class SunmiPayHelper {
             if (res < 0) {
                 writeCardFail("写卡失败：" + res);
             }
-            if (TextUtils.isEmpty(initData.getVipPwd())) {
-                initData.setVipPwd(" ");
-            }
             res = m1WriteBlock(startBlockNo + 2, initData.getVipPwd());
             if (res < 0) {
                 writeCardFail("写卡失败：" + res);
@@ -424,18 +420,19 @@ public class SunmiPayHelper {
             data.setCardCode(code);
         }
         //余额
+        outData = new byte[128];
         res = m1ReadBlock(startBlockNo + 1, outData);
         if (res >= 0 && res <= 16) {
             String str = new String(outData, 0, 16).trim();
             data.setMoney(decryptIcCardMoney(str));
         }
         //密码
+        outData = new byte[128];
         res = m1ReadBlock(startBlockNo + 2, outData);
         if (res >= 0 && res <= 16) {
             String pwd = new String(outData, 0, 16).trim();
-            data.setVipPwd(EncryptUtil.pwdDecrypt(pwd).trim());
+            data.setVipPwd(pwd);//这里不对密码进行解密处理，使用是再解密
         }
-        data.setVipPwd("");// TODO: 2019/11/26 此行为测试代码，目前写入的密码和读取的密码不一致
         return data;
     }
 
@@ -508,13 +505,11 @@ public class SunmiPayHelper {
      */
     private int m1ReadBlock(final int block, byte[] blockData) {
         try {
-            int result = readCardOptV2.mifareReadBlock(block, blockData);
-            Log.e(TAG, "m1ReadBlock result:" + result);
-            return result;
+            return readCardOptV2.mifareReadBlock(block, blockData);
         } catch (RemoteException e) {
             e.printStackTrace();
+            return -123;
         }
-        return -123;
     }
 
     /**
@@ -526,12 +521,16 @@ public class SunmiPayHelper {
      */
     private int m1WriteBlock(final int block, final String blockData) {
         try {
-            int result = readCardOptV2.mifareWriteBlock(block, blockData.getBytes());
-            return result;
+            //需补齐16位，否则写入失败
+            StringBuilder sb = new StringBuilder(blockData);
+            while (sb.length() < 16) {
+                sb.append(" ");
+            }
+            return readCardOptV2.mifareWriteBlock(block, sb.toString().getBytes());
         } catch (RemoteException e) {
             e.printStackTrace();
+            return -123;
         }
-        return -123;
     }
 
     /**
