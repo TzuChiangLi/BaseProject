@@ -40,6 +40,7 @@ public class TrdProdPresenter implements TrdProdContract.TrdProdPresenter {
         String appPayType = TradeHelper.getPay().getAppPayType();
         String depCode = TradeHelper.getTrade().getDepCode();
         Trade trade = TradeHelper.getTrade();
+        mView.showTradeFlag(trade.getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND) ? false : true);
         //如果交易流水中包含会员信息，那么根据设备是否在线，获取相关的会员信息进行显示
         if (!TextUtils.isEmpty(trade.getVipCode())) {
             //未结、未挂起的单据有会员优惠的信息，但是vip是null

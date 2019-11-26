@@ -23,6 +23,7 @@ import com.hjq.bar.TitleBar;
 
 import java.util.List;
 
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.OnClick;
 
@@ -32,6 +33,8 @@ import butterknife.OnClick;
 public class TradeProdActivity extends BaseActivity implements TrdProdContract.TrdProdView, OnTitleBarListener {
     @BindView(R.id.trd_qry_prod_top_bar)
     TitleBar mTitleBar;
+    @BindView(R.id.trd_qry_prod_top_bar_title)
+    TextView mTitleTv;
     @BindView(R.id.trd_qry_prod_img_pay_type)
     ImageView mPayTypeImg;
     @BindView(R.id.trd_qry_prod_tv_pay_type)
@@ -54,6 +57,10 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
     RelativeLayout mBottomLayout;
     @BindView(R.id.trd_qry_prod_rl_vip)
     RelativeLayout mVipLayout;
+    @BindString(R.string.trade_prod_sale)
+    String saleTitle;
+    @BindString(R.string.trade_prod_rtn)
+    String rtnTitle;
     private TrdProdContract.TrdProdPresenter mPresenter;
     private ShopAdapter<TradeProd> mAdapter;
 
@@ -102,6 +109,11 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
     @Override
     public void onRightClick(View v) {
 
+    }
+
+    @Override
+    public void showTradeFlag(boolean isSale) {
+        mTitleTv.setText(isSale?saleTitle:rtnTitle);
     }
 
     @Override

@@ -191,7 +191,11 @@ public class HomePresenter implements HomeContract.HomePresenter {
 
     @Override
     public void goPwdChange() {
-        mView.goPwdChangeActivity();
+        if (ZgParams.isIsOnline()) {
+            mView.goPwdChangeActivity();
+        } else {
+            mView.showError("当前处于离线状态\n无法修改密码");
+        }
     }
 
     @Override

@@ -58,8 +58,11 @@
             android:textSize="@dimen/sp_16" />
 
         <com.ftrend.cleareditview.ClearEditText
+            android:id="@+id/pwd_chg_edt_old"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:lines="1" />
 
         <TextView
             android:layout_width="match_parent"
@@ -70,8 +73,11 @@
             android:textSize="@dimen/sp_16" />
 
         <com.ftrend.cleareditview.ClearEditText
+            android:id="@+id/pwd_chg_edt_new"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:lines="1" />
 
         <TextView
             android:layout_width="match_parent"
@@ -82,13 +88,17 @@
             android:textSize="@dimen/sp_16" />
 
         <com.ftrend.cleareditview.ClearEditText
+            android:id="@+id/pwd_chg_edt_new_again"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:lines="1" />
 
     </LinearLayout>
 
 
     <Button
+        android:id="@+id/pwd_chg_btn_submit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

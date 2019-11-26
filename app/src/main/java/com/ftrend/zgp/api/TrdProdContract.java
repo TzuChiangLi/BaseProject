@@ -25,6 +25,10 @@ public interface TrdProdContract {
 
     interface TrdProdView extends BaseView<TrdProdContract.TrdProdPresenter> {
         /**
+         * @param isSale 流水类型
+         */
+        void showTradeFlag(boolean isSale);
+        /**
          * 显示商品详情和流水信息
          */
         void showTradeProd(List<TradeProd> prodList);

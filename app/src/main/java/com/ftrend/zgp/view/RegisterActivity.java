@@ -40,6 +40,9 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.R
 
     @Override
     protected void initData() {
+//        mPosCodeEdt.setText("101");
+//        mRegCodeEdt.setText("1234");
+//        mURLEdt.setText("192.168.31.186");
     }
 
     @Override
