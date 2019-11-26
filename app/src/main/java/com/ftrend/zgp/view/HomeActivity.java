@@ -13,15 +13,11 @@ import com.ftrend.zgp.adapter.MenuAdapter;
 import com.ftrend.zgp.api.HomeContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
-import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.HomePresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.common.CommonUtil;
-import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
-import com.ftrend.zgp.utils.pay.SqbPayHelper;
-import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.sunmi.VipCardData;
 import com.gyf.immersionbar.ImmersionBar;
@@ -239,7 +235,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
                     }
                 });
                 break;
-            case "测试退款":
+            /*case "测试退款":
                 // 此功能仅用于测试
                 if (!CommonUtil.debugMode(App.getContext())) {
                     return;
@@ -272,7 +268,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
                         return null;
                     }
                 });
-                break;
+                break;*/
             case "修改密码":
                 mPresenter.goPwdChange();
                 break;
