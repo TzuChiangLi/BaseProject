@@ -96,7 +96,6 @@ public class PayPresenter implements PayContract.Presenter {
                 }
             });
         } else {
-            //TODO 2019年11月23日15:41:39 退款的具体使用哪个方法待确认
             SqbPayHelper.refundBySn(RtnHelper.getRtnTrade(), value, new SqbPayHelper.PayResultCallback() {
                 @Override
                 public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
@@ -122,8 +121,7 @@ public class PayPresenter implements PayContract.Presenter {
                     change = value - TradeHelper.getTradeTotal();
                 }
                 //完成支付
-                if (TradeHelper.pay(appPayType, value, change, payCode)
-                ) {
+                if (TradeHelper.pay(appPayType, value, change, payCode)) {
                     TradeHelper.clearVip();
                     PrinterHelper.initPrinter(PayActivity.mContext, new PrinterHelper.PrintInitCallBack() {
                         @Override
@@ -200,12 +198,6 @@ public class PayPresenter implements PayContract.Presenter {
         payDataSign[0] = "";
         payCardBalance[0] = 0.00;
         payRequestTime[0] = 0;
-        //TODO 2019年11月23日16:18:50 测试用代码
-//        if (true) {
-//            //手工输入卡号
-//            postMessage(PayContract.MSG_CARD_CODE_INPUT);
-//            return;
-//        }
         if (!SunmiPayHelper.getInstance().serviceAvailable()) {
             MessageUtil.showError("刷卡服务不可用！");
             //手工输入卡号
@@ -308,26 +300,13 @@ public class PayPresenter implements PayContract.Presenter {
                     }
                 } else {
                     payCardCode[0] = body.getString("cardCode");
-                    boolean needPass;
                     if (payCardType[0].equals("1")) {//IC卡，以卡内信息为准
                         payCardBalance[0] = cardData.getMoney();
-                        needPass = !TextUtils.isEmpty(cardData.getVipPwd());
                     } else {
                         payCardBalance[0] = body.getDouble("balance");
-                        needPass = body.getBool("needPass");
                     }
-
-                    if (payCardBalance[0] < RtnHelper.getRtnTotal()) {
-                        mView.cardPayFail("卡余额不足！");
-                        return;
-                    }
-                    if (needPass) {
-                        //需要支付密码
-                        postMessage(PayContract.MSG_CARD_PASSWORD);
-                    } else {
-                        //无需支付密码
-                        postMessage(PayContract.MSG_CARD_PAY_REQUEST);
-                    }
+                    //退款无需支付密码
+                    postMessage(PayContract.MSG_CARD_PAY_REQUEST);
                 }
             }
 
@@ -345,7 +324,7 @@ public class PayPresenter implements PayContract.Presenter {
     @Override
     public void cardPayPass(String pwd) {
         if (payCardType[0].equals("1")) {//IC卡，以卡内信息为准
-            if (cardData.getVipPwd().equals(pwd)) {
+            if (cardData.getVipPwdDecrypted().equals(pwd)) {
                 postMessage(PayContract.MSG_CARD_PAY_REQUEST);
             } else {
                 MessageUtil.showError("支付密码校验失败，请重新输入！");
@@ -487,13 +466,14 @@ public class PayPresenter implements PayContract.Presenter {
         }
     }
 
+    private Handler mHandler = new Handler();
     /**
      * 延迟发送事件消息
      *
      * @param msgId
      */
     private void postMessage(final int msgId) {
-        new Handler().postDelayed(new Runnable() {
+        mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Event.sendEvent(Event.TARGET_PAY, msgId);

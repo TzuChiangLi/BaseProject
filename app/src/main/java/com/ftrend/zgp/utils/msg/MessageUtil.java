@@ -1,7 +1,6 @@
 package com.ftrend.zgp.utils.msg;
 
 import android.content.Context;
-import android.text.TextUtils;
 
 import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.toast.XToast;
@@ -178,14 +177,10 @@ public class MessageUtil {
         question(message, "是", "否", listener);
     }
 
-
-    /**
-     * 当前显示的等待提示框对象
-     */
-    private static BasePopupView waitDialog = null;
+    //region 等待消息框
 
     public static boolean isWaiting() {
-        return waitDialog != null && waitDialog.isShow();
+        return WaitUtil.getInstance().isWaiting();
     }
 
     /**
@@ -195,41 +190,7 @@ public class MessageUtil {
      * @param listener 取消按钮监听回调，如果不希望点击取消按钮立即关闭对话框，onCancel请返回false
      */
     public static void waitBegin(String message, final MessageBoxCancelListener listener) {
-        if (waitDialog != null) {
-            waitEnd();
-            /*if (waitDialog.isDismiss()) {
-                waitEnd();
-            } else {
-                waitUpdate(message, listener);
-                return;
-            }*/
-        }
-        Context context = ActivityUtils.getTopActivity();
-        DialogBuilder builder = new DialogBuilder(context, 1);
-        builder.setContent(message);
-        builder.setLeftBtn("取消");
-        builder.setDialogType(DialogBuilder.DialogType.wait);
-        builder.setOnClickListener(new DialogBuilder.OnBtnClickListener() {
-            @Override
-            public void onLeftBtnClick(BasePopupView v) {
-                if (listener != null) {
-                    if (listener.onCancel()) {
-                        waitEnd();
-                    }
-                } else {
-                    waitEnd();
-                }
-            }
-
-            @Override
-            public void onRightBtnClick(BasePopupView v) {
-
-            }
-        });
-        waitDialog = new XPopup.Builder(context)
-                .dismissOnTouchOutside(false)
-                .asCustom(builder)
-                .show();
+        WaitUtil.getInstance().waitBegin(message, listener);
     }
 
     /**
@@ -238,70 +199,37 @@ public class MessageUtil {
      * @param msg
      */
     public static void waitUpdate(String msg) {
-        if (waitDialog == null) {
-            return;
-        }
-        if (waitDialog instanceof DialogBuilder) {
-            ((DialogBuilder) waitDialog).updateMsg(msg);
-        }
+        WaitUtil.getInstance().waitUpdate(msg);
     }
 
     public static void waitUpdate(String msg, final MessageBoxOkListener listener) {
-        if (waitDialog == null) {
-            return;
-        }
-        if (waitDialog instanceof DialogBuilder) {
-            ((DialogBuilder) waitDialog).updateMsg(msg);
-            ((DialogBuilder) waitDialog).updateListener(listener);
-        }
+        WaitUtil.getInstance().waitUpdate(msg, listener);
     }
 
     public static void waitUpdate(String msg, final MessageBoxCancelListener listener) {
-        if (waitDialog == null) {
-            return;
-        }
-        if (waitDialog instanceof DialogBuilder) {
-            ((DialogBuilder) waitDialog).updateMsg(msg);
-            ((DialogBuilder) waitDialog).updateListener(listener);
-        }
+        WaitUtil.getInstance().waitUpdate(msg, listener);
     }
 
     /**
      * @param msg 内容文本
      */
     public static void waitError(String msg, final MessageBoxOkListener listener) {
-        if (waitDialog == null) {
-            return;
-        }
-        if (waitDialog instanceof DialogBuilder) {
-            ((DialogBuilder) waitDialog).updateError(msg);
-            ((DialogBuilder) waitDialog).updateListener(listener);
-        }
+        WaitUtil.getInstance().waitError(msg, listener);
     }
 
     public static void waitError(String errCode, String errMsg, final MessageBoxOkListener listener) {
-        waitError(formatErrorMsg(errCode, errMsg), listener);
+        WaitUtil.getInstance().waitError(errCode, errMsg, listener);
     }
 
     public static void waitSuccesss(String msg, final MessageBoxOkListener listener) {
-        if (waitDialog == null) {
-            return;
-        }
-        if (waitDialog instanceof DialogBuilder) {
-            ((DialogBuilder) waitDialog).updateSucccess(msg);
-            ((DialogBuilder) waitDialog).updateListener(listener);
-        }
+        WaitUtil.getInstance().waitSuccesss(msg, listener);
     }
 
     /**
      * 关闭等待提示框
      */
     public static void waitEnd() {
-        if (waitDialog == null) {
-            return;
-        }
-        waitDialog.dismiss();
-        waitDialog = null;
+        WaitUtil.getInstance().waitEnd();
     }
 
     /**
@@ -310,16 +238,10 @@ public class MessageUtil {
      * @param message 文本
      */
     public static void waitCircleProgress(String message) {
-        Context context = ActivityUtils.getTopActivity();
-        DialogBuilder builder = new DialogBuilder(context, 0);
-        builder.setContent(TextUtils.isEmpty(message) ? "加载中" : message);
-        builder.setDialogType(DialogBuilder.DialogType.wait_circle);
-        waitDialog = new XPopup.Builder(context)
-                .dismissOnTouchOutside(false)
-                .hasShadowBg(false)
-                .asCustom(builder)
-                .show();
+        WaitUtil.getInstance().waitCircleProgress(message);
     }
+
+    //endregion
 
     /**
      * 退货选择
@@ -433,7 +355,7 @@ public class MessageUtil {
 
     //endregion
 
-    private static String formatErrorMsg(String code, String msg) {
+    public static String formatErrorMsg(String code, String msg) {
         if (code.length() == 3) {
             //http错误码
             msg = "网络通讯异常";

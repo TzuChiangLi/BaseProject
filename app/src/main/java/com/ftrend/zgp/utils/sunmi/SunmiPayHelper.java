@@ -8,7 +8,6 @@ import android.util.Log;
 import com.ftrend.zgp.App;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ByteUtil;
-import com.ftrend.zgp.utils.common.EncryptUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.sunmi.pay.hardware.aidl.AidlConstants;
 import com.sunmi.pay.hardware.aidlv2.readcard.CheckCardCallbackV2;
@@ -186,6 +185,31 @@ public class SunmiPayHelper {
     }
 
     /**
+     * 校验卡信息
+     *
+     * @param cardData
+     */
+    private void verifyCard(final VipCardData cardData) {
+        readCard(new ReadCardCallback() {
+            @Override
+            public void onSuccess(VipCardData data) {
+                if (cardData.getCardCode().equals(data.getCardCode())
+                        && cardData.getMoney().compareTo(data.getMoney()) == 0
+                        && cardData.getVipPwd().equals(data.getVipPwd())) {
+                    writeCardSuccess(cardData);
+                } else {
+                    writeCardFail("写卡失败");
+                }
+            }
+
+            @Override
+            public void onError(String msg) {
+                writeCardFail(msg);
+            }
+        });
+    }
+
+    /**
      * 连接状态回调
      */
     private SunmiPayKernel.ConnectCallback mConnectCallback = new SunmiPayKernel.ConnectCallback() {
@@ -322,25 +346,18 @@ public class SunmiPayHelper {
         if (result) {
             int res = m1WriteBlock(startBlockNo, initData.getCardCode());
             if (res < 0) {
-                writeCardFail("写卡失败");
+                writeCardFail("写卡失败：" + res);
             }
             res = m1WriteBlock(startBlockNo + 1, encryptIcCardMoney(initData.getMoney()));
             if (res < 0) {
-                writeCardFail("写卡失败");
+                writeCardFail("写卡失败：" + res);
             }
             res = m1WriteBlock(startBlockNo + 2, initData.getVipPwd());
             if (res < 0) {
-                writeCardFail("写卡失败");
+                writeCardFail("写卡失败：" + res);
             }
             //校验
-            VipCardData cardData = m1ReadSector(cardConfig.getM1MSector());
-            if (cardData.getCardCode().equals(initData.getCardCode())
-                    && cardData.getMoney().compareTo(initData.getMoney()) == 0
-                    && cardData.getVipPwd().equals(initData.getVipPwd())) {
-                writeCardSuccess(cardData);
-            } else {
-                writeCardFail("写卡失败");
-            }
+            verifyCard(initData);
         }
     }
 
@@ -379,15 +396,9 @@ public class SunmiPayHelper {
                 //写卡失败
                 writeCardFail("写卡失败");
             }
-            //再次读卡，校验余额是否写成功
-            cardData = m1ReadSector(cardConfig.getM1MSector());
-            if (money.compareTo(cardData.getMoney()) == 0) {
-                //写卡成功
-                writeCardSuccess(cardData);
-            } else {
-                //写卡失败
-                writeCardFail("写卡失败");
-            }
+            cardData.setMoney(money);
+            //校验余额是否写成功
+            verifyCard(cardData);
         }
     }
 
@@ -409,16 +420,18 @@ public class SunmiPayHelper {
             data.setCardCode(code);
         }
         //余额
+        outData = new byte[128];
         res = m1ReadBlock(startBlockNo + 1, outData);
         if (res >= 0 && res <= 16) {
             String str = new String(outData, 0, 16).trim();
             data.setMoney(decryptIcCardMoney(str));
         }
         //密码
+        outData = new byte[128];
         res = m1ReadBlock(startBlockNo + 2, outData);
         if (res >= 0 && res <= 16) {
             String pwd = new String(outData, 0, 16).trim();
-            data.setVipPwd(EncryptUtil.pwdDecrypt(pwd).trim());
+            data.setVipPwd(pwd);//这里不对密码进行解密处理，使用是再解密
         }
         return data;
     }
@@ -492,13 +505,11 @@ public class SunmiPayHelper {
      */
     private int m1ReadBlock(final int block, byte[] blockData) {
         try {
-            int result = readCardOptV2.mifareReadBlock(block, blockData);
-            Log.e(TAG, "m1ReadBlock result:" + result);
-            return result;
+            return readCardOptV2.mifareReadBlock(block, blockData);
         } catch (RemoteException e) {
             e.printStackTrace();
+            return -123;
         }
-        return -123;
     }
 
     /**
@@ -510,12 +521,16 @@ public class SunmiPayHelper {
      */
     private int m1WriteBlock(final int block, final String blockData) {
         try {
-            int result = readCardOptV2.mifareWriteBlock(block, blockData.getBytes());
-            return result;
+            //需补齐16位，否则写入失败
+            StringBuilder sb = new StringBuilder(blockData);
+            while (sb.length() < 16) {
+                sb.append(" ");
+            }
+            return readCardOptV2.mifareWriteBlock(block, sb.toString().getBytes());
         } catch (RemoteException e) {
             e.printStackTrace();
+            return -123;
         }
-        return -123;
     }
 
     /**
@@ -613,7 +628,8 @@ public class SunmiPayHelper {
         None,   //无操作
         Read,   //读卡
         Init,   //初始化卡
-        Update  //更新卡余额
+        Update, //更新卡余额
+        Verify  //验证卡信息
     }
 
     /**

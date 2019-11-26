@@ -30,6 +30,10 @@ public class Event {
      * 目标界面：支付模块
      */
     public static final int TARGET_PAY = 4;
+    /**
+     * 目标界面：等待消息框
+     */
+    public static final int TARGET_WAIT_DIALOG = 5;
     //-----------------------------------操作命令-----------------------------------------//
 
     /**

@@ -13,15 +13,11 @@ import com.ftrend.zgp.adapter.MenuAdapter;
 import com.ftrend.zgp.api.HomeContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
-import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.HomePresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.common.CommonUtil;
-import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
-import com.ftrend.zgp.utils.pay.SqbPayHelper;
-import com.ftrend.zgp.utils.pop.StringInputCallback;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.sunmi.VipCardData;
 import com.gyf.immersionbar.ImmersionBar;
@@ -175,35 +171,71 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
                 mPresenter.goTradeQuery();
                 break;
             case "操作指南":
-                //测试：初始化IC卡
+                // 此功能仅用于测试
+                if (!CommonUtil.debugMode(App.getContext())) {
+                    return;
+                }
                 if (!SunmiPayHelper.getInstance().serviceAvailable()) {
                     MessageUtil.showError("刷卡服务不可用");
                     return;
                 }
-                VipCardData data = new VipCardData(AidlConstants.CardType.MIFARE);
-                data.setCardCode("2");
-                data.setMoney(10000.0);
-                data.setVipPwd("");//7AUAL;;?. //123456
-                MessageUtil.waitBegin("测试功能：初始化IC卡\n请刷卡...", new MessageUtil.MessageBoxCancelListener() {
+                MessageUtil.question("请选择写卡还是读卡", "读卡", "写卡", new MessageUtil.MessageBoxYesNoListener() {
                     @Override
-                    public boolean onCancel() {
-                        SunmiPayHelper.getInstance().cancelWriteCard();
-                        return true;
-                    }
-                });
-                SunmiPayHelper.getInstance().initCard(data, new SunmiPayHelper.WriteCardCallback() {
-                    @Override
-                    public void onSuccess(VipCardData data1) {
-                        MessageUtil.waitSuccesss("写卡成功", null);
+                    public void onYes() {
+                        //读卡
+                        MessageUtil.waitBegin("测试功能：读取IC卡\n请刷卡...", new MessageUtil.MessageBoxCancelListener() {
+                            @Override
+                            public boolean onCancel() {
+                                SunmiPayHelper.getInstance().cancelReadCard();
+                                return true;
+                            }
+                        });
+                        SunmiPayHelper.getInstance().readCard(new SunmiPayHelper.ReadCardCallback() {
+                            @Override
+                            public void onSuccess(VipCardData data) {
+                                StringBuilder sb = new StringBuilder();
+                                sb.append("卡号：" + data.getCardCode() + "\n");
+                                sb.append("余额：" + data.getMoney() + "\n");
+                                sb.append("密码：" + data.getVipPwdDecrypted());
+                                MessageUtil.waitSuccesss(sb.toString(), null);
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                MessageUtil.waitError(msg, null);
+                            }
+                        });
                     }
 
                     @Override
-                    public void onError(String msg) {
-                        MessageUtil.waitError("写卡失败", null);
+                    public void onNo() {
+                        //写卡
+                        VipCardData data = new VipCardData(AidlConstants.CardType.MIFARE);
+                        data.setCardCode("2");
+                        data.setMoney(10000.0);
+                        data.setVipPwd("7AUAL;;?.");// //123456
+                        MessageUtil.waitBegin("测试功能：初始化IC卡\n请刷卡...", new MessageUtil.MessageBoxCancelListener() {
+                            @Override
+                            public boolean onCancel() {
+                                SunmiPayHelper.getInstance().cancelWriteCard();
+                                return true;
+                            }
+                        });
+                        SunmiPayHelper.getInstance().initCard(data, new SunmiPayHelper.WriteCardCallback() {
+                            @Override
+                            public void onSuccess(VipCardData data1) {
+                                MessageUtil.waitSuccesss("写卡成功", null);
+                            }
+
+                            @Override
+                            public void onError(String msg) {
+                                MessageUtil.waitError("写卡失败", null);
+                            }
+                        });
                     }
                 });
                 break;
-            case "测试退款":
+            /*case "测试退款":
                 // 此功能仅用于测试
                 if (!CommonUtil.debugMode(App.getContext())) {
                     return;
@@ -236,7 +268,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
                         return null;
                     }
                 });
-                break;
+                break;*/
             case "修改密码":
                 mPresenter.goPwdChange();
                 break;
