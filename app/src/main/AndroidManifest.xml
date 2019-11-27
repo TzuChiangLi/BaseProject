@@ -43,7 +43,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/NoActionBar">
-        <activity android:name=".view.PwdChangeActivity"></activity>
+        <activity android:name=".view.WakeLockActivity"/>
+        <activity android:name=".view.PwdChangeActivity"/>
         <activity android:name=".view.ConfigActivity" />
         <activity android:name=".view.TradeProdActivity" />
         <activity android:name=".view.TradeQueryActivity" />

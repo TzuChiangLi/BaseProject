@@ -10,8 +10,12 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.common.ScreenLock;
 import com.ftrend.zgp.utils.log.LogUtil;
+import com.ftrend.zgp.view.LoginActivity;
+import com.ftrend.zgp.view.WakeLockActivity;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -28,6 +32,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 //    private NetworkChangeReceiver mNetworkChangeReceiver;
     public static Context mContext;
     private onNetStatusReceiver receiver = null;
+    private ScreenLock mScreenLock = null;
+    private boolean isLogin = false;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,7 +49,35 @@ public abstract class BaseActivity extends AppCompatActivity {
         initTitleBar();
         initData();
         mContext = this;
+        isLogin = (this instanceof LoginActivity);
+        if (!isLogin) {
+//            LogUtil.d("----This is not LoginActivity");
+            mScreenLock = new ScreenLock(this);
+            mScreenLock.begin(mStateListener);
+        }
     }
+
+    //屏幕状态监听
+    ScreenLock.ScreenStateListener mStateListener = new ScreenLock.ScreenStateListener() {
+        @Override
+        public void onScreenOn(boolean isLocked) {
+//            LogUtil.d("----屏幕开启：" + new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss").format(new Date()) + "/" + isLocked + "/");
+            if (isLocked) {
+                Intent intent = new Intent(mContext, WakeLockActivity.class);
+                startActivity(intent);
+            }
+        }
+
+        @Override
+        public void onScreenOff() {
+//            LogUtil.d("----屏幕关闭：" + new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss").format(new Date()));
+        }
+
+        @Override
+        public void onUserPresent() {
+//            LogUtil.d("----解锁屏幕：" + new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss").format(new Date()));
+        }
+    };
 
 
     public class onNetStatusReceiver extends BroadcastReceiver {
@@ -110,9 +145,11 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        unRegisterReceiver();
+    protected void onRestart() {
+        super.onRestart();
+        if (!isLogin) {
+            mScreenLock.wake();
+        }
     }
 
     @Override
@@ -122,12 +159,32 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        unRegisterReceiver();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (!isLogin) {
+            if (!ActivityUtils.getTopActivity().equals(this)) {
+                mScreenLock.sleep();
+            }
+        }
+    }
+
+    @Override
     protected void onDestroy() {
+        super.onDestroy();
         //ButterKnife解绑
         if (unbinder != null) {
             unbinder.unbind();
         }
-        super.onDestroy();
+        if (!isLogin) {
+            mScreenLock.sleep();
+            mScreenLock.unregisterListener();
+        }
     }
 
 
