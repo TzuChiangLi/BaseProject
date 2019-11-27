@@ -52,7 +52,7 @@ public class WakeLockActivity extends BaseActivity implements WakeLockContract.W
 
     @Override
     protected void initTitleBar() {
-        ImmersionBar.with(this).autoDarkModeEnable(true).init();
+        ImmersionBar.with(this).transparentNavigationBar().autoDarkModeEnable(true).init();
     }
 
     @OnClick(R.id.wake_lock_btn_enter)
@@ -79,6 +79,5 @@ public class WakeLockActivity extends BaseActivity implements WakeLockContract.W
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
     }
 }

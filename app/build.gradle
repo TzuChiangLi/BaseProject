@@ -120,7 +120,7 @@ dependencies {
     implementation "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
     //沉浸式状态栏
     //https://github.com/gyf-dev/ImmersionBar
-    implementation 'com.gyf.immersionbar:immersionbar:3.0.0-beta07'
+    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
     //日历选择控件
     //https://github.com/prolificinteractive/material-calendarview
     implementation 'com.github.prolificinteractive:material-calendarview:1.6.1'
