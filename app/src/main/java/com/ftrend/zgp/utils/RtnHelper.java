@@ -15,7 +15,6 @@ import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.Method;
@@ -254,7 +253,7 @@ public class RtnHelper {
         prod.setProdCode(product.getProdCode());
         prod.setProdName(product.getProdName());
         prod.setBarCode(product.getBarCode());
-        prod.setDepCode(product.getDepCode());
+        prod.setDepCode(product.getProdDepCode());
         prod.setPrice(product.getPrice());
         prod.setProdForDsc(product.getForDsc());
         prod.setProdPriceFlag(product.getPriceFlag());

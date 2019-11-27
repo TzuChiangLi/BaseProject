@@ -243,7 +243,7 @@ public class TradeHelper {
         prod.setProdCode(product.getProdCode());
         prod.setProdName(product.getProdName());
         prod.setBarCode(product.getBarCode());
-        prod.setDepCode(product.getDepCode());
+        prod.setDepCode(product.getProdDepCode());
         prod.setPrice(product.getPrice());
         prod.setProdForDsc(product.getForDsc());
         prod.setProdPriceFlag(product.getPriceFlag());
@@ -1052,8 +1052,9 @@ public class TradeHelper {
      * @return 支付方式
      */
     public static String convertAppPayType(String appPayType, String depCode) {
+        //支付方式不再区分专柜
         DepPayInfo payInfo = SQLite.select().from(DepPayInfo.class)
-                .where(DepPayInfo_Table.depCode.eq(depCode))
+                .where(DepPayInfo_Table.depCode.eq("000"))
                 .and(DepPayInfo_Table.appPayType.eq(appPayType))
                 .querySingle();
         String payTypeName = (payInfo == null) ? "" : payInfo.getPayTypeName();

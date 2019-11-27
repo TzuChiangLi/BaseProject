@@ -332,7 +332,7 @@ public class HandoverHelper {
                         Trade_Table.cashier.withTable().eq(userCode))
                 .join(DepPayInfo.class, Join.JoinType.INNER)
                 //payTypeCode可能重复出现，这里要用appPayType关联
-                .on(Trade_Table.depCode.withTable().eq(DepPayInfo_Table.depCode.withTable()),
+                .on(DepPayInfo_Table.depCode.withTable().eq("000"),//支付方式不再区分专柜
                         TradePay_Table.appPayType.withTable().eq(DepPayInfo_Table.appPayType.withTable()))
                 .groupBy(TradePay_Table.payTypeCode.withTable())
                 .query();

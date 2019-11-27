@@ -34,8 +34,9 @@ public class PayType {
      * @return
      */
     public static String appPayTypeToPayType(String depCode, String appPayType) {
+        //支付方式所有专柜通用，不再做区分
         return SQLite.select(DepPayInfo_Table.payTypeCode).from(DepPayInfo.class)
-                .where(DepPayInfo_Table.depCode.eq(depCode))
+                .where(DepPayInfo_Table.depCode.eq("000"))
                 .and(DepPayInfo_Table.appPayType.eq(appPayType))
                 .querySingle().getPayTypeCode();
     }

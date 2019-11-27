@@ -20,7 +20,10 @@ public class DepProduct extends BaseModel {
     private int id;
     @Column
     @NotNull
-    private String depCode;
+    private String depCode;//专柜编码
+    @Column
+    @NotNull
+    private String prodDepCode;//商品所属部门编码，商品流水中使用此字段为depCode
     @Column
     @NotNull
     private String prodCode;
@@ -80,6 +83,7 @@ public class DepProduct extends BaseModel {
     public DepProduct() {
     }
 
+    // TODO: 2019/11/27 增加参数prodDepCode，重新生成测试数据
     public DepProduct(String depCode, String prodCode, String barCode, String prodName, String clsCode, String unit, double price) {
         this.depCode = depCode;
         this.prodCode = prodCode;
@@ -88,13 +92,6 @@ public class DepProduct extends BaseModel {
         this.clsCode = clsCode;
         this.unit = unit;
         this.price = price;
-    }
-
-    public DepProduct(String prodCode, String prodName, String depCode, String clsCode) {
-        this.prodCode = prodCode;
-        this.prodName = prodName;
-        this.depCode = depCode;
-        this.clsCode = clsCode;
     }
 
     /**
@@ -158,6 +155,14 @@ public class DepProduct extends BaseModel {
 
     public void setProdCode(String prodCode) {
         this.prodCode = prodCode;
+    }
+
+    public String getProdDepCode() {
+        return prodDepCode;
+    }
+
+    public void setProdDepCode(String prodDepCode) {
+        this.prodDepCode = prodDepCode;
     }
 
     public String getBarCode() {

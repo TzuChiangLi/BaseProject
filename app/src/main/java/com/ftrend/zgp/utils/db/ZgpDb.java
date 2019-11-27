@@ -24,7 +24,7 @@ public class ZgpDb {
     // 数据库名称
     public static final String DATABASE_NAME = "zgp";
     // 数据库版本号
-    public static final int DATABASE_VERSION = 7;
+    public static final int DATABASE_VERSION = 8;
 
     @Migration(version = 0, database = ZgpDb.class, priority = 0)
     public static class Migration0 extends BaseMigration {
@@ -122,7 +122,6 @@ public class ZgpDb {
     @Migration(version = 7, database = ZgpDb.class, priority = 1)
     public static class Migration7_Trade extends AlterTableMigration<Trade> {
 
-
         public Migration7_Trade(Class<Trade> table) {
             super(table);
         }
@@ -130,6 +129,19 @@ public class ZgpDb {
         @Override
         public void onPreMigrate() {
             addColumn(SQLiteType.TEXT, "vipGrade");
+        }
+    }
+
+    @Migration(version = 8, database = ZgpDb.class, priority = 1)
+    public static class Migration8_DepProduct extends AlterTableMigration<DepProduct> {
+
+        public Migration8_DepProduct(Class<DepProduct> table) {
+            super(table);
+        }
+
+        @Override
+        public void onPreMigrate() {
+            addColumn(SQLiteType.TEXT, "prodDepCode");
         }
     }
 

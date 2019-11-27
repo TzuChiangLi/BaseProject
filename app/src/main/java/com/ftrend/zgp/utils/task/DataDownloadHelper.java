@@ -10,7 +10,6 @@ import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.DepCls;
 import com.ftrend.zgp.model.DepCls_Table;
 import com.ftrend.zgp.model.DepPayInfo;
-import com.ftrend.zgp.model.DepPayInfo_Table;
 import com.ftrend.zgp.model.DepProduct;
 import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.SysParams;
@@ -266,7 +265,8 @@ public class DataDownloadHelper {
             product.setProdCode(map.getString("prodCode"));
             product.setBarCode(map.getString("barCode"));
             product.setProdName(map.getString("prodName"));
-            product.setDepCode(map.getString("depCode"));
+            product.setDepCode(depCode);//专柜编号
+            product.setProdDepCode(map.getString("depCode"));//商品所属部门编号
             product.setClsCode(map.getString("clsCode"));
             product.setCargoNo(map.getString("cargoNo"));
             product.setSpec(map.getString("spec"));
@@ -300,7 +300,7 @@ public class DataDownloadHelper {
      */
     private static void saveDepPayInfo(final String depCode, final List<RestBodyMap> payInfoList) {
         //清空数据表
-        SQLite.delete(DepPayInfo.class).where(DepPayInfo_Table.depCode.eq(depCode)).execute();
+        SQLite.delete(DepPayInfo.class)/*.where(DepPayInfo_Table.depCode.eq(depCode))*/.execute();//支付方式不再区分专柜
         //写入数据
         for (RestBodyMap map : payInfoList) {
             DepPayInfo payInfo = new DepPayInfo();
