@@ -4,6 +4,7 @@ import com.ftrend.zgp.api.WakeLockContract;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.model.User_Table;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.common.EncryptUtil;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 /**
@@ -27,7 +28,7 @@ public class WakeLockPresenter implements WakeLockContract.WakePresenter {
                 .where(User_Table.userCode.eq(ZgParams.getCurrentUser().getUserCode()))
                 .querySingle();
         if (user != null) {
-            if (user.getUserPwd().equals(pwd)) {
+            if (pwd.equals(EncryptUtil.pwdDecrypt(user.getUserPwd()))) {
                 mView.success();
             } else {
                 mView.show("密码不正确");

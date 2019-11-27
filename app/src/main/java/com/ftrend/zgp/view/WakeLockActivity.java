@@ -1,6 +1,8 @@
 package com.ftrend.zgp.view;
 
 
+import android.view.KeyEvent;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import com.ftrend.cleareditview.ClearEditText;
@@ -48,6 +50,16 @@ public class WakeLockActivity extends BaseActivity implements WakeLockContract.W
         if (mPresenter == null) {
             mPresenter = WakeLockPresenter.createPresenter(this);
         }
+        mEdt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode()
+                        && KeyEvent.ACTION_DOWN == event.getAction())) {
+                    enter();
+                }
+                return true;
+            }
+        });
     }
 
     @Override
