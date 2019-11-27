@@ -43,8 +43,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/NoActionBar">
-        <activity android:name=".view.WakeLockActivity"/>
-        <activity android:name=".view.PwdChangeActivity"/>
+        <activity
+            android:name=".view.WakeLockActivity"
+            android:launchMode="singleInstance" />
+        <activity android:name=".view.PwdChangeActivity" />
         <activity android:name=".view.ConfigActivity" />
         <activity android:name=".view.TradeProdActivity" />
         <activity android:name=".view.TradeQueryActivity" />
@@ -56,9 +58,7 @@
         <activity android:name=".view.RegisterActivity" />
         <activity android:name=".view.PayActivity" />
         <activity android:name=".view.ShopListActivity" />
-        <activity
-            android:name=".view.LoginActivity"
-            android:launchMode="singleInstance" />
+        <activity android:name=".view.LoginActivity" />
         <activity android:name=".view.ShopCartActivity" />
         <activity
             android:name=".view.SplashActivity"
