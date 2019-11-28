@@ -73,7 +73,7 @@ public class TradeHelper {
     // 顾客类型：2-会员
     public static final String TRADE_CUST_VIP = "2";
     // 分页查询，一页查询条数
-    public static final int PAGE_COUNT = 10;
+    public static final int PAGE_COUNT = 30;
     // 交易流水
     private static Trade trade = null;
     // 商品列表
