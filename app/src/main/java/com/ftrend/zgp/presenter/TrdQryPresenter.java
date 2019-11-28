@@ -34,7 +34,7 @@ public class TrdQryPresenter implements TrdQryContract.TrdQryPresenter {
         //只查询本地数据库
         tradeList = TradeHelper.getTradeListPage(0);
         //记录总条数
-        totalCount = TradeHelper.getTradeSize();
+        totalCount = TradeHelper.getTradeListSize();
         //当前记录条数
         currentCount = tradeList.size();
         //显示第一次加载的交易记录
@@ -49,6 +49,10 @@ public class TrdQryPresenter implements TrdQryContract.TrdQryPresenter {
         if (currentCount < totalCount) {
             //继续加载
             List<Trade> tempList = TradeHelper.getTradeListPage(page);
+            if (tempList.size() == 0) {
+                mView.loadMoreEnd();
+                return;
+            }
             //添加新纪录到总记录中
             tradeList.addAll(tempList);
             //更新当前位置
@@ -70,7 +74,6 @@ public class TrdQryPresenter implements TrdQryContract.TrdQryPresenter {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    LogUtil.d("----lsNo:" + tradeList.get(index).getLsNo());
                     mView.goTradeProdActivity(tradeList.get(index).getLsNo());
                 }
             }, 800);

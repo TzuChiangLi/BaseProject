@@ -73,7 +73,7 @@ public class TradeHelper {
     // 顾客类型：2-会员
     public static final String TRADE_CUST_VIP = "2";
     // 分页查询，一页查询条数
-    public static final int PAGE_COUNT = 30;
+    public static final int PAGE_COUNT = 10;
     // 交易流水
     private static Trade trade = null;
     // 商品列表
@@ -1067,8 +1067,11 @@ public class TradeHelper {
     /**
      * @return 获取本地所有交易流水
      */
-    public static long getTradeSize() {
-        return SQLite.select(count()).from(Trade.class).count();
+    public static long getTradeListSize() {
+        return SQLite.select(count()).from(Trade.class)
+                .where(Trade_Table.status.eq(TRADE_STATUS_PAID))
+                .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
+                .count();
     }
 
     /**

@@ -25,11 +25,10 @@ public class ConfigPresenter implements ConfigContract.ConfigPresenter {
         return new ConfigPresenter(mView);
     }
 
-
     @Override
     public void loadCfgItem() {
-        String[] type = {"多设置项分组预留位置，可删除", ""};
-        String[] item = {"", "打印小票"};
+        String[] type = {"打印设置", ""};
+        String[] item = {"", "结算成功自动打印交易小票"};
         List<Config> configList = new ArrayList<>();
         for (int i = 0; i < type.length; i++) {
             Config config = new Config();
@@ -53,7 +52,8 @@ public class ConfigPresenter implements ConfigContract.ConfigPresenter {
     public void print(boolean flag) {
         PrintConfig printConfig = ZgParams.getPrinterConfig();
         printConfig.setPrintTrade(flag);
-        mView.show(String.format("小票打印：%s", flag ? "开启" : "禁用"));
+
+        mView.show(String.format("参数已保存"));
     }
 
     @Override
