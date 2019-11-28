@@ -92,4 +92,10 @@ public class WakeLockActivity extends BaseActivity implements WakeLockContract.W
     @Override
     public void onBackPressed() {
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestory();
+    }
 }

@@ -55,6 +55,8 @@
             android:imeOptions="actionDone"
             android:lines="1"
             android:maxLines="1"
+            android:inputType="numberPassword"
+            android:maxLength="8"
             android:paddingStart="@dimen/dp_4"
             android:paddingTop="@dimen/dp_8"
             android:paddingEnd="@dimen/dp_4"

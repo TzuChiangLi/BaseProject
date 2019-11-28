@@ -10,7 +10,6 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 /**
  * @author liziqiang@ftrend.cn
  */
-
 public class WakeLockPresenter implements WakeLockContract.WakePresenter {
     private WakeLockContract.WakeLockView mView;
 

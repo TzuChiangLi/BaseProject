@@ -126,8 +126,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:inputType="textPassword"
+                android:inputType="numberPassword"
                 android:maxHeight="@dimen/dp_45"
+                android:maxLength="8"
                 android:maxLines="1"
                 android:textSize="@dimen/sp_18" />
 
