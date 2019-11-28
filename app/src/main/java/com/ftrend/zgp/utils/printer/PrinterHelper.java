@@ -87,9 +87,6 @@ public class PrinterHelper {
      * @return 是否打印成功
      */
     public static boolean print(List<PrintData> printDataList) {
-        if (!ZgParams.getPrinterConfig().isPrintTrade()) {
-            return true;
-        }
         try {
             for (PrintData p : printDataList) {
                 //处理样式

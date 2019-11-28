@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.zgp.App;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.MenuAdapter;
@@ -380,5 +379,20 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
             mNetImg = findViewById(R.id.home_img_online_status);
         }
         mNetImg.setImageResource(isOnline ? R.drawable.online : R.drawable.offline);
+    }
+
+    @Override
+    public void onBackPressed() {
+        MessageUtil.question("是否要退出本程序？", new MessageUtil.MessageBoxYesNoListener() {
+            @Override
+            public void onYes() {
+                finish();
+            }
+
+            @Override
+            public void onNo() {
+
+            }
+        });
     }
 }

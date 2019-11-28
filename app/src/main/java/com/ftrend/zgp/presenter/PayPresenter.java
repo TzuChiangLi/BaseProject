@@ -123,6 +123,9 @@ public class PayPresenter implements PayContract.Presenter {
                 //完成支付
                 if (TradeHelper.pay(appPayType, value, change, payCode)) {
                     TradeHelper.clearVip();
+                    if (!ZgParams.getPrinterConfig().isPrintTrade()) {
+                        return true;
+                    }
                     PrinterHelper.initPrinter(PayActivity.mContext, new PrinterHelper.PrintInitCallBack() {
                         @Override
                         public void onSuccess(SunmiPrinterService service) {
@@ -141,6 +144,9 @@ public class PayPresenter implements PayContract.Presenter {
             } else {
                 if (RtnHelper.pay(appPayType, value)) {
                     if (RtnHelper.rtn()) {
+                        if (!ZgParams.getPrinterConfig().isPrintTrade()) {
+                            return true;
+                        }
                         PrinterHelper.initPrinter(PayActivity.mContext, new PrinterHelper.PrintInitCallBack() {
                             @Override
                             public void onSuccess(SunmiPrinterService service) {
@@ -209,7 +215,7 @@ public class PayPresenter implements PayContract.Presenter {
             @Override
             public void onSuccess(VipCardData data) {
                 payCardCode[0] = data.getCardCode();
-                LogUtil.d("----卡片号码："+payCardCode[0]);
+                LogUtil.d("----卡片号码：" + payCardCode[0]);
                 if (data.getCardType() == AidlConstants.CardType.MIFARE) {
                     payCardType[0] = "1";
                     cardData.copy(data);//记录卡信息，用于IC卡支付
@@ -468,6 +474,7 @@ public class PayPresenter implements PayContract.Presenter {
     }
 
     private Handler mHandler = new Handler();
+
     /**
      * 延迟发送事件消息
      *

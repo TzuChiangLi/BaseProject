@@ -36,7 +36,7 @@ public class ConfigActivity extends BaseActivity implements ConfigContract.Confi
     @Override
     public void onNetWorkChange(boolean isOnline) {
         if (mTitleBar == null) {
-            mTitleBar = findViewById(R.id.rtn_top_bar);
+            mTitleBar = findViewById(R.id.cfg_top_bar);
         }
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
     }
