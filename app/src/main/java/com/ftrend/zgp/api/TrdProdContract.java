@@ -50,6 +50,10 @@ public interface TrdProdContract {
         void showPayInfo(String payTypeName, int img);
 
         /**
+         * @param isSale 是否会退货或销售
+         */
+        void setTradeFlag(boolean isSale);
+        /**
          * 打印成功回调
          */
         void printResult();

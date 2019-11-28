@@ -84,6 +84,7 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
         if (mPresenter == null) {
             mPresenter = TrdProdPresenter.createPresenter(this);
         }
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     @Override
@@ -113,14 +114,13 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
 
     @Override
     public void showTradeFlag(boolean isSale) {
-        mTitleTv.setText(isSale?saleTitle:rtnTitle);
+        mTitleTv.setText(isSale ? saleTitle : rtnTitle);
     }
 
     @Override
     public void showTradeProd(List<TradeProd> prodList) {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new ShopAdapter<>(R.layout.shop_list_rv_product_item, prodList, 6);
-        mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setNewData(prodList);
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -146,6 +146,12 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
         }
         mPayTypeTv.setText(payTypeName);
         mPayTypeImg.setImageResource(img);
+    }
+
+    @Override
+    public void setTradeFlag(boolean isSale) {
+        mAdapter = new ShopAdapter<>(R.layout.shop_list_rv_product_item, null, isSale ? 9 : 6);
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override

@@ -57,6 +57,7 @@ public class TrdProdPresenter implements TrdProdContract.TrdProdPresenter {
                 mView.showVipInfo(vipInfo);
             }
         }
+        mView.setTradeFlag(trade.getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND));
         mView.showTradeProd(TradeHelper.getProdList());
         mView.showPayInfo(TradeHelper.convertAppPayType(appPayType, depCode), TradeHelper.payTypeImgRes(appPayType));
         mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(trade.getTradeTime()),
