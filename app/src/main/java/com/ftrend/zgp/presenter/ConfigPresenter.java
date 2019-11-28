@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import com.ftrend.zgp.api.ConfigContract;
 import com.ftrend.zgp.model.Config;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.printer.PrintConfig;
 
 import java.util.ArrayList;
@@ -52,7 +53,11 @@ public class ConfigPresenter implements ConfigContract.ConfigPresenter {
     public void print(boolean flag) {
         PrintConfig printConfig = ZgParams.getPrinterConfig();
         printConfig.setPrintTrade(flag);
-        mView.show(String.format("参数已保存"));
+        if (ZgParams.saveAppParams("printerConfig", PrintConfig.toJson(printConfig))) {
+            mView.show("参数已保存");
+        } else {
+            mView.show("参数写入失败");
+        }
     }
 
     @Override

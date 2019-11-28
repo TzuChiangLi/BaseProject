@@ -43,7 +43,6 @@ public class PrinterHelper {
                                     //打印机工作正常
                                     PrinterHelper.service = service;
                                     callBack.onSuccess(service);
-                                    LogUtil.d("----init printer success");
                                     break;
                                 default:
                                     //TODO 还有其他错误代码

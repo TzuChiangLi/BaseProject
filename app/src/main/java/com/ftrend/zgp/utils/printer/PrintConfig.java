@@ -23,6 +23,14 @@ public class PrintConfig {
         }
     }
 
+    public static String toJson(PrintConfig printConfig) {
+        try {
+            return GsonUtils.toJson(printConfig);
+        } catch (Exception e) {
+            return String.format("{}");
+        }
+    }
+
     public boolean isPrintTrade() {
         return printTrade;
     }

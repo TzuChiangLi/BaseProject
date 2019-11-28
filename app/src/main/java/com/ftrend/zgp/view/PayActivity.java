@@ -253,7 +253,6 @@ public class PayActivity extends BaseActivity implements PayContract.View, OnTit
                     case 2:
                         //现金
                         final double total = isSale ? TradeHelper.getTradeTotal() : RtnHelper.getRtnTotal();
-                        LogUtil.d("----rtntotal:"+total);
                         if (isSale) {
                             InputPanel.showChargeDialog(PayActivity.this, total,
                                     new MoneyInputCallback() {

@@ -89,7 +89,7 @@ public class ConfigActivity extends BaseActivity implements ConfigContract.Confi
             @Override
             public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                 switch ((String) view.getTag()) {
-                    case "打印小票":
+                    case "结算成功自动打印交易小票":
                         mPresenter.print(isChecked);
                         break;
                     default:

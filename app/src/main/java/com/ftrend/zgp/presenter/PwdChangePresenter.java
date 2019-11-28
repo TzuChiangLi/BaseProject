@@ -71,11 +71,9 @@ public class PwdChangePresenter implements PwdChangeContract.PwdChangePresenter 
                         }));
 
             } else {
-                LogUtil.d("----两次输入的新密码不一致，请重新输入");
                 mView.show("两次输入的新密码不一致，请重新输入");
             }
         } else {
-            LogUtil.d("----用户密码输入错误，请重新输入");
             mView.show("用户信息验证失败");
         }
     }
