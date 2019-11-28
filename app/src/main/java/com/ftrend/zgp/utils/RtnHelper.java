@@ -613,8 +613,8 @@ public class RtnHelper {
      */
     public static boolean pay(String appPayType, double value) {
         if (value > 0) {
-            if (value < rtnTrade.getTotal()) {
-                return false;
+            if (value <= rtnTrade.getTotal()) {
+                return pay(appPayType, value, 0, "(无)");
             } else {
                 //自动找零
                 return pay(appPayType, value, value - rtnTrade.getTotal(), "(无)");

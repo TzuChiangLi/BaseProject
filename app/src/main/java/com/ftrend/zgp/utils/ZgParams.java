@@ -7,6 +7,7 @@ import com.ftrend.zgp.model.AppParams_Table;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.SysParams;
 import com.ftrend.zgp.model.User;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.pay.SqbConfig;
 import com.ftrend.zgp.utils.printer.PrintConfig;
 import com.ftrend.zgp.utils.sunmi.SunmiCardConfig;
@@ -100,6 +101,7 @@ public class ZgParams {
                 initFlag = param.getParamValue();
             } else if ("printerConfig".equalsIgnoreCase(param.getParamName())) {
                 printerConfig = PrintConfig.fromJson(param.getParamValue());
+                LogUtil.d("----"+printerConfig.isPrintTrade());
             } else if ("lastDep".equalsIgnoreCase(param.getParamName())) {
                 lastDep = param.getParamValue();
             } else if ("lastUser".equalsIgnoreCase(param.getParamName())) {

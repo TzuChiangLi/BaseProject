@@ -159,7 +159,7 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
 
     @Override
     public void showInputPanel(int index) {
-        if (!RtnHelper.getRtnTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND)) {
+        if (!RtnHelper.getTrade().getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND)) {
             mView.showInputPanel(index);
         }
     }

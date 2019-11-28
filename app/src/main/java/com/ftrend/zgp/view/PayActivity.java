@@ -22,6 +22,7 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.PayType;
@@ -252,6 +253,7 @@ public class PayActivity extends BaseActivity implements PayContract.View, OnTit
                     case 2:
                         //现金
                         final double total = isSale ? TradeHelper.getTradeTotal() : RtnHelper.getRtnTotal();
+                        LogUtil.d("----rtntotal:"+total);
                         if (isSale) {
                             InputPanel.showChargeDialog(PayActivity.this, total,
                                     new MoneyInputCallback() {
