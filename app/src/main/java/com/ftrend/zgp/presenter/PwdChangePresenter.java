@@ -32,6 +32,11 @@ public class PwdChangePresenter implements PwdChangeContract.PwdChangePresenter 
 
 
     @Override
+    public void setUserInfo() {
+        mView.showUserInfo(String.format("%s(%s)", ZgParams.getCurrentUser().getUserName(), ZgParams.getCurrentUser().getUserCode()));
+    }
+
+    @Override
     public void modify(String old, String newPwd, String confirm) {
         //先检测旧密码是否正确
         final User user = SQLite.select().from(User.class).where(User_Table.userCode.eq(ZgParams.getCurrentUser().getUserCode()))

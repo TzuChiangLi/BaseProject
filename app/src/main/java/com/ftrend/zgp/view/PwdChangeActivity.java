@@ -1,7 +1,6 @@
 package com.ftrend.zgp.view;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,6 +25,8 @@ import butterknife.OnClick;
 public class PwdChangeActivity extends BaseActivity implements PwdChangeContract.PwdChangeView, OnTitleBarListener {
     @BindView(R.id.pwd_chg_top_bar)
     TitleBar mTitleBar;
+    @BindView(R.id.pwd_chg_tv_user)
+    TextView mUserTv;
     @BindView(R.id.pwd_chg_edt_old)
     ClearEditText mOldEdt;
     @BindView(R.id.pwd_chg_edt_new)
@@ -50,7 +51,7 @@ public class PwdChangeActivity extends BaseActivity implements PwdChangeContract
 
     @Override
     protected void initData() {
-
+        mPresenter.setUserInfo();
     }
 
     @Override
@@ -126,6 +127,11 @@ public class PwdChangeActivity extends BaseActivity implements PwdChangeContract
     @OnClick(R.id.pwd_chg_btn_submit)
     public void submit() {
         modify();
+    }
+
+    @Override
+    public void showUserInfo(String msg) {
+        mUserTv.setText(msg);
     }
 
     @Override

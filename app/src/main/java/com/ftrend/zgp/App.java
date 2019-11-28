@@ -38,10 +38,7 @@ public class App extends Application {
         LogUtil.setSaveError(true);
     }
 
-
-
     public static Context getContext() {
         return context;
     }
-
 }

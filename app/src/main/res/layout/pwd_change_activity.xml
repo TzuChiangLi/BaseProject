@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/common_white"
     tools:context="com.ftrend.zgp.view.ConfigActivity">
 
     <com.hjq.bar.TitleBar
@@ -38,78 +39,111 @@
         android:scaleType="centerInside"
         android:src="@drawable/title_bar_bottom" />
 
-    <LinearLayout
+
+    <RelativeLayout
         android:id="@+id/pwd_chg_ll_mid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/pwd_chg_title_line"
-        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginStart="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_2"
+        android:layout_marginEnd="@dimen/dp_4"
         android:background="@color/common_white"
-        android:orientation="vertical"
-        android:paddingStart="@dimen/dp_8"
-        android:paddingEnd="@dimen/dp_8">
+        android:padding="@dimen/dp_12">
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/pwd_chg_title_user"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/pwd_chg_tv_old"
+            android:layout_alignParentTop="true"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingEnd="@dimen/dp_8"
+            android:text="@string/pwd_chg_tv_user"
             android:textColor="@color/text_black_first"
-            android:textSize="@dimen/sp_16" />
+            android:textSize="@dimen/sp_13" />
+
+        <TextView
+            android:id="@+id/pwd_chg_tv_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingEnd="@dimen/dp_8"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_13"
+            tools:text="@string/pwd_chg_tv_user_name" />
+
 
         <com.ftrend.cleareditview.ClearEditText
             android:id="@+id/pwd_chg_edt_old"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/pwd_chg_title_user"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:background="@drawable/pwd_edt_selector"
+            android:hint="@string/pwd_chg_tv_old"
             android:imeOptions="actionNext"
-            android:maxLength="8"
             android:inputType="numberPassword"
-            android:lines="1" />
+            android:lines="1"
+            android:maxLength="8"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingEnd="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_12"
+            android:textSize="@dimen/sp_13" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/pwd_chg_tv_new"
-            android:textColor="@color/text_black_first"
-            android:textSize="@dimen/sp_16" />
 
         <com.ftrend.cleareditview.ClearEditText
             android:id="@+id/pwd_chg_edt_new"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/pwd_chg_edt_old"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:background="@drawable/pwd_edt_selector"
+            android:hint="@string/pwd_chg_tv_new"
             android:imeOptions="actionNext"
-            android:maxLength="8"
             android:inputType="numberPassword"
-            android:lines="1" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:text="@string/pwd_chg_tv_new_confirm"
-            android:textColor="@color/text_black_first"
-            android:textSize="@dimen/sp_16" />
+            android:lines="1"
+            android:maxLength="8"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingEnd="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_12"
+            android:textSize="@dimen/sp_13" />
 
         <com.ftrend.cleareditview.ClearEditText
             android:id="@+id/pwd_chg_edt_new_again"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/pwd_chg_edt_new"
+            android:background="@drawable/pwd_edt_selector"
+            android:hint="@string/pwd_chg_tv_new_confirm"
             android:imeOptions="actionDone"
-            android:maxLength="8"
             android:inputType="numberPassword"
-            android:lines="1" />
+            android:lines="1"
+            android:maxLength="8"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingEnd="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_12"
+            android:textSize="@dimen/sp_13" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <Button
         android:id="@+id/pwd_chg_btn_submit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/shop_btn_blue_selector"
+        android:layout_height="@dimen/dp_40"
+        android:layout_below="@+id/pwd_chg_ll_mid"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:background="@drawable/pwd_chg_btn_selector"
         android:text="@string/pwd_chg_btn_submit"
+        android:stateListAnimator="@null"
         android:textColor="@color/common_white"
         android:textSize="@dimen/sp_13" />
 

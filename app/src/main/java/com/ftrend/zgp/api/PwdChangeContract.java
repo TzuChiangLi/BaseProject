@@ -9,6 +9,11 @@ import com.ftrend.zgp.base.BaseView;
 public interface PwdChangeContract {
     interface PwdChangePresenter {
         /**
+         * 设置用户信息
+         */
+        void setUserInfo();
+
+        /**
          * 修改密码
          */
         void modify(String old, String newPwd, String confirm);
@@ -20,6 +25,10 @@ public interface PwdChangeContract {
     }
 
     interface PwdChangeView extends BaseView<PwdChangeContract.PwdChangePresenter> {
+        /**
+         * @param msg 用户信息：李克勤（30010）
+         */
+        void showUserInfo(String msg);
         /**
          * @param msg 显示状态
          */
