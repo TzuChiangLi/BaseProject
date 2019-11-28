@@ -244,8 +244,8 @@ public class HomePresenter implements HomeContract.HomePresenter {
 
     @Override
     public void logout() {
-        //清除登录信息
-        ZgParams.clearCurrentInfo();
+        //重新读取信息
+        ZgParams.loadParams();
         mView.logout();
     }
 
