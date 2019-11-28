@@ -167,10 +167,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (!isLogin) {
-            if (!ActivityUtils.getTopActivity().equals(this)) {
-                mScreenLock.sleep();
+        try {
+            if (!isLogin) {
+                if (!ActivityUtils.getTopActivity().equals(this)) {
+                    mScreenLock.sleep();
+                }
             }
+        } catch (Exception e) {
+            LogUtil.e(e.getMessage());
         }
     }
 

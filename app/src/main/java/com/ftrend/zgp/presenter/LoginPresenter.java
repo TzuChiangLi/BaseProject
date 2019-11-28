@@ -72,10 +72,7 @@ public class LoginPresenter implements LoginContract.LoginPresenter {
             User user = SQLite.select().from(User.class).where(User_Table.userCode.eq(userCode)).querySingle();
             Dep dep = SQLite.select().from(Dep.class).where(Dep_Table.depCode.eq(depCode)).querySingle();
             if (user != null) {
-
                 LogUtil.d("----pwd:"+EncryptUtil.pwdDecrypt(user.getUserPwd()));
-
-
                 if (userPwd.equals(EncryptUtil.pwdDecrypt(user.getUserPwd()))) {
                     mView.loginSuccess(user, dep);
                     //保存静态变量

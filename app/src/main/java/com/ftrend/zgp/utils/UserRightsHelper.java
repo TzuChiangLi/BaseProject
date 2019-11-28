@@ -57,4 +57,12 @@ public class UserRightsHelper {
         }
         return userRights.substring(rightsNo - 1, rightsNo).equals("1");
     }
+
+    /**
+     * @param user 用户
+     * @return 是否更新
+     */
+    public static boolean changeUserPwd(User user) {
+        return user.save();
+    }
 }

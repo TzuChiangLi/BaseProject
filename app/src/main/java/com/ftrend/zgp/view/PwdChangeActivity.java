@@ -142,7 +142,7 @@ public class PwdChangeActivity extends BaseActivity implements PwdChangeContract
             public void run() {
                 Intent intent = new Intent(PwdChangeActivity.this, LoginActivity.class);
                 startActivity(intent);
-                ActivityUtils.finishAllActivitiesExceptNewest(true);
+                finish();
             }
         }, 1500);
     }

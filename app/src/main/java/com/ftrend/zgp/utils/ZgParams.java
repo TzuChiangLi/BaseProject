@@ -172,7 +172,6 @@ public class ZgParams {
         appParams.setParamValue(paramValue);
         return appParams.save();
     }
-
     /**
      * 设置初始化完成标志
      */
