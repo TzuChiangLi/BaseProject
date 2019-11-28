@@ -52,7 +52,6 @@ public class ConfigPresenter implements ConfigContract.ConfigPresenter {
     public void print(boolean flag) {
         PrintConfig printConfig = ZgParams.getPrinterConfig();
         printConfig.setPrintTrade(flag);
-
         mView.show(String.format("参数已保存"));
     }
 

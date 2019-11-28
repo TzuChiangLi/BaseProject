@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.zgp.R;
@@ -136,15 +135,14 @@ public class PwdChangeActivity extends BaseActivity implements PwdChangeContract
 
     @Override
     public void showSuccess(String msg) {
-        MessageUtil.showSuccess(msg);
-        new Handler().postDelayed(new Runnable() {
+        MessageUtil.info(msg, new MessageUtil.MessageBoxOkListener() {
             @Override
-            public void run() {
+            public void onOk() {
                 Intent intent = new Intent(PwdChangeActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
-        }, 1500);
+        });
     }
 
     @Override

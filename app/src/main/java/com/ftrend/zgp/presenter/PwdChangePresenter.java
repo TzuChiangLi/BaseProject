@@ -57,7 +57,6 @@ public class PwdChangePresenter implements PwdChangeContract.PwdChangePresenter 
                                     //清除数据
                                     TradeHelper.clear();
                                     RtnHelper.clearAllData();
-                                    LogUtil.d("----修改成功\n请重新登录");
                                     mView.showSuccess("修改成功\n请重新登录");
                                 } else {
                                     mView.showError("数据写入失败");
@@ -66,7 +65,7 @@ public class PwdChangePresenter implements PwdChangeContract.PwdChangePresenter 
 
                             @Override
                             public void onFailed(String errorCode, String errorMsg) {
-                                LogUtil.d("----err:" + errorMsg);
+                                LogUtil.e("----err:" + errorMsg);
                                 mView.showError(String.format("%s(%s)", errorMsg, errorCode));
                             }
                         }));
