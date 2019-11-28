@@ -2,6 +2,7 @@ package com.ftrend.zgp.presenter;
 
 import android.content.Context;
 
+import com.blankj.utilcode.util.DeviceUtils;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.HomeContract;
 import com.ftrend.zgp.model.Menu;
@@ -9,6 +10,7 @@ import com.ftrend.zgp.utils.HandoverHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.UserRightsHelper;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
@@ -46,7 +48,11 @@ public class HomePresenter implements HomeContract.HomePresenter {
 
     @Override
     public void initSunmiPaySdk() {
-        SunmiPayHelper.getInstance().connectPayService();
+        LogUtil.d("----设备厂商：" + DeviceUtils.getManufacturer());
+        LogUtil.d("----设备型号：" + DeviceUtils.getModel());
+        if (DeviceUtils.getManufacturer().contains("SUNMI")) {
+            SunmiPayHelper.getInstance().connectPayService();
+        }
     }
 
     @Override
