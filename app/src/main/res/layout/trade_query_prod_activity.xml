@@ -114,12 +114,49 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/trd_qry_prod_ll_more"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/trd_qry_prod_ll_mid"
+        android:background="@color/common_white"
+        android:orientation="horizontal"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_8">
+
+        <TextView
+            android:id="@+id/trd_qry_prod_title_old_lsno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lines="1"
+            android:paddingTop="@dimen/dp_2"
+            android:paddingBottom="@dimen/dp_4"
+            android:text="销售原单："
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_10"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/trd_qry_prod_tv_old_lsno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_2"
+            android:paddingBottom="@dimen/dp_4"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_10"
+            android:visibility="gone"
+            tools:text="@string/rtn_trade_replace_trade_lsno"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/trd_qry_prod_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/trd_qry_prod_rl_bottom"
-        android:layout_below="@+id/trd_qry_prod_ll_mid"
+        android:layout_below="@+id/trd_qry_prod_ll_more"
         android:layout_marginTop="@dimen/dp_4"
         android:paddingStart="@dimen/dp_4"
         android:paddingEnd="@dimen/dp_4"

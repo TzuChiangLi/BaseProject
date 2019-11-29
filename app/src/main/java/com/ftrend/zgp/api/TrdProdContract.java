@@ -25,9 +25,15 @@ public interface TrdProdContract {
 
     interface TrdProdView extends BaseView<TrdProdContract.TrdProdPresenter> {
         /**
+         * @param oldLsNo 原单流水号
+         */
+        void showMoreInfo(String oldLsNo);
+
+        /**
          * @param isSale 流水类型
          */
         void showTradeFlag(boolean isSale);
+
         /**
          * 显示商品详情和流水信息
          */
@@ -53,6 +59,7 @@ public interface TrdProdContract {
          * @param isSale 是否会退货或销售
          */
         void setTradeFlag(boolean isSale);
+
         /**
          * 打印成功回调
          */

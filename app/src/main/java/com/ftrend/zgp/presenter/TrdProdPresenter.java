@@ -59,6 +59,9 @@ public class TrdProdPresenter implements TrdProdContract.TrdProdPresenter {
         }
         mView.setTradeFlag(trade.getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND));
         mView.showTradeProd(TradeHelper.getProdList());
+        if (!TextUtils.isEmpty(TradeHelper.getProdList().get(0).getSaleInfo())) {
+            mView.showMoreInfo(TradeHelper.getProdList().get(0).getSaleInfo().substring(0, 8));
+        }
         mView.showPayInfo(TradeHelper.convertAppPayType(appPayType, depCode), TradeHelper.payTypeImgRes(appPayType));
         mView.showTradeInfo(new SimpleDateFormat("yyyy年MM月dd日HH:mm").format(trade.getTradeTime()),
                 trade.getLsNo().length() > 8 ? trade.getLsNo() : String.format("%s%s", new SimpleDateFormat("yyyyMMdd").format(trade.getTradeTime()), trade.getLsNo()),

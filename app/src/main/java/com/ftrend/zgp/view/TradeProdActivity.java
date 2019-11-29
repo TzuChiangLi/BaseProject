@@ -4,6 +4,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -39,6 +40,10 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
     ImageView mPayTypeImg;
     @BindView(R.id.trd_qry_prod_tv_pay_type)
     TextView mPayTypeTv;
+    @BindView(R.id.trd_qry_prod_tv_old_lsno)
+    TextView mOldLsNoTv;
+    @BindView(R.id.trd_qry_prod_title_old_lsno)
+    TextView mOldLsNoTitle;
     @BindView(R.id.trd_qry_prod_tv_trade_time)
     TextView mTradeTimeTv;
     @BindView(R.id.trd_qry_prod_tv_trade_lsno)
@@ -55,6 +60,8 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
     RecyclerView mRecyclerView;
     @BindView(R.id.trd_qry_prod_rl_bottom)
     RelativeLayout mBottomLayout;
+    @BindView(R.id.trd_qry_prod_ll_more)
+    LinearLayout mMoreLayout;
     @BindView(R.id.trd_qry_prod_rl_vip)
     RelativeLayout mVipLayout;
     @BindString(R.string.trade_prod_sale)
@@ -66,7 +73,10 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
 
     @Override
     public void onNetWorkChange(boolean isOnline) {
-
+        if (mTitleBar == null) {
+            mTitleBar = findViewById(R.id.trd_qry_prod_top_bar);
+        }
+        mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
     }
 
     @Override
@@ -110,6 +120,14 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
     @Override
     public void onRightClick(View v) {
 
+    }
+
+    @Override
+    public void showMoreInfo(String oldLsNo) {
+        mMoreLayout.setVisibility(View.VISIBLE);
+        mOldLsNoTv.setVisibility(View.VISIBLE);
+        mOldLsNoTitle.setVisibility(View.VISIBLE);
+        mOldLsNoTv.setText(oldLsNo);
     }
 
     @Override

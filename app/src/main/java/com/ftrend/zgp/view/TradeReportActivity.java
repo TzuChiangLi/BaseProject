@@ -106,7 +106,7 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
         mTitleBar.setRightIcon(ZgParams.isIsOnline() ? R.drawable.online : R.drawable.offline);
     }
 
-    @OnClick(R.id.textView_date_range)
+    @OnClick(R.id.rl_date_range)
     public void selectDateRange() {
         InputPanel.showMultiCalendarSelector(this, begin, end, new DateRangeInputCallback() {
             @Override
