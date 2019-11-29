@@ -22,6 +22,11 @@ public interface HandoverContract {
         void doHandover();
 
         /**
+         * 打印
+         */
+        void print(List<HandoverRecord> recordList);
+
+        /**
          * 销毁，防止泄露
          */
         void onDestory();

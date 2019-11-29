@@ -16,10 +16,14 @@ import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.msg.InputPanel;
+import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.DateRangeInputCallback;
+import com.ftrend.zgp.utils.printer.PrintFormat;
+import com.ftrend.zgp.utils.printer.PrinterHelper;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
 import com.hjq.bar.TitleBar;
+import com.sunmi.peripheral.printer.SunmiPrinterService;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,7 +66,6 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
     @BindDrawable(R.drawable.view_white_bottom_right_line)
     Drawable bgRight;
 
-
     /**
      * 起始日期
      */
@@ -71,6 +74,9 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
      * 结束日期
      */
     private Date end;
+
+    private List<RestBodyMap> dataList = null;
+    private List<ReportData> payList = null;
 
     @Override
     public void onNetWorkChange(boolean isOnline) {
@@ -169,10 +175,10 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
         if (dataList == null) {
             return;
         }
-
+        this.dataList = dataList;
         Integer sumCount = 0;
         Double sumTotal = 0.0;
-        List<ReportData> payList = new ArrayList<>();
+        payList = new ArrayList<>();
         for (RestBodyMap data : dataList) {
             ReportData reportData = new ReportData(data);
             if (reportData.itemName.equals("T")) {
@@ -282,6 +288,30 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
     public void onRightClick(View v) {
     }
 
+    @OnClick(R.id.trade_report_btn_print_again)
+    public void print() {
+        PrinterHelper.initPrinter(TradeProdActivity.mContext, new PrinterHelper.PrintInitCallBack() {
+            @Override
+            public void onSuccess(SunmiPrinterService service) {
+                getPrintData(service);
+            }
+
+            @Override
+            public void onFailed() {
+                MessageUtil.showError("打印机出现故障，请检查");
+            }
+        });
+    }
+
+
+    public void getPrintData(SunmiPrinterService service) {
+        if (service == null) {
+            return;
+        }
+        //生成数据，执行打印命令
+        PrinterHelper.print(PrintFormat.printTradeReport(begin, end, dataList, payList));
+    }
+
     @OnClick(R.id.trade_report_btn_back)
     public void back() {
         finish();
@@ -290,12 +320,12 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
     /**
      * 报表数据
      */
-    class ReportData {
-        private String itemName;
-        private Integer tradeCount;
-        private Double tradeTotal;
+    public static class ReportData {
+        public String itemName;
+        public Integer tradeCount;
+        public Double tradeTotal;
 
-        ReportData(RestBodyMap map) {
+        public ReportData(RestBodyMap map) {
             if (map.containsKey("itemName")) {
                 itemName = map.getString("itemName");
             }

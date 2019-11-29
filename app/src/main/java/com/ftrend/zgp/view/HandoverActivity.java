@@ -64,7 +64,7 @@ public class HandoverActivity extends BaseActivity implements HandoverContract.H
         if (isReport) {
             // 交班报表查询模式
             mTitleLabel.setText("交班报表");
-            mHandoverBtn.setVisibility(View.GONE);
+            mHandoverBtn.setText("打印");
             mCancelBtn.setText("返回");
         }
     }
@@ -80,7 +80,13 @@ public class HandoverActivity extends BaseActivity implements HandoverContract.H
         if (ClickUtil.onceClick()) {
             return;
         }
-        mPresenter.doHandover();
+        if (isReport) {
+            if (mAdapter != null && (!mAdapter.getData().isEmpty())) {
+                mPresenter.print(mAdapter.getData());
+            }
+        } else {
+            mPresenter.doHandover();
+        }
     }
 
     @OnClick(R.id.handover_btn_cancel)
@@ -122,12 +128,10 @@ public class HandoverActivity extends BaseActivity implements HandoverContract.H
 
     @Override
     public void onTitleClick(View v) {
-
     }
 
     @Override
     public void onRightClick(View v) {
-
     }
 
     /**

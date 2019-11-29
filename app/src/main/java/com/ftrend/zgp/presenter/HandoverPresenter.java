@@ -1,6 +1,7 @@
 package com.ftrend.zgp.presenter;
 
 import com.ftrend.zgp.api.HandoverContract;
+import com.ftrend.zgp.model.HandoverRecord;
 import com.ftrend.zgp.utils.HandoverHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.RestBodyMap;
@@ -8,7 +9,12 @@ import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.printer.PrintFormat;
+import com.ftrend.zgp.utils.printer.PrinterHelper;
+import com.ftrend.zgp.view.TradeProdActivity;
+import com.sunmi.peripheral.printer.SunmiPrinterService;
 
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -47,7 +53,6 @@ public class HandoverPresenter implements HandoverContract.HandoverPresenter {
                 return;
             }
             RestSubscribe.getInstance().posEnd(ZgParams.getPosCode(), new RestCallback(new RestResultHandler() {
-
                 @Override
                 public void onSuccess(RestBodyMap body) {
                     HandoverHelper.finish();
@@ -69,6 +74,30 @@ public class HandoverPresenter implements HandoverContract.HandoverPresenter {
         } else {
             mView.showOfflineTip();
         }
+    }
+
+    @Override
+    public void print(final List<HandoverRecord> recordList) {
+        //TODO 2019年11月29日13:47:05 打印
+        PrinterHelper.initPrinter(TradeProdActivity.mContext, new PrinterHelper.PrintInitCallBack() {
+            @Override
+            public void onSuccess(SunmiPrinterService service) {
+                getPrintData(service,recordList);
+            }
+
+            @Override
+            public void onFailed() {
+                MessageUtil.showError("打印机出现故障，请检查");
+            }
+        });
+    }
+
+    public void getPrintData(SunmiPrinterService service,List<HandoverRecord> recordList) {
+        if (service == null) {
+            return;
+        }
+        //生成数据，执行打印命令
+        PrinterHelper.print(PrintFormat.printHandoverTrade(recordList));
     }
 
     @Override

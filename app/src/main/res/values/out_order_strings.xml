@@ -14,6 +14,7 @@
 
     <string name="out_btn_get_out">取单</string>
     <string name="out_btn_close">返回</string>
+    <string name="out_btn_print">打印</string>
 
 
 </resources>

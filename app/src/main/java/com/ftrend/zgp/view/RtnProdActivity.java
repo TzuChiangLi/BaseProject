@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.blankj.utilcode.util.KeyboardUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.ShopAdapter;

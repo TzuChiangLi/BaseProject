@@ -1,6 +1,8 @@
 package com.ftrend.zgp.utils.printer;
 
 import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.utils.http.RestBodyMap;
+import com.ftrend.zgp.view.TradeReportActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,10 +43,25 @@ public class PrintData {
      */
     private boolean isTypeList = false;
 
+    private boolean isTradeList = false;
+
+    private boolean isPayList = false;
+
     /**
      * 商品列表
      */
     private List<TradeProd> prodList = new ArrayList<>();
+
+    /**
+     * 交易统计
+     */
+    private List<RestBodyMap> dataList = new ArrayList<>();
+
+    /**
+     * 交易统计-支付明细
+     */
+    private List<TradeReportActivity.ReportData> payList = new ArrayList<>();
+
 
     public String getPrintData() {
         return printData;
@@ -100,5 +117,38 @@ public class PrintData {
 
     public void setTypeList(boolean typeList) {
         isTypeList = typeList;
+    }
+
+
+    public boolean isTradeList() {
+        return isTradeList;
+    }
+
+    public void setTradeList(boolean tradeList) {
+        isTradeList = tradeList;
+    }
+
+    public List<RestBodyMap> getDataList() {
+        return dataList;
+    }
+
+    public void setDataList(List<RestBodyMap> dataList) {
+        this.dataList = dataList;
+    }
+
+    public List<TradeReportActivity.ReportData> getPayList() {
+        return payList;
+    }
+
+    public void setPayList(List<TradeReportActivity.ReportData> payList) {
+        this.payList = payList;
+    }
+
+    public boolean isPayList() {
+        return isPayList;
+    }
+
+    public void setPayList(boolean payList) {
+        isPayList = payList;
     }
 }

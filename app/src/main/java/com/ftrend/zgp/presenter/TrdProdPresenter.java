@@ -68,9 +68,6 @@ public class TrdProdPresenter implements TrdProdContract.TrdProdPresenter {
 
     @Override
     public void print() {
-        if (!ZgParams.getPrinterConfig().isPrintTrade()) {
-            return;
-        }
         PrinterHelper.initPrinter(TradeProdActivity.mContext, new PrinterHelper.PrintInitCallBack() {
             @Override
             public void onSuccess(SunmiPrinterService service) {

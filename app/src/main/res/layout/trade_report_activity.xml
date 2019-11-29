@@ -228,9 +228,19 @@
             android:id="@+id/trade_report_btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_toStartOf="@+id/trade_report_btn_print_again"
             android:background="@drawable/shop_btn_gray_selector"
             android:text="@string/out_btn_close"
             android:textColor="@color/text_black_first" />
+
+        <Button
+            android:id="@+id/trade_report_btn_print_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/shop_btn_red_selector"
+            android:text="@string/out_btn_print"
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/sp_13" />
     </RelativeLayout>
 </RelativeLayout>

@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.blankj.utilcode.util.KeyboardUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftrend.cleareditview.ClearEditText;
@@ -89,6 +90,7 @@ public class RtnProdDialog extends BottomPopupView implements BaseQuickAdapter.O
 
     @Override
     protected void onDismiss() {
+        KeyboardUtils.hideSoftInput(this);
         super.onDismiss();
         callBack.onClose();
     }

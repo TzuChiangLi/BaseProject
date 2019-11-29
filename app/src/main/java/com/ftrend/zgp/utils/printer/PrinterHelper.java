@@ -4,8 +4,9 @@ import android.content.Context;
 import android.os.RemoteException;
 
 import com.ftrend.zgp.model.TradeProd;
-import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.log.LogUtil;
+import com.ftrend.zgp.view.TradeReportActivity;
 import com.sunmi.peripheral.printer.InnerPrinterCallback;
 import com.sunmi.peripheral.printer.InnerPrinterException;
 import com.sunmi.peripheral.printer.InnerPrinterManager;
@@ -106,21 +107,57 @@ public class PrinterHelper {
                     //商品列表的处理
                     String[] result;
                     for (TradeProd prod : p.getProdList()) {
-                        result = PrintFormat.mergeString(prod.getProdName(), String.format("%.0f", prod.getAmount()), String.format("%.2f", prod.getTotal()),
+                        result = PrintFormat.mergeSaleString(prod.getProdName(), String.format("%.0f", prod.getAmount()), String.format("%.2f", prod.getTotal()),
                                 32);
                         service.printText(result[0], null);
                         service.printText(result[1], null);
                     }
                     service.lineWrap(1, null);
-                } else {
-                    //打印单行文本
-                    service.printText(p.getPrintData(), null);
                 }
+                if (p.isTradeList()) {
+                    //交易明细处理
+                    double total = 0;
+                    Integer count = 0;
+                    int i = 0;
+                    //交易处理
+                    //销售          金额          次数
+                    for (RestBodyMap data : p.getDataList()) {
+                        TradeReportActivity.ReportData reportData = new TradeReportActivity.ReportData(data);
+                        if (reportData.itemName.equals("R")) {
+                            service.printText(PrintFormat.mergeReportTitle("退货", String.format("%.2f", reportData.tradeTotal),
+                                    String.format("%d", reportData.tradeCount).replace(".00", ""), 32), null);
+                            count += reportData.tradeCount;
+                            total += reportData.tradeTotal;
+                            LogUtil.d("----itemName/total/count:" + reportData.itemName + "/" + reportData.tradeTotal + "/" + reportData.tradeCount);
+                        }
+                        if (reportData.itemName.equals("T")) {
+                            service.printText(PrintFormat.mergeReportTitle("销售", String.format("%.2f", reportData.tradeTotal),
+                                    String.format("%d", reportData.tradeCount).replace(".00", ""), 32), null);
+                            count += reportData.tradeCount;
+                            total += reportData.tradeTotal;
+                            LogUtil.d("----itemName/total/count:" + reportData.itemName + "/" + reportData.tradeTotal + "/" + reportData.tradeCount);
+                        }
+                    }
+                    service.printText(PrintFormat.mergeReportTitle("合计", String.format("%.2f", total),
+                            String.format("%d", count).replace(".00", ""), 32), null);
+                    service.lineWrap(1, null);
+                }
+                if (p.isPayList()) {
+                    //支付处理
+                    for (TradeReportActivity.ReportData reportData : p.getPayList()) {
+                        service.printText(PrintFormat.mergeReportTitle(reportData.itemName, String.format("%.2f", reportData.tradeTotal),
+                                String.format("%d", reportData.tradeCount).replace(".00", ""), 32), null);
+                    }
+                    service.lineWrap(1, null);
+                }
+                //打印单行文本
+                service.printText(p.getPrintData(), null);
             }
             service.lineWrap(4, null);
             result = true;
             return result;
-        } catch (Exception e) {
+        } catch (
+                Exception e) {
             LogUtil.e(e.getMessage());
             return result;
         }
