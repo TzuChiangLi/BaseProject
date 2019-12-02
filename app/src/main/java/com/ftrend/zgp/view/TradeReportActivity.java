@@ -339,7 +339,6 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
         public String itemName;
         public Integer tradeCount;
         public Double tradeTotal;
-        public String itemCode;
 
         public ReportData(RestBodyMap map) {
             if (map.containsKey("itemName")) {
@@ -350,9 +349,6 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
             }
             if (map.containsKey("tradeTotal")) {
                 tradeTotal = map.getDouble("tradeTotal");
-            }
-            if (map.containsKey("itemCode")) {
-                tradeTotal = map.getDouble("itemCode");
             }
         }
     }
