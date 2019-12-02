@@ -116,7 +116,7 @@ public class SqbPayHelper {
         UpayOrder order = new UpayOrder();
         order.setClient_sn(clientSn);//商户订单号
         order.setTotal_amount(CommonUtil.debugMode(App.getContext())
-                ? "1" : CommonUtil.moneyToString(trade.getTotal()));//交易总金额
+                ? "1" : payMoneyString(trade.getTotal()));//交易总金额
         // order.setPayway("1");//支付方式--无需指定
         order.setDynamic_id(scanCode);//付款码内容
         order.setSubject(ZgParams.getCurrentDep().getDepName() + "-购物消费");//交易简介
@@ -180,7 +180,7 @@ public class SqbPayHelper {
         order.setRefund_request_no(requestNo);//退款序列号
         order.setOperator(ZgParams.getCurrentUser().getUserCode());//操作员
         order.setRefund_amount(CommonUtil.debugMode(App.getContext())
-                ? "1" : CommonUtil.moneyToString(trade.getTotal()));//退款金额
+                ? "1" : payMoneyString(trade.getTotal()));//退款金额
         order.setReflect(requestNo);//反射参数
         order.setRefundModel(UpayOrder.RefundModel.CLIENT_SN);//指定退款模式为商户订单号退款
         order.setPayModel(UpayOrder.PayModel.NO_UI);//指定 SDK 启动模式为无界面模式
@@ -342,6 +342,17 @@ public class SqbPayHelper {
         }
     }
 
+    /**
+     * 转换支付金额字符串：整数、单位为分
+     *
+     * @param money
+     * @return
+     */
+    private static String payMoneyString(double money) {
+        return String.format("%d", Math.round(money * 100));
+    }
+
+}
     /*
 biz_response.result_code,状态分为：状态分为 SUCCESS、FAIL、INPROGRESS和 ERROR 四类，
 SUCCESS: 本次业务执行成功
@@ -457,4 +468,3 @@ FAIL_CANCELED	确认失败（即收钱吧后台和消费者端均失败）	     
       description='零售商品', reflect='7894259244086017', refund_request_no='7894259244086017',
       result_code='REFUND_SUCCESS', error_code='', error_message=''}
      */
-}
