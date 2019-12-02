@@ -213,6 +213,9 @@ public class PrintFormat {
      * @return 打印数据列表
      */
     public static List<PrintData> printTradeReport(Date begin, Date end, List<RestBodyMap> dataList, List<TradeReportActivity.ReportData> payList) {
+        if (dataList == null || dataList.isEmpty()) {
+            return null;
+        }
         List<PrintData> printDataList = new ArrayList<>();
         PrintData printData;
         //分割线
@@ -258,12 +261,20 @@ public class PrintFormat {
         //分割线
         printDataList.add(newLine());
         //支付明细统计
+        if (payList != null) {
+            printData = new PrintData();
+            printData.setPayList(true);
+            printData.setPayList(payList);
+            printDataList.add(printData);
+            //分割线
+            printDataList.add(newLine());
+        }
+        //打印时间
         printData = new PrintData();
-        printData.setPayList(true);
-        printData.setPayList(payList);
+        printData.setInitStyle(true);
+        printData.setAlign(ALIGN_LEFT);
+        printData.setPrintData(mergeSaleString("打印时间:", new SimpleDateFormat("yyyy/MM/dd/HH:mm:ss").format(new Date()), 32));
         printDataList.add(printData);
-        //分割线
-        printDataList.add(newLine());
         return printDataList;
     }
 
@@ -347,6 +358,14 @@ public class PrintFormat {
         printData.setInitStyle(true);
         printData.setPrintData(mergeReportTitle("支付方式合计", String.format("%.2f", data.getPayTotal()),
                 String.format("%.2f", data.getPayCount()).replace(".00", ""), 32));
+        printDataList.add(printData);
+        //分割线
+        printDataList.add(newLine());
+        //打印时间
+        printData = new PrintData();
+        printData.setInitStyle(true);
+        printData.setAlign(ALIGN_LEFT);
+        printData.setPrintData(mergeSaleString("打印时间:", new SimpleDateFormat("yyyy/MM/dd/HH:mm:ss").format(new Date()), 32));
         printDataList.add(printData);
 
         return printDataList;

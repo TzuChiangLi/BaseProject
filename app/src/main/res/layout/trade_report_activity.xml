@@ -89,7 +89,7 @@
                     android:layout_marginBottom="@dimen/dp_4"
                     android:paddingStart="@dimen/dp_8"
                     android:paddingTop="@dimen/dp_4"
-                    android:paddingEnd="@dimen/dp_12"
+                    android:paddingEnd="@dimen/dp_16"
                     android:paddingBottom="@dimen/dp_4"
                     android:text="修改"
                     android:textColor="@color/common_white"

@@ -15,6 +15,7 @@ import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.DateRangeInputCallback;
@@ -309,7 +310,21 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
             return;
         }
         //生成数据，执行打印命令
-        PrinterHelper.print(PrintFormat.printTradeReport(begin, end, dataList, payList));
+        if (!dataList.isEmpty()) {
+            PrinterHelper.print(PrintFormat.printTradeReport(begin, end, dataList, payList));
+        } else {
+            RestBodyMap bodyMap = new RestBodyMap();
+            bodyMap.put("itemName", "T");
+            bodyMap.put("tradeCount", 0);
+            bodyMap.put("tradeTotal", 0.00);
+            dataList.add(bodyMap);
+            bodyMap = new RestBodyMap();
+            bodyMap.put("itemName", "R");
+            bodyMap.put("tradeCount", 0);
+            bodyMap.put("tradeTotal", 0.00);
+            dataList.add(bodyMap);
+            PrinterHelper.print(PrintFormat.printTradeReport(begin, end, dataList, null));
+        }
     }
 
     @OnClick(R.id.trade_report_btn_back)
@@ -324,6 +339,7 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
         public String itemName;
         public Integer tradeCount;
         public Double tradeTotal;
+        public String itemCode;
 
         public ReportData(RestBodyMap map) {
             if (map.containsKey("itemName")) {
@@ -334,6 +350,9 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
             }
             if (map.containsKey("tradeTotal")) {
                 tradeTotal = map.getDouble("tradeTotal");
+            }
+            if (map.containsKey("itemCode")) {
+                tradeTotal = map.getDouble("itemCode");
             }
         }
     }
