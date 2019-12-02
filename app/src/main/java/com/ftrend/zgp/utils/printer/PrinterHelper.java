@@ -88,6 +88,9 @@ public class PrinterHelper {
      * @return 是否打印成功
      */
     public static boolean print(List<PrintData> printDataList) {
+        if (printDataList == null || printDataList.isEmpty()) {
+            return false;
+        }
         try {
             for (PrintData p : printDataList) {
                 //处理样式
@@ -128,14 +131,12 @@ public class PrinterHelper {
                                     String.format("%d", reportData.tradeCount).replace(".00", ""), 32), null);
                             count += reportData.tradeCount;
                             total += reportData.tradeTotal;
-                            LogUtil.d("----itemName/total/count:" + reportData.itemName + "/" + reportData.tradeTotal + "/" + reportData.tradeCount);
                         }
                         if (reportData.itemName.equals("T")) {
                             service.printText(PrintFormat.mergeReportTitle("销售", String.format("%.2f", reportData.tradeTotal),
                                     String.format("%d", reportData.tradeCount).replace(".00", ""), 32), null);
                             count += reportData.tradeCount;
                             total += reportData.tradeTotal;
-                            LogUtil.d("----itemName/total/count:" + reportData.itemName + "/" + reportData.tradeTotal + "/" + reportData.tradeCount);
                         }
                     }
                     service.printText(PrintFormat.mergeReportTitle("合计", String.format("%.2f", total),
@@ -156,8 +157,7 @@ public class PrinterHelper {
             service.lineWrap(4, null);
             result = true;
             return result;
-        } catch (
-                Exception e) {
+        } catch (Exception e) {
             LogUtil.e(e.getMessage());
             return result;
         }
