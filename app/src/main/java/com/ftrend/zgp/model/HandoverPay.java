@@ -32,21 +32,16 @@ public class HandoverPay extends BaseModel {
     private String payTypeName;
     @Column
     @NotNull
-    private double saleCount = 0;
+    private int saleCount = 0;
     @Column
     @NotNull
     private double saleTotal = 0;
     @Column
     @NotNull
-    private double rtnCount = 0;
+    private int rtnCount = 0;
     @Column
     @NotNull
     private double rtnTotal = 0;
-
-    @Column
-    @NotNull
-    @Deprecated
-    private String tradeFlag = "";
 
     public HandoverPay() {
     }
@@ -83,14 +78,6 @@ public class HandoverPay extends BaseModel {
         this.cashierName = cashierName;
     }
 
-    public String getTradeFlag() {
-        return tradeFlag;
-    }
-
-    public void setTradeFlag(String tradeFlag) {
-        this.tradeFlag = tradeFlag;
-    }
-
     public String getPayType() {
         return payType;
     }
@@ -107,11 +94,11 @@ public class HandoverPay extends BaseModel {
         this.payTypeName = payTypeName;
     }
 
-    public double getSaleCount() {
+    public int getSaleCount() {
         return saleCount;
     }
 
-    public void setSaleCount(double saleCount) {
+    public void setSaleCount(int saleCount) {
         this.saleCount = saleCount;
     }
 
@@ -123,11 +110,11 @@ public class HandoverPay extends BaseModel {
         this.saleTotal = saleTotal;
     }
 
-    public double getRtnCount() {
+    public int getRtnCount() {
         return rtnCount;
     }
 
-    public void setRtnCount(double rtnCount) {
+    public void setRtnCount(int rtnCount) {
         this.rtnCount = rtnCount;
     }
 
@@ -153,7 +140,7 @@ public class HandoverPay extends BaseModel {
         rtnTotal += other.rtnTotal;
     }
 
-    public double getCount() {
+    public int getCount() {
         return saleCount + rtnCount;
     }
 

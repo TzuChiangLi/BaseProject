@@ -30,31 +30,31 @@ public class HandoverSum extends BaseModel {
     private String cashierName;
     @Column
     @NotNull
-    private double saleCount = 0;
+    private int saleCount = 0;
     @Column
     @NotNull
     private double saleTotal = 0;
     @Column
     @NotNull
-    private double rtnCount = 0;
+    private int rtnCount = 0;
     @Column
     @NotNull
     private double rtnTotal = 0;
     @Column
     @NotNull
-    private double delCount = 0;
+    private int delCount = 0;
     @Column
     @NotNull
     private double delTotal = 0;
     @Column
     @NotNull
-    private double cancelCount = 0;
+    private int cancelCount = 0;
     @Column
     @NotNull
     private double cancelTotal = 0;
     @Column
     @NotNull
-    private double hangupCount = 0;
+    private int hangupCount = 0;
     @Column
     @NotNull
     private double hangupTotal = 0;
@@ -95,11 +95,11 @@ public class HandoverSum extends BaseModel {
         this.cashierName = cashierName;
     }
 
-    public double getSaleCount() {
+    public int getSaleCount() {
         return saleCount;
     }
 
-    public void setSaleCount(double saleCount) {
+    public void setSaleCount(int saleCount) {
         this.saleCount = saleCount;
     }
 
@@ -111,11 +111,11 @@ public class HandoverSum extends BaseModel {
         this.saleTotal = saleTotal;
     }
 
-    public double getRtnCount() {
+    public int getRtnCount() {
         return rtnCount;
     }
 
-    public void setRtnCount(double rtnCount) {
+    public void setRtnCount(int rtnCount) {
         this.rtnCount = rtnCount;
     }
 
@@ -127,11 +127,11 @@ public class HandoverSum extends BaseModel {
         this.rtnTotal = rtnTotal;
     }
 
-    public double getDelCount() {
+    public int getDelCount() {
         return delCount;
     }
 
-    public void setDelCount(double delCount) {
+    public void setDelCount(int delCount) {
         this.delCount = delCount;
     }
 
@@ -143,11 +143,11 @@ public class HandoverSum extends BaseModel {
         this.delTotal = delTotal;
     }
 
-    public double getCancelCount() {
+    public int getCancelCount() {
         return cancelCount;
     }
 
-    public void setCancelCount(double cancelCount) {
+    public void setCancelCount(int cancelCount) {
         this.cancelCount = cancelCount;
     }
 
@@ -159,11 +159,11 @@ public class HandoverSum extends BaseModel {
         this.cancelTotal = cancelTotal;
     }
 
-    public double getHangupCount() {
+    public int getHangupCount() {
         return hangupCount;
     }
 
-    public void setHangupCount(double hangupCount) {
+    public void setHangupCount(int hangupCount) {
         this.hangupCount = hangupCount;
     }
 

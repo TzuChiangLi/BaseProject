@@ -11,26 +11,20 @@ public class HandoverRecord {
 
     private String depCode;
 
-    private double saleCount = 0;
+    private int saleCount = 0;
     private double saleTotal = 0;
 
-    private double rtnCount = 0;
+    private int rtnCount = 0;
     private double rtnTotal = 0;
 
     private double moneyTotal = 0;
-    private double moneyCount = 0;
+    private int moneyCount = 0;
 
     private double sqbTotal = 0;
-    private double sqbCount = 0;
-
-    private double aliPayTotal = 0;
-    private double aliPayCount = 0;
-
-    private double wechatTotal = 0;
-    private double wechatCount = 0;
+    private int sqbCount = 0;
 
     private double cardTotal = 0;
-    private double cardCount = 0;
+    private int cardCount = 0;
 
     public HandoverRecord() {
     }
@@ -51,11 +45,11 @@ public class HandoverRecord {
         this.cashierName = cashierName;
     }
 
-    public double getSaleCount() {
+    public int getSaleCount() {
         return saleCount;
     }
 
-    public void setSaleCount(double saleCount) {
+    public void setSaleCount(int saleCount) {
         this.saleCount = saleCount;
     }
 
@@ -67,11 +61,11 @@ public class HandoverRecord {
         this.saleTotal = saleTotal;
     }
 
-    public double getRtnCount() {
+    public int getRtnCount() {
         return rtnCount;
     }
 
-    public void setRtnCount(double rtnCount) {
+    public void setRtnCount(int rtnCount) {
         this.rtnCount = rtnCount;
     }
 
@@ -87,7 +81,7 @@ public class HandoverRecord {
         return saleTotal + rtnTotal;
     }
 
-    public double getCount() {
+    public int getCount() {
         return saleCount + rtnCount;
     }
 
@@ -99,16 +93,12 @@ public class HandoverRecord {
         this.moneyTotal = moneyTotal;
     }
 
-    public double getMoneyCount() {
+    public int getMoneyCount() {
         return moneyCount;
     }
 
-    public void setMoneyCount(double moneyCount) {
+    public void setMoneyCount(int moneyCount) {
         this.moneyCount = moneyCount;
-    }
-
-    public double getAliPayTotal() {
-        return aliPayTotal;
     }
 
     public double getSqbTotal() {
@@ -119,40 +109,12 @@ public class HandoverRecord {
         this.sqbTotal = sqbTotal;
     }
 
-    public double getSqbCount() {
+    public int getSqbCount() {
         return sqbCount;
     }
 
-    public void setSqbCount(double sqbCount) {
+    public void setSqbCount(int sqbCount) {
         this.sqbCount = sqbCount;
-    }
-
-    public void setAliPayTotal(double aliPayTotal) {
-        this.aliPayTotal = aliPayTotal;
-    }
-
-    public double getAliPayCount() {
-        return aliPayCount;
-    }
-
-    public void setAliPayCount(double aliPayCount) {
-        this.aliPayCount = aliPayCount;
-    }
-
-    public double getWechatTotal() {
-        return wechatTotal;
-    }
-
-    public void setWechatTotal(double wechatTotal) {
-        this.wechatTotal = wechatTotal;
-    }
-
-    public double getWechatCount() {
-        return wechatCount;
-    }
-
-    public void setWechatCount(double wechatCount) {
-        this.wechatCount = wechatCount;
     }
 
     public double getCardTotal() {
@@ -163,20 +125,20 @@ public class HandoverRecord {
         this.cardTotal = cardTotal;
     }
 
-    public double getCardCount() {
+    public int getCardCount() {
         return cardCount;
     }
 
-    public void setCardCount(double cardCount) {
+    public void setCardCount(int cardCount) {
         this.cardCount = cardCount;
     }
 
     public double getPayTotal() {
-        return moneyTotal + sqbTotal + aliPayTotal + wechatTotal + cardTotal;
+        return moneyTotal + sqbTotal + cardTotal;
     }
 
-    public double getPayCount() {
-        return moneyCount + sqbCount + aliPayCount + wechatCount + cardCount;
+    public int getPayCount() {
+        return moneyCount + sqbCount + cardCount;
     }
 
     public String getDepCode() {
