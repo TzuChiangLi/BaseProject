@@ -13,7 +13,6 @@ import com.wosai.upay.bean.UpayOrder;
 import com.wosai.upay.bean.UpayResult;
 import com.wosai.upay.common.UpayCallBack;
 import com.wosai.upay.common.UpayTask;
-import com.wosai.upay.util.StringUtil;
 
 import java.util.Date;
 
@@ -292,11 +291,11 @@ public class SqbPayHelper {
         boolean isSuccess;
         String errMsg = "";
         String orderStatus = result.getOrder_status();
-        if (StringUtil.isNotEmpty(result.getError_code()) || StringUtil.isEmpty(orderStatus)) {
+        if (!TextUtils.isEmpty(result.getError_code()) || TextUtils.isEmpty(orderStatus)) {
             //SDK返回了错误信息，表明交易已失败
             isSuccess = false;
-            //result_code: http错误码
-            if (!TextUtils.isEmpty(result.getResult_code())) {
+            if (TextUtils.isEmpty(result.getError_code())) {
+                //无错误信息，返回默认的错误信息
                 errMsg = "网络通讯异常，请稍后重试！";
             } else {
                 errMsg = "交易失败。请根据以下提示信息拨打客服电话或排查故障！\n"
