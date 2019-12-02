@@ -2,24 +2,16 @@
 <resources>
     <string name="shop_title_bar_shop">收银-选择商品</string>
     <string name="shop_title_bar_list">收银-购物车</string>
-    <string name="shop_rv_title_prodcode">商品码：</string>
-    <string name="shop_rv_title_barcode">条码：</string>
     <string name="shop_rv_title_sn">SN：</string>
     <string name="shop_rv_title_sn_line">/</string>
-    <string name="shop_tv_total">合计：</string>
     <string name="shop_tv_symbol">￥</string>
-    <string name="shop_tv_count">共</string>
     <string name="shop_tv_total_unit">(</string>
     <string name="shop_tv_count_unit">)</string>
     <string name="shop_tv_vip">会员</string>
     <string name="shop_tv_not_vip">非会员</string>
-    <string name="shop_tv_vip_code">编号：</string>
-    <string name="shop_tv_vip_card_grade">卡号/类型：</string>
     <string name="shop_tv_whole_dsc">整单优惠</string>
     <string name="shop_tv_cancel">取消交易</string>
     <string name="shop_tv_add">添加商品</string>
-    <string name="shop_tv_buy">加入购物车</string>
-    <string name="shop_tv_num">数量：</string>
     <string name="shop_tv_per_price">单价：</string>
     <string name="shop_tv_discount">优惠：</string>
     <string name="shop_tv_amount">数量：</string>
@@ -36,6 +28,5 @@
 
     <string name="shop_btn_pay">结算</string>
     <string name="shop_btn_list">购物车</string>
-    <string name="shop_btn_scan">扫码</string>
     <string name="shop_edt_search">请输入商品码、条码或者商品名称</string>
 </resources>

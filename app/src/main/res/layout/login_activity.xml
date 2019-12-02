@@ -8,7 +8,6 @@
 
 
     <ImageView
-        android:id="@+id/login_img_logo"
         android:layout_width="@dimen/dp_128"
         android:layout_height="@dimen/dp_128"
         android:layout_above="@+id/login_ll"
@@ -30,7 +29,6 @@
         android:padding="@dimen/dp_16">
 
         <LinearLayout
-            android:id="@+id/login_ll_dep"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -43,7 +41,6 @@
                 android:src="@drawable/login_dep" />
 
             <TextView
-                android:id="@+id/login_title_dep"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -64,7 +61,6 @@
 
 
         <LinearLayout
-            android:id="@+id/login_ll_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_16"
@@ -78,7 +74,6 @@
                 android:src="@drawable/login_user" />
 
             <TextView
-                android:id="@+id/login_title_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -98,7 +93,6 @@
 
 
         <LinearLayout
-            android:id="@+id/login_ll_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_16"
@@ -112,7 +106,6 @@
                 android:src="@drawable/login_pwd" />
 
             <TextView
-                android:id="@+id/login_title_password"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

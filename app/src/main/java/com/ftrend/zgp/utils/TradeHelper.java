@@ -655,11 +655,15 @@ public class TradeHelper {
         int result = 0;
         FlowCursor csr = SQLite.select(DepProduct_Table.priceFlag).from(DepProduct.class)
                 .where(DepProduct_Table.barCode.eq(barCode)).query();
+        if (csr == null) {
+            return false;
+        }
         if (csr.moveToFirst()) {
             do {
                 result = csr.getIntOrDefault(0);
             } while (csr.moveToNext());
         }
+        csr.close();
         return result != 0;
     }
 

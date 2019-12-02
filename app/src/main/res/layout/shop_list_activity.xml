@@ -199,7 +199,6 @@
             android:id="@+id/shop_list_btn_pay"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/shop_list_btn_vip"
             android:layout_alignParentEnd="true"
             android:background="@drawable/shop_btn_red_selector"
             android:text="@string/shop_btn_pay"

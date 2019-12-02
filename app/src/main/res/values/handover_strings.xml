@@ -13,8 +13,6 @@
     <string name="handover_trade_total">交易合计</string>
     <string name="handover_pay_total">支付方式合计</string>
 
-    <string name="handover_alipay">支付宝</string>
-    <string name="handover_wechat">微信支付</string>
     <string name="handover_sqb">收钱吧</string>
     <string name="handover_card">储值卡</string>
     <string name="handover_money">现金</string>

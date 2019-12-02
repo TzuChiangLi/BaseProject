@@ -31,7 +31,6 @@
 
 
     <LinearLayout
-        android:id="@+id/more_ll_btn_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/more_tv_title"
@@ -81,7 +80,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/more_ll_btn_group_second"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/more_ll_btn_group_first"

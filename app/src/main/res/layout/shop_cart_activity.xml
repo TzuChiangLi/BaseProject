@@ -31,7 +31,6 @@
 
 
     <ImageView
-        android:id="@+id/shop_cart_title_line"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/shop_cart_top_bar"
