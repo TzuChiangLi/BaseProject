@@ -133,13 +133,13 @@ public class HomePresenter implements HomeContract.HomePresenter {
             mView.mustHandover();
             return;
         }
-        if (UserRightsHelper.hasRights(UserRightsHelper.SALE)) {
-            //初始化流水单信息
-            TradeHelper.initSale();
-            mView.goShopChartActivity();
-        } else {
+        if (!UserRightsHelper.hasRights(UserRightsHelper.SALE)) {
             mView.showError("无此权限");
+            return;
         }
+        //初始化流水单信息
+        TradeHelper.initSale();
+        mView.goShopChartActivity();
 
     }
 
@@ -166,11 +166,11 @@ public class HomePresenter implements HomeContract.HomePresenter {
             mView.mustHandover();
             return;
         }
-        if (UserRightsHelper.hasRights(UserRightsHelper.REFUND)) {
-            mView.goRtnProdActivity();
-        } else {
+        if (!UserRightsHelper.hasRights(UserRightsHelper.REFUND)) {
             mView.showError("无此权限");
+            return;
         }
+        mView.goRtnProdActivity();
     }
 
     @Override
@@ -222,11 +222,15 @@ public class HomePresenter implements HomeContract.HomePresenter {
 
     @Override
     public void goTradeReport() {
-        if (UserRightsHelper.hasRights(UserRightsHelper.HISTORY_REPORT)) {
-            mView.goTradeReportActivity();
-        } else {
-            mView.showError("无此权限");
+        if (!ZgParams.isIsOnline()) {
+            mView.showError("单机模式无法查询交易统计！");
+            return;
         }
+        if (!UserRightsHelper.hasRights(UserRightsHelper.HISTORY_REPORT)) {
+            mView.showError("无此权限");
+            return;
+        }
+        mView.goTradeReportActivity();
     }
 
     @Override
@@ -241,11 +245,11 @@ public class HomePresenter implements HomeContract.HomePresenter {
 
     @Override
     public void goPwdChange() {
-        if (ZgParams.isIsOnline()) {
-            mView.goPwdChangeActivity();
-        } else {
-            mView.showError("当前处于离线状态\n无法修改密码");
+        if (!ZgParams.isIsOnline()) {
+            mView.showError("单机模式无法修改密码！");
+            return;
         }
+        mView.goPwdChangeActivity();
     }
 
     @Override
