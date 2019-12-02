@@ -34,10 +34,8 @@ import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import static com.raizlabs.android.dbflow.sql.language.Method.count;
 import static com.raizlabs.android.dbflow.sql.language.Method.sum;
@@ -525,35 +523,6 @@ public class TradeHelper {
     }
 
     /**
-     * 获取购物车中未行清的所有商品列表
-     *
-     * @return
-     */
-    public static List<Map<String, Long>> getProdCountList() {
-        List<Map<String, Long>> prodCountList = new ArrayList<>();
-        Map<String, Long> map = new HashMap<>();
-        long count;
-        for (TradeProd prod : prodList) {
-            if (TextUtils.isEmpty(prod.getBarCode())) {
-                count = SQLite.select(count()).from(TradeProd.class)
-                        .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
-                        .and(TradeProd_Table.prodCode.eq(prod.getProdCode()))
-                        .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
-                        .count();
-            } else {
-                count = SQLite.select(count()).from(TradeProd.class)
-                        .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
-                        .and(TradeProd_Table.barCode.eq(prod.getBarCode()))
-                        .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
-                        .count();
-            }
-            map.put(prod.getProdCode(), count);
-        }
-        prodCountList.add(map);
-        return prodCountList;
-    }
-
-    /**
      * 购物车 - 加减按钮、更改单个商品的数量
      *
      * @param index        索引序号
@@ -801,26 +770,26 @@ public class TradeHelper {
     }
 
     /**
-     * 选择商品界面：获取每个商品的件数
+     * 选择商品界面：获取购物车中指定商品的件数
      *
      * @param prodCode 商品码
-     * @param barCode  条码（可能为null）
      * @return 数量
      */
-    public static long getProdCount(String prodCode, String barCode) {
-        if (TextUtils.isEmpty(barCode)) {
-            return SQLite.select(count()).from(TradeProd.class)
-                    .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
-                    .and(TradeProd_Table.prodCode.eq(prodCode))
-                    .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
-                    .count();
+    public static long getProdCount(String prodCode) {
+        long count;
+        FlowCursor csr = SQLite.select(sum(TradeProd_Table.amount)).from(TradeProd.class)
+                .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
+                .and(TradeProd_Table.prodCode.eq(prodCode))
+                .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
+                .query();
+        if (csr == null) {
+            count = 0;
         } else {
-            return SQLite.select(count()).from(TradeProd.class)
-                    .where(TradeProd_Table.lsNo.eq(trade.getLsNo()))
-                    .and(TradeProd_Table.barCode.eq(barCode))
-                    .and(TradeProd_Table.delFlag.eq(DELFLAG_NO))
-                    .count();
+            csr.moveToNext();
+            count = csr.getLongOrDefault(0);
+            csr.close();
         }
+        return count;
     }
 
     /**

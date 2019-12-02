@@ -59,8 +59,9 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 helper.setText(R.id.shop_rv_product_tv_prodname, ((DepProduct) item).getProdName());
                 helper.setText(R.id.shop_rv_product_price, String.format("%.2f", ((DepProduct) item).getPrice()));
                 helper.setText(R.id.shop_rv_product_tv_barcode, ((DepProduct) item).getBarCode());
-                helper.setText(R.id.shop_rv_product_tv_num, String.format("%d", TradeHelper.getProdCountList().get(0).get(((DepProduct) item).getProdCode())));
-                helper.setGone(R.id.shop_rv_product_tv_num, TradeHelper.getProdCount(((DepProduct) item).getProdCode(), ((DepProduct) item).getBarCode()) == 0 ? false : true);
+                long prodCount = TradeHelper.getProdCount(((DepProduct) item).getProdCode());
+                helper.setText(R.id.shop_rv_product_tv_num, String.format("%d", prodCount));
+                helper.setGone(R.id.shop_rv_product_tv_num, prodCount == 0 ? false : true);
                 helper.setBackgroundColor(R.id.shop_cart_rv_product_rl, ((DepProduct) item).isSelect() ? rv_item_selected : rv_item_normal);
                 break;
             case 2:
@@ -166,8 +167,9 @@ public class ShopAdapter<T> extends BaseQuickAdapter<T, BaseViewHolder> {
                 helper.setText(R.id.shop_rv_product_tv_prodname, ((DepProduct) item).getProdName());
                 helper.setText(R.id.shop_rv_product_price, String.format("%.2f", ((DepProduct) item).getPrice()));
                 helper.setText(R.id.shop_rv_product_tv_barcode, ((DepProduct) item).getBarCode());
-                helper.setText(R.id.shop_rv_product_tv_num, String.format("%d", RtnHelper.getProdCount(((DepProduct) item).getProdCode(), ((DepProduct) item).getBarCode())));
-                helper.setGone(R.id.shop_rv_product_tv_num, RtnHelper.getProdCount(((DepProduct) item).getProdCode(), ((DepProduct) item).getBarCode()) == 0 ? false : true);
+                long rtnCount = RtnHelper.getProdCount(((DepProduct) item).getProdCode());
+                helper.setText(R.id.shop_rv_product_tv_num, String.format("%d", rtnCount));
+                helper.setGone(R.id.shop_rv_product_tv_num, rtnCount == 0 ? false : true);
                 helper.setBackgroundColor(R.id.shop_cart_rv_product_rl, ((DepProduct) item).isSelect() ? rv_item_selected : rv_item_normal);
                 break;
             case 8:
