@@ -121,6 +121,7 @@ public class LsUploadThread extends Thread {
         if (orderList.size() == 0) {
             //没有收钱吧交易记录，流水上传完毕
             setUploaded(queue);
+            return;
         }
 
         final int total = orderList.size();
