@@ -181,8 +181,8 @@ public class DscHelper {
             dscTotal += prod.equals(tradeProd) ? 0 : prod.getTotalDsc() - prod.getSingleDsc();//跳过当前商品
         }
 
-        //(1)商品原价 - 最低限价MinimumPrice
-        dsc[0] = tradeProd.getPrice() - tradeProd.getProdMinPrice();
+        //(1)（商品原价 - 最低限价MinimumPrice） * 数量
+        dsc[0] = (tradeProd.getPrice() - tradeProd.getProdMinPrice()) * tradeProd.getAmount();
         //(2)（整单金额 × 最大优惠折扣MaxDscRate） - 整单已优惠金额
         dsc[1] = totalForDsc * ZgParams.getCurrentUser().getMaxDscRate() / 100 - dscTotal;
         //(3)单笔最大优惠金额MaxDscTotal - 整单已优惠金额
