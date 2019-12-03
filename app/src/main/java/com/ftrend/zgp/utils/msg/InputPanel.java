@@ -94,7 +94,7 @@ public class InputPanel {
     public static void showVipMobile(Context context, StringInputCallback callback) {
         new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
-                .asCustom(new CommonInputDialog(context, "请输入会员手机号：", "查询", "13637366688", 11, false, callback))
+                .asCustom(new CommonInputDialog(context, "请输入会员手机号：", "查询", "", 11, false, callback))
                 .show();
     }
 
