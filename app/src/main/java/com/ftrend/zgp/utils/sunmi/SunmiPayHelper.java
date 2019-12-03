@@ -431,7 +431,7 @@ public class SunmiPayHelper {
         res = m1ReadBlock(startBlockNo + 2, outData);
         if (res >= 0 && res <= 16) {
             String pwd = new String(outData, 0, 16).trim();
-            data.setVipPwd(pwd);//这里不对密码进行解密处理，使用是再解密
+            data.setVipPwd(pwd);//这里不对密码进行解密处理，使用时再解密
         }
         return data;
     }
@@ -451,8 +451,9 @@ public class SunmiPayHelper {
         if (decStr.startsWith("<>")) {
             //余额有校验，去除校验参数（兼容5000新版本）
             decStr = decStr.substring(2, 12);
+            return Double.valueOf(decStr) / 100;//卡内余额单位为分
         }
-        return Double.valueOf(decStr) / 100;//卡内余额单位为分
+        return Double.valueOf(decStr);//卡内余额单位为元
     }
 
     /**
@@ -463,7 +464,7 @@ public class SunmiPayHelper {
      */
     private String encryptIcCardMoney(Double money) {
         StringBuilder sb = new StringBuilder();
-        sb.append(Math.round(money * 100));//卡内余额单位为分
+        sb.append(Math.round(money));//卡内余额单位为元，按无校验格式写入
         while (sb.length() < 16) {
             sb.append(" ");
         }
