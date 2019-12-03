@@ -66,7 +66,7 @@ public interface HomeContract {
         /**
          * 执行数据同步
          */
-        void doDataTrans(final Context context);
+        void doDataTrans();
 
         /**
          * 跳转到交班报表界面
