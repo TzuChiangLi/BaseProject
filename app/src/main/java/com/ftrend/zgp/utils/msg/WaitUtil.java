@@ -8,6 +8,7 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.zgp.utils.event.Event;
 import com.lxj.xpopup.XPopup;
 import com.lxj.xpopup.core.BasePopupView;
+import com.lxj.xpopup.interfaces.SimpleCallback;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -83,6 +84,12 @@ class WaitUtil {
         });
         waitDialog = new XPopup.Builder(context)
                 .dismissOnTouchOutside(false)
+                .setPopupCallback(new SimpleCallback() {
+                    @Override
+                    public boolean onBackPressed() {
+                        return true;
+                    }
+                })
                 .asCustom(builder)
                 .show();
     }
