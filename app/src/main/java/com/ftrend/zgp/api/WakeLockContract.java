@@ -1,5 +1,8 @@
 package com.ftrend.zgp.api;
 
+import android.animation.AnimatorSet;
+import android.view.View;
+
 import com.ftrend.zgp.base.BaseView;
 
 /**
@@ -9,13 +12,13 @@ import com.ftrend.zgp.base.BaseView;
 public interface WakeLockContract {
     interface WakePresenter {
         void enter(String pwd);
-
+        void start(View...views);
         void onDestory();
     }
 
     interface WakeLockView extends BaseView<WakeLockContract.WakePresenter> {
         void show(String msg);
-
+        void start(AnimatorSet alphaSet,AnimatorSet translationSet);
         void success();
     }
 }

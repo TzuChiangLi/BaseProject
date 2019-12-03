@@ -313,6 +313,7 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
         if (!dataList.isEmpty()) {
             PrinterHelper.print(PrintFormat.printTradeReport(begin, end, dataList, payList));
         } else {
+            //如果数据未初始化，打印模板数据
             RestBodyMap bodyMap = new RestBodyMap();
             bodyMap.put("itemName", "T");
             bodyMap.put("tradeCount", 0);
@@ -339,7 +340,6 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
         public String itemName;
         public Integer tradeCount;
         public Double tradeTotal;
-        public String itemCode;
 
         public ReportData(RestBodyMap map) {
             if (map.containsKey("itemName")) {
@@ -350,9 +350,6 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
             }
             if (map.containsKey("tradeTotal")) {
                 tradeTotal = map.getDouble("tradeTotal");
-            }
-            if (map.containsKey("itemCode")) {
-                tradeTotal = map.getDouble("itemCode");
             }
         }
     }
