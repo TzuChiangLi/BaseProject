@@ -54,25 +54,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:lines="1"
-            android:text="@string/rtn_trade_tv_trade_time"
-            android:textColor="@color/text_black_second"
-            android:textSize="@dimen/sp_10" />
-
-        <TextView
-            android:id="@+id/trd_qry_prod_tv_trade_time"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2.5"
-            android:gravity="center_vertical"
-            android:textColor="@color/text_black_second"
-            android:textSize="@dimen/sp_10"
-            tools:text="@string/rtn_trade_replace_trade_time" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:gravity="center_vertical|end"
             android:lines="1"
             android:text="@string/rtn_trade_tv_lsno"
@@ -91,9 +72,27 @@
             tools:text="@string/rtn_trade_replace_trade_lsno" />
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:lines="1"
+            android:text="@string/rtn_trade_tv_trade_time"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_10" />
+
+        <TextView
+            android:id="@+id/trd_qry_prod_tv_trade_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.0"
+            android:gravity="center_vertical"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_10"
+            tools:text="@string/rtn_trade_replace_trade_time" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:lines="1"
             android:text="@string/rtn_trade_tv_cashier"
@@ -105,8 +104,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="@dimen/dp_24"
-            android:text="@string/rtn_trade_tv_cashier_empty"
-            android:textAlignment="textEnd"
+            android:layout_marginRight="@dimen/dp_10"
+            android:textAlignment="textStart"
             android:textColor="@color/text_black_second"
             android:textSize="@dimen/sp_10"
             tools:text="@string/rtn_trade_replace_cashier" />
