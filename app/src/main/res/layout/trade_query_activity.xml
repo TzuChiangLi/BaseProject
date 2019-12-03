@@ -118,8 +118,8 @@
             android:gravity="center"
             android:layout_marginRight="@dimen/dp_1"
             android:text="@string/trade_qry_lsno"
-            android:textColor="@color/common_white"
-            android:background="@color/common_blue"
+            android:textColor="@color/text_black_first"
+            android:background="@color/handover_title_blue"
             android:textSize="@dimen/sp_14" />
 
 
@@ -130,8 +130,8 @@
             android:gravity="center"
             android:layout_marginRight="@dimen/dp_1"
             android:text="@string/trade_qry_amount"
-            android:textColor="@color/common_white"
-            android:background="@color/common_blue"
+            android:textColor="@color/text_black_first"
+            android:background="@color/handover_title_blue"
             android:textSize="@dimen/sp_14" />
 
 
@@ -141,8 +141,8 @@
             android:gravity="center"
             android:layout_marginRight="@dimen/dp_1"
             android:text="@string/trade_qry_trade_time"
-            android:textColor="@color/common_white"
-            android:background="@color/common_blue"
+            android:textColor="@color/text_black_first"
+            android:background="@color/handover_title_blue"
             android:textSize="@dimen/sp_14" />
 
         <TextView
@@ -151,15 +151,15 @@
             android:gravity="center"
             android:layout_marginRight="@dimen/dp_1"
             android:text="收款员"
-            android:textColor="@color/common_white"
-            android:background="@color/common_blue"
+            android:textColor="@color/text_black_first"
+            android:background="@color/handover_title_blue"
             android:textSize="@dimen/sp_14" />
 
         <TextView
             android:layout_width="@dimen/dp_0"
             android:layout_height="match_parent"
             android:layout_weight="0.5"
-            android:background="@color/common_blue" />
+            android:background="@color/handover_title_blue" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
