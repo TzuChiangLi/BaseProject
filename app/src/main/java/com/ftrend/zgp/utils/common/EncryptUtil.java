@@ -60,8 +60,9 @@ public class EncryptUtil {
      * @return
      */
     public static String pwdDecrypt(String src) {
-        if (src.isEmpty()) return src;
-
+        if (src == null || src.isEmpty()) {
+            return src;
+        }
         if (src.startsWith("11")) {
             return src.substring(2);
         }
@@ -92,6 +93,51 @@ public class EncryptUtil {
             midb = (byte) (((s1[i] & 0xFF ^ midb) + midb) ^ 256);
         }
         return new String(CutRightZero(mids));
+    }
+
+    /**
+     * IC卡支付密码解密
+     *
+     * @param src
+     * @return
+     */
+    public static String cardPwdDecrypt(String src) {
+        if (src == null || src.isEmpty()) {
+            return src;
+        }
+        String mids1 = src.trim().toUpperCase();
+        if (mids1.length() % 2 != 0) {
+            return "";
+        }
+
+        String mids = "";
+        byte midb = 37;
+        byte midc;
+        int midi;
+        while (mids1.length() > 0) {
+            String mids2 = mids1.substring(0, 2);
+            mids1 = mids1.substring(2);
+            //高字节
+            char c = mids2.charAt(0);
+            if (c >= 'A' && c <= 'F') {
+                midi = (byte) c - (byte) 'A' + 10;
+            } else {
+                midi = (byte) c - (byte) '0';
+            }
+            midc = (byte) (midi * 16);
+            //低字节
+            c = mids2.charAt(1);
+            if (c >= 'A' && c <= 'F') {
+                midi = (byte) c - (byte) 'A' + 10;
+            } else {
+                midi = (byte) c - (byte) '0';
+            }
+            midc += midi;
+            //异或解密
+            mids += (char) (midc ^ midb);
+            midb = (byte) (((midc ^ midb) + midb) % 256);
+        }
+        return mids;
     }
 
     private static byte[] CutRightZero(byte[] AStr) {
