@@ -88,7 +88,7 @@ public class VipCardData {
     }
 
     public String getVipPwdDecrypted() {
-        return EncryptUtil.pwdDecrypt(vipPwd).trim();
+        return EncryptUtil.cardPwdDecrypt(vipPwd).trim();
     }
 
     public void setVipPwd(String vipPwd) {
