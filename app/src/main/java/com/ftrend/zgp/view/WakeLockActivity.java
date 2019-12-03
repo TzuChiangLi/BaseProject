@@ -1,8 +1,10 @@
 package com.ftrend.zgp.view;
 
 
+import android.animation.AnimatorSet;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.ftrend.cleareditview.ClearEditText;
@@ -21,12 +23,16 @@ import butterknife.OnClick;
  * @author liziqiang@ftrend.cn
  */
 public class WakeLockActivity extends BaseActivity implements WakeLockContract.WakeLockView {
+    @BindView(R.id.wake_lock_tv_title)
+    TextView mTitleTv;
     @BindView(R.id.wake_lock_tv_dep)
     TextView mDepNameTv;
     @BindView(R.id.wake_lock_tv_cashier)
     TextView mCashierTv;
     @BindView(R.id.wake_lock_edt_pwd)
     ClearEditText mEdt;
+    @BindView(R.id.wake_lock_btn_enter)
+    Button mBtn;
     private WakeLockContract.WakePresenter mPresenter;
 
     @Override
@@ -78,6 +84,12 @@ public class WakeLockActivity extends BaseActivity implements WakeLockContract.W
     }
 
     @Override
+    public void start(AnimatorSet alphaSet, AnimatorSet translationSet) {
+        alphaSet.start();
+        translationSet.start();
+    }
+
+    @Override
     public void success() {
         finish();
     }
@@ -91,6 +103,12 @@ public class WakeLockActivity extends BaseActivity implements WakeLockContract.W
 
     @Override
     public void onBackPressed() {
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mPresenter.start(mTitleTv, mDepNameTv, mCashierTv, mEdt, mBtn);
     }
 
     @Override

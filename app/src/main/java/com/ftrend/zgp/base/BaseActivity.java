@@ -61,8 +61,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     ScreenLock.ScreenStateListener mStateListener = new ScreenLock.ScreenStateListener() {
         @Override
         public void onScreenOn(boolean isLocked) {
-//            LogUtil.d("----屏幕开启：" + new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss").format(new Date()) + "/" + isLocked + "/");
-            if (isLocked) {
+            if (isLocked && !ActivityUtils.isActivityExistsInStack(WakeLockActivity.class)) {
                 Intent intent = new Intent(mContext, WakeLockActivity.class);
                 startActivity(intent);
             }
@@ -70,7 +69,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         @Override
         public void onScreenOff() {
-//            LogUtil.d("----屏幕关闭：" + new SimpleDateFormat("yyyy年MM月dd日HH:mm:ss").format(new Date()));
         }
 
         @Override
