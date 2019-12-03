@@ -33,7 +33,6 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/rtn_list_rv_product_tv_prodcode_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/shop_rv_title_sn"
@@ -49,7 +48,6 @@
                 tools:text="@string/shop_tv_prod_replace" />
 
             <TextView
-                android:id="@+id/rtn_list_rv_product_tv_barcode_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_4"
@@ -174,7 +172,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/rtn_list_rv_ls_tv_discount_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/shop_tv_discount"
@@ -252,7 +249,6 @@
                 tools:text="@string/shop_tv_num_replace" />
 
             <LinearLayout
-                android:id="@+id/rtn_list_rv_rtn_ll_dsc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rtn_list_line"
@@ -262,7 +258,6 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/rtn_list_rv_rtn_tv_discount_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/shop_tv_amount"
@@ -289,7 +284,6 @@
 
 
             <TextView
-                android:id="@+id/rtn_list_rv_rtn_tv_total_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rtn_list_line"

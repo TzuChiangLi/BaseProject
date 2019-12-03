@@ -5,7 +5,6 @@
     android:background="@drawable/vip_mobile_card_shape">
 
     <ImageView
-        android:id="@+id/vip_way_img_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

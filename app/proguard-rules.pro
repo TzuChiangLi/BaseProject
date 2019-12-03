@@ -44,6 +44,7 @@
 -keep interface !com.ftrend.** { *; }
 -keep class com.ftrend.zgp.utils.http.** { *; }
 -keep class com.ftrend.zgp.utils.pay.** { *; }
+-keep class com.ftrend.zgp.utils.msg.** { *; }
 -keep class com.ftrend.zgp.model.** { *; }
 -keep class com.ftrend.zgp.view.** { *; }
 -keep class com.ftrend.zgp.presenter.** { *; }

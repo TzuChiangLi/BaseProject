@@ -61,7 +61,6 @@
         android:visibility="gone">
 
         <RelativeLayout
-            android:id="@+id/init_rl_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="@dimen/dp_16">

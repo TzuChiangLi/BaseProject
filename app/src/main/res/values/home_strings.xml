@@ -1,8 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="home_tv_date">当前日期：</string>
-    <string name="home_tv_user">收款员：</string>
-    <string name="home_tv_trade">交易</string>
-    <string name="home_tv_query">报表查询</string>
-    <string name="home_tv_sys">系统功能</string>
-</resources>
+<resources></resources>

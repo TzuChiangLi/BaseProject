@@ -219,11 +219,11 @@ public class HandoverHelper {
         if (csr != null) {
             if (csr.moveToNext()) {
                 // 销售笔数
-                sum.setSaleCount(csr.getDoubleOrDefault("saleCount"));
+                sum.setSaleCount(csr.getIntOrDefault("saleCount"));
                 // 销售金额
                 sum.setSaleTotal(csr.getDoubleOrDefault("saleTotal"));
                 // 退货笔数
-                sum.setRtnCount(csr.getDoubleOrDefault("rtnCount"));
+                sum.setRtnCount(csr.getIntOrDefault("rtnCount"));
                 // 退货金额
                 sum.setRtnTotal(csr.getDoubleOrDefault("rtnTotal"));
             }
@@ -261,11 +261,11 @@ public class HandoverHelper {
         if (csr != null) {
             if (csr.moveToNext()) {
                 // 挂单笔数
-                sum.setHangupCount(csr.getDoubleOrDefault("hangupCount"));
+                sum.setHangupCount(csr.getIntOrDefault("hangupCount"));
                 // 挂单金额
                 sum.setHangupTotal(csr.getDoubleOrDefault("hangupTotal"));
                 // 取消笔数
-                sum.setCancelCount(csr.getDoubleOrDefault("cancelCount"));
+                sum.setCancelCount(csr.getIntOrDefault("cancelCount"));
                 // 取消金额
                 sum.setCancelTotal(csr.getDoubleOrDefault("cancelTotal"));
             }
@@ -292,7 +292,7 @@ public class HandoverHelper {
         if (csr != null) {
             if (csr.moveToNext()) {
                 // 行清次数
-                sum.setDelCount(csr.getDoubleOrDefault("deleteCount"));
+                sum.setDelCount(csr.getIntOrDefault("deleteCount"));
                 // 行清金额
                 sum.setDelTotal(csr.getDoubleOrDefault("deleteTotal"));
             }
@@ -342,9 +342,9 @@ public class HandoverHelper {
                 //这里取字段名，如果使用TradePay_Table.payTypeCode.getCursorKey()，得到的名称为`payTypeCode`，可能是bug
                 pay.setPayType(csr.getStringOrDefault(TradePay_Table.payTypeCode.getNameAlias().nameRaw()));
                 pay.setPayTypeName(csr.getStringOrDefault(DepPayInfo_Table.payTypeName.getNameAlias().nameRaw()));
-                pay.setSaleCount(csr.getDoubleOrDefault("saleCount"));
+                pay.setSaleCount(csr.getIntOrDefault("saleCount"));
                 pay.setSaleTotal(csr.getDoubleOrDefault("saleTotal"));
-                pay.setRtnCount(csr.getDoubleOrDefault("rtnCount"));
+                pay.setRtnCount(csr.getIntOrDefault("rtnCount"));
                 pay.setRtnTotal(csr.getDoubleOrDefault("rtnTotal"));
                 payList.add(pay);
             }
@@ -418,7 +418,6 @@ public class HandoverHelper {
                 if (time == 0) {
                     result = -1;
                 } else {
-//                    Date minDate = new Date(time);
                     long days = (System.currentTimeMillis() - time) / (1000 * 60 * 60 * 24);
                     if (days < TIP_HANDOVER_DAYS) {
                         result = -1;
@@ -630,10 +629,6 @@ public class HandoverHelper {
             handoverRecord.setSqbCount(paySqb.getCount());
             handoverRecord.setCardTotal(payPrepaid.getTotal());
             handoverRecord.setCardCount(payPrepaid.getCount());
-            handoverRecord.setAliPayTotal(0);
-            handoverRecord.setAliPayCount(0);
-            handoverRecord.setWechatTotal(0);
-            handoverRecord.setWechatCount(0);
 
             recordList.add(handoverRecord);
         }

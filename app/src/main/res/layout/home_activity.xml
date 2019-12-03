@@ -43,7 +43,6 @@
         android:paddingBottom="@dimen/dp_4">
 
         <ImageView
-            android:id="@+id/home_tv_pos_code_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

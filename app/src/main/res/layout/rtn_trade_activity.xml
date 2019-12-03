@@ -158,7 +158,6 @@
             tools:text="@string/rtn_trade_replace_trade_lsno" />
 
         <TextView
-            android:id="@+id/rtn_tv_cahier_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

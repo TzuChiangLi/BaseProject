@@ -3,26 +3,16 @@
     <color name="dialog_bg_white">#FFFFFF</color>
     <color name="keyboard_normal">#FFFFFF</color>
     <color name="keyboard_press">#707070</color>
-    <color name="clear_edt_light_gray">#99000000</color>
     <color name="divide_line">#b5b5b5</color>
-    <color name="text_black">#141418</color>
     <color name="text_white">#FFFFFF</color>
     <color name="text_black_first">#393B4D</color>
     <color name="text_black_second">#5f5f6b</color>
-    <color name="text_black_third">#97979f</color>
     <color name="progress_load_red">#FF4646</color>
     <color name="progress_load_blue">#95cefd</color>
     <color name="progress_load_orange">#FFA25A</color>
     <color name="dialog_button_ok">#DA5858</color>
 
-    <color name="colorDialogWindowBg">#00000000</color>
-    <color name="colorDialogTrans">#00000000</color>
-    <color name="colorDialogViewBg">#b2000000</color>
     <color name="colorDialogTextColor">#ffffff</color>
     <color name="colorDialogProgressBarColor">#ffffff</color>
-    <color name="colorDialogImageTintColor">#ffffff</color>
     <!--进度条相关的颜色-->
-    <color name="colorDialogProgressBarBgColor">#b4b4b4</color>
-    <color name="colorDialogProgressBarProgressColor">#FFFFFF</color>
-    <color name="colorDialogProgressBarSecondProgressColor">#ff9c9c</color>
 </resources>

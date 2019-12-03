@@ -80,34 +80,42 @@ public class PayPresenter implements PayContract.Presenter {
     }
 
     @Override
-    public void payByShouQian(String value) {
+    public void payByShouQian(final String value) {
         mView.waitPayResult();
-        if (isSale) {
-            SqbPayHelper.pay(TradeHelper.getTrade(), value, new SqbPayHelper.PayResultCallback() {
-                @Override
-                public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
-                    if (isSuccess) {
-                        // TODO: 2019/10/26 微信支付账号长度超过后台数据库对应字段长度，暂时先不记录支付账号
-                        paySuccess(payType, TradeHelper.getTrade().getTotal(), "");
-                        mView.paySuccess();
-                    } else {
-                        mView.payFail(errMsg);
-                    }
+        //网络不可用等情况，收钱吧SDK返回比较快，可能导致错误消息比等待提示先出现，界面一直显示等待提示。
+        // 这里延迟100毫秒，确保先显示等待提示再调用SDK方法。
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (isSale) {
+                    SqbPayHelper.pay(TradeHelper.getTrade(), value, new SqbPayHelper.PayResultCallback() {
+                        @Override
+                        public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
+                            if (isSuccess) {
+                                // TODO: 2019/10/26 微信支付账号长度超过后台数据库对应字段长度，暂时先不记录支付账号
+                                paySuccess(payType, TradeHelper.getTrade().getTotal(), "");
+                                mView.paySuccess();
+                            } else {
+                                mView.payFail(errMsg);
+                            }
+                        }
+                    });
+                } else {
+                    SqbPayHelper.refundBySn(RtnHelper.getRtnTrade(), value, new SqbPayHelper.PayResultCallback() {
+                        @Override
+                        public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
+                            if (isSuccess) {
+                                paySuccess(payType, RtnHelper.getRtnTrade().getTotal(), "");
+                                mView.paySuccess();
+                            } else {
+                                mView.payFail(errMsg);
+                            }
+                        }
+                    });
                 }
-            });
-        } else {
-            SqbPayHelper.refundBySn(RtnHelper.getRtnTrade(), value, new SqbPayHelper.PayResultCallback() {
-                @Override
-                public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
-                    if (isSuccess) {
-                        paySuccess(payType, RtnHelper.getRtnTrade().getTotal(), "");
-                        mView.paySuccess();
-                    } else {
-                        mView.payFail(errMsg);
-                    }
-                }
-            });
-        }
+            }
+        }, 100);
+
     }
 
     @Override

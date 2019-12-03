@@ -109,7 +109,6 @@
                 android:paddingEnd="@dimen/dp_8">
 
                 <TextView
-                    android:id="@+id/cell_item_header"
                     android:layout_columnWeight="1"
                     android:layout_gravity="fill"
                     android:background="@drawable/view_blue_top_left_line"
@@ -121,7 +120,6 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/cell_total_header"
                     android:layout_columnWeight="1"
                     android:layout_gravity="fill"
                     android:background="@drawable/view_blue_top_mid_line"
@@ -133,7 +131,6 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/cell_count_header"
                     android:layout_columnWeight="1"
                     android:layout_gravity="fill"
                     android:background="@drawable/view_blue_top_right_line"
@@ -145,7 +142,6 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/cell_sale_item"
                     android:layout_gravity="fill"
                     android:background="@drawable/view_white_left_line"
                     android:gravity="center"
@@ -175,7 +171,6 @@
                     android:textSize="@dimen/sp_14" />
 
                 <TextView
-                    android:id="@+id/cell_rtn_item"
                     android:layout_gravity="fill"
                     android:background="@drawable/view_white_left_line"
                     android:gravity="center"
@@ -205,7 +200,6 @@
                     android:textSize="@dimen/sp_14" />
 
                 <TextView
-                    android:id="@+id/cell_sum_item"
                     android:layout_gravity="fill"
                     android:background="@drawable/view_blue_bottom_left_line"
                     android:gravity="center"

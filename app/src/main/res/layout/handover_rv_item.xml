@@ -6,7 +6,6 @@
 
 
     <RelativeLayout
-        android:id="@+id/handover_ll_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/common_blue"
@@ -501,7 +500,6 @@
             android:visibility="gone" />
 
         <TextView
-            android:id="@+id/handover_rv_item_tv_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/handover_rv_ll_item"
@@ -512,7 +510,6 @@
 
 
         <TextView
-            android:id="@+id/handover_tv_time_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/handover_rv_ll_item"

@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="rtn_btn_not_order">不按单退</string>
     <string name="rtn_title_trade">退货·按单</string>
     <string name="rtn_title_prod">退货·不按单</string>
 
     <string name="rtn_btn_chg_prod">不按单退货</string>
-    <string name="rtn_btn_chg_trade">按单退货</string>
 
     <string name="rtn_btn_enter">退货</string>
 
@@ -28,6 +26,5 @@
     <string name="rtn_prod_btn_add">添加商品</string>
     <string name="rtn_prod_tv_add">选择退货商品</string>
     <string name="rtn_prod_tv_search">请输入商品码、条码或者商品名称</string>
-    <string name="rtn_prod_tv_add_finish">选好了</string>
 
 </resources>

@@ -4,15 +4,12 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.ftrend.zgp.model.DepProduct;
-import com.ftrend.zgp.model.SqbPayOrder;
-import com.ftrend.zgp.model.SqbPayOrder_Table;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
 import com.ftrend.zgp.model.TradePay_Table;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.TradeUploadQueue;
-import com.ftrend.zgp.model.Trade_Table;
 import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
 import com.ftrend.zgp.utils.pay.PayType;
@@ -684,109 +681,19 @@ public class RtnHelper {
     }
 
     /**
-     * 检查结算是否成功
-     *
-     * @param lsNo 流水单号
-     * @return 订单状态
-     */
-    public static boolean checkPayStatus(String lsNo) {
-        Trade payTrade = SQLite.select().from(Trade.class).where(Trade_Table.lsNo.eq(lsNo))
-                .querySingle();
-        if (payTrade != null) {
-            return TRADE_STATUS_PAID.equals(payTrade.getStatus());
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * @return 获取订单号
-     */
-    public static String getRtnSn() {
-        String sn = "";
-        SqbPayOrder sqbPayOrder = SQLite.select().from(SqbPayOrder.class)
-                .where(SqbPayOrder_Table.lsNo.eq(trade.getLsNo()))
-                .and(SqbPayOrder_Table.depCode.eq(trade.getDepCode()))
-                .querySingle();
-        if (sqbPayOrder != null) {
-            return sqbPayOrder.getSn();
-        }
-        return sn;
-    }
-
-
-    /**
-     * @return 不按单退货商品件数
-     */
-    public static double getRtnProdAmount() {
-        double amount = 0;
-        if (rtnProdList == null) {
-            return amount;
-        }
-        for (TradeProd prod : rtnProdList) {
-            amount += prod.getAmount();
-        }
-        return amount;
-    }
-
-    /**
      * 选择商品界面：获取每个商品的件数
      *
      * @param prodCode 商品码
-     * @param barCode  条码（可能为null）
      * @return 数量
      */
-    public static long getProdCount(String prodCode, String barCode) {
+    public static long getProdCount(String prodCode) {
         long count = 0;
-        if (TextUtils.isEmpty(barCode)) {
-            for (TradeProd prod : rtnProdList) {
-                if (prod.getProdCode().equals(prodCode)) {
-                    count++;
-                }
-            }
-        } else {
-            for (TradeProd prod : rtnProdList) {
-                if (prod.getBarCode().equals(barCode)) {
-                    count++;
-                }
+        for (TradeProd prod : rtnProdList) {
+            if (prod.getProdCode().equals(prodCode)) {
+                count += Math.round(prod.getAmount());
             }
         }
         return count;
-    }
-
-    /**
-     * @param key 关键词
-     * @return 筛选商品
-     */
-    public static List<TradeProd> searchRtnProdList(String key) {
-        if (!TextUtils.isEmpty(key)) {
-            List<TradeProd> filterList = new ArrayList<>();
-            if (!rtnProdList.isEmpty()) {
-                //筛选ProdCode、BarCode以及ProdName
-                for (TradeProd prod : rtnProdList) {
-                    if (!TextUtils.isEmpty(prod.getProdCode())) {
-                        if (prod.getProdCode().contains(key)) {
-                            filterList.add(prod);
-                            continue;
-                        }
-                    }
-                    if (!TextUtils.isEmpty(prod.getProdName())) {
-                        if (prod.getProdName().contains(key)) {
-                            filterList.add(prod);
-                            continue;
-                        }
-                    }
-                    if (!TextUtils.isEmpty(prod.getBarCode())) {
-                        if (prod.getBarCode().contains(key)) {
-                            filterList.add(prod);
-                        }
-                    }
-                }
-            }
-            return filterList;
-        } else {
-            return rtnProdList;
-        }
     }
 
     /**

@@ -192,7 +192,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/vip_dsc_ll_dsc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/vip_dsc_ll_tip"
@@ -224,7 +223,6 @@
             android:textSize="@dimen/sp_16" />
 
         <TextView
-            android:id="@+id/vip_dsc_tv_range_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_10"
