@@ -313,6 +313,7 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
         if (!dataList.isEmpty()) {
             PrinterHelper.print(PrintFormat.printTradeReport(begin, end, dataList, payList));
         } else {
+            //如果数据未初始化，打印模板数据
             RestBodyMap bodyMap = new RestBodyMap();
             bodyMap.put("itemName", "T");
             bodyMap.put("tradeCount", 0);

@@ -91,6 +91,7 @@
             android:paddingTop="@dimen/dp_12"
             android:paddingEnd="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_12"
+            android:textCursorDrawable="@drawable/edt_cursor_blue"
             android:textSize="@dimen/sp_13" />
 
 
@@ -110,6 +111,7 @@
             android:paddingTop="@dimen/dp_12"
             android:paddingEnd="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_12"
+            android:textCursorDrawable="@drawable/edt_cursor_blue"
             android:textSize="@dimen/sp_13" />
 
         <com.ftrend.cleareditview.ClearEditText
@@ -127,6 +129,7 @@
             android:paddingTop="@dimen/dp_12"
             android:paddingEnd="@dimen/dp_8"
             android:paddingBottom="@dimen/dp_12"
+            android:textCursorDrawable="@drawable/edt_cursor_blue"
             android:textSize="@dimen/sp_13" />
 
     </RelativeLayout>
@@ -141,8 +144,8 @@
         android:layout_marginTop="@dimen/dp_4"
         android:layout_marginEnd="@dimen/dp_16"
         android:background="@drawable/pwd_chg_btn_selector"
-        android:text="@string/pwd_chg_btn_submit"
         android:stateListAnimator="@null"
+        android:text="@string/pwd_chg_btn_submit"
         android:textColor="@color/common_white"
         android:textSize="@dimen/sp_13" />
 

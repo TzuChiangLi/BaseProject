@@ -71,6 +71,7 @@
             android:minHeight="@dimen/dp_24"
             android:paddingStart="@dimen/dp_12"
             android:inputType="number|text"
+            android:textCursorDrawable="@drawable/edt_cursor_blue"
             android:paddingEnd="@dimen/dp_8"
             android:textColor="@color/text_black_first"
             android:textSize="@dimen/sp_12" />
