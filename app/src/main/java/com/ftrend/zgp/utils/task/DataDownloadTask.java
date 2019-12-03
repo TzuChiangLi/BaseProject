@@ -221,7 +221,12 @@ public class DataDownloadTask {
             @Override
             public void onFailed(String errorCode, String errorMsg) {
                 Log.w(TAG, "检查数据更新标志发生错误: " + errorCode + " - " + errorMsg);
-                retry("检查数据更新标志发生错误");
+                if (isForce) {
+                    retry("检查数据更新标志发生错误");
+                } else {
+                    //非强制更新时，不做重试，直接返回
+                    postFailed(errorMsg);
+                }
             }
         }));
     }

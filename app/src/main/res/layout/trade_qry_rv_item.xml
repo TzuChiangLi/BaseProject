@@ -4,44 +4,48 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
+    android:layout_marginTop="@dimen/dp_6"
+    android:layout_marginBottom="@dimen/dp_6"
     android:paddingStart="@dimen/dp_8"
     android:paddingEnd="@dimen/dp_8">
 
     <TextView
         android:id="@+id/trade_qry_rv_item_lsno"
         android:layout_width="@dimen/dp_0"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_12"
-        android:layout_marginBottom="@dimen/dp_12"
+        android:layout_height="match_parent"
         android:layout_weight="1.3"
         android:gravity="center"
         android:textColor="@color/text_black_first"
         android:textSize="@dimen/sp_14"
-        tools:text="@string/trade_qry_replace_lsno" />
+        tools:text="2019120390100026" />
 
     <TextView
         android:id="@+id/trade_qry_rv_item_total"
         android:layout_width="@dimen/dp_0"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_12"
-        android:layout_marginBottom="@dimen/dp_12"
+        android:layout_height="match_parent"
         android:layout_weight="0.7"
         android:gravity="center"
         android:textColor="@color/text_black_first"
         android:textSize="@dimen/sp_14"
-        tools:text="@string/trade_qry_replace_total" />
+        tools:text="12345.00" />
 
     <TextView
         android:id="@+id/trade_qry_rv_item_trade_time"
-        android:layout_width="@dimen/dp_0"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_12"
-        android:layout_marginBottom="@dimen/dp_12"
-        android:layout_weight="1.6"
+        android:layout_width="65dp"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:textColor="@color/text_black_first"
         android:textSize="@dimen/sp_14"
-        tools:text="@string/trade_qry_replace_trade_time" />
+        tools:text="13:44" />
+
+    <TextView
+        android:id="@+id/trade_qry_rv_item_cashier"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_14"
+        tools:text="麦德龙" />
 
     <TextView
         android:id="@+id/trade_qry_rv_item_btn_enter"

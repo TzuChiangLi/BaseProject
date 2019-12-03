@@ -37,6 +37,8 @@ import butterknife.OnClick;
 public class TradeQueryActivity extends BaseActivity implements TrdQryContract.TrdQryView, OnTitleBarListener {
     @BindView(R.id.trade_qry_top_bar)
     TitleBar mTitleBar;
+    @BindView(R.id.textView_dep)
+    TextView mDep;
     @BindView(R.id.trd_qry_prod_edt_trade)
     ClearEditText mEdt;
     @BindView(R.id.trade_qry_rv_list)
@@ -65,6 +67,8 @@ public class TradeQueryActivity extends BaseActivity implements TrdQryContract.T
 
     @Override
     protected void initView() {
+        mDep.setText("专柜：" + ZgParams.getCurrentDep().getDepName());
+
         if (mPresenter == null) {
             mPresenter = TrdQryPresenter.createPresenter(this);
         }

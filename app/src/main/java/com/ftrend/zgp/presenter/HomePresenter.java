@@ -187,7 +187,7 @@ public class HomePresenter implements HomeContract.HomePresenter {
     }
 
     @Override
-    public void doDataTrans(final Context context) {
+    public void doDataTrans() {
         final String waitMsg = "正在同步数据，请稍候...";
         MessageUtil.waitBegin(waitMsg, new MessageUtil.MessageBoxCancelListener() {
             @Override
@@ -203,11 +203,13 @@ public class HomePresenter implements HomeContract.HomePresenter {
                 String custMsg = String.format(Locale.getDefault(), waitMsg + "(%d%%)", percent);
                 MessageUtil.waitUpdate(custMsg);
                 if (percent >= 100) {
-                    //重新读取配置参数
-                    ZgParams.loadParams();
-                    //重新初始化收钱吧SDK
-                    initSqbSdk(context);
-                    MessageUtil.waitSuccesss("数据同步已完成", null);
+                    //专柜、用户信息可能已更新，重新登录
+                    MessageUtil.waitSuccesss("数据同步已完成，请重新登录", new MessageUtil.MessageBoxOkListener() {
+                        @Override
+                        public void onOk() {
+                            logout();
+                        }
+                    });
                 } else if (isFailed) {
                     MessageUtil.waitError("数据同步失败：" + msg, null);
                 }

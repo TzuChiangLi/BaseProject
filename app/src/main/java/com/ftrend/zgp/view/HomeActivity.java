@@ -153,7 +153,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
                 mPresenter.getOutOrder();
                 break;
             case "数据同步":
-                mPresenter.doDataTrans(HomeActivity.this);
+                mPresenter.doDataTrans();
                 break;
             case "参数设置":
                 mPresenter.goConfigSetting();
