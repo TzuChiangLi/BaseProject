@@ -14,6 +14,7 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.presenter.OrderOutPresenter;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -38,6 +39,11 @@ public class OrderOutActivity extends BaseActivity implements OrderOutContract.O
     @Override
     public void onNetWorkChange(boolean isOnline) {
 
+    }
+
+    @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("取单");
     }
 
     @Override

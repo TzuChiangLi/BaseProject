@@ -17,6 +17,7 @@ import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.presenter.TrdProdPresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -77,6 +78,11 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
             mTitleBar = findViewById(R.id.trd_qry_prod_top_bar);
         }
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
+    }
+
+    @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("流水查询--详情");
     }
 
     @Override

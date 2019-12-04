@@ -16,6 +16,7 @@ import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
 import com.ftrend.zgp.presenter.LoginPresenter;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 
@@ -145,5 +146,10 @@ public class LoginActivity extends BaseActivity implements LoginContract.LoginVi
      */
     @Override
     public void onNetWorkChange(boolean isOnline) {
+    }
+
+    @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("登录");
     }
 }

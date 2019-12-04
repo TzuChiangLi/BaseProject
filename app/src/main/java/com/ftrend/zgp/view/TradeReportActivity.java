@@ -85,6 +85,11 @@ public class TradeReportActivity extends BaseActivity implements OnTitleBarListe
     }
 
     @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("交易统计");
+    }
+
+    @Override
     protected int getLayoutID() {
         return R.layout.trade_report_activity;
     }

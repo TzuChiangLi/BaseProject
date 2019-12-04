@@ -24,6 +24,7 @@ import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.presenter.RtnProdPresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.MoneyInputCallback;
@@ -72,6 +73,11 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
             mTitleBar = findViewById(R.id.rtn_prod_top_bar);
         }
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
+    }
+
+    @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("不按单退货");
     }
 
     @Override

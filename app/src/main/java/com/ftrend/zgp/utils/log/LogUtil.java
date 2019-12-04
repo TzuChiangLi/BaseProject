@@ -5,6 +5,10 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.blankj.utilcode.util.AppUtils;
+import com.ftrend.zgp.model.UserLog;
+import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.db.TransHelper;
+import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -20,7 +24,11 @@ import java.util.Date;
  */
 public class LogUtil {
     private final static String TAG = "Ftrend";
-    static String logPathStr = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DATA/" + AppUtils.getAppPackageName() + "/LogUtil/";
+
+    //非数据库字段：保存当前所在模块
+    private static String currentModule = "";
+
+    private static String logPathStr = Environment.getExternalStorageDirectory().getAbsolutePath() + "/DATA/" + AppUtils.getAppPackageName() + "/LogUtil/";
     /**
      * 允许保存Error错误到本地日志
      */
@@ -48,7 +56,6 @@ public class LogUtil {
             }
         }
     }
-
 
     /**
      * 在try-catch中使用以便保存到本地
@@ -98,6 +105,31 @@ public class LogUtil {
         }
     }
 
+    /**
+     * @param function 功能代码（中文）
+     * @param content  操作内容
+     */
+    public static void u(final String function, final String content) {
+        TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                return u(databaseWrapper, function, content);
+            }
+        });
+    }
+
+    private static boolean u(DatabaseWrapper databaseWrapper, String function, String content) {
+        UserLog userLog = new UserLog();
+        userLog.setUserCode(ZgParams.getCurrentUser().getUserCode());
+        userLog.setDepCode(ZgParams.getCurrentDep().getDepCode());
+        userLog.setModule(currentModule);
+        userLog.setContent(content);
+        userLog.setOccurTime(new Date());
+        userLog.setFunction(function);
+        return userLog.insert(databaseWrapper) > 0;
+    }
+
+
     public static Date getDateTime() {
         Date date = new Date();
         Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -118,17 +150,12 @@ public class LogUtil {
     public static void setShowLog(boolean showLog) {
         LogUtil.showLog = showLog;
     }
+
+    public static String getCurrentModule() {
+        return currentModule;
+    }
+
+    public static void setCurrentModule(String currentModule) {
+        LogUtil.currentModule = currentModule;
+    }
 }
-//                //检查存储读写权限
-//                SoulPermission.getInstance().checkAndRequestPermissions(
-//                        Permissions.build(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
-//                        new CheckRequestPermissionsListener() {
-//                            @Override
-//                            public void onAllPermissionOk(Permission[] allPermissions) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onPermissionDenied(Permission[] refusedPermissions) {
-//                            }
-//                        });

@@ -14,6 +14,7 @@ import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
@@ -134,10 +135,12 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
                         MessageUtil.info("退货成功", new MessageUtil.MessageBoxOkListener() {
                             @Override
                             public void onOk() {
+                                LogUtil.u("按单退货", "现金退货成功");
                                 mView.finish();
                             }
                         });
                     } else {
+                        LogUtil.u("按单退货", "现金退货失败");
                         MessageUtil.error("退货失败");
                     }
                 }
@@ -324,10 +327,12 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
                         MessageUtil.waitSuccesss("储值卡退款成功", new MessageUtil.MessageBoxOkListener() {
                             @Override
                             public void onOk() {
+                                LogUtil.u("按单退货", "储值卡退款成功");
                                 mView.finish();
                             }
                         });
                     } else {
+                        LogUtil.u("按单退货", "储值卡退款失败");
                         MessageUtil.waitError("储值卡退款失败", null);
                     }
                 }
@@ -335,6 +340,7 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
 
             @Override
             public void onError(String msg) {
+                LogUtil.u("按单退货", "储值卡退款失败");
                 MessageUtil.waitError(msg, null);
             }
         });
@@ -354,10 +360,12 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
                             MessageUtil.waitSuccesss("退款成功", new MessageUtil.MessageBoxOkListener() {
                                 @Override
                                 public void onOk() {
+                                    LogUtil.u("按单退货", "收钱吧退款成功");
                                     mView.finish();
                                 }
                             });
                         } else {
+                            LogUtil.u("按单退货", "收钱吧退款失败");
                             MessageUtil.waitError("退款失败", null);
                         }
                     }

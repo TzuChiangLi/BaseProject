@@ -165,4 +165,9 @@ public class InitActivity extends BaseActivity implements InitContract.InitView 
     @Override
     public void onNetWorkChange(boolean isOnline) {
     }
+
+    @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("初始化");
+    }
 }

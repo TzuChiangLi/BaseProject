@@ -10,6 +10,7 @@ import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.task.DataDownloadTask;
 import com.ftrend.zgp.utils.task.LsDownloadTask;

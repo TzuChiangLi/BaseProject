@@ -137,6 +137,7 @@ public class HomePresenter implements HomeContract.HomePresenter {
             mView.showError("无此权限");
             return;
         }
+        LogUtil.u("点击收银", "进入收银界面");
         //初始化流水单信息
         TradeHelper.initSale();
         mView.goShopChartActivity();
@@ -145,6 +146,7 @@ public class HomePresenter implements HomeContract.HomePresenter {
 
     @Override
     public void goHandover() {
+        LogUtil.u("点击交班", "进入交班界面");
         switch (HandoverHelper.canHandover()) {
             case 1:
                 mView.goHandoverActivity();
@@ -170,6 +172,7 @@ public class HomePresenter implements HomeContract.HomePresenter {
             mView.showError("无此权限");
             return;
         }
+        LogUtil.u("点击退货", "进入退货界面");
         mView.goRtnProdActivity();
     }
 
@@ -179,6 +182,7 @@ public class HomePresenter implements HomeContract.HomePresenter {
             mView.mustHandover();
             return;
         }
+        LogUtil.u("点击取单", "进入取单界面");
         if (TradeHelper.outOrderCount()) {
             mView.goOrderOutActivity();
         } else {
@@ -188,6 +192,7 @@ public class HomePresenter implements HomeContract.HomePresenter {
 
     @Override
     public void doDataTrans() {
+        LogUtil.u("点击数据同步", "进行数据同步");
         final String waitMsg = "正在同步数据，请稍候...";
         MessageUtil.waitBegin(waitMsg, new MessageUtil.MessageBoxCancelListener() {
             @Override
@@ -207,10 +212,12 @@ public class HomePresenter implements HomeContract.HomePresenter {
                     MessageUtil.waitSuccesss("数据同步已完成，请重新登录", new MessageUtil.MessageBoxOkListener() {
                         @Override
                         public void onOk() {
+                            LogUtil.u("数据同步", "数据同步成功");
                             logout();
                         }
                     });
                 } else if (isFailed) {
+                    LogUtil.u("数据同步", String.format("数据同步失败：%s", msg));
                     MessageUtil.waitError("数据同步失败：" + msg, null);
                 }
             }
@@ -219,6 +226,7 @@ public class HomePresenter implements HomeContract.HomePresenter {
 
     @Override
     public void goHandoverReport() {
+        LogUtil.u("点击交班报表", "进入交班报表界面");
         mView.goHandoverReportActivity();
     }
 
@@ -226,22 +234,27 @@ public class HomePresenter implements HomeContract.HomePresenter {
     public void goTradeReport() {
         if (!ZgParams.isIsOnline()) {
             mView.showError("单机模式无法查询交易统计！");
+            LogUtil.u("点击交易查询", "单机模式无法查询交易统计");
             return;
         }
         if (!UserRightsHelper.hasRights(UserRightsHelper.HISTORY_REPORT)) {
             mView.showError("无此权限");
+            LogUtil.u("点击交易查询", "无此权限");
             return;
         }
+        LogUtil.u("点击交易查询", "进入交易查询");
         mView.goTradeReportActivity();
     }
 
     @Override
     public void goTradeQuery() {
+        LogUtil.u("点击流水查询", "进入流水查询");
         mView.goTradeQueryActivity();
     }
 
     @Override
     public void goConfigSetting() {
+        LogUtil.u("点击参数设置", "进入参数设置界面");
         mView.goConfigActivity();
     }
 
@@ -251,11 +264,13 @@ public class HomePresenter implements HomeContract.HomePresenter {
             mView.showError("单机模式无法修改密码！");
             return;
         }
+        LogUtil.u("点击修改密码", "进入修改密码界面");
         mView.goPwdChangeActivity();
     }
 
     @Override
     public void logout() {
+        LogUtil.u("点击注销", "注销当前用户");
         //重新读取信息
         ZgParams.loadParams();
         mView.logout();

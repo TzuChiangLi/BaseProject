@@ -62,8 +62,10 @@ public class PwdChangePresenter implements PwdChangeContract.PwdChangePresenter 
                                     //清除数据
                                     TradeHelper.clear();
                                     RtnHelper.clearAllData();
+                                    LogUtil.u("修改密码", "修改密码成功");
                                     mView.showSuccess("修改成功\n请重新登录");
                                 } else {
+                                    LogUtil.u("修改密码", "修改密码失败");
                                     mView.showError("数据写入失败");
                                 }
                             }
@@ -71,6 +73,7 @@ public class PwdChangePresenter implements PwdChangeContract.PwdChangePresenter 
                             @Override
                             public void onFailed(String errorCode, String errorMsg) {
                                 LogUtil.e("----err:" + errorMsg);
+                                LogUtil.u("修改密码", "修改密码失败");
                                 mView.showError(String.format("%s(%s)", errorMsg, errorCode));
                             }
                         }));
@@ -79,6 +82,7 @@ public class PwdChangePresenter implements PwdChangeContract.PwdChangePresenter 
                 mView.show("两次输入的新密码不一致，请重新输入");
             }
         } else {
+            LogUtil.u("修改密码", "修改密码失败");
             mView.show("用户信息验证失败");
         }
     }

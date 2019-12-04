@@ -20,6 +20,7 @@ import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.keyboard.KeyboardView;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.utils.common.CommonUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.lxj.xpopup.core.BottomPopupView;
 

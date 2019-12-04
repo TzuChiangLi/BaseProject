@@ -48,6 +48,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         initView();
         initTitleBar();
         initData();
+        setCurrentModule();
         mContext = this;
         isLogin = (this instanceof LoginActivity);
         if (!isLogin) {
@@ -92,6 +93,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public abstract void onNetWorkChange(boolean isOnline);
 
+    public abstract void setCurrentModule();
 
     private void registerReceiver() {
         IntentFilter msgFilter = new IntentFilter();
@@ -148,6 +150,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (!isLogin) {
             mScreenLock.wake();
         }
+        setCurrentModule();
     }
 
     @Override
@@ -179,6 +182,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LogUtil.setCurrentModule("");
         //ButterKnife解绑
         if (unbinder != null) {
             unbinder.unbind();

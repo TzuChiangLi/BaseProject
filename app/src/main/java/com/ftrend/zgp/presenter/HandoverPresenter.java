@@ -8,6 +8,7 @@ import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.printer.PrintFormat;
 import com.ftrend.zgp.utils.printer.PrinterHelper;
@@ -50,6 +51,7 @@ public class HandoverPresenter implements HandoverContract.HandoverPresenter {
             });
             if (!HandoverHelper.save()) {
                 MessageUtil.waitError("交班失败！", null);
+                LogUtil.u("交班", "交班失败");
                 return;
             }
             RestSubscribe.getInstance().posEnd(ZgParams.getPosCode(), new RestCallback(new RestResultHandler() {
@@ -60,6 +62,7 @@ public class HandoverPresenter implements HandoverContract.HandoverPresenter {
                         @Override
                         public void onOk() {
                             mView.success();
+                            LogUtil.u("交班", "交班成功");
                         }
                     });
                 }
@@ -67,6 +70,7 @@ public class HandoverPresenter implements HandoverContract.HandoverPresenter {
                 @Override
                 public void onFailed(String errorCode, String errorMsg) {
                     MessageUtil.waitError(String.format(Locale.CHINA, "%s - %s", errorCode, errorMsg), null);
+                    LogUtil.u("交班", String.format(Locale.CHINA, "%s - %s", errorCode, errorMsg));
                 }
             }));
             // 上传APP配置参数，失败不影响交班结果
@@ -82,7 +86,7 @@ public class HandoverPresenter implements HandoverContract.HandoverPresenter {
         PrinterHelper.initPrinter(TradeProdActivity.mContext, new PrinterHelper.PrintInitCallBack() {
             @Override
             public void onSuccess(SunmiPrinterService service) {
-                getPrintData(service,recordList);
+                getPrintData(service, recordList);
             }
 
             @Override
@@ -92,7 +96,7 @@ public class HandoverPresenter implements HandoverContract.HandoverPresenter {
         });
     }
 
-    public void getPrintData(SunmiPrinterService service,List<HandoverRecord> recordList) {
+    public void getPrintData(SunmiPrinterService service, List<HandoverRecord> recordList) {
         if (service == null) {
             return;
         }

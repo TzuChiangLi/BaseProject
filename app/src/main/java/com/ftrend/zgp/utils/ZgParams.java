@@ -66,6 +66,7 @@ public class ZgParams {
     //业务参数：本机IP
     private static String currentIp = "";
 
+
     /**
      * 读取参数，包括系统参数和APP本地参数
      *

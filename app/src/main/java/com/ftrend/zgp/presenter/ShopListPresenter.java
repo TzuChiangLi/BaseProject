@@ -15,6 +15,7 @@ import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.StringInputCallback;
@@ -49,6 +50,7 @@ public class ShopListPresenter implements ShopListContract.ShopListPresenter {
             MessageUtil.question("是否取消当前交易？", new MessageUtil.MessageBoxYesNoListener() {
                 @Override
                 public void onYes() {
+                    LogUtil.u("购物车", "取消交易");
                     setTradeStatus(TradeHelper.TRADE_STATUS_CANCELLED);
                 }
 
@@ -58,6 +60,7 @@ public class ShopListPresenter implements ShopListContract.ShopListPresenter {
                 }
             });
         } else {
+            LogUtil.u("购物车", "无权限取消交易");
             MessageUtil.showError("无此操作权限！");
         }
     }
@@ -71,8 +74,10 @@ public class ShopListPresenter implements ShopListContract.ShopListPresenter {
         if (!TextUtils.isEmpty(TradeHelper.getTrade().getVipCode())) {
             //未结、未挂起的单据有会员优惠的信息，但是vip是null
             if (ZgParams.isIsOnline()) {
+                LogUtil.u("购物车", "在线查询会员优惠");
                 RestSubscribe.getInstance().queryVipInfo(TradeHelper.getTrade().getVipCode(), new RestCallback(regHandler));
             } else {
+                LogUtil.u("购物车", "离线模式保存会员信息");
                 VipInfo vipInfo = TradeHelper.vip();
                 vipInfo.setCardCode(TradeHelper.getTrade().getCardCode());
                 vipInfo.setVipCode(TradeHelper.getTrade().getVipCode());

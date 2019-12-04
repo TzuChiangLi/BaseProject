@@ -24,6 +24,7 @@ import com.ftrend.zgp.model.User_Table;
 import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.Join;
@@ -892,7 +893,7 @@ public class TradeHelper {
     public static boolean orderOut(String lsNo) {
         // 验证购物车是否为空
         if (!cartIsEmpty()) {
-            Log.e(TAG, "取单失败：购物车不为空");
+            LogUtil.e("取单失败：购物车不为空");
             return false;
         }
 
@@ -903,15 +904,14 @@ public class TradeHelper {
                 .querySingle();
         // 验证流水状态为：挂起
         if (trade == null || !TRADE_STATUS_HANGUP.equals(trade.getStatus())) {
-            Log.e(TAG, "取单失败：流水号无效或流水不是挂起状态");
+            LogUtil.e("取单失败：流水号无效或流水不是挂起状态");
             return false;
         }
         // 修改流水状态为：未结
         trade.setStatus(TRADE_STATUS_NOTPAY);
         if (trade.update()) {
             // 取单成功，自动读取购物车流水
-            initSale();
-            return true;
+            return initSale();
         } else {
             return false;
         }

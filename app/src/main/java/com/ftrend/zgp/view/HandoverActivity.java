@@ -14,6 +14,7 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.HandoverRecord;
 import com.ftrend.zgp.presenter.HandoverPresenter;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -145,6 +146,11 @@ public class HandoverActivity extends BaseActivity implements HandoverContract.H
             mTitleBar = findViewById(R.id.handover_top_bar);
         }
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
+    }
+
+    @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("交班");
     }
 
     @Override

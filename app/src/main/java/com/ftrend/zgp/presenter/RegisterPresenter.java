@@ -12,6 +12,7 @@ import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.qw.soul.permission.SoulPermission;
 
@@ -48,6 +49,7 @@ public class RegisterPresenter implements RegisterContract.RegisterPresenter {
             MessageUtil.waitSuccesss("设备注册成功！", new MessageUtil.MessageBoxOkListener() {
                 @Override
                 public void onOk() {
+                    LogUtil.u("注册设备", "设备注册成功");
                     mView.registerSuccess();
                 }
             });
@@ -57,6 +59,7 @@ public class RegisterPresenter implements RegisterContract.RegisterPresenter {
         public void onFailed(String errorCode, String errorMsg) {
             MessageUtil.waitEnd();
             MessageUtil.error(errorCode, errorMsg);
+            LogUtil.u("注册设备", "设备注册失败");
         }
     };
 

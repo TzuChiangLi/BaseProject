@@ -23,6 +23,7 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.DscData;
@@ -86,6 +87,11 @@ public class ShopListActivity extends BaseActivity implements ShopListContract.S
             mTitleBar = findViewById(R.id.shop_list_top_bar);
         }
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
+    }
+
+    @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("购物车");
     }
 
     @Override

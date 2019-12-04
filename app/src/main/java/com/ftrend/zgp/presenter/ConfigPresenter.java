@@ -16,6 +16,7 @@ import java.util.List;
  */
 
 public class ConfigPresenter implements ConfigContract.ConfigPresenter {
+    public static String currentModule = "参数配置";
     private ConfigContract.ConfigView mView;
 
     private ConfigPresenter(ConfigContract.ConfigView mView) {
@@ -28,6 +29,7 @@ public class ConfigPresenter implements ConfigContract.ConfigPresenter {
 
     @Override
     public void loadCfgItem() {
+        //设置界面
         String[] type = {"打印设置", ""};
         String[] item = {"", "结算成功自动打印交易小票"};
         List<Config> configList = new ArrayList<>();
@@ -54,8 +56,10 @@ public class ConfigPresenter implements ConfigContract.ConfigPresenter {
         PrintConfig printConfig = ZgParams.getPrinterConfig();
         printConfig.setPrintTrade(flag);
         if (ZgParams.saveAppParams("printerConfig", PrintConfig.toJson(printConfig))) {
+            LogUtil.u("打印设置", flag ? "开启" : "关闭");
             mView.show("参数已保存");
         } else {
+            LogUtil.u("点击收银", "参数写入失败");
             mView.show("参数写入失败");
         }
     }

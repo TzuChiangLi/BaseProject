@@ -14,6 +14,7 @@ import com.ftrend.zgp.api.PwdChangeContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.presenter.PwdChangePresenter;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -42,6 +43,11 @@ public class PwdChangeActivity extends BaseActivity implements PwdChangeContract
             mTitleBar = findViewById(R.id.pwd_chg_top_bar);
         }
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
+    }
+
+    @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("修改密码");
     }
 
     @Override

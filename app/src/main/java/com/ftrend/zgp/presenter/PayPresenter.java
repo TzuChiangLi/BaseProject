@@ -3,7 +3,6 @@ package com.ftrend.zgp.presenter;
 import android.os.Handler;
 import android.text.TextUtils;
 
-import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.api.PayContract;
 import com.ftrend.zgp.model.Menu;
@@ -17,6 +16,7 @@ import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.ftrend.zgp.utils.pay.SqbPayHelper;
@@ -81,6 +81,7 @@ public class PayPresenter implements PayContract.Presenter {
 
     @Override
     public void payByShouQian(final String value) {
+        LogUtil.u("结算", "收钱吧支付");
         mView.waitPayResult();
         //网络不可用等情况，收钱吧SDK返回比较快，可能导致错误消息比等待提示先出现，界面一直显示等待提示。
         // 这里延迟100毫秒，确保先显示等待提示再调用SDK方法。
@@ -95,6 +96,7 @@ public class PayPresenter implements PayContract.Presenter {
                                 // TODO: 2019/10/26 微信支付账号长度超过后台数据库对应字段长度，暂时先不记录支付账号
                                 paySuccess(payType, TradeHelper.getTrade().getTotal(), "");
                                 mView.paySuccess();
+                                LogUtil.u("结算", "结算成功");
                             } else {
                                 mView.payFail(errMsg);
                             }
@@ -107,6 +109,7 @@ public class PayPresenter implements PayContract.Presenter {
                             if (isSuccess) {
                                 paySuccess(payType, RtnHelper.getRtnTrade().getTotal(), "");
                                 mView.paySuccess();
+                                LogUtil.u("结算", "结算成功");
                             } else {
                                 mView.payFail(errMsg);
                             }
@@ -152,6 +155,7 @@ public class PayPresenter implements PayContract.Presenter {
             } else {
                 if (RtnHelper.pay(appPayType, value)) {
                     if (RtnHelper.rtn()) {
+                        LogUtil.u("结算", "结算成功");
                         if (!ZgParams.getPrinterConfig().isPrintTrade()) {
                             return true;
                         }
@@ -218,12 +222,12 @@ public class PayPresenter implements PayContract.Presenter {
             postMessage(PayContract.MSG_CARD_CODE_INPUT);
             return;
         }
+        LogUtil.u("结算", "刷卡支付");
         mView.cardPayWait("请刷卡...");
         SunmiPayHelper.getInstance().readCard(new SunmiPayHelper.ReadCardCallback() {
             @Override
             public void onSuccess(VipCardData data) {
                 payCardCode[0] = data.getCardCode();
-                LogUtil.d("----卡片号码：" + payCardCode[0]);
                 if (data.getCardType() == AidlConstants.CardType.MIFARE) {
                     payCardType[0] = "1";
                     cardData.copy(data);//记录卡信息，用于IC卡支付

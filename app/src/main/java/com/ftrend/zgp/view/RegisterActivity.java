@@ -14,6 +14,7 @@ import com.ftrend.zgp.api.RegisterContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.presenter.RegisterPresenter;
 import com.ftrend.zgp.utils.common.ClickUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 
@@ -122,6 +123,11 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.R
     @Override
     public void onNetWorkChange(boolean isOnline) {
 
+    }
+
+    @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("注册");
     }
 
     @Override

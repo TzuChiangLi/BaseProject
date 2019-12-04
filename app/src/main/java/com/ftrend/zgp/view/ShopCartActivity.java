@@ -392,6 +392,11 @@ public class ShopCartActivity extends BaseActivity implements ShopCartContract.S
     }
 
     @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("收银-选择商品");
+    }
+
+    @Override
     public void setPresenter(ShopCartContract.ShopCartPresenter presenter) {
         if (presenter != null) {
             mPresenter = presenter;

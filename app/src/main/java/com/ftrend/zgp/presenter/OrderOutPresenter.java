@@ -2,6 +2,7 @@ package com.ftrend.zgp.presenter;
 
 import com.ftrend.zgp.api.OrderOutContract;
 import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.log.LogUtil;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -29,7 +30,13 @@ public class OrderOutPresenter implements OrderOutContract.OrderOutPresenter {
         if (!TradeHelper.cartIsEmpty()) {
             return -1;
         }
-        return TradeHelper.orderOut(lsNo) ? 0 : 1;
+        if (TradeHelper.orderOut(lsNo)) {
+            LogUtil.u("取单", "取单成功");
+            return 0;
+        } else {
+            LogUtil.u("取单", "取单失败");
+            return 1;
+        }
     }
 
     @Override

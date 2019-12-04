@@ -126,6 +126,11 @@ public class PayActivity extends BaseActivity implements PayContract.View, OnTit
     }
 
     @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("结算");
+    }
+
+    @Override
     public void setPresenter(PayContract.Presenter presenter) {
         if (presenter != null) {
             mPresenter = presenter;

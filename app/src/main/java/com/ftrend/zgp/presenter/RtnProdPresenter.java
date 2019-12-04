@@ -111,7 +111,6 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
     }
 
 
-
     @Override
     public void updateTradeInfo() {
         //获取退货流水金额
@@ -129,15 +128,18 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
         switch (appPayType) {
             case "0":
                 //现金
+
                 if (RtnHelper.pay(appPayType, 0)) {
                     if (RtnHelper.rtn()) {
                         MessageUtil.info("退货成功", new MessageUtil.MessageBoxOkListener() {
                             @Override
                             public void onOk() {
+                                LogUtil.u("不按单退货", "现金退货成功");
                                 mView.finish();
                             }
                         });
                     } else {
+                        LogUtil.u("不按单退货", "现金退货失败");
                         MessageUtil.error("退货失败");
                     }
                 }
@@ -318,10 +320,12 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
                         MessageUtil.waitSuccesss("储值卡退款成功", new MessageUtil.MessageBoxOkListener() {
                             @Override
                             public void onOk() {
+                                LogUtil.u("不按单退货", "储值卡退款成功");
                                 mView.finish();
                             }
                         });
                     } else {
+                        LogUtil.u("不按单退货", "储值卡退款失败");
                         MessageUtil.waitError("储值卡退款失败", null);
                     }
                 }
@@ -348,10 +352,12 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
                             MessageUtil.waitSuccesss("退款成功", new MessageUtil.MessageBoxOkListener() {
                                 @Override
                                 public void onOk() {
+                                    LogUtil.u("不按单退货", "收钱吧退款失败");
                                     mView.finish();
                                 }
                             });
                         } else {
+                            LogUtil.u("不按单退货", "收钱吧退款失败");
                             MessageUtil.waitError("退款失败", null);
                         }
                     }

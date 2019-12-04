@@ -73,10 +73,12 @@ public class LoginPresenter implements LoginContract.LoginPresenter {
             Dep dep = SQLite.select().from(Dep.class).where(Dep_Table.depCode.eq(depCode)).querySingle();
             if (user != null) {
                 if (userPwd.equals(EncryptUtil.pwdDecrypt(user.getUserPwd()))) {
+                    LogUtil.u("用户登录", String.format("用户/专柜：%s/%s", userCode, depCode));
                     mView.loginSuccess(user, dep);
                     //保存静态变量
                     ZgParams.saveCurrentInfo(user, dep);
                 } else {
+                    LogUtil.u("用户登录", "输入信息有误");
                     mView.loginFailed("用户名或密码错误\n请重试！");
                 }
             }
@@ -89,6 +91,4 @@ public class LoginPresenter implements LoginContract.LoginPresenter {
             mView = null;
         }
     }
-
-
 }

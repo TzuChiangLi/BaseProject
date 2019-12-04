@@ -70,10 +70,6 @@ public class SplashActivity extends AppCompatActivity {
 
                     @Override
                     public void onPermissionDenied(Permission[] refusedPermissions) {
-                        String refusedPermission = "";
-                        for (int i = 0; i < refusedPermissions.length; i++) {
-                            refusedPermission += String.format("%s%s\n", "以下权限申请失败：", refusedPermissions[i]);
-                        }
                         MessageUtil.showWarning("请重新启动并赋予相关权限！");
                         new Handler().postDelayed(new Runnable() {
                             @Override

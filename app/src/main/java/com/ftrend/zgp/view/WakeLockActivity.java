@@ -13,6 +13,7 @@ import com.ftrend.zgp.api.WakeLockContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.presenter.WakeLockPresenter;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 
@@ -38,6 +39,11 @@ public class WakeLockActivity extends BaseActivity implements WakeLockContract.W
     @Override
     public void onNetWorkChange(boolean isOnline) {
 
+    }
+
+    @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("暂时离开");
     }
 
     @Override

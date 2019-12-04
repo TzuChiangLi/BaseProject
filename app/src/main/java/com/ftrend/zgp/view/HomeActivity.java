@@ -17,6 +17,7 @@ import com.ftrend.zgp.presenter.HomePresenter;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.common.CommonUtil;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.sunmi.VipCardData;
@@ -379,6 +380,11 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
             mNetImg = findViewById(R.id.home_img_online_status);
         }
         mNetImg.setImageResource(isOnline ? R.drawable.online : R.drawable.offline);
+    }
+
+    @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("首页");
     }
 
     @Override

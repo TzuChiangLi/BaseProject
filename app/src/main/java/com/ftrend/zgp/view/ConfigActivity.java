@@ -12,6 +12,7 @@ import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Config;
 import com.ftrend.zgp.presenter.ConfigPresenter;
 import com.ftrend.zgp.utils.ZgParams;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.gyf.immersionbar.ImmersionBar;
 import com.hjq.bar.OnTitleBarListener;
@@ -39,6 +40,11 @@ public class ConfigActivity extends BaseActivity implements ConfigContract.Confi
             mTitleBar = findViewById(R.id.cfg_top_bar);
         }
         mTitleBar.setRightIcon(isOnline ? R.drawable.online : R.drawable.offline);
+    }
+
+    @Override
+    public void setCurrentModule() {
+        LogUtil.setCurrentModule("参数配置");
     }
 
     @Override
@@ -119,11 +125,9 @@ public class ConfigActivity extends BaseActivity implements ConfigContract.Confi
 
     @Override
     public void onTitleClick(View v) {
-
     }
 
     @Override
     public void onRightClick(View v) {
-
     }
 }
