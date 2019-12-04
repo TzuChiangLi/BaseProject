@@ -418,14 +418,14 @@ public class ShopCartActivity extends BaseActivity implements ShopCartContract.S
 
     @Override
     protected void onRestart() {
-        super.onRestart();
         mPresenter.updateOrderInfo();
+        super.onRestart();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         mPresenter.onDestory();
         EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 }

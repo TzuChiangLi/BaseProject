@@ -91,8 +91,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * @param isOnline 设置网络状态
+     */
     public abstract void onNetWorkChange(boolean isOnline);
 
+    /**
+     * 设置用户操作记录模块
+     */
     public abstract void setCurrentModule();
 
     private void registerReceiver() {
@@ -146,11 +152,11 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onRestart() {
-        super.onRestart();
         if (!isLogin) {
             mScreenLock.wake();
         }
         setCurrentModule();
+        super.onRestart();
     }
 
     @Override
@@ -161,13 +167,13 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        super.onPause();
         unRegisterReceiver();
+        super.onPause();
     }
 
     @Override
     protected void onStop() {
-        super.onStop();
+
         try {
             if (!isLogin) {
                 if (!ActivityUtils.getTopActivity().equals(this)) {
@@ -177,12 +183,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         } catch (Exception e) {
             LogUtil.e(e.getMessage());
         }
+        super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        LogUtil.setCurrentModule("");
         //ButterKnife解绑
         if (unbinder != null) {
             unbinder.unbind();
@@ -191,6 +196,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             mScreenLock.sleep();
             mScreenLock.unregisterListener();
         }
+        super.onDestroy();
     }
 
 
