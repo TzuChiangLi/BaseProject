@@ -20,6 +20,7 @@ public interface HomeContract {
 
         /**
          * 初始化收钱吧SDK
+         * @param context 上下文
          */
         void initSqbSdk(Context context);
 

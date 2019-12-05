@@ -236,6 +236,11 @@ public class RtnTradeActivity extends BaseActivity implements OnTitleBarListener
 
 
     @Override
+    public void returnHomeActivity() {
+        cancel();
+    }
+
+    @Override
     public void showInputPanel(final int position) {
         InputPanel.showPriceChange(RtnTradeActivity.this, new MoneyInputCallback() {
             @Override

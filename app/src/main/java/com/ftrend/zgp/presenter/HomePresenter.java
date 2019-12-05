@@ -271,8 +271,13 @@ public class HomePresenter implements HomeContract.HomePresenter {
     @Override
     public void logout() {
         LogUtil.u("点击注销", "注销当前用户");
+        //清理当前信息
+        ZgParams.clearCurrentInfo();
+        //清理当前交易未处理的所有信息
+        TradeHelper.clear();
         //重新读取信息
         ZgParams.loadParams();
+        //界面注销
         mView.logout();
     }
 

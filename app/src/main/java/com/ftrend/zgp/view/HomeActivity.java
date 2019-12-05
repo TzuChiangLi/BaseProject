@@ -14,11 +14,14 @@ import com.ftrend.zgp.api.HomeContract;
 import com.ftrend.zgp.base.BaseActivity;
 import com.ftrend.zgp.model.Menu;
 import com.ftrend.zgp.presenter.HomePresenter;
+import com.ftrend.zgp.utils.RtnHelper;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.common.CommonUtil;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.MessageUtil;
+import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.sunmi.VipCardData;
 import com.gyf.immersionbar.ImmersionBar;
@@ -172,6 +175,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView,
                 mPresenter.goTradeQuery();
                 break;
             case "操作指南":
+                TradeHelper.getPaidLs("90200033");
                 // 此功能仅用于测试
                 if (!CommonUtil.debugMode(App.getContext())) {
                     return;

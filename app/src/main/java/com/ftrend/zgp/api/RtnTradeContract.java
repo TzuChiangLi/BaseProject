@@ -63,7 +63,7 @@ public interface RtnTradeContract {
         /**
          * 结束当前界面
          */
-        void finish();
+        void returnHomeActivity();
 
         /**
          * 显示改价弹窗

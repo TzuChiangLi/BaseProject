@@ -169,7 +169,6 @@ public class TradeProdActivity extends BaseActivity implements TrdProdContract.T
             mBottomLayout.setVisibility(View.VISIBLE);
         }
         mPayTypeTv.setText(payTypeName);
-        mPayTypeTv.setText("微信支付");
         mPayTypeImg.setImageResource(img);
     }
 

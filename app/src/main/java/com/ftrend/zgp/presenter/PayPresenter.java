@@ -79,8 +79,11 @@ public class PayPresenter implements PayContract.Presenter {
         mView.showTradeInfo(isSale ? TradeHelper.getTradeTotal() : RtnHelper.getRtnTotal());
     }
 
+    /**
+     * @param sn 收钱吧订单号
+     */
     @Override
-    public void payByShouQian(final String value) {
+    public void payByShouQian(final String sn) {
         LogUtil.u("结算", "收钱吧支付");
         mView.waitPayResult();
         //网络不可用等情况，收钱吧SDK返回比较快，可能导致错误消息比等待提示先出现，界面一直显示等待提示。
@@ -89,7 +92,7 @@ public class PayPresenter implements PayContract.Presenter {
             @Override
             public void run() {
                 if (isSale) {
-                    SqbPayHelper.pay(TradeHelper.getTrade(), value, new SqbPayHelper.PayResultCallback() {
+                    SqbPayHelper.pay(TradeHelper.getTrade(), sn, new SqbPayHelper.PayResultCallback() {
                         @Override
                         public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
                             if (isSuccess) {
@@ -103,7 +106,7 @@ public class PayPresenter implements PayContract.Presenter {
                         }
                     });
                 } else {
-                    SqbPayHelper.refundBySn(RtnHelper.getRtnTrade(), value, new SqbPayHelper.PayResultCallback() {
+                    SqbPayHelper.refundBySn(RtnHelper.getRtnTrade(), sn, new SqbPayHelper.PayResultCallback() {
                         @Override
                         public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
                             if (isSuccess) {
@@ -153,7 +156,7 @@ public class PayPresenter implements PayContract.Presenter {
                     return false;
                 }
             } else {
-                if (RtnHelper.pay(appPayType, value)) {
+                if (RtnHelper.pay(appPayType, RtnHelper.getRtnTrade().getTotal(), 0, "")) {
                     if (RtnHelper.rtn()) {
                         LogUtil.u("结算", "结算成功");
                         if (!ZgParams.getPrinterConfig().isPrintTrade()) {

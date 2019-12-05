@@ -19,7 +19,7 @@ import java.util.Date;
 /**
  * 收钱吧SDK接口功能类
  * Copyright (C),青岛致远方象软件科技有限公司
- *
+ * <p>
  * 为了方便理解业务逻辑，对收钱吧SDK部分文件做了反编译处理，见test的com.ftrend.zgp.upay包
  *
  * @author liuhongbin@ftrend.cn
@@ -105,7 +105,7 @@ public class SqbPayHelper {
     /**
      * 支付请求
      *
-     * @param trade 交易流水
+     * @param trade    交易流水
      * @param scanCode 用户支付码内容（扫描的支付条码或二维码）
      * @param callback 支付结果回调
      */
@@ -168,7 +168,6 @@ public class SqbPayHelper {
      */
     private static void refund(final Trade trade, String sn, String clientSn, final PayResultCallback callback) {
         final String requestNo = CommonUtil.newUuid().substring(0, 30);
-
         UpayOrder order = new UpayOrder();
         //无UI(sn和client_sn不能同时为空)
         order.setSn(sn);//收钱吧订单号

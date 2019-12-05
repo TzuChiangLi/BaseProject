@@ -64,7 +64,7 @@ public class PayActivity extends BaseActivity implements PayContract.View, OnTit
     private PayContract.Presenter mPresenter;
     private static int START_SCAN = 002;
     private String lsNo;
-    private boolean isSale = true;
+    private boolean isSale = true, isRtnProd = false;
 
     @Override
     protected int getLayoutID() {

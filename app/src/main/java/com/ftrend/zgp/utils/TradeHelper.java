@@ -291,7 +291,7 @@ public class TradeHelper {
                     .from(SqbPayOrder.class)
                     .join(SqbPayResult.class, Join.JoinType.INNER)
                     .on(SqbPayOrder_Table.requestNo.withTable().eq(SqbPayResult_Table.requestNo.withTable()))
-                    .where(SqbPayOrder_Table.lsNo.eq(trade.getLsNo()))
+                    .where(SqbPayOrder_Table.lsNo.eq(lsNo))
                     .and(SqbPayResult_Table.status.eq("SUCCESS"))
                     .querySingle();
             if (order != null) {

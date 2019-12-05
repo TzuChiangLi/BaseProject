@@ -367,6 +367,8 @@ public class PrintFormat {
         printData.setAlign(ALIGN_LEFT);
         printData.setPrintData(mergeSaleString("打印时间:", new SimpleDateFormat("yyyy/MM/dd/HH:mm:ss").format(new Date()), 32));
         printDataList.add(printData);
+        //分割线
+        printDataList.add(newLine());
 
         return printDataList;
     }

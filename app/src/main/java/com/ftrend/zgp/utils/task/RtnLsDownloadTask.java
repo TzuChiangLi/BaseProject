@@ -145,7 +145,6 @@ public class RtnLsDownloadTask {
         //收钱吧支付clientSn
         trade.setSqbPayClientSn(values.getString("sqbPayClientSn"));
         //初始化
-        LogUtil.d("----rtnFlag:" + trade.getRtnFlag());
         RtnHelper.setTrade(trade);
     }
 
