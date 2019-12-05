@@ -14,7 +14,9 @@ import com.blankj.utilcode.util.ActivityUtils;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ScreenLock;
 import com.ftrend.zgp.utils.log.LogUtil;
+import com.ftrend.zgp.view.InitActivity;
 import com.ftrend.zgp.view.LoginActivity;
+import com.ftrend.zgp.view.RegisterActivity;
 import com.ftrend.zgp.view.WakeLockActivity;
 
 import butterknife.ButterKnife;
@@ -33,7 +35,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public static Context mContext;
     private onNetStatusReceiver receiver = null;
     private ScreenLock mScreenLock = null;
-    private boolean isLogin = false;
+    private boolean wakeLock = false;
 
 
     @Override
@@ -50,9 +52,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         initData();
         setCurrentModule();
         mContext = this;
-        isLogin = (this instanceof LoginActivity);
-        if (!isLogin) {
-//            LogUtil.d("----This is not LoginActivity");
+        wakeLock = (this instanceof LoginActivity)
+                || (this instanceof RegisterActivity)
+                || (this instanceof InitActivity);
+        if (!wakeLock) {
             mScreenLock = new ScreenLock(this);
             mScreenLock.begin(mStateListener);
         }
@@ -152,7 +155,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onRestart() {
-        if (!isLogin) {
+        if (!wakeLock) {
             mScreenLock.wake();
         }
         setCurrentModule();
@@ -175,7 +178,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onStop() {
 
         try {
-            if (!isLogin) {
+            if (!wakeLock) {
                 if (!ActivityUtils.getTopActivity().equals(this)) {
                     mScreenLock.sleep();
                 }
@@ -192,7 +195,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (unbinder != null) {
             unbinder.unbind();
         }
-        if (!isLogin) {
+        if (!wakeLock) {
             mScreenLock.sleep();
             mScreenLock.unregisterListener();
         }
@@ -220,7 +223,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
     //endregion
-
+}
 
 //    class NetworkChangeReceiver extends BroadcastReceiver {
 //
@@ -273,4 +276,3 @@ public abstract class BaseActivity extends AppCompatActivity {
 //            }
 //        }
 //    }
-}

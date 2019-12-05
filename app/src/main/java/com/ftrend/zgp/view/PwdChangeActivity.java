@@ -147,6 +147,7 @@ public class PwdChangeActivity extends BaseActivity implements PwdChangeContract
 
     @Override
     public void showSuccess(String msg) {
+        KeyboardUtils.hideSoftInput(this);
         MessageUtil.info(msg, new MessageUtil.MessageBoxOkListener() {
             @Override
             public void onOk() {

@@ -42,7 +42,6 @@ public class PwdChangePresenter implements PwdChangeContract.PwdChangePresenter 
         final User user = SQLite.select().from(User.class).where(User_Table.userCode.eq(ZgParams.getCurrentUser().getUserCode()))
                 .querySingle();
         if (user == null) {
-            LogUtil.d("----该用户不存在，请尝试更新数据");
             mView.show("该用户不存在，请尝试更新数据");
             return;
         }
@@ -50,7 +49,6 @@ public class PwdChangePresenter implements PwdChangeContract.PwdChangePresenter 
         if (old.equals(EncryptUtil.pwdDecrypt(user.getUserPwd()))) {
             if (newPwd.equals(confirm)) {
                 //两次输入的密码一致则调用接口成功
-                LogUtil.d("----调用接口");
                 RestSubscribe.getInstance().userChangePwd(ZgParams.getCurrentUser().getUserCode(),
                         old, newPwd, new RestCallback(new RestResultHandler() {
                             @Override

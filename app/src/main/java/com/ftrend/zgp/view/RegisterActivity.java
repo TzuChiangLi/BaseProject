@@ -144,7 +144,8 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.R
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         mPresenter.onDestory();
+        super.onDestroy();
     }
+
 }
