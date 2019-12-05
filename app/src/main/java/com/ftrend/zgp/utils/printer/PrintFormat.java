@@ -319,19 +319,19 @@ public class PrintFormat {
         printData = new PrintData();
         printData.setInitStyle(true);
         printData.setPrintData(mergeReportTitle("收银", String.format("%.2f", data.getSaleTotal()),
-                String.format("%.2f", data.getSaleCount()).replace(".00", ""), 32));
+                String.format("%d", data.getSaleCount()), 32));
         printDataList.add(printData);
         //退货
         printData = new PrintData();
         printData.setInitStyle(true);
         printData.setPrintData(mergeReportTitle("退货", String.format("%.2f", data.getRtnTotal()),
-                String.format("%.2f", data.getRtnCount()).replace(".00", ""), 32));
+                String.format("%d", data.getRtnCount()), 32));
         printDataList.add(printData);
         //交易合计
         printData = new PrintData();
         printData.setInitStyle(true);
         printData.setPrintData(mergeReportTitle("交易合计", String.format("%.2f", data.getTotal()),
-                String.format("%.2f", data.getCount()).replace(".00", ""), 32));
+                String.format("%d", data.getCount()), 32));
         printDataList.add(printData);
         //分割线
         printDataList.add(newLine());
@@ -339,25 +339,25 @@ public class PrintFormat {
         printData = new PrintData();
         printData.setInitStyle(true);
         printData.setPrintData(mergeReportTitle("现金", String.format("%.2f", data.getMoneyTotal()),
-                String.format("%.2f", data.getMoneyCount()).replace(".00", ""), 32));
+                String.format("%d", data.getMoneyCount()), 32));
         printDataList.add(printData);
         //收钱吧
         printData = new PrintData();
         printData.setInitStyle(true);
         printData.setPrintData(mergeReportTitle("收钱吧", String.format("%.2f", data.getSqbTotal()),
-                String.format("%.2f", data.getSqbCount()).replace(".00", ""), 32));
+                String.format("%d", data.getSqbCount()), 32));
         printDataList.add(printData);
         //储值卡
         printData = new PrintData();
         printData.setInitStyle(true);
         printData.setPrintData(mergeReportTitle("交易统计", String.format("%.2f", data.getCardTotal()),
-                String.format("%.2f", data.getCardCount()).replace(".00", ""), 32));
+                String.format("%d", data.getCardCount()), 32));
         printDataList.add(printData);
         //支付方式合计
         printData = new PrintData();
         printData.setInitStyle(true);
         printData.setPrintData(mergeReportTitle("支付方式合计", String.format("%.2f", data.getPayTotal()),
-                String.format("%.2f", data.getPayCount()).replace(".00", ""), 32));
+                String.format("%d", data.getPayCount()), 32));
         printDataList.add(printData);
         //分割线
         printDataList.add(newLine());

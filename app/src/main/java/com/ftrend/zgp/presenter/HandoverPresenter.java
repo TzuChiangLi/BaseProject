@@ -82,7 +82,6 @@ public class HandoverPresenter implements HandoverContract.HandoverPresenter {
 
     @Override
     public void print(final List<HandoverRecord> recordList) {
-        //TODO 2019年11月29日13:47:05 打印
         PrinterHelper.initPrinter(TradeProdActivity.mContext, new PrinterHelper.PrintInitCallBack() {
             @Override
             public void onSuccess(SunmiPrinterService service) {
