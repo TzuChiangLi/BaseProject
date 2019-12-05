@@ -126,6 +126,7 @@ public class TradeHelper {
                 .where(Trade_Table.status.eq(TRADE_STATUS_NOTPAY))
                 .and(Trade_Table.tradeFlag.eq(TRADE_FLAG_SALE))
                 .and(Trade_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode()))
+                .and(Trade_Table.cashier.eq(ZgParams.getCurrentUser().getUserCode()))
                 .querySingle();
     }
 
