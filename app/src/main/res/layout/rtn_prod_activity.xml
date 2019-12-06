@@ -97,7 +97,7 @@
         <Button
             android:id="@+id/rtn_prod_btn_back"
             android:layout_width="@dimen/dp_56"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_toStartOf="@+id/rtn_prod_btn_prod_rtn"
             android:background="@drawable/shop_btn_gray_selector"

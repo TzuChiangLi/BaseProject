@@ -57,6 +57,7 @@
         android:maxLength="8"
         android:maxLines="1"
         android:paddingStart="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_4"
         android:paddingTop="@dimen/dp_8"
         android:paddingEnd="@dimen/dp_4"
         android:paddingBottom="@dimen/dp_8"

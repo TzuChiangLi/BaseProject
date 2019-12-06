@@ -47,7 +47,7 @@ public class WakeLockPresenter implements WakeLockContract.WakePresenter {
     public void start(View... views) {
         /*logo渐渐显示后开始下一步的动画*/
         if (alphaSet == null || translationSet == null) {
-            Float Height = 20f;
+            Float Height = 25f;
             alphaSet = new AnimatorSet();
             translationSet = new AnimatorSet();
 
