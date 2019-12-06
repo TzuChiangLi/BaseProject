@@ -12,6 +12,7 @@ import com.ftrend.zgp.model.TradeProd_Table;
 import com.ftrend.zgp.model.TradeUploadQueue;
 import com.ftrend.zgp.utils.db.TransHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.Method;
@@ -299,6 +300,7 @@ public class RtnHelper {
         }
         TradeProd prod = rtnProdList.get(index);
         prod.setPrice(changePrice);
+        recalcRtnTrade();
         return prod.getPrice() == changePrice;
     }
 
@@ -656,7 +658,6 @@ public class RtnHelper {
                                  String appPayType, double amount, double change, String payCode) {
         try {
             String payTypeCode = PayType.appPayTypeToPayType(ZgParams.getCurrentDep().getDepCode(), appPayType);
-
             if (rtnPay == null) {
                 rtnPay = new TradePay();
                 rtnPay.setLsNo(rtnTrade.getLsNo());
@@ -675,6 +676,7 @@ public class RtnHelper {
             TradeUploadQueue queue = new TradeUploadQueue(rtnTrade.getDepCode(), rtnTrade.getLsNo());
             return queue.insert(databaseWrapper) > 0;
         } catch (Exception e) {
+            LogUtil.e("----" + e.getMessage());
             Log.e(TAG, "支付异常: " + rtnPay.getLsNo() + " - " + appPayType, e);
             return false;
         }

@@ -156,7 +156,7 @@ public class PayPresenter implements PayContract.Presenter {
                     return false;
                 }
             } else {
-                if (RtnHelper.pay(appPayType, RtnHelper.getRtnTrade().getTotal(), 0, "")) {
+                if (RtnHelper.pay(appPayType, value, 0, "")) {
                     if (RtnHelper.rtn()) {
                         LogUtil.u("结算", "结算成功");
                         if (!ZgParams.getPrinterConfig().isPrintTrade()) {

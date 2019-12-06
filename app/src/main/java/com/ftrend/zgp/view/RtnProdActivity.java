@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.blankj.utilcode.util.KeyboardUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.adapter.ShopAdapter;
@@ -349,28 +348,6 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
         });
     }
 
-    @Override
-    public void showRtnInfo(double rtnTotal, String payTypeName) {
-        String msg;
-        if (TextUtils.isEmpty(payTypeName)) {
-            msg = String.format(Locale.CHINA, "现金退款：￥%.2f", rtnTotal);
-        } else {
-            msg = String.format(Locale.CHINA, "退款金额￥%.2f，将自动返还至[%s]付款原账户", rtnTotal, payTypeName);
-        }
-        MessageUtil.question(msg, "确认", "返回",
-                new MessageUtil.MessageBoxYesNoListener() {
-                    @Override
-                    public void onYes() {
-                        //先退货，再写入数据库
-                        mPresenter.rtnTrade();
-                    }
-
-                    @Override
-                    public void onNo() {
-
-                    }
-                });
-    }
 
     @Override
     public void updateTradeProd(int index) {

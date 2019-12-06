@@ -21,7 +21,6 @@ import com.ftrend.zgp.utils.pay.SqbPayHelper;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.sunmi.VipCardData;
 import com.ftrend.zgp.utils.task.RtnLsDownloadTask;
-import com.ftrend.zgp.view.RtnTradeActivity;
 import com.sunmi.pay.hardware.aidl.AidlConstants;
 
 import java.text.SimpleDateFormat;
@@ -358,7 +357,7 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
                 if (isSuccess) {
                     if (RtnHelper.pay(RtnHelper.getPay().getAppPayType(), RtnHelper.getRtnTrade().getTotal(), 0, "")) {
                         if (RtnHelper.rtn()) {
-                            MessageUtil.waitSuccesss("退款成功", new MessageUtil.MessageBoxOkListener() {
+                            MessageUtil.info("退款成功", new MessageUtil.MessageBoxOkListener() {
                                 @Override
                                 public void onOk() {
                                     LogUtil.u("按单退货", "收钱吧退款成功");

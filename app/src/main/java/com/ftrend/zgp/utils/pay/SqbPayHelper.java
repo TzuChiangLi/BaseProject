@@ -330,7 +330,8 @@ public class SqbPayHelper {
             return;
         }*/
         //回调
-        if (REQUEST_PAY.equals(request.getRequestType())) {
+        if (REQUEST_PAY.equals(request.getRequestType())
+                || REQUEST_REFUND.equals(request.getRequestType())) {
             callback.onResult(isSuccess,
                     PayType.sqbPaywayToAppPayType(result.getPayway()),
                     result.getPayer_uid(),

@@ -43,19 +43,15 @@ public interface RtnProdContract {
          * 不按单退货添加退货商品
          *
          * @param prod 商品
+         * @return 是否添加成功
          */
         boolean addRtnProd(DepProduct prod);
-
 
         /**
          * 更新信息
          */
         void updateTradeInfo();
 
-        /**
-         * 退货
-         */
-        void rtnTrade();
 
         /**
          * 改商品价格
@@ -106,10 +102,6 @@ public interface RtnProdContract {
          */
         void setScanProdPosition(int index);
 
-        /**
-         * 结束当前界面
-         */
-        void finish();
 
         /**
          * 显示改价弹窗
@@ -118,11 +110,6 @@ public interface RtnProdContract {
          */
         void showInputPanel(int position);
 
-        /**
-         * @param rtnTotal    退货金额
-         * @param payTypeName 退货来源
-         */
-        void showRtnInfo(double rtnTotal, String payTypeName);
 
         /**
          * 加减更改
