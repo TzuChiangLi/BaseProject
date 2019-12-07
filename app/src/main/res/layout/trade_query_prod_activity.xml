@@ -64,7 +64,7 @@
             android:id="@+id/trd_qry_prod_tv_trade_lsno"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2.0"
+            android:layout_weight="1.5"
             android:gravity="center_vertical"
             android:lines="1"
             android:textColor="@color/text_black_second"

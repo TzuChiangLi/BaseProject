@@ -376,14 +376,14 @@ public class PayPresenter implements PayContract.Presenter {
     private void doIcCardPay() {
         mView.cardPayWait("请再次刷卡...");
         VipCardData updateData = new VipCardData(cardData);
-        updateData.setMoney(TradeHelper.getTrade().getTotal() * -1);//扣减余额
+        updateData.setMoney(isSale ? TradeHelper.getTrade().getTotal() * -1 : RtnHelper.getRtnTrade().getTotal() * -1);//扣减余额
         SunmiPayHelper.getInstance().writeCard(updateData, new SunmiPayHelper.WriteCardCallback() {
             @Override
             public void onSuccess(VipCardData data) {
                 if (isSale) {
                     paySuccess(PayType.PAYTYPE_ICCARD, TradeHelper.getTradeTotal(), data.getCardCode());
                 } else {
-                    paySuccess(PayType.PAYTYPE_ICCARD, RtnHelper.getRtnTotal(), data.getCardCode());
+                    paySuccess(PayType.PAYTYPE_ICCARD, RtnHelper.getRtnTrade().getTotal(), data.getCardCode());
                 }
                 mView.cardPaySuccess("支付成功！");
             }

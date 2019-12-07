@@ -29,7 +29,8 @@
 #-injars      bin/resources.ap_
 #-injars      libs
 #-outjars     bin/application.apk
--libraryjars D:/Android/android-sdk-windows/platforms/android-28/android.jar
+#-libraryjars D:/Android/android-sdk-windows/platforms/android-28/android.jar
+-libraryjars F:\AndroidSDK\Sdk\platforms\android-28\android.jar
 
 -android
 #-dontpreverify
