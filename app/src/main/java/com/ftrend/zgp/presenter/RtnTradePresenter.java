@@ -1,5 +1,6 @@
 package com.ftrend.zgp.presenter;
 
+import android.os.Handler;
 import android.text.TextUtils;
 
 import com.ftrend.zgp.api.RtnTradeContract;
@@ -350,14 +351,20 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
 
     //region 收钱吧退款
     private void doSqbPay() {
+        MessageUtil.waitBegin("退款处理中...", new MessageUtil.MessageBoxCancelListener() {
+            @Override
+            public boolean onCancel() {
+                return false;//支付过程无法取消
+            }
+        });
         String clientSn = RtnHelper.getTrade().getSqbPayClientSn();
         SqbPayHelper.refundByClientSn(RtnHelper.getRtnTrade(), clientSn, new SqbPayHelper.PayResultCallback() {
             @Override
-            public void onResult(boolean isSuccess, String payType, String payCode, String errMsg) {
+            public void onResult(boolean isSuccess, String payType, String payCode, final String errMsg) {
                 if (isSuccess) {
                     if (RtnHelper.pay(RtnHelper.getPay().getAppPayType(), RtnHelper.getRtnTrade().getTotal(), 0, "")) {
                         if (RtnHelper.rtn()) {
-                            MessageUtil.info("退款成功", new MessageUtil.MessageBoxOkListener() {
+                            MessageUtil.waitUpdate("退款成功", new MessageUtil.MessageBoxOkListener() {
                                 @Override
                                 public void onOk() {
                                     LogUtil.u("按单退货", "收钱吧退款成功");
@@ -370,7 +377,14 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
                         }
                     }
                 } else {
-                    MessageUtil.error(errMsg);
+                    MessageUtil.waitEnd();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            MessageUtil.error(errMsg);
+                        }
+                    }, 200);
+
                 }
             }
         });

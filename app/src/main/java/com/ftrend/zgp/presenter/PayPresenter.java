@@ -377,6 +377,7 @@ public class PayPresenter implements PayContract.Presenter {
         mView.cardPayWait("请再次刷卡...");
         VipCardData updateData = new VipCardData(cardData);
         updateData.setMoney(isSale ? TradeHelper.getTrade().getTotal() * -1 : RtnHelper.getRtnTrade().getTotal() * -1);//扣减余额
+        LogUtil.d("----updateData.getMoney:"+updateData.getMoney());
         SunmiPayHelper.getInstance().writeCard(updateData, new SunmiPayHelper.WriteCardCallback() {
             @Override
             public void onSuccess(VipCardData data) {
