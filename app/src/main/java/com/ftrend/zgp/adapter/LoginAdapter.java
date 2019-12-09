@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.model.Dep;
 import com.ftrend.zgp.model.User;
+import com.ftrend.zgp.utils.log.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,13 +53,16 @@ public class LoginAdapter<T> extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        String code = "";
         LayoutInflater inflater = LayoutInflater.from(context);
         convertView = inflater.inflate(R.layout.login_sp_item, null);
         if (convertView != null) {
             TextView titleTv = convertView.findViewById(R.id.login_sp_title);
             TextView codeTv = convertView.findViewById(R.id.login_sp_code);
+            code = type == 0 ? ((List<Dep>) data).get(position).getDepCode() : ((List<User>) data).get(position).getUserCode();
+            code = code.contains("-")?code.substring(0,code.indexOf("-")):code;
             titleTv.setText((type == 0 ? ((List<Dep>) data).get(position).getDepName() : ((List<User>) data).get(position).getUserName()));
-            codeTv.setText(type == 0 ? ((List<Dep>) data).get(position).getDepCode() : ((List<User>) data).get(position).getUserCode());
+            codeTv.setText(code);
         }
 
         return convertView;
