@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/vip_mobile_card_shape">
+
+
+    <TextView
+        android:id="@+id/pay_charge_tv_total_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_24"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:text="@string/pay_tv_total"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/pay_charge_tv_total"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/pay_charge_tv_title"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:layout_toEndOf="@+id/pay_charge_tv_total_title"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/pay_charge_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_24"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:layout_toEndOf="@+id/pay_charge_tv_total"
+        android:text="@string/pay_tv_charge"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/pay_charge_tv_charge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/pay_charge_tv_title"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:layout_toEndOf="@+id/pay_charge_tv_title"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold" />
+
+
+    <ImageView
+        android:id="@+id/pay_charge_img_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/dp_24"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:scaleType="centerCrop"
+        android:src="@drawable/close" />
+
+
+    <LinearLayout
+        android:id="@+id/pay_charge_ll_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_charge_tv_title"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:background="@drawable/shop_cart_edt_bg"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.ftrend.cleareditview.ClearEditText
+            android:id="@+id/pay_charge_edt"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_35"
+            android:layout_weight="5"
+            android:autoSizeTextType="uniform"
+            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:hint="@string/pay_tv_tip"
+            android:inputType="none"
+            android:paddingStart="@dimen/dp_8" />
+
+
+        <Button
+            android:id="@+id/pay_charge_btn_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_35"
+            android:background="@android:color/transparent"
+            android:stateListAnimator="@null"
+            android:text="@string/pay_tv_success"
+            android:textColor="@color/common_white" />
+
+    </LinearLayout>
+
+
+    <ViewStub
+        android:id="@+id/pay_charge_key_lite_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_charge_ll_info"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout="@layout/key_lite_func_view_stub" />
+</RelativeLayout>

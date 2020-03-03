@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rtn_dialog_rl"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rtn_prod_dialog_shape">
+
+    <TextView
+        android:id="@+id/rtn_dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_16"
+        android:text="@string/rtn_prod_tv_add"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/rtn_dialog_img_hide"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/rtn_dialog_title"
+        android:layout_alignBottom="@+id/rtn_dialog_title"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:scaleType="centerInside"
+        android:src="@drawable/close" />
+
+    <LinearLayout
+        android:id="@+id/rtn_dialog_ll_top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_32"
+        android:layout_below="@+id/rtn_dialog_title"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginEnd="@dimen/dp_8"
+        android:background="@drawable/shop_cart_edt_bg"
+        android:minHeight="@dimen/dp_28"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:id="@+id/rtn_dialog_img_scan"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:maxHeight="@dimen/dp_28"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:scaleType="centerInside"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:src="@drawable/scan" />
+
+        <View
+            android:layout_width="@dimen/dp_1"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_6"
+            android:layout_marginBottom="@dimen/dp_6"
+            android:background="@color/common_gray_bg" />
+
+        <com.ftrend.cleareditview.ClearEditText
+            android:id="@+id/rtn_dialog_edt"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:hint="@string/rtn_prod_tv_search"
+            android:minHeight="@dimen/dp_24"
+            android:paddingStart="@dimen/dp_12"
+            android:inputType="number|text"
+            android:textCursorDrawable="@drawable/edt_cursor_blue"
+            android:paddingEnd="@dimen/dp_8"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_12" />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rtn_dialog_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rtn_dialog_ll_top"
+        android:layout_marginTop="@dimen/dp_4"
+        android:background="@color/common_gray_bg"
+        tools:listitem="@layout/shop_cart_rv_product_item_normal" />
+
+    <!--<Button-->
+        <!--android:id="@+id/rtn_dialog_btn_finish"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:background="@drawable/shop_btn_blue_selector"-->
+        <!--android:maxHeight="@dimen/dp_36"-->
+        <!--android:stateListAnimator="@null"-->
+        <!--android:text="@string/rtn_prod_tv_add_finish"-->
+        <!--android:textColor="@color/common_white"-->
+        <!--android:textSize="@dimen/sp_16"-->
+        <!--tools:text="选好了" />-->
+
+</RelativeLayout>

@@ -1,0 +1,228 @@
+package com.ftrend.zgp.api;
+
+import android.content.Context;
+
+import com.ftrend.zgp.base.BaseView;
+import com.ftrend.zgp.model.Menu;
+
+import java.util.List;
+
+/**
+ * @author liziqiang@ftrend.cn
+ */
+
+public interface HomeContract {
+    interface HomePresenter {
+        /**
+         * 添加支付方式的参数配置
+         */
+        void addPayTypeParmas();
+
+        /**
+         * 清理用户七天前的操作记录
+         */
+        void clearUserLog();
+
+        /**
+         * 初始化商米支付SDK
+         */
+        void initSunmiPaySdk();
+
+        /**
+         * 初始化收钱吧SDK
+         *
+         * @param context 上下文
+         */
+        void initSqbSdk(Context context);
+
+        /**
+         * 启动后台线程
+         */
+        void initServerThread();
+
+        /**
+         * 创建界面菜单的数据
+         */
+        void initMenuList();
+
+        /**
+         * 设置用户名、专柜号、当前日期
+         */
+        void setInfo();
+
+        /**
+         * 检查交班
+         */
+        void checkHandover();
+
+        /**
+         * 跳转收银-选择商品界面
+         */
+        void goShopCart();
+
+        /**
+         * 跳转交班界面
+         */
+        void goHandover();
+
+        /**
+         * 跳转到退货界面
+         */
+        void goRtnProd();
+
+        /**
+         * 跳转到取单界面
+         */
+        void getOutOrder();
+
+        /**
+         * 执行数据同步
+         */
+        void doDataTrans();
+
+        /**
+         * 跳转到交班报表界面
+         */
+        void goHandoverReport();
+
+        /**
+         * 跳转到会员卡界面
+         */
+        void goVipProduct();
+
+        /**
+         * 跳转到交易统计界面
+         */
+        void goTradeReport();
+
+        /**
+         * 跳转到流水查询界面
+         */
+        void goTradeQuery();
+
+        /**
+         * 跳转到参数设置界面
+         */
+        void goConfigSetting();
+
+        /**
+         * 修改密码
+         */
+        void goPwdChange();
+
+        /**
+         * 操作指南
+         */
+        void goHelper();
+
+        /**
+         * 注销登录
+         */
+        void logout();
+
+        /**
+         * 销毁，防止泄露
+         */
+        void onDestory();
+    }
+
+    interface HomeView extends BaseView<HomeContract.HomePresenter> {
+        /**
+         * 显示错误
+         *
+         * @param msg 文本信息
+         */
+        void showError(String msg);
+
+        /**
+         * 返回数据显示界面
+         *
+         * @param menuList 数据
+         */
+        void setMenuList(List<Menu> menuList);
+
+        /**
+         * 设置用户名、专柜号、当前日期
+         *
+         * @param info 字符串数组
+         */
+        void showInfo(String... info);
+
+        /**
+         * 必须交班
+         */
+        void mustHandover();
+
+        /**
+         * 提示交班
+         */
+        void tipHandover(int days);
+
+        /**
+         * 修改密码
+         */
+        void goPwdChangeActivity();
+
+
+        /**
+         * 跳转到收银选择商品界面
+         */
+        void goShopChartActivity();
+
+        /**
+         * 跳转到交班界面
+         */
+        void goHandoverActivity();
+
+        /**
+         * 跳转到会员卡界面
+         */
+        void goVipProdActivity();
+
+        /**
+         * 跳转到取单界面
+         */
+        void goOrderOutActivity();
+
+        /**
+         * 跳转到退货界面
+         */
+        void goRtnProdActivity();
+
+        /**
+         * 跳转到交班报表界面
+         */
+        void goHandoverReportActivity();
+
+        /**
+         * 跳转到交易统计界面
+         */
+        void goTradeReportActivity();
+
+        /**
+         * 跳转到流水查询界面
+         */
+        void goTradeQueryActivity();
+
+        /**
+         * 跳转到参数设置界面
+         */
+        void goConfigActivity();
+
+        /**
+         * 跳转到操作指南界面
+         */
+        void goHelperActivity();
+
+        /**
+         * 无挂单流水
+         */
+        void hasNoHangUpTrade();
+
+        /**
+         * 注销登录
+         */
+        void logout();
+
+    }
+}

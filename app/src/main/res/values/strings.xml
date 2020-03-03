@@ -1,0 +1,6 @@
+<resources>
+    <string name="zgp_app_name">方象专柜收银</string>
+    <string name="app_test">******</string>
+    <string name="app_reg">设备需要在系统中注册以后，才可使用。\n请填写以下信息，点击“注册”按钮完成设备注册。</string>
+    <string name="app_empty">无商品</string>
+</resources>

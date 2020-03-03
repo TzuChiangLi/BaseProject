@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginStart="@dimen/dp_16"
+    android:layout_marginEnd="@dimen/dp_16"
+    android:background="@drawable/dialog_bg_top"
+    android:minWidth="@dimen/dp_130">
+
+    <ImageView
+        android:id="@+id/dialog_img_state"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_56"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:maxHeight="@dimen/dp_56"
+        android:minHeight="@dimen/dp_48"
+        android:scaleType="centerInside"
+        android:src="@drawable/dialog_state_tip" />
+
+    <TextView
+        android:id="@+id/dialog_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_img_state"
+        android:layout_centerHorizontal="true"
+        android:maxLines="3"
+        android:text="弹窗提示"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_19"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dialog_tv_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dialog_tv_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_16"
+        android:maxLines="10"
+        android:minWidth="@dimen/dp_150"
+        android:text="@string/text_demo_long_msg"
+        android:textColor="@color/text_black_second"
+        android:textSize="@dimen/sp_16"
+        android:textAlignment="textStart" />
+    <!--android:gravity="center"-->
+
+    <View
+        android:id="@+id/dialog_divide_line"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_below="@+id/dialog_tv_msg"
+        android:background="@color/divide_line" />
+
+
+    <LinearLayout
+        android:id="@+id/dialog_ll_btn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_below="@+id/dialog_divide_line"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/dialog_ll_btn_left"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_bg_bottom_left"
+            android:maxHeight="40dp"
+            android:text="Left"
+            android:textSize="@dimen/sp_17" />
+
+        <View
+            android:id="@+id/dialog_ll_btn_line"
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/divide_line"
+            android:maxHeight="40dp" />
+
+        <Button
+            android:id="@+id/dialog_ll_btn_right"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/dialog_bg_bottom_right"
+            android:maxHeight="40dp"
+            android:text="Right"
+            android:textSize="@dimen/sp_17"
+            android:textColor="@color/text_white" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

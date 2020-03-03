@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="vip_way_title">会员登录方式</string>
+    <string name="vip_way_mobile">手机号</string>
+    <string name="vip_way_scan">微会员</string>
+    <string name="vip_way_card">会员卡</string>
+
+    <string name="vip_way_mobile_title">请输入会员手机号：</string>
+    <string name="vip_btn_submit">提交</string>
+
+    <string name="vip_card_code">卡号：</string>
+    <string name="vip_code">会员号  </string>
+    <string name="vip_name">持卡人  </string>
+    <string name="vip_balance">￥</string>
+    <string name="vip_point">剩余积分：</string>
+    <string name="vip_total">消费金额：</string>
+    <string name="vip_prod">刷卡商品：</string>
+    <string name="vip_set_prod">设置刷卡商品</string>
+    <string name="vip_card_pay">刷卡消费</string>
+    <string name="vip_read_card">读卡</string>
+    <string name="vip_total_number">500.00</string>
+    <string name="vip_total_zero_double">0.00</string>
+    <string name="vip_total_zero_int">0</string>
+    <string name="vip_prod_replace">A1000-刷卡专用商品</string>
+    <string name="vip_card_replace">**** **** **** **** ****</string>
+
+</resources>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="wake_tv_welcome">欢迎回来</string>
+    <string name="wake_tv_dep_name">专柜名</string>
+    <string name="wake_tv_cashier_name">用户名</string>
+    <string name="wake_edt_hint">请输入密码</string>
+
+    <string name="wake_btn_enter">进入</string>
+</resources>

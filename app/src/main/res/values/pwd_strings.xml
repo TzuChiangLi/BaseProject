@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pwd_chg_tv_title">修改密码</string>
+    <string name="pwd_chg_tv_user">当前用户：</string>
+    <string name="pwd_chg_tv_user_name">李克勤(30010)</string>
+    <string name="pwd_chg_tv_old">请输入旧密码</string>
+    <string name="pwd_chg_tv_new">请输入新密码</string>
+    <string name="pwd_chg_tv_new_confirm">确认新密码</string>
+
+    <string name="pwd_chg_btn_submit">提交修改</string>
+</resources>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/common_white"
+    android:layout_height="match_parent"
+    tools:context=".view.HandoverActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/handover_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        app:leftIcon="@drawable/back"
+        app:lineColor="@color/common_blue"
+        app:lineSize="1px"
+        app:rightIcon="@drawable/online">
+
+        <TextView
+            android:id="@+id/handover_tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:letterSpacing="0.05"
+            android:text="@string/handover_title"
+            android:textColor="@color/common_blue"
+            android:textSize="@dimen/sp_16"
+            android:textStyle="bold" />
+    </com.hjq.bar.TitleBar>
+
+
+    <ImageView
+        android:id="@+id/handover_title_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/handover_top_bar"
+        android:scaleType="centerInside"
+        android:src="@drawable/title_bar_bottom" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/handover_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_above="@+id/handover_ll_bottom"
+        android:layout_below="@+id/handover_title_line"
+        tools:listitem="@layout/handover_rv_item" />
+
+
+    <LinearLayout
+        android:id="@+id/handover_ll_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/common_white"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/handover_btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shop_btn_gray_selector"
+            android:text="@string/handover_cancel" />
+
+
+        <Button
+            android:id="@+id/handover_btn_handover"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shop_btn_red_selector"
+            android:text="@string/handover_send"
+            android:textColor="@color/shop_white_text" />
+    </LinearLayout>
+
+
+</RelativeLayout>

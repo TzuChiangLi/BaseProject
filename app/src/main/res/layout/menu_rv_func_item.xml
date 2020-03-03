@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menu_rl_func"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/dp_4"
+        android:background="@color/common_white"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_8">
+
+        <ImageView
+            android:id="@+id/menu_img_func"
+            android:layout_width="@dimen/dp_56"
+            android:layout_height="@dimen/dp_56"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/dp_17"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:id="@+id/menu_tv_func"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|center_horizontal"
+            android:gravity="top|center_horizontal"
+            android:text="@string/app_test"
+            android:textColor="@color/text_black_second" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/menu_tv_num"
+        android:layout_width="@dimen/dp_18"
+        android:layout_height="@dimen/dp_18"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_8"
+        android:background="@drawable/shop_tip_num"
+        android:gravity="center"
+        android:text="13"
+        android:textColor="@color/shop_white_text"
+        android:textSize="@dimen/sp_10" />
+</RelativeLayout>

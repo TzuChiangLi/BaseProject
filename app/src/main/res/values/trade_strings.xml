@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="trade_qry_title">流水查询</string>
+    <string name="trade_qry_lsno">流水号</string>
+    <string name="trade_qry_amount">交易金额</string>
+    <string name="trade_qry_trade_time">交易时间</string>
+    <string name="trade_qry_replace_lsno">10200072</string>
+    <string name="trade_qry_replace_total">15.00</string>
+    <string name="trade_qry_replace_trade_time">2019/11/14 13:43</string>
+    <string name="trade_qry_prod_tv_search">请输入交易流水号查询</string>
+    <string name="trade_qry_prod_tv_qry">查看</string>
+
+    <string name="trade_prod_sale">销售流水</string>
+    <string name="trade_prod_rtn">退货流水</string>
+    <string name="trade_prod_title">流水详情</string>
+    <string name="trade_prod_trade_title">￥</string>
+    <string name="trade_prod_print_again">重打小票</string>
+    <string name="trade_prod_back">返回</string>
+
+    <string name="trade_report_title">交易统计</string>
+</resources>

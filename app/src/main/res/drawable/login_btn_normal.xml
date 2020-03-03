@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <gradient
+        android:endColor="@color/login_btn_orange_end"
+        android:startColor="@color/login_btn_orange_start" />
+</shape>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="out_tv_get_out">已挂起交易</string>
+    <string name="out_tv_lsno">流水号 :</string>
+    <string name="out_tv_num">商品数 :</string>
+    <string name="out_tv_amount">数量 :</string>
+    <string name="out_tv_total">合计金额 :</string>
+    <string name="out_tv_prodname_demo">商品名称跑步鞋XS-789（42码）</string>
+
+
+    <string name="out_btn_get_out">取单</string>
+    <string name="out_btn_close">返回</string>
+    <string name="out_btn_print">打印</string>
+
+
+</resources>

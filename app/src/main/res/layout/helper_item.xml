@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/dp_8"
+    android:background="@color/common_white">
+
+    <TextView
+        android:id="@+id/helper_rv_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:paddingStart="@dimen/dp_12"
+        android:paddingTop="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_12"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold"
+        tools:text="@string/help_question_replace" />
+
+    <TextView
+        android:id="@+id/helper_rv_answer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/helper_rv_question"
+        android:lineSpacingExtra="@dimen/dp_6"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingEnd="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_8"
+        android:textColor="@color/text_black_second"
+        android:textSize="@dimen/sp_13"
+        tools:text="@string/help_answer_replace" />
+
+</RelativeLayout>

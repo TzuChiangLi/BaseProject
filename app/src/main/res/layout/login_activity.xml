@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg"
+    tools:context=".view.LoginActivity">
+
+
+    <ImageView
+        android:layout_width="@dimen/dp_128"
+        android:layout_height="@dimen/dp_128"
+        android:layout_above="@+id/login_ll"
+        android:layout_centerHorizontal="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/splash_logo" />
+
+
+    <LinearLayout
+        android:id="@+id/login_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="@dimen/dp_24"
+        android:layout_marginTop="@dimen/dp_32"
+        android:layout_marginEnd="@dimen/dp_24"
+        android:background="@color/common_white"
+        android:orientation="vertical"
+        android:padding="@dimen/dp_16">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/login_dep" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:paddingStart="@dimen/dp_8"
+                android:text="@string/login_title_dep"
+                android:textSize="@dimen/sp_14" />
+
+            <Spinner
+                android:id="@+id/login_sp_dep"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:minHeight="@dimen/dp_45"
+                android:spinnerMode="dropdown"
+                android:textCursorDrawable="@drawable/edt_cursor_blue" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/login_user" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingStart="@dimen/dp_8"
+                android:text="@string/login_title_username"
+                android:textSize="@dimen/sp_14" />
+
+            <Spinner
+                android:id="@+id/login_sp_user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:minHeight="@dimen/dp_40"
+                android:spinnerMode="dropdown"
+                android:textCursorDrawable="@drawable/edt_cursor_blue" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_16"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/login_pwd" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingStart="@dimen/dp_8"
+                android:text="@string/login_title_password"
+                android:textSize="@dimen/sp_14" />
+
+
+            <com.ftrend.cleareditview.ClearEditText
+                android:id="@+id/login_edt_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:inputType="numberPassword"
+                android:maxHeight="@dimen/dp_45"
+                android:maxLength="8"
+                android:maxLines="1"
+                android:minHeight="@dimen/dp_40"
+                android:paddingStart="@dimen/dp_8"
+                android:paddingEnd="@dimen/dp_0"
+                android:textSize="@dimen/sp_18" />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/login_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_40"
+        android:layout_below="@+id/login_ll"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_70"
+        android:background="@drawable/login_btn_selector"
+        android:letterSpacing="0.2"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16"
+        android:text="@string/login_btn"
+        android:textColor="@color/common_white" />
+
+</RelativeLayout>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_white"
+    tools:context="com.ftrend.zgp.view.ConfigActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/pwd_chg_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        app:leftIcon="@drawable/back"
+        app:lineColor="@color/common_blue"
+        app:lineSize="1px"
+        app:rightIcon="@drawable/online">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:letterSpacing="0.05"
+            android:text="@string/pwd_chg_tv_title"
+            android:textColor="@color/common_blue"
+            android:textSize="@dimen/sp_16"
+            android:textStyle="bold" />
+
+    </com.hjq.bar.TitleBar>
+
+    <ImageView
+        android:id="@+id/pwd_chg_title_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pwd_chg_top_bar"
+        android:background="@color/common_white"
+        android:scaleType="centerInside"
+        android:src="@drawable/title_bar_bottom" />
+
+
+    <RelativeLayout
+        android:id="@+id/pwd_chg_ll_mid"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pwd_chg_title_line"
+        android:layout_marginStart="@dimen/dp_4"
+        android:layout_marginTop="@dimen/dp_2"
+        android:layout_marginEnd="@dimen/dp_4"
+        android:background="@color/common_white"
+        android:padding="@dimen/dp_12">
+
+        <TextView
+            android:id="@+id/pwd_chg_title_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingEnd="@dimen/dp_8"
+            android:text="@string/pwd_chg_tv_user"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_13" />
+
+        <TextView
+            android:id="@+id/pwd_chg_tv_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingEnd="@dimen/dp_8"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_13"
+            tools:text="@string/pwd_chg_tv_user_name" />
+
+
+        <com.ftrend.cleareditview.ClearEditText
+            android:id="@+id/pwd_chg_edt_old"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pwd_chg_title_user"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:background="@drawable/pwd_edt_selector"
+            android:hint="@string/pwd_chg_tv_old"
+            android:imeOptions="actionNext"
+            android:inputType="numberPassword"
+            android:lines="1"
+            android:maxLength="8"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingEnd="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_12"
+            android:textCursorDrawable="@drawable/edt_cursor_blue"
+            android:textSize="@dimen/sp_13" />
+
+
+        <com.ftrend.cleareditview.ClearEditText
+            android:id="@+id/pwd_chg_edt_new"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pwd_chg_edt_old"
+            android:layout_marginBottom="@dimen/dp_16"
+            android:background="@drawable/pwd_edt_selector"
+            android:hint="@string/pwd_chg_tv_new"
+            android:imeOptions="actionNext"
+            android:inputType="numberPassword"
+            android:lines="1"
+            android:maxLength="8"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingEnd="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_12"
+            android:textCursorDrawable="@drawable/edt_cursor_blue"
+            android:textSize="@dimen/sp_13" />
+
+        <com.ftrend.cleareditview.ClearEditText
+            android:id="@+id/pwd_chg_edt_new_again"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/pwd_chg_edt_new"
+            android:background="@drawable/pwd_edt_selector"
+            android:hint="@string/pwd_chg_tv_new_confirm"
+            android:imeOptions="actionDone"
+            android:inputType="numberPassword"
+            android:lines="1"
+            android:maxLength="8"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_12"
+            android:paddingEnd="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_12"
+            android:textCursorDrawable="@drawable/edt_cursor_blue"
+            android:textSize="@dimen/sp_13" />
+
+    </RelativeLayout>
+
+
+    <Button
+        android:id="@+id/pwd_chg_btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:layout_below="@+id/pwd_chg_ll_mid"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:background="@drawable/pwd_chg_btn_selector"
+        android:stateListAnimator="@null"
+        android:text="@string/pwd_chg_btn_submit"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_13" />
+
+
+</RelativeLayout>

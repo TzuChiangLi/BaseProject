@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/common_blue"
+        android:paddingTop="@dimen/dp_2"
+        android:paddingBottom="@dimen/dp_2">
+
+        <TextView
+            android:id="@+id/handover_tv_usercode_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_16"
+            android:text="@string/handover_usercode"
+            android:textColor="@color/common_white" />
+
+        <TextView
+            android:id="@+id/handover_tv_usercode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/handover_tv_usercode_title"
+            android:textColor="@color/common_white" />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:layout_toStartOf="@+id/handover_tv_username_title"
+            android:scaleType="centerInside"
+            android:src="@drawable/user" />
+
+        <TextView
+            android:id="@+id/handover_tv_username_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/handover_tv_username"
+            android:text="@string/handover_username"
+            android:textColor="@color/common_white" />
+
+        <TextView
+            android:id="@+id/handover_tv_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:textColor="@color/common_white" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/common_white"
+        android:padding="@dimen/dp_16">
+
+        <LinearLayout
+            android:id="@+id/handover_rv_ll_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dp_4"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_blue_top_left_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_project"
+                    android:textColor="@color/common_black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_blue_top_mid_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_amout"
+                    android:textColor="@color/common_black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_blue_top_right_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_count"
+                    android:textColor="@color/common_black"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/view_white_left_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_cash" />
+
+                <TextView
+                    android:id="@+id/handover_cash_total"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_white_mid_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_total_replace" />
+
+                <TextView
+                    android:id="@+id/handover_cash_count"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_white_right_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_count_replace" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_white_left_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_return" />
+
+                <TextView
+                    android:id="@+id/handover_th_total"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_white_mid_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_total_replace" />
+
+                <TextView
+                    android:id="@+id/handover_th_count"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_white_right_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_count_replace" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_blue_mid_left_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_trade_total"
+                    android:textColor="@color/common_black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/handover_trade_total"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_blue_mid_mid_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_total_replace"
+                    android:textColor="@color/common_black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/handover_trade_count"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_blue_mid_right_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_count_replace"
+                    android:textColor="@color/common_black"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_white_left_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_money" />
+
+                <TextView
+                    android:id="@+id/handover_money_total"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_white_mid_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_total_replace" />
+
+                <TextView
+                    android:id="@+id/handover_money_count"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_white_right_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_count_replace" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_white_left_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_sqb" />
+
+                <TextView
+                    android:id="@+id/handover_sqb_total"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_white_mid_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_total_replace" />
+
+                <TextView
+                    android:id="@+id/handover_sqb_count"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_white_right_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_count_replace" />
+            </LinearLayout>
+
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/view_white_left_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_alipay" />
+
+                <TextView
+                    android:id="@+id/handover_alipay_total"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/view_white_mid_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_total_replace" />
+
+                <TextView
+                    android:id="@+id/handover_alipay_count"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/view_white_right_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_count_replace" />
+            </LinearLayout>-->
+
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/view_white_left_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_wechat" />
+
+                <TextView
+                    android:id="@+id/handover_wechat_total"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/view_white_mid_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_total_replace" />
+
+                <TextView
+                    android:id="@+id/handover_wechat_count"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/view_white_right_line"
+                    android:gravity="center"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_count_replace" />
+            </LinearLayout>-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_white_left_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_card" />
+
+                <TextView
+                    android:id="@+id/handover_card_total"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_white_mid_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_total_replace" />
+
+                <TextView
+                    android:id="@+id/handover_card_count"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_white_right_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_count_replace" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_blue_bottom_left_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_pay_total"
+                    android:textColor="@color/common_black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/handover_pay_total"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_blue_bottom_mid_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_total_replace"
+                    android:textColor="@color/common_black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/handover_pay_count"
+                    android:layout_width="@dimen/dp_0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:autoSizeTextType="uniform"
+                    android:background="@drawable/view_blue_bottom_right_line"
+                    android:gravity="center"
+                    android:lines="1"
+                    android:padding="@dimen/dp_8"
+                    android:text="@string/handover_count_replace"
+                    android:textColor="@color/common_black"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/handover_tv_count_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/handover_rv_ll_item"
+            android:layout_alignParentStart="true"
+            android:text="@string/handover_print_count"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_13"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/handover_rv_ll_item"
+            android:layout_toEndOf="@+id/handover_tv_count_title"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_13"
+            android:visibility="gone" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/handover_rv_ll_item"
+            android:layout_toStartOf="@+id/handover_tv_print_time"
+            android:text="@string/handover_time"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_13"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/handover_tv_print_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/handover_rv_ll_item"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_13"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

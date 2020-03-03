@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="init_title">设备注册成功，正在进行初始化设置…</string>
+    <string name="init_warning">初始化过程中请勿移动，并保持网络连接畅通！</string>
+    <string name="init_result_title">您的设备注册信息如下</string>
+    <string name="init_result_machine">101</string>
+    <string name="init_result_title_desk">专柜信息：</string>
+    <string name="init_result_desk">11110001 鞋服专柜\n11110002 运动品牌专柜\n11110003 XXXX专柜</string>
+    <string name="init_result_title_user">用户信息：</string>
+    <string name="init_result_user">001 收款员1\n002 收款员2</string>
+    <string name="reg_title_first">请输入服务器地址</string>
+    <string name="reg_title_second">请输入设备注册信息</string>
+    <string name="reg_title_posCode">机器号</string>
+    <string name="reg_title_regCode">验证码</string>
+    <string name="reg_title_warning">在注册过程中，请保持网络连接畅通，否则可能注册失败。</string>
+    <string name="reg_btn_register">注册</string>
+</resources>

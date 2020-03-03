@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pay_tv_title">收银-结算</string>
+    <string name="pay_tv_should_pay">应收款：</string>
+    <string name="pay_tv_method">请选择一种支付方式</string>
+    <string name="pay_tv_charge">找零:</string>
+    <string name="pay_tv_total">应收:</string>
+    <string name="pay_tv_success">结账</string>
+    <string name="pay_tv_tip">请输入收到现金金额</string>
+</resources>

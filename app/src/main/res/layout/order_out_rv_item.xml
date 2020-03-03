@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_12">
+
+    <LinearLayout
+        android:id="@+id/out_order_ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:layout_toStartOf="@+id/out_order_btn_get_out"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/out_tv_lsno"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/out_order_tv_lsno"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|start"
+            android:text="10112345"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:gravity="center"
+            android:text="@string/out_tv_num"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/out_order_tv_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_2"
+            android:gravity="center"
+            android:text="15"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical|end"
+            android:paddingEnd="@dimen/dp_8"
+            android:text="@string/out_tv_total"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/out_order_tv_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="123"
+            android:textSize="@dimen/sp_12" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/out_order_tv_prod_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/out_order_ll_title"
+        android:layout_alignStart="@+id/out_order_ll_title"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_toStartOf="@+id/out_order_tv_num_title"
+        android:text="@string/out_tv_prodname_demo"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_14"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/out_order_tv_num_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/out_order_tv_prod_name"
+        android:layout_toStartOf="@+id/out_order_tv_num"
+        android:text="@string/out_tv_amount"
+        android:textSize="@dimen/sp_12" />
+
+    <TextView
+        android:id="@+id/out_order_tv_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/out_order_tv_prod_name"
+        android:layout_marginStart="@dimen/dp_2"
+        android:layout_marginEnd="@dimen/dp_12"
+        android:layout_toStartOf="@+id/out_order_btn_get_out"
+        android:text="20"
+        android:textSize="@dimen/sp_12" />
+
+    <Button
+        android:id="@+id/out_order_btn_get_out"
+        android:layout_width="@dimen/dp_65"
+        android:layout_height="@dimen/dp_40"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/shop_btn_blue_selector"
+        android:gravity="center"
+        android:stateListAnimator="@null"
+        android:text="@string/out_btn_get_out"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_13" />
+
+</RelativeLayout>

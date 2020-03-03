@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_8"
+    android:background="@color/common_white"
+    android:paddingBottom="@dimen/dp_6">
+
+    <TextView
+        android:id="@+id/main_rv_menu_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_8"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_18"
+        android:textStyle="bold" />
+
+    <!--<View-->
+    <!--android:id="@+id/main_rv_menu_line"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1px"-->
+    <!--android:layout_below="@+id/main_rv_menu_title"-->
+    <!--android:layout_marginStart="@dimen/dp_8"-->
+    <!--android:background="@color/divide_line" />-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/main_rv_menu_rv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/main_rv_menu_title"
+        android:layout_marginStart="@dimen/dp_12"
+        android:layout_marginEnd="@dimen/dp_12"
+        tools:listitem="@layout/menu_rv_func_item" />
+</RelativeLayout>

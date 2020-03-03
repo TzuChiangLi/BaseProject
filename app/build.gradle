@@ -1,0 +1,152 @@
+ext {
+    var = '2.1.0'
+}
+apply plugin: 'com.android.application'
+def dbflow_version = '4.2.4'
+
+
+android {
+    signingConfigs {
+        release {
+            storeFile file('../key/zgpos.jks')
+            storePassword 'ftrend.cn'
+            keyAlias = 'zgpos'
+            keyPassword 'ftrend.cn'
+        }
+    }
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.ftrend.zgp"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 10203
+        versionName "1.2.3.R"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        applicationIdSuffix = 'zgpos'
+        maxSdkVersion 28
+        signingConfig signingConfigs.release
+        proguardFiles
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+            versionNameSuffix = '-debug'
+        }
+    }
+    //apk文件重命名
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "ftrend-zgp-${variant.buildType.name}-v${versionName}.apk"
+        }
+    }
+    //单元测试
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_7
+        targetCompatibility = JavaVersion.VERSION_1_7
+    }
+    buildToolsVersion = '29.0.2'
+}
+
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
+configurations {
+    all*.exclude group: 'com.google.code.gson'
+    all*.exclude group: 'com.google.zxing'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'com.android.support:cardview-v7:28.0.0'
+    implementation 'com.android.support:design:28.0.0'
+    //RxJava:    https://github.com/ReactiveX/RxJava
+    implementation "io.reactivex.rxjava2:rxjava:2.2.11"
+    //RxAndroid: https://github.com/ReactiveX/RxAndroid
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    //Retrofit:  https://github.com/square/retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.6.2'
+    //工具类:     https://github.com/Blankj/AndroidUtilCode
+    implementation 'com.blankj:utilcode:1.25.0'
+    //GSON库
+    // https://github.com/google/gson
+    // implementation 'com.google.code.gson:gson:2.8.6'
+    // https://github.com/alibaba/fastjson
+    // implementation 'com.alibaba:fastjson:1.1.71.android'
+    //黄油刀：   https://github.com/JakeWharton/butterknife
+    implementation 'com.jakewharton:butterknife:8.7.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
+    //权限申请：  https://github.com/soulqw/SoulPermission
+    implementation 'com.qw:soulpermission:1.2.1'
+    //弹窗库：    https://github.com/li-xiaojun/XPopup
+    implementation 'com.lxj:xpopup:1.8.10'
+    //状态栏：    https://github.com/getActivity/TitleBar
+    implementation 'com.hjq:titlebar:6.0'
+    //BRVAH适配器：https://github.com/CymChad/BaseRecyclerViewAdapterHelper
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.47'
+    //DBFlow:     https://github.com/agrosner/DBFlow
+    annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:${dbflow_version}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow-core:${dbflow_version}"
+    implementation "com.github.Raizlabs.DBFlow:dbflow:${dbflow_version}"
+    //沉浸式:    https://github.com/gyf-dev/ImmersionBar
+    implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
+    //日历选择控件
+    //https://github.com/prolificinteractive/material-calendarview
+    implementation 'com.github.prolificinteractive:material-calendarview:1.6.1'
+    //EventBus
+    //https://github.com/greenrobot/EventBus
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    //一些公共自定义view
+    implementation project(':library')
+    //商米支付SDK
+    implementation(name: 'PayLib-release-1.4.18', ext: 'aar')
+    //商米打印机远程导入
+    implementation 'com.sunmi:printerlibrary:1.0.6'
+    //收钱吧（gson包冲突，exclude方式无效，通过module方式引用解决冲突）
+    implementation project(':SQB-Android-SDK-2.1.5')
+//    implementation(name: 'SQB-Android-SDK-2.1.5', ext: 'aar') {
+//        exclude group: 'com.google.code.gson'
+//    }
+    //单元测试框架
+    //http://robolectric.org
+    testImplementation 'org.robolectric:robolectric:4.3'
+//    //UI测试
+//    androidTestImplementation 'com.jayway.android.robotium:robotium-solo:5.6.3'
+//    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    //SwitchButtonUI控件
+    //https://github.com/zcweng/SwitchButton
+    implementation 'com.github.zcweng:switch-button:0.0.3@aar'
+    //扫码库一
+    //https://github.com/kangdp/StarBarcode
+//    implementation 'com.kdp:starbarcode:1.0.5'
+    //内存泄漏检查库
+    //https://square.github.io/leakcanary/
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0'
+    //扫码库二(功能更全但是进入界面略慢)
+    //https://github.com/bertsir/zBarLibary
+//    implementation 'cn.bertsir.zbarLibary:zbarlibary:latest.release'
+//    implementation 'com.google.zxing:core:3.4.0'//zxing
+//    implementation 'com.soundcloud.android:android-crop:1.0.1@aar'//图片裁切
+}

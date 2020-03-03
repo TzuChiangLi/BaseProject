@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="dialog_bg_white">#FFFFFF</color>
+    <color name="keyboard_normal">#FFFFFF</color>
+    <color name="keyboard_press">#707070</color>
+    <color name="divide_line">#b5b5b5</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_black_first">#393B4D</color>
+    <color name="text_black_second">#5f5f6b</color>
+    <color name="progress_load_red">#FF4646</color>
+    <color name="progress_load_blue">#95cefd</color>
+    <color name="progress_load_orange">#FFA25A</color>
+    <color name="dialog_button_ok">#DA5858</color>
+
+    <color name="colorDialogTextColor">#ffffff</color>
+    <color name="colorDialogProgressBarColor">#ffffff</color>
+    <!--进度条相关的颜色-->
+</resources>

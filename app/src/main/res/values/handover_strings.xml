@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="handover_usercode">收款员号：</string>
+    <string name="handover_username">收款员：</string>
+    <string name="handover_print_count">已打印次数：</string>
+    <string name="handover_time">上次打印时间：</string>
+    <string name="handover_title">交班</string>
+    <string name="handover_project">项目</string>
+    <string name="handover_amout">金额</string>
+    <string name="handover_count">次数</string>
+    <string name="handover_cash">收银</string>
+    <string name="handover_return">退货</string>
+    <string name="handover_trade_total">交易合计</string>
+    <string name="handover_pay_total">支付方式合计</string>
+
+    <string name="handover_sqb">收钱吧</string>
+    <string name="handover_card">储值卡</string>
+    <string name="handover_money">现金</string>
+
+
+    <string name="handover_cancel">取消</string>
+    <string name="handover_send">交班</string>
+
+    <string name="handover_total_replace">123.00</string>
+    <string name="handover_count_replace">12</string>
+</resources>

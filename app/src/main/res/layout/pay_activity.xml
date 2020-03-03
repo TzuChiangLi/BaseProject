@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_gray_bg"
+    android:orientation="vertical"
+    tools:context=".view.PayActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/pay_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:layout_alignParentTop="true"
+        android:background="@color/common_white"
+        app:leftIcon="@drawable/back"
+        app:lineColor="@color/common_blue"
+        app:lineVisible="true"
+        app:rightIcon="@drawable/online">
+
+        <TextView
+            android:id="@+id/pay_tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:letterSpacing="0.05"
+            android:text="@string/pay_tv_title"
+            android:textColor="@color/common_blue"
+            android:textSize="@dimen/sp_16"
+            android:textStyle="bold" />
+    </com.hjq.bar.TitleBar>
+
+
+    <ImageView
+        android:id="@+id/pay_title_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_top_bar"
+        android:background="@color/common_white"
+        android:scaleType="centerInside"
+        android:src="@drawable/title_bar_bottom" />
+
+    <RelativeLayout
+        android:id="@+id/pay_rl_money"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_title_line"
+        android:background="@color/common_white">
+
+        <TextView
+            android:id="@+id/pay_tv_total_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:padding="@dimen/dp_16"
+            android:text="@string/pay_tv_should_pay"
+            android:textColor="@color/pay_tv_red"
+            android:textSize="@dimen/sp_20" />
+
+
+        <TextView
+            android:id="@+id/pay_tv_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/pay_tv_total_title"
+            android:paddingTop="@dimen/dp_16"
+            android:paddingBottom="@dimen/dp_16"
+            android:text="159.33"
+            android:textColor="@color/pay_tv_red"
+            android:textSize="@dimen/sp_20"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/pay_tv_select_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_rl_money"
+        android:background="@color/common_blue"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_4"
+        android:paddingEnd="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_4"
+        android:text="@string/pay_tv_method"
+        android:textColor="@color/common_white"
+        android:textSize="@dimen/sp_16" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/pay_rv_pay_way"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pay_tv_select_title"
+        android:overScrollMode="never"
+        tools:listitem="@layout/pay_way_rv_item" />
+
+
+</RelativeLayout>

@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_white"
+    tools:context="com.ftrend.zgp.view.VipProdActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/vip_prod_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        app:leftIcon="@drawable/back"
+        app:lineColor="@color/common_blue"
+        app:lineSize="1px"
+        app:rightIcon="@drawable/online">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:letterSpacing="0.05"
+            android:text="@string/vip_way_card"
+            android:textColor="@color/common_blue"
+            android:textSize="@dimen/sp_16"
+            android:textStyle="bold" />
+
+    </com.hjq.bar.TitleBar>
+
+    <ImageView
+        android:id="@+id/vip_prod_img_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_prod_top_bar"
+        android:background="@color/common_white"
+        android:scaleType="centerInside"
+        android:src="@drawable/title_bar_bottom"
+        tools:visibility="gone" />
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/vip_rl_read"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_160"
+        android:layout_below="@+id/vip_prod_img_line"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:alpha="1"
+        app:cardCornerRadius="@dimen/dp_8"
+        app:cardElevation="@dimen/dp_0"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/vip_img_read_card"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_160"
+            android:background="@color/common_white"
+            android:scaleType="centerInside"
+            android:src="@drawable/vip_prod_card"
+            tools:visibility="visible" />
+
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/vip_rl_show"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_160"
+        android:layout_below="@+id/vip_prod_img_line"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:alpha="0"
+        app:cardCornerRadius="@dimen/dp_8"
+        app:cardElevation="@dimen/dp_4"
+        tools:alpha="1">
+
+
+        <RelativeLayout
+            android:id="@+id/vip_rl_info"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_160"
+            android:background="@drawable/card_blue"
+            android:padding="@dimen/dp_12"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/vip_tv_card"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginStart="@dimen/dp_4"
+                android:layout_marginTop="@dimen/dp_4"
+                android:fontFamily="@font/ptmono"
+                android:gravity="start|center_vertical"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
+                android:text="@string/vip_card_replace"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/sp_16"
+                tools:text="@string/vip_card_replace" />
+
+            <TextView
+                android:id="@+id/vip_tv_name_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/vip_tv_vip_code_title"
+                android:layout_alignStart="@+id/vip_tv_card"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
+                android:text="@string/vip_name"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/vip_tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/vip_tv_name_title"
+                android:layout_toEndOf="@+id/vip_tv_name_title"
+                android:paddingStart="@dimen/dp_4"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingEnd="@dimen/dp_0"
+                android:paddingBottom="@dimen/dp_4"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/sp_12"
+                tools:text="@string/vip_way_card" />
+
+            <TextView
+                android:id="@+id/vip_tv_vip_code_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/vip_tv_card"
+                android:layout_alignParentBottom="true"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
+                android:text="@string/vip_code"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/vip_tv_vip_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/vip_tv_vip_code_title"
+                android:layout_toEndOf="@+id/vip_tv_vip_code_title"
+                android:paddingStart="@dimen/dp_4"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingEnd="@dimen/dp_0"
+                android:paddingBottom="@dimen/dp_4"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/sp_12"
+                tools:text="123123" />
+
+            <TextView
+                android:id="@+id/vip_tv_total_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/vip_tv_vip_code_title"
+                android:layout_toStartOf="@+id/vip_tv_total"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
+                android:text="@string/vip_balance"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/sp_16" />
+
+            <TextView
+                android:id="@+id/vip_tv_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/vip_tv_total_title"
+                android:layout_alignParentEnd="true"
+                android:paddingStart="@dimen/dp_4"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingEnd="@dimen/dp_0"
+                android:paddingBottom="@dimen/dp_4"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/sp_20"
+                tools:text="@string/vip_total_number" />
+
+
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+
+    <RelativeLayout
+        android:id="@+id/vip_prod_rl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_rl_show"
+        android:layout_marginTop="@dimen/dp_16"
+        android:background="@color/common_white"
+        android:paddingStart="@dimen/dp_16"
+        android:paddingEnd="@dimen/dp_16">
+
+        <TextView
+            android:id="@+id/vip_tv_point_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/vip_ll_score"
+            android:layout_alignBottom="@+id/vip_ll_score"
+            android:gravity="center"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:text="@string/vip_point"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_16" />
+
+
+        <LinearLayout
+            android:id="@+id/vip_ll_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/vip_tv_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/dp_4"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingEnd="@dimen/dp_0"
+                android:paddingBottom="@dimen/dp_4"
+                android:text="@string/vip_total_zero_int"
+                android:textSize="@dimen/sp_16"
+                android:textStyle="bold" />
+
+
+            <ImageView
+                android:id="@+id/vip_prod_score"
+                android:layout_width="@dimen/dp_32"
+                android:layout_height="@dimen/dp_32"
+                android:scaleType="centerInside"
+                android:src="@drawable/vip_point" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/vip_total_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/vip_ll_total"
+            android:layout_alignBottom="@+id/vip_ll_total"
+            android:gravity="center"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:text="@string/vip_total"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_16" />
+
+        <LinearLayout
+            android:id="@+id/vip_ll_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vip_tv_point_title"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/dp_12"
+            android:layout_marginBottom="@dimen/dp_12"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/vip_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
+                android:text="@string/vip_total_zero_double"
+                android:textSize="@dimen/sp_16"
+                android:textStyle="bold" />
+
+
+            <ImageView
+                android:id="@+id/vip_total_modify"
+                android:layout_width="@dimen/dp_32"
+                android:layout_height="@dimen/dp_32"
+                android:scaleType="centerInside"
+                android:src="@drawable/cfg_modify" />
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/vip_prod_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vip_total_title"
+            android:layout_alignTop="@+id/vip_ll_prod"
+            android:layout_alignBottom="@+id/vip_ll_prod"
+            android:gravity="center"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:text="@string/vip_prod"
+            android:textColor="@color/text_black_first"
+            android:textSize="@dimen/sp_16" />
+
+
+        <LinearLayout
+            android:id="@+id/vip_ll_prod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vip_ll_total"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="@dimen/dp_8"
+            android:gravity="center"
+
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/vip_prod_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxWidth="@dimen/dp_180"
+                android:maxLines="1"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
+                android:textSize="@dimen/sp_15"
+                tools:text="@string/vip_prod_replace" />
+
+
+            <ImageView
+                android:id="@+id/vip_prod_modify"
+                android:layout_width="@dimen/dp_32"
+                android:layout_height="@dimen/dp_32"
+                android:scaleType="centerInside"
+                android:src="@drawable/cfg_modify" />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_prod_rl"
+        android:layout_marginTop="@dimen/dp_16"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/vip_read_card"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_36"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_8"
+            android:background="@drawable/pwd_chg_btn_selector"
+            android:paddingStart="@dimen/dp_8"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingEnd="@dimen/dp_8"
+            android:paddingBottom="@dimen/dp_4"
+            android:text="@string/vip_read_card"
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/sp_13" />
+
+
+        <Button
+            android:id="@+id/vip_btn_pay"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_36"
+            android:layout_marginStart="@dimen/dp_32"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_8"
+            android:background="@drawable/pwd_chg_btn_selector"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:text="@string/vip_card_pay"
+            android:textColor="@color/common_white"
+            android:textSize="@dimen/sp_13" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

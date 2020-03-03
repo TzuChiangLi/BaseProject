@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/pay_submit_red" />
+    <corners android:bottomRightRadius="@dimen/dp_4"
+        android:topRightRadius="@dimen/dp_4"/>
+</shape>

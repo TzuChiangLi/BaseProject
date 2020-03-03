@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="KeyboardView">
+        <attr name="style" format="integer">
+            <enum name="number" value="0" />
+            <enum name="discountNumber" value="1" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="ProgressView">
+        <attr name="defualtText" format="string" />
+        <attr name="originColor" format="color" />
+        <attr name="finishColor" format="color" />
+        <attr name="errorColor" format="color" />
+    </declare-styleable>
+    <declare-styleable name="ClearEditText">
+        <attr name="clearIcon" format="reference" />
+        <attr name="scaleSize" format="float" />
+        <attr name="drawableWidth" format="dimension" />
+    </declare-styleable>
+    <declare-styleable name="CircleProgressView">
+        <attr name="progressIndeterminate" format="boolean" />
+        <attr name="barColor" format="color" />
+        <attr name="rimColor" format="color" />
+        <attr name="rimWidth" format="dimension" />
+        <attr name="spinSpeed" format="float" />
+        <attr name="barSpinCycleTime" format="integer" />
+        <attr name="circleRadius" format="dimension" />
+        <attr name="fillRadius" format="boolean" />
+        <attr name="barWidth" format="dimension" />
+        <attr name="linearProgress" format="boolean" />
+    </declare-styleable>
+
+</resources>

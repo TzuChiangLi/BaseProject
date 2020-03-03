@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_white"
+    tools:context="com.ftrend.zgp.view.TradeQueryActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/trade_qry_top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        app:leftIcon="@drawable/back"
+        app:lineColor="@color/common_blue"
+        app:lineSize="1px"
+        app:rightIcon="@drawable/online">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:letterSpacing="0.05"
+            android:text="@string/trade_qry_title"
+            android:textColor="@color/common_blue"
+            android:textSize="@dimen/sp_16"
+            android:textStyle="bold" />
+    </com.hjq.bar.TitleBar>
+
+    <ImageView
+        android:id="@+id/trade_qry_title_line"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/trade_qry_top_bar"
+        android:scaleType="centerInside"
+        android:src="@drawable/title_bar_bottom" />
+
+    <TextView
+        android:id="@+id/textView_dep"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/trade_qry_title_line"
+        android:layout_marginTop="@dimen/dp_5"
+        android:paddingStart="@dimen/dp_8"
+        android:paddingEnd="@dimen/dp_8"
+        android:textColor="@color/common_blue"
+        android:textSize="@dimen/sp_20"
+        android:textStyle="bold"
+        tools:text="专柜：乐知味" />
+
+    <LinearLayout
+        android:id="@+id/trd_qry_prod_ll_top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_36"
+        android:layout_below="@+id/textView_dep"
+        android:layout_marginStart="@dimen/dp_8"
+        android:layout_marginEnd="@dimen/dp_8"
+        android:background="@drawable/qry_prod_edt_top_bottom_line"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/dp_2">
+
+        <ImageView
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/dp_4"
+            android:scaleType="centerInside"
+            android:src="@drawable/search" />
+        <!--<Button-->
+        <!--android:id="@+id/trd_qry_prod_btn_no_order"-->
+        <!--android:layout_width="@dimen/dp_0"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_weight="1"-->
+        <!--android:background="@drawable/rtn_btn_top_red_selector"-->
+        <!--android:gravity="center"-->
+        <!--android:lines="1"-->
+        <!--android:paddingStart="@dimen/dp_2"-->
+        <!--android:paddingEnd="@dimen/dp_2"-->
+        <!--android:text="@string/rtn_prod_btn_not_order"-->
+        <!--android:textColor="@color/common_white"-->
+        <!--android:textSize="@dimen/sp_11" />-->
+
+        <com.ftrend.cleareditview.ClearEditText
+            android:id="@+id/trd_qry_prod_edt_trade"
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="5"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical|start"
+            android:hint="@string/trade_qry_prod_tv_search"
+            android:inputType="number"
+            android:maxLines="1"
+            android:paddingStart="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_4"
+            android:paddingBottom="@dimen/dp_4"
+            android:textColor="@color/text_black_second"
+            android:textSize="@dimen/sp_11" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/trade_qry_ll_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/trd_qry_prod_ll_top"
+        android:background="@android:color/transparent"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_6">
+
+        <TextView
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="1.3"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/dp_1"
+            android:text="@string/trade_qry_lsno"
+            android:textColor="@color/text_black_first"
+            android:background="@color/handover_title_blue"
+            android:textSize="@dimen/sp_14" />
+
+
+        <TextView
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="0.7"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/dp_1"
+            android:text="@string/trade_qry_amount"
+            android:textColor="@color/text_black_first"
+            android:background="@color/handover_title_blue"
+            android:textSize="@dimen/sp_14" />
+
+
+        <TextView
+            android:layout_width="65dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/dp_1"
+            android:text="@string/trade_qry_trade_time"
+            android:textColor="@color/text_black_first"
+            android:background="@color/handover_title_blue"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_marginRight="@dimen/dp_1"
+            android:text="收款员"
+            android:textColor="@color/text_black_first"
+            android:background="@color/handover_title_blue"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:layout_width="@dimen/dp_0"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="@color/handover_title_blue" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/trade_qry_rv_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/trade_qry_rl_bottom"
+        android:layout_below="@+id/trade_qry_ll_title"
+        tools:listitem="@layout/trade_qry_rv_item" />
+
+    <RelativeLayout
+        android:id="@+id/trade_qry_rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/trade_qry_btn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/shop_btn_gray_selector"
+            android:text="@string/out_btn_close"
+            android:textColor="@color/text_black_first" />
+    </RelativeLayout>
+</RelativeLayout>

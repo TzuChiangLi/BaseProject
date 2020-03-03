@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/vip_mobile_card_shape">
+
+
+    <TextView
+        android:id="@+id/vip_dsc_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_24"
+        android:layout_marginBottom="@dimen/dp_8"
+        android:text="@string/vip_way_mobile_title"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_16"
+        android:textStyle="bold" />
+
+
+    <ImageView
+        android:id="@+id/vip_way_img_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="@dimen/dp_24"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:scaleType="centerCrop"
+        android:src="@drawable/close" />
+
+
+    <LinearLayout
+        android:id="@+id/vip_way_ll_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_dsc_tv_title"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout_marginBottom="@dimen/dp_14"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_16"
+            android:layout_marginEnd="@dimen/dp_16"
+            android:background="@drawable/shop_cart_edt_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/vip_ll_scan"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <ImageView
+                    android:id="@+id/vip_way_scan"
+                    android:layout_width="@dimen/dp_50"
+                    android:layout_height="match_parent"
+                    android:background="@null"
+                    android:maxHeight="@dimen/dp_28"
+                    android:paddingTop="@dimen/dp_4"
+                    android:paddingBottom="@dimen/dp_4"
+                    android:scaleType="centerInside"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"
+                    android:src="@drawable/scan" />
+
+                <View
+                    android:layout_width="@dimen/dp_1"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_4"
+                    android:layout_marginBottom="@dimen/dp_4"
+                    android:background="@color/common_gray_bg" />
+            </LinearLayout>
+
+
+            <com.ftrend.cleareditview.ClearEditText
+                android:id="@+id/vip_way_edt"
+                android:layout_width="@dimen/dp_0"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:background="@android:color/transparent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:inputType="none"
+                android:paddingStart="@dimen/dp_8" />
+
+
+            <Button
+                android:id="@+id/vip_mobile_btn_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_35"
+                android:background="@android:color/transparent"
+                android:stateListAnimator="@null"
+                android:text="@string/vip_btn_submit"
+                android:textColor="@color/common_white" />
+        </LinearLayout>
+
+        <ViewStub
+            android:id="@+id/vip_dsc_rate_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/vip_way_ll_info"
+            android:layout="@layout/vip_dsc_rate_view_stub" />
+    </LinearLayout>
+
+
+    <ViewStub
+        android:id="@+id/vip_way_key_func_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_way_ll_info"
+        android:layout="@layout/key_all_func_view_stub" />
+
+    <ViewStub
+        android:id="@+id/vip_way_key_lite_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_way_ll_info"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout="@layout/key_lite_func_view_stub" />
+</RelativeLayout>

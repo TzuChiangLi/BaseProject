@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="intro_app_name">方象专柜收银</string>
+    <string name="intro_app_version">Version  1.0.1-R</string>
+    <string name="intro_app_home_title">公司官网</string>
+    <string name="intro_app_enter">http://www.ftrend.cn</string>
+    <string name="intro_app_tel_title">技术支持</string>
+    <string name="intro_app_tel">0532-80974666</string>
+    <string name="intro_app_fax_title">传真</string>
+    <string name="intro_app_fax">0532-80974682</string>
+    <string name="intro_app_email_title">Email</string>
+    <string name="intro_app_email">market@ftrend.cn</string>
+    <string name="intro_copyright"> 青岛致远方象软件科技有限公司  版权所有\nCopyright ©2019-2020 Ftrend.All Rights Reserved.</string>
+
+
+</resources>

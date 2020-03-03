@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="help_title">常见问题</string>
+    <string name="help_question_replace">1、注册失败，提示“服务器请求失败...”</string>
+    <string name="help_answer_replace">（1）检查服务器IP地址是否输入正确。\n（2）如果后台服务未“启用80端口转发”，服务器地址应包括端口号，如：192.168.1.20:8091。</string>
+</resources>

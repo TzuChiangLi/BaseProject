@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/init_bg"
+    tools:context=".view.InitActivity">
+
+    <TextView
+        android:id="@+id/init_tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_56"
+        android:text="@string/init_title"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_18"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/init_tv_warning"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/init_tv_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_16"
+        android:text="@string/init_warning"
+        android:textColor="@color/init_warning" />
+
+
+    <com.ftrend.progressview.ProgressView
+        android:id="@+id/init_progress_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_250"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        app:defualtText="开始"
+        app:originColor="@color/progress_load_blue" />
+
+
+    <!--以下部分是获取成功后赋值并向上动画效果展示信息的布局-->
+    <TextView
+        android:id="@+id/init_tv_result_title1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp_36"
+        android:layout_marginTop="@dimen/dp_36"
+        android:text="@string/init_result_title"
+        android:textColor="@color/text_black_first"
+        android:textSize="@dimen/sp_18"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <ScrollView
+        android:id="@+id/init_scl_info"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_330"
+        android:layout_above="@+id/init_progress_view"
+        android:layout_below="@+id/init_tv_result_title1"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_16">
+
+
+            <TextView
+                android:id="@+id/init_tv_result_title2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_36"
+                android:text="@string/reg_title_posCode"
+                android:textColor="@color/text_black_second" />
+
+
+            <TextView
+                android:id="@+id/init_result_posCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/init_tv_result_title2"
+                android:layout_toEndOf="@+id/init_tv_result_title2"
+                android:letterSpacing="0.05"
+                android:lineSpacingExtra="@dimen/dp_4"
+                android:text="@string/init_result_machine" />
+
+
+            <TextView
+                android:id="@+id/init_tv_result_title3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/init_result_posCode"
+                android:layout_marginStart="@dimen/dp_36"
+                android:text="@string/init_result_title_desk"
+                android:textColor="@color/text_black_second" />
+
+
+            <TextView
+                android:id="@+id/init_result_dep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/init_tv_result_title3"
+                android:layout_toEndOf="@+id/init_tv_result_title2"
+                android:letterSpacing="0.05"
+                android:lineSpacingExtra="@dimen/dp_4"
+                android:text="@string/init_result_desk" />
+
+
+            <TextView
+                android:id="@+id/init_tv_result_title4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/init_result_dep"
+                android:layout_marginStart="@dimen/dp_36"
+                android:text="@string/init_result_title_user"
+                android:textColor="@color/text_black_second" />
+
+            <TextView
+                android:id="@+id/init_result_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/init_tv_result_title4"
+                android:layout_toEndOf="@+id/init_tv_result_title2"
+                android:letterSpacing="0.05"
+                android:lineSpacingExtra="@dimen/dp_4"
+                android:text="@string/init_result_user" />
+
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

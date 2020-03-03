@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('SQB-Android-SDK-2.1.5.aar'))
