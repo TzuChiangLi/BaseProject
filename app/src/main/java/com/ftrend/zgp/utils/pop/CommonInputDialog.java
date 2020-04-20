@@ -14,7 +14,9 @@ import android.widget.TextView;
 import com.blankj.utilcode.util.KeyboardUtils;
 import com.ftrend.cleareditview.ClearEditText;
 import com.ftrend.keyboard.KeyboardView;
+import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.R;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.lxj.xpopup.core.BottomPopupView;
 
@@ -77,6 +79,15 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
         this.mDefMoney = def;
     }
 
+    /**
+     * @param context   上下文
+     * @param title     标题
+     * @param action    按钮文本
+     * @param def       默认值
+     * @param maxLength 最大长度
+     * @param enableDot 允许小数点
+     * @param callback  回调
+     */
     public CommonInputDialog(@NonNull Context context, String title, String action, String def,
                              int maxLength, boolean enableDot, StringInputCallback callback) {
         super(context);
@@ -103,6 +114,8 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
     }
 
     /**
+     * 输入服务器
+     *
      * @param context  上下文
      * @param title    标题
      * @param action   按钮文本
@@ -118,6 +131,25 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
         this.mServerCallback = callback;
     }
 
+    /**
+     * 输入称重数量，限制整数两位，小数三位
+     *
+     * @param context       上下文
+     * @param title         标题
+     * @param action        按钮文本
+     * @param enableDot     输入小数点
+     * @param moneyCallback 回调
+     */
+    public CommonInputDialog(@NonNull Context context, String title, String action,
+                             boolean enableDot, MoneyInputCallback moneyCallback) {
+        super(context);
+        this.mTitle = title;
+        this.mBtnText = action;
+        this.mValueType = ValueType.QUANTITY;
+        this.mMaxLength = 8;
+        this.mEnableDot = enableDot;
+        this.mMoneyCallback = moneyCallback;
+    }
 
     @Override
     protected int getImplLayoutId() {
@@ -139,6 +171,7 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
             mScanLayout.setVisibility(VISIBLE);
             mScanLayout.setOnClickListener(this);
         }
+        mKeyView.setEnDot(mEnableDot?0:1);
         mTitleTv.setText(mTitle);
         mSubmitBtn.setText(mBtnText);
         mEdt.setInputType(InputType.TYPE_NULL);
@@ -163,6 +196,7 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
     public void submit() {
         switch (mValueType) {
             case MONEY:
+            case QUANTITY:
                 if (mMoneyCallback != null && !TextUtils.isEmpty(mEdt.getText().toString())) {
                     double d = Double.parseDouble(mEdt.getText().toString());
                     String msg = mMoneyCallback.validate(d);
@@ -249,7 +283,11 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
         /**
          * 输入服务地址
          */
-        SERVER
+        SERVER,
+        /**
+         * 商品数量 例：10.123 kg，主要用于称重
+         */
+        QUANTITY
     }
 
     //-------------------------------------键盘响应--------------------------------------------//
@@ -277,6 +315,13 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
                 appendText(".");
                 break;
             case MONEY:
+                if (mEdt.getText() == null) {
+                    appendText("0.");
+                } else if (!mEdt.getText().toString().contains(".")) {
+                    appendText(".");
+                }
+                break;
+            case QUANTITY:
                 if (mEdt.getText() == null) {
                     appendText("0.");
                 } else if (!mEdt.getText().toString().contains(".")) {
@@ -319,6 +364,21 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
                     return;
                 }
             } else if (text.length() >= mMaxLength - 3 && !".".equals(s)) {
+                return;
+            }
+        }
+        if (mValueType==ValueType.QUANTITY){
+            if ("0".equals(text)) {
+                text = "";
+            }
+            if (text.contains(".")) {
+                int position = text.indexOf(".");
+                // 小数位数不超过3位
+                if (text.length() - position >= 4) {
+                    return;
+                }
+            } else if (text.length() >= mMaxLength - 4 && !".".equals(s)) {
+                //整数位最长4位
                 return;
             }
         }

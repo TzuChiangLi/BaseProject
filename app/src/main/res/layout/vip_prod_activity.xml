@@ -136,13 +136,14 @@
                 android:id="@+id/vip_tv_vip_code_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_above="@+id/vip_tv_point_title"
                 android:layout_alignStart="@+id/vip_tv_card"
-                android:layout_alignParentBottom="true"
                 android:paddingTop="@dimen/dp_4"
                 android:paddingBottom="@dimen/dp_4"
                 android:text="@string/vip_code"
                 android:textColor="@color/common_white"
                 android:textSize="@dimen/sp_12" />
+
 
             <TextView
                 android:id="@+id/vip_tv_vip_code"
@@ -159,10 +160,37 @@
                 tools:text="123123" />
 
             <TextView
+                android:id="@+id/vip_tv_point_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/vip_tv_card"
+                android:layout_alignParentBottom="true"
+                android:gravity="center"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingBottom="@dimen/dp_4"
+                android:text="@string/vip_point"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/vip_tv_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/vip_tv_point_title"
+                android:layout_toEndOf="@+id/vip_tv_point_title"
+                android:paddingStart="@dimen/dp_4"
+                android:paddingTop="@dimen/dp_4"
+                android:paddingEnd="@dimen/dp_0"
+                android:paddingBottom="@dimen/dp_4"
+                android:text="@string/vip_total_zero_int"
+                android:textColor="@color/common_white"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
                 android:id="@+id/vip_tv_total_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/vip_tv_vip_code_title"
+                android:layout_alignBottom="@+id/vip_tv_point_title"
                 android:layout_toStartOf="@+id/vip_tv_total"
                 android:paddingTop="@dimen/dp_4"
                 android:paddingBottom="@dimen/dp_4"
@@ -200,49 +228,6 @@
         android:paddingEnd="@dimen/dp_16">
 
         <TextView
-            android:id="@+id/vip_tv_point_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/vip_ll_score"
-            android:layout_alignBottom="@+id/vip_ll_score"
-            android:gravity="center"
-            android:paddingTop="@dimen/dp_4"
-            android:paddingBottom="@dimen/dp_4"
-            android:text="@string/vip_point"
-            android:textColor="@color/text_black_first"
-            android:textSize="@dimen/sp_16" />
-
-
-        <LinearLayout
-            android:id="@+id/vip_ll_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/vip_tv_score"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="@dimen/dp_4"
-                android:paddingTop="@dimen/dp_4"
-                android:paddingEnd="@dimen/dp_0"
-                android:paddingBottom="@dimen/dp_4"
-                android:text="@string/vip_total_zero_int"
-                android:textSize="@dimen/sp_16"
-                android:textStyle="bold" />
-
-
-            <ImageView
-                android:id="@+id/vip_prod_score"
-                android:layout_width="@dimen/dp_32"
-                android:layout_height="@dimen/dp_32"
-                android:scaleType="centerInside"
-                android:src="@drawable/vip_point" />
-        </LinearLayout>
-
-        <TextView
             android:id="@+id/vip_total_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -259,7 +244,6 @@
             android:id="@+id/vip_ll_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/vip_tv_point_title"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="@dimen/dp_12"
             android:layout_marginBottom="@dimen/dp_12"

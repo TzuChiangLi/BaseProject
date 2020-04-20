@@ -345,7 +345,7 @@ public class RtnHelper {
             for (TradeProd rtnProd : rtnProdList) {
                 if (rtnProd.getSortNo().equals(prod.getSortNo())) {
                     rtnProd.setPrice(changePrice);
-                    rtnProd.setTotal(rtnProd.getAmount() * changePrice);
+                    rtnProd.setTotal(FormatHelper.priceFormat(rtnProd.getAmount() * changePrice));
                 }
             }
         }
@@ -361,7 +361,7 @@ public class RtnHelper {
             rtnTotal += p.getTotal();
         }
         //更新退货信息以刷新界面
-        rtnTrade.setTotal(rtnTotal);
+        rtnTrade.setTotal(FormatHelper.priceFormat(rtnTotal));
         rtnTrade.setAmount(rtnAmount);
     }
 
@@ -394,7 +394,7 @@ public class RtnHelper {
                         return;
                     } else {
                         rtnProd.setAmount(amount);
-                        rtnProd.setTotal(amount * prod.getRtnPrice());
+                        rtnProd.setTotal(FormatHelper.priceFormat(amount * prod.getRtnPrice()));
                     }
                 }
             }
@@ -408,7 +408,7 @@ public class RtnHelper {
                 rtnProd.setBarCode(prod.getBarCode());
                 rtnProd.setDepCode(prod.getDepCode());
                 //此处是退货单价
-                rtnProd.setPrice(prod.getRtnPrice());
+                rtnProd.setPrice(FormatHelper.priceFormat(prod.getRtnPrice()));
                 rtnProd.setProdForDsc(prod.getProdForDsc());
                 rtnProd.setProdPriceFlag(prod.getProdPriceFlag());
                 rtnProd.setProdIsLargess(prod.getProdIsLargess());
@@ -421,7 +421,7 @@ public class RtnHelper {
                 //数量
                 rtnProd.setAmount(changeAmount);
                 //小计
-                rtnProd.setTotal(prod.getRtnPrice() * rtnProd.getAmount());
+                rtnProd.setTotal(FormatHelper.priceFormat(prod.getRtnPrice() * rtnProd.getAmount()));
                 //插入原单信息
                 rtnProd.setSaleInfo(makeSaleInfo(trade.getLsNo(), trade.getTradeTime(), prod.getSortNo()));
                 rtnProd.setDelFlag(DELFLAG_NO);
@@ -438,7 +438,7 @@ public class RtnHelper {
                 rtnProd.setBarCode(prod.getBarCode());
                 rtnProd.setDepCode(prod.getDepCode());
                 //此处是退货单价
-                rtnProd.setPrice(prod.getRtnPrice());
+                rtnProd.setPrice(FormatHelper.priceFormat(prod.getRtnPrice()));
                 rtnProd.setProdForDsc(prod.getProdForDsc());
                 rtnProd.setProdPriceFlag(prod.getProdPriceFlag());
                 rtnProd.setProdIsLargess(prod.getProdIsLargess());
@@ -451,7 +451,103 @@ public class RtnHelper {
                 //数量
                 rtnProd.setAmount(changeAmount);
                 //小计
-                rtnProd.setTotal(prod.getRtnPrice() * rtnProd.getAmount());
+                rtnProd.setTotal(FormatHelper.priceFormat(prod.getRtnPrice() * rtnProd.getAmount()));
+                //插入原单信息
+                rtnProd.setSaleInfo(makeSaleInfo(trade.getLsNo(), trade.getTradeTime(), prod.getSortNo()));
+                rtnProd.setDelFlag(DELFLAG_NO);
+                rtnProdList.add(rtnProd);
+            }
+        }
+        //统一更新交易流水
+        recalcRtnTrade();
+    }
+
+    /**
+     * 按单退货覆盖数量
+     *
+     * @param index        索引
+     * @param changeAmount 改变数量
+     */
+    public static void coverRtnTradeAmount(int index, double changeAmount) {
+        if (index < 0 || index >= prodList.size()) {
+            LogUtil.u(TAG, "按单退货覆盖数量", "改变数量: 索引无效");
+            return;
+        }
+        //根据sortNo来做查询条件，此时退货商品列表里的商品的sortNo还是原销售单里的sortNo
+        //更新为新的sortNo在最后提交的时候完成
+        TradeProd prod = prodList.get(index);
+        //最大允许可退货数量
+        double rtnMax = prod.getAmount() + prod.getLastRtnAmount();
+        //先检查是否已添加过，如果添加过，那么只需要更新数据，否则就得插入新的商品
+        if (!rtnProdList.isEmpty()) {
+            boolean isAdded = false;
+            for (TradeProd rtnProd : rtnProdList) {
+                if (rtnProd.getSortNo().equals(prod.getSortNo())) {
+                    //已经在退货列表中
+                    isAdded = true;
+                    //不能超过可退货数量
+                    if (changeAmount < 0 || changeAmount > rtnMax) {
+                        return;
+                    } else {
+                        rtnProd.setAmount(changeAmount);
+                        rtnProd.setTotal(changeAmount * prod.getRtnPrice());
+                    }
+                }
+            }
+            if (!isAdded && changeAmount > 0 && changeAmount <= rtnMax) {
+                //不存在，那么插入
+                TradeProd rtnProd = new TradeProd();
+                rtnProd.setLsNo(rtnTrade.getLsNo());
+                rtnProd.setSortNo(prod.getSortNo());
+                rtnProd.setProdCode(prod.getProdCode());
+                rtnProd.setProdName(prod.getProdName());
+                rtnProd.setBarCode(prod.getBarCode());
+                rtnProd.setDepCode(prod.getDepCode());
+                //此处是退货单价
+                rtnProd.setPrice(FormatHelper.priceFormat(prod.getRtnPrice()));
+                rtnProd.setProdForDsc(prod.getProdForDsc());
+                rtnProd.setProdPriceFlag(prod.getProdPriceFlag());
+                rtnProd.setProdIsLargess(prod.getProdIsLargess());
+                rtnProd.setProdMinPrice(FormatHelper.priceFormat(prod.getProdMinPrice()));
+                //优惠
+                rtnProd.setSingleDsc(0);
+                rtnProd.setWholeDsc(0);
+                rtnProd.setTranDsc(0);
+                rtnProd.setVipDsc(0);
+                //数量
+                rtnProd.setAmount(changeAmount);
+                //小计
+                rtnProd.setTotal(FormatHelper.priceFormat(prod.getRtnPrice() * rtnProd.getAmount()));
+                //插入原单信息
+                rtnProd.setSaleInfo(makeSaleInfo(trade.getLsNo(), trade.getTradeTime(), prod.getSortNo()));
+                rtnProd.setDelFlag(DELFLAG_NO);
+                rtnProdList.add(rtnProd);
+            }
+        } else {
+            if (changeAmount > 0 && changeAmount <= rtnMax) {
+                //不存在，那么插入
+                TradeProd rtnProd = new TradeProd();
+                rtnProd.setLsNo(rtnTrade.getLsNo());
+                rtnProd.setSortNo(prod.getSortNo());
+                rtnProd.setProdCode(prod.getProdCode());
+                rtnProd.setProdName(prod.getProdName());
+                rtnProd.setBarCode(prod.getBarCode());
+                rtnProd.setDepCode(prod.getDepCode());
+                //此处是退货单价
+                rtnProd.setPrice(FormatHelper.priceFormat(prod.getRtnPrice()));
+                rtnProd.setProdForDsc(prod.getProdForDsc());
+                rtnProd.setProdPriceFlag(prod.getProdPriceFlag());
+                rtnProd.setProdIsLargess(prod.getProdIsLargess());
+                rtnProd.setProdMinPrice(prod.getProdMinPrice());
+                //优惠
+                rtnProd.setSingleDsc(0);
+                rtnProd.setWholeDsc(0);
+                rtnProd.setTranDsc(0);
+                rtnProd.setVipDsc(0);
+                //数量
+                rtnProd.setAmount(changeAmount);
+                //小计
+                rtnProd.setTotal(FormatHelper.priceFormat(prod.getRtnPrice() * rtnProd.getAmount()));
                 //插入原单信息
                 rtnProd.setSaleInfo(makeSaleInfo(trade.getLsNo(), trade.getTradeTime(), prod.getSortNo()));
                 rtnProd.setDelFlag(DELFLAG_NO);
@@ -479,6 +575,26 @@ public class RtnHelper {
             return false;
         }
         prod.setAmount(amount + changeAmount);
+        recalcRtnTrade();
+        return true;
+    }
+    /**
+     * 不按单退货覆盖数量
+     *
+     * @param index        索引
+     * @param changeAmount 改变数量
+     */
+    public static boolean coverRtnProdAmount(int index, double changeAmount) {
+        if (index < 0 || index >= rtnProdList.size()) {
+            LogUtil.u(TAG, "不按单退货改数量", "改变数量: 索引无效");
+            return false;
+        }
+        TradeProd prod = rtnProdList.get(index);
+        double amount = prod.getAmount();
+        if (amount + changeAmount < 0) {
+            return false;
+        }
+        prod.setAmount(changeAmount);
         recalcRtnTrade();
         return true;
     }
@@ -540,7 +656,7 @@ public class RtnHelper {
         rtnTrade.setCashier(ZgParams.getCurrentUser().getUserCode());
         rtnTrade.setStatus(TRADE_STATUS_PAID);
         //pay中保存的已是负数
-        rtnTrade.setTotal(rtnPay.getAmount());
+        rtnTrade.setTotal(FormatHelper.priceFormat(rtnPay.getAmount()));
         //储值卡或IC卡支付，记录卡号，用于生成会员台账和计算积分
         return rtnTrade.insert(databaseWrapper) > 0;
     }
@@ -596,6 +712,7 @@ public class RtnHelper {
         }
         return saveRtnTrade();
     }
+
 
     /**
      * @param sortNo 序号

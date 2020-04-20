@@ -306,4 +306,34 @@ public class Trade extends BaseModel implements Cloneable {
         return trade;
     }
 
+    @Override
+    public String toString() {
+        return "Trade{" +
+                "id=" + id +
+                ", depCode='" + depCode + '\'' +
+                ", lsNo='" + lsNo + '\'' +
+                ", tradeTime=" + tradeTime +
+                ", tradeFlag='" + tradeFlag + '\'' +
+                ", cashier='" + cashier + '\'' +
+                ", dscTotal=" + dscTotal +
+                ", total=" + total +
+                ", custType='" + custType + '\'' +
+                ", vipCode='" + vipCode + '\'' +
+                ", vipGrade='" + vipGrade + '\'' +
+                ", cardCode='" + cardCode + '\'' +
+                ", vipTotal=" + vipTotal +
+                ", status='" + status + '\'' +
+                ", CreateTime='" + CreateTime + '\'' +
+                ", CreateIp='" + CreateIp + '\'' +
+                ", prodName='" + prodName + '\'' +
+                ", prodNum=" + prodNum +
+                ", amount=" + amount +
+                ", rtnTotal=" + rtnTotal +
+                ", rtnAmount=" + rtnAmount +
+                ", rtnFlag='" + rtnFlag + '\'' +
+                ", sqbPayClientSn='" + sqbPayClientSn + '\'' +
+                ", currScore='" + currScore + '\'' +
+                ", totalScore='" + totalScore + '\'' +
+                '}';
+    }
 }

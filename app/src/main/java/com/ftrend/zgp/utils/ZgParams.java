@@ -79,6 +79,10 @@ public class ZgParams {
     private static String[] payType = new String[]{"1", "1", "1"};
     //本地参数：会员刷卡商品
     private static String vipProd = "";
+    //本地参数：手动输入数量   0-关  1-开
+    private static String inputNum = "";
+    //本地参数：输入小数 只有允许手动输入数量才能开启此选项
+    private static String inputDecimal = "";
 
     //业务参数：本次登录的专柜
     private static Dep currentDep = new Dep();
@@ -86,7 +90,6 @@ public class ZgParams {
     private static User currentUser = new User();
     //业务参数：本机IP
     private static String currentIp = "";
-
 
     /**
      * 读取参数，包括系统参数和APP本地参数
@@ -126,7 +129,6 @@ public class ZgParams {
                 .where(AppParams_Table.paramName.notLike("UDP_%"))
                 .queryList();
         for (AppParams param : appParamsList) {
-            LogUtil.d("----appParamsList:" + param.getParamName());
             if ("serverUrl".equalsIgnoreCase(param.getParamName())) {
                 serverUrl = param.getParamValue();
             } else if ("posCode".equalsIgnoreCase(param.getParamName())) {
@@ -151,6 +153,10 @@ public class ZgParams {
                 }
             } else if (String.format(Locale.CHINA, "vipProd_%s", ZgParams.getCurrentDep().getDepCode()).equalsIgnoreCase(param.getParamName())) {
                 vipProd = param.getParamValue();
+            } else if ("inputNum".equalsIgnoreCase(param.getParamName())) {
+                inputNum = param.getParamValue();
+            } else if ("inputDecimal".equalsIgnoreCase(param.getParamName())) {
+                inputDecimal = param.getParamValue();
             }
         }
         //业务参数初始化
@@ -397,5 +403,21 @@ public class ZgParams {
 
     public static void setVipProd(String vipProd) {
         ZgParams.vipProd = vipProd;
+    }
+
+    public static String getInputNum() {
+        return inputNum;
+    }
+
+    public static void setInputNum(String inputNum) {
+        ZgParams.inputNum = inputNum;
+    }
+
+    public static String getInputDecimal() {
+        return inputDecimal;
+    }
+
+    public static void setInputDecimal(String inputDecimal) {
+        ZgParams.inputDecimal = inputDecimal;
     }
 }

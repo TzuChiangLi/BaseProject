@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.ftrend.library.R;
+import com.ftrend.log.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +50,10 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
      */
     private int style = 0;
 
+    /**
+     * 小数点,0开1关
+     */
+    private int enDot;
 
     public KeyboardView(Context context) {
         this(context, null);
@@ -66,6 +71,7 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
         style = typedArray.getInt(R.styleable.KeyboardView_style, 0);
         //回收变量
         typedArray.recycle();
+        //初始化数据
         initData();
         initView();
     }
@@ -90,7 +96,6 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
         View mLineView = new View(mContext);
         mLineView.setBackgroundColor(Color.parseColor("#DADADA"));
         addView(mLineView, new LinearLayoutCompat.LayoutParams(MATCH_PARENT, ConvertUtils.dp2px(1)));
-
         //添加键盘布局
         RecyclerView mRecyclerView = new RecyclerView(mContext);
         mRecyclerView.setOverScrollMode(OVER_SCROLL_NEVER);
@@ -135,7 +140,7 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
                             mNumberList.add("清空");
                             break;
                         case 12:
-                            mNumberList.add(".");
+                            mNumberList.add(enDot == 0 ? "." : "");
                             break;
                         case 13:
                             mNumberList.add("0");
@@ -157,7 +162,7 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
                     if (i < 9) {
                         mNumberList.add(String.valueOf(i + 1));
                     } else if (i == 9) {
-                        mNumberList.add(".");
+                        mNumberList.add(enDot == 0 ? "." : "");
                     } else if (i == 10) {
                         mNumberList.add("0");
                     } else {
@@ -166,7 +171,6 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
                 }
                 break;
         }
-
     }
 
     public void show() {
@@ -377,6 +381,14 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
 
     public void setStyle(int style) {
         this.style = style;
+    }
+
+    public int isEnDot() {
+        return enDot;
+    }
+
+    public void setEnDot(int enDot) {
+        this.enDot = enDot;
     }
 
     //endregion

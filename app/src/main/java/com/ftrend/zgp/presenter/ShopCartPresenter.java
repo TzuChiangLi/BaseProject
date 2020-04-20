@@ -278,7 +278,7 @@ public class ShopCartPresenter implements ShopCartContract.ShopCartPresenter {
     @Override
     public void updateTradeInfo() {
         double price = TradeHelper.getTradeTotal();
-        double count = TradeHelper.getTradeCount();
+        long count = TradeHelper.getTradeCount();
         mView.updateTradeProd(count, price);
     }
 

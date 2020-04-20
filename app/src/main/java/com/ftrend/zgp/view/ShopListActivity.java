@@ -25,7 +25,6 @@ import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.ClickUtil;
 import com.ftrend.zgp.utils.event.Event;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.msg.InputPanel;
 import com.ftrend.zgp.utils.msg.MessageUtil;
 import com.ftrend.zgp.utils.pop.DscData;
@@ -171,6 +170,277 @@ public class ShopListActivity extends BaseActivity implements ShopListContract.S
         InputPanel.showMoreFuncDialog(this);
     }
 
+
+    @Override
+    public void goScan() {
+        if (ClickUtil.onceClick()) {
+            return;
+        }
+        scan();
+    }
+
+    /**
+     * 展示会员信息
+     */
+    @Override
+    public void showVipInfoOnline() {
+        mNotVipTv.setVisibility(View.GONE);
+        mVipNameTv.setText(TradeHelper.vip.getVipName());
+        mCardGradeTv.setText(String.format("%s/%s", TradeHelper.vip.getCardCode(), TradeHelper.vip.getVipGrade()));
+    }
+
+    @Override
+    public void showVipInfoOffline(VipInfo vip) {
+        mNotVipTv.setVisibility(View.GONE);
+        mVipNameTv.setVisibility(View.GONE);
+        if (TextUtils.isEmpty(vip.getVipCode())) {
+            mCardGradeTv.setVisibility(View.GONE);
+        } else {
+            mCardGradeTv.setText(String.format("%s/%s", vip.getCardCode(), vip.getVipGrade()));
+        }
+    }
+
+    @Override
+    public void showVipInfoOffline(String code) {
+        mNotVipTv.setVisibility(View.VISIBLE);
+        mNotVipTv.setText(code);
+        mVipNameTv.setVisibility(View.GONE);
+        mCardGradeTv.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showError(String error) {
+        MessageUtil.showError(error);
+    }
+
+    @Override
+    public void showTradeProd(final List<TradeProd> prodList) {
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //防止点击item的子view出现画面闪烁的问题
+        ((SimpleItemAnimator) (Objects.requireNonNull(mRecyclerView.getItemAnimator()))).setSupportsChangeAnimations(false);
+        mProdAdapter = new ShopAdapter<>(R.layout.shop_list_rv_product_item, prodList, 2);
+        mRecyclerView.setAdapter(mProdAdapter);
+        mProdAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
+            @Override
+            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
+                if (ClickUtil.onceClick()) {
+                    return;
+                }
+                switch (view.getId()) {
+                    case R.id.shop_list_rv_img_add:
+                        //商品数量+1
+                        mPresenter.checkInputNum(position, 1);
+                        break;
+                    case R.id.shop_list_rv_img_minus:
+                        //改变数量-1
+                        mPresenter.checkInputNum(position, -1);
+                        break;
+                    case R.id.shop_list_rv_btn_change_price:
+                        //先检查商品是否允许改价
+                        mPresenter.getProdPriceFlag(prodList.get(position).getProdCode(), prodList.get(position).getBarCode(), position);
+                        break;
+                    case R.id.shop_list_rv_btn_discount:
+                        //单品优惠
+                        mPresenter.checkProdForDsc(position);
+                        break;
+                    case R.id.shop_list_rv_btn_del:
+                        //检查行清权限
+                        mPresenter.checkDelProdRight(position);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+        mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                if (ClickUtil.onceClick()) {
+                    return;
+                }
+                if (oldPosition != -1 && oldPosition < adapter.getItemCount()) {
+                    mProdAdapter.getData().get(oldPosition).setSelect(false);
+                    mProdAdapter.notifyItemChanged(oldPosition);
+                }
+                oldPosition = position;
+                mProdAdapter.getData().get(position).setSelect(true);
+                mProdAdapter.notifyItemChanged(position);
+                mRecyclerView.smoothScrollToPosition(position);
+            }
+        });
+    }
+
+    @Override
+    public void updateTotal(double total) {
+        mTotalTv.setText(String.format("%.2f", total));
+    }
+
+    @Override
+    public void updateCount(long count) {
+        mCountTv.setText(String.valueOf(count));
+    }
+
+    @Override
+    public void delTradeProd(int index) {
+        mProdAdapter.notifyItemRemoved(index);
+        mPresenter.updateTradeInfo();
+    }
+
+    @Override
+    public void updateTradeProd(int index) {
+        mProdAdapter.notifyItemChanged(index);
+    }
+
+    @Override
+    public void returnHomeActivity(final String status) {
+        Intent intent = new Intent(ShopListActivity.this, HomeActivity.class);
+        startActivity(intent);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                MessageUtil.showSuccess(status);
+            }
+        }, 200);
+    }
+
+    @Override
+    public void confirmEmptyTrade() {
+        mPresenter.refreshTrade();
+        MessageUtil.question("购物车已清空，交易取消。是否继续收银？", new MessageUtil.MessageBoxYesNoListener() {
+            @Override
+            public void onYes() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        finish();
+                    }
+                }, 200);
+
+            }
+
+            @Override
+            public void onNo() {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Intent intent = new Intent(ShopListActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                    }
+                }, 200);
+
+            }
+        });
+    }
+
+    @Override
+    public void showPriceChangeDialog(final int index) {
+        //弹出改价窗口
+        InputPanel.showPriceChange(ShopListActivity.this, new MoneyInputCallback() {
+            @Override
+            public void onOk(double value) {
+                if (TradeHelper.priceChangeInShopList(index, value)) {
+                    mProdAdapter.getData().get(oldPosition).setPrice(value);
+                    mProdAdapter.notifyItemChanged(oldPosition);
+                    mPresenter.updateTradeInfo();
+                    MessageUtil.showSuccess("改价成功");
+                } else {
+                    MessageUtil.showError("改价失败");
+                }
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public String validate(double value) {
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void showNoRightDscDialog(String msg) {
+        MessageUtil.showError(msg);
+    }
+
+    @Override
+    public void showInputNumDialog(final int position) {
+        InputPanel.showInputNumDialog(ShopListActivity.this, new MoneyInputCallback() {
+            @Override
+            public void onOk(double value) {
+                if (value == 0) {
+                    //输入为0时提示是否行清
+                    mPresenter.checkDelProdRight(position);
+                } else {
+                    //写入数量更新界面
+                    mPresenter.coverAmount(position, value);
+                }
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public String validate(double value) {
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public void hasDelProdRight(final int index) {
+        MessageUtil.question("确定删除此商品？", new MessageUtil.MessageBoxYesNoListener() {
+            @Override
+            public void onYes() {
+                mPresenter.delTradeProd(index);
+            }
+
+            @Override
+            public void onNo() {
+            }
+        });
+    }
+
+    @Override
+    public void showSingleDscDialog(int index) {
+        final DscData dscData = DscHelper.beginSingleDsc(index);
+        if (dscData == null) {
+            MessageUtil.showError("该商品不允许优惠");
+            return;
+        }
+        InputPanel.showSingleDscChange(ShopListActivity.this, dscData, new DscInputCallback() {
+            @Override
+            public boolean onOk(int dscRate, double dscMoney) {
+                if (DscHelper.commitSingleDsc()) {
+                    //刷新商品列表
+                    Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+            @Override
+            public double onDscByRate(double dscRate) {
+                return DscHelper.singleDscByRate(dscRate);
+            }
+
+            @Override
+            public double onDscByTotal(double dscTotal) {
+                return DscHelper.singleDscByTotal(dscTotal);
+            }
+
+            @Override
+            public void onCancel() {
+                DscHelper.cancelSingleDsc();
+            }
+        });
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessage(Event event) {
         if (event.getTarget() == Event.TARGET_SHOP_LIST) {
@@ -271,250 +541,6 @@ public class ShopListActivity extends BaseActivity implements ShopListContract.S
                     break;
             }
         }
-    }
-
-    @Override
-    public void goScan() {
-        if (ClickUtil.onceClick()) {
-            return;
-        }
-        scan();
-    }
-
-    /**
-     * 展示会员信息
-     */
-    @Override
-    public void showVipInfoOnline() {
-        mNotVipTv.setVisibility(View.GONE);
-        mVipNameTv.setText(TradeHelper.vip.getVipName());
-        mCardGradeTv.setText(String.format("%s/%s", TradeHelper.vip.getCardCode(), TradeHelper.vip.getVipGrade()));
-    }
-
-    @Override
-    public void showVipInfoOffline(VipInfo vip) {
-        mNotVipTv.setVisibility(View.GONE);
-        mVipNameTv.setVisibility(View.GONE);
-        if (TextUtils.isEmpty(vip.getVipCode())) {
-            mCardGradeTv.setVisibility(View.GONE);
-        } else {
-            mCardGradeTv.setText(String.format("%s/%s", vip.getCardCode(), vip.getVipGrade()));
-        }
-    }
-
-    @Override
-    public void showVipInfoOffline(String code) {
-        mNotVipTv.setVisibility(View.VISIBLE);
-        mNotVipTv.setText(code);
-        mVipNameTv.setVisibility(View.GONE);
-        mCardGradeTv.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void showError(String error) {
-        MessageUtil.showError(error);
-    }
-
-    @Override
-    public void showTradeProd(final List<TradeProd> prodList) {
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //防止点击item的子view出现画面闪烁的问题
-        ((SimpleItemAnimator) (Objects.requireNonNull(mRecyclerView.getItemAnimator()))).setSupportsChangeAnimations(false);
-        mProdAdapter = new ShopAdapter<>(R.layout.shop_list_rv_product_item, prodList, 2);
-        mRecyclerView.setAdapter(mProdAdapter);
-        mProdAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if (ClickUtil.onceClick()) {
-                    return;
-                }
-                switch (view.getId()) {
-                    case R.id.shop_list_rv_img_add:
-                        //商品数量+1
-                        mPresenter.changeAmount(position, 1);
-                        break;
-                    case R.id.shop_list_rv_img_minus:
-                        //改变数量-1
-                        mPresenter.changeAmount(position, -1);
-                        break;
-                    case R.id.shop_list_rv_btn_change_price:
-                        //先检查商品是否允许改价
-                        mPresenter.getProdPriceFlag(prodList.get(position).getProdCode(), prodList.get(position).getBarCode(), position);
-                        break;
-                    case R.id.shop_list_rv_btn_discount:
-                        //单品优惠
-                        mPresenter.checkProdForDsc(position);
-                        break;
-                    case R.id.shop_list_rv_btn_del:
-                        //检查行清权限
-                        mPresenter.checkDelProdRight(position);
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
-        mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (ClickUtil.onceClick()) {
-                    return;
-                }
-                if (oldPosition != -1 && oldPosition < adapter.getItemCount()) {
-                    mProdAdapter.getData().get(oldPosition).setSelect(false);
-                    mProdAdapter.notifyItemChanged(oldPosition);
-                }
-                oldPosition = position;
-                mProdAdapter.getData().get(position).setSelect(true);
-                mProdAdapter.notifyItemChanged(position);
-                mRecyclerView.smoothScrollToPosition(position);
-            }
-        });
-    }
-
-    @Override
-    public void updateTotal(double total) {
-        mTotalTv.setText(String.format("%.2f", total));
-    }
-
-    @Override
-    public void updateCount(double count) {
-        mCountTv.setText(String.valueOf(count).replace(".0", ""));
-    }
-
-    @Override
-    public void delTradeProd(int index) {
-        mProdAdapter.notifyItemRemoved(index);
-        mPresenter.updateTradeInfo();
-    }
-
-    @Override
-    public void updateTradeProd(int index) {
-        mProdAdapter.notifyItemChanged(index);
-    }
-
-    @Override
-    public void returnHomeActivity(final String status) {
-        Intent intent = new Intent(ShopListActivity.this, HomeActivity.class);
-        startActivity(intent);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                MessageUtil.showSuccess(status);
-            }
-        }, 200);
-    }
-
-    @Override
-    public void confirmEmptyTrade() {
-        mPresenter.refreshTrade();
-        MessageUtil.question("购物车已清空，交易取消。是否继续收银？", new MessageUtil.MessageBoxYesNoListener() {
-            @Override
-            public void onYes() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        finish();
-                    }
-                }, 200);
-
-            }
-
-            @Override
-            public void onNo() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Intent intent = new Intent(ShopListActivity.this, HomeActivity.class);
-                        startActivity(intent);
-                    }
-                }, 200);
-
-            }
-        });
-    }
-
-    @Override
-    public void showPriceChangeDialog(final int index) {
-        //弹出改价窗口
-        InputPanel.showPriceChange(ShopListActivity.this, new MoneyInputCallback() {
-            @Override
-            public void onOk(double value) {
-                if (TradeHelper.priceChangeInShopList(index, value)) {
-                    mProdAdapter.getData().get(oldPosition).setPrice(value);
-                    mProdAdapter.notifyItemChanged(oldPosition);
-                    mPresenter.updateTradeInfo();
-                    MessageUtil.showSuccess("改价成功");
-                } else {
-                    MessageUtil.showError("改价失败");
-                }
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public String validate(double value) {
-                return null;
-            }
-        });
-    }
-
-    @Override
-    public void showNoRightDscDialog(String msg) {
-        MessageUtil.showError(msg);
-    }
-
-    @Override
-    public void hasDelProdRight(final int index) {
-        MessageUtil.question("确定删除此商品？", new MessageUtil.MessageBoxYesNoListener() {
-            @Override
-            public void onYes() {
-                mPresenter.delTradeProd(index);
-            }
-
-            @Override
-            public void onNo() {
-            }
-        });
-    }
-
-    @Override
-    public void showSingleDscDialog(int index) {
-        final DscData dscData = DscHelper.beginSingleDsc(index);
-        if (dscData == null) {
-            MessageUtil.showError("该商品不允许优惠");
-            return;
-        }
-        InputPanel.showSingleDscChange(ShopListActivity.this, dscData, new DscInputCallback() {
-            @Override
-            public boolean onOk(int dscRate, double dscMoney) {
-                if (DscHelper.commitSingleDsc()) {
-                    //刷新商品列表
-                    Event.sendEvent(Event.TARGET_SHOP_LIST, Event.TYPE_REFRESH);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
-            @Override
-            public double onDscByRate(double dscRate) {
-                return DscHelper.singleDscByRate(dscRate);
-            }
-
-            @Override
-            public double onDscByTotal(double dscTotal) {
-                return DscHelper.singleDscByTotal(dscTotal);
-            }
-
-            @Override
-            public void onCancel() {
-                DscHelper.cancelSingleDsc();
-            }
-        });
     }
 
     @Override

@@ -8,6 +8,7 @@ import com.ftrend.zgp.api.ShopListContract;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.model.VipInfo;
 import com.ftrend.zgp.utils.DscHelper;
+import com.ftrend.zgp.utils.FormatHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.UserRightsHelper;
 import com.ftrend.zgp.utils.ZgParams;
@@ -58,7 +59,7 @@ public class ShopListPresenter implements ShopListContract.ShopListPresenter {
             MessageUtil.question("是否取消当前交易？", new MessageUtil.MessageBoxYesNoListener() {
                 @Override
                 public void onYes() {
-                    LogUtil.u(TAG,"购物车", "取消交易");
+                    LogUtil.u(TAG, "购物车", "取消交易");
                     setTradeStatus(TradeHelper.TRADE_STATUS_CANCELLED);
                 }
 
@@ -68,7 +69,7 @@ public class ShopListPresenter implements ShopListContract.ShopListPresenter {
                 }
             });
         } else {
-            LogUtil.u(TAG,"购物车", "无权限取消交易");
+            LogUtil.u(TAG, "购物车", "无权限取消交易");
             MessageUtil.showError("无此操作权限！");
         }
     }
@@ -82,10 +83,10 @@ public class ShopListPresenter implements ShopListContract.ShopListPresenter {
         if (!TextUtils.isEmpty(TradeHelper.getTrade().getVipCode())) {
             //未结、未挂起的单据有会员优惠的信息，但是vip是null
             if (ZgParams.isIsOnline()) {
-                LogUtil.u(TAG,"购物车", "在线查询会员优惠");
+                LogUtil.u(TAG, "购物车", "在线查询会员优惠");
                 RestSubscribe.getInstance().queryVipInfo(TradeHelper.getTrade().getVipCode(), new RestCallback(regHandler));
             } else {
-                LogUtil.u(TAG,"购物车", "离线模式保存会员信息");
+                LogUtil.u(TAG, "购物车", "离线模式保存会员信息");
                 VipInfo vipInfo = TradeHelper.vip();
                 vipInfo.setCardCode(TradeHelper.getTrade().getCardCode());
                 vipInfo.setVipCode(TradeHelper.getTrade().getVipCode());
@@ -155,11 +156,30 @@ public class ShopListPresenter implements ShopListContract.ShopListPresenter {
     }
 
     @Override
+    public void checkInputNum(int index, double changeAmount) {
+        if ("1".equals(ZgParams.getInputNum())) {
+            //手动输入
+            mView.showInputNumDialog(index);
+        } else {
+            //直接修改
+            changeAmount(index, changeAmount);
+        }
+    }
+
+    @Override
     public void changeAmount(int index, double changeAmount) {
         if (changeAmount < 0) {
-            changeAmount = TradeHelper.getProdList().get(index).getAmount() - 1 == 0 ? 0 : -1;
+            changeAmount = TradeHelper.getProdList().get(index).getAmount() - 1 == 0 ? 0 : changeAmount;
         }
         if (TradeHelper.changeAmount(index, changeAmount) > 0) {
+            updateTradeInfo();
+            mView.updateTradeProd(index);
+        }
+    }
+
+    @Override
+    public void coverAmount(int index, double changeAmount) {
+        if (TradeHelper.coverAmount(index, changeAmount) > 0) {
             updateTradeInfo();
             mView.updateTradeProd(index);
         }
@@ -260,7 +280,7 @@ public class ShopListPresenter implements ShopListContract.ShopListPresenter {
                     }, 150);
                     return null;
                 }
-                if (!TradeHelper.checkPhoneNoFormat(value)) {
+                if (!FormatHelper.checkPhoneNoFormat(value)) {
                     return "手机号无效";
                 }
                 return null;

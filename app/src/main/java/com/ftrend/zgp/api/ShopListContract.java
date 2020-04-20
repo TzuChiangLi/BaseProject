@@ -84,14 +84,29 @@ public interface ShopListContract {
          */
         void setTradeStatus(String status);
 
+        /**
+         * 检测是否输入数量开关
+         *
+         * @param index       商品索引
+         * @param changAmount 改变数量
+         */
+        void checkInputNum(int index, double changAmount);
 
         /**
-         * 更改商品数量
+         * 增减商品数量
          *
          * @param index        商品索引
          * @param changeAmount 改变数量
          */
         void changeAmount(int index, double changeAmount);
+
+        /**
+         * 更改数量：直接覆盖
+         *
+         * @param index        商品索引
+         * @param changeAmount 改变数量
+         */
+        void coverAmount(int index, double changeAmount);
 
         /**
          * 更新交易信息
@@ -183,7 +198,7 @@ public interface ShopListContract {
         /**
          * 更新购物车总商品数
          */
-        void updateCount(double count);
+        void updateCount(long count);
 
         /**
          * 更新界面 - 行清
@@ -231,6 +246,13 @@ public interface ShopListContract {
          * @param msg 文本
          */
         void showNoRightDscDialog(String msg);
+
+        /**
+         * 输入数量
+         *
+         * @param position 索引
+         */
+        void showInputNumDialog(int position);
 
         /**
          * 允许行清

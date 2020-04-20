@@ -4,4 +4,5 @@
     android:id="@+id/vip_way_keyboard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:enDot="enbale"
     app:style="0" />

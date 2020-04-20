@@ -23,9 +23,10 @@ public interface ConfigContract {
 
         /**
          * 测试网络
+         *
          * @param position 位置索引
          */
-        void changeServerUrl(int position,String url);
+        void changeServerUrl(int position, String url);
 
         /**
          * @param flag 打印小票
@@ -33,9 +34,19 @@ public interface ConfigContract {
         void print(boolean flag);
 
         /**
+         * @param flag 允许手动输入数量
+         */
+        void inputNum(boolean flag);
+
+        /**
+         * @param flag 允许输入小数（前提是允许输入数量）
+         */
+        void inputDecimal(boolean flag);
+
+        /**
          * @param position 选项 0-收钱吧 1-储值卡 2-现金
          */
-        void payType( boolean isChecked, int position);
+        void payType(boolean isChecked, int position);
 
         /**
          * 销毁

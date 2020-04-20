@@ -5,6 +5,10 @@
             <enum name="number" value="0" />
             <enum name="discountNumber" value="1" />
         </attr>
+        <attr name="enDot" format="integer">
+            <enum name="enbale" value="0"/>
+            <enum name="disable" value="1"/>
+        </attr>
     </declare-styleable>
     <declare-styleable name="ProgressView">
         <attr name="defualtText" format="string" />

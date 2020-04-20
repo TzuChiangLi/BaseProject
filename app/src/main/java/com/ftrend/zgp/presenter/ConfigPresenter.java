@@ -39,8 +39,25 @@ public class ConfigPresenter implements ConfigContract.ConfigPresenter {
     public void loadCfgItem() {
         //设置界面
         List<Config> mCfgList = new ArrayList<>();
-
+        //常用设置
         Config cfg = new Config();
+        cfg.setItemType(Config.TYPE_TITLE);
+        cfg.setText("常用设置");
+        mCfgList.add(cfg);
+
+        cfg = new Config();
+        cfg.setItemType(Config.NORMAL_SWB);
+        cfg.setText("允许输入数量");
+        cfg.setOn("1".equals(String.valueOf(ZgParams.getInputNum())));
+        mCfgList.add(cfg);
+        cfg = new Config();
+        cfg.setItemType(Config.NORMAL_SWB);
+        cfg.setText("数量允许输入小数");
+        cfg.setOn("1".equals(String.valueOf(ZgParams.getInputDecimal())));
+        mCfgList.add(cfg);
+
+
+        cfg = new Config();
         cfg.setItemType(Config.TYPE_TITLE);
         cfg.setText("打印设置");
         mCfgList.add(cfg);
@@ -170,7 +187,7 @@ public class ConfigPresenter implements ConfigContract.ConfigPresenter {
         printConfig.setPrintTrade(flag);
         if (ZgParams.saveAppParams("printBill", flag ? "True" : "False")) {
             //如果关闭打印小票，那么设置中打印储值卡存根同时关闭
-            mCfgList.get(1).setOn(flag);
+            mCfgList.get(4).setOn(flag);
             ZgParams.loadParams();
             mView.show("参数已保存");
             LogUtil.u(TAG, "打印设置", flag ? "开启" : "关闭");
@@ -178,6 +195,48 @@ public class ConfigPresenter implements ConfigContract.ConfigPresenter {
             LogUtil.u(TAG, "打印设置", "参数写入失败");
             mView.show("参数写入失败");
         }
+    }
+
+    @Override
+    public void inputNum(boolean flag) {
+        Config inputDecimal = mCfgList.get(2);
+        mCfgList.get(1).setOn(flag);
+        if (ZgParams.saveAppParams("inputNum", flag ? "1" : "0")) {
+            if (flag) {
+                inputDecimal.setLock(false);
+            } else {
+                //关闭输入小数
+                inputDecimal.setOn(false);
+                inputDecimal.setLock(true);
+                ZgParams.saveAppParams("inputDecimal", "0");
+                mView.updateConfig(2);
+            }
+            ZgParams.loadParams();
+            LogUtil.u(TAG, "允许输入数字", flag ? "开启" : "关闭");
+        } else {
+            LogUtil.u(TAG, "允许输入数字", "参数写入失败");
+            mView.show("参数写入失败");
+        }
+    }
+
+    @Override
+    public void inputDecimal(boolean flag) {
+        if (flag) {
+            //需要判断是否允许输入数量
+            if (mCfgList.get(1).isOn()) {
+                ZgParams.saveAppParams("inputDecimal", "1");
+                mCfgList.get(2).setOn(flag);
+            } else {
+                ZgParams.saveAppParams("inputDecimal", "0");
+                mCfgList.get(2).setOn(false);
+                mView.updateConfig(2);
+            }
+        } else {
+            //需要弹出提示
+            ZgParams.saveAppParams("inputDecimal", "0");
+            mCfgList.get(2).setOn(false);
+        }
+        ZgParams.loadParams();
     }
 
 
@@ -193,14 +252,14 @@ public class ConfigPresenter implements ConfigContract.ConfigPresenter {
             mView.show("请至少选择一项支付方式");
             payType[position] = isChecked ? "0" : "1";
             if (position == 0) {
-                mCfgList.get(3).setOn(true);
-                mView.updateConfig(3);
+                mCfgList.get(6).setOn(true);
+                mView.updateConfig(6);
             } else if (position == 1) {
-                mCfgList.get(4).setOn(true);
-                mView.updateConfig(4);
+                mCfgList.get(7).setOn(true);
+                mView.updateConfig(7);
             } else if (position == 2) {
-                mCfgList.get(5).setOn(true);
-                mView.updateConfig(5);
+                mCfgList.get(8).setOn(true);
+                mView.updateConfig(8);
             }
         } else {
             ZgParams.saveAppParams("payType", result.toString());

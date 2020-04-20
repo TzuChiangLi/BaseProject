@@ -83,6 +83,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
         if (mProdAdapter == null) {
             //刷新不按单退货的界面
             mProdAdapter = new ShopAdapter<>(R.layout.shop_list_rv_product_item, null, 8);
+            //取消item刷新动画，不会闪那一下
             ((SimpleItemAnimator) (Objects.requireNonNull(mRecyclerView.getItemAnimator())))
                     .setSupportsChangeAnimations(false);
         }
@@ -301,7 +302,7 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
                 }
                 switch (view.getId()) {
                     case R.id.shop_list_rv_img_add:
-                        mPresenter.changeAmount(position, 1);
+                        mPresenter.checkInputNum(position, 1);
                         break;
                     case R.id.shop_list_rv_img_minus:
                         mPresenter.changeAmount(position, -1);
@@ -416,6 +417,41 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
     @Override
     public void showRtnTotal(double rtnTotal) {
         mTotalTv.setText(String.format(Locale.CHINA, "%.2f", rtnTotal).replace("-", ""));
+    }
+
+    @Override
+    public void showInputNumDialog(final int index) {
+        InputPanel.showInputNumDialog(RtnProdActivity.this, new MoneyInputCallback() {
+            @Override
+            public void onOk(double value) {
+                if (value == 0) {
+                    //输入为0时提示是否行清
+                    MessageUtil.question("确定删除此商品？", new MessageUtil.MessageBoxYesNoListener() {
+                        @Override
+                        public void onYes() {
+                            mPresenter.delRtnProd(index);
+                        }
+
+                        @Override
+                        public void onNo() {
+                        }
+                    });
+                } else {
+                    //写入数量更新界面
+                    mPresenter.coverAmount(index, value);
+                }
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public String validate(double value) {
+                return null;
+            }
+        });
     }
 
 

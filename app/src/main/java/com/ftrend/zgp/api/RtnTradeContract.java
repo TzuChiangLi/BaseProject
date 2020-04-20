@@ -116,6 +116,21 @@ public interface RtnTradeContract {
          */
         void changeAmount(int index, double changeAmount);
 
+        /**
+         * 检查是否输入数量
+         *
+         * @param index        商品索引
+         * @param changeAmount 改变数量
+         */
+        void checkInputNum(int index, double changeAmount);
+
+        /**
+         * 输入数量覆盖
+         *
+         * @param index        商品索引
+         * @param changeAmount 改变数量
+         */
+        void coverAmount(int index, double changeAmount);
 
         /**
          * 销毁，防止泄露
@@ -178,6 +193,14 @@ public interface RtnTradeContract {
          * @param info 交易时间，流水号，收款员
          */
         void showTradeInfo(String... info);
+
+        /**
+         * 输入数量
+         *
+         * @param index 索引
+         */
+        void showInputNumDialog(int index);
+
 
         /**
          * 异常信息

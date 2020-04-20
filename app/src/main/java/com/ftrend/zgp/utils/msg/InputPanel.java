@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.pop.CalendarSelectorDialog;
 import com.ftrend.zgp.utils.pop.CommonInputDialog;
 import com.ftrend.zgp.utils.pop.DateRangeInputCallback;
@@ -26,6 +27,33 @@ import java.util.Date;
 public class InputPanel {
 //-------------------------------------业务弹窗-----------------------------------------//
 
+    /**
+     * 输入数量，主要用于称重
+     * @param context 上下文
+     * @param callback 回调
+     */
+    public static void showInputNumDialog(Context context, MoneyInputCallback callback) {
+        new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
+                .autoOpenSoftInput(false)
+                .asCustom(new CommonInputDialog(context, "请输入数量", "确定", "1".equals(ZgParams.getInputDecimal()),
+                        callback))
+                .show();
+    }
+    /**
+     * 输入数量，主要用于称重
+     * @param context 上下文
+     * @param callback 回调
+     */
+    public static void showRtnInputNumDialog(Context context,String value, MoneyInputCallback callback) {
+        new XPopup.Builder(context)
+                .dismissOnTouchOutside(false)
+                .autoOpenSoftInput(false)
+                .asCustom(new CommonInputDialog(context, String.format("请输入数量(上限：%s)",value),
+                        "确定", "1".equals(ZgParams.getInputDecimal()),
+                        callback))
+                .show();
+    }
 
     /**
      * @param context  上下文

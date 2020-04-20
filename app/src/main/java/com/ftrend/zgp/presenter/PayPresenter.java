@@ -69,7 +69,6 @@ public class PayPresenter implements PayContract.Presenter {
         final OperateCallback callback = new OperateCallback() {
             @Override
             public void onSuccess(Map<String, Object> data) {
-                LogUtil.d("----data.keyset:"+data.keySet());
                 // 实时积分计算成功，保存实时积分用于打印
                 if (data != null) {
                     Trade trade = isSale ? TradeHelper.getTrade() : RtnHelper.getRtnTrade();

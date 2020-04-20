@@ -273,8 +273,8 @@ public class ShopCartActivity extends BaseActivity implements ShopCartContract.S
     }
 
     @Override
-    public void updateTradeProd(double count, double price) {
-        mTipTv.setText(String.valueOf(count).replace(".0", ""));
+    public void updateTradeProd(long count, double price) {
+        mTipTv.setText(String.valueOf(count));
         mTotalTv.setText(String.format("￥%.2f", price));
     }
 

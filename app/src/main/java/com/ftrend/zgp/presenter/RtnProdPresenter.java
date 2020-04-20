@@ -7,6 +7,7 @@ import com.ftrend.zgp.model.Product;
 import com.ftrend.zgp.model.Product_Table;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.RtnHelper;
+import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.OperatorGroup;
@@ -142,6 +143,25 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
     public void changeAmount(int index, double changeAmount) {
         //仅修改临时数据，不修改数据库内数据
         if (RtnHelper.changeRtnProdAmount(index, changeAmount)) {
+            //更新列表界面
+            mView.updateTradeProd(index);
+            //更新底部信息
+            updateTradeInfo();
+        }
+    }
+
+    @Override
+    public void checkInputNum(int index, double changeAmount) {
+        if ("1".equals(ZgParams.getInputNum())) {
+            mView.showInputNumDialog(index);
+        } else {
+            changeAmount(index, changeAmount);
+        }
+    }
+
+    @Override
+    public void coverAmount(int index, double changeAmount) {
+        if (RtnHelper.coverRtnProdAmount(index, changeAmount)) {
             //更新列表界面
             mView.updateTradeProd(index);
             //更新底部信息

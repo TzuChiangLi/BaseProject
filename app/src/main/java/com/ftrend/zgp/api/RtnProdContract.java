@@ -97,6 +97,21 @@ public interface RtnProdContract {
          */
         void changeAmount(int index, double changeAmount);
 
+        /**
+         * 检查是否输入数量
+         *
+         * @param index        商品索引
+         * @param changeAmount 改变数量
+         */
+        void checkInputNum(int index, double changeAmount);
+
+        /**
+         * 输入数量覆盖
+         *
+         * @param index        商品索引
+         * @param changeAmount 改变数量
+         */
+        void coverAmount(int index, double changeAmount);
 
         /**
          * 销毁，防止泄露
@@ -154,6 +169,12 @@ public interface RtnProdContract {
          */
         void showRtnTotal(double rtnTotal);
 
+        /**
+         * 输入数量
+         *
+         * @param index 索引
+         */
+        void showInputNumDialog(int index);
 
         /**
          * 异常信息

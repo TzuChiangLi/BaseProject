@@ -27,7 +27,7 @@ public class ZgpDb {
     // 数据库名称
     public static final String DATABASE_NAME = "zgp";
     // 数据库版本号
-    public static final int DATABASE_VERSION = 10;
+    public static final int DATABASE_VERSION = 11;
 
     @Migration(version = 0, database = ZgpDb.class, priority = 0)
     public static class Migration0 extends BaseMigration {
@@ -167,6 +167,15 @@ public class ZgpDb {
         @Override
         public void migrate(@NonNull DatabaseWrapper database) {
             DbUpdateHelper.update_10(database);
+        }
+    }
+
+    @Migration(version = 11, database = ZgpDb.class, priority = 1)
+    public static class Migration11 extends BaseMigration {
+
+        @Override
+        public void migrate(@NonNull DatabaseWrapper database) {
+            DbUpdateHelper.update_11(database);
         }
     }
 }

@@ -58,7 +58,7 @@ public class TrdProdPresenter implements TrdProdContract.TrdProdPresenter {
                 mView.showVipInfo(vipInfo);
             }
         }
-        mView.setTradeFlag(trade.getTradeFlag().equals(TradeHelper.TRADE_FLAG_REFUND));
+        mView.setTradeFlag(trade.getTradeFlag().equals(TradeHelper.TRADE_FLAG_SALE));
         mView.showTradeProd(TradeHelper.getProdList());
         if (!TextUtils.isEmpty(TradeHelper.getProdList().get(0).getSaleInfo())) {
             mView.showMoreInfo(TradeHelper.getProdList().get(0).getSaleInfo().substring(0, 8));
@@ -122,7 +122,6 @@ public class TrdProdPresenter implements TrdProdContract.TrdProdPresenter {
 
         @Override
         public void onFailed(String errorCode, String errorMsg) {
-            LogUtil.d("vipCode err:" + errorCode + errorMsg);
         }
     };
 }

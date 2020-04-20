@@ -56,7 +56,6 @@ public class InitPresenter implements InitContract.InitPresenter {
                     if (isFailed) {
                         //失败退出
                         initFailed();
-                        LogUtil.d("----1");
                     }
                 }
             });
@@ -73,7 +72,6 @@ public class InitPresenter implements InitContract.InitPresenter {
                     if (isFailed) {
                         //失败退出
                         initFailed();
-                        LogUtil.d("----2");
                     }
                 }
             });

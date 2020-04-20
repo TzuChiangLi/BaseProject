@@ -286,7 +286,7 @@ public class RtnTradeActivity extends BaseActivity implements OnTitleBarListener
 
     @Override
     public void existTrade(final List<TradeProd> data) {
-        if (data ==null||data.isEmpty()) {
+        if (data == null || data.isEmpty()) {
             mProdAdapter.setNewData(null);
             mProdAdapter.setEmptyView(getLayoutInflater().inflate(R.layout.rv_item_empty, (ViewGroup) mRecyclerView.getParent(), false));
             return;
@@ -302,7 +302,7 @@ public class RtnTradeActivity extends BaseActivity implements OnTitleBarListener
                 switch (view.getId()) {
                     case R.id.rtn_list_rv_img_add:
                         //商品数量+1
-                        mPresenter.changeAmount(position, 1);
+                        mPresenter.checkInputNum(position, 1);
                         break;
                     case R.id.rtn_list_rv_img_minus:
                         //改变数量-1
@@ -362,6 +362,37 @@ public class RtnTradeActivity extends BaseActivity implements OnTitleBarListener
         mLsNoTv.setText(info[1]);
         mCashierTv.setText(info[2]);
     }
+
+    @Override
+    public void showInputNumDialog(final int index) {
+        final TradeProd prod = mProdAdapter.getItem(index);
+        if (prod != null) {
+            //获取最大可退货数量
+            final double rtnMax = prod.getAmount() + prod.getLastRtnAmount();
+            InputPanel.showRtnInputNumDialog(RtnTradeActivity.this, String.format("%.3f", rtnMax),
+                    new MoneyInputCallback() {
+                        @Override
+                        public void onOk(double value) {
+                            //写入数量更新界面
+                            mPresenter.coverAmount(index, value);
+                        }
+
+                        @Override
+                        public void onCancel() {
+
+                        }
+
+                        @Override
+                        public String validate(double value) {
+                            if (value > rtnMax) {
+                                return "超过订单内该商品数量上限";
+                            }
+                            return null;
+                        }
+                    });
+        }
+    }
+
 
     @Override
     public void showError(String msg) {

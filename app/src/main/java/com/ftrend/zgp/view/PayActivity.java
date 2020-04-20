@@ -2,6 +2,7 @@ package com.ftrend.zgp.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -327,8 +328,13 @@ public class PayActivity extends BaseActivity implements PayContract.View, OnTit
     }
 
     public void returnHomeActivity() {
-        Intent intent = new Intent(PayActivity.this, HomeActivity.class);
-        startActivity(intent);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(PayActivity.this, HomeActivity.class);
+                startActivity(intent);
+            }
+        },300);
     }
 
     @Override

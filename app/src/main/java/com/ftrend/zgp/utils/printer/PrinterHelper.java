@@ -5,6 +5,7 @@ import android.os.RemoteException;
 
 import com.ftrend.zgp.App;
 import com.ftrend.zgp.model.TradeProd;
+import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.view.TradeReportActivity;
@@ -117,8 +118,9 @@ public class PrinterHelper {
                 if (p.isTypeList()) {
                     //商品列表的处理
                     String[] result;
+                    String amount = ZgParams.getInputDecimal().equals("0") ? "%.0f" : "%.3f";
                     for (TradeProd prod : p.getProdList()) {
-                        result = PrintFormat.mergeSaleString(prod.getProdName(), String.format("%.0f", prod.getAmount()), String.format("%.2f", prod.getTotal()),
+                        result = PrintFormat.mergeSaleString(prod.getProdName(), String.format(amount, prod.getAmount()), String.format("%.2f", prod.getTotal()),
                                 32);
                         service.printText(result[0], null);
                         service.printText(result[1], null);

@@ -167,7 +167,7 @@ public interface ShopCartContract {
          *
          * @param num 购物车内的数量
          */
-        void updateTradeProd(double num, double price);
+        void updateTradeProd(long num, double price);
 
 
         /**

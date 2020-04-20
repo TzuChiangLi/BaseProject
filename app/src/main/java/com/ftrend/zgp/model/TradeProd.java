@@ -1,6 +1,7 @@
 package com.ftrend.zgp.model;
 
 
+import com.ftrend.zgp.utils.FormatHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
@@ -155,7 +156,7 @@ public class TradeProd extends BaseModel {
     }
 
     public double getManuDsc() {
-        return singleDsc + wholeDsc;
+        return FormatHelper.priceFormat(singleDsc + wholeDsc);
     }
 
     public double getVipDsc() {
@@ -167,7 +168,7 @@ public class TradeProd extends BaseModel {
     }
 
     public double getTranDsc() {
-        return tranDsc;
+        return FormatHelper.priceFormat(tranDsc);
     }
 
     public void setTranDsc(double tranDsc) {
@@ -175,11 +176,11 @@ public class TradeProd extends BaseModel {
     }
 
     public double getTotalDsc() {
-        return singleDsc + wholeDsc + vipDsc + tranDsc;
+        return FormatHelper.priceFormat(singleDsc + wholeDsc + vipDsc + tranDsc);
     }
 
     public double getTotal() {
-        total = price * amount - getTotalDsc();
+        total = FormatHelper.priceFormat(price * amount - getTotalDsc());
         return total;
     }
 
@@ -188,7 +189,7 @@ public class TradeProd extends BaseModel {
     }
 
     public double getVipTotal() {
-        return vipTotal;
+        return FormatHelper.priceFormat(vipTotal);
     }
 
     public void setVipTotal(double vipTotal) {
@@ -220,7 +221,7 @@ public class TradeProd extends BaseModel {
     }
 
     public double getSingleDsc() {
-        return singleDsc;
+        return FormatHelper.priceFormat(singleDsc);
     }
 
     public void setSingleDsc(double singleDsc) {
@@ -228,7 +229,7 @@ public class TradeProd extends BaseModel {
     }
 
     public double getWholeDsc() {
-        return wholeDsc;
+        return FormatHelper.priceFormat(wholeDsc);
     }
 
     public void setWholeDsc(double wholeDsc) {
@@ -281,7 +282,7 @@ public class TradeProd extends BaseModel {
     }
 
     public double getRtnTotal() {
-        return rtnTotal;
+        return FormatHelper.priceFormat(rtnTotal);
     }
 
     public void setRtnTotal(double rtnTotal) {

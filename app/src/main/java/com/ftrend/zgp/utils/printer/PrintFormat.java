@@ -1,7 +1,9 @@
 package com.ftrend.zgp.utils.printer;
 
 import android.text.TextUtils;
+import android.util.Log;
 
+import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.model.HandoverRecord;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
@@ -34,7 +36,7 @@ public class PrintFormat {
     /**
      * 前半部分空格数量
      */
-    private static int startSpace = iSplitCount == 32 ? 19 : 24;
+    private static int startSpace = iSplitCount == 32 ? 14 : 24;
     /**
      * 居左
      */
@@ -740,7 +742,7 @@ public class PrintFormat {
         int midLength = 0;
         int endLength = 0;
         //24不准确
-        startSpace = iSplitCount == 32 ? 19 : 24;
+        startSpace = iSplitCount == 32 ? 14 : 24;
         //int chineseCharNum = 0;
         // 计算开始的字符的总长度和中文字符串的数量
         for (int i = 0; i < start.length(); i++) {

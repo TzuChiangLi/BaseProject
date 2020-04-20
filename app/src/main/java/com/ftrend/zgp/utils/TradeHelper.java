@@ -37,6 +37,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import static com.ftrend.zgp.utils.FormatHelper.priceFormat;
 import static com.raizlabs.android.dbflow.sql.language.Method.count;
 import static com.raizlabs.android.dbflow.sql.language.Method.sum;
 
@@ -377,15 +378,15 @@ public class TradeHelper {
             }
             pay.setPayTypeCode(payTypeCode);
             pay.setAppPayType(appPayType);
-            pay.setAmount(amount);
-            pay.setChange(change);
+            pay.setAmount(priceFormat(amount));
+            pay.setChange(priceFormat(change));
             pay.setPayCode(payCode);
             pay.setPayTime(new Date());
-            pay.setBalance(balance);
+            pay.setBalance(priceFormat(balance));
             if (!pay.save(databaseWrapper)) {
                 return false;
             }
-            if (amount - change >= trade.getTotal()) {
+            if (priceFormat(amount - change) >= trade.getTotal()) {
                 trade.setTradeTime(pay.getPayTime());
                 trade.setCashier(ZgParams.getCurrentUser().getUserCode());
                 trade.setStatus(TRADE_STATUS_PAID);
@@ -505,8 +506,8 @@ public class TradeHelper {
             dscTotal += prod.getManuDsc() + prod.getTranDsc() + prod.getVipDsc();
             total += prod.getTotal();
         }
-        trade.setDscTotal(dscTotal);
-        trade.setTotal(total);
+        trade.setDscTotal(priceFormat(dscTotal));
+        trade.setTotal(priceFormat(total));
         return trade.save(databaseWrapper);
     }
 
@@ -535,6 +536,59 @@ public class TradeHelper {
                     .where(Trade_Table.lsNo.is(trade.getLsNo()))
                     .async()
                     .execute(); // non-UI blocking
+        }
+    }
+
+    /**
+     * 购物车 - 数量按钮、覆盖单个商品的数量
+     *
+     * @param index        索引序号
+     * @param changeAmount 数量
+     * @return -1:异常  0：超过优惠  >0:成功
+     */
+    public static int coverAmount(final int index, final double changeAmount) {
+        final int[] result = {-1};
+        TransHelper.transSync(new TransHelper.TransRunner() {
+            @Override
+            public boolean execute(DatabaseWrapper databaseWrapper) {
+                result[0] = doCoverAmount(databaseWrapper, index, changeAmount);
+                return result[0] > 0;
+            }
+        });
+        return result[0];
+    }
+
+    private static int doCoverAmount(DatabaseWrapper databaseWrapper, int index,
+                                     double changeAmount) {
+        if (index < 0 || index >= prodList.size()) {
+            LogUtil.u(TAG, "交易改变数量", "改变数量: 索引无效");
+            return -1;
+        }
+
+        // 手工优惠金额不能超过收款员单笔优惠上限
+        TradeProd tradeProd = prodList.get(index);
+        if (tradeProd.getManuDsc() > 0) {
+            double dsc = 0;//已优惠金额
+            for (int i = 0; i < prodList.size(); i++) {
+                dsc += prodList.get(i).getManuDsc();
+            }
+            if ((dsc + changeAmount * (tradeProd.getManuDsc() / tradeProd.getAmount()) > ZgParams.getCurrentUser().getMaxDscTotal())) {
+                return 0;
+            }
+        }
+
+        double oldAmount = tradeProd.getAmount();
+        tradeProd.setVipDsc(priceFormat((tradeProd.getVipDsc() / oldAmount) * changeAmount));
+        tradeProd.setSingleDsc(priceFormat((tradeProd.getSingleDsc() / oldAmount) * changeAmount));
+        tradeProd.setWholeDsc(priceFormat((tradeProd.getWholeDsc() / oldAmount) * changeAmount));
+        tradeProd.setTranDsc(priceFormat((tradeProd.getTranDsc() / oldAmount) * changeAmount));
+
+        tradeProd.setAmount(changeAmount);
+        tradeProd.setTotal(priceFormat((changeAmount * tradeProd.getPrice()) - tradeProd.getTotalDsc()));
+        if (tradeProd.save(databaseWrapper) && recalcTotal(databaseWrapper)) {
+            return 1;
+        } else {
+            return -1;
         }
     }
 
@@ -578,10 +632,10 @@ public class TradeHelper {
 
         double oldAmount = tradeProd.getAmount();
         double newAmount = oldAmount + changeAmount;
-        tradeProd.setVipDsc((tradeProd.getVipDsc() / oldAmount) * newAmount);
-        tradeProd.setSingleDsc((tradeProd.getSingleDsc() / oldAmount) * newAmount);
-        tradeProd.setWholeDsc((tradeProd.getWholeDsc() / oldAmount) * newAmount);
-        tradeProd.setTranDsc((tradeProd.getTranDsc() / oldAmount) * newAmount);
+        tradeProd.setVipDsc(priceFormat((tradeProd.getVipDsc() / oldAmount) * newAmount));
+        tradeProd.setSingleDsc(priceFormat((tradeProd.getSingleDsc() / oldAmount) * newAmount));
+        tradeProd.setWholeDsc(priceFormat((tradeProd.getWholeDsc() / oldAmount) * newAmount));
+        tradeProd.setTranDsc(priceFormat((tradeProd.getTranDsc() / oldAmount) * newAmount));
 
         tradeProd.setAmount(newAmount);
         tradeProd.setTotal(priceFormat((newAmount * tradeProd.getPrice()) - tradeProd.getTotalDsc()));
@@ -597,12 +651,8 @@ public class TradeHelper {
      *
      * @return
      */
-    public static double getTradeCount() {
-        double count = 0;
-        for (int i = 0; i < prodList.size(); i++) {
-            count += prodList.get(i).getAmount();
-        }
-        return count;
+    public static long getTradeCount() {
+        return prodList==null?0:prodList.size();
     }
 
     /**
@@ -616,7 +666,7 @@ public class TradeHelper {
         for (int i = 0; i < prodList.size(); i++) {
             total += prodList.get(i).getTotal();
         }
-        return total;
+        return priceFormat(total);
     }
 
     /**
@@ -627,7 +677,7 @@ public class TradeHelper {
         for (int i = 0; i < prodList.size(); i++) {
             total += prodList.get(i).getPrice() * prodList.get(i).getAmount();
         }
-        return total;
+        return priceFormat(total);
     }
 
     /**
@@ -964,39 +1014,6 @@ public class TradeHelper {
         return getCartLs() == null;
     }
 
-    /**
-     * 价格格式化
-     *
-     * @param before 格式化前的价格
-     * @return 保留小数点后两位
-     */
-    public static double priceFormat(double before) {
-        return Double.parseDouble(String.format("%.2f", before));
-    }
-
-    /**
-     * 金额正则表达式
-     *
-     * @param price 价格
-     * @return 是或否
-     */
-    public static boolean checkPriceFormat(Object price) {
-//        String match = "　^[0-9]+(.[0-9]{2})?$";
-        String match = "(?!^0*(\\.0{1,2})?$)^\\d{1,13}(\\.\\d{1,2})?$";
-
-        return String.valueOf(price).matches(match);
-    }
-
-    /**
-     * 非负整数正则表达式
-     *
-     * @param rate 折扣率
-     * @return 是或否
-     */
-    public static boolean checkRateFormat(Object rate) {
-        String match = "^[1-9]\\d*|0$";
-        return String.valueOf(rate).matches(match);
-    }
 
     /**
      * @param userCode 用户编码
@@ -1010,17 +1027,6 @@ public class TradeHelper {
         } catch (Exception e) {
             return "";
         }
-    }
-
-    /**
-     * 手机号正则表达式
-     *
-     * @param phone
-     * @return 是或否
-     */
-    public static boolean checkPhoneNoFormat(Object phone) {
-        String match = "^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$";
-        return String.valueOf(phone).matches(match);
     }
 
     /**

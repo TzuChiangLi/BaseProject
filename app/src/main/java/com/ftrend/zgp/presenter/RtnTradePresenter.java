@@ -9,6 +9,7 @@ import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
+import com.ftrend.zgp.utils.UserRightsHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.CommonUtil;
 import com.ftrend.zgp.utils.http.RestBodyMap;
@@ -156,21 +157,22 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
                 //现金
                 if (RtnHelper.pay(appPayType, 0)) {
                     if (RtnHelper.rtn()) {
+                        //提前打印防止退出界面时内存内变量变null
+                        printer();
                         MessageUtil.info("退货成功", new MessageUtil.MessageBoxOkListener() {
                             @Override
                             public void onOk() {
-                                LogUtil.u(TAG,"按单退货", "现金退货成功");
-                                printer();
+                                LogUtil.u(TAG, "按单退货", "现金退货成功");
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
                                         mView.returnHomeActivity();
                                     }
-                                }, 200);
+                                }, 300);
                             }
                         });
                     } else {
-                        LogUtil.u(TAG,"按单退货", "现金退货失败");
+                        LogUtil.u(TAG, "按单退货", "现金退货失败");
                         MessageUtil.error("退货失败");
                     }
                 }
@@ -231,9 +233,34 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
         updateTradeInfo();
     }
 
+    @Override
+    public void checkInputNum(int index, double changeAmount) {
+        if ("1".equals(ZgParams.getInputNum())) {
+            mView.showInputNumDialog(index);
+        } else {
+            changeAmount(index, changeAmount);
+        }
+    }
+
+
+    @Override
+    public void coverAmount(int index, double changeAmount) {
+        if (RtnHelper.isForSaleSet(RtnHelper.getProdList().get(index).getProdCode())) {
+            //返回为true时不允许退货
+            mView.showError("该商品不允许退货");
+            return;
+        }
+        //仅修改临时数据，不修改数据库内数据
+        RtnHelper.coverRtnTradeAmount(index, changeAmount);
+        //更新列表界面
+        mView.updateTradeProd(index);
+        //更新底部信息
+        updateTradeInfo();
+    }
+
     private void printer() {
         if (ZgParams.isPrintBill()) {
-            PrinterHelper.initPrinter( new PrinterHelper.PrintInitCallBack() {
+            PrinterHelper.initPrinter(new PrinterHelper.PrintInitCallBack() {
                 @Override
                 public void onSuccess(SunmiPrinterService service) {
                     getPrintData(service);
@@ -486,7 +513,7 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
                         MessageUtil.waitSuccesss("IC卡退款成功", new MessageUtil.MessageBoxOkListener() {
                             @Override
                             public void onOk() {
-                                LogUtil.u(TAG,"按单退货", "IC卡退款成功");
+                                LogUtil.u(TAG, "按单退货", "IC卡退款成功");
                                 printer();
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
@@ -497,7 +524,7 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
                             }
                         });
                     } else {
-                        LogUtil.u(TAG,"按单退货", "IC卡退款失败");
+                        LogUtil.u(TAG, "按单退货", "IC卡退款失败");
                         MessageUtil.waitError("IC卡退款失败", null);
                     }
                 }
@@ -505,7 +532,7 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
 
             @Override
             public void onError(String msg) {
-                LogUtil.u(TAG,"按单退货", "IC卡退款失败");
+                LogUtil.u(TAG, "按单退货", "IC卡退款失败");
                 MessageUtil.waitError(msg, null);
             }
         });
@@ -531,7 +558,7 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
                             MessageUtil.waitUpdate("退款成功", new MessageUtil.MessageBoxOkListener() {
                                 @Override
                                 public void onOk() {
-                                    LogUtil.u(TAG,"按单退货", "收钱吧退款成功");
+                                    LogUtil.u(TAG, "按单退货", "收钱吧退款成功");
                                     printer();
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
@@ -542,7 +569,7 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
                                 }
                             });
                         } else {
-                            LogUtil.u(TAG,"按单退货", "收钱吧退款失败");
+                            LogUtil.u(TAG, "按单退货", "收钱吧退款失败");
                             MessageUtil.waitError("退款失败", null);
                         }
                     }

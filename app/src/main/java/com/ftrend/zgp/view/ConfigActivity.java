@@ -140,6 +140,12 @@ public class ConfigActivity extends BaseActivity implements ConfigContract.Confi
                     case "结算成功自动打印交易小票":
                         mPresenter.print(isChecked);
                         break;
+                    case "允许输入数量":
+                        mPresenter.inputNum(isChecked);
+                        break;
+                    case "数量允许输入小数":
+                        mPresenter.inputDecimal(isChecked);
+                        break;
                     case "收钱吧":
                         mPresenter.payType(isChecked, 0);
                         break;

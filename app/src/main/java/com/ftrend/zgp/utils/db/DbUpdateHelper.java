@@ -143,6 +143,12 @@ public class DbUpdateHelper {
             }
         }
     }
+
+    public static void update_11(DatabaseWrapper db) {
+        //升级到此数据库版本后默认为关闭
+        new AppParams("inputNum", "0").insert(db);
+        new AppParams("inputDecimal", "0").insert(db);
+    }
 }
 //region SQL语句删除DepProduct表,暂不执行
 //            db.execSQL("DROP TABLE DepProduct");

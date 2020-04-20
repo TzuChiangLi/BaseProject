@@ -1,5 +1,6 @@
 package com.ftrend.zgp.model;
 
+import com.ftrend.zgp.utils.FormatHelper;
 import com.ftrend.zgp.utils.db.ZgpDb;
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.NotNull;
@@ -88,7 +89,7 @@ public class TradePay extends BaseModel {
     }
 
     public double getAmount() {
-        return amount;
+        return FormatHelper.priceFormat(amount);
     }
 
     public void setAmount(double amount) {
@@ -96,7 +97,7 @@ public class TradePay extends BaseModel {
     }
 
     public double getChange() {
-        return change;
+        return FormatHelper.priceFormat(change);
     }
 
     public void setChange(double change) {
@@ -120,10 +121,25 @@ public class TradePay extends BaseModel {
     }
 
     public double getBalance() {
-        return balance;
+        return FormatHelper.priceFormat(balance);
     }
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    @Override
+    public String toString() {
+        return "TradePay{" +
+                "id=" + id +
+                ", lsNo='" + lsNo + '\'' +
+                ", payTypeCode='" + payTypeCode + '\'' +
+                ", appPayType='" + appPayType + '\'' +
+                ", amount=" + amount +
+                ", change=" + change +
+                ", payCode='" + payCode + '\'' +
+                ", payTime=" + payTime +
+                ", balance=" + balance +
+                '}';
     }
 }
