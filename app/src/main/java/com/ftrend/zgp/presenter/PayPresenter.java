@@ -609,7 +609,6 @@ public class PayPresenter implements PayContract.Presenter {
                 break;
         }
     }
-
     //endregion
 
 }

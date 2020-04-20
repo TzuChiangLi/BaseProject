@@ -460,10 +460,10 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
                 double balance = payCardBalance[0] + RtnHelper.getRtnTrade().getTotal();
                 if (RtnHelper.pay(PayType.PAYTYPE_PREPAID, RtnHelper.getPay().getPayCode(), balance)) {
                     if (RtnHelper.rtn()) {
+                        printer();
                         MessageUtil.waitSuccesss("储值卡退款成功", new MessageUtil.MessageBoxOkListener() {
                             @Override
                             public void onOk() {
-                                printer();
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -510,11 +510,11 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
             public void onSuccess(VipCardData data) {
                 if (RtnHelper.pay(PayType.PAYTYPE_ICCARD, data.getCardCode(), data.getMoney())) {//保存实际写入的卡号
                     if (RtnHelper.rtn()) {
+                        printer();
                         MessageUtil.waitSuccesss("IC卡退款成功", new MessageUtil.MessageBoxOkListener() {
                             @Override
                             public void onOk() {
                                 LogUtil.u(TAG, "按单退货", "IC卡退款成功");
-                                printer();
                                 new Handler().postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
@@ -555,11 +555,11 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
                 if (isSuccess) {
                     if (RtnHelper.pay(RtnHelper.getPay().getAppPayType(), RtnHelper.getRtnTrade().getTotal(), 0, "")) {
                         if (RtnHelper.rtn()) {
+                            printer();
                             MessageUtil.waitUpdate("退款成功", new MessageUtil.MessageBoxOkListener() {
                                 @Override
                                 public void onOk() {
                                     LogUtil.u(TAG, "按单退货", "收钱吧退款成功");
-                                    printer();
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
