@@ -161,7 +161,7 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
         super.onCreate();
         ButterKnife.bind(this);
         if (mValueType != ValueType.SERVER) {
-            mKeyViewStub = ((ViewStub) findViewById(R.id.vip_way_key_lite_view)).inflate();
+            mKeyViewStub = ((ViewStub) findViewById(mEnableDot?R.id.vip_way_key_lite_view_endot:R.id.vip_way_key_lite_view_disdot)).inflate();
             mKeyView = mKeyViewStub.findViewById(R.id.vip_way_keyboard);
             mKeyView.show();
             mKeyView.setOnKeyboardClickListener(this);
@@ -171,7 +171,6 @@ public class CommonInputDialog extends BottomPopupView implements View.OnClickLi
             mScanLayout.setVisibility(VISIBLE);
             mScanLayout.setOnClickListener(this);
         }
-        mKeyView.setEnDot(mEnableDot?0:1);
         mTitleTv.setText(mTitle);
         mSubmitBtn.setText(mBtnText);
         mEdt.setInputType(InputType.TYPE_NULL);

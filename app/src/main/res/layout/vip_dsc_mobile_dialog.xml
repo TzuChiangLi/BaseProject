@@ -117,10 +117,17 @@
         android:layout="@layout/key_all_func_view_stub" />
 
     <ViewStub
-        android:id="@+id/vip_way_key_lite_view"
+        android:id="@+id/vip_way_key_lite_view_endot"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/vip_way_ll_info"
         android:layout_marginTop="@dimen/dp_4"
-        android:layout="@layout/key_lite_func_view_stub" />
+        android:layout="@layout/key_lite_func_view_stub_endot" />
+    <ViewStub
+        android:id="@+id/vip_way_key_lite_view_disdot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/vip_way_ll_info"
+        android:layout_marginTop="@dimen/dp_4"
+        android:layout="@layout/key_lite_func_view_stub_disdot" />
 </RelativeLayout>

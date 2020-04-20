@@ -27,7 +27,6 @@ import android.widget.LinearLayout;
 import com.blankj.utilcode.util.ConvertUtils;
 import com.blankj.utilcode.util.ScreenUtils;
 import com.ftrend.library.R;
-import com.ftrend.log.LogUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +68,7 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.KeyboardView);
         //获取属性
         style = typedArray.getInt(R.styleable.KeyboardView_style, 0);
+        enDot = typedArray.getInt(R.styleable.KeyboardView_enDot, 0);
         //回收变量
         typedArray.recycle();
         //初始化数据
@@ -108,7 +108,6 @@ public class KeyboardView extends LinearLayout implements View.OnClickListener, 
         mKeyboardAdapter.setItemClickListener(this);
         addView(mRecyclerView, new LayoutParams(MATCH_PARENT, (ScreenUtils.getScreenHeight() / 13) * 5));
     }
-
 
     private void initData() {
         switch (style) {
