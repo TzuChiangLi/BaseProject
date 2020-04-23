@@ -189,7 +189,7 @@ public class ConfigActivity extends BaseActivity implements ConfigContract.Confi
                 }
                 if (view.getId() == R.id.cfg_img_err) {
                     switch (position) {
-                        case 3:
+                        case 6:
                             MessageUtil.show("收钱吧激活失败，暂不可用");
                             break;
                         default:
@@ -198,7 +198,7 @@ public class ConfigActivity extends BaseActivity implements ConfigContract.Confi
                 }
                 if (view.getId() == R.id.cfg_ll) {
                     switch (position) {
-                        case 7:
+                        case 10:
                             InputPanel.showServerDialog(ConfigActivity.this, ZgParams.getServerUrl(),
                                     new ServerUrlInputCallback() {
                                         @Override
