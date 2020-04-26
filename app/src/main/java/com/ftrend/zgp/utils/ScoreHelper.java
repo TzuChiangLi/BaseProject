@@ -12,6 +12,7 @@ import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.log.LogUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -54,6 +55,10 @@ public class ScoreHelper {
      */
     public static void calcVipTotal(final Trade trade, List<TradeProd> prodList, TradePay pay,
                                     final OperateCallback callback) {
+        if (TextUtils.isEmpty(trade.getCardCode())){
+            callback.onSuccess(null);
+            return;
+        }
         setTrade(trade);
         setCallback(callback);
         //准备数据

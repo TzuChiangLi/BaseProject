@@ -235,7 +235,8 @@ public class TradeHelper {
     }
 
     private static long doAddProduct(DatabaseWrapper databaseWrapper, Product product) {
-        long index = prodList.size();
+        //确定商品序号需要用的是流水单内最后一个商品的序号+1
+        long index = prodList.size()==0?0:prodList.get(prodList.size()-1).getSortNo();
         final TradeProd prod = new TradeProd();
         prod.setLsNo(trade.getLsNo());
         prod.setSortNo(index + 1);//商品序号从1开始
