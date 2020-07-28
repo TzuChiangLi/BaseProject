@@ -246,7 +246,6 @@ public class SunmiPayHelper {
                 failCount = 0;
             }
             readCardOptV2.checkCard(cardConfig.getCardTypes(), mCheckCardCallback, 120);
-            LogUtil.u(TAG, "检卡", String.format("卡片类型：%d", cardConfig.getCardTypes()));
         } catch (Exception e) {
             cardState = CardState.Error;
             LogUtil.u(TAG, "检卡", "检卡异常：" + e.getMessage());
