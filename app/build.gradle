@@ -19,8 +19,8 @@ android {
         applicationId "com.ftrend.zgp"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 10205
-        versionName "1.2.5.R"
+        versionCode 10206
+        versionName "1.2.6.R"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         applicationIdSuffix = 'zgpos'
         maxSdkVersion 28
