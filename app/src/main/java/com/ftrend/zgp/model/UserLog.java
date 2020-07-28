@@ -101,4 +101,17 @@ public class UserLog extends BaseModel {
     public void setDepCode(String depCode) {
         this.depCode = depCode;
     }
+
+    @Override
+    public String toString() {
+        return "UserLog{" +
+                "id=" + id +
+                ", module='" + module + '\'' +
+                ", function='" + function + '\'' +
+                ", occurTime=" + occurTime +
+                ", content='" + content + '\'' +
+                ", userCode='" + userCode + '\'' +
+                ", depCode='" + depCode + '\'' +
+                '}';
+    }
 }
