@@ -264,7 +264,7 @@ public class SunmiPayHelper {
             LogUtil.u(TAG, "取消检卡", "取消检卡");
         } catch (Exception e) {
             LogUtil.u(TAG, "取消检卡",
-                    String.format(Locale.CHINA, "取消检卡异常：%s" + e.getMessage()));
+                    "取消检卡异常：" + e.getMessage());
         }
 
     }
