@@ -472,13 +472,14 @@ public class PayPresenter implements PayContract.Presenter {
         //ERR:A08---doMagCardPay
         mView.cardPayWait("卡支付处理中...");
         Trade trade = isSale ? TradeHelper.getTrade() : RtnHelper.getRtnTrade();
+        //接口的money退款时是负数
         RestSubscribe.getInstance().payCardRequest(
                 ZgParams.getPosCode(),
                 trade.getLsNo(),
                 CommonUtil.dateToYyyyMmDd(new Date()),
                 ZgParams.getCurrentUser().getUserCode(),
                 payCardCode[0],
-                trade.getTotal(),
+                isSale?trade.getTotal():trade.getTotal()*-1,
                 new RestCallback(new RestResultHandler() {
                     @Override
                     public void onSuccess(RestBodyMap body) {
