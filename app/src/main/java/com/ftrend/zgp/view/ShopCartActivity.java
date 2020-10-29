@@ -216,6 +216,10 @@ public class ShopCartActivity extends BaseActivity implements ShopCartContract.S
             mProdAdapter = new ShopAdapter<>(R.layout.shop_cart_rv_product_item_round, prodList, 1);
         }
         mProdRecyclerView.setAdapter(mProdAdapter);
+        //设置分页，上拉加载更多
+        mProdAdapter.setOnLoadMoreListener(loadMoreListener, mProdRecyclerView);
+        mProdAdapter.disableLoadMoreIfNotFullPage();
+
         mProdAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(final BaseQuickAdapter adapter, View view, final int position) {
@@ -260,15 +264,37 @@ public class ShopCartActivity extends BaseActivity implements ShopCartContract.S
         });
     }
 
+    BaseQuickAdapter.RequestLoadMoreListener loadMoreListener = new BaseQuickAdapter.RequestLoadMoreListener() {
+        @Override
+        public void onLoadMoreRequested() {
+            mProdRecyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mPresenter.loadMoreProd();
+                }
+            }, 1000);
+        }
+    };
+
     @Override
     public void updateProdList(List<Product> prodList) {
         //过滤筛选
         if (prodList.size() != 0) {
-            mProdAdapter.setNewData(prodList);
+            mProdAdapter.replaceData(prodList);
             mProdAdapter.notifyDataSetChanged();
         } else {
             mProdAdapter.setNewData(null);
             mProdAdapter.setEmptyView(getLayoutInflater().inflate(R.layout.rv_item_empty, (ViewGroup) mProdRecyclerView.getParent(), false));
+        }
+    }
+
+    @Override
+    public void appendProdList(List<Product> prodList) {
+        if (prodList == null || prodList.size() == 0) {
+            mProdAdapter.loadMoreEnd();
+        } else {
+            mProdAdapter.addData(prodList);
+            mProdAdapter.loadMoreComplete();
         }
     }
 
@@ -322,6 +348,12 @@ public class ShopCartActivity extends BaseActivity implements ShopCartContract.S
                     return null;
                 }
             });
+        } else {
+            //添加到购物车中
+            mPresenter.addToShopCart(prod);
+            mProdAdapter.notifyItemChanged(index);
+            mPresenter.updateTradeInfo();
+            MessageUtil.show("添加成功");
         }
     }
 

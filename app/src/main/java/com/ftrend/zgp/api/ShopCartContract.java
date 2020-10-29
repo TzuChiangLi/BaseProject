@@ -68,6 +68,11 @@ public interface ShopCartContract {
         void initProdList();
 
         /**
+         * 加载更多商品
+         */
+        void loadMoreProd();
+
+        /**
          * 加载本次流水单号中的购物车信息
          */
         void initOrderInfo();
@@ -160,6 +165,13 @@ public interface ShopCartContract {
          * @param prodList 商品列表
          */
         void updateProdList(List<Product> prodList);
+
+        /**
+         * 追加到商品列表
+         *
+         * @param prodList
+         */
+        void appendProdList(List<Product> prodList);
 
 
         /**
