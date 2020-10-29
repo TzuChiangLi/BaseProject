@@ -125,10 +125,10 @@ public class ShopCartPresenter implements ShopCartContract.ShopCartPresenter {
 
     private void loadPage() {
         //注意：状态为注销、暂停销售的商品，以及季节商品在商品列表不显示；但已经添加到购物车的不受影响
-        IProperty[] selectColumns = Product_Table.ALL_COLUMN_PROPERTIES;
+        IProperty[] selectColumns = new IProperty[Product_Table.ALL_COLUMN_PROPERTIES.length];// Product_Table.ALL_COLUMN_PROPERTIES;
         //给字段名加上表名，防止查询语句字段名冲突
         for (int i = 0; i < selectColumns.length; i++) {
-            selectColumns[i] = selectColumns[i].withTable();
+            selectColumns[i] = Product_Table.ALL_COLUMN_PROPERTIES[i].withTable();
         }
         Where<Product> where = SQLite.select(selectColumns).from(Product.class)
                 .join(DepProduct.class, Join.JoinType.INNER)
