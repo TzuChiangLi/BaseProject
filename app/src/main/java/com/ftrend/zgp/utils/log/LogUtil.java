@@ -129,6 +129,7 @@ public class LogUtil {
     }
 
     public static void u(final String module, final String function, final String content) {
+        Log.d(module, content);
         UserLog userLog = new UserLog();
         //当前用户名
         userLog.setUserCode(ZgParams.getCurrentUser().getUserCode());

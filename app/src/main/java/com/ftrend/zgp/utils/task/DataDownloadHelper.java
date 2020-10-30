@@ -20,13 +20,13 @@ import com.ftrend.zgp.utils.db.ZgpDb;
 import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
-import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.config.FlowManager;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -250,24 +250,15 @@ public class DataDownloadHelper {
      */
     private static void saveDepCls(final String depCode, final List<RestBodyMap> clsList) {
         //清空数据表
+        SQLite.delete(DepCls.class).where(DepCls_Table.depCode.eq("0")).execute();//不再生成0部门数据
         SQLite.delete(DepCls.class).where(DepCls_Table.depCode.eq(depCode)).execute();
         //写入数据
         for (RestBodyMap map : clsList) {
-            //清空0专柜的数据
-            SQLite.delete(DepCls.class).where(DepCls_Table.depCode.eq("0"))
-                    .and(DepCls_Table.clsCode.eq(map.getString("clsCode")))
-                    .execute();
             //插入专柜
             DepCls cls = new DepCls();
             cls.setDepCode(depCode);
             cls.setClsCode(map.getString("clsCode"));
             cls.setClsName(map.getString("clsName"));
-            cls.insert();
-            //插入0专柜关联数据
-            cls = new DepCls();
-            cls.setClsCode(map.getString("clsCode"));
-            cls.setClsName(map.getString("clsName"));
-            cls.setDepCode("0");
             cls.insert();
         }
     }
@@ -279,29 +270,18 @@ public class DataDownloadHelper {
      * @param productList
      */
     private static void saveDepProduct(final String depCode, final List<RestBodyMap> productList) {
-        //清理普通专柜数据
+        Log.d(TAG, ">>>开始更新专柜商品信息: " + productList.size());
+        Date startTime = new Date();
+
+        //清空数据表
+        SQLite.delete(DepProduct.class).where(DepProduct_Table.depCode.eq("0")).execute();//不再生成0部门数据
         SQLite.delete(DepProduct.class).where(DepProduct_Table.depCode.eq(depCode)).execute();
-        //写入数据
+
         for (RestBodyMap map : productList) {
-            //清空数据表
-            SQLite.delete(Product.class).where(Product_Table.prodCode.eq(map.getString("prodCode")))
-                    .execute();
             //插入普通专柜数据
             DepProduct depProd = new DepProduct();
             depProd.setProdCode(map.getString("prodCode"));
             depProd.setDepCode(depCode);
-            depProd.setProdDepCode("");
-            depProd.setProdName("");
-            depProd.setClsCode("");
-            depProd.insert();
-            //清理0专柜数据
-            SQLite.delete(DepProduct.class).where(DepProduct_Table.depCode.eq("0"))
-                    .and(DepProduct_Table.prodCode.eq(map.getString("prodCode")))
-                    .execute();
-            //生成0专柜数据
-            depProd = new DepProduct();
-            depProd.setProdCode(map.getString("prodCode"));
-            depProd.setDepCode("0");
             depProd.setProdDepCode("");
             depProd.setProdName("");
             depProd.setClsCode("");
@@ -311,8 +291,7 @@ public class DataDownloadHelper {
             product.setProdCode(map.getString("prodCode"));
             product.setBarCode(map.getString("barCode"));
             product.setProdName(map.getString("prodName"));
-            //商品所属部门编号
-            product.setDepCode(map.getString("depCode"));
+            product.setDepCode(map.getString("depCode"));//商品所属部门编号
             product.setClsCode(map.getString("clsCode"));
             product.setCargoNo(map.getString("cargoNo"));
             product.setSpec(map.getString("spec"));
@@ -334,8 +313,12 @@ public class DataDownloadHelper {
             product.setMinimumPrice(map.getDouble("minimumPrice"));
             product.setProdStatus(map.getString("prodStatus"));
             product.setSeason(map.getString("season"));
+            SQLite.delete(Product.class).where(Product_Table.prodCode.eq(product.getProdCode()));
             product.insert();
         }
+
+        long span = new Date().getTime() - startTime.getTime();
+        Log.d(TAG, "<<<结束更新专柜商品信息，用时: " + span);
     }
 
     /**
@@ -346,7 +329,7 @@ public class DataDownloadHelper {
      */
     private static void saveDepPayInfo(final String depCode, final List<RestBodyMap> payInfoList) {
         //清空数据表
-        SQLite.delete(DepPayInfo.class)/*.where(DepPayInfo_Table.depCode.eq(depCode))*/.execute();//支付方式不再区分专柜
+        SQLite.delete(DepPayInfo.class).execute();//支付方式不再区分专柜
         //写入数据
         for (RestBodyMap map : payInfoList) {
             DepPayInfo payInfo = new DepPayInfo();

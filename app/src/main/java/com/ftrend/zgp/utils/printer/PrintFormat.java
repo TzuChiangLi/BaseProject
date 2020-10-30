@@ -1,9 +1,7 @@
 package com.ftrend.zgp.utils.printer;
 
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.ftrend.log.LogUtil;
 import com.ftrend.zgp.model.HandoverRecord;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.TradePay;
@@ -126,7 +124,7 @@ public class PrintFormat {
         //支付方式
         printData = new PrintData();
         printData.setAlign(ALIGN_LEFT);
-        printData.setPrintData(mergeSaleString("支付方式：", TradeHelper.convertAppPayType(TradeHelper.getPay().getAppPayType(), trade.getDepCode()), iSplitCount));
+        printData.setPrintData(mergeSaleString("支付方式：", TradeHelper.convertAppPayType(TradeHelper.getPay().getAppPayType()), iSplitCount));
         printDataList.add(printData);
         //商品原价
         printData = new PrintData();
@@ -233,7 +231,7 @@ public class PrintFormat {
         //支付方式
         printData = new PrintData();
         printData.setAlign(ALIGN_LEFT);
-        printData.setPrintData(mergeSaleString("支付方式：", TradeHelper.convertAppPayType(RtnHelper.getRtnPay().getAppPayType(), trade.getDepCode()), iSplitCount));
+        printData.setPrintData(mergeSaleString("支付方式：", TradeHelper.convertAppPayType(RtnHelper.getRtnPay().getAppPayType()), iSplitCount));
         printDataList.add(printData);
         //商品原价
         printData = new PrintData();
@@ -340,7 +338,7 @@ public class PrintFormat {
         //支付方式
         printData = new PrintData();
         printData.setAlign(ALIGN_LEFT);
-        printData.setPrintData(mergeSaleString("支付方式：", TradeHelper.convertAppPayType(pay.getAppPayType(), trade.getDepCode()), iSplitCount));
+        printData.setPrintData(mergeSaleString("支付方式：", TradeHelper.convertAppPayType(pay.getAppPayType()), iSplitCount));
         printDataList.add(printData);
         //合计金额
         printData = new PrintData();
@@ -619,7 +617,7 @@ public class PrintFormat {
         printData = new PrintData();
         printData.setInitStyle(true);
         printData.setAlign(ALIGN_LEFT);
-        printData.setPrintData(mergeSaleString("支付方式：", TradeHelper.convertAppPayType(pay.getAppPayType(), ZgParams.getCurrentDep().getDepCode()), iSplitCount));
+        printData.setPrintData(mergeSaleString("支付方式：", TradeHelper.convertAppPayType(pay.getAppPayType()), iSplitCount));
         printDataList.add(printData);
         //消费
         printData = new PrintData();

@@ -36,6 +36,11 @@ public interface RtnProdContract {
         void showRtnProdDialog();
 
         /**
+         * 不按单退货弹窗加载更多商品
+         */
+        void loadMoreProd();
+
+        /**
          * 不按单退货初始化列表
          */
         void updateRtnProdList();
@@ -121,11 +126,25 @@ public interface RtnProdContract {
 
     interface RtnProdView extends BaseView<RtnProdContract.RtnProdPresenter> {
         /**
-         * 显示弹窗
+         * 显示不按单退货弹窗
          *
          * @param mProdList 商品列表
          */
         void showRtnProdDialog(List<Product> mProdList);
+
+        /**
+         * 更新不按单退货弹窗商品列表
+         *
+         * @param prodList 商品列表
+         */
+        void updateProdList(List<Product> prodList);
+
+        /**
+         * 追加到不按单退货弹窗商品列表
+         *
+         * @param prodList
+         */
+        void appendProdList(List<Product> prodList);
 
         /**
          * 不按单退货
