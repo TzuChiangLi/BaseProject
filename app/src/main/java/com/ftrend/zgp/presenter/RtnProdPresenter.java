@@ -1,22 +1,15 @@
 package com.ftrend.zgp.presenter;
 
 import com.ftrend.zgp.api.RtnProdContract;
-import com.ftrend.zgp.model.DepProduct;
-import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.Product;
-import com.ftrend.zgp.model.Product_Table;
 import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.log.LogUtil;
-import com.raizlabs.android.dbflow.sql.language.OperatorGroup;
-import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.ftrend.zgp.presenter.ShopCartPresenter.makeSeanFilter;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -24,6 +17,12 @@ import static com.ftrend.zgp.presenter.ShopCartPresenter.makeSeanFilter;
 public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
     private static final String TAG = "RtnProdPresenter";
     private RtnProdContract.RtnProdView mView;
+    private List<Product> mProdList = new ArrayList<>();
+
+    //查询参数
+    private int mPageSize = 20;//每页行数
+    private int mPage = 0;//当前页
+    private String mQueryStr = null;//查询字符串，用于扫码或模糊查询
 
     private RtnProdPresenter(RtnProdContract.RtnProdView mView) {
         this.mView = mView;
@@ -36,22 +35,24 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
     @Override
     public void showRtnProdDialog() {
         RtnHelper.initSale();
-        List<DepProduct> mTempList = SQLite.select(DepProduct_Table.prodCode).from(DepProduct.class).where(DepProduct_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode())).queryList();
-        List<String> mStrList = new ArrayList<>();
-        for (DepProduct prod : mTempList) {
-            mStrList.add(prod.getProdCode());
-        }
-        List<Product> mProdList = SQLite.select().from(Product.class)
-                .where(Product_Table.prodCode.in(mStrList))
-                .and(Product_Table.prodStatus.withTable().notIn("2", "3"))
-                //季节销售商品
-                .and(OperatorGroup.clause(Product_Table.season.withTable().eq("0000"))
-                        .or(Product_Table.season.withTable().like(makeSeanFilter())))
-                .queryList();
+        mPage = 0;
+        mQueryStr = null;
+        loadPage();
+        mView.showRtnProdDialog(mProdList);
+    }
+
+    @Override
+    public void loadMoreProd() {
+        mPage++;
+        loadPage();
+        mView.appendProdList(mProdList);
+    }
+
+    private void loadPage() {
+        mProdList = TradeHelper.loadProduct(null, mQueryStr, mPage, mPageSize);
         for (Product product : mProdList) {
             product.setSelect(false);
         }
-        mView.showRtnProdDialog(mProdList);
     }
 
     @Override
@@ -70,26 +71,24 @@ public class RtnProdPresenter implements RtnProdContract.RtnProdPresenter {
 
     @Override
     public void searchProdByScan(String code, List<Product> products) {
-        for (int i = 0; i < products.size(); i++) {
-            if (code.equals(products.get(i).getProdCode()) ||
-                    code.equals(products.get(i).getBarCode())) {
-                mView.setScanProdPosition(i);
-                addRtnProd(products.get(i));
-                break;
-            }
-            if (i == products.size() - 1) {
-                mView.showError("无此商品");
-            }
+        mPage = 0;
+        mQueryStr = code;
+        loadPage();
+        mView.updateProdList(mProdList);
+        if (mProdList.size() == 0) {
+            mView.showError("无此商品");
+        } else {
+            addRtnProd(mProdList.get(0));
         }
     }
 
 
     @Override
     public List<Product> searchDepProdList(String key, List<Product> depProdList) {
-        if (!depProdList.isEmpty()) {
-            return RtnHelper.searchDepProdList(key, depProdList);
-        }
-        return null;
+        mPage = 0;
+        mQueryStr = key;
+        loadPage();
+        return mProdList;
     }
 
     @Override

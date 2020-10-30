@@ -5,8 +5,6 @@ import android.text.TextUtils;
 
 import com.ftrend.zgp.api.PayContract;
 import com.ftrend.zgp.api.VipProdContract;
-import com.ftrend.zgp.model.DepProduct;
-import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.Product;
 import com.ftrend.zgp.model.Product_Table;
 import com.ftrend.zgp.model.Trade;
@@ -29,7 +27,6 @@ import com.ftrend.zgp.utils.printer.PrintFormat;
 import com.ftrend.zgp.utils.printer.PrinterHelper;
 import com.ftrend.zgp.utils.sunmi.SunmiPayHelper;
 import com.ftrend.zgp.utils.sunmi.VipCardData;
-import com.raizlabs.android.dbflow.sql.language.OperatorGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 import com.sunmi.pay.hardware.aidl.AidlConstants;
 import com.sunmi.peripheral.printer.SunmiPrinterService;
@@ -38,13 +35,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import static com.ftrend.zgp.presenter.ShopCartPresenter.makeSeanFilter;
 
 /**
  * @author liziqiang@ftrend.cn
@@ -71,24 +65,20 @@ public class VipProdPresenter implements VipProdContract.VipProdPresenter {
             Product prod = SQLite.select().from(Product.class).where(Product_Table.prodCode.eq(prodCode)).querySingle();
             mView.setVipProd(prod != null ? String.format("%s-%s", prodCode, prod.getProdName()) : "重新设置刷卡商品");
         } else {
-            mView.setVipProd("暂未设置刷卡商品");
+            List<Product> mProdList = TradeHelper.loadProduct(null, null, 0, 10);
+            if (mProdList.size() > 0) {
+                Product prod = mProdList.get(0);
+                mView.setVipProd(prod != null ? String.format("%s-%s", prodCode, prod.getProdName()) : "重新设置刷卡商品");
+            } else {
+                mView.setVipProd("暂未设置刷卡商品");
+            }
         }
     }
 
     @Override
     public void showProdDialog() {
-        List<DepProduct> mTempList = SQLite.select(DepProduct_Table.prodCode).from(DepProduct.class).where(DepProduct_Table.depCode.eq(ZgParams.getCurrentDep().getDepCode())).queryList();
-        List<String> mStrList = new ArrayList<>();
-        for (DepProduct prod : mTempList) {
-            mStrList.add(prod.getProdCode());
-        }
-        List<Product> mProdList = SQLite.select().from(Product.class)
-                .where(Product_Table.prodCode.in(mStrList))
-                .and(Product_Table.prodStatus.withTable().notIn("2", "3"))
-                //季节销售商品
-                .and(OperatorGroup.clause(Product_Table.season.withTable().eq("0000"))
-                        .or(Product_Table.season.withTable().like(makeSeanFilter())))
-                .queryList();
+        // TODO: 2020-10-29 增加分页支持
+        List<Product> mProdList = TradeHelper.loadProduct(null, null, 0, 100);
         for (Product product : mProdList) {
             product.setSelect(false);
         }

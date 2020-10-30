@@ -23,7 +23,8 @@ public class RestBodyMap extends HashMap<String, Object> {
 
     public String getString(final String key, final String def) {
         if (containsKey(key)) {
-            return String.valueOf(get(key));
+            Object value = get(key);
+            return value == null ? def : String.valueOf(value);
         } else {
             return def;
         }

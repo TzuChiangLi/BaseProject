@@ -222,6 +222,9 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
                 mDepAdapter.setNewData(mProdList);
                 mDepRecyclerView.addItemDecoration(new DividerItemDecoration(RtnProdActivity.this, DividerItemDecoration.VERTICAL));
                 mDepRecyclerView.setAdapter(mDepAdapter);
+                //设置分页，上拉加载更多
+                mDepAdapter.setOnLoadMoreListener(loadMoreListener, mDepRecyclerView);
+                mDepAdapter.disableLoadMoreIfNotFullPage();
             }
 
             @Override
@@ -289,6 +292,42 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
                 }
             }
         });
+    }
+
+    BaseQuickAdapter.RequestLoadMoreListener loadMoreListener = new BaseQuickAdapter.RequestLoadMoreListener() {
+        @Override
+        public void onLoadMoreRequested() {
+            mDepRecyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mPresenter.loadMoreProd();
+                }
+            }, 1000);
+        }
+    };
+
+    @Override
+    public void updateProdList(List<Product> prodList) {
+        if (prodList.size() != 0) {
+            mDepAdapter.replaceData(prodList);
+            mDepAdapter.notifyDataSetChanged();
+            //设置分页，上拉加载更多
+            mDepAdapter.setOnLoadMoreListener(loadMoreListener, mDepRecyclerView);
+            mDepAdapter.disableLoadMoreIfNotFullPage();
+        } else {
+            mDepAdapter.setNewData(null);
+            mDepAdapter.setEmptyView(getLayoutInflater().inflate(R.layout.rv_item_empty, (ViewGroup) mDepRecyclerView.getParent(), false));
+        }
+    }
+
+    @Override
+    public void appendProdList(List<Product> prodList) {
+        if (prodList == null || prodList.size() == 0) {
+            mDepAdapter.loadMoreEnd();
+        } else {
+            mDepAdapter.addData(prodList);
+            mDepAdapter.loadMoreComplete();
+        }
     }
 
     @Override

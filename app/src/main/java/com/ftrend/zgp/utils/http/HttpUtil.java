@@ -37,8 +37,8 @@ public class HttpUtil {
     private static HttpUtil INSTANCE;
     private static Retrofit mRetrofit;
     private static final int CONNECT_TIMEOUT = 3;
-    private static final int READ_TIMEOUT = 10;
-    private static final int WRITE_TIMEOUT = 10;
+    private static final int READ_TIMEOUT = 60;
+    private static final int WRITE_TIMEOUT = 60;
 
     private HttpUtil() {
         initRetrofit();

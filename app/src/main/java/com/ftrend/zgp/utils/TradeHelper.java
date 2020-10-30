@@ -2,9 +2,12 @@ package com.ftrend.zgp.utils;
 
 import android.text.TextUtils;
 
+import com.blankj.utilcode.util.StringUtils;
 import com.ftrend.zgp.R;
 import com.ftrend.zgp.model.DepPayInfo;
 import com.ftrend.zgp.model.DepPayInfo_Table;
+import com.ftrend.zgp.model.DepProduct;
+import com.ftrend.zgp.model.DepProduct_Table;
 import com.ftrend.zgp.model.Product;
 import com.ftrend.zgp.model.Product_Table;
 import com.ftrend.zgp.model.SqbPayOrder;
@@ -26,13 +29,18 @@ import com.ftrend.zgp.utils.db.ZgpDb;
 import com.ftrend.zgp.utils.log.LogUtil;
 import com.ftrend.zgp.utils.pay.PayType;
 import com.raizlabs.android.dbflow.config.FlowManager;
+import com.raizlabs.android.dbflow.sql.language.From;
 import com.raizlabs.android.dbflow.sql.language.Join;
 import com.raizlabs.android.dbflow.sql.language.Method;
+import com.raizlabs.android.dbflow.sql.language.OperatorGroup;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
+import com.raizlabs.android.dbflow.sql.language.Where;
+import com.raizlabs.android.dbflow.sql.language.property.IProperty;
 import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.FlowCursor;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -1034,7 +1042,7 @@ public class TradeHelper {
      * @param appPayType
      * @return 支付方式
      */
-    public static String convertAppPayType(String appPayType, String depCode) {
+    public static String convertAppPayType(String appPayType) {
         //支付方式不再区分专柜
         DepPayInfo payInfo = SQLite.select().from(DepPayInfo.class)
                 .where(DepPayInfo_Table.depCode.eq("000"))
@@ -1113,5 +1121,66 @@ public class TradeHelper {
      */
     public static void calcVipScore(final OperateCallback callback) {
         calcVipScore(trade, prodList, pay, callback);
+    }
+
+    /**
+     * 查询当前专柜的商品列表
+     *
+     * @param classCode
+     * @param queryStr
+     * @param page
+     * @param pageSize
+     * @return
+     */
+    public static List<Product> loadProduct(String classCode, String queryStr, int page, int pageSize) {
+        IProperty[] selectColumns = new IProperty[Product_Table.ALL_COLUMN_PROPERTIES.length];
+        //给字段名加上表名，防止查询语句字段名冲突
+        for (int i = 0; i < selectColumns.length; i++) {
+            selectColumns[i] = Product_Table.ALL_COLUMN_PROPERTIES[i].withTable();
+        }
+        From<Product> from = SQLite.select(selectColumns).from(Product.class);
+        if (!"0".equalsIgnoreCase(ZgParams.getCurrentDep().getDepCode())) {
+            from = from.join(DepProduct.class, Join.JoinType.INNER)
+                    .on(Product_Table.prodCode.withTable().eq(DepProduct_Table.prodCode.withTable()),
+                            DepProduct_Table.depCode.withTable().eq(ZgParams.getCurrentDep().getDepCode()));
+        }
+        Where<Product> where = from.where(Product_Table.prodStatus.withTable().notIn("2", "3"))
+                //季节销售商品
+                .and(OperatorGroup.clause(Product_Table.season.withTable().eq("0000"))
+                        .or(Product_Table.season.withTable().like(makeSeanFilter())));
+        //过滤条件：分类
+        if (!StringUtils.isEmpty(classCode) && !"all".equalsIgnoreCase(classCode)) {
+            where = where.and(Product_Table.clsCode.withTable().eq(classCode));
+        }
+        //过滤条件：模糊匹配字符串
+        if (!StringUtils.isEmpty(queryStr)) {
+            String filter = "%" + queryStr + "%";
+            where = where.and(OperatorGroup.clause(Product_Table.prodCode.withTable().like(filter))
+                    .or(Product_Table.prodName.withTable().like(filter))
+                    .or(Product_Table.barCode.withTable().like(filter))
+            );
+        }
+        if (pageSize > 0 && page >= 0) {
+            where = where.offset(page * pageSize).limit(pageSize);
+        }
+        return where.queryList();
+    }
+
+    /**
+     * 生成季节查询条件
+     *
+     * @return
+     */
+    public static String makeSeanFilter() {
+        int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+        if (month <= 3) {
+            return "1___";
+        } else if (month <= 6) {
+            return "_1__";
+        } else if (month <= 9) {
+            return "__1_";
+        } else {
+            return "___1";
+        }
     }
 }

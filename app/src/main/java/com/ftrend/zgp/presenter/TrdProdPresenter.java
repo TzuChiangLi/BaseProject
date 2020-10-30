@@ -2,8 +2,6 @@ package com.ftrend.zgp.presenter;
 
 import android.text.TextUtils;
 
-import com.ftrend.log.LogUtil;
-import com.ftrend.zgp.App;
 import com.ftrend.zgp.api.TrdProdContract;
 import com.ftrend.zgp.model.Trade;
 import com.ftrend.zgp.model.VipInfo;
@@ -63,7 +61,7 @@ public class TrdProdPresenter implements TrdProdContract.TrdProdPresenter {
         if (!TextUtils.isEmpty(TradeHelper.getProdList().get(0).getSaleInfo())) {
             mView.showMoreInfo(TradeHelper.getProdList().get(0).getSaleInfo().substring(0, 8));
         }
-        mView.showPayInfo(TradeHelper.convertAppPayType(appPayType, depCode), TradeHelper.payTypeImgRes(appPayType));
+        mView.showPayInfo(TradeHelper.convertAppPayType(appPayType), TradeHelper.payTypeImgRes(appPayType));
         mView.showTradeInfo(new SimpleDateFormat("HH:mm").format(trade.getTradeTime()),
                 trade.getLsNo().length() > 8 ? trade.getLsNo() : String.format("%s%s", new SimpleDateFormat("yyyyMMdd").format(trade.getTradeTime()), trade.getLsNo()),
                 TradeHelper.getCashierByUserCode(trade.getCashier()),

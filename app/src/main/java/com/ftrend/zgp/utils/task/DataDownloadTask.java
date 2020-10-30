@@ -9,9 +9,11 @@ import com.ftrend.zgp.utils.http.RestBodyMap;
 import com.ftrend.zgp.utils.http.RestCallback;
 import com.ftrend.zgp.utils.http.RestResultHandler;
 import com.ftrend.zgp.utils.http.RestSubscribe;
+import com.ftrend.zgp.utils.log.LogUtil;
 import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -45,6 +47,8 @@ public class DataDownloadTask {
 
     // 线程唯一实例，避免重复运行
     private static DataDownloadTask task = null;
+
+    private long mStartTime = 0;
 
     /**
      * 启动线程
@@ -80,6 +84,7 @@ public class DataDownloadTask {
      * 开始执行数据下载任务
      */
     private void start() {
+        mStartTime = new Date().getTime();
         running = true;
         step = -1;
         checkUpdateSign();
@@ -185,6 +190,7 @@ public class DataDownloadTask {
     private void postFinished() {
         running = false;
         handler.handleProgress(100, false, "数据更新完成");
+        LogUtil.u(TAG, "postFinished", ">>>>>>>>>>> 数据更新完成，总耗时: " + (new Date().getTime() - mStartTime));
     }
 
     /**

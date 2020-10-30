@@ -59,10 +59,6 @@ public class InitActivity extends BaseActivity implements InitContract.InitView 
 
     @Override
     protected void initView() {
-        LogUtil.d("----getScreenDensityDpi:" + ScreenUtils.getScreenDensityDpi());
-        LogUtil.d("----getScreenDensity:" + ScreenUtils.getScreenDensity());
-        LogUtil.d("----getScreenWidth:" + ScreenUtils.getScreenWidth());
-        LogUtil.d("----getScreenHeight:" + ScreenUtils.getScreenHeight());
         if (mPresenter == null) {
             mPresenter = InitPresenter.createPresenter(this);
         }

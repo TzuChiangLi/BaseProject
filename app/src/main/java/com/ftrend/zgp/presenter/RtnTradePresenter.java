@@ -9,7 +9,6 @@ import com.ftrend.zgp.model.TradeProd;
 import com.ftrend.zgp.utils.OperateCallback;
 import com.ftrend.zgp.utils.RtnHelper;
 import com.ftrend.zgp.utils.TradeHelper;
-import com.ftrend.zgp.utils.UserRightsHelper;
 import com.ftrend.zgp.utils.ZgParams;
 import com.ftrend.zgp.utils.common.CommonUtil;
 import com.ftrend.zgp.utils.http.RestBodyMap;
@@ -73,7 +72,7 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
                 }
                 String appPayType = RtnHelper.getPay().getAppPayType();
                 mView.existTrade(RtnHelper.getProdList());
-                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()),
+                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType),
                         TradeHelper.payTypeImgRes(appPayType));
                 mView.showTradeInfo(formatTradeTime(), RtnHelper.getTrade().getFullLsNo(),
                         TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
@@ -112,7 +111,7 @@ public class RtnTradePresenter implements RtnTradeContract.RtnTradePresenter {
                             if (RtnHelper.initRtnOnline()) {
                                 String appPayType = RtnHelper.getPay().getAppPayType();
                                 mView.existTrade(RtnHelper.getProdList());
-                                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType, RtnHelper.getTrade().getDepCode()),
+                                mView.showPayTypeName(TradeHelper.convertAppPayType(appPayType),
                                         TradeHelper.payTypeImgRes(appPayType));
                                 mView.showTradeInfo(formatTradeTime(), lsNo,
                                         TradeHelper.getCashierByUserCode(RtnHelper.getTrade().getCashier()));
