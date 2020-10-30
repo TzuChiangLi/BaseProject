@@ -291,26 +291,29 @@ public class RtnProdActivity extends BaseActivity implements OnTitleBarListener,
                     mAdapter.setNewData(null);
                 }
             }
-
-            BaseQuickAdapter.RequestLoadMoreListener loadMoreListener = new BaseQuickAdapter.RequestLoadMoreListener() {
-                @Override
-                public void onLoadMoreRequested() {
-                    mDepRecyclerView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mPresenter.loadMoreProd();
-                        }
-                    }, 1000);
-                }
-            };
         });
     }
+
+    BaseQuickAdapter.RequestLoadMoreListener loadMoreListener = new BaseQuickAdapter.RequestLoadMoreListener() {
+        @Override
+        public void onLoadMoreRequested() {
+            mDepRecyclerView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mPresenter.loadMoreProd();
+                }
+            }, 1000);
+        }
+    };
 
     @Override
     public void updateProdList(List<Product> prodList) {
         if (prodList.size() != 0) {
             mDepAdapter.replaceData(prodList);
             mDepAdapter.notifyDataSetChanged();
+            //设置分页，上拉加载更多
+            mDepAdapter.setOnLoadMoreListener(loadMoreListener, mDepRecyclerView);
+            mDepAdapter.disableLoadMoreIfNotFullPage();
         } else {
             mDepAdapter.setNewData(null);
             mDepAdapter.setEmptyView(getLayoutInflater().inflate(R.layout.rv_item_empty, (ViewGroup) mDepRecyclerView.getParent(), false));

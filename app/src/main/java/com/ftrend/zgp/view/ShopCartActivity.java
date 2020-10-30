@@ -282,6 +282,9 @@ public class ShopCartActivity extends BaseActivity implements ShopCartContract.S
         if (prodList.size() != 0) {
             mProdAdapter.replaceData(prodList);
             mProdAdapter.notifyDataSetChanged();
+            //设置分页，上拉加载更多
+            mProdAdapter.setOnLoadMoreListener(loadMoreListener, mProdRecyclerView);
+            mProdAdapter.disableLoadMoreIfNotFullPage();
         } else {
             mProdAdapter.setNewData(null);
             mProdAdapter.setEmptyView(getLayoutInflater().inflate(R.layout.rv_item_empty, (ViewGroup) mProdRecyclerView.getParent(), false));

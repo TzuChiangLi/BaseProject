@@ -26,6 +26,7 @@ import com.raizlabs.android.dbflow.structure.database.DatabaseWrapper;
 import com.raizlabs.android.dbflow.structure.database.transaction.ITransaction;
 import com.raizlabs.android.dbflow.structure.database.transaction.Transaction;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -277,6 +278,12 @@ public class DataDownloadHelper {
         SQLite.delete(DepProduct.class).where(DepProduct_Table.depCode.eq("0")).execute();//不再生成0部门数据
         SQLite.delete(DepProduct.class).where(DepProduct_Table.depCode.eq(depCode)).execute();
 
+        List<String> prodCodeList = new ArrayList<>();
+        for (RestBodyMap map : productList) {
+            prodCodeList.add(map.getString("prodCode"));
+        }
+        SQLite.delete(Product.class).where(Product_Table.prodCode.in(prodCodeList)).execute();
+
         for (RestBodyMap map : productList) {
             //插入普通专柜数据
             DepProduct depProd = new DepProduct();
@@ -313,7 +320,6 @@ public class DataDownloadHelper {
             product.setMinimumPrice(map.getDouble("minimumPrice"));
             product.setProdStatus(map.getString("prodStatus"));
             product.setSeason(map.getString("season"));
-            SQLite.delete(Product.class).where(Product_Table.prodCode.eq(product.getProdCode()));
             product.insert();
         }
 
